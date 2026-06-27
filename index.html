@@ -40,9 +40,11 @@
   .nav{display:flex;align-items:center;gap:24px;}
   .nav a{color:var(--muted);text-decoration:none;font-size:14.5px;transition:.2s;}
   .nav a:hover{color:var(--brand);}
-  .langbtn{border:1px solid #d3cdbf;background:var(--white);color:var(--brand);border-radius:999px;
-    padding:5px 16px;font-size:13px;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:.2s;}
-  .langbtn:hover{border-color:var(--brand);background:var(--soft);}
+  .langtoggle{display:inline-flex;border:1px solid #d3cdbf;border-radius:999px;overflow:hidden;
+    cursor:pointer;font-size:13px;letter-spacing:.5px;user-select:none;}
+  .langtoggle .seg{padding:5px 14px;color:var(--faint);transition:.2s;}
+  .langtoggle .seg:hover{color:var(--brand);}
+  body.lang-zh .langtoggle .seg-zh,body.lang-en .langtoggle .seg-en{background:var(--brand);color:#fff;}
 
   .hero{background:linear-gradient(155deg,var(--brand) 0%,var(--brand-deep) 100%);color:#eef2f6;}
   .hero .wrap{max-width:var(--maxw);margin:0 auto;padding:68px 30px 56px;}
@@ -112,9 +114,9 @@
       <span class="brand">謝楠楨<small>Nan-Chen Hsieh</small></span>
       <nav class="nav">
         <a class="navlink" href="#experience"><span class="zh">專業經歷</span><span class="en">Experience</span></a>
-        <button class="langbtn" id="langToggle" aria-label="切換語言 / switch language">
-          <span class="zh">EN</span><span class="en">中文</span>
-        </button>
+        <div class="langtoggle" role="group" aria-label="切換語言 / switch language">
+          <span class="seg seg-zh" id="segZh">中文</span><span class="seg seg-en" id="segEn">EN</span>
+        </div>
       </nav>
     </div>
   </div>
@@ -127,13 +129,14 @@
         <span class="latin">Nan-Chen Hsieh, Ph.D.</span>
       </h1>
       <p class="hrole">
-        <span class="zh">國立臺北護理健康大學 資訊管理系 教授</span>
-        <span class="en">Professor, Department of Information Management, National Taipei University of Nursing and Health Sciences</span>
+        <span class="zh">國立臺北護理健康大學 健康科技學院 教授</span>
+        <span class="en">Professor, College of Health Technology, National Taipei University of Nursing and Health Sciences</span>
       </p>
       <div class="tags">
-        <span><span class="zh">智慧醫療</span><span class="en">Smart Healthcare</span></span>
-        <span><span class="zh">資料科學</span><span class="en">Data Sciences</span></span>
-        <span><span class="zh">高齡健康及長照策略</span><span class="en">Aging Health &amp; Long-term Care</span></span>
+        <span><span class="zh">AI 健康科技應用</span><span class="en">Applied AI in Health Technology</span></span>
+        <span><span class="zh">智慧醫療與臨床決策支援</span><span class="en">Smart Healthcare &amp; Clinical Decision Support</span></span>
+        <span><span class="zh">醫療資料科學與機器學習</span><span class="en">Healthcare Data Science &amp; Machine Learning</span></span>
+        <span><span class="zh">高齡健康與長照科技</span><span class="en">Aging Health &amp; Long-term Care Technology</span></span>
         <span><span class="zh">健康資訊系統</span><span class="en">Health Information Systems</span></span>
       </div>
       <div class="hcontact">
@@ -154,11 +157,12 @@
           <div style="color:var(--muted);font-size:14.5px;margin-top:3px"><span class="zh">淡江大學</span><span class="en">Tamkang University</span></div>
         </div>
         <div class="block">
-          <div class="skh"><h2><span class="zh">研究專長</span><span class="en">Research</span></h2><span class="ln"></span></div>
+          <div class="skh"><h2><span class="zh">實務／研究專長</span><span class="en">Practice &amp; Research</span></h2><span class="ln"></span></div>
           <ul class="reslist">
-            <li><span class="zh">智慧醫療</span><span class="en">Smart Healthcare</span></li>
-            <li><span class="zh">資料科學</span><span class="en">Data Sciences</span></li>
-            <li><span class="zh">高齡健康及長照策略</span><span class="en">Aging Health &amp; LTC</span></li>
+            <li><span class="zh">AI 健康科技應用</span><span class="en">Applied AI in Health Technology</span></li>
+            <li><span class="zh">智慧醫療與臨床決策支援</span><span class="en">Smart Healthcare &amp; Clinical Decision Support</span></li>
+            <li><span class="zh">醫療資料科學與機器學習</span><span class="en">Healthcare Data Science &amp; Machine Learning</span></li>
+            <li><span class="zh">高齡健康與長照科技</span><span class="en">Aging Health &amp; Long-term Care Technology</span></li>
             <li><span class="zh">健康資訊系統</span><span class="en">Health Information Systems</span></li>
           </ul>
         </div>
@@ -179,58 +183,58 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="grp"><td colspan="3"><span class="zh">現職・在職中</span><span class="en">Current</span></td></tr>
-          <tr class="cur"><td class="c-yr">2004.08 –</td><td class="c-org">國立臺北護理健康大學 <small>資訊管理系</small></td><td class="c-role">教授</td></tr>
-          <tr class="cur"><td class="c-yr">2022.02 –</td><td class="c-org">國立臺北護理健康大學 <small>健康科技學院</small></td><td class="c-role">講座教授</td></tr>
-          <tr class="cur"><td class="c-yr">2023.02 –</td><td class="c-org">國立金門大學 <small>健康護理學院</small></td><td class="c-role">榮譽講座教授</td></tr>
-          <tr class="cur"><td class="c-yr">2024 –</td><td class="c-org">考試院</td><td class="c-role">國家考試 典試・命題委員</td></tr>
-          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org">全國大專以上長照課程推動委員會 <small>教育部</small></td><td class="c-role">主任委員</td></tr>
-          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org">教育部全國健康照護產學合作中心</td><td class="c-role">主持人</td></tr>
-          <tr class="cur"><td class="c-yr">2018.01 –</td><td class="c-org">教育部國民教育署 <small>全國照顧服務科推動計畫</small></td><td class="c-role">主持人</td></tr>
-          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org">教育部 <small>技專校院高等教育深耕計畫</small></td><td class="c-role">考評委員</td></tr>
-          <tr class="cur"><td class="c-yr">2019.01 –</td><td class="c-org">教育部 <small>師鐸獎甄審會</small></td><td class="c-role">委員</td></tr>
-          <tr class="cur"><td class="c-yr">2009.10 –</td><td class="c-org">衛生福利部</td><td class="c-role">專案評審委員</td></tr>
-          <tr class="cur"><td class="c-yr">2020.01 –</td><td class="c-org">財團法人高等教育評鑑中心基金會</td><td class="c-role">專業評鑑機構認可委員</td></tr>
-          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org">康寧學校財團法人康寧大學 <small>董事會</small></td><td class="c-role">監察人</td></tr>
-          <tr class="cur"><td class="c-yr">2022.10 –</td><td class="c-org">財團法人新北市私立馨園老人養護中心 <small>董事會</small></td><td class="c-role">董事長</td></tr>
-          <tr class="cur"><td class="c-yr">2024.04 –</td><td class="c-org">國際高端醫療服務組織 <small>UAiTED – CHaMP</small></td><td class="c-role">顧問</td></tr>
-          <tr class="cur"><td class="c-yr">2023.05 –</td><td class="c-org">財團法人豐榮護理之家</td><td class="c-role">董事</td></tr>
-          <tr class="cur"><td class="c-yr">2022.03 –</td><td class="c-org">臺北市立聯合醫院 <small>資訊諮詢小組</small></td><td class="c-role">委員</td></tr>
-          <tr class="cur"><td class="c-yr">2020 –</td><td class="c-org">台灣永續能源研究基金會 <small>TCSA 台灣永續獎</small></td><td class="c-role">評選委員（醫院 HSR 永續方案）</td></tr>
-          <tr class="cur"><td class="c-yr">2017.12 –</td><td class="c-org">生活照顧專業協會</td><td class="c-role">理事</td></tr>
-          <tr class="cur"><td class="c-yr">2015.08 –</td><td class="c-org">台灣電子健康學會</td><td class="c-role">理事</td></tr>
-          <tr class="cur"><td class="c-yr">2025.08 –</td><td class="c-org">財團法人景文科技大學</td><td class="c-role">校務委員</td></tr>
-          <tr class="cur"><td class="c-yr">2013.08 –</td><td class="c-org">耕莘健康管理專科學校</td><td class="c-role">校務委員</td></tr>
+          <tr class="grp"><td colspan="3"><span class="zh">現職</span><span class="en">Current</span></td></tr>
+          <tr class="cur"><td class="c-yr">2004.08 –</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康科技學院</small></span><span class="en">NTUNHS <small>College of Health Technology</small></span></td><td class="c-role"><span class="zh">教授</span><span class="en">Professor</span></td></tr>
+          <tr class="cur"><td class="c-yr">2022.02 –</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康科技學院</small></span><span class="en">NTUNHS <small>College of Health Technology</small></span></td><td class="c-role"><span class="zh">講座教授</span><span class="en">Chair Professor</span></td></tr>
+          <tr class="cur"><td class="c-yr">2023.02 –</td><td class="c-org"><span class="zh">國立金門大學 <small>健康護理學院</small></span><span class="en">National Quemoy University <small>College of Health and Nursing</small></span></td><td class="c-role"><span class="zh">榮譽講座教授</span><span class="en">Honorary Chair Professor</span></td></tr>
+          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org"><span class="zh">全國大專以上長照課程推動委員會 <small>教育部</small></span><span class="en">National LTC Curriculum Promotion Committee <small>Ministry of Education</small></span></td><td class="c-role"><span class="zh">主任委員</span><span class="en">Chairperson</span></td></tr>
+          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org"><span class="zh">教育部 <small>技專校院高等教育深耕計畫</small></span><span class="en">Ministry of Education <small>Higher Education Sprout Project</small></span></td><td class="c-role"><span class="zh">考評委員</span><span class="en">Review Committee Member</span></td></tr>
+          <tr class="cur"><td class="c-yr">2009.10 –</td><td class="c-org"><span class="zh">衛生福利部</span><span class="en">Ministry of Health and Welfare</span></td><td class="c-role"><span class="zh">專案評審委員</span><span class="en">Project Review Committee Member</span></td></tr>
+          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org"><span class="zh">康寧學校財團法人康寧大學 <small>董事會</small></span><span class="en">Kang-Ning University <small>Board of Directors</small></span></td><td class="c-role"><span class="zh">監察人</span><span class="en">Supervisor</span></td></tr>
+          <tr class="cur"><td class="c-yr">2022.10 –</td><td class="c-org"><span class="zh">財團法人新北市私立馨園老人養護中心 <small>董事會</small></span><span class="en">Xin-Yuan Elderly Care Center, New Taipei <small>Board of Directors</small></span></td><td class="c-role"><span class="zh">董事長</span><span class="en">Chairman of the Board</span></td></tr>
+          <tr class="cur"><td class="c-yr">2024.04 –</td><td class="c-org"><span class="zh">國際高端醫療服務組織 <small>UAiTED – CHaMP</small></span><span class="en">International Premium Healthcare Organization <small>UAiTED – CHaMP</small></span></td><td class="c-role"><span class="zh">顧問</span><span class="en">Advisor</span></td></tr>
+          <tr class="cur"><td class="c-yr">2023.05 –</td><td class="c-org"><span class="zh">財團法人豐榮護理之家</span><span class="en">Feng-Rong Nursing Home</span></td><td class="c-role"><span class="zh">董事</span><span class="en">Board Director</span></td></tr>
+          <tr class="cur"><td class="c-yr">2022.03 –</td><td class="c-org"><span class="zh">臺北市立聯合醫院 <small>資訊諮詢小組</small></span><span class="en">Taipei City Hospital <small>IT Advisory Group</small></span></td><td class="c-role"><span class="zh">委員</span><span class="en">Member</span></td></tr>
+          <tr class="cur"><td class="c-yr">2020 –</td><td class="c-org"><span class="zh">台灣永續能源研究基金會 <small>TCSA 台灣永續獎</small></span><span class="en">Taiwan Institute for Sustainable Energy <small>TCSA Sustainability Awards</small></span></td><td class="c-role"><span class="zh">評選委員（醫院 HSR 永續方案）</span><span class="en">Juror (Hospital HSR)</span></td></tr>
+          <tr class="cur"><td class="c-yr">2025.08 –</td><td class="c-org"><span class="zh">財團法人景文科技大學</span><span class="en">Jinwen University of Science and Technology</span></td><td class="c-role"><span class="zh">校務委員</span><span class="en">University Affairs Committee Member</span></td></tr>
+          <tr class="cur"><td class="c-yr">2013.08 –</td><td class="c-org"><span class="zh">耕莘健康管理專科學校</span><span class="en">Cardinal Tien Junior College of Healthcare &amp; Management</span></td><td class="c-role"><span class="zh">校務委員</span><span class="en">University Affairs Committee Member</span></td></tr>
           <tr class="grp"><td colspan="3"><span class="zh">歷年經歷</span><span class="en">Past</span></td></tr>
-          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org">國立臺北護理健康大學 <small>校長室</small></td><td class="c-role">校長</td></tr>
-          <tr><td class="c-yr">2006.08 – 2009.07</td><td class="c-org">國立臺北護理學院 <small>校長室</small></td><td class="c-role">副校長</td></tr>
-          <tr><td class="c-yr">2010.08 – 2012.07</td><td class="c-org">國立臺北護理健康大學 <small>健康事業管理學院</small></td><td class="c-role">院長</td></tr>
-          <tr><td class="c-yr">2009.08 – 2012.07</td><td class="c-org">國立臺北護理健康大學 <small>資訊管理系</small></td><td class="c-role">系主任</td></tr>
-          <tr><td class="c-yr">2004.08 – 2009.07</td><td class="c-org">國立臺北護理學院 <small>電算中心</small></td><td class="c-role">電算中心主任</td></tr>
-          <tr><td class="c-yr">2005.08 – 2006.07</td><td class="c-org">國立臺北護理學院 <small>資訊管理系</small></td><td class="c-role">系主任</td></tr>
-          <tr><td class="c-yr">2002.08 – 2004.07</td><td class="c-org">國立臺北護理學院 <small>資訊管理系</small></td><td class="c-role">副教授</td></tr>
-          <tr><td class="c-yr">2022.03 – 2024.03</td><td class="c-org">衛生福利部 <small>高齡健康與長照研究策略規劃諮詢會</small></td><td class="c-role">委員</td></tr>
-          <tr><td class="c-yr">2017.01 – 2020.12</td><td class="c-org">新北市政府</td><td class="c-role">長期照顧委員會 委員</td></tr>
-          <tr><td class="c-yr">2018.01 – 2019</td><td class="c-org">台中市政府</td><td class="c-role">長照推動工作教育委員</td></tr>
-          <tr><td class="c-yr">2016.01 – 2016.12</td><td class="c-org">行政院</td><td class="c-role">長期照顧保險工作小組委員</td></tr>
-          <tr><td class="c-yr">2022</td><td class="c-org">財團法人醫院評鑑暨醫療品質策進會 <small>醫策會</small></td><td class="c-role">人體生物資料庫查核委員</td></tr>
-          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org">台灣評鑑協會</td><td class="c-role">資訊管理專業類評鑑委員</td></tr>
-          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org">台灣評鑑協會</td><td class="c-role">專科學校追蹤評鑑委員</td></tr>
-          <tr><td class="c-yr">1993.01 – 1999.12</td><td class="c-org">經濟部智慧財產局</td><td class="c-role">電機組兼任專利審查委員</td></tr>
-          <tr><td class="c-yr">2014.01 – 2016.07</td><td class="c-org">臺灣醫學資訊學會</td><td class="c-role">理事</td></tr>
-          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org">中華民國國立大學校院協會</td><td class="c-role">理事</td></tr>
-          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org">中華民國國立科技大學校院協會</td><td class="c-role">理事</td></tr>
-          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org">中華民國木球協會</td><td class="c-role">副理事長</td></tr>
-          <tr><td class="c-yr">2007.10 – 2012.01</td><td class="c-org">中華民國大專校院資訊服務協會 <small>ISAC</small></td><td class="c-role">監事</td></tr>
-          <tr><td class="c-yr">2008.07 – 2010.07</td><td class="c-org">淡江大學資訊工程系友會</td><td class="c-role">監事</td></tr>
-          <tr><td class="c-yr">2003.08 – 2005.07</td><td class="c-org">中華民國資訊管理學會 <small>CSIM</small></td><td class="c-role">監事</td></tr>
-          <tr><td class="c-yr">2003.08 – 2004.07</td><td class="c-org">國立臺北護理學院 <small>電算中心</small></td><td class="c-role">系統設計組組長</td></tr>
-          <tr><td class="c-yr">2001.08 – 2003.07</td><td class="c-org">景文技術學院 <small>總務處</small></td><td class="c-role">總務長</td></tr>
-          <tr><td class="c-yr">1999.08 – 2001.07</td><td class="c-org">景文技術學院 <small>資訊管理系</small></td><td class="c-role">系主任</td></tr>
-          <tr><td class="c-yr">1997.08 – 2002.07</td><td class="c-org">景文技術學院 <small>資訊管理系</small></td><td class="c-role">副教授</td></tr>
-          <tr><td class="c-yr">1998.01 – 1998.12</td><td class="c-org">台北市政府 <small>職訓局</small></td><td class="c-role">兼任技術講師</td></tr>
-          <tr><td class="c-yr">1992.08 – 1997.07</td><td class="c-org">景文技術學院 <small>資訊管理系</small></td><td class="c-role">講師</td></tr>
-          <tr><td class="c-yr">1992.08 – 1994.07</td><td class="c-org">淡江大學 <small>資訊工程系</small></td><td class="c-role">兼任講師</td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>校長室</small></span><span class="en">NTUNHS <small>President's Office</small></span></td><td class="c-role"><span class="zh">校長</span><span class="en">President</span></td></tr>
+          <tr><td class="c-yr">2006.08 – 2009.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>校長室</small></span><span class="en">National Taipei College of Nursing <small>President's Office</small></span></td><td class="c-role"><span class="zh">副校長</span><span class="en">Vice President</span></td></tr>
+          <tr><td class="c-yr">2010.08 – 2012.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康事業管理學院</small></span><span class="en">NTUNHS <small>College of Health Care Management</small></span></td><td class="c-role"><span class="zh">院長</span><span class="en">Dean</span></td></tr>
+          <tr><td class="c-yr">2009.08 – 2012.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>資訊管理系</small></span><span class="en">NTUNHS <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">系主任</span><span class="en">Department Chair</span></td></tr>
+          <tr><td class="c-yr">2004.08 – 2009.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>電算中心</small></span><span class="en">National Taipei College of Nursing <small>Computer Center</small></span></td><td class="c-role"><span class="zh">電算中心主任</span><span class="en">Director, Computer Center</span></td></tr>
+          <tr><td class="c-yr">2005.08 – 2006.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>資訊管理系</small></span><span class="en">National Taipei College of Nursing <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">系主任</span><span class="en">Department Chair</span></td></tr>
+          <tr><td class="c-yr">2002.08 – 2004.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>資訊管理系</small></span><span class="en">National Taipei College of Nursing <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">副教授</span><span class="en">Associate Professor</span></td></tr>
+          <tr class="cur"><td class="c-yr">2024 –</td><td class="c-org"><span class="zh">考試院</span><span class="en">Examination Yuan</span></td><td class="c-role"><span class="zh">國家考試 典試・命題委員</span><span class="en">National Examination — Examiner &amp; Question Setter</span></td></tr>
+          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org"><span class="zh">教育部全國健康照護產學合作中心</span><span class="en">National Health Care Industry–Academia Cooperation Center, MOE</span></td><td class="c-role"><span class="zh">主持人</span><span class="en">Principal Investigator</span></td></tr>
+          <tr class="cur"><td class="c-yr">2018.01 –</td><td class="c-org"><span class="zh">教育部國民教育署 <small>全國照顧服務科推動計畫</small></span><span class="en">K-12 Education Administration, MOE <small>National Care Service Program</small></span></td><td class="c-role"><span class="zh">主持人</span><span class="en">Principal Investigator</span></td></tr>
+          <tr class="cur"><td class="c-yr">2019.01 –</td><td class="c-org"><span class="zh">教育部 <small>師鐸獎甄審會</small></span><span class="en">Ministry of Education <small>Teacher Award Selection Committee</small></span></td><td class="c-role"><span class="zh">委員</span><span class="en">Member</span></td></tr>
+          <tr><td class="c-yr">2022.03 – 2024.03</td><td class="c-org"><span class="zh">衛生福利部 <small>高齡健康與長照研究策略規劃諮詢會</small></span><span class="en">Ministry of Health and Welfare <small>Aging Health &amp; LTC Research Strategy Advisory Committee</small></span></td><td class="c-role"><span class="zh">委員</span><span class="en">Member</span></td></tr>
+          <tr><td class="c-yr">2017.01 – 2020.12</td><td class="c-org"><span class="zh">新北市政府</span><span class="en">New Taipei City Government</span></td><td class="c-role"><span class="zh">長期照顧委員會 委員</span><span class="en">Long-term Care Committee Member</span></td></tr>
+          <tr><td class="c-yr">2018.01 – 2019</td><td class="c-org"><span class="zh">台中市政府</span><span class="en">Taichung City Government</span></td><td class="c-role"><span class="zh">長照推動工作教育委員</span><span class="en">LTC Promotion &amp; Education Committee Member</span></td></tr>
+          <tr><td class="c-yr">2016.01 – 2016.12</td><td class="c-org"><span class="zh">行政院</span><span class="en">Executive Yuan</span></td><td class="c-role"><span class="zh">長期照顧保險工作小組委員</span><span class="en">Long-term Care Insurance Task Force Member</span></td></tr>
+          <tr class="cur"><td class="c-yr">2020.01 –</td><td class="c-org"><span class="zh">財團法人高等教育評鑑中心基金會</span><span class="en">Higher Education Evaluation &amp; Accreditation Council of Taiwan</span></td><td class="c-role"><span class="zh">專業評鑑機構認可委員</span><span class="en">Accreditation Committee Member</span></td></tr>
+          <tr><td class="c-yr">2022</td><td class="c-org"><span class="zh">財團法人醫院評鑑暨醫療品質策進會 <small>醫策會</small></span><span class="en">Joint Commission of Taiwan <small>JCT</small></span></td><td class="c-role"><span class="zh">人體生物資料庫查核委員</span><span class="en">Biobank Audit Committee Member</span></td></tr>
+          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org"><span class="zh">台灣評鑑協會</span><span class="en">Taiwan Assessment &amp; Evaluation Association</span></td><td class="c-role"><span class="zh">資訊管理專業類評鑑委員</span><span class="en">Information Management Accreditation Reviewer</span></td></tr>
+          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org"><span class="zh">台灣評鑑協會</span><span class="en">Taiwan Assessment &amp; Evaluation Association</span></td><td class="c-role"><span class="zh">專科學校追蹤評鑑委員</span><span class="en">Junior College Follow-up Accreditation Reviewer</span></td></tr>
+          <tr><td class="c-yr">1993.01 – 1999.12</td><td class="c-org"><span class="zh">經濟部智慧財產局</span><span class="en">Taiwan Intellectual Property Office, MOEA</span></td><td class="c-role"><span class="zh">電機組兼任專利審查委員</span><span class="en">Adjunct Patent Examiner (Electrical)</span></td></tr>
+          <tr class="cur"><td class="c-yr">2017.12 –</td><td class="c-org"><span class="zh">生活照顧專業協會</span><span class="en">Life Care Professional Association</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr class="cur"><td class="c-yr">2015.08 –</td><td class="c-org"><span class="zh">台灣電子健康學會</span><span class="en">Taiwan e-Health Association</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr><td class="c-yr">2014.01 – 2016.07</td><td class="c-org"><span class="zh">臺灣醫學資訊學會</span><span class="en">Taiwan Association for Medical Informatics</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國國立大學校院協會</span><span class="en">Association of National Universities of Taiwan</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國國立科技大學校院協會</span><span class="en">Association of National Universities of Technology</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國木球協會</span><span class="en">Woodball Association of R.O.C.</span></td><td class="c-role"><span class="zh">副理事長</span><span class="en">Vice Chairman</span></td></tr>
+          <tr><td class="c-yr">2007.10 – 2012.01</td><td class="c-org"><span class="zh">中華民國大專校院資訊服務協會 <small>ISAC</small></span><span class="en">Information Service Association of Chinese Colleges <small>ISAC</small></span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
+          <tr><td class="c-yr">2008.07 – 2010.07</td><td class="c-org"><span class="zh">淡江大學資訊工程系友會</span><span class="en">Tamkang University CSIE Alumni Association</span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
+          <tr><td class="c-yr">2003.08 – 2005.07</td><td class="c-org"><span class="zh">中華民國資訊管理學會 <small>CSIM</small></span><span class="en">Chinese Society of Information Management <small>CSIM</small></span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
+          <tr><td class="c-yr">2003.08 – 2004.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>電算中心</small></span><span class="en">National Taipei College of Nursing <small>Computer Center</small></span></td><td class="c-role"><span class="zh">系統設計組組長</span><span class="en">Head, System Design Division</span></td></tr>
+          <tr><td class="c-yr">2001.08 – 2003.07</td><td class="c-org"><span class="zh">景文技術學院 <small>總務處</small></span><span class="en">Jinwen Institute of Technology <small>Office of General Affairs</small></span></td><td class="c-role"><span class="zh">總務長</span><span class="en">Director of General Affairs</span></td></tr>
+          <tr><td class="c-yr">1999.08 – 2001.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">系主任</span><span class="en">Department Chair</span></td></tr>
+          <tr><td class="c-yr">1997.08 – 2002.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">副教授</span><span class="en">Associate Professor</span></td></tr>
+          <tr><td class="c-yr">1998.01 – 1998.12</td><td class="c-org"><span class="zh">台北市政府 <small>職訓局</small></span><span class="en">Taipei City Government <small>Vocational Training Bureau</small></span></td><td class="c-role"><span class="zh">兼任技術講師</span><span class="en">Adjunct Technical Lecturer</span></td></tr>
+          <tr><td class="c-yr">1992.08 – 1997.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">講師</span><span class="en">Lecturer</span></td></tr>
+          <tr><td class="c-yr">1992.08 – 1994.07</td><td class="c-org"><span class="zh">淡江大學 <small>資訊工程系</small></span><span class="en">Tamkang University <small>Dept. of Computer Science &amp; Information Engineering</small></span></td><td class="c-role"><span class="zh">兼任講師</span><span class="en">Adjunct Lecturer</span></td></tr>
         </tbody>
       </table>
     </section>
@@ -244,12 +248,14 @@
   </footer>
 
   <script>
-    const b=document.body, t=document.getElementById('langToggle');
-    t.addEventListener('click',()=>{
-      const en=b.classList.toggle('lang-en');
+    const b=document.body;
+    function setLang(en){
+      b.classList.toggle('lang-en',en);
       b.classList.toggle('lang-zh',!en);
       document.documentElement.lang=en?'en':'zh-Hant';
-    });
+    }
+    document.getElementById('segZh').addEventListener('click',()=>setLang(false));
+    document.getElementById('segEn').addEventListener('click',()=>setLang(true));
   </script>
 </body>
 </html>
