@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>謝楠楨 Nan-Chen Hsieh｜個人網站</title>
+<meta name="description" content="謝楠楨 Nan-Chen Hsieh, Ph.D. — 國立臺北護理健康大學 教授。研究專長：智慧醫療、資料科學、高齡健康及長照策略、健康資訊系統。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== THEME（改這幾個變數就能換色） ===== */
+  :root{
+    --brand:#1f3a5f;        /* 深藍 */
+    --brand-deep:#15293f;
+    --accent:#b0894c;       /* 暖金 */
+    --ink:#222a33;
+    --muted:#5a6671;
+    --faint:#8a949d;
+    --line:#e6e3da;
+    --soft:#f6f3ec;         /* 象牙白 */
+    --white:#ffffff;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Inter","Noto Sans TC",system-ui,"Microsoft JhengHei",sans-serif;color:var(--ink);
+    background:var(--white);line-height:1.8;font-weight:400;letter-spacing:.2px;-webkit-font-smoothing:antialiased;}
+  .serif{font-family:"Noto Serif TC",serif;}
+  .garamond{font-family:"Cormorant Garamond",serif;}
+  .en{display:none;}
+  body.lang-en .zh{display:none;}
+  body.lang-en .en{display:inline;}
+
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.93);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .topbar .wrap{max-width:var(--maxw);margin:0 auto;padding:13px 30px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-family:"Noto Serif TC",serif;font-weight:600;font-size:18px;color:var(--brand);letter-spacing:1px;}
+  .brand small{font-family:"Cormorant Garamond",serif;color:#9aa3ac;font-weight:600;font-size:17px;margin-left:6px;}
+  .nav{display:flex;align-items:center;gap:24px;}
+  .nav a{color:var(--muted);text-decoration:none;font-size:14.5px;transition:.2s;}
+  .nav a:hover{color:var(--brand);}
+  .langbtn{border:1px solid #d3cdbf;background:var(--white);color:var(--brand);border-radius:999px;
+    padding:5px 16px;font-size:13px;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:.2s;}
+  .langbtn:hover{border-color:var(--brand);background:var(--soft);}
+
+  .hero{background:linear-gradient(155deg,var(--brand) 0%,var(--brand-deep) 100%);color:#eef2f6;}
+  .hero .wrap{max-width:var(--maxw);margin:0 auto;padding:68px 30px 56px;}
+  .eyebrow{font-size:13px;letter-spacing:5px;text-transform:uppercase;color:#abbccd;margin-bottom:20px;}
+  .hname{font-family:"Noto Serif TC",serif;font-weight:600;font-size:clamp(42px,6vw,62px);line-height:1.04;color:#fff;}
+  .hname .latin{display:block;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:clamp(22px,3vw,30px);
+    letter-spacing:1.5px;color:#bccddd;margin-top:12px;}
+  .hrole{font-size:clamp(15px,2vw,17.5px);color:#d6dfe8;margin-top:24px;max-width:680px;line-height:1.85;}
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
+  .tags span{font-size:13.5px;padding:7px 17px;border:1px solid rgba(255,255,255,.26);border-radius:999px;color:#eaf0f5;}
+  .hcontact{display:flex;flex-wrap:wrap;gap:12px 30px;margin-top:34px;padding-top:24px;
+    border-top:1px solid rgba(255,255,255,.16);font-size:14.5px;color:#cdd8e2;}
+  .hcontact a{color:#cdd8e2;text-decoration:none;}.hcontact a:hover{color:#fff;text-decoration:underline;}
+  .hcontact .ic{color:#abbccd;margin-right:9px;}
+
+  main{max-width:var(--maxw);margin:0 auto;padding:0 30px;}
+  section{padding:52px 0 6px;}
+  .skh{display:flex;align-items:baseline;gap:16px;margin-bottom:26px;}
+  .skh h2{font-family:"Noto Serif TC",serif;font-weight:600;font-size:24px;color:var(--brand);white-space:nowrap;}
+  .skh h2 .lt{font-family:"Cormorant Garamond",serif;color:var(--accent);font-size:20px;margin-left:10px;}
+  .skh .ln{flex:1;height:1px;background:var(--line);}
+
+  .cols{display:grid;grid-template-columns:1fr 1.4fr;gap:18px 60px;align-items:start;}
+  .block .lab{font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+  .block .big{font-family:"Noto Serif TC",serif;font-size:22px;color:var(--ink);font-weight:500;}
+  .reslist{list-style:none;display:flex;flex-wrap:wrap;gap:10px;}
+  .reslist li{font-size:14.5px;color:var(--brand);background:var(--soft);border:1px solid var(--line);
+    padding:7px 15px;border-radius:999px;}
+
+  /* experience table */
+  .svc{width:100%;border-collapse:collapse;font-size:14.5px;}
+  .svc th{text-align:left;font-weight:500;color:var(--faint);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:0 14px 11px;border-bottom:2px solid var(--brand);}
+  .svc td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .svc tr:hover td{background:var(--soft);}
+  .svc .c-yr{white-space:nowrap;color:var(--accent);font-size:13px;width:120px;font-variant-numeric:tabular-nums;}
+  .svc .c-org{font-weight:500;width:300px;}
+  .svc .c-org small{display:block;font-weight:400;color:var(--faint);font-size:12.5px;}
+  .svc .c-role{color:var(--muted);}
+  .svc tr.cur .c-org{color:var(--brand);}
+  .svc tr.cur .c-yr{font-weight:500;}
+  .svc tr.grp td{padding:24px 14px 9px;border-bottom:1px solid var(--brand);
+    font-family:"Noto Serif TC",serif;font-size:13px;letter-spacing:2px;color:var(--brand);}
+  .svc tr.grp:first-child td{padding-top:2px;}
+  .svc tr.grp:hover td{background:transparent;}
+
+  footer{background:var(--soft);border-top:1px solid var(--line);margin-top:56px;}
+  footer .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 30px;display:flex;flex-wrap:wrap;gap:8px 24px;
+    justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint);}
+  footer a{color:var(--muted);text-decoration:none;}footer a:hover{color:var(--brand);}
+
+  @media(max-width:760px){
+    .cols{grid-template-columns:1fr;gap:24px;}
+    .nav .navlink{display:none;}
+    .hero .wrap{padding:48px 22px 42px;}
+    main{padding:0 18px;}
+    .svc{font-size:13.5px;}
+    .svc .c-org{width:auto;}.svc .c-yr{width:auto;}
+    .svc th,.svc td{padding-left:8px;padding-right:8px;}
+  }
+</style>
+</head>
+<body class="lang-zh">
+
+  <div class="topbar">
+    <div class="wrap">
+      <span class="brand">謝楠楨<small>Nan-Chen Hsieh</small></span>
+      <nav class="nav">
+        <a class="navlink" href="#experience"><span class="zh">專業經歷</span><span class="en">Experience</span></a>
+        <button class="langbtn" id="langToggle" aria-label="切換語言 / switch language">
+          <span class="zh">EN</span><span class="en">中文</span>
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow"><span class="zh">教授</span><span class="en">Professor</span></p>
+      <h1 class="hname">
+        <span class="zh">謝楠楨</span><span class="en">Nan-Chen Hsieh</span>
+        <span class="latin">Nan-Chen Hsieh, Ph.D.</span>
+      </h1>
+      <p class="hrole">
+        <span class="zh">國立臺北護理健康大學 資訊管理系 教授</span>
+        <span class="en">Professor, Department of Information Management, National Taipei University of Nursing and Health Sciences</span>
+      </p>
+      <div class="tags">
+        <span><span class="zh">智慧醫療</span><span class="en">Smart Healthcare</span></span>
+        <span><span class="zh">資料科學</span><span class="en">Data Sciences</span></span>
+        <span><span class="zh">高齡健康及長照策略</span><span class="en">Aging Health &amp; Long-term Care</span></span>
+        <span><span class="zh">健康資訊系統</span><span class="en">Health Information Systems</span></span>
+      </div>
+      <div class="hcontact">
+        <span><span class="ic">✉</span><a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a></span>
+        <span><span class="ic">✉</span><a href="mailto:nchsieh@gmail.com">nchsieh@gmail.com</a></span>
+        <span><span class="ic">☎</span>(02) 2822-7101 #1210</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="cols">
+        <div class="block">
+          <div class="skh"><h2><span class="zh">學歷</span><span class="en">Education</span></h2><span class="ln"></span></div>
+          <div class="lab">Ph.D.</div>
+          <div class="big"><span class="zh">資訊工程研究所 博士</span><span class="en">Ph.D., Computer Science &amp; Information Engineering</span></div>
+          <div style="color:var(--muted);font-size:14.5px;margin-top:3px"><span class="zh">淡江大學</span><span class="en">Tamkang University</span></div>
+        </div>
+        <div class="block">
+          <div class="skh"><h2><span class="zh">研究專長</span><span class="en">Research</span></h2><span class="ln"></span></div>
+          <ul class="reslist">
+            <li><span class="zh">智慧醫療</span><span class="en">Smart Healthcare</span></li>
+            <li><span class="zh">資料科學</span><span class="en">Data Sciences</span></li>
+            <li><span class="zh">高齡健康及長照策略</span><span class="en">Aging Health &amp; LTC</span></li>
+            <li><span class="zh">健康資訊系統</span><span class="en">Health Information Systems</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="skh">
+        <h2><span class="zh">專業經歷</span><span class="en">Professional Experience</span></h2>
+        <span class="ln"></span>
+      </div>
+      <table class="svc">
+        <thead>
+          <tr>
+            <th class="c-yr"><span class="zh">期間</span><span class="en">Period</span></th>
+            <th class="c-org"><span class="zh">機構・單位</span><span class="en">Organization</span></th>
+            <th class="c-role"><span class="zh">職務</span><span class="en">Role</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="3"><span class="zh">現職・在職中</span><span class="en">Current</span></td></tr>
+          <tr class="cur"><td class="c-yr">2004.08 –</td><td class="c-org">國立臺北護理健康大學 <small>資訊管理系</small></td><td class="c-role">教授</td></tr>
+          <tr class="cur"><td class="c-yr">2022.02 –</td><td class="c-org">國立臺北護理健康大學 <small>健康科技學院</small></td><td class="c-role">講座教授</td></tr>
+          <tr class="cur"><td class="c-yr">2023.02 –</td><td class="c-org">國立金門大學 <small>健康護理學院</small></td><td class="c-role">榮譽講座教授</td></tr>
+          <tr class="cur"><td class="c-yr">2024 –</td><td class="c-org">考試院</td><td class="c-role">國家考試 典試・命題委員</td></tr>
+          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org">全國大專以上長照課程推動委員會 <small>教育部</small></td><td class="c-role">主任委員</td></tr>
+          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org">教育部全國健康照護產學合作中心</td><td class="c-role">主持人</td></tr>
+          <tr class="cur"><td class="c-yr">2018.01 –</td><td class="c-org">教育部國民教育署 <small>全國照顧服務科推動計畫</small></td><td class="c-role">主持人</td></tr>
+          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org">教育部 <small>技專校院高等教育深耕計畫</small></td><td class="c-role">考評委員</td></tr>
+          <tr class="cur"><td class="c-yr">2019.01 –</td><td class="c-org">教育部 <small>師鐸獎甄審會</small></td><td class="c-role">委員</td></tr>
+          <tr class="cur"><td class="c-yr">2009.10 –</td><td class="c-org">衛生福利部</td><td class="c-role">專案評審委員</td></tr>
+          <tr class="cur"><td class="c-yr">2020.01 –</td><td class="c-org">財團法人高等教育評鑑中心基金會</td><td class="c-role">專業評鑑機構認可委員</td></tr>
+          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org">康寧學校財團法人康寧大學 <small>董事會</small></td><td class="c-role">監察人</td></tr>
+          <tr class="cur"><td class="c-yr">2022.10 –</td><td class="c-org">財團法人新北市私立馨園老人養護中心 <small>董事會</small></td><td class="c-role">董事長</td></tr>
+          <tr class="cur"><td class="c-yr">2024.04 –</td><td class="c-org">國際高端醫療服務組織 <small>UAiTED – CHaMP</small></td><td class="c-role">顧問</td></tr>
+          <tr class="cur"><td class="c-yr">2023.05 –</td><td class="c-org">財團法人豐榮護理之家</td><td class="c-role">董事</td></tr>
+          <tr class="cur"><td class="c-yr">2022.03 –</td><td class="c-org">臺北市立聯合醫院 <small>資訊諮詢小組</small></td><td class="c-role">委員</td></tr>
+          <tr class="cur"><td class="c-yr">2020 –</td><td class="c-org">台灣永續能源研究基金會 <small>TCSA 台灣永續獎</small></td><td class="c-role">評選委員（醫院 HSR 永續方案）</td></tr>
+          <tr class="cur"><td class="c-yr">2017.12 –</td><td class="c-org">生活照顧專業協會</td><td class="c-role">理事</td></tr>
+          <tr class="cur"><td class="c-yr">2015.08 –</td><td class="c-org">台灣電子健康學會</td><td class="c-role">理事</td></tr>
+          <tr class="cur"><td class="c-yr">2025.08 –</td><td class="c-org">財團法人景文科技大學</td><td class="c-role">校務委員</td></tr>
+          <tr class="cur"><td class="c-yr">2013.08 –</td><td class="c-org">耕莘健康管理專科學校</td><td class="c-role">校務委員</td></tr>
+          <tr class="grp"><td colspan="3"><span class="zh">歷年經歷</span><span class="en">Past</span></td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org">國立臺北護理健康大學 <small>校長室</small></td><td class="c-role">校長</td></tr>
+          <tr><td class="c-yr">2006.08 – 2009.07</td><td class="c-org">國立臺北護理學院 <small>校長室</small></td><td class="c-role">副校長</td></tr>
+          <tr><td class="c-yr">2010.08 – 2012.07</td><td class="c-org">國立臺北護理健康大學 <small>健康事業管理學院</small></td><td class="c-role">院長</td></tr>
+          <tr><td class="c-yr">2009.08 – 2012.07</td><td class="c-org">國立臺北護理健康大學 <small>資訊管理系</small></td><td class="c-role">系主任</td></tr>
+          <tr><td class="c-yr">2004.08 – 2009.07</td><td class="c-org">國立臺北護理學院 <small>電算中心</small></td><td class="c-role">電算中心主任</td></tr>
+          <tr><td class="c-yr">2005.08 – 2006.07</td><td class="c-org">國立臺北護理學院 <small>資訊管理系</small></td><td class="c-role">系主任</td></tr>
+          <tr><td class="c-yr">2002.08 – 2004.07</td><td class="c-org">國立臺北護理學院 <small>資訊管理系</small></td><td class="c-role">副教授</td></tr>
+          <tr><td class="c-yr">2022.03 – 2024.03</td><td class="c-org">衛生福利部 <small>高齡健康與長照研究策略規劃諮詢會</small></td><td class="c-role">委員</td></tr>
+          <tr><td class="c-yr">2017.01 – 2020.12</td><td class="c-org">新北市政府</td><td class="c-role">長期照顧委員會 委員</td></tr>
+          <tr><td class="c-yr">2018.01 – 2019</td><td class="c-org">台中市政府</td><td class="c-role">長照推動工作教育委員</td></tr>
+          <tr><td class="c-yr">2016.01 – 2016.12</td><td class="c-org">行政院</td><td class="c-role">長期照顧保險工作小組委員</td></tr>
+          <tr><td class="c-yr">2022</td><td class="c-org">財團法人醫院評鑑暨醫療品質策進會 <small>醫策會</small></td><td class="c-role">人體生物資料庫查核委員</td></tr>
+          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org">台灣評鑑協會</td><td class="c-role">資訊管理專業類評鑑委員</td></tr>
+          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org">台灣評鑑協會</td><td class="c-role">專科學校追蹤評鑑委員</td></tr>
+          <tr><td class="c-yr">1993.01 – 1999.12</td><td class="c-org">經濟部智慧財產局</td><td class="c-role">電機組兼任專利審查委員</td></tr>
+          <tr><td class="c-yr">2014.01 – 2016.07</td><td class="c-org">臺灣醫學資訊學會</td><td class="c-role">理事</td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org">中華民國國立大學校院協會</td><td class="c-role">理事</td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org">中華民國國立科技大學校院協會</td><td class="c-role">理事</td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org">中華民國木球協會</td><td class="c-role">副理事長</td></tr>
+          <tr><td class="c-yr">2007.10 – 2012.01</td><td class="c-org">中華民國大專校院資訊服務協會 <small>ISAC</small></td><td class="c-role">監事</td></tr>
+          <tr><td class="c-yr">2008.07 – 2010.07</td><td class="c-org">淡江大學資訊工程系友會</td><td class="c-role">監事</td></tr>
+          <tr><td class="c-yr">2003.08 – 2005.07</td><td class="c-org">中華民國資訊管理學會 <small>CSIM</small></td><td class="c-role">監事</td></tr>
+          <tr><td class="c-yr">2003.08 – 2004.07</td><td class="c-org">國立臺北護理學院 <small>電算中心</small></td><td class="c-role">系統設計組組長</td></tr>
+          <tr><td class="c-yr">2001.08 – 2003.07</td><td class="c-org">景文技術學院 <small>總務處</small></td><td class="c-role">總務長</td></tr>
+          <tr><td class="c-yr">1999.08 – 2001.07</td><td class="c-org">景文技術學院 <small>資訊管理系</small></td><td class="c-role">系主任</td></tr>
+          <tr><td class="c-yr">1997.08 – 2002.07</td><td class="c-org">景文技術學院 <small>資訊管理系</small></td><td class="c-role">副教授</td></tr>
+          <tr><td class="c-yr">1998.01 – 1998.12</td><td class="c-org">台北市政府 <small>職訓局</small></td><td class="c-role">兼任技術講師</td></tr>
+          <tr><td class="c-yr">1992.08 – 1997.07</td><td class="c-org">景文技術學院 <small>資訊管理系</small></td><td class="c-role">講師</td></tr>
+          <tr><td class="c-yr">1992.08 – 1994.07</td><td class="c-org">淡江大學 <small>資訊工程系</small></td><td class="c-role">兼任講師</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 <span class="serif" style="color:var(--brand)">謝楠楨</span> <span class="garamond" style="color:var(--brand);font-size:15px">Nan-Chen Hsieh</span></span>
+      <span><a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a> ・ <a href="mailto:nchsieh@gmail.com">nchsieh@gmail.com</a></span>
+    </div>
+  </footer>
+
+  <script>
+    const b=document.body, t=document.getElementById('langToggle');
+    t.addEventListener('click',()=>{
+      const en=b.classList.toggle('lang-en');
+      b.classList.toggle('lang-zh',!en);
+      document.documentElement.lang=en?'en':'zh-Hant';
+    });
+  </script>
+</body>
+</html>
