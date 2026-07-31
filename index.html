@@ -5,9 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>謝楠楨 Nan-Chen Hsieh｜個人網站</title>
 <meta name="description" content="謝楠楨 Nan-Chen Hsieh, Ph.D. — 國立臺北護理健康大學 教授。研究專長：智慧醫療、資料科學、高齡健康及長照策略、健康資訊系統。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231f3a5f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="謝楠楨 Nan-Chen Hsieh｜國立臺北護理健康大學 教授">
+<meta property="og:description" content="研究專長：AI 健康科技應用、智慧醫療與臨床決策支援、醫療資料科學與機器學習、高齡健康與長照科技。">
+<meta property="og:url" content="https://nchsieh.github.io/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
 <style>
   /* ===== THEME（改這幾個變數就能換色） ===== */
   :root{
@@ -23,6 +28,8 @@
     --maxw:1080px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0;}
   html{scroll-behavior:smooth}
   body{font-family:"Inter","Noto Sans TC",system-ui,"Microsoft JhengHei",sans-serif;color:var(--ink);
     background:var(--white);line-height:1.8;font-weight:400;letter-spacing:.2px;-webkit-font-smoothing:antialiased;}
@@ -40,10 +47,11 @@
   .nav{display:flex;align-items:center;gap:24px;}
   .nav a{color:var(--muted);text-decoration:none;font-size:14.5px;transition:.2s;}
   .nav a:hover{color:var(--brand);}
-  .langtoggle{display:inline-flex;border:1px solid #d3cdbf;border-radius:999px;overflow:hidden;
-    cursor:pointer;font-size:13px;letter-spacing:.5px;user-select:none;}
-  .langtoggle .seg{padding:5px 14px;color:var(--faint);transition:.2s;}
+  .langtoggle{display:inline-flex;border:1px solid #d3cdbf;border-radius:999px;overflow:hidden;}
+  .langtoggle .seg{appearance:none;-webkit-appearance:none;border:0;background:transparent;font-family:inherit;
+    padding:12px 16px;min-height:44px;color:var(--faint);font-size:13px;letter-spacing:.5px;cursor:pointer;transition:.2s;}
   .langtoggle .seg:hover{color:var(--brand);}
+  .langtoggle .seg:focus-visible{outline:2px solid var(--brand);outline-offset:-2px;}
   body.lang-zh .langtoggle .seg-zh,body.lang-en .langtoggle .seg-en{background:var(--brand);color:#fff;}
 
   .hero{background:linear-gradient(155deg,var(--brand) 0%,var(--brand-deep) 100%);color:#eef2f6;}
@@ -58,7 +66,8 @@
   .hcontact{display:flex;flex-wrap:wrap;gap:12px 30px;margin-top:34px;padding-top:24px;
     border-top:1px solid rgba(255,255,255,.16);font-size:14.5px;color:#cdd8e2;}
   .hcontact a{color:#cdd8e2;text-decoration:none;}.hcontact a:hover{color:#fff;text-decoration:underline;}
-  .hcontact .ic{color:#abbccd;margin-right:9px;}
+  .hcontact .ic{color:#abbccd;margin-right:9px;display:inline-flex;vertical-align:-3px;}
+  .hcontact .ic svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;}
 
   main{max-width:var(--maxw);margin:0 auto;padding:0 30px;}
   section{padding:52px 0 6px;}
@@ -69,20 +78,20 @@
 
   .cols{display:grid;grid-template-columns:1fr 1.4fr;gap:18px 60px;align-items:start;}
   .block .lab{font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
-  .block .big{font-family:"Noto Serif TC",serif;font-size:22px;color:var(--ink);font-weight:500;}
+  .block .big{font-family:"Noto Serif TC",serif;font-size:22px;color:var(--ink);font-weight:600;}
   .reslist{list-style:none;display:flex;flex-wrap:wrap;gap:10px;}
   .reslist li{font-size:14.5px;color:var(--brand);background:var(--soft);border:1px solid var(--line);
     padding:7px 15px;border-radius:999px;}
 
   /* experience table */
-  .svc{width:100%;border-collapse:collapse;font-size:14.5px;}
-  .svc th{text-align:left;font-weight:500;color:var(--faint);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+  .svc{width:100%;border-collapse:collapse;font-size:15px;}
+  .svc th{text-align:left;font-weight:500;color:var(--faint);font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;
     padding:0 14px 11px;border-bottom:2px solid var(--brand);}
-  .svc td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .svc td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top;}
   .svc tr:hover td{background:var(--soft);}
-  .svc .c-yr{white-space:nowrap;color:var(--accent);font-size:13px;width:120px;font-variant-numeric:tabular-nums;}
+  .svc .c-yr{white-space:nowrap;color:var(--accent);font-size:13.5px;width:120px;font-variant-numeric:tabular-nums;}
   .svc .c-org{font-weight:500;width:300px;}
-  .svc .c-org small{display:block;font-weight:400;color:var(--faint);font-size:12.5px;}
+  .svc .c-org small{display:block;font-weight:400;color:var(--faint);font-size:13px;}
   .svc .c-role{color:var(--muted);}
   .svc tr.cur .c-org{color:var(--brand);}
   .svc tr.cur .c-yr{font-weight:500;}
@@ -96,14 +105,38 @@
     justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint);}
   footer a{color:var(--muted);text-decoration:none;}footer a:hover{color:var(--brand);}
 
+  #backTop{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;
+    background:var(--brand);color:#fff;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .25s,transform .25s;z-index:15;}
+  #backTop.show{opacity:1;pointer-events:auto;transform:translateY(0);}
+  #backTop:hover{background:var(--brand-deep);}
+  #backTop svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;}
+
+  @media print{
+    .topbar,.langtoggle,#backTop{display:none!important;}
+    body{background:#fff;}
+    .hero{background:#fff!important;color:#000!important;}
+    .hero .wrap{padding:0 0 24px;}
+    .eyebrow,.hrole,.latin{color:#333!important;}
+    .hname{color:#000!important;}
+    .tags span{border-color:#999;color:#000;}
+    .hcontact,.hcontact a{color:#000!important;}
+    .svc tr{page-break-inside:avoid;break-inside:avoid;}
+    .svc tr:hover td{background:transparent;}
+    footer{background:#fff;margin-top:24px;}
+    a{text-decoration:none;color:#000;}
+    section{padding-top:20px;}
+  }
+
   @media(max-width:760px){
     .cols{grid-template-columns:1fr;gap:24px;}
     .nav .navlink{display:none;}
     .hero .wrap{padding:48px 22px 42px;}
     main{padding:0 18px;}
-    .svc{font-size:13.5px;}
+    .svc{font-size:14px;}
     .svc .c-org{width:auto;}.svc .c-yr{width:auto;}
     .svc th,.svc td{padding-left:8px;padding-right:8px;}
+    #backTop{right:16px;bottom:16px;}
   }
 </style>
 </head>
@@ -114,7 +147,7 @@
       <span class="brand">謝楠楨<small>Nan-Chen Hsieh</small></span>
       <nav class="nav">
         <div class="langtoggle" role="group" aria-label="切換語言 / switch language">
-          <span class="seg seg-zh" id="segZh">中文</span><span class="seg seg-en" id="segEn">EN</span>
+          <button type="button" class="seg seg-zh" id="segZh" aria-pressed="true">中文</button><button type="button" class="seg seg-en" id="segEn" aria-pressed="false">EN</button>
         </div>
       </nav>
     </div>
@@ -139,9 +172,9 @@
         <span><span class="zh">健康資訊系統</span><span class="en">Health Information Systems</span></span>
       </div>
       <div class="hcontact">
-        <span><span class="ic">✉</span><a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a></span>
-        <span><span class="ic">✉</span><a href="mailto:nchsieh@gmail.com">nchsieh@gmail.com</a></span>
-        <span><span class="ic">☎</span>(02) 2822-7101 #1210</span>
+        <span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 6l9 7 9-7M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg></span><a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a></span>
+        <span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 6l9 7 9-7M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg></span><a href="mailto:nchsieh@gmail.com">nchsieh@gmail.com</a></span>
+        <span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.5 3 3.9 5.4 6.9 6.9l2.3-2.3c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1L6.6 10.8z"/></svg></span>(02) 2822-7101 #1210</span>
       </div>
     </div>
   </header>
@@ -174,11 +207,12 @@
         <span class="ln"></span>
       </div>
       <table class="svc">
+        <caption class="sr-only"><span class="zh">謝楠楨專業經歷列表，依期間、機構單位、職務三欄呈現</span><span class="en">List of Nan-Chen Hsieh's professional experience, with columns for period, organization, and role</span></caption>
         <thead>
           <tr>
-            <th class="c-yr"><span class="zh">期間</span><span class="en">Period</span></th>
-            <th class="c-org"><span class="zh">機構・單位</span><span class="en">Organization</span></th>
-            <th class="c-role"><span class="zh">職務</span><span class="en">Role</span></th>
+            <th class="c-yr" scope="col"><span class="zh">期間</span><span class="en">Period</span></th>
+            <th class="c-org" scope="col"><span class="zh">機構・單位</span><span class="en">Organization</span></th>
+            <th class="c-role" scope="col"><span class="zh">職務</span><span class="en">Role</span></th>
           </tr>
         </thead>
         <tbody>
@@ -246,15 +280,28 @@
     </div>
   </footer>
 
+  <button type="button" id="backTop" aria-label="回到頂部 / back to top">
+    <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+
   <script>
     const b=document.body;
+    const segZh=document.getElementById('segZh'), segEn=document.getElementById('segEn');
     function setLang(en){
       b.classList.toggle('lang-en',en);
       b.classList.toggle('lang-zh',!en);
       document.documentElement.lang=en?'en':'zh-Hant';
+      segZh.setAttribute('aria-pressed',String(!en));
+      segEn.setAttribute('aria-pressed',String(en));
     }
-    document.getElementById('segZh').addEventListener('click',()=>setLang(false));
-    document.getElementById('segEn').addEventListener('click',()=>setLang(true));
+    segZh.addEventListener('click',()=>setLang(false));
+    segEn.addEventListener('click',()=>setLang(true));
+
+    const backTop=document.getElementById('backTop');
+    window.addEventListener('scroll',()=>{
+      backTop.classList.toggle('show',window.scrollY>600);
+    },{passive:true});
+    backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
   </script>
 </body>
 </html>
