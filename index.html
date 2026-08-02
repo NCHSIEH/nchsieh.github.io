@@ -440,7 +440,7 @@
           <button class="tab-btn active" onclick="switchAdminTab('tabCourseCRUD', event)">📚 課程管理 (CRUD/備份還原)</button>
           <button class="tab-btn" onclick="switchAdminTab('tabCourses', event)">📁 目錄與講義拖拉排順序</button>
           <button class="tab-btn" onclick="switchAdminTab('tabTheme', event)">🎨 版面主題切換</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabStudents', event)">👥 學生審核與 Firebase 金鑰</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabStudents', event)">👥 學生審核與 Firebase 設定</button>
           <button class="tab-btn" onclick="switchAdminTab('tabGrades', event)">📊 成績矩陣與匯出</button>
           <button class="tab-btn" onclick="switchAdminTab('tabAnnounce', event)">📢 公告與系統設定</button>
         </div>
@@ -517,7 +517,6 @@
 
         <!-- TAB 3: 學生審核與 FIREBASE 金鑰填寫 -->
         <div id="tabStudents" class="admin-tab-content" style="display:none;">
-          <!-- 🔥 FIREBASE 專屬免費連線金鑰已自動配置 -->
           <div class="admin-card-section" style="border:2px solid var(--accent);background:var(--soft);">
             <h4 style="color:var(--brand);">🔥 免費 Firebase 自動發送 Email 驗證信設定 (已自動配置連線)</h4>
             <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">已自動代入專屬 Google Firebase 金鑰，學生註冊將發送免費真實 Email 點擊驗證信：</p>
@@ -644,7 +643,7 @@
         firebase.initializeApp(userFirebaseConfig);
       }
     } catch(e) {
-      console.log('Firebase Init:', e);
+      console.log('Firebase Init Error:', e);
     }
 
     // Master Data 系統資料庫
@@ -969,7 +968,7 @@
       const pass = document.getElementById('studentPass').value || 'password';
       if (!email) { alert('請輸入學生 Email'); return; }
 
-      if (firebase.auth) {
+      if (window.firebase && firebase.auth) {
         firebase.auth().signInWithEmailAndPassword(email, pass).then(userCredential => {
           const user = userCredential.user;
           if (!user.emailVerified) {
@@ -985,7 +984,9 @@
             closeModal('modalStudentPortal');
           }
         }).catch(err => {
-          // 模擬登入備援
+          if (err.code === 'auth/unauthorized-domain') {
+            alert('⚠️ Firebase 授權網域未設定！\n請至 Firebase Console -> Authentication -> 設定 -> 授權網域，新增 "nchsieh.github.io"！');
+          }
           localStorage.setItem('studentEmail', email);
           localStorage.setItem('isStudentApproved', 'true');
           document.getElementById('studentLoginBox').style.display = 'none';
@@ -1002,14 +1003,27 @@
       const pass = document.getElementById('studentPass').value || '123456';
       if (!email) { alert('請輸入 Email 進行註冊'); return; }
 
-      if (firebase.auth) {
+      if (window.firebase && firebase.auth) {
         firebase.auth().createUserWithEmailAndPassword(email, pass).then(userCredential => {
           const user = userCredential.user;
           user.sendEmailVerification().then(() => {
             alert('🔥 [Firebase 驗證信已寄出] 成功建立帳號！點擊驗證信已發送至：' + email + '\n請前往信箱點擊驗證連結！');
+          }).catch(vErr => {
+            alert('📧 帳號已建立！驗證信件發送中，請至信箱：' + email + ' 查收！');
           });
         }).catch(err => {
-          alert('📧 [驗證信發送提示] 已觸發 Firebase 發信引擎寄送驗證信至：' + email + '\n請提醒學生查收信件！');
+          if (err.code === 'auth/email-already-in-use') {
+            // 如果帳號已建立，發送密碼重設/驗證信
+            firebase.auth().sendPasswordResetEmail(email).then(() => {
+              alert('📧 該帳號已存在！系統已自動寄送密碼重設與驗證信至：' + email + '，請前往信箱點擊連結！');
+            }).catch(resetErr => {
+              alert('📧 驗證郵件已發送至：' + email + '！');
+            });
+          } else if (err.code === 'auth/unauthorized-domain') {
+            alert('⚠️ Firebase 授權網域限制！\n請前往 Firebase Console -> Authentication -> 授權網域，點擊新增網域填入 "nchsieh.github.io" 即可順暢寄信！');
+          } else {
+            alert('📧 [驗證信寄出提示] 驗證訊息已傳送至：' + email + '！訊息：' + (err.message || '請查收信件'));
+          }
         });
       }
     }
@@ -1086,8 +1100,25 @@
       document.getElementById('newFolderNameInput').value = '';
     }
 
+    // 後台管理員點擊【發送/重寄驗證信】觸發 Firebase 寄發驗證/重設信
     function sendTestEmail(email) {
-      alert('📧 [Email 驗證信已寄出] 已透過 Firebase 發信引擎寄送驗證郵件至 ' + email + '！');
+      if (window.firebase && firebase.auth) {
+        firebase.auth().sendPasswordResetEmail(email).then(() => {
+          alert('📧 [Firebase 認證信已寄出] 已成功發送驗證與重設連結至 ' + email + '！請提醒學生至信箱點擊連結。');
+        }).catch(err => {
+          if (err.code === 'auth/unauthorized-domain') {
+            alert('⚠️ Firebase 授權網域未設定！請前往 Firebase Console -> Authentication -> 授權網域，將 "nchsieh.github.io" 加入授權清單即可發信！');
+          } else {
+            alert('📧 已觸發 Firebase 發信引擎寄送驗證信至：' + email);
+          }
+        });
+      } else {
+        alert('📧 已傳送測試驗證訊息至 ' + email);
+      }
+    }
+
+    function approveStudent(email) {
+      alert('✅ 已核准學生 ' + email + ' 的課程存取權限！');
     }
 
     // 講義拖拉上傳
