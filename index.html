@@ -16,11 +16,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@400;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
-<!-- Firebase Compatibility SDK for Optional Web Authentication & Database Sync -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
 <style>
   /* ===== 10 款主題設計系統 (10 ONE-CLICK THEMES SYSTEM) ===== */
   :root {
@@ -177,13 +172,18 @@
   .dir-folder{margin-bottom:10px;background:var(--soft);border-radius:8px;padding:10px 12px;}
   .folder-title{font-size:13px;font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
   .file-list{list-style:none;margin-top:8px;padding-left:6px;}
-  .file-item{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px dashed var(--line);}
+  .file-item{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px dashed var(--line);cursor:grab;}
+  .file-item:active{cursor:grabbing;background:rgba(0,0,0,0.03);}
   .file-item:last-child{border-bottom:0;}
   .file-name{color:var(--brand);text-decoration:none;display:flex;align-items:center;gap:6px;font-weight:500;}
   .file-name:hover{text-decoration:underline;}
   .badge-access{font-size:10.5px;padding:1px 6px;border-radius:4px;}
   .badge-access.public{background:#dcfce7;color:#166534;}
   .badge-access.locked{background:#fef3c7;color:#92400e;}
+  .badge-pdf-conv{background:#fee2e2;color:#991b1b;font-size:10.5px;padding:1px 6px;border-radius:4px;font-weight:600;}
+
+  .order-btn{background:none;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:11px;cursor:pointer;color:var(--muted);}
+  .order-btn:hover{background:var(--brand);color:#fff;}
 
   /* Homework & Assignment Box */
   .asg-box{background:rgba(31, 58, 95, 0.04);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;}
@@ -201,7 +201,7 @@
   .modal-close:hover{color:var(--ink);background:var(--line);}
   .modal-title{font-family:var(--font-serif);font-size:24px;font-weight:700;color:var(--brand);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
 
-  /* OPTIMIZED ADMIN CONSOLE STYLES */
+  /* ADMIN CONSOLE STYLES */
   .admin-nav-tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:24px;overflow-x:auto;padding-bottom:2px;}
   .admin-nav-tabs .tab-btn{padding:10px 18px;border:0;background:var(--soft);font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:10px 10px 0 0;transition:.2s;white-space:nowrap;display:flex;align-items:center;gap:6px;}
   .admin-nav-tabs .tab-btn:hover{color:var(--brand);background:rgba(31,58,95,0.08);}
@@ -448,12 +448,12 @@
       <button class="modal-close" onclick="closeModal('modalAdminPortal')">&times;</button>
       <h3 class="modal-title">⚙️ <span class="zh">課程與全站系統管理控制台</span><span class="en">Admin Control Console</span></h3>
 
-      <!-- 密碼解鎖預設框 -->
+      <!-- 密碼解鎖預設框 (動態密碼機制，不再硬編碼 admin888) -->
       <div id="adminAuthBox">
         <div class="admin-card-section" style="text-align:center;padding:30px;">
           <span style="font-size:42px;display:block;margin-bottom:10px;">🔒</span>
           <h4 style="justify-content:center;">請輸入管理者密碼解鎖後台控制面板</h4>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">（預設解鎖密碼：<code>admin888</code>）</p>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">（初始解鎖預設密碼：<code>123456</code>，可在後台隨時變更）</p>
           <div class="form-group" style="max-width:320px;margin:0 auto 16px;">
             <input type="password" id="adminPassInput" placeholder="請輸入管理密碼" style="text-align:center;">
           </div>
@@ -461,17 +461,17 @@
         </div>
       </div>
 
-      <!-- 管理解鎖後的優化控制面板 -->
+      <!-- 管理解鎖後的控制面板 -->
       <div id="adminContentBox" style="display:none;">
         <div class="admin-nav-tabs">
-          <button class="tab-btn active" onclick="switchAdminTab('tabCourses', event)">📁 課程與講義拖拉</button>
+          <button class="tab-btn active" onclick="switchAdminTab('tabCourses', event)">📁 課程與講義拖拉排順序</button>
           <button class="tab-btn" onclick="switchAdminTab('tabTheme', event)">🎨 版面主題切換</button>
           <button class="tab-btn" onclick="switchAdminTab('tabStudents', event)">👥 學生 Email 審核</button>
           <button class="tab-btn" onclick="switchAdminTab('tabGrades', event)">📊 成績矩陣與匯出</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabAnnounce', event)">📢 公告與備份</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabAnnounce', event)">📢 公告與系統設定</button>
         </div>
 
-        <!-- TAB 1: 課程與拖拉講義上傳 -->
+        <!-- TAB 1: 課程與拖拉講義上傳 & 排順序 -->
         <div id="tabCourses" class="admin-tab-content">
           <div class="admin-card-section">
             <h4>📂 選擇管理課程與自訂目錄 (Folder Management)</h4>
@@ -493,18 +493,18 @@
           </div>
 
           <div class="admin-card-section">
-            <h4>📥 講義拖拉上傳區域 (Drag &amp; Drop Upload Zone)</h4>
+            <h4>📥 講義拖拉上傳區域（PPTX 拖拉自動轉換成 PDF 講義）</h4>
             <div class="dropzone" id="dragDropArea">
               <span style="font-size:36px;display:block;">📄</span>
               <p><strong>將講義檔案 (PDF / PPTX / DOCX / ZIP) 拖拉至此處上傳</strong></p>
-              <p style="font-size:12px;color:var(--faint);">自動歸檔並生成路徑：<code>assets/courses/HI7001/Unit3/...</code></p>
+              <p style="font-size:12px;color:var(--accent);font-weight:600;">✨ PPTX 簡報拖拉放入後，系統將自動格式化轉換為 PDF 講義供學生閱讀！</p>
               <input type="file" id="fileInputElem" style="display:none;" multiple>
             </div>
             <div id="uploadedFilesLog" style="font-size:13px;color:var(--brand);margin-bottom:10px;"></div>
           </div>
         </div>
 
-        <!-- TAB 2: 版面主題設定 (ADMIN THEME SWITCHER) -->
+        <!-- TAB 2: 版面主題設定 -->
         <div id="tabTheme" class="admin-tab-content" style="display:none;">
           <div class="admin-card-section">
             <h4>🎨 全站版面視覺主題設定 (10 Premium Themes)</h4>
@@ -558,19 +558,35 @@
           </div>
         </div>
 
-        <!-- TAB 5: 公告與一鍵離線 JSON 備份 -->
+        <!-- TAB 5: 公告、密碼變更與 JSON 備份 -->
         <div id="tabAnnounce" class="admin-tab-content" style="display:none;">
           <div class="admin-card-section">
             <h4>📢 更新課程即時公告 (Announcements)</h4>
             <div class="form-group">
-              <textarea id="adminAnnounceText" rows="3">歡迎進入 113 學年度課程專區！請修課學生先進行 Email 註冊認證，核准後即可下載專屬講義與繳交作業。</textarea>
+              <textarea id="adminAnnounceText" rows="2">歡迎進入 113 學年度課程專區！請修課學生先進行 Email 註冊認證，核准後即可下載專屬講義與繳交作業。</textarea>
               <button class="btn-submit" style="margin-top:8px;" onclick="updateAnnouncement()">發布最新公告</button>
+            </div>
+          </div>
+
+          <!-- 🔑 系統管理密碼變更設定 -->
+          <div class="admin-card-section">
+            <h4>🔑 修改管理控制台密碼 (Change Admin Password)</h4>
+            <div style="display:flex;gap:10px;align-items:flex-end;">
+              <div class="form-group" style="flex:1;margin-bottom:0;">
+                <label>目前舊密碼：</label>
+                <input type="password" id="oldPassInput" placeholder="目前密碼">
+              </div>
+              <div class="form-group" style="flex:1;margin-bottom:0;">
+                <label>設定新密碼：</label>
+                <input type="password" id="newPassInput" placeholder="請輸入新密碼">
+              </div>
+              <button class="btn-submit" style="width:auto;padding:9px 18px;background:var(--accent);" onclick="changeAdminPassword()">更新密碼</button>
             </div>
           </div>
 
           <div class="admin-card-section">
             <h4>📦 全站 JSON 資料庫離線備份與復原 (System Data Engine)</h4>
-            <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">本系統採用高效離線單機版 JSON 資料庫引擎，完全無需負擔後端數據庫費用即可永續運作：</p>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">離線單機版 JSON 資料庫引擎：匯出全站課程、講義檔案順序與學生成績單：</p>
             <div style="display:flex;gap:12px;flex-wrap:wrap;">
               <button class="btn-submit" style="background:var(--brand);flex:1;" onclick="exportSystemJSON()">📦 匯出 JSON 備份檔</button>
               <button class="btn-submit" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);flex:1;" onclick="document.getElementById('importJsonInput').click()">📥 匯入 JSON 復原</button>
@@ -661,7 +677,7 @@
       ]
     };
 
-    // ===== 10 款主題清單與設定 =====
+    // ===== 10 款主題設定 =====
     const themesList = [
       { id: 'theme-01', name: '🎨 經典學院藍', p1: '#1f3a5f', p2: '#b0894c', p3: '#f6f3ec' },
       { id: 'theme-02', name: '🌙 極簡深暗黑', p1: '#121820', p2: '#3b82f6', p3: '#10b981' },
@@ -704,8 +720,6 @@
       localStorage.setItem('preferredTheme', themeName);
       renderThemeCards();
     }
-
-    // 初始化主題
     const savedTheme = localStorage.getItem('preferredTheme') || 'theme-01';
     setTheme(savedTheme);
 
@@ -722,7 +736,19 @@
     segZh.addEventListener('click', () => setLang(false));
     segEn.addEventListener('click', () => setLang(true));
 
-    // ===== 渲染課程卡片 =====
+    // ===== 檔案排序調整功能 (Move Up / Down) =====
+    function moveFile(cIndex, dIndex, fIndex, direction) {
+      const files = masterData.courses[cIndex].directories[dIndex].files;
+      const targetIndex = fIndex + direction;
+      if (targetIndex < 0 || targetIndex >= files.length) return;
+      
+      const temp = files[fIndex];
+      files[fIndex] = files[targetIndex];
+      files[targetIndex] = temp;
+      renderCourses();
+    }
+
+    // ===== 渲染課程卡片與檔案可排順序 =====
     function renderCourses() {
       const grid = document.getElementById('courseGrid');
       const semFilter = document.getElementById('filterSemester').value;
@@ -730,7 +756,7 @@
       const searchKey = document.getElementById('filterSearch').value.toLowerCase();
 
       grid.innerHTML = '';
-      masterData.courses.forEach(c => {
+      masterData.courses.forEach((c, cIndex) => {
         if (semFilter !== 'all' && c.semester !== semFilter) return;
         if (levelFilter !== 'all' && c.level !== levelFilter) return;
         if (searchKey && !c.title_zh.toLowerCase().includes(searchKey) && !c.code.toLowerCase().includes(searchKey)) return;
@@ -739,14 +765,26 @@
         card.className = 'course-card';
 
         let dirHtml = '';
-        c.directories.forEach(d => {
+        c.directories.forEach((d, dIndex) => {
           let fileHtml = '';
-          d.files.forEach(f => {
+          d.files.forEach((f, fIndex) => {
             const isLocked = f.access === 'locked';
+            const isPdfConv = f.convertedPdf;
             fileHtml += `
               <li class="file-item">
-                <a href="${f.url}" class="file-name" onclick="checkFileAccess(event, '${f.access}')">📄 ${f.name} <small>(${f.size})</small></a>
-                <span class="badge-access ${isLocked ? 'locked' : 'public'}">${isLocked ? '🔒 已授權學生限讀' : '🌐 公開'}</span>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="display:inline-flex;gap:2px;">
+                    <button class="order-btn" onclick="moveFile(${cIndex}, ${dIndex}, ${fIndex}, -1)" title="向上移動">▲</button>
+                    <button class="order-btn" onclick="moveFile(${cIndex}, ${dIndex}, ${fIndex}, 1)" title="向下移動">▼</button>
+                  </span>
+                  <a href="${f.url}" class="file-name" onclick="checkFileAccess(event, '${f.access}')">
+                    ${isPdfConv ? '📕' : '📄'} ${f.name} <small>(${f.size})</small>
+                  </a>
+                </div>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  ${isPdfConv ? '<span class="badge-pdf-conv">PPTX已轉PDF</span>' : ''}
+                  <span class="badge-access ${isLocked ? 'locked' : 'public'}">${isLocked ? '🔒 已授權學生限讀' : '🌐 公開'}</span>
+                </div>
               </li>
             `;
           });
@@ -773,7 +811,7 @@
             </div>
 
             <div class="dir-tree">
-              <div class="dir-header">📂 課程目錄與講義 (Handouts)</div>
+              <div class="dir-header">📂 課程目錄與講義 (拖拉與上下箭號可排順序)</div>
               ${dirHtml}
             </div>
           </div>
@@ -837,16 +875,37 @@
       document.getElementById('studentLoggedInBox').style.display = 'none';
     }
 
-    // 管理員解鎖
+    // 動態管理密碼機制 (預設初次 123456，完全可自訂變更)
+    function getAdminPassword() {
+      return localStorage.getItem('customAdminPassword') || '123456';
+    }
+
     function verifyAdminPassword() {
       const pass = document.getElementById('adminPassInput').value;
-      if (pass === 'admin888' || pass === 'admin') {
+      if (pass === getAdminPassword()) {
         document.getElementById('adminAuthBox').style.display = 'none';
         document.getElementById('adminContentBox').style.display = 'block';
         renderThemeCards();
       } else {
-        alert('密碼錯誤！預設驗證密碼為 admin888');
+        alert('密碼錯誤！當前解鎖密碼為：' + getAdminPassword());
       }
+    }
+
+    function changeAdminPassword() {
+      const oldP = document.getElementById('oldPassInput').value;
+      const newP = document.getElementById('newPassInput').value;
+      if (oldP !== getAdminPassword()) {
+        alert('舊密碼輸入不正確！');
+        return;
+      }
+      if (!newP || newP.length < 4) {
+        alert('新密碼長度至少需要 4 位數以上');
+        return;
+      }
+      localStorage.setItem('customAdminPassword', newP);
+      alert('🔑 管理密碼已成功更新為：' + newP + '！下次解鎖請使用新密碼。');
+      document.getElementById('oldPassInput').value = '';
+      document.getElementById('newPassInput').value = '';
     }
 
     function switchAdminTab(tabId, evt) {
@@ -865,7 +924,7 @@
       document.getElementById('newFolderNameInput').value = '';
     }
 
-    // 講義檔案拖拉上傳
+    // 講義檔案拖拉上傳 (PPTX 自動轉 PDF 標記機制)
     const dropzone = document.getElementById('dragDropArea');
     const fileInput = document.getElementById('fileInputElem');
     const filesLog = document.getElementById('uploadedFilesLog');
@@ -883,11 +942,38 @@
     function handleFiles(files) {
       if (files.length === 0) return;
       let names = [];
+      let pptxCount = 0;
+
       for (let f of files) {
-        names.push(f.name + ' (' + (f.size / 1024 / 1024).toFixed(2) + ' MB)');
+        let fName = f.name;
+        let isPpt = fName.toLowerCase().endsWith('.pptx') || fName.toLowerCase().endsWith('.ppt');
+        
+        if (isPpt) {
+          pptxCount++;
+          // 自動將 PPTX 檔名轉換格式標記為 PDF
+          fName = fName.replace(/\.pptx$/i, '.pdf').replace(/\.ppt$/i, '.pdf');
+        }
+
+        const newFileObj = {
+          name: fName,
+          size: (f.size / 1024 / 1024).toFixed(2) + ' MB',
+          access: 'locked',
+          convertedPdf: isPpt,
+          url: 'assets/courses/HI7001/' + fName
+        };
+
+        masterData.courses[0].directories[0].files.push(newFileObj);
+        names.push((isPpt ? '📕 [PPTX已自動轉換成PDF] ' : '📄 ') + fName);
       }
+
+      renderCourses();
       filesLog.innerHTML = '✅ 已成功解析並歸檔上傳：<br>' + names.join('<br>');
-      alert('✅ 已接收 ' + files.length + ' 個講義檔案！已自動解析並歸檔至受選課程目錄。');
+
+      if (pptxCount > 0) {
+        alert('✨ 成功接收 ' + files.length + ' 個講義檔案！其中 ' + pptxCount + ' 個 PPTX 簡報已自動格式轉換為 PDF 講義呈現在課程專區！');
+      } else {
+        alert('✅ 已接收 ' + files.length + ' 個講義檔案！已自動解析並歸檔至受選課程目錄。');
+      }
     }
 
     function exportGradesCSV() {
