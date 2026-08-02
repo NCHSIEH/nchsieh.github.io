@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@400;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
-<!-- Firebase Compatibility SDK for Web Authentication & Database -->
+<!-- Firebase Compatibility SDK for Optional Web Authentication & Database Sync -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -103,9 +103,6 @@
   .brand{font-family:var(--font-serif);font-weight:700;font-size:19px;color:var(--brand);letter-spacing:1px;display:flex;align-items:center;gap:6px;}
   .brand small{font-family:"Cormorant Garamond",serif;color:var(--faint);font-weight:600;font-size:16px;}
   .nav-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-  
-  .theme-select{background:var(--soft);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-size:13px;font-family:inherit;cursor:pointer;outline:none;transition:.2s;}
-  .theme-select:hover{border-color:var(--brand);}
 
   .langtoggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--soft);}
   .langtoggle .seg{appearance:none;border:0;background:transparent;font-family:inherit;padding:6px 14px;color:var(--faint);font-size:13px;cursor:pointer;transition:.2s;}
@@ -197,16 +194,32 @@
   .due-done{background:#dcfce7;color:#15803d;}
 
   /* ===== MODAL & DRAWER SYSTEM ===== */
-  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(5px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
   .modal-overlay.active{display:flex;}
-  .modal-card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;max-width:720px;width:100%;max-height:90vh;overflow-y:auto;padding:28px;box-shadow:0 20px 40px rgba(0,0,0,0.2);position:relative;color:var(--ink);}
-  .modal-close{position:absolute;top:18px;right:20px;background:none;border:0;font-size:24px;cursor:pointer;color:var(--faint);}
-  .modal-close:hover{color:var(--ink);}
-  .modal-title{font-family:var(--font-serif);font-size:22px;font-weight:700;color:var(--brand);margin-bottom:16px;}
+  .modal-card{background:var(--card-bg);border:1px solid var(--line);border-radius:18px;max-width:920px;width:100%;max-height:92vh;overflow-y:auto;padding:32px;box-shadow:0 24px 50px rgba(0,0,0,0.25);position:relative;color:var(--ink);}
+  .modal-close{position:absolute;top:20px;right:22px;background:var(--soft);border:1px solid var(--line);width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;color:var(--faint);display:flex;align-items:center;justify-content:center;transition:.2s;}
+  .modal-close:hover{color:var(--ink);background:var(--line);}
+  .modal-title{font-family:var(--font-serif);font-size:24px;font-weight:700;color:var(--brand);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+
+  /* OPTIMIZED ADMIN CONSOLE STYLES */
+  .admin-nav-tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:24px;overflow-x:auto;padding-bottom:2px;}
+  .admin-nav-tabs .tab-btn{padding:10px 18px;border:0;background:var(--soft);font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:10px 10px 0 0;transition:.2s;white-space:nowrap;display:flex;align-items:center;gap:6px;}
+  .admin-nav-tabs .tab-btn:hover{color:var(--brand);background:rgba(31,58,95,0.08);}
+  .admin-nav-tabs .tab-btn.active{color:#fff;background:var(--brand);}
+
+  .admin-card-section{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:20px;}
+  .admin-card-section h4{font-size:15px;color:var(--brand);font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+
+  /* Theme Selector Cards Grid inside Admin */
+  .theme-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:14px;}
+  .theme-card{border:2px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;transition:.2s;background:var(--card-bg);display:flex;flex-direction:column;gap:8px;}
+  .theme-card:hover, .theme-card.active{border-color:var(--brand);transform:scale(1.02);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+  .theme-swatch{height:28px;border-radius:6px;display:flex;overflow:hidden;border:1px solid rgba(0,0,0,0.1);}
+  .swatch-p1{flex:2;} .swatch-p2{flex:1;} .swatch-p3{flex:1;}
 
   /* Drag & Drop Upload Zone */
-  .dropzone{border:2px dashed var(--brand);border-radius:12px;padding:30px;text-align:center;background:var(--soft);cursor:pointer;transition:.2s;margin:16px 0;}
-  .dropzone:hover, .dropzone.dragover{background:rgba(31,58,95,0.1);border-color:var(--accent);}
+  .dropzone{border:2px dashed var(--brand);border-radius:12px;padding:32px 20px;text-align:center;background:var(--card-bg);cursor:pointer;transition:.2s;margin:16px 0;}
+  .dropzone:hover, .dropzone.dragover{background:rgba(31,58,95,0.08);border-color:var(--accent);}
   .dropzone p{font-size:14px;color:var(--muted);margin-top:6px;}
 
   /* Form controls inside modal */
@@ -216,16 +229,11 @@
   .btn-submit{background:var(--brand);color:#fff;border:0;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;font-size:14.5px;transition:.2s;}
   .btn-submit:hover{background:var(--brand-deep);}
 
-  /* Tabs inside admin modal */
-  .tab-headers{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:18px;}
-  .tab-btn{padding:8px 16px;border:0;background:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--faint);cursor:pointer;border-bottom:2px solid transparent;}
-  .tab-btn.active{color:var(--brand);border-bottom-color:var(--brand);}
-
   /* Grade Table */
-  .grade-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px;}
-  .grade-table th, .grade-table td{border:1px solid var(--line);padding:8px 10px;text-align:center;}
-  .grade-table th{background:var(--soft);color:var(--brand);font-weight:600;}
-  .grade-input{width:60px;padding:4px;text-align:center;border:1px solid var(--line);border-radius:4px;}
+  .grade-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px;background:var(--card-bg);border-radius:8px;overflow:hidden;}
+  .grade-table th, .grade-table td{border:1px solid var(--line);padding:10px;text-align:center;}
+  .grade-table th{background:var(--soft);color:var(--brand);font-weight:700;}
+  .grade-input{width:65px;padding:5px;text-align:center;border:1px solid var(--line);border-radius:6px;}
 
   footer{background:var(--soft);border-top:1px solid var(--line);margin-top:60px;}
   footer .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 24px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint);}
@@ -241,6 +249,7 @@
     main{padding:0 18px;}
     .topbar .wrap{padding:10px 16px;}
     .course-grid{grid-template-columns:1fr;}
+    .modal-card{padding:20px;}
   }
 </style>
 </head>
@@ -251,20 +260,6 @@
     <div class="wrap">
       <span class="brand">謝楠楨 <small>Nan-Chen Hsieh</small></span>
       <div class="nav-controls">
-        <!-- 10 款主題一鍵切換選單 -->
-        <select id="themeSelect" class="theme-select" aria-label="切換版面風格 / Select Theme">
-          <option value="theme-01">🎨 經典學院藍 (Default)</option>
-          <option value="theme-02">🌙 極簡深暗黑 (Dark Slate)</option>
-          <option value="theme-03">👑 牛津皇家藍 (Royal Navy)</option>
-          <option value="theme-04">🌿 智慧醫療綠 (Emerald)</option>
-          <option value="theme-05">✨ 典雅白與金 (Ivory Gold)</option>
-          <option value="theme-06">🍵 日系簡約風 (Muji Linen)</option>
-          <option value="theme-07">⚡ 極光科技藍 (Aurora Tech)</option>
-          <option value="theme-08">🇨🇭 瑞士國際風 (Swiss Style)</option>
-          <option value="theme-09">🪵 京都胡桃木 (Kyoto Walnut)</option>
-          <option value="theme-10">👁️ 高對比無障礙 (Accessible)</option>
-        </select>
-
         <!-- 語言切換 Toggle -->
         <div class="langtoggle" role="group" aria-label="切換語言 / switch language">
           <button type="button" class="seg seg-zh" id="segZh" aria-pressed="true">中文</button>
@@ -276,7 +271,7 @@
           <span class="zh">學生登入/專區</span><span class="en">Student Portal</span>
         </button>
         <button class="btn-portal" style="background:var(--accent);" id="btnAdminPortal">
-          <span class="zh">🔒 課程管理</span><span class="en">🔒 Admin</span>
+          <span class="zh">🔒 課程與系統管理</span><span class="en">🔒 Admin Console</span>
         </button>
       </div>
     </div>
@@ -447,106 +442,140 @@
     </div>
   </div>
 
-  <!-- ===== MODAL 2: ADMIN MANAGEMENT CONSOLE ===== -->
+  <!-- ===== MODAL 2: OPTIMIZED ADMIN CONSOLE ===== -->
   <div class="modal-overlay" id="modalAdminPortal">
-    <div class="modal-card" style="max-width:860px;">
+    <div class="modal-card">
       <button class="modal-close" onclick="closeModal('modalAdminPortal')">&times;</button>
-      <h3 class="modal-title">🔒 <span class="zh">課程與成績管理控制台</span><span class="en">Admin Control Console</span></h3>
+      <h3 class="modal-title">⚙️ <span class="zh">課程與全站系統管理控制台</span><span class="en">Admin Control Console</span></h3>
 
       <!-- 密碼解鎖預設框 -->
       <div id="adminAuthBox">
-        <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">請輸入管理者密碼以開啟編輯權限（預設驗證碼：<code>admin888</code>）</p>
-        <div class="form-group">
-          <input type="password" id="adminPassInput" placeholder="請輸入管理密碼">
+        <div class="admin-card-section" style="text-align:center;padding:30px;">
+          <span style="font-size:42px;display:block;margin-bottom:10px;">🔒</span>
+          <h4 style="justify-content:center;">請輸入管理者密碼解鎖後台控制面板</h4>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">（預設解鎖密碼：<code>admin888</code>）</p>
+          <div class="form-group" style="max-width:320px;margin:0 auto 16px;">
+            <input type="password" id="adminPassInput" placeholder="請輸入管理密碼" style="text-align:center;">
+          </div>
+          <button class="btn-submit" style="max-width:320px;margin:0 auto;" onclick="verifyAdminPassword()">解鎖管理控制台</button>
         </div>
-        <button class="btn-submit" onclick="verifyAdminPassword()">解鎖管理控制台</button>
       </div>
 
-      <!-- 管理解鎖後的完整控制面板 -->
+      <!-- 管理解鎖後的優化控制面板 -->
       <div id="adminContentBox" style="display:none;">
-        <div class="tab-headers">
-          <button class="tab-btn active" onclick="switchAdminTab('tabCourses')">📁 課程與講義拖拉上傳</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabStudents')">👥 學生 Email 審核</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabGrades')">📊 成績矩陣與匯出</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabAnnounce')">📢 公告與備份</button>
+        <div class="admin-nav-tabs">
+          <button class="tab-btn active" onclick="switchAdminTab('tabCourses', event)">📁 課程與講義拖拉</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabTheme', event)">🎨 版面主題切換</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabStudents', event)">👥 學生 Email 審核</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabGrades', event)">📊 成績矩陣與匯出</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabAnnounce', event)">📢 公告與備份</button>
         </div>
 
         <!-- TAB 1: 課程與拖拉講義上傳 -->
         <div id="tabCourses" class="admin-tab-content">
-          <h4>新增/編輯課程與自訂目錄</h4>
-          <div class="form-group" style="margin-top:10px;">
-            <label>選擇要管理的課程：</label>
-            <select id="adminSelectCourse">
-              <option value="CRS-2025-01">HI7001 - 智慧醫療與臨床決策支援系統專題</option>
-              <option value="CRS-2025-02">HI7002 - 醫療資料科學與機器學習應用</option>
-            </select>
+          <div class="admin-card-section">
+            <h4>📂 選擇管理課程與自訂目錄 (Folder Management)</h4>
+            <div class="form-group">
+              <label>管理目標課程：</label>
+              <select id="adminSelectCourse">
+                <option value="CRS-2025-01">HI7001 - 智慧醫療與臨床決策支援系統專題</option>
+                <option value="CRS-2025-02">HI7002 - 醫療資料科學與機器學習應用</option>
+              </select>
+            </div>
+
+            <div style="display:flex;gap:10px;align-items:flex-end;">
+              <div class="form-group" style="flex:1;margin-bottom:0;">
+                <label>新增自訂目錄/資料夾：</label>
+                <input type="text" id="newFolderNameInput" placeholder="例如：單元三：生成式 AI 與 LLM 應用">
+              </div>
+              <button class="btn-submit" style="width:auto;padding:9px 18px;" onclick="addCustomFolder()">建立目錄</button>
+            </div>
           </div>
 
-          <!-- 拖拉上傳區域 (Drag and Drop Zone) -->
-          <div class="dropzone" id="dragDropArea">
-            <span style="font-size:32px;">📥</span>
-            <p><strong>將講義檔案 (PDF / PPTX / DOCX) 拖拉至此處上傳</strong></p>
-            <p style="font-size:12px;color:var(--faint);">自動歸檔並生成路徑：<code>assets/courses/HI7001/...</code></p>
-            <input type="file" id="fileInputElem" style="display:none;" multiple>
+          <div class="admin-card-section">
+            <h4>📥 講義拖拉上傳區域 (Drag &amp; Drop Upload Zone)</h4>
+            <div class="dropzone" id="dragDropArea">
+              <span style="font-size:36px;display:block;">📄</span>
+              <p><strong>將講義檔案 (PDF / PPTX / DOCX / ZIP) 拖拉至此處上傳</strong></p>
+              <p style="font-size:12px;color:var(--faint);">自動歸檔並生成路徑：<code>assets/courses/HI7001/Unit3/...</code></p>
+              <input type="file" id="fileInputElem" style="display:none;" multiple>
+            </div>
+            <div id="uploadedFilesLog" style="font-size:13px;color:var(--brand);margin-bottom:10px;"></div>
           </div>
-          <div id="uploadedFilesLog" style="font-size:13px;color:var(--brand);margin-bottom:12px;"></div>
         </div>
 
-        <!-- TAB 2: 學生審核 -->
+        <!-- TAB 2: 版面主題設定 (ADMIN THEME SWITCHER) -->
+        <div id="tabTheme" class="admin-tab-content" style="display:none;">
+          <div class="admin-card-section">
+            <h4>🎨 全站版面視覺主題設定 (10 Premium Themes)</h4>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">由管理者設定全站預設視覺風格，選擇後將毫秒級無縫套用至整站視覺：</p>
+            <div class="theme-grid" id="themeCardGrid">
+              <!-- 10 款主題卡片由 JS 動態生成 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: 學生審核 -->
         <div id="tabStudents" class="admin-tab-content" style="display:none;">
-          <h4>待審核學生 Email 清單</h4>
-          <table class="grade-table" style="margin-top:10px;">
-            <thead><tr><th>學生 Email</th><th>註冊時間</th><th>Email 驗證</th><th>審核操作</th></tr></thead>
-            <tbody id="studentApprovalTable">
-              <tr>
-                <td>student01@ntunhs.edu.tw</td>
-                <td>2026-08-02 21:30</td>
-                <td><span class="badge-access public">已點擊驗證</span></td>
-                <td><button onclick="approveStudent('student01@ntunhs.edu.tw')" style="background:var(--brand);color:#fff;border:0;padding:4px 10px;border-radius:4px;cursor:pointer;">核准權限 (Approve)</button></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="admin-card-section">
+            <h4>👥 待審核學生 Email 清單 (Student Approval)</h4>
+            <table class="grade-table">
+              <thead><tr><th>學生 Email</th><th>註冊時間</th><th>Email 驗證</th><th>審核操作</th></tr></thead>
+              <tbody id="studentApprovalTable">
+                <tr>
+                  <td>student01@ntunhs.edu.tw</td>
+                  <td>2026-08-02 21:30</td>
+                  <td><span class="badge-access public">已點擊驗證</span></td>
+                  <td><button onclick="approveStudent('student01@ntunhs.edu.tw')" style="background:var(--brand);color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;">核准權限 (Approve)</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <!-- TAB 3: 成績矩陣與匯出 -->
+        <!-- TAB 4: 成績矩陣與匯出 -->
         <div id="tabGrades" class="admin-tab-content" style="display:none;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <h4>全班成績打分矩陣</h4>
-            <button onclick="exportGradesCSV()" style="background:var(--accent);color:#fff;border:0;padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;">📥 匯出成績單 CSV</button>
+          <div class="admin-card-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <h4>📊 全班成績打分矩陣 (Grading Matrix)</h4>
+              <button onclick="exportGradesCSV()" style="background:var(--accent);color:#fff;border:0;padding:7px 16px;border-radius:8px;font-size:13.5px;cursor:pointer;font-weight:600;">📥 匯出成績單 CSV</button>
+            </div>
+            <table class="grade-table">
+              <thead>
+                <tr><th>學生帳號</th><th>期中考 (30%)</th><th>期末專題 (40%)</th><th>作業一 (30%)</th><th>加權總分</th><th>評語編輯</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>student01@ntunhs.edu.tw</td>
+                  <td><input type="number" class="grade-input" value="88"></td>
+                  <td><input type="number" class="grade-input" value="95"></td>
+                  <td><input type="number" class="grade-input" value="92"></td>
+                  <td><strong>91.9</strong></td>
+                  <td><input type="text" value="表現優異" style="width:120px;padding:4px;border:1px solid var(--line);border-radius:4px;"></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <table class="grade-table">
-            <thead>
-              <tr><th>學生帳號</th><th>期中考 (30%)</th><th>期末專題 (40%)</th><th>作業一 (30%)</th><th>加權總分</th><th>評語編輯</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>student01@ntunhs.edu.tw</td>
-                <td><input type="number" class="grade-input" value="88"></td>
-                <td><input type="number" class="grade-input" value="95"></td>
-                <td><input type="number" class="grade-input" value="92"></td>
-                <td><strong>91.9</strong></td>
-                <td><input type="text" value="表現優異" style="width:100px;"></td>
-              </tr>
-            </tbody>
-          </table>
         </div>
 
-        <!-- TAB 4: 公告與一鍵離線 JSON 備份 -->
+        <!-- TAB 5: 公告與一鍵離線 JSON 備份 -->
         <div id="tabAnnounce" class="admin-tab-content" style="display:none;">
-          <div class="form-group">
-            <label>更新課程即時公告：</label>
-            <textarea id="adminAnnounceText" rows="3">歡迎進入 113 學年度課程專區！請修課學生先進行 Email 註冊認證，核准後即可下載專屬講義與繳交作業。</textarea>
-            <button class="btn-submit" style="margin-top:8px;" onclick="updateAnnouncement()">發布最新公告</button>
+          <div class="admin-card-section">
+            <h4>📢 更新課程即時公告 (Announcements)</h4>
+            <div class="form-group">
+              <textarea id="adminAnnounceText" rows="3">歡迎進入 113 學年度課程專區！請修課學生先進行 Email 註冊認證，核准後即可下載專屬講義與繳交作業。</textarea>
+              <button class="btn-submit" style="margin-top:8px;" onclick="updateAnnouncement()">發布最新公告</button>
+            </div>
           </div>
-          
-          <hr style="border:0;border-top:1px solid var(--line);margin:20px 0;">
 
-          <h4>📦 全站資料一鍵離線備份 (System Data Backup)</h4>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">匯出全站所有課程大綱、學生資料、作業與成績庫成單一 JSON 備份檔案。</p>
-          <div style="display:flex;gap:10px;">
-            <button class="btn-submit" style="background:var(--brand);" onclick="exportSystemJSON()">📦 匯出 JSON 備份檔</button>
-            <button class="btn-submit" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);" onclick="document.getElementById('importJsonInput').click()">📥 匯入 JSON 復原</button>
-            <input type="file" id="importJsonInput" style="display:none;" accept=".json" onchange="importSystemJSON(event)">
+          <div class="admin-card-section">
+            <h4>📦 全站 JSON 資料庫離線備份與復原 (System Data Engine)</h4>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">本系統採用高效離線單機版 JSON 資料庫引擎，完全無需負擔後端數據庫費用即可永續運作：</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <button class="btn-submit" style="background:var(--brand);flex:1;" onclick="exportSystemJSON()">📦 匯出 JSON 備份檔</button>
+              <button class="btn-submit" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);flex:1;" onclick="document.getElementById('importJsonInput').click()">📥 匯入 JSON 復原</button>
+              <input type="file" id="importJsonInput" style="display:none;" accept=".json" onchange="importSystemJSON(event)">
+            </div>
           </div>
         </div>
       </div>
@@ -567,7 +596,7 @@
 
   <!-- ===== JAVASCRIPT LOGIC ===== -->
   <script>
-    // 預設課程資料庫 (Default Master Data Engine)
+    // 預設 Master Data 系統引擎
     const masterData = {
       courses: [
         {
@@ -632,24 +661,55 @@
       ]
     };
 
-    // ===== 1. 10 款主題切換邏輯 (10 Themes Switcher) =====
-    const themeSelect = document.getElementById('themeSelect');
-    themeSelect.addEventListener('change', (e) => {
-      setTheme(e.target.value);
-    });
+    // ===== 10 款主題清單與設定 =====
+    const themesList = [
+      { id: 'theme-01', name: '🎨 經典學院藍', p1: '#1f3a5f', p2: '#b0894c', p3: '#f6f3ec' },
+      { id: 'theme-02', name: '🌙 極簡深暗黑', p1: '#121820', p2: '#3b82f6', p3: '#10b981' },
+      { id: 'theme-03', name: '👑 牛津皇家藍', p1: '#0f172a', p2: '#d97706', p3: '#f8fafc' },
+      { id: 'theme-04', name: '🌿 智慧醫療綠', p1: '#064e3b', p2: '#059669', p3: '#f0fdf4' },
+      { id: 'theme-05', name: '✨ 典雅白與金', p1: '#44403c', p2: '#c59b27', p3: '#faf8f5' },
+      { id: 'theme-06', name: '🍵 日系簡約風', p1: '#4a443d', p2: '#657954', p3: '#f4f1ea' },
+      { id: 'theme-07', name: '⚡ 極光科技藍', p1: '#06b6d4', p2: '#8b5cf6', p3: '#0d1117' },
+      { id: 'theme-08', name: '🇨🇭 瑞士國際風', p1: '#111111', p2: '#dc2626', p3: '#ffffff' },
+      { id: 'theme-09', name: '🪵 京都胡桃木', p1: '#3b2d27', p2: '#8c6d46', p3: '#eae5d9' },
+      { id: 'theme-10', name: '👁️ 高對比無障礙', p1: '#000000', p2: '#d97706', p3: '#fffbeb' }
+    ];
+
+    function renderThemeCards() {
+      const grid = document.getElementById('themeCardGrid');
+      const activeTheme = localStorage.getItem('preferredTheme') || 'theme-01';
+      grid.innerHTML = '';
+      themesList.forEach(t => {
+        const card = document.createElement('div');
+        card.className = `theme-card ${t.id === activeTheme ? 'active' : ''}`;
+        card.onclick = () => setTheme(t.id);
+        card.innerHTML = `
+          <div class="theme-swatch">
+            <div class="swatch-p1" style="background:${t.p1}"></div>
+            <div class="swatch-p2" style="background:${t.p2}"></div>
+            <div class="swatch-p3" style="background:${t.p3}"></div>
+          </div>
+          <div style="font-size:13px;font-weight:600;display:flex;justify-content:space-between;">
+            <span>${t.name}</span>
+            ${t.id === activeTheme ? '<span style="color:var(--accent);">✓ 使用中</span>' : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
 
     function setTheme(themeName) {
       document.body.className = document.body.className.replace(/\btheme-\d+\b/g, '');
       document.body.classList.add(themeName);
       localStorage.setItem('preferredTheme', themeName);
-      themeSelect.value = themeName;
+      renderThemeCards();
     }
 
     // 初始化主題
     const savedTheme = localStorage.getItem('preferredTheme') || 'theme-01';
     setTheme(savedTheme);
 
-    // ===== 2. 雙語切換邏輯 =====
+    // ===== 雙語切換 =====
     const b = document.body;
     const segZh = document.getElementById('segZh'), segEn = document.getElementById('segEn');
     function setLang(en) {
@@ -662,7 +722,7 @@
     segZh.addEventListener('click', () => setLang(false));
     segEn.addEventListener('click', () => setLang(true));
 
-    // ===== 3. 渲染課程卡片 (Render Courses) =====
+    // ===== 渲染課程卡片 =====
     function renderCourses() {
       const grid = document.getElementById('courseGrid');
       const semFilter = document.getElementById('filterSemester').value;
@@ -738,7 +798,6 @@
     document.getElementById('filterSearch').addEventListener('input', renderCourses);
     renderCourses();
 
-    // 檔案下載存取檢查
     function checkFileAccess(e, access) {
       if (access === 'locked') {
         const isApproved = localStorage.getItem('isStudentApproved') === 'true';
@@ -749,7 +808,7 @@
       }
     }
 
-    // ===== 4. MODAL 彈窗邏輯 =====
+    // MODAL 控制
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
@@ -761,7 +820,7 @@
       const email = document.getElementById('studentEmail').value;
       if (!email) { alert('請輸入學生 Email'); return; }
       localStorage.setItem('studentEmail', email);
-      localStorage.setItem('isStudentApproved', 'true'); // 模擬已開通
+      localStorage.setItem('isStudentApproved', 'true');
       document.getElementById('studentLoginBox').style.display = 'none';
       document.getElementById('studentLoggedInBox').style.display = 'block';
       document.getElementById('loggedInEmailDisplay').innerText = email;
@@ -784,19 +843,29 @@
       if (pass === 'admin888' || pass === 'admin') {
         document.getElementById('adminAuthBox').style.display = 'none';
         document.getElementById('adminContentBox').style.display = 'block';
+        renderThemeCards();
       } else {
         alert('密碼錯誤！預設驗證密碼為 admin888');
       }
     }
 
-    function switchAdminTab(tabId) {
+    function switchAdminTab(tabId, evt) {
       document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.admin-nav-tabs .tab-btn').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).style.display = 'block';
-      event.target.classList.add('active');
+      if (evt) evt.target.classList.add('active');
     }
 
-    // ===== 5. 講義檔案拖拉上傳 (Drag & Drop Logic) =====
+    function addCustomFolder() {
+      const name = document.getElementById('newFolderNameInput').value;
+      if (!name) { alert('請輸入目錄名稱'); return; }
+      masterData.courses[0].directories.push({ name: name, files: [] });
+      renderCourses();
+      alert('✅ 已成功建立自訂目錄：' + name);
+      document.getElementById('newFolderNameInput').value = '';
+    }
+
+    // 講義檔案拖拉上傳
     const dropzone = document.getElementById('dragDropArea');
     const fileInput = document.getElementById('fileInputElem');
     const filesLog = document.getElementById('uploadedFilesLog');
@@ -821,7 +890,6 @@
       alert('✅ 已接收 ' + files.length + ' 個講義檔案！已自動解析並歸檔至受選課程目錄。');
     }
 
-    // 匯出 CSV 成績單
     function exportGradesCSV() {
       let csvContent = "data:text/csv;charset=utf-8,學生帳號,期中考(30%),期末專題(40%),作業一(30%),加權總分,評語\n";
       csvContent += "student01@ntunhs.edu.tw,88,95,92,91.9,表現優異\n";
@@ -834,7 +902,6 @@
       document.body.removeChild(link);
     }
 
-    // 一鍵匯出 JSON 離線備份
     function exportSystemJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(masterData, null, 2));
       const downloadAnchor = document.createElement('a');
@@ -863,7 +930,7 @@
       alert('📢 課程即時公告已更新！');
     }
 
-    // 回到頂部按鈕
+    // 回到頂部
     const backTop = document.getElementById('backTop');
     window.addEventListener('scroll', () => {
       backTop.classList.toggle('show', window.scrollY > 600);
