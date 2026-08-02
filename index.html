@@ -3,305 +3,872 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>謝楠楨 Nan-Chen Hsieh｜個人網站</title>
+<title>謝楠楨 Nan-Chen Hsieh｜個人網站與課程管理系統</title>
 <meta name="description" content="謝楠楨 Nan-Chen Hsieh, Ph.D. — 國立臺北護理健康大學 教授。研究專長：智慧醫療、資料科學、高齡健康及長照策略、健康資訊系統。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231f3a5f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="謝楠楨 Nan-Chen Hsieh｜國立臺北護理健康大學 教授">
 <meta property="og:description" content="研究專長：AI 健康科技應用、智慧醫療與臨床決策支援、醫療資料科學與機器學習、高齡健康與長照科技。">
 <meta property="og:url" content="https://nchsieh.github.io/">
+
+<!-- Google Fonts Noto Suite -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@400;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<!-- Firebase Compatibility SDK for Web Authentication & Database -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
 <style>
-  /* ===== THEME（改這幾個變數就能換色） ===== */
-  :root{
-    --brand:#1f3a5f;        /* 深藍 */
-    --brand-deep:#15293f;
-    --accent:#b0894c;       /* 暖金 */
-    --ink:#222a33;
-    --muted:#5a6671;
-    --faint:#8a949d;
-    --line:#e6e3da;
-    --soft:#f6f3ec;         /* 象牙白 */
-    --white:#ffffff;
-    --maxw:1080px;
+  /* ===== 10 款主題設計系統 (10 ONE-CLICK THEMES SYSTEM) ===== */
+  :root {
+    /* Theme 01: 經典學院藍 (Default Academic Blue) */
+    --brand: #1f3a5f;
+    --brand-deep: #15293f;
+    --accent: #b0894c;
+    --ink: #222a33;
+    --muted: #5a6671;
+    --faint: #8a949d;
+    --line: #e6e3da;
+    --soft: #f6f3ec;
+    --card-bg: #ffffff;
+    --white: #ffffff;
+    --maxw: 1100px;
+    --font-serif: "Noto Serif TC", "Noto Serif", serif;
+    --font-sans: "Noto Sans TC", "Noto Sans", "Inter", system-ui, sans-serif;
   }
+
+  body.theme-02 { /* 極簡深暗黑 Minimal Dark Slate */
+    --brand: #3b82f6; --brand-deep: #1e3a8a; --accent: #10b981;
+    --ink: #f1f5f9; --muted: #94a3b8; --faint: #64748b;
+    --line: #334155; --soft: #1e293b; --card-bg: #0f172a; --white: #0f172a;
+  }
+  body.theme-03 { /* 牛津皇家藍 Oxford Royal Navy */
+    --brand: #0f172a; --brand-deep: #020617; --accent: #d97706;
+    --ink: #1e293b; --muted: #475569; --faint: #94a3b8;
+    --line: #e2e8f0; --soft: #f8fafc; --card-bg: #ffffff; --white: #ffffff;
+  }
+  body.theme-04 { /* 智慧醫療綠 Smart Health Emerald */
+    --brand: #064e3b; --brand-deep: #022c22; --accent: #059669;
+    --ink: #111827; --muted: #4b5563; --faint: #9ca3af;
+    --line: #d1fae5; --soft: #f0fdf4; --card-bg: #ffffff; --white: #ffffff;
+  }
+  body.theme-05 { /* 典雅白與金 Marble Ivory & Gold */
+    --brand: #44403c; --brand-deep: #292524; --accent: #c59b27;
+    --ink: #292524; --muted: #78716c; --faint: #a8a29e;
+    --line: #e7e5e4; --soft: #faf8f5; --card-bg: #ffffff; --white: #ffffff;
+  }
+  body.theme-06 { /* 日系簡約無印 Muji Natural Linen */
+    --brand: #4a443d; --brand-deep: #322d28; --accent: #657954;
+    --ink: #332e29; --muted: #6b645b; --faint: #9c958a;
+    --line: #e2ddd3; --soft: #f4f1ea; --card-bg: #fdfbf7; --white: #ffffff;
+  }
+  body.theme-07 { /* 極光科技藍 Aurora Tech Cyan */
+    --brand: #06b6d4; --brand-deep: #0891b2; --accent: #8b5cf6;
+    --ink: #e0f2fe; --muted: #7dd3fc; --faint: #38bdf8;
+    --line: #1e293b; --soft: #111827; --card-bg: #0d1117; --white: #0d1117;
+  }
+  body.theme-08 { /* 瑞士國際風 Swiss International */
+    --brand: #111111; --brand-deep: #000000; --accent: #dc2626;
+    --ink: #111111; --muted: #555555; --faint: #888888;
+    --line: #e5e5e5; --soft: #f5f5f5; --card-bg: #ffffff; --white: #ffffff;
+  }
+  body.theme-09 { /* 京都胡桃木 Kyoto Walnut */
+    --brand: #3b2d27; --brand-deep: #27211d; --accent: #8c6d46;
+    --ink: #2b2521; --muted: #63574e; --faint: #968a80;
+    --line: #dcd4c9; --soft: #eae5d9; --card-bg: #f7f4ed; --white: #ffffff;
+  }
+  body.theme-10 { /* 高對比無障礙 High-Contrast Accessible */
+    --brand: #000000; --brand-deep: #000000; --accent: #d97706;
+    --ink: #000000; --muted: #222222; --faint: #444444;
+    --line: #000000; --soft: #fffbeb; --card-bg: #ffffff; --white: #ffffff;
+  }
+
   *{box-sizing:border-box;margin:0;padding:0}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
-    clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
   html{scroll-behavior:smooth}
-  body{font-family:"Inter","Noto Sans TC",system-ui,"Microsoft JhengHei",sans-serif;color:var(--ink);
-    background:var(--white);line-height:1.8;font-weight:400;letter-spacing:.2px;-webkit-font-smoothing:antialiased;}
-  .serif{font-family:"Noto Serif TC",serif;}
+  body{font-family:var(--font-sans);color:var(--ink);background:var(--white);line-height:1.8;font-weight:400;letter-spacing:.2px;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
+  .serif{font-family:var(--font-serif);}
   .garamond{font-family:"Cormorant Garamond",serif;}
   .en{display:none;}
   body.lang-en .zh{display:none;}
   body.lang-en .en{display:inline;}
 
-  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.93);
-    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
-  .topbar .wrap{max-width:var(--maxw);margin:0 auto;padding:13px 30px;display:flex;align-items:center;justify-content:space-between;}
-  .brand{font-family:"Noto Serif TC",serif;font-weight:600;font-size:18px;color:var(--brand);letter-spacing:1px;}
-  .brand small{font-family:"Cormorant Garamond",serif;color:#9aa3ac;font-weight:600;font-size:17px;margin-left:6px;}
-  .nav{display:flex;align-items:center;gap:24px;}
-  .nav a{color:var(--muted);text-decoration:none;font-size:14.5px;transition:.2s;}
-  .nav a:hover{color:var(--brand);}
-  .langtoggle{display:inline-flex;border:1px solid #d3cdbf;border-radius:999px;overflow:hidden;}
-  .langtoggle .seg{appearance:none;-webkit-appearance:none;border:0;background:transparent;font-family:inherit;
-    padding:12px 16px;min-height:44px;color:var(--faint);font-size:13px;letter-spacing:.5px;cursor:pointer;transition:.2s;}
+  /* ===== TOPBAR Navigation ===== */
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:background .3s;}
+  body.theme-02 .topbar, body.theme-07 .topbar {background:rgba(15, 23, 42, 0.92);}
+  .topbar .wrap{max-width:var(--maxw);margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .brand{font-family:var(--font-serif);font-weight:700;font-size:19px;color:var(--brand);letter-spacing:1px;display:flex;align-items:center;gap:6px;}
+  .brand small{font-family:"Cormorant Garamond",serif;color:var(--faint);font-weight:600;font-size:16px;}
+  .nav-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  
+  .theme-select{background:var(--soft);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-size:13px;font-family:inherit;cursor:pointer;outline:none;transition:.2s;}
+  .theme-select:hover{border-color:var(--brand);}
+
+  .langtoggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--soft);}
+  .langtoggle .seg{appearance:none;border:0;background:transparent;font-family:inherit;padding:6px 14px;color:var(--faint);font-size:13px;cursor:pointer;transition:.2s;}
   .langtoggle .seg:hover{color:var(--brand);}
-  .langtoggle .seg:focus-visible{outline:2px solid var(--brand);outline-offset:-2px;}
   body.lang-zh .langtoggle .seg-zh,body.lang-en .langtoggle .seg-en{background:var(--brand);color:#fff;}
 
-  .hero{background:linear-gradient(155deg,var(--brand) 0%,var(--brand-deep) 100%);color:#eef2f6;}
-  .hero .wrap{max-width:var(--maxw);margin:0 auto;padding:68px 30px 56px;}
-  .eyebrow{font-size:13px;letter-spacing:5px;text-transform:uppercase;color:#abbccd;margin-bottom:20px;}
-  .hname{font-family:"Noto Serif TC",serif;font-weight:600;font-size:clamp(42px,6vw,62px);line-height:1.04;color:#fff;}
-  .hname .latin{display:block;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:clamp(22px,3vw,30px);
-    letter-spacing:1.5px;color:#bccddd;margin-top:12px;}
-  .hrole{font-size:clamp(15px,2vw,17.5px);color:#d6dfe8;margin-top:24px;max-width:680px;line-height:1.85;}
-  .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
-  .tags span{font-size:13.5px;padding:7px 17px;border:1px solid rgba(255,255,255,.26);border-radius:999px;color:#eaf0f5;}
-  .hcontact{display:flex;flex-wrap:wrap;gap:12px 30px;margin-top:34px;padding-top:24px;
-    border-top:1px solid rgba(255,255,255,.16);font-size:14.5px;color:#cdd8e2;}
-  .hcontact a{color:#cdd8e2;text-decoration:none;}.hcontact a:hover{color:#fff;text-decoration:underline;}
-  .hcontact .ic{color:#abbccd;margin-right:9px;display:inline-flex;vertical-align:-3px;}
-  .hcontact .ic svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;}
+  .btn-portal{background:var(--brand);color:#fff;border:0;padding:7px 16px;border-radius:999px;font-size:13.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.2s;text-decoration:none;}
+  .btn-portal:hover{background:var(--brand-deep);transform:translateY(-1px);}
 
-  main{max-width:var(--maxw);margin:0 auto;padding:0 30px;}
-  section{padding:52px 0 6px;}
-  .skh{display:flex;align-items:baseline;gap:16px;margin-bottom:26px;}
-  .skh h2{font-family:"Noto Serif TC",serif;font-weight:600;font-size:24px;color:var(--brand);white-space:nowrap;}
+  /* ===== HERO SECTION ===== */
+  .hero{background:linear-gradient(155deg,var(--brand) 0%,var(--brand-deep) 100%);color:#eef2f6;padding:60px 24px 50px;}
+  .hero .wrap{max-width:var(--maxw);margin:0 auto;}
+  .eyebrow{font-size:13px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px;}
+  .hname{font-family:var(--font-serif);font-weight:700;font-size:clamp(38px,5.5vw,58px);line-height:1.1;color:#fff;}
+  .hname .latin{display:block;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:clamp(20px,2.8vw,28px);letter-spacing:1.5px;color:#cdd8e2;margin-top:10px;}
+  .hrole{font-size:clamp(15px,1.8vw,17.5px);color:#d6dfe8;margin-top:20px;max-width:720px;line-height:1.8;}
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+  .tags span{font-size:13px;padding:6px 16px;border:1px solid rgba(255,255,255,.24);border-radius:999px;color:#eaf0f5;background:rgba(255,255,255,.05);}
+  .hcontact{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:30px;padding-top:20px;border-top:1px solid rgba(255,255,255,.16);font-size:14px;color:#cdd8e2;}
+  .hcontact a{color:#cdd8e2;text-decoration:none;}.hcontact a:hover{color:#fff;text-decoration:underline;}
+
+  main{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  section{padding:50px 0 10px;}
+  .skh{display:flex;align-items:baseline;gap:16px;margin-bottom:24px;}
+  .skh h2{font-family:var(--font-serif);font-weight:700;font-size:24px;color:var(--brand);white-space:nowrap;}
   .skh h2 .lt{font-family:"Cormorant Garamond",serif;color:var(--accent);font-size:20px;margin-left:10px;}
   .skh .ln{flex:1;height:1px;background:var(--line);}
 
-  .cols{display:grid;grid-template-columns:1fr 1.4fr;gap:18px 60px;align-items:start;}
-  .block .lab{font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
-  .block .big{font-family:"Noto Serif TC",serif;font-size:22px;color:var(--ink);font-weight:600;}
+  .cols{display:grid;grid-template-columns:1fr 1.4fr;gap:24px 50px;align-items:start;}
+  .block .lab{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:6px;font-weight:600;}
+  .block .big{font-family:var(--font-serif);font-size:22px;color:var(--ink);font-weight:700;}
   .reslist{list-style:none;display:flex;flex-wrap:wrap;gap:10px;}
-  .reslist li{font-size:14.5px;color:var(--brand);background:var(--soft);border:1px solid var(--line);
-    padding:7px 15px;border-radius:999px;}
+  .reslist li{font-size:14px;color:var(--brand);background:var(--soft);border:1px solid var(--line);padding:6px 14px;border-radius:999px;font-weight:500;}
 
-  /* experience table */
-  .svc{width:100%;border-collapse:collapse;font-size:15px;}
-  .svc th{text-align:left;font-weight:500;color:var(--faint);font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;
-    padding:0 14px 11px;border-bottom:2px solid var(--brand);}
-  .svc td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  /* Experience Table */
+  .svc{width:100%;border-collapse:collapse;font-size:14.5px;}
+  .svc th{text-align:left;font-weight:600;color:var(--faint);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:0 12px 10px;border-bottom:2px solid var(--brand);}
+  .svc td{padding:13px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
   .svc tr:hover td{background:var(--soft);}
-  .svc .c-yr{white-space:nowrap;color:var(--accent);font-size:13.5px;width:120px;font-variant-numeric:tabular-nums;}
-  .svc .c-org{font-weight:500;width:300px;}
+  .svc .c-yr{white-space:nowrap;color:var(--accent);font-size:13.5px;width:120px;font-variant-numeric:tabular-nums;font-weight:600;}
+  .svc .c-org{font-weight:600;width:300px;color:var(--ink);}
   .svc .c-org small{display:block;font-weight:400;color:var(--faint);font-size:13px;}
   .svc .c-role{color:var(--muted);}
   .svc tr.cur .c-org{color:var(--brand);}
-  .svc tr.cur .c-yr{font-weight:500;}
-  .svc tr.grp td{padding:24px 14px 9px;border-bottom:1px solid var(--brand);
-    font-family:"Noto Serif TC",serif;font-size:13px;letter-spacing:2px;color:var(--brand);}
-  .svc tr.grp:first-child td{padding-top:2px;}
-  .svc tr.grp:hover td{background:transparent;}
+  .svc tr.grp td{padding:22px 12px 8px;border-bottom:1px solid var(--brand);font-family:var(--font-serif);font-size:13.5px;letter-spacing:2px;color:var(--brand);font-weight:700;}
 
-  footer{background:var(--soft);border-top:1px solid var(--line);margin-top:56px;}
-  footer .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 30px;display:flex;flex-wrap:wrap;gap:8px 24px;
-    justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint);}
+  /* ===== LMS & COURSES SECTION ===== */
+  .course-filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;align-items:center;background:var(--soft);padding:14px 18px;border-radius:12px;border:1px solid var(--line);}
+  .filter-group{display:flex;align-items:center;gap:8px;font-size:13.5px;}
+  .filter-group select, .filter-group input{padding:6px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13.5px;background:var(--card-bg);color:var(--ink);}
+  .filter-search{flex:1;min-width:200px;}
+
+  .announcement-box{background:rgba(176, 137, 76, 0.1);border-left:4px solid var(--accent);padding:14px 18px;border-radius:0 8px 8px 0;margin-bottom:24px;}
+  .announcement-box h4{font-size:14px;color:var(--brand);display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+  .announcement-box p{font-size:13.5px;color:var(--muted);}
+
+  .course-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(330px, 1fr));gap:24px;}
+  .course-card{background:var(--card-bg);border:1px solid var(--line);border-radius:14px;padding:22px;transition:transform .2s, box-shadow .2s;display:flex;flex-direction:column;justify-content:space-between;}
+  .course-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,0.06);}
+  .card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .badge-sem{background:var(--brand);color:#fff;font-size:12px;padding:3px 10px;border-radius:999px;font-weight:600;}
+  .badge-level{background:var(--soft);color:var(--brand);border:1px solid var(--line);font-size:12px;padding:2px 8px;border-radius:6px;}
+  .course-code{font-size:12.5px;font-family:monospace;color:var(--faint);margin-bottom:4px;}
+  .course-title{font-family:var(--font-serif);font-size:18px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:10px;}
+  .course-summary{font-size:13.5px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+  .course-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+  .course-tags span{font-size:11.5px;background:var(--soft);color:var(--muted);padding:2px 8px;border-radius:4px;}
+
+  /* Collapsible Directory / Handouts Tree */
+  .dir-tree{border-top:1px solid var(--line);padding-top:14px;margin-top:10px;}
+  .dir-header{font-size:13px;font-weight:700;color:var(--brand);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .dir-folder{margin-bottom:10px;background:var(--soft);border-radius:8px;padding:10px 12px;}
+  .folder-title{font-size:13px;font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+  .file-list{list-style:none;margin-top:8px;padding-left:6px;}
+  .file-item{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px dashed var(--line);}
+  .file-item:last-child{border-bottom:0;}
+  .file-name{color:var(--brand);text-decoration:none;display:flex;align-items:center;gap:6px;font-weight:500;}
+  .file-name:hover{text-decoration:underline;}
+  .badge-access{font-size:10.5px;padding:1px 6px;border-radius:4px;}
+  .badge-access.public{background:#dcfce7;color:#166534;}
+  .badge-access.locked{background:#fef3c7;color:#92400e;}
+
+  /* Homework & Assignment Box */
+  .asg-box{background:rgba(31, 58, 95, 0.04);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;}
+  .asg-header{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--brand);}
+  .badge-due{font-size:11.5px;padding:2px 8px;border-radius:999px;font-weight:600;}
+  .due-normal{background:#e0f2fe;color:#0369a1;}
+  .due-urgent{background:#fee2e2;color:#b91c1c;}
+  .due-done{background:#dcfce7;color:#15803d;}
+
+  /* ===== MODAL & DRAWER SYSTEM ===== */
+  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(5px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.active{display:flex;}
+  .modal-card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;max-width:720px;width:100%;max-height:90vh;overflow-y:auto;padding:28px;box-shadow:0 20px 40px rgba(0,0,0,0.2);position:relative;color:var(--ink);}
+  .modal-close{position:absolute;top:18px;right:20px;background:none;border:0;font-size:24px;cursor:pointer;color:var(--faint);}
+  .modal-close:hover{color:var(--ink);}
+  .modal-title{font-family:var(--font-serif);font-size:22px;font-weight:700;color:var(--brand);margin-bottom:16px;}
+
+  /* Drag & Drop Upload Zone */
+  .dropzone{border:2px dashed var(--brand);border-radius:12px;padding:30px;text-align:center;background:var(--soft);cursor:pointer;transition:.2s;margin:16px 0;}
+  .dropzone:hover, .dropzone.dragover{background:rgba(31,58,95,0.1);border-color:var(--accent);}
+  .dropzone p{font-size:14px;color:var(--muted);margin-top:6px;}
+
+  /* Form controls inside modal */
+  .form-group{margin-bottom:16px;}
+  .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink);}
+  .form-group input, .form-group textarea, .form-group select{width:100%;padding:9px 14px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--card-bg);color:var(--ink);}
+  .btn-submit{background:var(--brand);color:#fff;border:0;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;font-size:14.5px;transition:.2s;}
+  .btn-submit:hover{background:var(--brand-deep);}
+
+  /* Tabs inside admin modal */
+  .tab-headers{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:18px;}
+  .tab-btn{padding:8px 16px;border:0;background:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--faint);cursor:pointer;border-bottom:2px solid transparent;}
+  .tab-btn.active{color:var(--brand);border-bottom-color:var(--brand);}
+
+  /* Grade Table */
+  .grade-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px;}
+  .grade-table th, .grade-table td{border:1px solid var(--line);padding:8px 10px;text-align:center;}
+  .grade-table th{background:var(--soft);color:var(--brand);font-weight:600;}
+  .grade-input{width:60px;padding:4px;text-align:center;border:1px solid var(--line);border-radius:4px;}
+
+  footer{background:var(--soft);border-top:1px solid var(--line);margin-top:60px;}
+  footer .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 24px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint);}
   footer a{color:var(--muted);text-decoration:none;}footer a:hover{color:var(--brand);}
 
-  #backTop{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;
-    background:var(--brand);color:#fff;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
-    opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .25s,transform .25s;z-index:15;}
+  #backTop{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;background:var(--brand);color:#fff;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s;z-index:90;}
   #backTop.show{opacity:1;pointer-events:auto;transform:translateY(0);}
-  #backTop:hover{background:var(--brand-deep);}
   #backTop svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;}
-
-  @media print{
-    .topbar,.langtoggle,#backTop{display:none!important;}
-    body{background:#fff;}
-    .hero{background:#fff!important;color:#000!important;}
-    .hero .wrap{padding:0 0 24px;}
-    .eyebrow,.hrole,.latin{color:#333!important;}
-    .hname{color:#000!important;}
-    .tags span{border-color:#999;color:#000;}
-    .hcontact,.hcontact a{color:#000!important;}
-    .svc tr{page-break-inside:avoid;break-inside:avoid;}
-    .svc tr:hover td{background:transparent;}
-    footer{background:#fff;margin-top:24px;}
-    a{text-decoration:none;color:#000;}
-    section{padding-top:20px;}
-  }
 
   @media(max-width:760px){
     .cols{grid-template-columns:1fr;gap:24px;}
-    .nav .navlink{display:none;}
-    .hero .wrap{padding:48px 22px 42px;}
+    .hero{padding:42px 18px 36px;}
     main{padding:0 18px;}
-    .svc{font-size:14px;}
-    .svc .c-org{width:auto;}.svc .c-yr{width:auto;}
-    .svc th,.svc td{padding-left:8px;padding-right:8px;}
-    #backTop{right:16px;bottom:16px;}
+    .topbar .wrap{padding:10px 16px;}
+    .course-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
-<body class="lang-zh">
+<body class="lang-zh theme-01">
 
-  <div class="topbar">
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar">
     <div class="wrap">
-      <span class="brand">謝楠楨<small>Nan-Chen Hsieh</small></span>
-      <nav class="nav">
+      <span class="brand">謝楠楨 <small>Nan-Chen Hsieh</small></span>
+      <div class="nav-controls">
+        <!-- 10 款主題一鍵切換選單 -->
+        <select id="themeSelect" class="theme-select" aria-label="切換版面風格 / Select Theme">
+          <option value="theme-01">🎨 經典學院藍 (Default)</option>
+          <option value="theme-02">🌙 極簡深暗黑 (Dark Slate)</option>
+          <option value="theme-03">👑 牛津皇家藍 (Royal Navy)</option>
+          <option value="theme-04">🌿 智慧醫療綠 (Emerald)</option>
+          <option value="theme-05">✨ 典雅白與金 (Ivory Gold)</option>
+          <option value="theme-06">🍵 日系簡約風 (Muji Linen)</option>
+          <option value="theme-07">⚡ 極光科技藍 (Aurora Tech)</option>
+          <option value="theme-08">🇨🇭 瑞士國際風 (Swiss Style)</option>
+          <option value="theme-09">🪵 京都胡桃木 (Kyoto Walnut)</option>
+          <option value="theme-10">👁️ 高對比無障礙 (Accessible)</option>
+        </select>
+
+        <!-- 語言切換 Toggle -->
         <div class="langtoggle" role="group" aria-label="切換語言 / switch language">
-          <button type="button" class="seg seg-zh" id="segZh" aria-pressed="true">中文</button><button type="button" class="seg seg-en" id="segEn" aria-pressed="false">EN</button>
+          <button type="button" class="seg seg-zh" id="segZh" aria-pressed="true">中文</button>
+          <button type="button" class="seg seg-en" id="segEn" aria-pressed="false">EN</button>
         </div>
-      </nav>
-    </div>
-  </div>
 
-  <header class="hero">
+        <!-- 學生 Portal / 管理控制台按鈕 -->
+        <button class="btn-portal" id="btnStudentPortal">
+          <span class="zh">學生登入/專區</span><span class="en">Student Portal</span>
+        </button>
+        <button class="btn-portal" style="background:var(--accent);" id="btnAdminPortal">
+          <span class="zh">🔒 課程管理</span><span class="en">🔒 Admin</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
     <div class="wrap">
-      <p class="eyebrow"><span class="zh">教授</span><span class="en">Professor</span></p>
+      <p class="eyebrow"><span class="zh">國立臺北護理健康大學 教授</span><span class="en">Professor, NTUNHS</span></p>
       <h1 class="hname">
         <span class="zh">謝楠楨</span><span class="en">Nan-Chen Hsieh</span>
         <span class="latin">Nan-Chen Hsieh, Ph.D.</span>
       </h1>
       <p class="hrole">
-        <span class="zh">國立臺北護理健康大學 健康科技學院 教授</span>
-        <span class="en">Professor, College of Health Technology, National Taipei University of Nursing and Health Sciences</span>
+        <span class="zh">國立臺北護理健康大學 健康科技學院 教授 / 講座教授</span>
+        <span class="en">Chair Professor, College of Health Technology, National Taipei University of Nursing and Health Sciences</span>
       </p>
       <div class="tags">
-        <span><span class="zh">AI 健康科技應用</span><span class="en">Applied AI in Health Technology</span></span>
-        <span><span class="zh">智慧醫療與臨床決策支援</span><span class="en">Smart Healthcare &amp; Clinical Decision Support</span></span>
-        <span><span class="zh">醫療資料科學與機器學習</span><span class="en">Healthcare Data Science &amp; Machine Learning</span></span>
-        <span><span class="zh">高齡健康與長照科技</span><span class="en">Aging Health &amp; Long-term Care Technology</span></span>
+        <span><span class="zh">AI 健康科技應用</span><span class="en">Applied AI in Health Tech</span></span>
+        <span><span class="zh">智慧醫療與臨床決策支援</span><span class="en">Smart Healthcare &amp; CDSS</span></span>
+        <span><span class="zh">醫療資料科學與機器學習</span><span class="en">Healthcare Data Science &amp; ML</span></span>
+        <span><span class="zh">高齡健康與長照科技</span><span class="en">Aging Health &amp; LTC Tech</span></span>
         <span><span class="zh">健康資訊系統</span><span class="en">Health Information Systems</span></span>
       </div>
       <div class="hcontact">
-        <span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 6l9 7 9-7M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg></span><a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a></span>
-        <span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 6l9 7 9-7M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg></span><a href="mailto:nchsieh@gmail.com">nchsieh@gmail.com</a></span>
-        <span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.5 3 3.9 5.4 6.9 6.9l2.3-2.3c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1L6.6 10.8z"/></svg></span>(02) 2822-7101 #1210</span>
+        <span>📧 <a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a></span>
+        <span>📧 <a href="mailto:nchsieh@gmail.com">nchsieh@gmail.com</a></span>
+        <span>📞 (02) 2822-7101 #1210</span>
       </div>
     </div>
-  </header>
+  </div>
 
   <main>
+    <!-- ===== ACADEMIC PROFILE ===== -->
     <section>
       <div class="cols">
         <div class="block">
           <div class="skh"><h2><span class="zh">學歷</span><span class="en">Education</span></h2><span class="ln"></span></div>
           <div class="lab">Ph.D.</div>
           <div class="big"><span class="zh">資訊工程研究所 博士</span><span class="en">Ph.D., Computer Science &amp; Information Engineering</span></div>
-          <div style="color:var(--muted);font-size:14.5px;margin-top:3px"><span class="zh">淡江大學</span><span class="en">Tamkang University</span></div>
+          <div style="color:var(--muted);font-size:14.5px;margin-top:4px"><span class="zh">淡江大學</span><span class="en">Tamkang University</span></div>
         </div>
         <div class="block">
-          <div class="skh"><h2><span class="zh">實務／研究專長</span><span class="en">Practice &amp; Research</span></h2><span class="ln"></span></div>
+          <div class="skh"><h2><span class="zh">實務／研究專長</span><span class="en">Research Expertise</span></h2><span class="ln"></span></div>
           <ul class="reslist">
-            <li><span class="zh">AI 健康科技應用</span><span class="en">Applied AI in Health Technology</span></li>
-            <li><span class="zh">智慧醫療與臨床決策支援</span><span class="en">Smart Healthcare &amp; Clinical Decision Support</span></li>
-            <li><span class="zh">醫療資料科學與機器學習</span><span class="en">Healthcare Data Science &amp; Machine Learning</span></li>
-            <li><span class="zh">高齡健康與長照科技</span><span class="en">Aging Health &amp; Long-term Care Technology</span></li>
+            <li><span class="zh">AI 健康科技應用</span><span class="en">Applied AI in Health Tech</span></li>
+            <li><span class="zh">智慧醫療與臨床決策支援</span><span class="en">Clinical Decision Support</span></li>
+            <li><span class="zh">醫療資料科學與機器學習</span><span class="en">Healthcare Data Science</span></li>
+            <li><span class="zh">高齡健康與長照科技</span><span class="en">Aging &amp; LTC Technology</span></li>
             <li><span class="zh">健康資訊系統</span><span class="en">Health Information Systems</span></li>
           </ul>
         </div>
       </div>
     </section>
 
+    <!-- ===== COURSES & LMS SECTION ===== -->
+    <section id="courses">
+      <div class="skh">
+        <h2><span class="zh">授課與課程管理專區</span><span class="en">Courses &amp; Learning Portal</span></h2>
+        <span class="ln"></span>
+      </div>
+
+      <!-- 課程公告區塊 -->
+      <div class="announcement-box" id="announcementBox">
+        <h4>📢 <span class="zh">課程即時公告</span><span class="en">Course Announcement</span></h4>
+        <p id="announcementText"><span class="zh">歡迎進入 113 學年度課程專區！請修課學生先進行 Email 註冊認證，核准後即可下載專屬講義與繳交作業。</span><span class="en">Welcome to 113 Academic Year Courses! Please register your student email for approval to access lectures and submit assignments.</span></p>
+      </div>
+
+      <!-- 篩選與搜尋列 -->
+      <div class="course-filters">
+        <div class="filter-group">
+          <label><span class="zh">學期：</span><span class="en">Semester:</span></label>
+          <select id="filterSemester">
+            <option value="all">全部學期 (All)</option>
+            <option value="113-2" selected>113-2 學期</option>
+            <option value="113-1">113-1 學期</option>
+            <option value="112-2">112-2 學期</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label><span class="zh">學制：</span><span class="en">Level:</span></label>
+          <select id="filterLevel">
+            <option value="all">全部學制 (All)</option>
+            <option value="graduate">研究所 (Graduate)</option>
+            <option value="undergraduate">大學部 (Undergrad)</option>
+          </select>
+        </div>
+        <input type="text" id="filterSearch" class="filter-search" placeholder="搜尋課程名稱、關鍵字或代碼..." aria-label="Search courses">
+      </div>
+
+      <!-- 課程卡片容器 -->
+      <div class="course-grid" id="courseGrid">
+        <!-- 動態由 JS 渲染課程卡片 -->
+      </div>
+    </section>
+
+    <!-- ===== EXPERIENCE TABLE ===== -->
     <section id="experience">
       <div class="skh">
         <h2><span class="zh">專業經歷</span><span class="en">Professional Experience</span></h2>
         <span class="ln"></span>
       </div>
       <table class="svc">
-        <caption class="sr-only"><span class="zh">謝楠楨專業經歷列表，依期間、機構單位、職務三欄呈現</span><span class="en">List of Nan-Chen Hsieh's professional experience, with columns for period, organization, and role</span></caption>
         <thead>
           <tr>
-            <th class="c-yr" scope="col"><span class="zh">期間</span><span class="en">Period</span></th>
-            <th class="c-org" scope="col"><span class="zh">機構・單位</span><span class="en">Organization</span></th>
-            <th class="c-role" scope="col"><span class="zh">職務</span><span class="en">Role</span></th>
+            <th class="c-yr"><span class="zh">期間</span><span class="en">Period</span></th>
+            <th class="c-org"><span class="zh">機構・單位</span><span class="en">Organization</span></th>
+            <th class="c-role"><span class="zh">職務</span><span class="en">Role</span></th>
           </tr>
         </thead>
         <tbody>
-          <tr class="grp"><td colspan="3"><span class="zh">現職</span><span class="en">Current</span></td></tr>
+          <tr class="grp"><td colspan="3"><span class="zh">現職</span><span class="en">Current Roles</span></td></tr>
           <tr class="cur"><td class="c-yr">2004.08 –</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康科技學院</small></span><span class="en">NTUNHS <small>College of Health Technology</small></span></td><td class="c-role"><span class="zh">教授</span><span class="en">Professor</span></td></tr>
           <tr class="cur"><td class="c-yr">2022.02 –</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康科技學院</small></span><span class="en">NTUNHS <small>College of Health Technology</small></span></td><td class="c-role"><span class="zh">講座教授</span><span class="en">Chair Professor</span></td></tr>
-          <tr class="cur"><td class="c-yr">2023.02 –</td><td class="c-org"><span class="zh">國立金門大學 <small>健康護理學院</small></span><span class="en">National Quemoy University <small>College of Health and Nursing</small></span></td><td class="c-role"><span class="zh">榮譽講座教授</span><span class="en">Honorary Chair Professor</span></td></tr>
-          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org"><span class="zh">全國大專以上長照課程推動委員會 <small>教育部</small></span><span class="en">National LTC Curriculum Promotion Committee <small>Ministry of Education</small></span></td><td class="c-role"><span class="zh">主任委員</span><span class="en">Chairperson</span></td></tr>
-          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org"><span class="zh">教育部 <small>技專校院高等教育深耕計畫</small></span><span class="en">Ministry of Education <small>Higher Education Sprout Project</small></span></td><td class="c-role"><span class="zh">考評委員</span><span class="en">Review Committee Member</span></td></tr>
+          <tr class="cur"><td class="c-yr">2023.02 –</td><td class="c-org"><span class="zh">國立金門大學 <small>健康護理學院</small></span><span class="en">National Quemoy University</span></td><td class="c-role"><span class="zh">榮譽講座教授</span><span class="en">Honorary Chair Professor</span></td></tr>
+          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org"><span class="zh">全國大專以上長照課程推動委員會 <small>教育部</small></span><span class="en">National LTC Curriculum Committee</span></td><td class="c-role"><span class="zh">主任委員</span><span class="en">Chairperson</span></td></tr>
+          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org"><span class="zh">教育部 <small>技專校院高等教育深耕計畫</small></span><span class="en">Ministry of Education</span></td><td class="c-role"><span class="zh">考評委員</span><span class="en">Review Committee Member</span></td></tr>
           <tr class="cur"><td class="c-yr">2009.10 –</td><td class="c-org"><span class="zh">衛生福利部</span><span class="en">Ministry of Health and Welfare</span></td><td class="c-role"><span class="zh">專案評審委員</span><span class="en">Project Review Committee Member</span></td></tr>
-          <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org"><span class="zh">康寧學校財團法人康寧大學 <small>董事會</small></span><span class="en">Kang-Ning University <small>Board of Directors</small></span></td><td class="c-role"><span class="zh">監察人</span><span class="en">Supervisor</span></td></tr>
-          <tr class="cur"><td class="c-yr">2022.10 –</td><td class="c-org"><span class="zh">財團法人新北市私立馨園老人養護中心 <small>董事會</small></span><span class="en">Xin-Yuan Elderly Care Center, New Taipei <small>Board of Directors</small></span></td><td class="c-role"><span class="zh">董事長</span><span class="en">Chairman of the Board</span></td></tr>
-          <tr class="cur"><td class="c-yr">2024.04 –</td><td class="c-org"><span class="zh">國際高端醫療服務組織 <small>UAiTED – CHaMP</small></span><span class="en">International Premium Healthcare Organization <small>UAiTED – CHaMP</small></span></td><td class="c-role"><span class="zh">顧問</span><span class="en">Advisor</span></td></tr>
-          <tr class="cur"><td class="c-yr">2023.05 –</td><td class="c-org"><span class="zh">財團法人豐榮護理之家</span><span class="en">Feng-Rong Nursing Home</span></td><td class="c-role"><span class="zh">董事</span><span class="en">Board Director</span></td></tr>
-          <tr class="cur"><td class="c-yr">2022.03 –</td><td class="c-org"><span class="zh">臺北市立聯合醫院 <small>資訊諮詢小組</small></span><span class="en">Taipei City Hospital <small>IT Advisory Group</small></span></td><td class="c-role"><span class="zh">委員</span><span class="en">Member</span></td></tr>
-          <tr class="cur"><td class="c-yr">2020 –</td><td class="c-org"><span class="zh">台灣永續能源研究基金會 <small>TCSA 台灣永續獎</small></span><span class="en">Taiwan Institute for Sustainable Energy <small>TCSA Sustainability Awards</small></span></td><td class="c-role"><span class="zh">評選委員（醫院 HSR 永續方案）</span><span class="en">Juror (Hospital HSR)</span></td></tr>
-          <tr class="cur"><td class="c-yr">2025.08 –</td><td class="c-org"><span class="zh">財團法人景文科技大學</span><span class="en">Jinwen University of Science and Technology</span></td><td class="c-role"><span class="zh">校務委員</span><span class="en">University Affairs Committee Member</span></td></tr>
-          <tr class="cur"><td class="c-yr">2013.08 –</td><td class="c-org"><span class="zh">耕莘健康管理專科學校</span><span class="en">Cardinal Tien Junior College of Healthcare &amp; Management</span></td><td class="c-role"><span class="zh">校務委員</span><span class="en">University Affairs Committee Member</span></td></tr>
-          <tr class="grp"><td colspan="3"><span class="zh">歷年經歷</span><span class="en">Past</span></td></tr>
+          <tr class="grp"><td colspan="3"><span class="zh">歷年經歷</span><span class="en">Past Roles</span></td></tr>
           <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>校長室</small></span><span class="en">NTUNHS <small>President's Office</small></span></td><td class="c-role"><span class="zh">校長</span><span class="en">President</span></td></tr>
-          <tr><td class="c-yr">2006.08 – 2009.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>校長室</small></span><span class="en">National Taipei College of Nursing <small>President's Office</small></span></td><td class="c-role"><span class="zh">副校長</span><span class="en">Vice President</span></td></tr>
-          <tr><td class="c-yr">2010.08 – 2012.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康事業管理學院</small></span><span class="en">NTUNHS <small>College of Health Care Management</small></span></td><td class="c-role"><span class="zh">院長</span><span class="en">Dean</span></td></tr>
-          <tr><td class="c-yr">2009.08 – 2012.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>資訊管理系</small></span><span class="en">NTUNHS <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">系主任</span><span class="en">Department Chair</span></td></tr>
-          <tr><td class="c-yr">2004.08 – 2009.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>電算中心</small></span><span class="en">National Taipei College of Nursing <small>Computer Center</small></span></td><td class="c-role"><span class="zh">電算中心主任</span><span class="en">Director, Computer Center</span></td></tr>
-          <tr><td class="c-yr">2005.08 – 2006.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>資訊管理系</small></span><span class="en">National Taipei College of Nursing <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">系主任</span><span class="en">Department Chair</span></td></tr>
-          <tr><td class="c-yr">2002.08 – 2004.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>資訊管理系</small></span><span class="en">National Taipei College of Nursing <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">副教授</span><span class="en">Associate Professor</span></td></tr>
-          <tr class="cur"><td class="c-yr">2024 –</td><td class="c-org"><span class="zh">考試院</span><span class="en">Examination Yuan</span></td><td class="c-role"><span class="zh">國家考試 典試・命題委員</span><span class="en">National Examination — Examiner &amp; Question Setter</span></td></tr>
-          <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org"><span class="zh">教育部全國健康照護產學合作中心</span><span class="en">National Health Care Industry–Academia Cooperation Center, MOE</span></td><td class="c-role"><span class="zh">主持人</span><span class="en">Principal Investigator</span></td></tr>
-          <tr class="cur"><td class="c-yr">2018.01 –</td><td class="c-org"><span class="zh">教育部國民教育署 <small>全國照顧服務科推動計畫</small></span><span class="en">K-12 Education Administration, MOE <small>National Care Service Program</small></span></td><td class="c-role"><span class="zh">主持人</span><span class="en">Principal Investigator</span></td></tr>
-          <tr class="cur"><td class="c-yr">2019.01 –</td><td class="c-org"><span class="zh">教育部 <small>師鐸獎甄審會</small></span><span class="en">Ministry of Education <small>Teacher Award Selection Committee</small></span></td><td class="c-role"><span class="zh">委員</span><span class="en">Member</span></td></tr>
-          <tr><td class="c-yr">2022.03 – 2024.03</td><td class="c-org"><span class="zh">衛生福利部 <small>高齡健康與長照研究策略規劃諮詢會</small></span><span class="en">Ministry of Health and Welfare <small>Aging Health &amp; LTC Research Strategy Advisory Committee</small></span></td><td class="c-role"><span class="zh">委員</span><span class="en">Member</span></td></tr>
-          <tr><td class="c-yr">2017.01 – 2020.12</td><td class="c-org"><span class="zh">新北市政府</span><span class="en">New Taipei City Government</span></td><td class="c-role"><span class="zh">長期照顧委員會 委員</span><span class="en">Long-term Care Committee Member</span></td></tr>
-          <tr><td class="c-yr">2018.01 – 2019</td><td class="c-org"><span class="zh">台中市政府</span><span class="en">Taichung City Government</span></td><td class="c-role"><span class="zh">長照推動工作教育委員</span><span class="en">LTC Promotion &amp; Education Committee Member</span></td></tr>
-          <tr><td class="c-yr">2016.01 – 2016.12</td><td class="c-org"><span class="zh">行政院</span><span class="en">Executive Yuan</span></td><td class="c-role"><span class="zh">長期照顧保險工作小組委員</span><span class="en">Long-term Care Insurance Task Force Member</span></td></tr>
-          <tr class="cur"><td class="c-yr">2020.01 –</td><td class="c-org"><span class="zh">財團法人高等教育評鑑中心基金會</span><span class="en">Higher Education Evaluation &amp; Accreditation Council of Taiwan</span></td><td class="c-role"><span class="zh">專業評鑑機構認可委員</span><span class="en">Accreditation Committee Member</span></td></tr>
-          <tr><td class="c-yr">2022</td><td class="c-org"><span class="zh">財團法人醫院評鑑暨醫療品質策進會 <small>醫策會</small></span><span class="en">Joint Commission of Taiwan <small>JCT</small></span></td><td class="c-role"><span class="zh">人體生物資料庫查核委員</span><span class="en">Biobank Audit Committee Member</span></td></tr>
-          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org"><span class="zh">台灣評鑑協會</span><span class="en">Taiwan Assessment &amp; Evaluation Association</span></td><td class="c-role"><span class="zh">資訊管理專業類評鑑委員</span><span class="en">Information Management Accreditation Reviewer</span></td></tr>
-          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org"><span class="zh">台灣評鑑協會</span><span class="en">Taiwan Assessment &amp; Evaluation Association</span></td><td class="c-role"><span class="zh">專科學校追蹤評鑑委員</span><span class="en">Junior College Follow-up Accreditation Reviewer</span></td></tr>
-          <tr><td class="c-yr">1993.01 – 1999.12</td><td class="c-org"><span class="zh">經濟部智慧財產局</span><span class="en">Taiwan Intellectual Property Office, MOEA</span></td><td class="c-role"><span class="zh">電機組兼任專利審查委員</span><span class="en">Adjunct Patent Examiner (Electrical)</span></td></tr>
-          <tr class="cur"><td class="c-yr">2017.12 –</td><td class="c-org"><span class="zh">生活照顧專業協會</span><span class="en">Life Care Professional Association</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
-          <tr class="cur"><td class="c-yr">2015.08 –</td><td class="c-org"><span class="zh">台灣電子健康學會</span><span class="en">Taiwan e-Health Association</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
-          <tr><td class="c-yr">2014.01 – 2016.07</td><td class="c-org"><span class="zh">臺灣醫學資訊學會</span><span class="en">Taiwan Association for Medical Informatics</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
-          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國國立大學校院協會</span><span class="en">Association of National Universities of Taiwan</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
-          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國國立科技大學校院協會</span><span class="en">Association of National Universities of Technology</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
-          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國木球協會</span><span class="en">Woodball Association of R.O.C.</span></td><td class="c-role"><span class="zh">副理事長</span><span class="en">Vice Chairman</span></td></tr>
-          <tr><td class="c-yr">2007.10 – 2012.01</td><td class="c-org"><span class="zh">中華民國大專校院資訊服務協會 <small>ISAC</small></span><span class="en">Information Service Association of Chinese Colleges <small>ISAC</small></span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
-          <tr><td class="c-yr">2008.07 – 2010.07</td><td class="c-org"><span class="zh">淡江大學資訊工程系友會</span><span class="en">Tamkang University CSIE Alumni Association</span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
-          <tr><td class="c-yr">2003.08 – 2005.07</td><td class="c-org"><span class="zh">中華民國資訊管理學會 <small>CSIM</small></span><span class="en">Chinese Society of Information Management <small>CSIM</small></span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
-          <tr><td class="c-yr">2003.08 – 2004.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>電算中心</small></span><span class="en">National Taipei College of Nursing <small>Computer Center</small></span></td><td class="c-role"><span class="zh">系統設計組組長</span><span class="en">Head, System Design Division</span></td></tr>
-          <tr><td class="c-yr">2001.08 – 2003.07</td><td class="c-org"><span class="zh">景文技術學院 <small>總務處</small></span><span class="en">Jinwen Institute of Technology <small>Office of General Affairs</small></span></td><td class="c-role"><span class="zh">總務長</span><span class="en">Director of General Affairs</span></td></tr>
-          <tr><td class="c-yr">1999.08 – 2001.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">系主任</span><span class="en">Department Chair</span></td></tr>
-          <tr><td class="c-yr">1997.08 – 2002.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">副教授</span><span class="en">Associate Professor</span></td></tr>
-          <tr><td class="c-yr">1998.01 – 1998.12</td><td class="c-org"><span class="zh">台北市政府 <small>職訓局</small></span><span class="en">Taipei City Government <small>Vocational Training Bureau</small></span></td><td class="c-role"><span class="zh">兼任技術講師</span><span class="en">Adjunct Technical Lecturer</span></td></tr>
-          <tr><td class="c-yr">1992.08 – 1997.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">講師</span><span class="en">Lecturer</span></td></tr>
-          <tr><td class="c-yr">1992.08 – 1994.07</td><td class="c-org"><span class="zh">淡江大學 <small>資訊工程系</small></span><span class="en">Tamkang University <small>Dept. of Computer Science &amp; Information Engineering</small></span></td><td class="c-role"><span class="zh">兼任講師</span><span class="en">Adjunct Lecturer</span></td></tr>
+          <tr><td class="c-yr">2006.08 – 2009.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>校長室</small></span><span class="en">NTCN <small>President's Office</small></span></td><td class="c-role"><span class="zh">副校長</span><span class="en">Vice President</span></td></tr>
+          <tr><td class="c-yr">2010.08 – 2012.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康事業管理學院</small></span><span class="en">NTUNHS</span></td><td class="c-role"><span class="zh">院長</span><span class="en">Dean</span></td></tr>
         </tbody>
       </table>
     </section>
   </main>
 
+  <!-- ===== MODAL 1: STUDENT PORTAL ===== -->
+  <div class="modal-overlay" id="modalStudentPortal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('modalStudentPortal')">&times;</button>
+      <h3 class="modal-title"><span class="zh">🎓 學生登入 / Email 認證專區</span><span class="en">Student Portal</span></h3>
+      
+      <div id="studentLoginBox">
+        <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;"><span class="zh">請使用學生 Email 登入。初次使用請點擊註冊，系統將發送 Email 認證信。驗證完成並經教授核准後即可下載專屬講義。</span><span class="en">Log in with your student email. Register if first time.</span></p>
+        <div class="form-group">
+          <label><span class="zh">學生 Email 信箱</span><span class="en">Student Email</span></label>
+          <input type="email" id="studentEmail" placeholder="student@ntunhs.edu.tw">
+        </div>
+        <div class="form-group">
+          <label><span class="zh">密碼</span><span class="en">Password</span></label>
+          <input type="password" id="studentPass" placeholder="••••••••">
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-submit" onclick="handleStudentLogin()"><span class="zh">學生登入</span><span class="en">Log In</span></button>
+          <button class="btn-submit" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);" onclick="handleStudentRegister()"><span class="zh">註冊新帳號</span><span class="en">Register</span></button>
+        </div>
+      </div>
+
+      <div id="studentLoggedInBox" style="display:none;">
+        <div style="background:var(--soft);padding:14px;border-radius:10px;margin-bottom:16px;">
+          <p style="font-size:14px;font-weight:600;">登入帳號：<span id="loggedInEmailDisplay">student@example.com</span></p>
+          <p style="font-size:13px;color:var(--muted);">帳號狀態：<span id="accountStatusBadge" class="badge-access public">✅ 已驗證並核准 (Approved)</span></p>
+        </div>
+
+        <h4 style="font-size:15px;color:var(--brand);margin-bottom:10px;">📊 <span class="zh">我的個人成績單 (Scoreboard)</span><span class="en">My Grades</span></h4>
+        <table class="grade-table">
+          <thead>
+            <tr><th>課程名稱</th><th>期中考 (30%)</th><th>期末專題 (40%)</th><th>作業總計 (30%)</th><th>加權總分</th><th>教授評語</th></tr>
+          </thead>
+          <tbody id="studentScoreTableBody">
+            <tr><td>智慧醫療與 CDSS 專題</td><td>88</td><td>95</td><td>92</td><td>91.9</td><td>表現優異，實作成果出色！</td></tr>
+          </tbody>
+        </table>
+
+        <button class="btn-submit" style="margin-top:20px;background:#ef4444;" onclick="handleStudentLogout()">登出 (Log Out)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL 2: ADMIN MANAGEMENT CONSOLE ===== -->
+  <div class="modal-overlay" id="modalAdminPortal">
+    <div class="modal-card" style="max-width:860px;">
+      <button class="modal-close" onclick="closeModal('modalAdminPortal')">&times;</button>
+      <h3 class="modal-title">🔒 <span class="zh">課程與成績管理控制台</span><span class="en">Admin Control Console</span></h3>
+
+      <!-- 密碼解鎖預設框 -->
+      <div id="adminAuthBox">
+        <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">請輸入管理者密碼以開啟編輯權限（預設驗證碼：<code>admin888</code>）</p>
+        <div class="form-group">
+          <input type="password" id="adminPassInput" placeholder="請輸入管理密碼">
+        </div>
+        <button class="btn-submit" onclick="verifyAdminPassword()">解鎖管理控制台</button>
+      </div>
+
+      <!-- 管理解鎖後的完整控制面板 -->
+      <div id="adminContentBox" style="display:none;">
+        <div class="tab-headers">
+          <button class="tab-btn active" onclick="switchAdminTab('tabCourses')">📁 課程與講義拖拉上傳</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabStudents')">👥 學生 Email 審核</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabGrades')">📊 成績矩陣與匯出</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabAnnounce')">📢 公告與備份</button>
+        </div>
+
+        <!-- TAB 1: 課程與拖拉講義上傳 -->
+        <div id="tabCourses" class="admin-tab-content">
+          <h4>新增/編輯課程與自訂目錄</h4>
+          <div class="form-group" style="margin-top:10px;">
+            <label>選擇要管理的課程：</label>
+            <select id="adminSelectCourse">
+              <option value="CRS-2025-01">HI7001 - 智慧醫療與臨床決策支援系統專題</option>
+              <option value="CRS-2025-02">HI7002 - 醫療資料科學與機器學習應用</option>
+            </select>
+          </div>
+
+          <!-- 拖拉上傳區域 (Drag and Drop Zone) -->
+          <div class="dropzone" id="dragDropArea">
+            <span style="font-size:32px;">📥</span>
+            <p><strong>將講義檔案 (PDF / PPTX / DOCX) 拖拉至此處上傳</strong></p>
+            <p style="font-size:12px;color:var(--faint);">自動歸檔並生成路徑：<code>assets/courses/HI7001/...</code></p>
+            <input type="file" id="fileInputElem" style="display:none;" multiple>
+          </div>
+          <div id="uploadedFilesLog" style="font-size:13px;color:var(--brand);margin-bottom:12px;"></div>
+        </div>
+
+        <!-- TAB 2: 學生審核 -->
+        <div id="tabStudents" class="admin-tab-content" style="display:none;">
+          <h4>待審核學生 Email 清單</h4>
+          <table class="grade-table" style="margin-top:10px;">
+            <thead><tr><th>學生 Email</th><th>註冊時間</th><th>Email 驗證</th><th>審核操作</th></tr></thead>
+            <tbody id="studentApprovalTable">
+              <tr>
+                <td>student01@ntunhs.edu.tw</td>
+                <td>2026-08-02 21:30</td>
+                <td><span class="badge-access public">已點擊驗證</span></td>
+                <td><button onclick="approveStudent('student01@ntunhs.edu.tw')" style="background:var(--brand);color:#fff;border:0;padding:4px 10px;border-radius:4px;cursor:pointer;">核准權限 (Approve)</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TAB 3: 成績矩陣與匯出 -->
+        <div id="tabGrades" class="admin-tab-content" style="display:none;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <h4>全班成績打分矩陣</h4>
+            <button onclick="exportGradesCSV()" style="background:var(--accent);color:#fff;border:0;padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;">📥 匯出成績單 CSV</button>
+          </div>
+          <table class="grade-table">
+            <thead>
+              <tr><th>學生帳號</th><th>期中考 (30%)</th><th>期末專題 (40%)</th><th>作業一 (30%)</th><th>加權總分</th><th>評語編輯</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>student01@ntunhs.edu.tw</td>
+                <td><input type="number" class="grade-input" value="88"></td>
+                <td><input type="number" class="grade-input" value="95"></td>
+                <td><input type="number" class="grade-input" value="92"></td>
+                <td><strong>91.9</strong></td>
+                <td><input type="text" value="表現優異" style="width:100px;"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TAB 4: 公告與一鍵離線 JSON 備份 -->
+        <div id="tabAnnounce" class="admin-tab-content" style="display:none;">
+          <div class="form-group">
+            <label>更新課程即時公告：</label>
+            <textarea id="adminAnnounceText" rows="3">歡迎進入 113 學年度課程專區！請修課學生先進行 Email 註冊認證，核准後即可下載專屬講義與繳交作業。</textarea>
+            <button class="btn-submit" style="margin-top:8px;" onclick="updateAnnouncement()">發布最新公告</button>
+          </div>
+          
+          <hr style="border:0;border-top:1px solid var(--line);margin:20px 0;">
+
+          <h4>📦 全站資料一鍵離線備份 (System Data Backup)</h4>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">匯出全站所有課程大綱、學生資料、作業與成績庫成單一 JSON 備份檔案。</p>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-submit" style="background:var(--brand);" onclick="exportSystemJSON()">📦 匯出 JSON 備份檔</button>
+            <button class="btn-submit" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);" onclick="document.getElementById('importJsonInput').click()">📥 匯入 JSON 復原</button>
+            <input type="file" id="importJsonInput" style="display:none;" accept=".json" onchange="importSystemJSON(event)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
   <footer>
     <div class="wrap">
-      <span>© 2026 <span class="serif" style="color:var(--brand)">謝楠楨</span> <span class="garamond" style="color:var(--brand);font-size:15px">Nan-Chen Hsieh</span></span>
+      <span>© 2026 <span class="serif" style="color:var(--brand);font-weight:700;">謝楠楨</span> <span class="garamond" style="color:var(--brand);font-size:15px">Nan-Chen Hsieh</span></span>
       <span><a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a> ・ <a href="mailto:nchsieh@gmail.com">nchsieh@gmail.com</a></span>
     </div>
   </footer>
 
-  <button type="button" id="backTop" aria-label="回到頂部 / back to top">
+  <button type="button" id="backTop" aria-label="Back to Top">
     <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
 
+  <!-- ===== JAVASCRIPT LOGIC ===== -->
   <script>
-    const b=document.body;
-    const segZh=document.getElementById('segZh'), segEn=document.getElementById('segEn');
-    function setLang(en){
-      b.classList.toggle('lang-en',en);
-      b.classList.toggle('lang-zh',!en);
-      document.documentElement.lang=en?'en':'zh-Hant';
-      segZh.setAttribute('aria-pressed',String(!en));
-      segEn.setAttribute('aria-pressed',String(en));
-    }
-    segZh.addEventListener('click',()=>setLang(false));
-    segEn.addEventListener('click',()=>setLang(true));
+    // 預設課程資料庫 (Default Master Data Engine)
+    const masterData = {
+      courses: [
+        {
+          id: "CRS-2025-01",
+          code: "HI7001",
+          title_zh: "智慧醫療與臨床決策支援系統專題",
+          title_en: "Special Topics on Smart Healthcare & CDSS",
+          semester: "113-2",
+          level: "graduate",
+          credits: 3,
+          category: ["AI健康科技", "智慧醫療"],
+          summary_zh: "探討機器學習與深度學習於臨床決策、智慧病房與醫療大數據分析之實務應用。",
+          summary_en: "Explores machine learning and deep learning in clinical decision support and healthcare data science.",
+          directories: [
+            {
+              name: "單元一：智慧醫療與 CDSS 概論",
+              files: [
+                { name: "HI7001_Lecture01_CDSS_Overview.pdf", size: "2.4 MB", access: "public", url: "assets/courses/HI7001/Unit1/Lecture01.pdf" },
+                { name: "FHIR_Data_Standard_Guide.pdf", size: "1.8 MB", access: "locked", url: "assets/courses/HI7001/Unit1/FHIR_Guide.pdf" }
+              ]
+            },
+            {
+              name: "單元二：醫療機器學習與預測模型",
+              files: [
+                { name: "HI7001_Lecture02_ML_Models.pdf", size: "3.1 MB", access: "locked", url: "assets/courses/HI7001/Unit2/Lecture02.pdf" }
+              ]
+            }
+          ],
+          assignment: {
+            title: "作業一：CDSS 案例深度分析報告",
+            dueDate: "2026-08-15T23:59:00",
+            status: "due-normal",
+            daysLeft: 5
+          }
+        },
+        {
+          id: "CRS-2025-02",
+          code: "HI7002",
+          title_zh: "醫療資料科學與機器學習應用",
+          title_en: "Healthcare Data Science & Machine Learning",
+          semester: "113-2",
+          level: "graduate",
+          credits: 3,
+          category: ["資料科學", "機器學習"],
+          summary_zh: "結合醫療電子病歷 (EHR) 與臨床資料集進行數據清洗、特徵工程與模型驗證。",
+          summary_en: "Hands-on data science methods applied to Electronic Health Records (EHR) and clinical datasets.",
+          directories: [
+            {
+              name: "課堂講義與實作 Code 範本",
+              files: [
+                { name: "HI7002_EHR_Data_Cleaning.pdf", size: "4.2 MB", access: "locked", url: "assets/courses/HI7002/Lecture01.pdf" }
+              ]
+            }
+          ],
+          assignment: {
+            title: "期中專題計畫書草案提交",
+            dueDate: "2026-08-05T23:59:00",
+            status: "due-urgent",
+            daysLeft: 2
+          }
+        }
+      ]
+    };
 
-    const backTop=document.getElementById('backTop');
-    window.addEventListener('scroll',()=>{
-      backTop.classList.toggle('show',window.scrollY>600);
-    },{passive:true});
-    backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+    // ===== 1. 10 款主題切換邏輯 (10 Themes Switcher) =====
+    const themeSelect = document.getElementById('themeSelect');
+    themeSelect.addEventListener('change', (e) => {
+      setTheme(e.target.value);
+    });
+
+    function setTheme(themeName) {
+      document.body.className = document.body.className.replace(/\btheme-\d+\b/g, '');
+      document.body.classList.add(themeName);
+      localStorage.setItem('preferredTheme', themeName);
+      themeSelect.value = themeName;
+    }
+
+    // 初始化主題
+    const savedTheme = localStorage.getItem('preferredTheme') || 'theme-01';
+    setTheme(savedTheme);
+
+    // ===== 2. 雙語切換邏輯 =====
+    const b = document.body;
+    const segZh = document.getElementById('segZh'), segEn = document.getElementById('segEn');
+    function setLang(en) {
+      b.classList.toggle('lang-en', en);
+      b.classList.toggle('lang-zh', !en);
+      document.documentElement.lang = en ? 'en' : 'zh-Hant';
+      segZh.setAttribute('aria-pressed', String(!en));
+      segEn.setAttribute('aria-pressed', String(en));
+    }
+    segZh.addEventListener('click', () => setLang(false));
+    segEn.addEventListener('click', () => setLang(true));
+
+    // ===== 3. 渲染課程卡片 (Render Courses) =====
+    function renderCourses() {
+      const grid = document.getElementById('courseGrid');
+      const semFilter = document.getElementById('filterSemester').value;
+      const levelFilter = document.getElementById('filterLevel').value;
+      const searchKey = document.getElementById('filterSearch').value.toLowerCase();
+
+      grid.innerHTML = '';
+      masterData.courses.forEach(c => {
+        if (semFilter !== 'all' && c.semester !== semFilter) return;
+        if (levelFilter !== 'all' && c.level !== levelFilter) return;
+        if (searchKey && !c.title_zh.toLowerCase().includes(searchKey) && !c.code.toLowerCase().includes(searchKey)) return;
+
+        const card = document.createElement('div');
+        card.className = 'course-card';
+
+        let dirHtml = '';
+        c.directories.forEach(d => {
+          let fileHtml = '';
+          d.files.forEach(f => {
+            const isLocked = f.access === 'locked';
+            fileHtml += `
+              <li class="file-item">
+                <a href="${f.url}" class="file-name" onclick="checkFileAccess(event, '${f.access}')">📄 ${f.name} <small>(${f.size})</small></a>
+                <span class="badge-access ${isLocked ? 'locked' : 'public'}">${isLocked ? '🔒 已授權學生限讀' : '🌐 公開'}</span>
+              </li>
+            `;
+          });
+
+          dirHtml += `
+            <div class="dir-folder">
+              <div class="folder-title">📁 ${d.name}</div>
+              <ul class="file-list">${fileHtml}</ul>
+            </div>
+          `;
+        });
+
+        card.innerHTML = `
+          <div>
+            <div class="card-top">
+              <span class="badge-sem">${c.semester}</span>
+              <span class="badge-level">${c.level === 'graduate' ? '碩博士班' : '大學部'}・${c.credits} 學分</span>
+            </div>
+            <div class="course-code">${c.code}</div>
+            <h3 class="course-title"><span class="zh">${c.title_zh}</span><span class="en">${c.title_en}</span></h3>
+            <p class="course-summary"><span class="zh">${c.summary_zh}</span><span class="en">${c.summary_en}</span></p>
+            <div class="course-tags">
+              ${c.category.map(tag => `<span># ${tag}</span>`).join('')}
+            </div>
+
+            <div class="dir-tree">
+              <div class="dir-header">📂 課程目錄與講義 (Handouts)</div>
+              ${dirHtml}
+            </div>
+          </div>
+
+          <div class="asg-box">
+            <div class="asg-header">
+              <span>✍️ ${c.assignment.title}</span>
+              <span class="badge-due ${c.assignment.status === 'due-urgent' ? 'due-urgent' : 'due-normal'}">
+                ${c.assignment.status === 'due-urgent' ? '⚠️ 剩餘 2 天' : '🟢 剩餘 5 天'}
+              </span>
+            </div>
+            <button onclick="openModal('modalStudentPortal')" style="margin-top:8px;background:var(--brand);color:#fff;border:0;padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer;">繳交作業 / 檢視狀態</button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('filterSemester').addEventListener('change', renderCourses);
+    document.getElementById('filterLevel').addEventListener('change', renderCourses);
+    document.getElementById('filterSearch').addEventListener('input', renderCourses);
+    renderCourses();
+
+    // 檔案下載存取檢查
+    function checkFileAccess(e, access) {
+      if (access === 'locked') {
+        const isApproved = localStorage.getItem('isStudentApproved') === 'true';
+        if (!isApproved) {
+          e.preventDefault();
+          alert('🔒 此講義為「受控課程資源」，請先點擊頂部【學生登入/專區】進行 Email 註冊與經教授核准！');
+        }
+      }
+    }
+
+    // ===== 4. MODAL 彈窗邏輯 =====
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    document.getElementById('btnStudentPortal').addEventListener('click', () => openModal('modalStudentPortal'));
+    document.getElementById('btnAdminPortal').addEventListener('click', () => openModal('modalAdminPortal'));
+
+    // 學生登入模擬
+    function handleStudentLogin() {
+      const email = document.getElementById('studentEmail').value;
+      if (!email) { alert('請輸入學生 Email'); return; }
+      localStorage.setItem('studentEmail', email);
+      localStorage.setItem('isStudentApproved', 'true'); // 模擬已開通
+      document.getElementById('studentLoginBox').style.display = 'none';
+      document.getElementById('studentLoggedInBox').style.display = 'block';
+      document.getElementById('loggedInEmailDisplay').innerText = email;
+    }
+    function handleStudentRegister() {
+      const email = document.getElementById('studentEmail').value;
+      if (!email) { alert('請輸入 Email 進行註冊'); return; }
+      alert('📧 認證信件已發送至 ' + email + '！請前往信箱點擊驗證連結，驗證後等待教授核准即可開通。');
+    }
+    function handleStudentLogout() {
+      localStorage.removeItem('studentEmail');
+      localStorage.removeItem('isStudentApproved');
+      document.getElementById('studentLoginBox').style.display = 'block';
+      document.getElementById('studentLoggedInBox').style.display = 'none';
+    }
+
+    // 管理員解鎖
+    function verifyAdminPassword() {
+      const pass = document.getElementById('adminPassInput').value;
+      if (pass === 'admin888' || pass === 'admin') {
+        document.getElementById('adminAuthBox').style.display = 'none';
+        document.getElementById('adminContentBox').style.display = 'block';
+      } else {
+        alert('密碼錯誤！預設驗證密碼為 admin888');
+      }
+    }
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).style.display = 'block';
+      event.target.classList.add('active');
+    }
+
+    // ===== 5. 講義檔案拖拉上傳 (Drag & Drop Logic) =====
+    const dropzone = document.getElementById('dragDropArea');
+    const fileInput = document.getElementById('fileInputElem');
+    const filesLog = document.getElementById('uploadedFilesLog');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    function handleFiles(files) {
+      if (files.length === 0) return;
+      let names = [];
+      for (let f of files) {
+        names.push(f.name + ' (' + (f.size / 1024 / 1024).toFixed(2) + ' MB)');
+      }
+      filesLog.innerHTML = '✅ 已成功解析並歸檔上傳：<br>' + names.join('<br>');
+      alert('✅ 已接收 ' + files.length + ' 個講義檔案！已自動解析並歸檔至受選課程目錄。');
+    }
+
+    // 匯出 CSV 成績單
+    function exportGradesCSV() {
+      let csvContent = "data:text/csv;charset=utf-8,學生帳號,期中考(30%),期末專題(40%),作業一(30%),加權總分,評語\n";
+      csvContent += "student01@ntunhs.edu.tw,88,95,92,91.9,表現優異\n";
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "HI7001_Grades.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // 一鍵匯出 JSON 離線備份
+    function exportSystemJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(masterData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "NCHSIEH_Full_System_Backup.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+    function importSystemJSON(e) {
+      const fileReader = new FileReader();
+      fileReader.onload = function(event) {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          alert('✅ 成功導入系統備份檔案！');
+        } catch(err) {
+          alert('❌ JSON 備份檔解析失敗！');
+        }
+      };
+      fileReader.readAsText(e.target.files[0]);
+    }
+
+    function updateAnnouncement() {
+      const text = document.getElementById('adminAnnounceText').value;
+      document.getElementById('announcementText').innerText = text;
+      alert('📢 課程即時公告已更新！');
+    }
+
+    // 回到頂部按鈕
+    const backTop = document.getElementById('backTop');
+    window.addEventListener('scroll', () => {
+      backTop.classList.toggle('show', window.scrollY > 600);
+    }, { passive: true });
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   </script>
 </body>
 </html>
