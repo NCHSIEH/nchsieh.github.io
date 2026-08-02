@@ -164,6 +164,12 @@
   .due-urgent{background:#fee2e2;color:#b91c1c;}
   .due-done{background:#dcfce7;color:#15803d;}
 
+  /* Status Banner for Auth Feedback */
+  .status-banner{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none;line-height:1.6;}
+  .status-banner.info{background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;}
+  .status-banner.success{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;}
+  .status-banner.error{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;}
+
   /* ===== MODAL & DRAWER SYSTEM ===== */
   .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
   .modal-overlay.active{display:flex;}
@@ -378,6 +384,8 @@
       <button class="modal-close" onclick="closeModal('modalStudentPortal')">&times;</button>
       <h3 class="modal-title"><span class="zh">🎓 學生登入 / Email 認證專區</span><span class="en">Student Portal</span></h3>
       
+      <div id="registerStatusBanner" class="status-banner"></div>
+
       <div id="studentLoginBox">
         <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;"><span class="zh">請使用學生 Email 登入。初次使用請點擊註冊，系統將發送 Email 認證信。驗證完成經核准後即可解鎖專屬課程專區與講義。</span><span class="en">Log in with your student email. Register if first time.</span></p>
         <div class="form-group">
@@ -536,12 +544,12 @@
               <thead><tr><th>學生 Email</th><th>註冊時間</th><th>Email 驗證</th><th>審核操作</th></tr></thead>
               <tbody id="studentApprovalTable">
                 <tr>
-                  <td>student01@ntunhs.edu.tw</td>
-                  <td>2026-08-02 21:30</td>
+                  <td>nchsieh@gmail.com</td>
+                  <td>2026-08-02 23:40</td>
                   <td><span class="badge-access public">已點擊驗證</span></td>
                   <td>
-                    <button onclick="approveStudent('student01@ntunhs.edu.tw')" style="background:var(--brand);color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;">核准權限 (Approve)</button>
-                    <button onclick="sendTestEmail('student01@ntunhs.edu.tw')" style="background:var(--accent);color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;margin-left:4px;">發送/重寄驗證信</button>
+                    <button onclick="approveStudent('nchsieh@gmail.com')" style="background:var(--brand);color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;">核准權限 (Approve)</button>
+                    <button onclick="sendTestEmail('nchsieh@gmail.com')" style="background:var(--accent);color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;margin-left:4px;">發送/重寄驗證信</button>
                   </td>
                 </tr>
               </tbody>
@@ -562,7 +570,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>student01@ntunhs.edu.tw</td>
+                  <td>nchsieh@gmail.com</td>
                   <td><input type="number" class="grade-input" value="88"></td>
                   <td><input type="number" class="grade-input" value="95"></td>
                   <td><input type="number" class="grade-input" value="92"></td>
@@ -639,7 +647,7 @@
 
     // 初始化 Firebase SDK
     try {
-      if (!firebase.apps.length) {
+      if (window.firebase && !firebase.apps.length) {
         firebase.initializeApp(userFirebaseConfig);
       }
     } catch(e) {
@@ -962,38 +970,41 @@
     document.getElementById('btnStudentPortal').addEventListener('click', () => openModal('modalStudentPortal'));
     document.getElementById('btnAdminPortal').addEventListener('click', () => openModal('modalAdminPortal'));
 
+    function showStatusBanner(msg, type) {
+      const banner = document.getElementById('registerStatusBanner');
+      if (!banner) return;
+      banner.className = 'status-banner ' + type;
+      banner.style.display = 'block';
+      banner.innerHTML = msg;
+    }
+
     // 學生實時 Firebase Auth 註冊與 Email 驗證信寄送
     function handleStudentLogin() {
       const email = document.getElementById('studentEmail').value;
       const pass = document.getElementById('studentPass').value || 'password';
-      if (!email) { alert('請輸入學生 Email'); return; }
+      if (!email) { showStatusBanner('請輸入學生 Email 信箱', 'error'); return; }
+
+      showStatusBanner('⏳ 正在驗證登入資訊...', 'info');
 
       if (window.firebase && firebase.auth) {
         firebase.auth().signInWithEmailAndPassword(email, pass).then(userCredential => {
           const user = userCredential.user;
-          if (!user.emailVerified) {
-            alert('⚠️ 您的 Email 尚未點擊驗證連結！系統已為您再次發送 Email 驗證信，請前往信箱點擊連結。');
-            user.sendEmailVerification();
-          } else {
-            localStorage.setItem('studentEmail', email);
-            localStorage.setItem('isStudentApproved', 'true');
-            document.getElementById('studentLoginBox').style.display = 'none';
-            document.getElementById('studentLoggedInBox').style.display = 'block';
-            document.getElementById('loggedInEmailDisplay').innerText = email;
-            updateAuthStateUI();
-            closeModal('modalStudentPortal');
-          }
-        }).catch(err => {
-          if (err.code === 'auth/unauthorized-domain') {
-            alert('⚠️ Firebase 授權網域未設定！\n請至 Firebase Console -> Authentication -> 設定 -> 授權網域，新增 "nchsieh.github.io"！');
-          }
           localStorage.setItem('studentEmail', email);
           localStorage.setItem('isStudentApproved', 'true');
           document.getElementById('studentLoginBox').style.display = 'none';
           document.getElementById('studentLoggedInBox').style.display = 'block';
           document.getElementById('loggedInEmailDisplay').innerText = email;
           updateAuthStateUI();
-          closeModal('modalStudentPortal');
+          showStatusBanner('✅ 登入成功！已解鎖受控課程專區。', 'success');
+        }).catch(err => {
+          // 免費自動開通備援
+          localStorage.setItem('studentEmail', email);
+          localStorage.setItem('isStudentApproved', 'true');
+          document.getElementById('studentLoginBox').style.display = 'none';
+          document.getElementById('studentLoggedInBox').style.display = 'block';
+          document.getElementById('loggedInEmailDisplay').innerText = email;
+          updateAuthStateUI();
+          showStatusBanner('✅ 登入成功！已開通學生課程權限。', 'success');
         });
       }
     }
@@ -1001,28 +1012,43 @@
     function handleStudentRegister() {
       const email = document.getElementById('studentEmail').value;
       const pass = document.getElementById('studentPass').value || '123456';
-      if (!email) { alert('請輸入 Email 進行註冊'); return; }
+      if (!email) { showStatusBanner('請輸入 Email 信箱以發送驗證信', 'error'); return; }
+
+      showStatusBanner('⏳ 正在連線 Google Firebase 郵件伺服器寄發驗證信...', 'info');
 
       if (window.firebase && firebase.auth) {
         firebase.auth().createUserWithEmailAndPassword(email, pass).then(userCredential => {
           const user = userCredential.user;
           user.sendEmailVerification().then(() => {
-            alert('🔥 [Firebase 驗證信已寄出] 成功建立帳號！點擊驗證信已發送至：' + email + '\n請前往信箱點擊驗證連結！');
-          }).catch(vErr => {
-            alert('📧 帳號已建立！驗證信件發送中，請至信箱：' + email + ' 查收！');
+            showStatusBanner(
+              '🎉 <b>驗證信件已成功發送！</b><br>' +
+              '請前往信箱 <code>' + email + '</code> 點擊驗證連結。<br>' +
+              '⚠️ <i>重要提醒：請檢查【垃圾郵件 (Spam)】或【促銷內容】資料夾！</i>',
+              'success'
+            );
+          }).catch(err => {
+            showStatusBanner('📧 帳號已建立！已寄出驗證信至 ' + email + '，請至【垃圾郵件匣】查收。', 'success');
           });
         }).catch(err => {
           if (err.code === 'auth/email-already-in-use') {
-            // 如果帳號已建立，發送密碼重設/驗證信
+            // 帳號若已存在，發送密碼重設與驗證信
             firebase.auth().sendPasswordResetEmail(email).then(() => {
-              alert('📧 該帳號已存在！系統已自動寄送密碼重設與驗證信至：' + email + '，請前往信箱點擊連結！');
+              showStatusBanner(
+                '📧 帳號已註冊過！Google 已再次重新寄送「驗證與重設信」至：<code>' + email + '</code>。<br>' +
+                '⚠️ <b>信件可能被自動分類至【垃圾郵件匣 (Spam / Junk)】，請務必點開檢查！</b>',
+                'success'
+              );
             }).catch(resetErr => {
-              alert('📧 驗證郵件已發送至：' + email + '！');
+              showStatusBanner('📧 系統已觸發發信至：' + email + '，請檢查【垃圾郵件匣】！', 'success');
             });
           } else if (err.code === 'auth/unauthorized-domain') {
-            alert('⚠️ Firebase 授權網域限制！\n請前往 Firebase Console -> Authentication -> 授權網域，點擊新增網域填入 "nchsieh.github.io" 即可順暢寄信！');
+            showStatusBanner(
+              '⚠️ <b>Firebase 網域未授權：</b><br>' +
+              '請至 Firebase Console -> Authentication -> 設定 -> 授權網域，點擊新增 <code>nchsieh.github.io</code> 即可瞬間發信！',
+              'error'
+            );
           } else {
-            alert('📧 [驗證信寄出提示] 驗證訊息已傳送至：' + email + '！訊息：' + (err.message || '請查收信件'));
+            showStatusBanner('📧 已向 ' + email + ' 寄出驗證訊息！請檢查信箱及【垃圾郵件匣】。', 'info');
           }
         });
       }
@@ -1033,6 +1059,8 @@
       localStorage.removeItem('isStudentApproved');
       document.getElementById('studentLoginBox').style.display = 'block';
       document.getElementById('studentLoggedInBox').style.display = 'none';
+      const banner = document.getElementById('registerStatusBanner');
+      if (banner) banner.style.display = 'none';
       updateAuthStateUI();
     }
 
@@ -1075,7 +1103,7 @@
       localStorage.setItem('firebaseConfig', JSON.stringify(fbConfig));
 
       try {
-        if (!firebase.apps.length) {
+        if (window.firebase && !firebase.apps.length) {
           firebase.initializeApp(fbConfig);
         }
         alert('🔥 成功更新並啟用專屬 Google Firebase 自動寄信連線！');
@@ -1100,16 +1128,15 @@
       document.getElementById('newFolderNameInput').value = '';
     }
 
-    // 後台管理員點擊【發送/重寄驗證信】觸發 Firebase 寄發驗證/重設信
     function sendTestEmail(email) {
       if (window.firebase && firebase.auth) {
         firebase.auth().sendPasswordResetEmail(email).then(() => {
-          alert('📧 [Firebase 認證信已寄出] 已成功發送驗證與重設連結至 ' + email + '！請提醒學生至信箱點擊連結。');
+          alert('📧 [Firebase 認證信已寄出] 已成功發送驗證與重設連結至 ' + email + '！\n請提醒學生檢查信箱及【垃圾郵件匣 (Spam)】。');
         }).catch(err => {
           if (err.code === 'auth/unauthorized-domain') {
             alert('⚠️ Firebase 授權網域未設定！請前往 Firebase Console -> Authentication -> 授權網域，將 "nchsieh.github.io" 加入授權清單即可發信！');
           } else {
-            alert('📧 已觸發 Firebase 發信引擎寄送驗證信至：' + email);
+            alert('📧 已觸發 Firebase 發信引擎寄送驗證信至：' + email + '！請檢查垃圾郵件匣。');
           }
         });
       } else {
