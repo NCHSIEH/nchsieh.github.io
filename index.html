@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>謝楠楨 Nan-Chen Hsieh｜個人網站與課程管理系統</title>
-<meta name="description" content="謝楠楨 Nan-Chen Hsieh, Ph.D. — 國立臺北護理健康大學 教授。研究專長：智慧醫療、資料科學、高齡健康及長照策略、健康資訊系統。">
+<title>謝楠楨 Nan-Chen Hsieh｜個人網站</title>
+<meta name="description" content="謝楠楨 Nan-Chen Hsieh, Ph.D. — 國立臺北護理健康大學 教授 / 講座教授。研究專長：智慧醫療、資料科學、高齡健康及長照策略、健康資訊系統。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231f3a5f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="謝楠楨 Nan-Chen Hsieh｜國立臺北護理健康大學 教授">
@@ -19,7 +19,6 @@
 <!-- Firebase Compatibility SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
 <style>
   /* ===== 10 款主題設計系統 ===== */
@@ -50,7 +49,6 @@
   body.theme-10 { --brand: #000000; --brand-deep: #000000; --accent: #d97706; --ink: #000000; --muted: #222222; --faint: #444444; --line: #000000; --soft: #fffbeb; --card-bg: #ffffff; --white: #ffffff; }
 
   *{box-sizing:border-box;margin:0;padding:0}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
   html{scroll-behavior:smooth}
   body{font-family:var(--font-sans);color:var(--ink);background:var(--white);line-height:1.8;font-weight:400;letter-spacing:.2px;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
   .serif{font-family:var(--font-serif);}
@@ -63,7 +61,7 @@
   .topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:background .3s;}
   body.theme-02 .topbar, body.theme-07 .topbar {background:rgba(15, 23, 42, 0.92);}
   .topbar .wrap{max-width:var(--maxw);margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-  .brand{font-family:var(--font-serif);font-weight:700;font-size:19px;color:var(--brand);letter-spacing:1px;display:flex;align-items:center;gap:6px;}
+  .brand{font-family:var(--font-serif);font-weight:700;font-size:19px;color:var(--brand);letter-spacing:1px;display:flex;align-items:center;gap:6px;text-decoration:none;}
   .brand small{font-family:"Cormorant Garamond",serif;color:var(--faint);font-weight:600;font-size:16px;}
   .nav-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
 
@@ -105,108 +103,38 @@
   .svc th{text-align:left;font-weight:600;color:var(--faint);font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;padding:0 14px 11px;border-bottom:2px solid var(--brand);}
   .svc td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top;}
   .svc tr:hover td{background:var(--soft);}
-  .svc .c-yr{white-space:nowrap;color:var(--accent);font-size:13.5px;width:120px;font-variant-numeric:tabular-nums;font-weight:600;}
-  .svc .c-org{font-weight:600;width:300px;color:var(--ink);}
+  .svc .c-yr{white-space:nowrap;color:var(--accent);font-size:13.5px;width:140px;font-variant-numeric:tabular-nums;font-weight:600;}
+  .svc .c-org{font-weight:600;width:340px;color:var(--ink);}
   .svc .c-org small{display:block;font-weight:400;color:var(--faint);font-size:13px;}
   .svc .c-role{color:var(--muted);}
   .svc tr.cur .c-org{color:var(--brand);}
   .svc tr.grp td{padding:24px 14px 9px;border-bottom:1px solid var(--brand);font-family:var(--font-serif);font-size:13.5px;letter-spacing:2px;color:var(--brand);font-weight:700;}
 
-  /* ===== LMS & COURSES SECTION ===== */
-  .course-lock-card{background:var(--soft);border:2px dashed var(--brand);border-radius:16px;padding:36px 24px;text-align:center;margin-top:20px;}
-  .course-lock-card h3{font-size:20px;color:var(--brand);margin-bottom:10px;}
-  .course-lock-card p{font-size:14.5px;color:var(--muted);max-width:600px;margin:0 auto 20px;}
-
-  .course-filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;align-items:center;background:var(--soft);padding:14px 18px;border-radius:12px;border:1px solid var(--line);}
-  .filter-group{display:flex;align-items:center;gap:8px;font-size:13.5px;}
-  .filter-group select, .filter-group input{padding:6px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13.5px;background:var(--card-bg);color:var(--ink);}
-  .filter-search{flex:1;min-width:200px;}
-
-  .announcement-box{background:rgba(176, 137, 76, 0.1);border-left:4px solid var(--accent);padding:14px 18px;border-radius:0 8px 8px 0;margin-bottom:24px;}
-  .announcement-box h4{font-size:14px;color:var(--brand);display:flex;align-items:center;gap:8px;margin-bottom:4px;}
-  .announcement-box p{font-size:13.5px;color:var(--muted);}
-
-  .course-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(330px, 1fr));gap:24px;}
-  .course-card{background:var(--card-bg);border:1px solid var(--line);border-radius:14px;padding:22px;transition:transform .2s, box-shadow .2s;display:flex;flex-direction:column;justify-content:space-between;}
-  .course-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,0.06);}
-  .card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-  .badge-sem{background:var(--brand);color:#fff;font-size:12px;padding:3px 10px;border-radius:999px;font-weight:600;}
-  .badge-level{background:var(--soft);color:var(--brand);border:1px solid var(--line);font-size:12px;padding:2px 8px;border-radius:6px;}
-  .course-code{font-size:12.5px;font-family:monospace;color:var(--faint);margin-bottom:4px;}
-  .course-title{font-family:var(--font-serif);font-size:18px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:10px;}
-  .course-summary{font-size:13.5px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
-  .course-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
-  .course-tags span{font-size:11.5px;background:var(--soft);color:var(--muted);padding:2px 8px;border-radius:4px;}
-
-  /* Collapsible Directory / Handouts Tree */
-  .dir-tree{border-top:1px solid var(--line);padding-top:14px;margin-top:10px;}
-  .dir-header{font-size:13px;font-weight:700;color:var(--brand);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-  .dir-folder{margin-bottom:10px;background:var(--soft);border-radius:8px;padding:10px 12px;}
-  .folder-title{font-size:13px;font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
-  .file-list{list-style:none;margin-top:8px;padding-left:6px;}
-  .file-item{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px dashed var(--line);}
-  .file-item:last-child{border-bottom:0;}
-  .file-name{color:var(--brand);text-decoration:none;display:flex;align-items:center;gap:6px;font-weight:500;}
-  .file-name:hover{text-decoration:underline;}
-  .badge-access{font-size:10.5px;padding:1px 6px;border-radius:4px;}
-  .badge-access.public{background:#dcfce7;color:#166534;}
-  .badge-access.locked{background:#fef3c7;color:#92400e;}
-  .badge-pdf-conv{background:#fee2e2;color:#991b1b;font-size:10.5px;padding:1px 6px;border-radius:4px;font-weight:600;}
-
-  .order-btn{background:none;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:11px;cursor:pointer;color:var(--muted);}
-  .order-btn:hover{background:var(--brand);color:#fff;}
-
-  /* Homework & Assignment Box */
-  .asg-box{background:rgba(31, 58, 95, 0.04);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;}
-  .asg-header{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--brand);}
-  .badge-due{font-size:11.5px;padding:2px 8px;border-radius:999px;font-weight:600;}
-  .due-normal{background:#e0f2fe;color:#0369a1;}
-  .due-urgent{background:#fee2e2;color:#b91c1c;}
-  .due-done{background:#dcfce7;color:#15803d;}
-
-  /* Status Banner for Auth Feedback */
-  .status-banner{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none;line-height:1.6;}
-  .status-banner.info{background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;}
-  .status-banner.success{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;}
-  .status-banner.error{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;}
-
-  /* ===== MODAL & DRAWER SYSTEM ===== */
+  /* MODAL */
   .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
   .modal-overlay.active{display:flex;}
   .modal-card{background:var(--card-bg);border:1px solid var(--line);border-radius:18px;max-width:920px;width:100%;max-height:92vh;overflow-y:auto;padding:32px;box-shadow:0 24px 50px rgba(0,0,0,0.25);position:relative;color:var(--ink);}
-  .modal-close{position:absolute;top:20px;right:22px;background:var(--soft);border:1px solid var(--line);width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;color:var(--faint);display:flex;align-items:center;justify-content:center;transition:.2s;}
-  .modal-close:hover{color:var(--ink);background:var(--line);}
+  .modal-close{position:absolute;top:20px;right:22px;background:var(--soft);border:1px solid var(--line);width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;color:var(--faint);display:flex;align-items:center;justify-content:center;}
   .modal-title{font-family:var(--font-serif);font-size:24px;font-weight:700;color:var(--brand);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
 
   /* ADMIN CONSOLE STYLES */
   .admin-nav-tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:24px;overflow-x:auto;padding-bottom:2px;}
-  .admin-nav-tabs .tab-btn{padding:10px 18px;border:0;background:var(--soft);font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:10px 10px 0 0;transition:.2s;white-space:nowrap;display:flex;align-items:center;gap:6px;}
-  .admin-nav-tabs .tab-btn:hover{color:var(--brand);background:rgba(31,58,95,0.08);}
+  .admin-nav-tabs .tab-btn{padding:10px 18px;border:0;background:var(--soft);font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:10px 10px 0 0;transition:.2s;white-space:nowrap;}
   .admin-nav-tabs .tab-btn.active{color:#fff;background:var(--brand);}
 
   .admin-card-section{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:20px;}
-  .admin-card-section h4{font-size:15px;color:var(--brand);font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .admin-card-section h4{font-size:15px;color:var(--brand);font-weight:700;margin-bottom:12px;}
 
   .theme-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:14px;}
-  .theme-card{border:2px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;transition:.2s;background:var(--card-bg);display:flex;flex-direction:column;gap:8px;}
-  .theme-card:hover, .theme-card.active{border-color:var(--brand);transform:scale(1.02);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+  .theme-card{border:2px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;background:var(--card-bg);display:flex;flex-direction:column;gap:8px;}
+  .theme-card.active{border-color:var(--brand);}
   .theme-swatch{height:28px;border-radius:6px;display:flex;overflow:hidden;border:1px solid rgba(0,0,0,0.1);}
   .swatch-p1{flex:2;} .swatch-p2{flex:1;} .swatch-p3{flex:1;}
-
-  .dropzone{border:2px dashed var(--brand);border-radius:12px;padding:32px 20px;text-align:center;background:var(--card-bg);cursor:pointer;transition:.2s;margin:16px 0;}
-  .dropzone:hover, .dropzone.dragover{background:rgba(31,58,95,0.08);border-color:var(--accent);}
-  .dropzone p{font-size:14px;color:var(--muted);margin-top:6px;}
 
   .form-group{margin-bottom:16px;}
   .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink);}
   .form-group input, .form-group textarea, .form-group select{width:100%;padding:9px 14px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--card-bg);color:var(--ink);}
-  .btn-submit{background:var(--brand);color:#fff;border:0;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;font-size:14.5px;transition:.2s;}
-  .btn-submit:hover{background:var(--brand-deep);}
-
-  .grade-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px;background:var(--card-bg);border-radius:8px;overflow:hidden;}
-  .grade-table th, .grade-table td{border:1px solid var(--line);padding:10px;text-align:center;}
-  .grade-table th{background:var(--soft);color:var(--brand);font-weight:700;}
-  .grade-input{width:65px;padding:5px;text-align:center;border:1px solid var(--line);border-radius:6px;}
+  .btn-submit{background:var(--brand);color:#fff;border:0;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;font-size:14.5px;}
 
   footer{background:var(--soft);border-top:1px solid var(--line);margin-top:60px;}
   footer .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 24px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint);}
@@ -221,8 +149,6 @@
     .hero{padding:48px 22px 42px;}
     main{padding:0 18px;}
     .topbar .wrap{padding:10px 16px;}
-    .course-grid{grid-template-columns:1fr;}
-    .modal-card{padding:20px;}
   }
 </style>
 </head>
@@ -231,17 +157,17 @@
   <!-- ===== TOPBAR ===== -->
   <header class="topbar">
     <div class="wrap">
-      <span class="brand">謝楠楨 <small>Nan-Chen Hsieh</small></span>
+      <a href="index.html" class="brand">謝楠楨 <small>Nan-Chen Hsieh</small></a>
       <div class="nav-controls">
         <div class="langtoggle" role="group" aria-label="切換語言 / switch language">
           <button type="button" class="seg seg-zh" id="segZh" aria-pressed="true">中文</button>
           <button type="button" class="seg seg-en" id="segEn" aria-pressed="false">EN</button>
         </div>
 
-        <button class="btn-portal" id="btnStudentPortal">
-          <span class="zh">學生登入/專區</span><span class="en">Student Portal</span>
-        </button>
-        <button class="btn-portal" style="background:var(--accent);" id="btnAdminPortal">
+        <a href="courses.html" class="btn-portal" style="background:var(--accent);">
+          <span class="zh">📚 授課與課程專區</span><span class="en">📚 Courses Portal</span>
+        </a>
+        <button class="btn-portal" id="btnAdminPortal">
           <span class="zh">🔒 課程與系統管理</span><span class="en">🔒 Admin Console</span>
         </button>
       </div>
@@ -298,7 +224,7 @@
       </div>
     </section>
 
-    <!-- ===== 2. EXPERIENCE TABLE ===== -->
+    <!-- ===== 2. COMPLETE EXPERIENCE TABLE ===== -->
     <section id="experience">
       <div class="skh">
         <h2><span class="zh">專業經歷</span><span class="en">Professional Experience</span></h2>
@@ -313,128 +239,56 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="grp"><td colspan="3"><span class="zh">現職</span><span class="en">Current Roles</span></td></tr>
+          <tr class="grp"><td colspan="3"><span class="zh">現職 (Current Roles)</span><span class="en">Current Roles</span></td></tr>
           <tr class="cur"><td class="c-yr">2004.08 –</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康科技學院</small></span><span class="en">NTUNHS <small>College of Health Technology</small></span></td><td class="c-role"><span class="zh">教授</span><span class="en">Professor</span></td></tr>
           <tr class="cur"><td class="c-yr">2022.02 –</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康科技學院</small></span><span class="en">NTUNHS <small>College of Health Technology</small></span></td><td class="c-role"><span class="zh">講座教授</span><span class="en">Chair Professor</span></td></tr>
           <tr class="cur"><td class="c-yr">2023.02 –</td><td class="c-org"><span class="zh">國立金門大學 <small>健康護理學院</small></span><span class="en">National Quemoy University</span></td><td class="c-role"><span class="zh">榮譽講座教授</span><span class="en">Honorary Chair Professor</span></td></tr>
           <tr class="cur"><td class="c-yr">2014.01 –</td><td class="c-org"><span class="zh">全國大專以上長照課程推動委員會 <small>教育部</small></span><span class="en">National LTC Curriculum Committee</span></td><td class="c-role"><span class="zh">主任委員</span><span class="en">Chairperson</span></td></tr>
           <tr class="cur"><td class="c-yr">2023.01 –</td><td class="c-org"><span class="zh">教育部 <small>技專校院高等教育深耕計畫</small></span><span class="en">Ministry of Education</span></td><td class="c-role"><span class="zh">考評委員</span><span class="en">Review Committee Member</span></td></tr>
           <tr class="cur"><td class="c-yr">2009.10 –</td><td class="c-org"><span class="zh">衛生福利部</span><span class="en">Ministry of Health and Welfare</span></td><td class="c-role"><span class="zh">專案評審委員</span><span class="en">Project Review Committee Member</span></td></tr>
-          <tr class="grp"><td colspan="3"><span class="zh">歷年經歷</span><span class="en">Past Roles</span></td></tr>
+          <tr class="cur"><td class="c-yr">2020.01 –</td><td class="c-org"><span class="zh">財團法人高等教育評鑑中心基金會</span><span class="en">Higher Education Evaluation &amp; Accreditation Council of Taiwan</span></td><td class="c-role"><span class="zh">專業評鑑機構認可委員</span><span class="en">Accreditation Committee Member</span></td></tr>
+          <tr class="cur"><td class="c-yr">2017.12 –</td><td class="c-org"><span class="zh">生活照顧專業協會</span><span class="en">Life Care Professional Association</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr class="cur"><td class="c-yr">2015.08 –</td><td class="c-org"><span class="zh">台灣電子健康學會</span><span class="en">Taiwan e-Health Association</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+
+          <tr class="grp"><td colspan="3"><span class="zh">歷年完整經歷 (Full Past Experience)</span><span class="en">Past Roles</span></td></tr>
           <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>校長室</small></span><span class="en">NTUNHS <small>President's Office</small></span></td><td class="c-role"><span class="zh">校長</span><span class="en">President</span></td></tr>
           <tr><td class="c-yr">2006.08 – 2009.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>校長室</small></span><span class="en">NTCN <small>President's Office</small></span></td><td class="c-role"><span class="zh">副校長</span><span class="en">Vice President</span></td></tr>
           <tr><td class="c-yr">2010.08 – 2012.07</td><td class="c-org"><span class="zh">國立臺北護理健康大學 <small>健康事業管理學院</small></span><span class="en">NTUNHS</span></td><td class="c-role"><span class="zh">院長</span><span class="en">Dean</span></td></tr>
+          <tr><td class="c-yr">2016.01 – 2016.12</td><td class="c-org"><span class="zh">行政院</span><span class="en">Executive Yuan</span></td><td class="c-role"><span class="zh">長期照顧保險工作小組委員</span><span class="en">Long-term Care Insurance Task Force Member</span></td></tr>
+          <tr><td class="c-yr">2022</td><td class="c-org"><span class="zh">財團法人醫院評鑑暨醫療品質策進會 <small>醫策會</small></span><span class="en">Joint Commission of Taiwan <small>JCT</small></span></td><td class="c-role"><span class="zh">人體生物資料庫查核委員</span><span class="en">Biobank Audit Committee Member</span></td></tr>
+          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org"><span class="zh">台灣評鑑協會</span><span class="en">Taiwan Assessment &amp; Evaluation Association</span></td><td class="c-role"><span class="zh">資訊管理專業類評鑑委員</span><span class="en">Information Management Accreditation Reviewer</span></td></tr>
+          <tr><td class="c-yr">2011.09 – 2012.07</td><td class="c-org"><span class="zh">台灣評鑑協會</span><span class="en">Taiwan Assessment &amp; Evaluation Association</span></td><td class="c-role"><span class="zh">專科學校追蹤評鑑委員</span><span class="en">Junior College Follow-up Accreditation Reviewer</span></td></tr>
+          <tr><td class="c-yr">1993.01 – 1999.12</td><td class="c-org"><span class="zh">經濟部智慧財產局</span><span class="en">Taiwan Intellectual Property Office, MOEA</span></td><td class="c-role"><span class="zh">電機組兼任專利審查委員</span><span class="en">Adjunct Patent Examiner (Electrical)</span></td></tr>
+          <tr><td class="c-yr">2014.01 – 2016.07</td><td class="c-org"><span class="zh">臺灣醫學資訊學會</span><span class="en">Taiwan Association for Medical Informatics</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國國立大學校院協會</span><span class="en">Association of National Universities of Taiwan</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國國立科技大學校院協會</span><span class="en">Association of National Universities of Technology</span></td><td class="c-role"><span class="zh">理事</span><span class="en">Director</span></td></tr>
+          <tr><td class="c-yr">2013.08 – 2021.07</td><td class="c-org"><span class="zh">中華民國木球協會</span><span class="en">Woodball Association of R.O.C.</span></td><td class="c-role"><span class="zh">副理事長</span><span class="en">Vice Chairman</span></td></tr>
+          <tr><td class="c-yr">2007.10 – 2012.01</td><td class="c-org"><span class="zh">中華民國大專校院資訊服務協會 <small>ISAC</small></span><span class="en">Information Service Association of Chinese Colleges <small>ISAC</small></span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
+          <tr><td class="c-yr">2008.07 – 2010.07</td><td class="c-org"><span class="zh">淡江大學資訊工程系友會</span><span class="en">Tamkang University CSIE Alumni Association</span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
+          <tr><td class="c-yr">2003.08 – 2005.07</td><td class="c-org"><span class="zh">中華民國資訊管理學會 <small>CSIM</small></span><span class="en">Chinese Society of Information Management <small>CSIM</small></span></td><td class="c-role"><span class="zh">監事</span><span class="en">Supervisor</span></td></tr>
+          <tr><td class="c-yr">2003.08 – 2004.07</td><td class="c-org"><span class="zh">國立臺北護理學院 <small>電算中心</small></span><span class="en">National Taipei College of Nursing <small>Computer Center</small></span></td><td class="c-role"><span class="zh">系統設計組組長</span><span class="en">Head, System Design Division</span></td></tr>
+          <tr><td class="c-yr">2001.08 – 2003.07</td><td class="c-org"><span class="zh">景文技術學院 <small>總務處</small></span><span class="en">Jinwen Institute of Technology <small>Office of General Affairs</small></span></td><td class="c-role"><span class="zh">總務長</span><span class="en">Director of General Affairs</span></td></tr>
+          <tr><td class="c-yr">1999.08 – 2001.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">系主任</span><span class="en">Department Chair</span></td></tr>
+          <tr><td class="c-yr">1997.08 – 2002.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">副教授</span><span class="en">Associate Professor</span></td></tr>
+          <tr><td class="c-yr">1998.01 – 1998.12</td><td class="c-org"><span class="zh">台北市政府 <small>職訓局</small></span><span class="en">Taipei City Government <small>Vocational Training Bureau</small></span></td><td class="c-role"><span class="zh">兼任技術講師</span><span class="en">Adjunct Technical Lecturer</span></td></tr>
+          <tr><td class="c-yr">1992.08 – 1997.07</td><td class="c-org"><span class="zh">景文技術學院 <small>資訊管理系</small></span><span class="en">Jinwen Institute of Technology <small>Dept. of Information Management</small></span></td><td class="c-role"><span class="zh">講師</span><span class="en">Lecturer</span></td></tr>
+          <tr><td class="c-yr">1992.08 – 1994.07</td><td class="c-org"><span class="zh">淡江大學 <small>資訊工程系</small></span><span class="en">Tamkang University <small>Dept. of Computer Science &amp; Information Engineering</small></span></td><td class="c-role"><span class="zh">兼任講師</span><span class="en">Adjunct Lecturer</span></td></tr>
         </tbody>
       </table>
     </section>
-
-    <!-- ===== 3. COURSES & LMS SECTION ===== -->
-    <section id="courses">
-      <div class="skh">
-        <h2><span class="zh">授課與課程管理專區</span><span class="en">Courses &amp; Learning Portal</span></h2>
-        <span class="ln"></span>
-      </div>
-
-      <div id="courseUnauthenticatedState" class="course-lock-card">
-        <span style="font-size:42px;display:block;margin-bottom:12px;">🔒</span>
-        <h3><span class="zh">受控課程與教學受限專區</span><span class="en">Protected Course Area</span></h3>
-        <p><span class="zh">為維護教材版權與學生隱私，詳細課程目錄、講義 PDF 下載及作業繳交功能僅開放修課學生存取。請點擊上方【學生登入/專區】按鈕進行 Email 註冊與登入。</span><span class="en">Course contents and handouts are restricted to approved students. Please click Student Portal to log in.</span></p>
-        <button class="btn-portal" style="padding:10px 24px;font-size:15px;" onclick="openModal('modalStudentPortal')">
-          <span>🎓 點此進行學生 Email 登入 / 註冊</span>
-        </button>
-      </div>
-
-      <div id="courseAuthenticatedState" style="display:none;">
-        <div class="announcement-box" id="announcementBox">
-          <h4>📢 <span class="zh">課程即時公告</span><span class="en">Course Announcement</span></h4>
-          <p id="announcementText"><span class="zh">歡迎進入 113 學年度課程專區！您已成功登入並獲得存取權限。</span><span class="en">Welcome to 113 Academic Year Courses! You are authenticated to access all lectures and assignments.</span></p>
-        </div>
-
-        <div class="course-filters">
-          <div class="filter-group">
-            <label><span class="zh">學期：</span><span class="en">Semester:</span></label>
-            <select id="filterSemester">
-              <option value="all">全部學期 (All)</option>
-              <option value="113-2" selected>113-2 學期</option>
-              <option value="113-1">113-1 學期</option>
-              <option value="112-2">112-2 學期</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label><span class="zh">學制：</span><span class="en">Level:</span></label>
-            <select id="filterLevel">
-              <option value="all">全部學制 (All)</option>
-              <option value="graduate">研究所 (Graduate)</option>
-              <option value="undergraduate">大學部 (Undergrad)</option>
-            </select>
-          </div>
-          <input type="text" id="filterSearch" class="filter-search" placeholder="搜尋課程名稱、關鍵字或代碼..." aria-label="Search courses">
-        </div>
-
-        <div class="course-grid" id="courseGrid">
-          <!-- 動態由 JS 渲染課程卡片 -->
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- ===== MODAL 1: STUDENT PORTAL ===== -->
-  <div class="modal-overlay" id="modalStudentPortal">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeModal('modalStudentPortal')">&times;</button>
-      <h3 class="modal-title"><span class="zh">🎓 學生登入 / Email 認證專區</span><span class="en">Student Portal</span></h3>
-      
-      <div id="registerStatusBanner" class="status-banner"></div>
-
-      <div id="studentLoginBox">
-        <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;"><span class="zh">請使用學生 Email 登入。初次使用請點擊註冊，系統將發送 Email 認證信。驗證完成經核准後即可解鎖專屬課程專區與講義。</span><span class="en">Log in with your student email. Register if first time.</span></p>
-        <div class="form-group">
-          <label><span class="zh">學生 Email 信箱</span><span class="en">Student Email</span></label>
-          <input type="email" id="studentEmail" placeholder="student@ntunhs.edu.tw">
-        </div>
-        <div class="form-group">
-          <label><span class="zh">密碼</span><span class="en">Password</span></label>
-          <input type="password" id="studentPass" placeholder="••••••••">
-        </div>
-        <div style="display:flex;gap:10px;">
-          <button class="btn-submit" onclick="handleStudentLogin()"><span class="zh">學生登入</span><span class="en">Log In</span></button>
-          <button class="btn-submit" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);" onclick="handleStudentRegister()"><span class="zh">註冊新帳號</span><span class="en">Register</span></button>
-        </div>
-      </div>
-
-      <div id="studentLoggedInBox" style="display:none;">
-        <div style="background:var(--soft);padding:14px;border-radius:10px;margin-bottom:16px;">
-          <p style="font-size:14px;font-weight:600;">登入帳號：<span id="loggedInEmailDisplay">student@example.com</span></p>
-          <p style="font-size:13px;color:var(--muted);">帳號狀態：<span id="accountStatusBadge" class="badge-access public">✅ 已驗證並核准 (Approved)</span></p>
-        </div>
-
-        <h4 style="font-size:15px;color:var(--brand);margin-bottom:10px;">📊 <span class="zh">我的個人成績單 (Scoreboard)</span><span class="en">My Grades</span></h4>
-        <table class="grade-table">
-          <thead>
-            <tr><th>課程名稱</th><th>期中考 (30%)</th><th>期末專題 (40%)</th><th>作業總計 (30%)</th><th>加權總分</th><th>教授評語</th></tr>
-          </thead>
-          <tbody id="studentScoreTableBody">
-            <tr><td>智慧醫療與 CDSS 專題</td><td>88</td><td>95</td><td>92</td><td>91.9</td><td>表現優異，實作成果出色！</td></tr>
-          </tbody>
-        </table>
-
-        <button class="btn-submit" style="margin-top:20px;background:#ef4444;" onclick="handleStudentLogout()">登出 (Log Out)</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== MODAL 2: FULL COURSE CRUD & ADMIN CONSOLE ===== -->
+  <!-- ===== MODAL: ADMIN PORTAL ===== -->
   <div class="modal-overlay" id="modalAdminPortal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeModal('modalAdminPortal')">&times;</button>
       <h3 class="modal-title">⚙️ <span class="zh">課程與全站系統管理控制台</span><span class="en">Admin Control Console</span></h3>
 
-      <!-- 密碼解鎖預設框 -->
       <div id="adminAuthBox">
         <div class="admin-card-section" style="text-align:center;padding:30px;">
           <span style="font-size:42px;display:block;margin-bottom:10px;">🔒</span>
           <h4 style="justify-content:center;">請輸入管理者密碼解鎖後台控制面板</h4>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">（初始預設解鎖密碼：<code>123456</code>，可在【📢 公告與系統設定】自由修改）</p>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">（初始預設解鎖密碼：<code>123456</code>）</p>
           <div class="form-group" style="max-width:320px;margin:0 auto 16px;">
             <input type="password" id="adminPassInput" placeholder="請輸入管理密碼" style="text-align:center;">
           </div>
@@ -442,156 +296,20 @@
         </div>
       </div>
 
-      <!-- 管理解鎖後的控制面板 -->
       <div id="adminContentBox" style="display:none;">
         <div class="admin-nav-tabs">
-          <button class="tab-btn active" onclick="switchAdminTab('tabCourseCRUD', event)">📚 課程管理 (CRUD/備份還原)</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabCourses', event)">📁 目錄與講義拖拉排順序</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabTheme', event)">🎨 版面主題切換</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabStudents', event)">👥 學生審核與 Firebase 設定</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabGrades', event)">📊 成績矩陣與匯出</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabAnnounce', event)">📢 公告與系統設定</button>
+          <button class="tab-btn active" onclick="switchAdminTab('tabTheme', event)">🎨 版面主題切換</button>
+          <button class="tab-btn" onclick="switchAdminTab('tabAnnounce', event)">📢 密碼變更與全站設定</button>
         </div>
 
-        <!-- TAB 0: 課程管理 CRUD (增加、刪除、備份、還原課程) -->
-        <div id="tabCourseCRUD" class="admin-tab-content">
-          <div class="admin-card-section">
-            <h4>➕ 增加新課程 (Create New Course)</h4>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-              <div class="form-group"><label>課程代碼：</label><input type="text" id="newCourseCode" placeholder="如：HI7003"></div>
-              <div class="form-group"><label>開課學期：</label><input type="text" id="newCourseSemester" placeholder="如：113-2"></div>
-            </div>
-            <div class="form-group"><label>課程中文名稱：</label><input type="text" id="newCourseTitleZh" placeholder="如：高齡長照科技與智慧居家專題"></div>
-            <div class="form-group"><label>課程英文名稱：</label><input type="text" id="newCourseTitleEn" placeholder="如：Special Topics in Aging & Long-term Care Tech"></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-              <div class="form-group">
-                <label>學制：</label>
-                <select id="newCourseLevel"><option value="graduate">研究所</option><option value="undergraduate">大學部</option></select>
-              </div>
-              <div class="form-group"><label>學分數：</label><input type="number" id="newCourseCredits" value="3"></div>
-              <div class="form-group"><label>領域標籤 (逗點分隔)：</label><input type="text" id="newCourseTags" placeholder="長照科技, 高齡健康"></div>
-            </div>
-            <div class="form-group"><label>課程簡介與摘要：</label><textarea id="newCourseSummary" rows="2" placeholder="簡述本課程教學目標與內容..."></textarea></div>
-            <button class="btn-submit" onclick="createNewCourse()">➕ 立即新增課程</button>
-          </div>
-
-          <div class="admin-card-section">
-            <h4>🗑️ 刪除現有課程</h4>
-            <div style="display:flex;gap:12px;align-items:center;">
-              <select id="deleteCourseSelect" style="flex:1;padding:9px;border-radius:8px;border:1px solid var(--line);"></select>
-              <button onclick="deleteSelectedCourse()" style="background:#ef4444;color:#fff;border:0;padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;">🗑️ 刪除目前選取課程</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 1: 課程目錄與講義拖拉排順序 -->
-        <div id="tabCourses" class="admin-tab-content" style="display:none;">
-          <div class="admin-card-section">
-            <h4>📂 選擇管理課程與自訂目錄 (Folder Management)</h4>
-            <div class="form-group">
-              <label>管理目標課程：</label>
-              <select id="adminSelectCourse"></select>
-            </div>
-
-            <div style="display:flex;gap:10px;align-items:flex-end;">
-              <div class="form-group" style="flex:1;margin-bottom:0;">
-                <label>新增自訂目錄/資料夾：</label>
-                <input type="text" id="newFolderNameInput" placeholder="例如：單元三：生成式 AI 與 LLM 應用">
-              </div>
-              <button class="btn-submit" style="width:auto;padding:9px 18px;" onclick="addCustomFolder()">建立目錄</button>
-            </div>
-          </div>
-
-          <div class="admin-card-section">
-            <h4>📥 講義拖拉上傳區域（PPTX 拖拉自動轉換成 PDF 講義）</h4>
-            <div class="dropzone" id="dragDropArea">
-              <span style="font-size:36px;display:block;">📄</span>
-              <p><strong>將講義檔案 (PDF / PPTX / DOCX / ZIP) 拖拉至此處上傳</strong></p>
-              <p style="font-size:12px;color:var(--accent);font-weight:600;">✨ PPTX 簡報拖拉放入後，系統將自動格式化轉換為 PDF 講義供學生閱讀！</p>
-              <input type="file" id="fileInputElem" style="display:none;" multiple>
-            </div>
-            <div id="uploadedFilesLog" style="font-size:13px;color:var(--brand);margin-bottom:10px;"></div>
-          </div>
-        </div>
-
-        <!-- TAB 2: 版面主題設定 -->
-        <div id="tabTheme" class="admin-tab-content" style="display:none;">
+        <div id="tabTheme" class="admin-tab-content">
           <div class="admin-card-section">
             <h4>🎨 全站版面視覺主題設定 (10 Premium Themes)</h4>
-            <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">由管理者設定全站預設視覺風格，選擇後將毫秒級無縫套用至整站視覺：</p>
             <div class="theme-grid" id="themeCardGrid"></div>
           </div>
         </div>
 
-        <!-- TAB 3: 學生審核與 FIREBASE 金鑰填寫 -->
-        <div id="tabStudents" class="admin-tab-content" style="display:none;">
-          <div class="admin-card-section" style="border:2px solid var(--accent);background:var(--soft);">
-            <h4 style="color:var(--brand);">🔥 免費 Firebase 自動發送 Email 驗證信設定 (已自動配置連線)</h4>
-            <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">已自動代入專屬 Google Firebase 金鑰，學生註冊將發送免費真實 Email 點擊驗證信：</p>
-            
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              <div class="form-group"><label>apiKey:</label><input type="text" id="fbApiKey" value="AIzaSyByzButphIQElqo4E_eZ9Y8yEzRHn4zjHY"></div>
-              <div class="form-group"><label>authDomain:</label><input type="text" id="fbAuthDomain" value="nchsieh-lms.firebaseapp.com"></div>
-              <div class="form-group"><label>projectId:</label><input type="text" id="fbProjectId" value="nchsieh-lms"></div>
-              <div class="form-group"><label>appId:</label><input type="text" id="fbAppId" value="1:928315004665:web:f58b30b237f836d7c87428"></div>
-            </div>
-            <button class="btn-submit" style="background:var(--accent);" onclick="saveFirebaseConfig()">💾 儲存並更新 Firebase 自動寄信連線</button>
-          </div>
-
-          <div class="admin-card-section">
-            <h4>👥 待審核學生 Email 清單 (Student Approval)</h4>
-            <table class="grade-table">
-              <thead><tr><th>學生 Email</th><th>註冊時間</th><th>Email 驗證</th><th>審核操作</th></tr></thead>
-              <tbody id="studentApprovalTable">
-                <tr>
-                  <td>nchsieh@gmail.com</td>
-                  <td>2026-08-02 23:40</td>
-                  <td><span class="badge-access public">已點擊驗證</span></td>
-                  <td>
-                    <button onclick="approveStudent('nchsieh@gmail.com')" style="background:var(--brand);color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;">核准權限 (Approve)</button>
-                    <button onclick="sendTestEmail('nchsieh@gmail.com')" style="background:var(--accent);color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:600;margin-left:4px;">發送/重寄驗證信</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB 4: 成績矩陣與匯出 -->
-        <div id="tabGrades" class="admin-tab-content" style="display:none;">
-          <div class="admin-card-section">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-              <h4>📊 全班成績打分矩陣 (Grading Matrix)</h4>
-              <button onclick="exportGradesCSV()" style="background:var(--accent);color:#fff;border:0;padding:7px 16px;border-radius:8px;font-size:13.5px;cursor:pointer;font-weight:600;">📥 匯出成績單 CSV</button>
-            </div>
-            <table class="grade-table">
-              <thead>
-                <tr><th>學生帳號</th><th>期中考 (30%)</th><th>期末專題 (40%)</th><th>作業一 (30%)</th><th>加權總分</th><th>評語編輯</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>nchsieh@gmail.com</td>
-                  <td><input type="number" class="grade-input" value="88"></td>
-                  <td><input type="number" class="grade-input" value="95"></td>
-                  <td><input type="number" class="grade-input" value="92"></td>
-                  <td><strong>91.9</strong></td>
-                  <td><input type="text" value="表現優異" style="width:120px;padding:4px;border:1px solid var(--line);border-radius:4px;"></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB 5: 公告、密碼變更與 JSON 備份還原 -->
         <div id="tabAnnounce" class="admin-tab-content" style="display:none;">
-          <div class="admin-card-section">
-            <h4>📢 更新課程即時公告 (Announcements)</h4>
-            <div class="form-group">
-              <textarea id="adminAnnounceText" rows="2">歡迎進入 113 學年度課程專區！請修課學生先進行 Email 註冊認證，核准後即可下載專屬講義與繳交作業。</textarea>
-              <button class="btn-submit" style="margin-top:8px;" onclick="updateAnnouncement()">發布最新公告</button>
-            </div>
-          </div>
-
           <div class="admin-card-section">
             <h4>🔑 修改管理控制台密碼 (Change Admin Password)</h4>
             <div style="display:flex;gap:10px;align-items:flex-end;">
@@ -604,16 +322,6 @@
                 <input type="password" id="newPassInput" placeholder="請輸入新密碼">
               </div>
               <button class="btn-submit" style="width:auto;padding:9px 18px;background:var(--accent);" onclick="changeAdminPassword()">更新密碼</button>
-            </div>
-          </div>
-
-          <div class="admin-card-section">
-            <h4>📦 全站 JSON 資料庫離線備份與還原 (Backup &amp; Restore Engine)</h4>
-            <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">離線單機版 JSON 資料庫引擎：匯出全站課程、講義檔案順序與學生成績單：</p>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;">
-              <button class="btn-submit" style="background:var(--brand);flex:1;" onclick="exportSystemJSON()">📦 匯出全站 JSON 備份檔</button>
-              <button class="btn-submit" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);flex:1;" onclick="document.getElementById('importJsonInput').click()">📥 還原/導入 JSON 資料庫</button>
-              <input type="file" id="importJsonInput" style="display:none;" accept=".json" onchange="importSystemJSON(event)">
             </div>
           </div>
         </div>
@@ -635,90 +343,6 @@
 
   <!-- ===== JAVASCRIPT LOGIC ===== -->
   <script>
-    // 預設專屬 Firebase 金鑰配置 (User Provided Config)
-    const userFirebaseConfig = {
-      apiKey: "AIzaSyByzButphIQElqo4E_eZ9Y8yEzRHn4zjHY",
-      authDomain: "nchsieh-lms.firebaseapp.com",
-      projectId: "nchsieh-lms",
-      storageBucket: "nchsieh-lms.firebasestorage.app",
-      messagingSenderId: "928315004665",
-      appId: "1:928315004665:web:f58b30b237f836d7c87428"
-    };
-
-    // 初始化 Firebase SDK
-    try {
-      if (window.firebase && !firebase.apps.length) {
-        firebase.initializeApp(userFirebaseConfig);
-      }
-    } catch(e) {
-      console.log('Firebase Init Error:', e);
-    }
-
-    // Master Data 系統資料庫
-    const masterData = {
-      courses: [
-        {
-          id: "CRS-2025-01",
-          code: "HI7001",
-          title_zh: "智慧醫療與臨床決策支援系統專題",
-          title_en: "Special Topics on Smart Healthcare & CDSS",
-          semester: "113-2",
-          level: "graduate",
-          credits: 3,
-          category: ["AI健康科技", "智慧醫療"],
-          summary_zh: "探討機器學習與深度學習於臨床決策、智慧病房與醫療大數據分析之實務應用。",
-          summary_en: "Explores machine learning and deep learning in clinical decision support and healthcare data science.",
-          directories: [
-            {
-              name: "單元一：智慧醫療與 CDSS 概論",
-              files: [
-                { name: "HI7001_Lecture01_CDSS_Overview.pdf", size: "2.4 MB", access: "public", url: "assets/courses/HI7001/Unit1/Lecture01.pdf" },
-                { name: "FHIR_Data_Standard_Guide.pdf", size: "1.8 MB", access: "locked", url: "assets/courses/HI7001/Unit1/FHIR_Guide.pdf" }
-              ]
-            },
-            {
-              name: "單元二：醫療機器學習與預測模型",
-              files: [
-                { name: "HI7001_Lecture02_ML_Models.pdf", size: "3.1 MB", access: "locked", url: "assets/courses/HI7001/Unit2/Lecture02.pdf" }
-              ]
-            }
-          ],
-          assignment: {
-            title: "作業一：CDSS 案例深度分析報告",
-            dueDate: "2026-08-15T23:59:00",
-            status: "due-normal",
-            daysLeft: 5
-          }
-        },
-        {
-          id: "CRS-2025-02",
-          code: "HI7002",
-          title_zh: "醫療資料科學與機器學習應用",
-          title_en: "Healthcare Data Science & Machine Learning",
-          semester: "113-2",
-          level: "graduate",
-          credits: 3,
-          category: ["資料科學", "機器學習"],
-          summary_zh: "結合醫療電子病歷 (EHR) 與臨床資料集進行數據清洗、特徵工程與模型驗證。",
-          summary_en: "Hands-on data science methods applied to Electronic Health Records (EHR) and clinical datasets.",
-          directories: [
-            {
-              name: "課堂講義與實作 Code 範本",
-              files: [
-                { name: "HI7002_EHR_Data_Cleaning.pdf", size: "4.2 MB", access: "locked", url: "assets/courses/HI7002/Lecture01.pdf" }
-              ]
-            }
-          ],
-          assignment: {
-            title: "期中專題計畫書草案提交",
-            dueDate: "2026-08-05T23:59:00",
-            status: "due-urgent",
-            daysLeft: 2
-          }
-        }
-      ]
-    };
-
     // 主題設定
     const themesList = [
       { id: 'theme-01', name: '🎨 經典學院藍', p1: '#1f3a5f', p2: '#b0894c', p3: '#f6f3ec' },
@@ -778,291 +402,9 @@
     segZh.addEventListener('click', () => setLang(false));
     segEn.addEventListener('click', () => setLang(true));
 
-    function updateAuthStateUI() {
-      const isApproved = localStorage.getItem('isStudentApproved') === 'true';
-      const unauthDiv = document.getElementById('courseUnauthenticatedState');
-      const authDiv = document.getElementById('courseAuthenticatedState');
-
-      if (isApproved) {
-        unauthDiv.style.display = 'none';
-        authDiv.style.display = 'block';
-        renderCourses();
-      } else {
-        unauthDiv.style.display = 'block';
-        authDiv.style.display = 'none';
-      }
-    }
-
-    function moveFile(cIndex, dIndex, fIndex, direction) {
-      const files = masterData.courses[cIndex].directories[dIndex].files;
-      const targetIndex = fIndex + direction;
-      if (targetIndex < 0 || targetIndex >= files.length) return;
-      const temp = files[fIndex];
-      files[fIndex] = files[targetIndex];
-      files[targetIndex] = temp;
-      renderCourses();
-    }
-
-    function renderAdminCourseDropdowns() {
-      const delSel = document.getElementById('deleteCourseSelect');
-      const adminSel = document.getElementById('adminSelectCourse');
-      if (!delSel || !adminSel) return;
-      
-      delSel.innerHTML = '';
-      adminSel.innerHTML = '';
-      
-      masterData.courses.forEach(c => {
-        const opt1 = document.createElement('option');
-        opt1.value = c.id; opt1.innerText = `${c.code} - ${c.title_zh} (${c.semester})`;
-        delSel.appendChild(opt1);
-
-        const opt2 = document.createElement('option');
-        opt2.value = c.id; opt2.innerText = `${c.code} - ${c.title_zh} (${c.semester})`;
-        adminSel.appendChild(opt2);
-      });
-    }
-
-    function createNewCourse() {
-      const code = document.getElementById('newCourseCode').value;
-      const sem = document.getElementById('newCourseSemester').value;
-      const titleZh = document.getElementById('newCourseTitleZh').value;
-      const titleEn = document.getElementById('newCourseTitleEn').value;
-      const level = document.getElementById('newCourseLevel').value;
-      const credits = parseInt(document.getElementById('newCourseCredits').value) || 3;
-      const tagsStr = document.getElementById('newCourseTags').value;
-      const summary = document.getElementById('newCourseSummary').value;
-
-      if (!code || !titleZh) { alert('請填寫課程代碼與中文名稱！'); return; }
-
-      const newCourseObj = {
-        id: 'CRS-' + Date.now(),
-        code: code,
-        title_zh: titleZh,
-        title_en: titleEn || code,
-        semester: sem || '113-2',
-        level: level,
-        credits: credits,
-        category: tagsStr ? tagsStr.split(',').map(t => t.trim()) : ["智慧醫療"],
-        summary_zh: summary || "本課程著重於智慧醫療與臨床實務應用。",
-        summary_en: summary || "Focuses on smart healthcare and clinical decision support.",
-        directories: [{ name: "單元一：課程大綱與參考講義", files: [] }],
-        assignment: { title: "作業一：專案閱讀心得報告", dueDate: "2026-08-20T23:59:00", status: "due-normal" }
-      };
-
-      masterData.courses.push(newCourseObj);
-      renderAdminCourseDropdowns();
-      renderCourses();
-      alert('✅ 成功新增課程：' + titleZh + '！');
-    }
-
-    function deleteSelectedCourse() {
-      const cId = document.getElementById('deleteCourseSelect').value;
-      if (!cId) return;
-      if (confirm('⚠️ 確定要刪除此課程嗎？該課程下的所有講義與目錄將同步移除！')) {
-        masterData.courses = masterData.courses.filter(c => c.id !== cId);
-        renderAdminCourseDropdowns();
-        renderCourses();
-        alert('🗑️ 課程已刪除。');
-      }
-    }
-
-    function renderCourses() {
-      const grid = document.getElementById('courseGrid');
-      const semFilter = document.getElementById('filterSemester').value;
-      const levelFilter = document.getElementById('filterLevel').value;
-      const searchKey = document.getElementById('filterSearch').value.toLowerCase();
-
-      grid.innerHTML = '';
-      masterData.courses.forEach((c, cIndex) => {
-        if (semFilter !== 'all' && c.semester !== semFilter) return;
-        if (levelFilter !== 'all' && c.level !== levelFilter) return;
-        if (searchKey && !c.title_zh.toLowerCase().includes(searchKey) && !c.code.toLowerCase().includes(searchKey)) return;
-
-        const card = document.createElement('div');
-        card.className = 'course-card';
-
-        let dirHtml = '';
-        c.directories.forEach((d, dIndex) => {
-          let fileHtml = '';
-          d.files.forEach((f, fIndex) => {
-            const isLocked = f.access === 'locked';
-            const isPdfConv = f.convertedPdf;
-            fileHtml += `
-              <li class="file-item">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="display:inline-flex;gap:2px;">
-                    <button class="order-btn" onclick="moveFile(${cIndex}, ${dIndex}, ${fIndex}, -1)" title="向上移動">▲</button>
-                    <button class="order-btn" onclick="moveFile(${cIndex}, ${dIndex}, ${fIndex}, 1)" title="向下移動">▼</button>
-                  </span>
-                  <a href="${f.url}" class="file-name" onclick="checkFileAccess(event, '${f.access}')">
-                    ${isPdfConv ? '📕' : '📄'} ${f.name} <small>(${f.size})</small>
-                  </a>
-                </div>
-                <div style="display:flex;gap:4px;align-items:center;">
-                  ${isPdfConv ? '<span class="badge-pdf-conv">PPTX已轉PDF</span>' : ''}
-                  <span class="badge-access ${isLocked ? 'locked' : 'public'}">${isLocked ? '🔒 已授權學生限讀' : '🌐 公開'}</span>
-                </div>
-              </li>
-            `;
-          });
-
-          dirHtml += `
-            <div class="dir-folder">
-              <div class="folder-title">📁 ${d.name}</div>
-              <ul class="file-list">${fileHtml}</ul>
-            </div>
-          `;
-        });
-
-        card.innerHTML = `
-          <div>
-            <div class="card-top">
-              <span class="badge-sem">${c.semester}</span>
-              <span class="badge-level">${c.level === 'graduate' ? '碩博士班' : '大學部'}・${c.credits} 學分</span>
-            </div>
-            <div class="course-code">${c.code}</div>
-            <h3 class="course-title"><span class="zh">${c.title_zh}</span><span class="en">${c.title_en}</span></h3>
-            <p class="course-summary"><span class="zh">${c.summary_zh}</span><span class="en">${c.summary_en}</span></p>
-            <div class="course-tags">
-              ${c.category.map(tag => `<span># ${tag}</span>`).join('')}
-            </div>
-
-            <div class="dir-tree">
-              <div class="dir-header">📂 課程目錄與講義 (按箭號可調整檔案順序)</div>
-              ${dirHtml}
-            </div>
-          </div>
-
-          <div class="asg-box">
-            <div class="asg-header">
-              <span>✍️ ${c.assignment.title}</span>
-              <span class="badge-due ${c.assignment.status === 'due-urgent' ? 'due-urgent' : 'due-normal'}">
-                ${c.assignment.status === 'due-urgent' ? '⚠️ 剩餘 2 天' : '🟢 剩餘 5 天'}
-              </span>
-            </div>
-            <button onclick="openModal('modalStudentPortal')" style="margin-top:8px;background:var(--brand);color:#fff;border:0;padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer;">繳交作業 / 檢視狀態</button>
-          </div>
-        `;
-
-        grid.appendChild(card);
-      });
-    }
-
-    document.getElementById('filterSemester').addEventListener('change', renderCourses);
-    document.getElementById('filterLevel').addEventListener('change', renderCourses);
-    document.getElementById('filterSearch').addEventListener('input', renderCourses);
-    renderAdminCourseDropdowns();
-    updateAuthStateUI();
-
-    function checkFileAccess(e, access) {
-      if (access === 'locked') {
-        const isApproved = localStorage.getItem('isStudentApproved') === 'true';
-        if (!isApproved) {
-          e.preventDefault();
-          alert('🔒 此講義為「受控課程資源」，請先點擊頂部【學生登入/專區】進行 Email 註冊與經教授核准！');
-        }
-      }
-    }
-
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-    document.getElementById('btnStudentPortal').addEventListener('click', () => openModal('modalStudentPortal'));
     document.getElementById('btnAdminPortal').addEventListener('click', () => openModal('modalAdminPortal'));
-
-    function showStatusBanner(msg, type) {
-      const banner = document.getElementById('registerStatusBanner');
-      if (!banner) return;
-      banner.className = 'status-banner ' + type;
-      banner.style.display = 'block';
-      banner.innerHTML = msg;
-    }
-
-    // 學生實時 Firebase Auth 註冊與 Email 驗證信寄送
-    function handleStudentLogin() {
-      const email = document.getElementById('studentEmail').value;
-      const pass = document.getElementById('studentPass').value || 'password';
-      if (!email) { showStatusBanner('請輸入學生 Email 信箱', 'error'); return; }
-
-      showStatusBanner('⏳ 正在驗證登入資訊...', 'info');
-
-      if (window.firebase && firebase.auth) {
-        firebase.auth().signInWithEmailAndPassword(email, pass).then(userCredential => {
-          const user = userCredential.user;
-          localStorage.setItem('studentEmail', email);
-          localStorage.setItem('isStudentApproved', 'true');
-          document.getElementById('studentLoginBox').style.display = 'none';
-          document.getElementById('studentLoggedInBox').style.display = 'block';
-          document.getElementById('loggedInEmailDisplay').innerText = email;
-          updateAuthStateUI();
-          showStatusBanner('✅ 登入成功！已解鎖受控課程專區。', 'success');
-        }).catch(err => {
-          // 免費自動開通備援
-          localStorage.setItem('studentEmail', email);
-          localStorage.setItem('isStudentApproved', 'true');
-          document.getElementById('studentLoginBox').style.display = 'none';
-          document.getElementById('studentLoggedInBox').style.display = 'block';
-          document.getElementById('loggedInEmailDisplay').innerText = email;
-          updateAuthStateUI();
-          showStatusBanner('✅ 登入成功！已開通學生課程權限。', 'success');
-        });
-      }
-    }
-
-    function handleStudentRegister() {
-      const email = document.getElementById('studentEmail').value;
-      const pass = document.getElementById('studentPass').value || '123456';
-      if (!email) { showStatusBanner('請輸入 Email 信箱以發送驗證信', 'error'); return; }
-
-      showStatusBanner('⏳ 正在連線 Google Firebase 郵件伺服器寄發驗證信...', 'info');
-
-      if (window.firebase && firebase.auth) {
-        firebase.auth().createUserWithEmailAndPassword(email, pass).then(userCredential => {
-          const user = userCredential.user;
-          user.sendEmailVerification().then(() => {
-            showStatusBanner(
-              '🎉 <b>驗證信件已成功發送！</b><br>' +
-              '請前往信箱 <code>' + email + '</code> 點擊驗證連結。<br>' +
-              '⚠️ <i>重要提醒：請檢查【垃圾郵件 (Spam)】或【促銷內容】資料夾！</i>',
-              'success'
-            );
-          }).catch(err => {
-            showStatusBanner('📧 帳號已建立！已寄出驗證信至 ' + email + '，請至【垃圾郵件匣】查收。', 'success');
-          });
-        }).catch(err => {
-          if (err.code === 'auth/email-already-in-use') {
-            // 帳號若已存在，發送密碼重設與驗證信
-            firebase.auth().sendPasswordResetEmail(email).then(() => {
-              showStatusBanner(
-                '📧 帳號已註冊過！Google 已再次重新寄送「驗證與重設信」至：<code>' + email + '</code>。<br>' +
-                '⚠️ <b>信件可能被自動分類至【垃圾郵件匣 (Spam / Junk)】，請務必點開檢查！</b>',
-                'success'
-              );
-            }).catch(resetErr => {
-              showStatusBanner('📧 系統已觸發發信至：' + email + '，請檢查【垃圾郵件匣】！', 'success');
-            });
-          } else if (err.code === 'auth/unauthorized-domain') {
-            showStatusBanner(
-              '⚠️ <b>Firebase 網域未授權：</b><br>' +
-              '請至 Firebase Console -> Authentication -> 設定 -> 授權網域，點擊新增 <code>nchsieh.github.io</code> 即可瞬間發信！',
-              'error'
-            );
-          } else {
-            showStatusBanner('📧 已向 ' + email + ' 寄出驗證訊息！請檢查信箱及【垃圾郵件匣】。', 'info');
-          }
-        });
-      }
-    }
-
-    function handleStudentLogout() {
-      localStorage.removeItem('studentEmail');
-      localStorage.removeItem('isStudentApproved');
-      document.getElementById('studentLoginBox').style.display = 'block';
-      document.getElementById('studentLoggedInBox').style.display = 'none';
-      const banner = document.getElementById('registerStatusBanner');
-      if (banner) banner.style.display = 'none';
-      updateAuthStateUI();
-    }
 
     function getAdminPassword() {
       return localStorage.getItem('customAdminPassword') || '123456';
@@ -1074,7 +416,6 @@
         document.getElementById('adminAuthBox').style.display = 'none';
         document.getElementById('adminContentBox').style.display = 'block';
         renderThemeCards();
-        renderAdminCourseDropdowns();
       } else {
         alert('密碼錯誤！當前解鎖密碼為：' + getAdminPassword());
       }
@@ -1091,156 +432,11 @@
       document.getElementById('newPassInput').value = '';
     }
 
-    function saveFirebaseConfig() {
-      const apiKey = document.getElementById('fbApiKey').value;
-      const authDomain = document.getElementById('fbAuthDomain').value;
-      const projectId = document.getElementById('fbProjectId').value;
-      const appId = document.getElementById('fbAppId').value;
-
-      if (!apiKey || !projectId) { alert('請至少填寫 apiKey 與 projectId！'); return; }
-
-      const fbConfig = { apiKey, authDomain, projectId, appId };
-      localStorage.setItem('firebaseConfig', JSON.stringify(fbConfig));
-
-      try {
-        if (window.firebase && !firebase.apps.length) {
-          firebase.initializeApp(fbConfig);
-        }
-        alert('🔥 成功更新並啟用專屬 Google Firebase 自動寄信連線！');
-      } catch(err) {
-        alert('🔥 Firebase 連線已成功更新！');
-      }
-    }
-
     function switchAdminTab(tabId, evt) {
       document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.admin-nav-tabs .tab-btn').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).style.display = 'block';
       if (evt) evt.target.classList.add('active');
-    }
-
-    function addCustomFolder() {
-      const name = document.getElementById('newFolderNameInput').value;
-      if (!name) { alert('請輸入目錄名稱'); return; }
-      masterData.courses[0].directories.push({ name: name, files: [] });
-      renderCourses();
-      alert('✅ 已成功建立自訂目錄：' + name);
-      document.getElementById('newFolderNameInput').value = '';
-    }
-
-    function sendTestEmail(email) {
-      if (window.firebase && firebase.auth) {
-        firebase.auth().sendPasswordResetEmail(email).then(() => {
-          alert('📧 [Firebase 認證信已寄出] 已成功發送驗證與重設連結至 ' + email + '！\n請提醒學生檢查信箱及【垃圾郵件匣 (Spam)】。');
-        }).catch(err => {
-          if (err.code === 'auth/unauthorized-domain') {
-            alert('⚠️ Firebase 授權網域未設定！請前往 Firebase Console -> Authentication -> 授權網域，將 "nchsieh.github.io" 加入授權清單即可發信！');
-          } else {
-            alert('📧 已觸發 Firebase 發信引擎寄送驗證信至：' + email + '！請檢查垃圾郵件匣。');
-          }
-        });
-      } else {
-        alert('📧 已傳送測試驗證訊息至 ' + email);
-      }
-    }
-
-    function approveStudent(email) {
-      alert('✅ 已核准學生 ' + email + ' 的課程存取權限！');
-    }
-
-    // 講義拖拉上傳
-    const dropzone = document.getElementById('dragDropArea');
-    const fileInput = document.getElementById('fileInputElem');
-    const filesLog = document.getElementById('uploadedFilesLog');
-
-    dropzone.addEventListener('click', () => fileInput.click());
-    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-    dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropzone.classList.remove('dragover');
-      handleFiles(e.dataTransfer.files);
-    });
-    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
-
-    function handleFiles(files) {
-      if (files.length === 0) return;
-      let names = [];
-      let pptxCount = 0;
-
-      for (let f of files) {
-        let fName = f.name;
-        let isPpt = fName.toLowerCase().endsWith('.pptx') || fName.toLowerCase().endsWith('.ppt');
-        
-        if (isPpt) {
-          pptxCount++;
-          fName = fName.replace(/\.pptx$/i, '.pdf').replace(/\.ppt$/i, '.pdf');
-        }
-
-        const newFileObj = {
-          name: fName,
-          size: (f.size / 1024 / 1024).toFixed(2) + ' MB',
-          access: 'locked',
-          convertedPdf: isPpt,
-          url: 'assets/courses/HI7001/' + fName
-        };
-
-        masterData.courses[0].directories[0].files.push(newFileObj);
-        names.push((isPpt ? '📕 [PPTX已自動轉換成PDF] ' : '📄 ') + fName);
-      }
-
-      renderCourses();
-      filesLog.innerHTML = '✅ 已成功解析並歸檔上傳：<br>' + names.join('<br>');
-
-      if (pptxCount > 0) {
-        alert('✨ 成功接收 ' + files.length + ' 個講義檔案！其中 ' + pptxCount + ' 個 PPTX 簡報已自動格式轉換為 PDF 講義呈現在課程專區！');
-      } else {
-        alert('✅ 已接收 ' + files.length + ' 個講義檔案！已自動解析並歸檔至受選課程目錄。');
-      }
-    }
-
-    function exportGradesCSV() {
-      let csvContent = "data:text/csv;charset=utf-8,學生帳號,期中考(30%),期末專題(40%),作業一(30%),加權總分,評語\n";
-      csvContent += "student01@ntunhs.edu.tw,88,95,92,91.9,表現優異\n";
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "HI7001_Grades.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function exportSystemJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(masterData, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "NCHSIEH_Full_System_Backup.json");
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-    }
-
-    function importSystemJSON(e) {
-      const fileReader = new FileReader();
-      fileReader.onload = function(event) {
-        try {
-          const parsed = JSON.parse(event.target.result);
-          masterData.courses = parsed.courses || masterData.courses;
-          renderAdminCourseDropdowns();
-          renderCourses();
-          alert('✅ 成功導入系統備份檔案！所有課程與講義目錄已完滿還原！');
-        } catch(err) {
-          alert('❌ JSON 備份檔解析失敗！');
-        }
-      };
-      fileReader.readAsText(e.target.files[0]);
-    }
-
-    function updateAnnouncement() {
-      const text = document.getElementById('adminAnnounceText').value;
-      document.getElementById('announcementText').innerText = text;
-      alert('📢 課程即時公告已更新！');
     }
 
     const backTop = document.getElementById('backTop');

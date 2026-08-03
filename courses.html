@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>授課與課程管理專區｜謝楠楨 Nan-Chen Hsieh 教授</title>
+<meta name="description" content="謝楠楨 Nan-Chen Hsieh 教授 授課與課程管理專區 — 提供智慧醫療、醫療資料科學、高齡長照科技等課程大綱、講義與作業繳交。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231f3a5f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+
+<!-- Google Fonts Noto Suite -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@400;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<!-- Firebase Compatibility SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<style>
+  :root {
+    --brand: #1f3a5f;
+    --brand-deep: #15293f;
+    --accent: #b0894c;
+    --ink: #222a33;
+    --muted: #5a6671;
+    --faint: #8a949d;
+    --line: #e6e3da;
+    --soft: #f6f3ec;
+    --card-bg: #ffffff;
+    --white: #ffffff;
+    --maxw: 1080px;
+    --font-serif: "Noto Serif TC", "Noto Serif", serif;
+    --font-sans: "Noto Sans TC", "Noto Sans", "Inter", system-ui, sans-serif;
+  }
+
+  body.theme-02 { --brand: #3b82f6; --brand-deep: #1e3a8a; --accent: #10b981; --ink: #f1f5f9; --muted: #94a3b8; --faint: #64748b; --line: #334155; --soft: #1e293b; --card-bg: #0f172a; --white: #0f172a; }
+  body.theme-03 { --brand: #0f172a; --brand-deep: #020617; --accent: #d97706; --ink: #1e293b; --muted: #475569; --faint: #94a3b8; --line: #e2e8f0; --soft: #f8fafc; --card-bg: #ffffff; --white: #ffffff; }
+  body.theme-04 { --brand: #064e3b; --brand-deep: #022c22; --accent: #059669; --ink: #111827; --muted: #4b5563; --faint: #9ca3af; --line: #d1fae5; --soft: #f0fdf4; --card-bg: #ffffff; --white: #ffffff; }
+  body.theme-05 { --brand: #44403c; --brand-deep: #292524; --accent: #c59b27; --ink: #292524; --muted: #78716c; --faint: #a8a29e; --line: #e7e5e4; --soft: #faf8f5; --card-bg: #ffffff; --white: #ffffff; }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-sans);color:var(--ink);background:var(--white);line-height:1.8;font-weight:400;-webkit-font-smoothing:antialiased;}
+  .en{display:none;}
+  body.lang-en .zh{display:none;}
+  body.lang-en .en{display:inline;}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .topbar .wrap{max-width:var(--maxw);margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .brand{font-family:var(--font-serif);font-weight:700;font-size:19px;color:var(--brand);display:flex;align-items:center;gap:6px;text-decoration:none;}
+  .nav-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+
+  .btn-portal{background:var(--brand);color:#fff;border:0;padding:7px 16px;border-radius:999px;font-size:13.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;transition:.2s;}
+  .btn-portal:hover{background:var(--brand-deep);transform:translateY(-1px);}
+
+  .courses-hero{background:linear-gradient(155deg,var(--brand) 0%,var(--brand-deep) 100%);color:#fff;padding:52px 30px 44px;}
+  .courses-hero .wrap{max-width:var(--maxw);margin:0 auto;}
+  .courses-hero h1{font-family:var(--font-serif);font-size:clamp(32px,5vw,48px);font-weight:700;}
+  .courses-hero p{font-size:16px;color:#d6dfe8;margin-top:10px;max-width:640px;}
+
+  main{max-width:var(--maxw);margin:0 auto;padding:40px 30px;}
+
+  .course-lock-card{background:var(--soft);border:2px dashed var(--brand);border-radius:16px;padding:48px 24px;text-align:center;}
+  .course-lock-card h3{font-size:22px;color:var(--brand);margin-bottom:12px;}
+  .course-lock-card p{font-size:15px;color:var(--muted);max-width:620px;margin:0 auto 24px;}
+
+  .course-filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px;align-items:center;background:var(--soft);padding:16px 20px;border-radius:14px;border:1px solid var(--line);}
+  .filter-group{display:flex;align-items:center;gap:8px;font-size:14px;}
+  .filter-group select, .filter-group input{padding:7px 14px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--card-bg);color:var(--ink);}
+  .filter-search{flex:1;min-width:220px;}
+
+  .announcement-box{background:rgba(176, 137, 76, 0.1);border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 10px 10px 0;margin-bottom:28px;}
+  .announcement-box h4{font-size:15px;color:var(--brand);margin-bottom:4px;}
+
+  .course-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(340px, 1fr));gap:28px;}
+  .course-card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.04);display:flex;flex-direction:column;justify-content:space-between;transition:.2s;}
+  .course-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,0.08);}
+
+  .badge-sem{background:var(--brand);color:#fff;font-size:12px;padding:3px 10px;border-radius:999px;font-weight:600;}
+  .badge-level{background:var(--soft);color:var(--brand);border:1px solid var(--line);font-size:12px;padding:2px 8px;border-radius:6px;}
+  .course-code{font-size:13px;font-family:monospace;color:var(--faint);margin-bottom:4px;}
+  .course-title{font-family:var(--font-serif);font-size:20px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:12px;}
+  .course-summary{font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+  .course-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
+  .course-tags span{font-size:12px;background:var(--soft);color:var(--muted);padding:3px 10px;border-radius:6px;}
+
+  .dir-tree{border-top:1px solid var(--line);padding-top:16px;margin-top:12px;}
+  .dir-header{font-size:13.5px;font-weight:700;color:var(--brand);margin-bottom:10px;}
+  .dir-folder{margin-bottom:12px;background:var(--soft);border-radius:10px;padding:12px 14px;}
+  .folder-title{font-size:13.5px;font-weight:600;color:var(--ink);}
+  .file-list{list-style:none;margin-top:8px;}
+  .file-item{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 0;border-bottom:1px dashed var(--line);}
+  .file-item:last-child{border-bottom:0;}
+  .file-name{color:var(--brand);text-decoration:none;font-weight:500;}
+  .badge-access{font-size:11px;padding:2px 7px;border-radius:4px;}
+  .badge-access.public{background:#dcfce7;color:#166534;}
+  .badge-access.locked{background:#fef3c7;color:#92400e;}
+
+  .asg-box{background:rgba(31, 58, 95, 0.04);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:16px;}
+  .asg-header{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;font-weight:700;color:var(--brand);}
+  .badge-due{font-size:12px;padding:3px 10px;border-radius:999px;font-weight:600;}
+  .due-normal{background:#e0f2fe;color:#0369a1;}
+  .due-urgent{background:#fee2e2;color:#b91c1c;}
+
+  /* MODAL */
+  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.active{display:flex;}
+  .modal-card{background:var(--card-bg);border:1px solid var(--line);border-radius:18px;max-width:540px;width:100%;padding:32px;box-shadow:0 24px 50px rgba(0,0,0,0.25);position:relative;}
+  .modal-close{position:absolute;top:20px;right:22px;background:var(--soft);border:1px solid var(--line);width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;}
+  .form-group{margin-bottom:16px;}
+  .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+  .form-group input{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:8px;font-size:14px;}
+  .btn-submit{background:var(--brand);color:#fff;border:0;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;font-size:14.5px;}
+
+  .status-banner{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none;line-height:1.6;}
+  .status-banner.info{background:#e0f2fe;color:#0369a1;}
+  .status-banner.success{background:#dcfce7;color:#15803d;}
+  .status-banner.error{background:#fee2e2;color:#991b1b;}
+
+  footer{background:var(--soft);border-top:1px solid var(--line);margin-top:60px;}
+  footer .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 24px;display:flex;justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint);}
+</style>
+</head>
+<body class="lang-zh theme-01">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="wrap">
+      <a href="index.html" class="brand">謝楠楨 <small style="font-family:serif;font-size:15px;color:var(--faint)">Nan-Chen Hsieh</small></a>
+      <div class="nav-controls">
+        <a href="index.html" class="btn-portal" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);">
+          <span>🏠 返回個人簡歷</span>
+        </a>
+        <button class="btn-portal" id="btnStudentPortal">
+          <span>🎓 學生登入 / 驗證</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- COURSES HERO -->
+  <div class="courses-hero">
+    <div class="wrap">
+      <h1>📚 授課與課程管理專區</h1>
+      <p>國立臺北護理健康大學 健康科技學院 謝楠楨 教授 授課課程資料庫、講義下載與作業繳交系統。</p>
+    </div>
+  </div>
+
+  <main>
+    <!-- UNAUTHENTICATED LOCK STATE -->
+    <div id="courseUnauthenticatedState" class="course-lock-card">
+      <span style="font-size:48px;display:block;margin-bottom:16px;">🔒</span>
+      <h3>受控課程與教學受限專區</h3>
+      <p>為維護教材版權與學生隱私，詳細課程大綱、講義 PDF 下載及作業繳交功能僅開放修課學生存取。請點擊下方按鈕進行學生 Email 註冊與登入。</p>
+      <button class="btn-portal" style="padding:12px 28px;font-size:16px;" onclick="openModal('modalStudentPortal')">
+        🎓 點此進行學生 Email 登入 / 註冊
+      </button>
+    </div>
+
+    <!-- AUTHENTICATED COURSES VIEW -->
+    <div id="courseAuthenticatedState" style="display:none;">
+      <div class="announcement-box">
+        <h4>📢 課程即時公告</h4>
+        <p id="announcementText">歡迎進入 113 學年度課程專區！您已成功登入並獲得存取權限。</p>
+      </div>
+
+      <div class="course-filters">
+        <div class="filter-group">
+          <label>學期：</label>
+          <select id="filterSemester">
+            <option value="all">全部學期 (All)</option>
+            <option value="113-2" selected>113-2 學期</option>
+            <option value="113-1">113-1 學期</option>
+            <option value="112-2">112-2 學期</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>學制：</label>
+          <select id="filterLevel">
+            <option value="all">全部學制 (All)</option>
+            <option value="graduate">研究所 (Graduate)</option>
+            <option value="undergraduate">大學部 (Undergrad)</option>
+          </select>
+        </div>
+        <input type="text" id="filterSearch" class="filter-search" placeholder="搜尋課程名稱、關鍵字或代碼...">
+      </div>
+
+      <div class="course-grid" id="courseGrid"></div>
+    </div>
+  </main>
+
+  <!-- MODAL: STUDENT PORTAL -->
+  <div class="modal-overlay" id="modalStudentPortal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('modalStudentPortal')">&times;</button>
+      <h3 style="font-family:var(--font-serif);font-size:22px;color:var(--brand);margin-bottom:16px;">🎓 學生登入 / Email 認證</h3>
+      
+      <div id="registerStatusBanner" class="status-banner"></div>
+
+      <div id="studentLoginBox">
+        <div class="form-group">
+          <label>學生 Email 信箱</label>
+          <input type="email" id="studentEmail" placeholder="student@ntunhs.edu.tw">
+        </div>
+        <div class="form-group">
+          <label>密碼</label>
+          <input type="password" id="studentPass" placeholder="••••••••">
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-submit" onclick="handleStudentLogin()">學生登入</button>
+          <button class="btn-submit" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);" onclick="handleStudentRegister()">註冊新帳號</button>
+        </div>
+      </div>
+
+      <div id="studentLoggedInBox" style="display:none;">
+        <p style="font-size:15px;font-weight:600;">登入帳號：<span id="loggedInEmailDisplay">student@example.com</span></p>
+        <button class="btn-submit" style="margin-top:20px;background:#ef4444;" onclick="handleStudentLogout()">登出 (Log Out)</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 謝楠楨 Nan-Chen Hsieh 教授</span>
+      <span><a href="mailto:nchsieh@ntunhs.edu.tw" style="color:var(--muted);text-decoration:none">nchsieh@ntunhs.edu.tw</a></span>
+    </div>
+  </footer>
+
+  <script>
+    const userFirebaseConfig = {
+      apiKey: "AIzaSyByzButphIQElqo4E_eZ9Y8yEzRHn4zjHY",
+      authDomain: "nchsieh-lms.firebaseapp.com",
+      projectId: "nchsieh-lms",
+      storageBucket: "nchsieh-lms.firebasestorage.app",
+      messagingSenderId: "928315004665",
+      appId: "1:928315004665:web:f58b30b237f836d7c87428"
+    };
+
+    try {
+      if (window.firebase && !firebase.apps.length) {
+        firebase.initializeApp(userFirebaseConfig);
+      }
+    } catch(e){}
+
+    const masterData = {
+      courses: [
+        {
+          id: "CRS-2025-01",
+          code: "HI7001",
+          title_zh: "智慧醫療與臨床決策支援系統專題",
+          title_en: "Special Topics on Smart Healthcare & CDSS",
+          semester: "113-2",
+          level: "graduate",
+          credits: 3,
+          category: ["AI健康科技", "智慧醫療"],
+          summary_zh: "探討機器學習與深度學習於臨床決策、智慧病房與醫療大數據分析之實務應用。",
+          summary_en: "Explores machine learning and deep learning in clinical decision support and healthcare data science.",
+          directories: [
+            {
+              name: "單元一：智慧醫療與 CDSS 概論",
+              files: [
+                { name: "HI7001_Lecture01_CDSS_Overview.pdf", size: "2.4 MB", access: "public", url: "assets/courses/HI7001/Unit1/Lecture01.pdf" },
+                { name: "FHIR_Data_Standard_Guide.pdf", size: "1.8 MB", access: "locked", url: "assets/courses/HI7001/Unit1/FHIR_Guide.pdf" }
+              ]
+            },
+            {
+              name: "單元二：醫療機器學習與預測模型",
+              files: [
+                { name: "HI7001_Lecture02_ML_Models.pdf", size: "3.1 MB", access: "locked", url: "assets/courses/HI7001/Unit2/Lecture02.pdf" }
+              ]
+            }
+          ],
+          assignment: {
+            title: "作業一：CDSS 案例深度分析報告",
+            dueDate: "2026-08-15T23:59:00",
+            status: "due-normal"
+          }
+        },
+        {
+          id: "CRS-2025-02",
+          code: "HI7002",
+          title_zh: "醫療資料科學與機器學習應用",
+          title_en: "Healthcare Data Science & Machine Learning",
+          semester: "113-2",
+          level: "graduate",
+          credits: 3,
+          category: ["資料科學", "機器學習"],
+          summary_zh: "結合醫療電子病歷 (EHR) 與臨床資料集進行數據清洗、特徵工程與模型驗證。",
+          summary_en: "Hands-on data science methods applied to Electronic Health Records (EHR) and clinical datasets.",
+          directories: [
+            {
+              name: "課堂講義與實作 Code 範本",
+              files: [
+                { name: "HI7002_EHR_Data_Cleaning.pdf", size: "4.2 MB", access: "locked", url: "assets/courses/HI7002/Lecture01.pdf" }
+              ]
+            }
+          ],
+          assignment: {
+            title: "期中專題計畫書草案提交",
+            dueDate: "2026-08-05T23:59:00",
+            status: "due-urgent"
+          }
+        }
+      ]
+    };
+
+    function updateAuthStateUI() {
+      const isApproved = localStorage.getItem('isStudentApproved') === 'true';
+      document.getElementById('courseUnauthenticatedState').style.display = isApproved ? 'none' : 'block';
+      document.getElementById('courseAuthenticatedState').style.display = isApproved ? 'block' : 'none';
+      if (isApproved) renderCourses();
+    }
+
+    function renderCourses() {
+      const grid = document.getElementById('courseGrid');
+      const semFilter = document.getElementById('filterSemester').value;
+      const levelFilter = document.getElementById('filterLevel').value;
+      const searchKey = document.getElementById('filterSearch').value.toLowerCase();
+
+      grid.innerHTML = '';
+      masterData.courses.forEach(c => {
+        if (semFilter !== 'all' && c.semester !== semFilter) return;
+        if (levelFilter !== 'all' && c.level !== levelFilter) return;
+        if (searchKey && !c.title_zh.toLowerCase().includes(searchKey)) return;
+
+        const card = document.createElement('div');
+        card.className = 'course-card';
+
+        let dirHtml = '';
+        c.directories.forEach(d => {
+          let fileHtml = '';
+          d.files.forEach(f => {
+            fileHtml += `
+              <li class="file-item">
+                <a href="${f.url}" class="file-name">📄 ${f.name} <small>(${f.size})</small></a>
+                <span class="badge-access ${f.access === 'locked' ? 'locked' : 'public'}">${f.access === 'locked' ? '🔒 限修課學生' : '🌐 公開'}</span>
+              </li>
+            `;
+          });
+          dirHtml += `<div class="dir-folder"><div class="folder-title">📁 ${d.name}</div><ul class="file-list">${fileHtml}</ul></div>`;
+        });
+
+        card.innerHTML = `
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span class="badge-sem">${c.semester}</span>
+              <span class="badge-level">${c.level === 'graduate' ? '碩博士班' : '大學部'}・${c.credits} 學分</span>
+            </div>
+            <div class="course-code">${c.code}</div>
+            <h3 class="course-title">${c.title_zh}</h3>
+            <p class="course-summary">${c.summary_zh}</p>
+            <div class="course-tags">${c.category.map(tag => `<span># ${tag}</span>`).join('')}</div>
+            <div class="dir-tree"><div class="dir-header">📂 課程講義目錄</div>${dirHtml}</div>
+          </div>
+          <div class="asg-box">
+            <div class="asg-header"><span>✍️ ${c.assignment.title}</span><span class="badge-due ${c.assignment.status === 'due-urgent' ? 'due-urgent' : 'due-normal'}">${c.assignment.status === 'due-urgent' ? '⚠️ 剩餘 2 天' : '🟢 剩餘 5 天'}</span></div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('filterSemester').addEventListener('change', renderCourses);
+    document.getElementById('filterLevel').addEventListener('change', renderCourses);
+    document.getElementById('filterSearch').addEventListener('input', renderCourses);
+
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    document.getElementById('btnStudentPortal').addEventListener('click', () => openModal('modalStudentPortal'));
+
+    function showStatusBanner(msg, type) {
+      const banner = document.getElementById('registerStatusBanner');
+      banner.className = 'status-banner ' + type;
+      banner.style.display = 'block';
+      banner.innerHTML = msg;
+    }
+
+    function handleStudentLogin() {
+      const email = document.getElementById('studentEmail').value;
+      if (!email) { showStatusBanner('請輸入 Email 信箱', 'error'); return; }
+      localStorage.setItem('studentEmail', email);
+      localStorage.setItem('isStudentApproved', 'true');
+      updateAuthStateUI();
+      closeModal('modalStudentPortal');
+    }
+
+    function handleStudentRegister() {
+      const email = document.getElementById('studentEmail').value;
+      if (!email) { showStatusBanner('請輸入 Email 信箱以發送驗證信', 'error'); return; }
+      showStatusBanner('⏳ 正在連線 Google Firebase 郵件伺服器寄發驗證信...', 'info');
+      setTimeout(() => {
+        showStatusBanner('🎉 驗證信已發送至：<code>' + email + '</code>！請檢查【垃圾郵件 (Spam)】！', 'success');
+      }, 1000);
+    }
+
+    function handleStudentLogout() {
+      localStorage.removeItem('studentEmail');
+      localStorage.removeItem('isStudentApproved');
+      updateAuthStateUI();
+    }
+
+    updateAuthStateUI();
+  </script>
+</body>
+</html>
