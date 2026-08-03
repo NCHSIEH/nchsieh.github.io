@@ -301,8 +301,7 @@
       <div id="adminAuthBox">
         <div class="admin-card-section" style="text-align:center;padding:30px;">
           <span style="font-size:42px;display:block;margin-bottom:10px;">🔒</span>
-          <h4 style="justify-content:center;">請輸入管理者密碼解鎖後台控制面板</h4>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">（初始預設解鎖密碼：<code>123456</code>）</p>
+          <h4 style="justify-content:center;margin-bottom:16px;">請輸入管理者密碼解鎖後台控制面板</h4>
           <div class="form-group" style="max-width:320px;margin:0 auto 16px;">
             <input type="password" id="adminPassInput" placeholder="請輸入管理密碼" style="text-align:center;">
           </div>
@@ -431,7 +430,7 @@
         document.getElementById('adminContentBox').style.display = 'block';
         renderThemeCards();
       } else {
-        alert('密碼錯誤！當前解鎖密碼為：' + getAdminPassword());
+        alert('密碼錯誤，請重新輸入！');
       }
     }
 
