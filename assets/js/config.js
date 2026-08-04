@@ -64,6 +64,13 @@ export const PROFILE_ASSETS = {
 export const MATERIALS_ROOT = 'assets/courses/';
 
 /**
+ * 講義上傳的目標 GitHub 儲存庫，格式為「帳號/儲存庫」。
+ * 後台的「上傳設定」會以此為預設值，不必每次手動輸入。
+ * 換 repo 時改這裡即可。
+ */
+export const GITHUB_REPO = 'NCHSIEH/nchsieh.github.io';
+
+/**
  * 管理者 Email 名單。
  *
  * 這份名單只用來決定前端要不要顯示後台畫面，它「不是」安全防線。

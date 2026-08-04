@@ -454,9 +454,16 @@ function initUploadSettings() {
   });
 
   $('#btnSaveToken').addEventListener('click', async () => {
-    const repo = $('#ghRepo').value.trim();
+    // 欄位留空時採用預設值，不要因此擋下使用者
+    let repo = $('#ghRepo').value.trim() || getRepo();
+    $('#ghRepo').value = repo;
+
     const token = $('#ghToken').value.trim();
-    if (!repo.includes('/')) { banner('#upBanner', 'repo 格式應為「帳號/儲存庫」。', 'error'); return; }
+    if (!repo.includes('/')) {
+      banner('#upBanner',
+        'repo 格式應為「帳號/儲存庫」，例如 <code>NCHSIEH/nchsieh.github.io</code>。', 'error');
+      return;
+    }
     if (!token) { banner('#upBanner', '請貼上存取金鑰。', 'error'); return; }
 
     setRepo(repo); setToken(token);

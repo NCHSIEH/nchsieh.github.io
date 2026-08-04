@@ -13,26 +13,32 @@
    這樣即使外洩，影響範圍也僅限於這個公開網站的內容。
    ========================================================================== */
 
-import { MATERIALS_ROOT } from './config.js';
+import { MATERIALS_ROOT, GITHUB_REPO } from './config.js';
 
 const KEY_STORE = 'github.token';
 const REPO_STORE = 'github.repo';
 
-/** 預設從目前網址推斷 repo，nchsieh.github.io 就是 NCHSIEH/nchsieh.github.io */
+/**
+ * 依序取用：使用者自訂 → config.js 的預設 → 從網址推斷。
+ * 先前只靠網址推斷，在本機或 localhost 開啟時會得到空字串，
+ * 導致「上傳設定」的欄位空白且無法儲存。
+ */
 function guessRepo() {
-  const host = location.hostname;
+  const host = location.hostname || '';
   if (host.endsWith('.github.io')) {
-    const owner = host.replace('.github.io', '');
-    return `${owner}/${host}`;
+    return `${host.replace('.github.io', '')}/${host}`;
   }
   return '';
 }
 
 export function getRepo() {
-  try { return localStorage.getItem(REPO_STORE) || guessRepo(); } catch { return guessRepo(); }
+  let saved = '';
+  try { saved = localStorage.getItem(REPO_STORE) || ''; } catch {}
+  return saved || GITHUB_REPO || guessRepo();
 }
+
 export function setRepo(v) {
-  try { localStorage.setItem(REPO_STORE, v.trim()); } catch {}
+  try { localStorage.setItem(REPO_STORE, (v || '').trim()); } catch {}
 }
 
 export function getToken() {
