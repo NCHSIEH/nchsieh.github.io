@@ -311,9 +311,12 @@
     </div>
 
     <div class="panel">
-      <h4>目前講義</h4>
-      <table class="admin-table">
-        <thead><tr><th>單元</th><th>檔案</th><th>大小</th><th>操作</th></tr></thead>
+      <h4>
+        <span>目前講義</span>
+        <span class="hintline" style="margin:0">拖曳左側把手可調整順序，順序會反映在學生看到的講義清單上。</span>
+      </h4>
+      <table class="admin-table mat-table">
+        <thead><tr><th class="col-drag"></th><th>單元</th><th>檔案</th><th>大小</th><th>操作</th></tr></thead>
         <tbody id="matTbody"></tbody>
       </table>
     </div>

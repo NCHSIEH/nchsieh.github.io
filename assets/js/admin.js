@@ -295,25 +295,46 @@ async function openMaterials(course) {
   await guard(refreshMaterials, '#matBanner');
 }
 
+function materialRow(m, index) {
+  return el('tr', { draggable: 'true', 'data-id': m.id, 'data-order': String(index) }, [
+    el('td', { class: 'col-drag' }, [
+      el('span', { class: 'drag-handle', title: '拖曳調整順序', 'aria-hidden': 'true', text: '⠿' }),
+      el('span', { class: 'reorder-btns' }, [
+        el('button', {
+          type: 'button', class: 'reorder-btn', title: '上移', 'aria-label': `將「${m.name}」上移`,
+          onclick: () => guard(() => moveMaterial(m.id, -1), '#matBanner')
+        }, '▲'),
+        el('button', {
+          type: 'button', class: 'reorder-btn', title: '下移', 'aria-label': `將「${m.name}」下移`,
+          onclick: () => guard(() => moveMaterial(m.id, 1), '#matBanner')
+        }, '▼')
+      ])
+    ]),
+    el('td', { text: m.unit || '—' }),
+    el('td', {}, [
+      el('div', { style: 'font-weight:600', text: m.name || '' }),
+      el('div', { class: 'mono', style: 'font-size:11.5px;color:var(--faint)', text: m.path || '' })
+    ]),
+    el('td', { text: m.size || '—' }),
+    el('td', {}, [el('button', {
+      class: 'btn btn-danger btn-sm btn-rect', type: 'button',
+      onclick: () => confirmThen(`移除「${m.name}」？`, () => guard(async () => {
+        await deleteMaterial(editorCourse.id, m.id); await refreshMaterials();
+      }, '#matBanner'))
+    }, '移除')])
+  ]);
+}
+
+/** 目前顯示中的講義清單，供拖曳排序時計算新順序 */
+let currentMaterials = [];
+
 async function refreshMaterials() {
   const detail = await loadCourseDetail(editorCourse.id);
+  currentMaterials = detail.materials;
 
   $('#matTbody').replaceChildren(...(detail.materials.length
-    ? detail.materials.map(m => el('tr', {}, [
-        el('td', { text: m.unit || '—' }),
-        el('td', {}, [
-          el('div', { style: 'font-weight:600', text: m.name || '' }),
-          el('div', { class: 'mono', style: 'font-size:11.5px;color:var(--faint)', text: m.path || '' })
-        ]),
-        el('td', { text: m.size || '—' }),
-        el('td', {}, [el('button', {
-          class: 'btn btn-danger btn-sm btn-rect', type: 'button',
-          onclick: () => confirmThen(`移除「${m.name}」？`, () => guard(async () => {
-            await deleteMaterial(editorCourse.id, m.id); await refreshMaterials();
-          }, '#matBanner'))
-        }, '移除')])
-      ]))
-    : [emptyRow(4, '尚未加入講義。')]));
+    ? detail.materials.map((m, i) => materialRow(m, i))
+    : [emptyRow(5, '尚未加入講義。')]));
 
   $('#asgTbody').replaceChildren(...(detail.assignments.length
     ? detail.assignments.map(a => el('tr', {}, [
@@ -327,6 +348,61 @@ async function refreshMaterials() {
         }, '移除')])
       ]))
     : [emptyRow(3, '尚未設定作業。')]));
+}
+
+/** 依 id 陣列的先後順序，把新的 order 值寫回 Firestore */
+async function persistMaterialOrder(orderedIds) {
+  await Promise.all(orderedIds.map((id, i) => saveMaterial(editorCourse.id, id, { order: i })));
+}
+
+/** 上／下移一步，供無法拖曳的裝置（觸控螢幕、鍵盤操作）使用 */
+async function moveMaterial(id, delta) {
+  const ids = currentMaterials.map(m => m.id);
+  const i = ids.indexOf(id);
+  const j = i + delta;
+  if (i < 0 || j < 0 || j >= ids.length) return;
+  [ids[i], ids[j]] = [ids[j], ids[i]];
+  await persistMaterialOrder(ids);
+  await refreshMaterials();
+}
+
+/** 講義列表的拖曳排序：拖曳中即時移動 DOM，放開後才寫回資料庫 */
+function initMaterialsDrag() {
+  const tbody = $('#matTbody');
+  let draggingRow = null;
+
+  tbody.addEventListener('dragstart', e => {
+    const tr = e.target.closest('tr[draggable="true"]');
+    if (!tr) return;
+    draggingRow = tr;
+    tr.classList.add('is-dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    // Firefox 需要實際設定資料才會啟動拖曳
+    e.dataTransfer.setData('text/plain', tr.dataset.id || '');
+  });
+
+  tbody.addEventListener('dragover', e => {
+    if (!draggingRow) return;
+    e.preventDefault();
+    const tr = e.target.closest('tr[draggable="true"]');
+    if (!tr || tr === draggingRow) return;
+    const rect = tr.getBoundingClientRect();
+    const putBefore = (e.clientY - rect.top) < rect.height / 2;
+    tbody.insertBefore(draggingRow, putBefore ? tr : tr.nextSibling);
+  });
+
+  tbody.addEventListener('dragend', () => guard(async () => {
+    if (!draggingRow) return;
+    draggingRow.classList.remove('is-dragging');
+    draggingRow = null;
+
+    const ids = [...tbody.querySelectorAll('tr[draggable="true"]')].map(tr => tr.dataset.id);
+    if (!ids.length) return;
+    await persistMaterialOrder(ids);
+    // 不整批重繪，避免拖曳完成的瞬間畫面閃動；只更新本地順序快取
+    currentMaterials = ids.map(id => currentMaterials.find(m => m.id === id)).filter(Boolean);
+    banner('#matBanner', '順序已更新。', 'success');
+  }, '#matBanner'));
 }
 
 /* ==========================================================================
@@ -627,9 +703,10 @@ function mount() {
     fillCourseForm(null); banner('#adminOpBanner', '');
   });
 
-  // 上傳
+  // 上傳與排序
   initDropzone();
   initUploadSettings();
+  initMaterialsDrag();
 
   // 講義（手動填寫）
   $('#btnAddMaterial').addEventListener('click', () => guard(async () => {

@@ -1289,3 +1289,35 @@ body.has-access .portal-cards { display: none; }
 .manual-add[open] > summary::before { content: "－"; }
 .manual-add > summary:hover { color: var(--brand); }
 .manual-body { padding-top: 8px; border-top: 1px solid var(--line); }
+
+/* --------------------------------------------------------------------------
+   19. 講義拖曳排序
+   -------------------------------------------------------------------------- */
+
+.mat-table .col-drag { width: 54px; }
+.mat-table tbody tr { cursor: default; }
+.mat-table tbody tr[draggable="true"] { transition: background .12s ease, opacity .12s ease; }
+.mat-table tbody tr[draggable="true"]:hover { background: var(--surface-2); }
+.mat-table tbody tr.is-dragging {
+  opacity: .35;
+  background: var(--brand-tint);
+}
+
+.col-drag { display: flex; align-items: center; gap: 4px; }
+.drag-handle {
+  cursor: grab; font-size: 16px; line-height: 1; color: var(--faint);
+  padding: 4px 2px; user-select: none; touch-action: none;
+}
+.drag-handle:active { cursor: grabbing; }
+tr:hover .drag-handle { color: var(--muted); }
+
+.reorder-btns { display: flex; flex-direction: column; gap: 1px; }
+.reorder-btn {
+  appearance: none; border: 1px solid var(--line); background: var(--card);
+  color: var(--faint); font-size: 8px; line-height: 1;
+  width: 18px; height: 14px; padding: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.reorder-btn:first-child { border-radius: 4px 4px 0 0; }
+.reorder-btn:last-child  { border-radius: 0 0 4px 4px; margin-top: -1px; }
+.reorder-btn:hover { color: var(--brand); border-color: var(--line-strong); background: var(--surface-2); }
