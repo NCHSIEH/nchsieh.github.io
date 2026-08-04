@@ -241,6 +241,33 @@
         <h4>連線狀態</h4>
         <div class="kv" id="sysInfo"></div>
       </div>
+
+      <div class="panel">
+        <h4>修改登入密碼</h4>
+        <p class="hintline">
+          修改後這台裝置與其他裝置都需要用新密碼重新登入。
+          若忘記目前密碼，請改用登入頁的「忘記密碼」流程。
+        </p>
+        <div id="pwBanner" class="banner"></div>
+        <form id="pwForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pwOld">目前密碼</label>
+              <input type="password" id="pwOld" autocomplete="current-password">
+            </div>
+            <div class="form-group">
+              <label for="pwNew">新密碼</label>
+              <input type="password" id="pwNew" autocomplete="new-password" placeholder="至少 6 個字元">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pwNew2">再輸入一次新密碼</label>
+            <input type="password" id="pwNew2" autocomplete="new-password">
+          </div>
+          <button class="btn btn-primary btn-rect" type="submit" id="btnChangePassword">更新密碼</button>
+        </form>
+      </div>
+
       <div class="panel">
         <h4>講義檔案放置方式</h4>
         <p class="hintline">

@@ -12,7 +12,7 @@ import {
 import { MATERIALS_ROOT, firebaseConfig } from './config.js';
 import {
   auth, watchAuth, loginStudent, logout, friendlyError, firebaseReady, firebaseError,
-  resolveIdentity, isAdminEmail, resendVerification, refreshUser,
+  resolveIdentity, isAdminEmail, resendVerification, refreshUser, changePassword,
   listStudents, decideStudent, removeStudent,
   listCourses, saveCourse, deleteCourse, loadCourseDetail,
   saveMaterial, deleteMaterial, saveAssignment, deleteAssignment,
@@ -773,9 +773,33 @@ function mount() {
     <p><span class="dot ok"></span>管理者：<code>${esc(me.user.email || '')}</code></p>
     <p><span class="dot ok"></span>UID：<code>${esc(me.user.uid)}</code></p>
     <p style="margin-top:10px;color:var(--faint);font-size:12.5px">
-      密碼變更與帳號管理請至 Firebase Console 的 Authentication 頁面操作。本站不保存任何密碼。
+      密碼可在下方「修改登入密碼」直接更新，本站僅在瀏覽器與 Firebase 之間傳遞，不會保存任何密碼。
     </p>`;
   $('#matRoot').textContent = MATERIALS_ROOT;
+
+  // 修改密碼
+  $('#pwForm').addEventListener('submit', e => {
+    e.preventDefault();
+    guard(async () => {
+      const oldP = $('#pwOld').value;
+      const newP = $('#pwNew').value;
+      const newP2 = $('#pwNew2').value;
+
+      if (!oldP) { banner('#pwBanner', '請輸入目前密碼。', 'error'); return; }
+      if (newP.length < 6) { banner('#pwBanner', '新密碼請至少 6 個字元。', 'error'); return; }
+      if (newP !== newP2) { banner('#pwBanner', '兩次輸入的新密碼不一致。', 'error'); return; }
+      if (newP === oldP) { banner('#pwBanner', '新密碼不能與目前密碼相同。', 'error'); return; }
+
+      $('#btnChangePassword').disabled = true;
+      try {
+        await changePassword(oldP, newP);
+        banner('#pwBanner', '密碼已更新，下次登入請使用新密碼。', 'success');
+        $('#pwForm').reset();
+      } finally {
+        $('#btnChangePassword').disabled = false;
+      }
+    }, '#pwBanner');
+  });
 }
 
 /* ---------- 啟動 ---------- */

@@ -7,7 +7,8 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/fireba
 import {
   getAuth, onAuthStateChanged, createUserWithEmailAndPassword,
   signInWithEmailAndPassword, signOut, sendEmailVerification,
-  sendPasswordResetEmail, reload
+  sendPasswordResetEmail, reload,
+  EmailAuthProvider, reauthenticateWithCredential, updatePassword
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
 import {
   getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc,
@@ -42,12 +43,13 @@ const AUTH_ERRORS = {
   'auth/invalid-email':         'Email 格式不正確。',
   'auth/weak-password':         '密碼強度不足，請至少使用 6 個字元。',
   'auth/user-not-found':        '查無此帳號，請先註冊。',
-  'auth/wrong-password':        '密碼錯誤。',
+  'auth/wrong-password':        '目前密碼輸入錯誤。',
   'auth/invalid-credential':    'Email 或密碼錯誤。',
   'auth/too-many-requests':     '嘗試次數過多，請稍候幾分鐘再試。',
   'auth/network-request-failed': '網路連線失敗，請檢查網路後再試。',
   'auth/unauthorized-domain':   '目前網域未被授權。請至 Firebase Console → Authentication → Settings → Authorized domains 加入本站網域。',
   'auth/operation-not-allowed': 'Firebase 尚未啟用「電子郵件／密碼」登入方式，請至 Console 開啟。',
+  'auth/requires-recent-login': '這項操作需要重新驗證身分，請重新登入後再試一次。',
   'permission-denied':          '權限不足。若你是修課學生，請確認帳號已通過審核。'
 };
 
@@ -107,6 +109,21 @@ export async function refreshUser() {
   // 強制換發 ID Token，讓 email_verified 立即反映到 Security Rules
   await auth.currentUser.getIdToken(true);
   return auth.currentUser;
+}
+
+/**
+ * 修改目前登入帳號的密碼。
+ * Firebase 要求「最近登入過」才能改密碼，所以必須先用舊密碼重新驗證一次，
+ * 否則會丟出 auth/requires-recent-login。這裡把兩步包成一個函式，
+ * 呼叫端只需要提供舊密碼與新密碼。
+ */
+export async function changePassword(oldPassword, newPassword) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('尚未登入。');
+
+  const credential = EmailAuthProvider.credential(user.email, oldPassword);
+  await reauthenticateWithCredential(user, credential);
+  await updatePassword(user, newPassword);
 }
 
 /* ---------- 身分判定 ---------- */
