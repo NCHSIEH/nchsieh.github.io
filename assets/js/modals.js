@@ -39,8 +39,12 @@ const STUDENT_MODAL = `
             </div>
           </div>
           <div class="form-group">
+            <label for="stClass">班級</label>
+            <input type="text" id="stClass" placeholder="例如：護理系四年甲班">
+          </div>
+          <div class="form-group">
             <label for="stNote">備註</label>
-            <input type="text" id="stNote" placeholder="選填，例如修課班別">
+            <input type="text" id="stNote" placeholder="選填">
           </div>
         </div>
 

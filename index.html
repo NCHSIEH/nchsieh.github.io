@@ -87,26 +87,6 @@
         <button type="button" class="seg" data-set-lang="zh" aria-pressed="true">中文</button>
         <button type="button" class="seg" data-set-lang="en" aria-pressed="false">EN</button>
       </div>
-
-      <div class="looks">
-        <button class="btn btn-ghost btn-sm" type="button" id="btnLooks" aria-expanded="false" aria-controls="looksPanel">
-          <span data-lang="zh">版面</span><span data-lang="en">Style</span>
-        </button>
-        <div class="looks-panel" id="looksPanel" hidden>
-          <div class="looks-group">
-            <h4><span data-lang="zh">版型</span><span data-lang="en">Layout</span></h4>
-            <div class="looks-grid" id="layoutPicker"></div>
-          </div>
-          <div class="looks-group">
-            <h4><span data-lang="zh">配色</span><span data-lang="en">Theme</span></h4>
-            <div class="looks-grid" id="themePicker"></div>
-          </div>
-        </div>
-      </div>
-
-      <a href="courses.html" class="btn btn-primary btn-sm">
-        <span data-lang="zh">授課課程</span><span data-lang="en">Courses</span>
-      </a>
     </div>
   </div>
 </header>
@@ -168,8 +148,8 @@
   <main id="main">
 
     <section id="profile">
-      <div class="cols">
-        <div class="block">
+      <div class="cols" id="profileCols">
+        <div class="block edu-block" id="eduBlock">
           <div class="skh">
             <h2><span data-lang="zh">學歷</span><span data-lang="en">Education</span></h2>
             <span class="ln"></span>
@@ -503,7 +483,7 @@
 <script type="module">
   import { initUI } from './assets/js/ui.js';
   import { initHome } from './assets/js/home.js';
-  initUI();
+  initUI({ applySiteDefault: true });
   initHome();
 </script>
 </body>

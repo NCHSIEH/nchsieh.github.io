@@ -193,16 +193,34 @@ function render() {
 
 /* ---------- 公告 ---------- */
 
+/** 公告是否在有效期間內；兩個欄位都留空＝一律視為有效 */
+function isAnnouncementActive(a) {
+  const now = Date.now() / 1000;
+  const startOk = !a.startAt || (a.startAt.seconds ?? 0) <= now;
+  const endOk = !a.endAt || (a.endAt.seconds ?? 0) >= now;
+  return startOk && endOk;
+}
+
+/** 公告是否該顯示給目前這位訪客；沒有指定班級就是給所有人看 */
+function isAnnouncementForViewer(a) {
+  if (!a.targetClass) return true;
+  return identity.profile?.className === a.targetClass;
+}
+
 async function renderAnnouncements() {
   const box = $('#announcementBox');
   if (!box) return;
   try {
-    const rows = await listAnnouncements(3);
+    const rows = (await listAnnouncements(20))
+      .filter(isAnnouncementActive)
+      .filter(isAnnouncementForViewer)
+      .slice(0, 3);
     if (!rows.length) { box.hidden = true; return; }
     box.hidden = false;
     box.replaceChildren(...rows.map(a => el('div', { class: 'notice' }, [
       el('h4', { text: a.title || '' }),
       a.body ? el('p', { text: a.body }) : null,
+      a.targetClass ? el('div', { class: 'when', text: `班級：${a.targetClass}` }) : null,
       el('div', { class: 'when', text: fmtDateTime(a.publishedAt) })
     ])));
   } catch { box.hidden = true; }
@@ -241,9 +259,10 @@ export async function initCourses() {
 
   renderAnnouncements();
 
-  // 登入狀態改變時，清掉權限快取重新判定
+  // 登入狀態改變時，清掉權限快取重新判定；公告也要重新套用班級篩選
   let lastRole = identity.role;
   onIdentity(id => {
+    renderAnnouncements();
     if (id.role === lastRole) return;
     lastRole = id.role;
     detailCache.clear();

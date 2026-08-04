@@ -13,7 +13,7 @@ import {
 import {
   getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc,
   collection, getDocs, addDoc, query, where, orderBy, limit,
-  serverTimestamp, writeBatch
+  serverTimestamp, writeBatch, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 import { firebaseConfig, ADMIN_EMAILS } from './config.js';
@@ -70,7 +70,7 @@ export function watchAuth(callback) {
   return onAuthStateChanged(auth, callback);
 }
 
-export async function registerStudent({ email, password, name, studentId, note }) {
+export async function registerStudent({ email, password, name, studentId, className, note }) {
   const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
   await sendEmailVerification(cred.user);
   // 建立待審核紀錄。status 只能是 'pending'，這是 Security Rules 強制的。
@@ -78,6 +78,7 @@ export async function registerStudent({ email, password, name, studentId, note }
     email: cred.user.email,
     name: (name || '').trim(),
     studentId: (studentId || '').trim(),
+    className: (className || '').trim(),
     note: (note || '').trim(),
     status: 'pending',
     createdAt: serverTimestamp()
@@ -166,23 +167,54 @@ export async function resolveIdentity(user) {
 
 /* ---------- 學生審核 ---------- */
 
+/**
+ * 學生排序：預設依申請時間新到舊。
+ * 只要有任何一筆學生被管理者手動拖拉過（存在 order 欄位），
+ * 就整批改用手動順序，邏輯與課程排序一致。
+ */
 export async function listStudents(status) {
   const base = collection(db, 'students');
   const q = status && status !== 'all'
     ? query(base, where('status', '==', status))
     : query(base);
   const snap = await getDocs(q);
-  return snap.docs
-    .map(d => ({ id: d.id, ...d.data() }))
-    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  const byCreated = (a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+  const hasManualOrder = rows.some(r => typeof r.order === 'number');
+  if (!hasManualOrder) return rows.sort(byCreated);
+
+  return rows.sort((a, b) => {
+    const ao = typeof a.order === 'number' ? a.order : Infinity;
+    const bo = typeof b.order === 'number' ? b.order : Infinity;
+    return ao !== bo ? ao - bo : byCreated(a, b);
+  });
 }
 
+/** 依 uid 陣列的先後順序，把新的 order 值寫回 Firestore */
+export async function saveStudentOrder(orderedUids) {
+  await Promise.all(orderedUids.map((uid, i) => updateDoc(doc(db, 'students', uid), { order: i })));
+}
+
+/**
+ * status 可為 'approved' | 'rejected' | 'suspended'。
+ * suspended 用來「暫停」一個原本已核准的學生，不影響他原始的申請紀錄，
+ * 之後可以再次 decideStudent(uid, 'approved', ...) 恢復存取。
+ */
 export async function decideStudent(uid, status, adminEmail) {
   await updateDoc(doc(db, 'students', uid), {
     status,
     decidedAt: serverTimestamp(),
     decidedBy: adminEmail || null
   });
+}
+
+/**
+ * 設定某位學生可以看到哪些課程。
+ * courseIds 為空陣列表示「不限制，可看全部課程」（沿用既有預設行為）。
+ */
+export async function setStudentAccess(uid, courseIds) {
+  await updateDoc(doc(db, 'students', uid), { allowedCourses: courseIds });
 }
 
 export async function removeStudent(uid) {
@@ -192,14 +224,29 @@ export async function removeStudent(uid) {
 
 /* ---------- 課程 ---------- */
 
+/**
+ * 課程排序：初設依開課學期新到舊排序。
+ * 只要有任何一筆課程被管理者手動拖拉過（存在 order 欄位），
+ * 就整批改用手動順序；沒有設定過 order 的課程排在最後，
+ * 避免新建課程「插隊」到手動排序中間。
+ */
 export async function listCourses() {
   const snap = await getDocs(collection(db, 'courses'));
-  return snap.docs
-    .map(d => ({ id: d.id, ...d.data() }))
-    .sort((a, b) => {
-      const s = String(b.semester || '').localeCompare(String(a.semester || ''));
-      return s !== 0 ? s : String(a.code || '').localeCompare(String(b.code || ''));
-    });
+  const courses = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  const bySemester = (a, b) => {
+    const s = String(b.semester || '').localeCompare(String(a.semester || ''));
+    return s !== 0 ? s : String(a.code || '').localeCompare(String(b.code || ''));
+  };
+
+  const hasManualOrder = courses.some(c => typeof c.order === 'number');
+  if (!hasManualOrder) return courses.sort(bySemester);
+
+  return courses.sort((a, b) => {
+    const ao = typeof a.order === 'number' ? a.order : Infinity;
+    const bo = typeof b.order === 'number' ? b.order : Infinity;
+    return ao !== bo ? ao - bo : bySemester(a, b);
+  });
 }
 
 export async function saveCourse(id, data) {
@@ -283,13 +330,27 @@ export async function listAnnouncements(max = 5) {
   }
 }
 
-export async function publishAnnouncement({ title, body }) {
+/**
+ * targetClass 留空表示全班級可見。
+ * startAt / endAt 是 <input type="date"> 的字串值（如 '2026-09-01'）或 null，
+ * 用來限制公告只在特定期間對公開頁顯示；兩者都留空＝立即生效、永不過期。
+ */
+export async function publishAnnouncement({ title, body, targetClass, startAt, endAt }) {
   const ref = await addDoc(collection(db, 'announcements'), {
     title: title.trim(),
     body: (body || '').trim(),
+    targetClass: (targetClass || '').trim(),
+    startAt: startAt ? Timestamp.fromDate(new Date(startAt)) : null,
+    endAt: endAt ? Timestamp.fromDate(new Date(endAt + 'T23:59:59')) : null,
+    reminderSentAt: null,
     publishedAt: serverTimestamp()
   });
   return ref.id;
+}
+
+/** Email 提醒寄送完成後呼叫，記錄時間避免重複顯示「尚未寄送」 */
+export async function markAnnouncementReminderSent(id) {
+  await updateDoc(doc(db, 'announcements', id), { reminderSentAt: serverTimestamp() });
 }
 
 export async function deleteAnnouncement(id) {
@@ -330,6 +391,27 @@ export async function saveProject(id, data) {
 
 export async function deleteProject(id) {
   await deleteDoc(doc(db, 'projects', id));
+}
+
+/* ---------- 全站設定（版型／配色預設） ----------
+   公開頁用這裡的值決定「所有訪客第一次造訪」看到的版型與主題。
+   讀取刻意包一層 try/catch、找不到就回傳 null——呼叫端必須把這當成
+   「還沒設定，請用 config.js 的預設值」，絕不能讓這次讀取擋住首頁渲染。 */
+
+export async function getSiteSettings() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'site'));
+    return snap.exists() ? snap.data() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** 只有管理者能寫入，由 firestore.rules 強制；前端這層檢查只是省一次白跑的請求 */
+export async function saveSiteSettings({ theme, layout }) {
+  await setDoc(doc(db, 'settings', 'site'), {
+    theme, layout, updatedAt: serverTimestamp()
+  }, { merge: true });
 }
 
 /* ---------- 備份 ---------- */

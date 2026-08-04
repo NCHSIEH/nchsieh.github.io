@@ -46,11 +46,22 @@ service cloud.firestore {
     //   1. 已登入
     //   2. Email 已完成驗證（點過驗證信）
     //   3. students 文件存在且 status == 'approved'（由管理者核准）
+    // 注意：暫停中的學生 status 是 'suspended'，不是 'approved'，
+    // 所以會自動被這裡擋下——暫停功能不需要額外的規則邏輯。
     function isApprovedStudent() {
       return signedIn()
         && request.auth.token.email_verified == true
         && exists(/databases/$(database)/documents/students/$(request.auth.uid))
         && studentDoc().status == 'approved';
+    }
+
+    // 課程存取範圍：students 文件的 allowedCourses 欄位若不存在或是空陣列，
+    // 代表「不限制」，維持原本可看全部課程的行為；
+    // 若有內容，則只有列在其中的課程可以讀取講義與作業。
+    function canAccessCourse(courseId) {
+      return !('allowedCourses' in studentDoc())
+        || studentDoc().allowedCourses.size() == 0
+        || courseId in studentDoc().allowedCourses;
     }
 
     function unchanged(field) {
@@ -72,16 +83,17 @@ service cloud.firestore {
         && request.resource.data.status == 'pending'
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.keys().hasOnly(
-             ['email', 'name', 'studentId', 'note', 'status', 'createdAt']
+             ['email', 'name', 'studentId', 'className', 'note', 'status', 'createdAt']
            );
 
-      // 本人只能補填姓名與學號，改不動 status——這是審核機制的關鍵。
+      // 本人只能補填姓名、學號、班級與備註，改不動 status——這是審核機制的關鍵。
+      // order（顯示順序）與 allowedCourses（可看課程範圍）只有管理者能寫。
       allow update: if isAdmin()
         || (signedIn() && request.auth.uid == uid
             && unchanged('status')
             && unchanged('email')
             && request.resource.data.diff(resource.data)
-                 .affectedKeys().hasOnly(['name', 'studentId', 'note']));
+                 .affectedKeys().hasOnly(['name', 'studentId', 'className', 'note']));
 
       allow delete: if isAdmin();
     }
@@ -93,16 +105,16 @@ service cloud.firestore {
       allow read:  if true;
       allow write: if isAdmin();
 
-      // 講義清單只給已核准的修課學生。
-      // 未核准者連檔名與路徑都拿不到。
+      // 講義清單只給已核准、且這門課在其可看範圍內的修課學生。
+      // 未核准、被暫停、或這門課不在 allowedCourses 範圍內的學生，連檔名與路徑都拿不到。
       match /materials/{materialId} {
-        allow read:  if isApprovedStudent() || isAdmin();
+        allow read:  if (isApprovedStudent() && canAccessCourse(courseId)) || isAdmin();
         allow write: if isAdmin();
       }
 
       // 作業與截止日同上
       match /assignments/{assignmentId} {
-        allow read:  if isApprovedStudent() || isAdmin();
+        allow read:  if (isApprovedStudent() && canAccessCourse(courseId)) || isAdmin();
         allow write: if isAdmin();
       }
     }
@@ -110,6 +122,14 @@ service cloud.firestore {
 
     // ---------- 公告 ----------
     match /announcements/{id} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+
+    // ---------- 全站設定（版型／配色預設） ----------
+    // 任何人都能讀（公開頁需要在載入時套用），只有管理者能寫。
+    match /settings/{id} {
       allow read:  if true;
       allow write: if isAdmin();
     }

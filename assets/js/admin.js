@@ -7,16 +7,20 @@
 
 import {
   $, $$, el, esc, banner, openModal, closeModal, fmtDateTime,
-  renderThemePicker, renderLayoutPicker
+  renderThemePicker, renderLayoutPicker, currentTheme, currentLayout
 } from './ui.js';
-import { MATERIALS_ROOT, firebaseConfig } from './config.js';
+import {
+  MATERIALS_ROOT, firebaseConfig, THEMES, LAYOUTS,
+  EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY
+} from './config.js';
 import {
   auth, watchAuth, loginStudent, logout, friendlyError, firebaseReady, firebaseError,
   resolveIdentity, isAdminEmail, resendVerification, refreshUser, changePassword,
-  listStudents, decideStudent, removeStudent,
+  listStudents, decideStudent, removeStudent, saveStudentOrder, setStudentAccess,
   listCourses, saveCourse, deleteCourse, loadCourseDetail,
   saveMaterial, deleteMaterial, saveAssignment, deleteAssignment,
-  listAnnouncements, publishAnnouncement, deleteAnnouncement,
+  listAnnouncements, publishAnnouncement, deleteAnnouncement, markAnnouncementReminderSent,
+  getSiteSettings, saveSiteSettings,
   exportBackup
 } from './data.js';
 import {
@@ -248,14 +252,24 @@ function fillCourseForm(c) {
   $('#btnCancelEdit').hidden      = !c;
 }
 
-async function refreshCourses() {
-  const tbody = $('#adminCourseTbody');
-  tbody.replaceChildren(emptyRow(4, '讀取中…'));
+/** 目前顯示中的課程清單，供拖曳排序時計算新順序 */
+let currentCourses = [];
 
-  const courses = await listCourses();
-  if (!courses.length) { tbody.replaceChildren(emptyRow(4, '尚未建立任何課程。')); return; }
-
-  tbody.replaceChildren(...courses.map(c => el('tr', {}, [
+function courseRow(c, index) {
+  return el('tr', { draggable: 'true', 'data-id': c.id, 'data-order': String(index) }, [
+    el('td', { class: 'col-drag' }, [
+      el('span', { class: 'drag-handle', title: '拖曳調整順序', 'aria-hidden': 'true', text: '⠿' }),
+      el('span', { class: 'reorder-btns' }, [
+        el('button', {
+          type: 'button', class: 'reorder-btn', title: '上移', 'aria-label': `將「${c.titleZh || c.code}」上移`,
+          onclick: () => guard(() => moveCourse(c.id, -1))
+        }, '▲'),
+        el('button', {
+          type: 'button', class: 'reorder-btn', title: '下移', 'aria-label': `將「${c.titleZh || c.code}」下移`,
+          onclick: () => guard(() => moveCourse(c.id, 1))
+        }, '▼')
+      ])
+    ]),
     el('td', {}, [
       el('div', { style: 'font-weight:600', text: c.titleZh || '(未命名)' }),
       el('div', { class: 'mono', style: 'font-size:12px;color:var(--faint)', text: c.code || '' })
@@ -277,7 +291,71 @@ async function refreshCourses() {
             banner('#adminOpBanner', '課程已刪除。', 'success');
           })) }, '刪除')
     ])])
-  ])));
+  ]);
+}
+
+async function refreshCourses() {
+  const tbody = $('#adminCourseTbody');
+  tbody.replaceChildren(emptyRow(5, '讀取中…'));
+
+  const courses = await listCourses();
+  currentCourses = courses;
+  if (!courses.length) { tbody.replaceChildren(emptyRow(5, '尚未建立任何課程。')); return; }
+
+  tbody.replaceChildren(...courses.map((c, i) => courseRow(c, i)));
+}
+
+/** 依 id 陣列的先後順序，把新的 order 值寫回 Firestore */
+async function persistCourseOrder(orderedIds) {
+  await Promise.all(orderedIds.map((id, i) => saveCourse(id, { order: i })));
+}
+
+/** 上／下移一步，供無法拖曳的裝置（觸控螢幕、鍵盤操作）使用 */
+async function moveCourse(id, delta) {
+  const ids = currentCourses.map(c => c.id);
+  const i = ids.indexOf(id);
+  const j = i + delta;
+  if (i < 0 || j < 0 || j >= ids.length) return;
+  [ids[i], ids[j]] = [ids[j], ids[i]];
+  await persistCourseOrder(ids);
+  await refreshCourses();
+}
+
+/** 課程列表的拖曳排序：拖曳中即時移動 DOM，放開後才寫回資料庫 */
+function initCoursesDrag() {
+  const tbody = $('#adminCourseTbody');
+  let draggingRow = null;
+
+  tbody.addEventListener('dragstart', e => {
+    const tr = e.target.closest('tr[draggable="true"]');
+    if (!tr) return;
+    draggingRow = tr;
+    tr.classList.add('is-dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', tr.dataset.id || '');
+  });
+
+  tbody.addEventListener('dragover', e => {
+    if (!draggingRow) return;
+    e.preventDefault();
+    const tr = e.target.closest('tr[draggable="true"]');
+    if (!tr || tr === draggingRow) return;
+    const rect = tr.getBoundingClientRect();
+    const putBefore = (e.clientY - rect.top) < rect.height / 2;
+    tbody.insertBefore(draggingRow, putBefore ? tr : tr.nextSibling);
+  });
+
+  tbody.addEventListener('dragend', () => guard(async () => {
+    if (!draggingRow) return;
+    draggingRow.classList.remove('is-dragging');
+    draggingRow = null;
+
+    const ids = [...tbody.querySelectorAll('tr[draggable="true"]')].map(tr => tr.dataset.id);
+    if (!ids.length) return;
+    await persistCourseOrder(ids);
+    currentCourses = ids.map(id => currentCourses.find(c => c.id === id)).filter(Boolean);
+    banner('#adminOpBanner', '課程順序已更新。', 'success');
+  }));
 }
 
 /* ---------- 講義與作業 ---------- */
@@ -572,81 +650,283 @@ function initUploadSettings() {
    ========================================================================== */
 
 const STATUS_BADGE = {
-  pending:  ['pending',  '審核中'],
-  approved: ['approved', '已核准'],
-  rejected: ['rejected', '已駁回']
+  pending:   ['pending',  '審核中'],
+  approved:  ['approved', '已核准'],
+  rejected:  ['rejected', '已駁回'],
+  suspended: ['rejected', '已暫停']
 };
+
+/** 目前顯示中的學生清單，供拖曳排序與課程權限彈窗查找資料 */
+let currentStudents = [];
+
+function studentRow(r, index) {
+  const [cls, label] = STATUS_BADGE[r.status] || ['guest', r.status || '—'];
+  const canScope = r.status === 'approved' || r.status === 'suspended';
+
+  return el('tr', { draggable: 'true', 'data-id': r.id, 'data-order': String(index) }, [
+    el('td', { class: 'col-drag' }, [
+      el('span', { class: 'drag-handle', title: '拖曳調整順序', 'aria-hidden': 'true', text: '⠿' }),
+      el('span', { class: 'reorder-btns' }, [
+        el('button', {
+          type: 'button', class: 'reorder-btn', title: '上移', 'aria-label': `將「${r.name || r.email}」上移`,
+          onclick: () => guard(() => moveStudent(r.id, -1))
+        }, '▲'),
+        el('button', {
+          type: 'button', class: 'reorder-btn', title: '下移', 'aria-label': `將「${r.name || r.email}」下移`,
+          onclick: () => guard(() => moveStudent(r.id, 1))
+        }, '▼')
+      ])
+    ]),
+    el('td', {}, [
+      el('div', { style: 'font-weight:600', text: r.name || '(未填姓名)' }),
+      el('div', { style: 'font-size:12px;color:var(--faint)', text: r.email || '' }),
+      el('div', { class: 'mono', style: 'font-size:11.5px;color:var(--faint);margin-top:2px',
+        text: [r.studentId && `學號 ${r.studentId}`, r.className && `班級 ${r.className}`].filter(Boolean).join('　') || '—' })
+    ]),
+    el('td', { style: 'font-size:12.5px;white-space:nowrap', text: fmtDateTime(r.createdAt) }),
+    el('td', {}, [el('span', { class: `state-badge ${cls}`, text: label })]),
+    el('td', {}, [
+      canScope
+        ? el('button', {
+            class: 'btn btn-ghost btn-sm btn-rect', type: 'button',
+            title: r.allowedCourses?.length ? `限定 ${r.allowedCourses.length} 門課程` : '不限制，可看全部課程',
+            onclick: () => openAccessModal(r)
+          }, r.allowedCourses?.length ? `已限定 ${r.allowedCourses.length} 門` : '全部課程')
+        : el('span', { style: 'color:var(--faint);font-size:12.5px', text: '—' })
+    ]),
+    el('td', {}, [el('div', { class: 'actions' }, [
+      r.status !== 'approved' && el('button', {
+        class: 'btn btn-ok btn-sm btn-rect', type: 'button',
+        onclick: () => guard(async () => {
+          await decideStudent(r.id, 'approved', me.user.email);
+          await refreshStudents(); await refreshDash();
+          banner('#adminOpBanner', `已核准 ${r.email}。`, 'success');
+        })
+      }, r.status === 'suspended' ? '恢復存取' : '核准'),
+      r.status === 'approved' && el('button', {
+        class: 'btn btn-quiet btn-sm btn-rect', type: 'button',
+        onclick: () => confirmThen(`暫停 ${r.email} 的講義存取權？\n可隨時再按「恢復存取」還原，原始申請資料不會被清除。`, () => guard(async () => {
+          await decideStudent(r.id, 'suspended', me.user.email);
+          await refreshStudents(); await refreshDash();
+          banner('#adminOpBanner', `已暫停 ${r.email} 的存取權。`, 'success');
+        }))
+      }, '暫停存取'),
+      r.status !== 'rejected' && el('button', {
+        class: 'btn btn-danger btn-sm btn-rect', type: 'button',
+        onclick: () => confirmThen(`駁回 ${r.email} 的申請？`, () => guard(async () => {
+          await decideStudent(r.id, 'rejected', me.user.email);
+          await refreshStudents(); await refreshDash();
+        }))
+      }, '駁回'),
+      el('button', {
+        class: 'btn btn-quiet btn-sm btn-rect', type: 'button',
+        onclick: () => confirmThen(
+          `刪除 ${r.email} 的申請紀錄？\n\n注意：這只會移除 Firestore 紀錄。` +
+          `Firebase Authentication 中的帳號仍然存在，需另行至 Console 刪除。`,
+          () => guard(async () => {
+            await removeStudent(r.id); await refreshStudents(); await refreshDash();
+          }))
+      }, '刪除')
+    ].filter(Boolean))])
+  ]);
+}
 
 async function refreshStudents() {
   const filter = $('#studentFilter').value;
   const tbody = $('#studentTbody');
-  tbody.replaceChildren(emptyRow(5, '讀取中…'));
+  tbody.replaceChildren(emptyRow(6, '讀取中…'));
 
   const rows = await listStudents(filter);
+  currentStudents = rows;
   $('#studentCount').textContent = `${rows.length} 筆`;
 
   if (!rows.length) {
-    tbody.replaceChildren(emptyRow(5,
+    tbody.replaceChildren(emptyRow(6,
       filter === 'pending' ? '目前沒有待審核的申請。' : '沒有符合條件的紀錄。'));
     return;
   }
 
-  tbody.replaceChildren(...rows.map(r => {
-    const [cls, label] = STATUS_BADGE[r.status] || ['guest', r.status || '—'];
-    return el('tr', {}, [
-      el('td', {}, [
-        el('div', { style: 'font-weight:600', text: r.name || '(未填姓名)' }),
-        el('div', { style: 'font-size:12px;color:var(--faint)', text: r.email || '' })
-      ]),
-      el('td', { class: 'mono', style: 'font-size:12.5px', text: r.studentId || '—' }),
-      el('td', { style: 'font-size:12.5px;white-space:nowrap', text: fmtDateTime(r.createdAt) }),
-      el('td', {}, [el('span', { class: `state-badge ${cls}`, text: label })]),
-      el('td', {}, [el('div', { class: 'actions' }, [
-        r.status !== 'approved' && el('button', {
-          class: 'btn btn-ok btn-sm btn-rect', type: 'button',
-          onclick: () => guard(async () => {
-            await decideStudent(r.id, 'approved', me.user.email);
-            await refreshStudents(); await refreshDash();
-            banner('#adminOpBanner', `已核准 ${r.email}。`, 'success');
-          })
-        }, '核准'),
-        r.status !== 'rejected' && el('button', {
-          class: 'btn btn-danger btn-sm btn-rect', type: 'button',
-          onclick: () => confirmThen(`駁回 ${r.email} 的申請？`, () => guard(async () => {
-            await decideStudent(r.id, 'rejected', me.user.email);
-            await refreshStudents(); await refreshDash();
-          }))
-        }, '駁回'),
-        el('button', {
-          class: 'btn btn-quiet btn-sm btn-rect', type: 'button',
-          onclick: () => confirmThen(
-            `刪除 ${r.email} 的申請紀錄？\n\n注意：這只會移除 Firestore 紀錄。` +
-            `Firebase Authentication 中的帳號仍然存在，需另行至 Console 刪除。`,
-            () => guard(async () => {
-              await removeStudent(r.id); await refreshStudents(); await refreshDash();
-            }))
-        }, '刪除')
-      ].filter(Boolean))])
-    ]);
+  tbody.replaceChildren(...rows.map((r, i) => studentRow(r, i)));
+}
+
+/** 依 uid 陣列的先後順序，把新的 order 值寫回 Firestore */
+async function persistStudentOrder(orderedIds) {
+  await saveStudentOrder(orderedIds);
+}
+
+/** 上／下移一步，供無法拖曳的裝置（觸控螢幕、鍵盤操作）使用 */
+async function moveStudent(id, delta) {
+  const ids = currentStudents.map(r => r.id);
+  const i = ids.indexOf(id);
+  const j = i + delta;
+  if (i < 0 || j < 0 || j >= ids.length) return;
+  [ids[i], ids[j]] = [ids[j], ids[i]];
+  await persistStudentOrder(ids);
+  await refreshStudents();
+}
+
+/** 學生列表的拖曳排序：拖曳中即時移動 DOM，放開後才寫回資料庫 */
+function initStudentsDrag() {
+  const tbody = $('#studentTbody');
+  let draggingRow = null;
+
+  tbody.addEventListener('dragstart', e => {
+    const tr = e.target.closest('tr[draggable="true"]');
+    if (!tr) return;
+    draggingRow = tr;
+    tr.classList.add('is-dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', tr.dataset.id || '');
+  });
+
+  tbody.addEventListener('dragover', e => {
+    if (!draggingRow) return;
+    e.preventDefault();
+    const tr = e.target.closest('tr[draggable="true"]');
+    if (!tr || tr === draggingRow) return;
+    const rect = tr.getBoundingClientRect();
+    const putBefore = (e.clientY - rect.top) < rect.height / 2;
+    tbody.insertBefore(draggingRow, putBefore ? tr : tr.nextSibling);
+  });
+
+  tbody.addEventListener('dragend', () => guard(async () => {
+    if (!draggingRow) return;
+    draggingRow.classList.remove('is-dragging');
+    draggingRow = null;
+
+    const ids = [...tbody.querySelectorAll('tr[draggable="true"]')].map(tr => tr.dataset.id);
+    if (!ids.length) return;
+    await persistStudentOrder(ids);
+    currentStudents = ids.map(id => currentStudents.find(r => r.id === id)).filter(Boolean);
+    banner('#adminOpBanner', '學生順序已更新。', 'success');
   }));
+}
+
+/* ---------- 課程存取權限彈窗 ---------- */
+
+let accessStudent = null;
+
+function setAccessListDisabled(disabled) {
+  $('#accessCourseList').classList.toggle('is-disabled', disabled);
+  $$('.access-course-cb').forEach(cb => { cb.disabled = disabled; });
+}
+
+function renderAccessCourseList(student) {
+  const box = $('#accessCourseList');
+  const allowed = new Set(student.allowedCourses || []);
+  if (!currentCourses.length) {
+    box.replaceChildren(el('p', { style: 'color:var(--faint);font-size:13px', text: '目前尚未建立任何課程。' }));
+    return;
+  }
+  box.replaceChildren(...currentCourses.map(c => el('label', {
+    style: 'display:flex;align-items:center;gap:8px;font-size:13.5px'
+  }, [
+    el('input', { type: 'checkbox', class: 'access-course-cb', value: c.id, checked: allowed.has(c.id) }),
+    el('span', { text: `${c.titleZh || c.code || '(未命名)'}${c.semester ? `（${c.semester}）` : ''}` })
+  ])));
+}
+
+async function openAccessModal(student) {
+  accessStudent = student;
+  $('#accessModalSub').textContent = `${student.name || student.email} — 設定可讀取的課程範圍`;
+  banner('#accessBanner', '');
+
+  if (!currentCourses.length) currentCourses = await listCourses();
+  renderAccessCourseList(student);
+
+  const noRestriction = !student.allowedCourses || student.allowedCourses.length === 0;
+  $('#accessAll').checked = noRestriction;
+  setAccessListDisabled(noRestriction);
+
+  openModal('modalAccess');
 }
 
 /* ==========================================================================
    公告
    ========================================================================== */
 
+function emailjsConfigured() {
+  return !!(EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY);
+}
+
+/** 依公告的 targetClass 找出應該收提醒信的已核准學生 */
+async function reminderTargets(a) {
+  const approved = await listStudents('approved');
+  return a.targetClass ? approved.filter(s => (s.className || '') === a.targetClass) : approved;
+}
+
+async function sendAnnouncementReminder(a) {
+  if (!emailjsConfigured()) {
+    banner('#adminOpBanner',
+      '尚未設定 EmailJS，請至「系統」分頁查看設定方式（需編輯 assets/js/config.js）。', 'warn');
+    return;
+  }
+  if (typeof window.emailjs === 'undefined') {
+    banner('#adminOpBanner', 'EmailJS 程式庫尚未載入，請確認網路連線後重新整理頁面。', 'error');
+    return;
+  }
+
+  const targets = await reminderTargets(a);
+  if (!targets.length) {
+    banner('#adminOpBanner',
+      a.targetClass ? `班級「${a.targetClass}」目前沒有已核准的學生。` : '目前沒有已核准的學生。', 'warn');
+    return;
+  }
+
+  banner('#adminOpBanner', `正在寄送給 ${targets.length} 位學生…`, 'info');
+  window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  let ok = 0, fail = 0;
+  for (const s of targets) {
+    try {
+      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: s.email, to_name: s.name || s.email,
+        subject: a.title || '', message: a.body || ''
+      });
+      ok++;
+    } catch { fail++; }
+    // 免費方案有寄送頻率限制，逐封間隔一下避免被擋
+    await new Promise(r => setTimeout(r, 350));
+  }
+
+  await markAnnouncementReminderSent(a.id);
+  banner('#adminOpBanner',
+    `Email 提醒已處理完成：成功 ${ok} 封${fail ? `，失敗 ${fail} 封` : ''}。`,
+    fail ? 'warn' : 'success');
+  await refreshAnnouncements();
+}
+
+function fmtAnnPeriod(a) {
+  if (!a.startAt && !a.endAt) return '即時生效・不過期';
+  const from = a.startAt ? fmtDateTime(a.startAt).split(' ')[0] : '即時';
+  const to = a.endAt ? fmtDateTime(a.endAt).split(' ')[0] : '不過期';
+  return `${from} ～ ${to}`;
+}
+
 async function refreshAnnouncements() {
   const tbody = $('#annTbody');
-  tbody.replaceChildren(emptyRow(3, '讀取中…'));
+  tbody.replaceChildren(emptyRow(4, '讀取中…'));
   const rows = await listAnnouncements(50);
-  if (!rows.length) { tbody.replaceChildren(emptyRow(3, '尚無公告。')); return; }
+  if (!rows.length) { tbody.replaceChildren(emptyRow(4, '尚無公告。')); return; }
 
   tbody.replaceChildren(...rows.map(a => el('tr', {}, [
     el('td', {}, [
       el('div', { style: 'font-weight:600', text: a.title || '' }),
-      el('div', { style: 'font-size:12.5px;color:var(--muted)', text: a.body || '' })
+      el('div', { style: 'font-size:12.5px;color:var(--muted)', text: a.body || '' }),
+      el('div', { style: 'font-size:11.5px;color:var(--faint);margin-top:2px', text: fmtDateTime(a.publishedAt) })
     ]),
-    el('td', { style: 'font-size:12.5px;white-space:nowrap', text: fmtDateTime(a.publishedAt) }),
+    el('td', { style: 'font-size:12.5px;white-space:nowrap' }, [
+      el('div', { text: a.targetClass ? `班級：${a.targetClass}` : '全部班級' }),
+      el('div', { style: 'color:var(--faint);margin-top:2px', text: fmtAnnPeriod(a) })
+    ]),
+    el('td', {}, [
+      a.reminderSentAt
+        ? el('span', { class: 'state-badge approved', text: `已寄送 ${fmtDateTime(a.reminderSentAt)}` })
+        : el('button', {
+            class: 'btn btn-ghost btn-sm btn-rect', type: 'button',
+            onclick: () => guard(() => sendAnnouncementReminder(a))
+          }, '寄送提醒')
+    ]),
     el('td', {}, [el('button', {
       class: 'btn btn-danger btn-sm btn-rect', type: 'button',
       onclick: () => confirmThen(`刪除公告「${a.title}」？`, () => guard(async () => {
@@ -654,6 +934,26 @@ async function refreshAnnouncements() {
       }))
     }, '刪除')])
   ])));
+}
+
+/* ==========================================================================
+   外觀 — 全站預設
+   ========================================================================== */
+
+async function refreshSiteDefault() {
+  const box = $('#siteDefaultInfo');
+  box.innerHTML = '<p><span class="dot"></span>讀取中…</p>';
+  const settings = await getSiteSettings();
+  if (!settings) {
+    box.innerHTML = `<p><span class="dot wait"></span>尚未設定過，目前訪客看到的是程式內建預設值。</p>`;
+    return;
+  }
+  const themeName  = THEMES.find(t => t.id === settings.theme)?.name || settings.theme || '（未知）';
+  const layoutName = LAYOUTS.find(l => l.id === settings.layout)?.name || settings.layout || '（未知）';
+  box.innerHTML = `
+    <p><span class="dot ok"></span>版型：<code>${esc(layoutName)}</code></p>
+    <p><span class="dot ok"></span>配色：<code>${esc(themeName)}</code></p>
+    <p style="margin-top:6px;color:var(--faint);font-size:12.5px">${esc(fmtDateTime(settings.updatedAt))} 更新</p>`;
 }
 
 /* ==========================================================================
@@ -707,6 +1007,7 @@ function mount() {
   initDropzone();
   initUploadSettings();
   initMaterialsDrag();
+  initCoursesDrag();
 
   // 講義（手動填寫）
   $('#btnAddMaterial').addEventListener('click', () => guard(async () => {
@@ -741,20 +1042,58 @@ function mount() {
   // 學生
   $('#studentFilter').addEventListener('change', () => guard(refreshStudents));
   $('#btnReloadStudents').addEventListener('click', () => guard(refreshStudents));
+  initStudentsDrag();
+
+  // 課程存取權限彈窗
+  $('#accessAll').addEventListener('change', e => setAccessListDisabled(e.target.checked));
+  $('#btnSaveAccess').addEventListener('click', () => guard(async () => {
+    if (!accessStudent) return;
+    const noRestriction = $('#accessAll').checked;
+    const courseIds = noRestriction
+      ? []
+      : $$('.access-course-cb').filter(cb => cb.checked).map(cb => cb.value);
+    await setStudentAccess(accessStudent.id, courseIds);
+    banner('#accessBanner', '已儲存。', 'success');
+    await refreshStudents();
+    setTimeout(() => closeModal('modalAccess'), 500);
+  }, '#accessBanner'));
 
   // 公告
+  $('#emailjsHint').textContent = emailjsConfigured()
+    ? '會寄給所有已核准、且符合班級條件的學生。'
+    : '尚未設定 EmailJS，勾選也不會真的寄出，請先至「系統」分頁完成設定。';
   $('#btnPublishAnn').addEventListener('click', () => guard(async () => {
     const title = $('#annTitle').value.trim();
     if (!title) { banner('#adminOpBanner', '請輸入公告標題。', 'error'); return; }
-    await publishAnnouncement({ title, body: $('#annBody').value });
-    $('#annTitle').value = ''; $('#annBody').value = '';
+    const startAt = $('#annStart').value || null;
+    const endAt = $('#annEnd').value || null;
+    const targetClass = $('#annTargetClass').value.trim();
+    const sendEmail = $('#annSendEmail').checked;
+
+    const id = await publishAnnouncement({ title, body: $('#annBody').value, targetClass, startAt, endAt });
+    $('#annTitle').value = ''; $('#annBody').value = ''; $('#annTargetClass').value = '';
+    $('#annStart').value = ''; $('#annEnd').value = ''; $('#annSendEmail').checked = false;
     banner('#adminOpBanner', '公告已發布。', 'success');
     await refreshAnnouncements(); await refreshDash();
+
+    if (sendEmail) {
+      const rows = await listAnnouncements(50);
+      const a = rows.find(r => r.id === id) || { id, title, body: $('#annBody').value, targetClass };
+      await sendAnnouncementReminder(a);
+    }
   }));
 
   // 外觀
   renderLayoutPicker($('#layoutPicker'));
   renderThemePicker($('#themePicker'));
+  refreshSiteDefault();
+  $('#btnSetSiteDefault').addEventListener('click', () => guard(async () => {
+    const theme = currentTheme();
+    const layout = currentLayout();
+    await saveSiteSettings({ theme, layout });
+    banner('#siteDefaultBanner', '已套用到全站，所有訪客下次載入即可看到。', 'success');
+    await refreshSiteDefault();
+  }, '#siteDefaultBanner'));
 
   // 工具列
   $('#btnRefreshAll').addEventListener('click', refreshAll);
@@ -776,6 +1115,11 @@ function mount() {
       密碼可在下方「修改登入密碼」直接更新，本站僅在瀏覽器與 Firebase 之間傳遞，不會保存任何密碼。
     </p>`;
   $('#matRoot').textContent = MATERIALS_ROOT;
+
+  $('#emailjsInfo').innerHTML = emailjsConfigured()
+    ? `<p><span class="dot ok"></span>已設定，公告的「寄送提醒」按鈕可以使用。</p>
+       <p><span class="dot ok"></span>Service ID：<code>${esc(EMAILJS_SERVICE_ID)}</code></p>`
+    : `<p><span class="dot wait"></span>尚未設定，公告的「寄送提醒」目前會顯示提示但不會真的寄出。</p>`;
 
   // 修改密碼
   $('#pwForm').addEventListener('submit', e => {

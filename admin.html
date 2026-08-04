@@ -164,8 +164,12 @@
 
         <div class="panel">
           <h4>現有課程</h4>
-          <table class="admin-table">
-            <thead><tr><th>課程</th><th>學期</th><th>對象</th><th>操作</th></tr></thead>
+          <p class="hintline">
+            預設依開課學期排序；拖曳最左側 <span aria-hidden="true">⠿</span> 或用上／下箭頭可自訂順序，
+            一旦手動調整過，課程頁與這裡都會照你排的順序顯示。
+          </p>
+          <table class="admin-table mat-table">
+            <thead><tr><th class="col-drag"></th><th>課程</th><th>學期</th><th>對象</th><th>操作</th></tr></thead>
             <tbody id="adminCourseTbody"></tbody>
           </table>
         </div>
@@ -181,6 +185,7 @@
             <select id="studentFilter" class="inline-select">
               <option value="pending">待審核</option>
               <option value="approved">已核准</option>
+              <option value="suspended">已暫停</option>
               <option value="rejected">已駁回</option>
               <option value="all">全部</option>
             </select>
@@ -188,12 +193,13 @@
           </span>
         </h4>
         <p class="hintline">
-          核准後該學生即可讀取所有課程的講義與作業。這項判斷由 Firestore Security Rules
-          在伺服器端強制執行，學生無法透過修改瀏覽器內容繞過。
+          核准後該學生即可讀取所有課程的講義與作業（除非在「可看課程」限定範圍）。這項判斷由 Firestore
+          Security Rules 在伺服器端強制執行，學生無法透過修改瀏覽器內容繞過。
+          拖曳最左側 <span aria-hidden="true">⠿</span> 或用上／下箭頭可自訂顯示順序。
           <span id="studentCount" style="float:right"></span>
         </p>
-        <table class="admin-table">
-          <thead><tr><th>申請人</th><th>學號</th><th>申請時間</th><th>狀態</th><th>操作</th></tr></thead>
+        <table class="admin-table mat-table">
+          <thead><tr><th class="col-drag"></th><th>申請人</th><th>申請時間</th><th>狀態</th><th>可看課程</th><th>操作</th></tr></thead>
           <tbody id="studentTbody"></tbody>
         </table>
       </div>
@@ -206,12 +212,30 @@
           <h4>發布公告</h4>
           <div class="form-group"><label for="annTitle">標題</label><input type="text" id="annTitle" placeholder="114-1 學期講義已更新"></div>
           <div class="form-group"><label for="annBody">內容</label><textarea id="annBody" rows="5"></textarea></div>
+          <div class="form-group">
+            <label for="annTargetClass">指定班級</label>
+            <input type="text" id="annTargetClass" placeholder="留空＝全部班級都看得到">
+            <div class="help">需與學生註冊時填寫的班級完全相符，才會顯示給該班級、並收到提醒信。</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="annStart">開始日期</label><input type="date" id="annStart"></div>
+            <div class="form-group"><label for="annEnd">結束日期</label><input type="date" id="annEnd"></div>
+          </div>
+          <div class="help" style="margin-bottom:10px">兩者都留空＝立即生效、永久顯示；只填結束日期＝顯示到該日為止。</div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer">
+              <input type="checkbox" id="annSendEmail"> 發布後立即寄送 Email 提醒
+            </label>
+            <div class="help" id="emailjsHint">
+              會寄給所有已核准、且符合班級條件的學生。透過 EmailJS 寄送，需先完成一次性設定（見下方「系統」分頁或 FIREBASE_SETUP.md）。
+            </div>
+          </div>
           <button class="btn btn-primary btn-rect" type="button" id="btnPublishAnn">發布</button>
         </div>
         <div class="panel">
           <h4>已發布</h4>
           <table class="admin-table">
-            <thead><tr><th>公告</th><th>時間</th><th>操作</th></tr></thead>
+            <thead><tr><th>公告</th><th>範圍／期間</th><th>提醒</th><th>操作</th></tr></thead>
             <tbody id="annTbody"></tbody>
           </table>
         </div>
@@ -221,11 +245,18 @@
     <!-- 外觀 -->
     <section class="admin-view" id="viewLook" hidden>
       <div class="panel">
+        <h4>全站預設</h4>
+        <p class="hintline">
+          這裡決定「所有訪客」看到的版型與配色，存在資料庫、即時對全站生效，不需要改程式碼或 push。
+        </p>
+        <div class="kv" id="siteDefaultInfo"></div>
+        <button type="button" class="btn btn-primary btn-sm" id="btnSetSiteDefault">將目前選擇設為全站預設</button>
+        <span class="banner" id="siteDefaultBanner"></span>
+      </div>
+      <div class="panel">
         <h4>版型樣板</h4>
         <p class="hintline">
-          切換首頁的版面配置。這裡的選擇儲存在你自己的瀏覽器，只影響這台裝置。
-          若要更換所有訪客看到的預設版型，請修改 <code>assets/js/config.js</code> 的
-          <code>DEFAULT_LAYOUT</code> 與 <code>DEFAULT_THEME</code> 後 push 到 GitHub。
+          先在下面選擇、預覽（只有這台裝置看得到這個預覽），確認滿意後按上方按鈕套用到全站。
         </p>
         <div class="looks-grid wide" id="layoutPicker"></div>
       </div>
@@ -240,6 +271,18 @@
       <div class="panel">
         <h4>連線狀態</h4>
         <div class="kv" id="sysInfo"></div>
+      </div>
+
+      <div class="panel">
+        <h4>Email 提醒（EmailJS）</h4>
+        <div class="kv" id="emailjsInfo"></div>
+        <p class="hintline" style="margin-top:10px">
+          公告的「Email 提醒」功能透過 <a href="https://www.emailjs.com" target="_blank" rel="noopener">EmailJS</a>
+          寄送，完全在瀏覽器端運作、不需要後端伺服器，免費方案為每月 200 封。
+          設定方式：註冊帳號 → 連接你的信箱 → 建立一組 Email Template → 把 Service ID／Template ID／Public Key
+          填入 <code>assets/js/config.js</code> 的 <code>EMAILJS_SERVICE_ID</code>／<code>EMAILJS_TEMPLATE_ID</code>／
+          <code>EMAILJS_PUBLIC_KEY</code>，push 到 GitHub 後即可使用，詳細步驟見 <code>FIREBASE_SETUP.md</code>。
+        </p>
       </div>
 
       <div class="panel">
@@ -414,6 +457,33 @@
     </details>
   </div>
 </div>
+
+<div class="modal-overlay" id="modalAccess" aria-labelledby="accessModalTitle">
+  <div class="modal-card narrow">
+    <button class="modal-close" type="button" data-close-modal aria-label="關閉">&times;</button>
+    <h2 class="modal-title" id="accessModalTitle">課程存取權限</h2>
+    <p class="modal-sub" id="accessModalSub"></p>
+
+    <div id="accessBanner" class="banner"></div>
+
+    <div class="form-group">
+      <label style="display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer">
+        <input type="checkbox" id="accessAll"> 不限制，可看全部課程
+      </label>
+      <div class="help">取消勾選後，只有下方勾選的課程講義與作業對這位學生開放。</div>
+    </div>
+
+    <div id="accessCourseList" style="display:flex;flex-direction:column;gap:8px;margin-top:12px"></div>
+
+    <div style="display:flex;gap:8px;margin-top:20px">
+      <button class="btn btn-primary btn-rect" type="button" id="btnSaveAccess">儲存</button>
+      <button class="btn btn-quiet btn-rect" type="button" data-close-modal>取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- EmailJS：純前端寄信服務，公告的「Email 提醒」功能靠這個送出，未設定時只是靜靜待命 -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <script type="module">
   import { initUI } from './assets/js/ui.js';

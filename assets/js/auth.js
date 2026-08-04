@@ -29,6 +29,7 @@ const STATUS_TEXT = {
   approved:  { cls: 'approved', label: '已核准・可存取講義' },
   pending:   { cls: 'pending',  label: '審核中' },
   rejected:  { cls: 'rejected', label: '申請未通過' },
+  suspended: { cls: 'rejected', label: '存取已暫停' },
   unverified:{ cls: 'pending',  label: '待完成 Email 驗證' },
   guest:     { cls: 'guest',    label: '訪客・僅顯示公開課程大綱' }
 };
@@ -83,6 +84,7 @@ function readForm() {
     password:  $('#stPassword').value,
     name:      $('#stName')?.value.trim() || '',
     studentId: $('#stStudentId')?.value.trim() || '',
+    className: $('#stClass')?.value.trim() || '',
     note:      $('#stNote')?.value.trim() || ''
   };
 }
@@ -187,6 +189,9 @@ function paintModalState() {
   } else if (identity.status === 'rejected') {
     rows.push(el('p', { class: 'kv', style: 'margin-top:10px',
       text: '你的申請未通過。若有疑問請直接來信與任課教師聯繫。' }));
+  } else if (identity.status === 'suspended') {
+    rows.push(el('p', { class: 'kv', style: 'margin-top:10px',
+      text: '你的存取權限已被任課教師暫停，講義與作業暫時無法讀取。若有疑問請直接來信與任課教師聯繫。' }));
   } else if (identity.role === 'student' || identity.role === 'admin') {
     rows.push(el('p', { class: 'kv', style: 'margin-top:10px',
       text: '你已可存取全部課程講義與作業資訊。' }));

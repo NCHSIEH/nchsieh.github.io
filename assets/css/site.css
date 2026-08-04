@@ -4,7 +4,7 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. 設計 Token — 4 款精選主題
+   1. 設計 Token — 6 款主題
    所有顏色一律走 token，元件內不得出現硬寫死色碼
    -------------------------------------------------------------------------- */
 :root,
@@ -122,6 +122,76 @@ body.theme-clinic {
   --hero-to:      #063730;
   --hero-ink:     #e6f2ef;
   --hero-dim:     #a8c8c1;
+
+  color-scheme: light;
+}
+
+body.theme-terracotta {
+  /* 陶土橙 — 溫暖沉穩，帶一點手作質感 */
+  --brand:        #9a4a2c;
+  --brand-deep:   #78381f;
+  --brand-tint:   rgba(154, 74, 44, .08);
+  --on-brand:     #ffffff;
+
+  --accent:       #3f6d5c;
+  --accent-deep:  #2f5346;
+  --accent-tint:  rgba(63, 109, 92, .12);
+
+  --ink:          #2b211c;
+  --muted:        #5c4f47;
+  --faint:        #83766d;
+
+  --line:         #e8ded3;
+  --line-strong:  #d0c0ac;
+
+  --surface:      #ffffff;
+  --surface-2:    #f8f2ea;
+  --card:         #ffffff;
+
+  --ok-bg:        #dcfce7;  --ok-fg:     #14532d;
+  --warn-bg:      #fef3c7;  --warn-fg:   #78350f;
+  --danger-bg:    #fee2e2;  --danger-fg: #991b1b;
+  --info-bg:      #e0f2fe;  --info-fg:   #075985;
+
+  --hero-from:    #9a4a2c;
+  --hero-to:      #6b331c;
+  --hero-ink:     #f7ece4;
+  --hero-dim:     #dcbba9;
+
+  color-scheme: light;
+}
+
+body.theme-indigo {
+  /* 靛藍蒼穹 — 現代、略帶科技感，與暖色系互補 */
+  --brand:        #3730a3;
+  --brand-deep:   #282270;
+  --brand-tint:   rgba(55, 48, 163, .08);
+  --on-brand:     #ffffff;
+
+  --accent:       #d97706;
+  --accent-deep:  #b45f04;
+  --accent-tint:  rgba(217, 119, 6, .12);
+
+  --ink:          #1e1b3a;
+  --muted:        #4c4870;
+  --faint:        #767295;
+
+  --line:         #e2e0f0;
+  --line-strong:  #c5c1e3;
+
+  --surface:      #ffffff;
+  --surface-2:    #f4f3fb;
+  --card:         #ffffff;
+
+  --ok-bg:        #dcfce7;  --ok-fg:     #14532d;
+  --warn-bg:      #fef3c7;  --warn-fg:   #78350f;
+  --danger-bg:    #fee2e2;  --danger-fg: #991b1b;
+  --info-bg:      #e0f2fe;  --info-fg:   #075985;
+
+  --hero-from:    #3730a3;
+  --hero-to:      #241e70;
+  --hero-ink:     #ecebf9;
+  --hero-dim:     #bab5e0;
 
   color-scheme: light;
 }
@@ -313,11 +383,12 @@ body.lang-en [data-lang="en"] { display: revert; }
 .btn-rect  { border-radius: 9px; }
 
 /* --------------------------------------------------------------------------
-   5. 版型引擎 — 同一份 HTML，四種版面
+   5. 版型引擎 — 同一份 HTML，五種版面
       layout-table     緊湊表格（預設）
       layout-sidebar   側邊欄雙欄
       layout-timeline  時間軸
       layout-cover     雜誌式封面
+      layout-minimal   極簡置中
    -------------------------------------------------------------------------- */
 
 .page { max-width: none; }
@@ -459,6 +530,11 @@ section { padding: 54px 0 8px; scroll-margin-top: 84px; }
 .layout-sidebar main { max-width: 860px; margin: 0; padding: 0 40px 40px; }
 .layout-sidebar section:first-child { padding-top: 44px; }
 
+/* 側邊欄版型：學歷已透過個人資訊欄的 Ph.D. 標示帶出，這裡不重複顯示，
+   讓研究專長獨占版面寬度 */
+.layout-sidebar .edu-block { display: none; }
+.layout-sidebar #profileCols { grid-template-columns: 1fr; }
+
 /* 側邊欄捲軸配色 */
 .layout-sidebar .profile-panel::-webkit-scrollbar { width: 7px; }
 .layout-sidebar .profile-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 4px; }
@@ -560,6 +636,29 @@ section { padding: 54px 0 8px; scroll-margin-top: 84px; }
 .layout-cover #profile .skh .ln { display: none; }
 
 
+/* ========== 版型 E：極簡置中 ========== */
+
+.layout-minimal .profile-panel {
+  background: var(--brand); color: var(--hero-ink);
+  padding: 76px 28px 56px; text-align: center;
+}
+.layout-minimal .panel-inner { max-width: 680px; }
+.layout-minimal .portrait-wrap { float: none; margin: 0 auto 26px; width: 148px; }
+.layout-minimal .portrait, .layout-minimal .portrait-fallback {
+  width: 148px; height: 148px; margin: 0 auto; border-radius: 50%; font-size: 54px;
+}
+.layout-minimal .eyebrow, .layout-minimal .hname,
+.layout-minimal .hrole, .layout-minimal .hbio { text-align: center; }
+.layout-minimal .hbio { margin-left: auto; margin-right: auto; }
+.layout-minimal .tags, .layout-minimal .hero-actions,
+.layout-minimal .scholar-links, .layout-minimal .hcontact {
+  justify-content: center; text-align: left;
+}
+.layout-minimal .hcontact { border-top: none; }
+.layout-minimal main { max-width: 760px; }
+.layout-minimal #profile .cols { grid-template-columns: 1fr; gap: 28px; }
+
+
 /* ========== 版面／配色切換器 ========== */
 
 .looks { position: relative; }
@@ -605,6 +704,9 @@ section { padding: 54px 0 8px; scroll-margin-top: 84px; }
 .look-thumb.t-cover { flex-direction: column; }
 .look-thumb.t-cover i:nth-child(1) { height: 22px; background: var(--brand); }
 .look-thumb.t-cover i:nth-child(n+2) { height: 5px; }
+.look-thumb.t-minimal { flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+.look-thumb.t-minimal i:nth-child(1) { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); }
+.look-thumb.t-minimal i:nth-child(n+2) { width: 70%; height: 3px; }
 
 .theme-card {
   border: 2px solid var(--line); border-radius: 10px; padding: 8px;
@@ -620,6 +722,8 @@ section { padding: 54px 0 8px; scroll-margin-top: 84px; }
 .theme-swatch i:nth-child(2) { flex: 1; }
 .theme-swatch i:nth-child(3) { flex: 1; }
 .theme-name { font-size: 12.5px; font-weight: 600; }
+
+/* --------------------------------------------------------------------------
    7. 經歷表格（含行動版卡片化）
    -------------------------------------------------------------------------- */
 .exp-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
@@ -902,6 +1006,8 @@ main.courses { padding-top: 34px; padding-bottom: 20px; }
 .admin-table tr:last-child td { border-bottom: 0; }
 .admin-table .actions { display: flex; gap: 6px; flex-wrap: wrap; }
 .admin-table .muted-row td { color: var(--faint); text-align: center; padding: 22px 10px; }
+
+#accessCourseList.is-disabled { opacity: .45; pointer-events: none; }
 
 .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
 .theme-card {

@@ -16,25 +16,28 @@ export const firebaseConfig = {
   appId:             "1:928315004665:web:f58b30b237f836d7c87428"
 };
 
-/** 4 款精選主題 */
+/** 6 款主題 */
 export const THEMES = [
-  { id: 'theme-academy', name: '學院藍',   note: '預設・沉穩學術', sw: ['#1f3a5f', '#9c7538', '#f7f4ed'] },
-  { id: 'theme-oxford',  name: '牛津墨',   note: '高對比・銳利',   sw: ['#10192b', '#b4530f', '#f6f7f9'] },
-  { id: 'theme-clinic',  name: '智慧醫療', note: '綠松・領域呼應', sw: ['#0b4f45', '#0e7490', '#f2f8f6'] },
-  { id: 'theme-night',   name: '深夜',     note: '深色模式',       sw: ['#0d1420', '#7aa7d9', '#d4a960'] }
+  { id: 'theme-academy',    name: '學院藍',     note: '預設・沉穩學術',   sw: ['#1f3a5f', '#9c7538', '#f7f4ed'] },
+  { id: 'theme-oxford',     name: '牛津墨',     note: '高對比・銳利',     sw: ['#10192b', '#b4530f', '#f6f7f9'] },
+  { id: 'theme-clinic',     name: '智慧醫療',   note: '綠松・領域呼應',   sw: ['#0b4f45', '#0e7490', '#f2f8f6'] },
+  { id: 'theme-terracotta', name: '陶土橙',     note: '溫暖・手作質感',   sw: ['#9a4a2c', '#3f6d5c', '#f8f2ea'] },
+  { id: 'theme-indigo',     name: '靛藍蒼穹',   note: '現代・科技感',     sw: ['#3730a3', '#d97706', '#f4f3fb'] },
+  { id: 'theme-night',      name: '深夜',       note: '深色模式',         sw: ['#0d1420', '#7aa7d9', '#d4a960'] }
 ];
 
 export const DEFAULT_THEME = 'theme-academy';
 
 /**
- * 4 款版型樣板。同一份 HTML，由 CSS 呈現四種版面。
+ * 5 款版型樣板。同一份 HTML，由 CSS 呈現五種版面。
  * thumb / bars 只用來畫切換器上的骨架縮圖。
  */
 export const LAYOUTS = [
-  { id: 'layout-table',    name: '緊湊表格', note: '資訊密度最高，接近正式履歷表', thumb: 't-table',    bars: 5 },
-  { id: 'layout-sidebar',  name: '側邊欄',   note: '左側固定個人資訊，右側捲動內容', thumb: 't-sidebar', bars: 2 },
+  { id: 'layout-table',    name: '緊湊表格', note: '資訊密度最高，接近正式履歷表',   thumb: 't-table',    bars: 5 },
+  { id: 'layout-sidebar',  name: '側邊欄',   note: '左側固定個人資訊，右側捲動內容', thumb: 't-sidebar',  bars: 2 },
   { id: 'layout-timeline', name: '時間軸',   note: '職涯以垂直時間軸串連',           thumb: 't-timeline', bars: 5 },
-  { id: 'layout-cover',    name: '雜誌封面', note: '大尺度封面，視覺最強',           thumb: 't-cover',    bars: 4 }
+  { id: 'layout-cover',    name: '雜誌封面', note: '大尺度封面，視覺最強',           thumb: 't-cover',    bars: 4 },
+  { id: 'layout-minimal',  name: '極簡置中', note: '單欄置中，留白最多、最安靜',     thumb: 't-minimal',  bars: 3 }
 ];
 
 /** 想更換全站預設版型，改這裡 */
@@ -84,3 +87,17 @@ export const GITHUB_REPO = 'NCHSIEH/nchsieh.github.io';
 export const ADMIN_EMAILS = [
   'nchsieh@gmail.com'
 ];
+
+/**
+ * EmailJS 設定，用於公告的「Email 提醒」功能。
+ * 三個欄位都留空時，後台會停用寄送按鈕並提示尚未設定，不影響其他功能。
+ *
+ * 取得方式（免費）：
+ *   1. 到 https://www.emailjs.com 註冊帳號、連接你的信箱（Gmail 等）→ 取得 Service ID
+ *   2. 建立一個 Email Template（可用 to_email / to_name / subject / message 作為變數）→ 取得 Template ID
+ *   3. Account → General → 取得 Public Key
+ * 詳細步驟見 FIREBASE_SETUP.md。
+ */
+export const EMAILJS_SERVICE_ID  = '';
+export const EMAILJS_TEMPLATE_ID = '';
+export const EMAILJS_PUBLIC_KEY  = '';

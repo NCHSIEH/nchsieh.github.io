@@ -328,13 +328,38 @@ export function dueState(value) {
   return { cls: 'normal', label: `截止 ${stamp}` };
 }
 
+/* ---------- 全站版型／配色設定（非阻塞） ----------
+   公開頁已移除切換器，一律套用管理者在後台設定的全站預設。
+   刻意用動態 import 讀 data.js（才會牽動 Firebase），
+   這樣就算 Firebase 完全載入失敗，也絕不會擋住頁面其餘部分的渲染或互動——
+   失敗就靜默維持目前（config.js 預設或上次快取）的版型與配色。 */
+
+export function applySiteSettingsAsync() {
+  import('./data.js')
+    .then(({ getSiteSettings }) => getSiteSettings())
+    .then(settings => {
+      if (!settings) return;
+      if (settings.theme)  applyTheme(settings.theme);
+      if (settings.layout) applyLayout(settings.layout);
+    })
+    .catch(() => { /* 靜默失敗 */ });
+}
+
 /* ---------- 啟動 ---------- */
 
-export function initUI() {
+/**
+ * @param {{ applySiteDefault?: boolean }} opts
+ *   applySiteDefault: 公開頁（index.html / courses.html）傳 true，
+ *   會在初始渲染完成後非同步套用全站預設版型／配色。
+ *   admin.html 不傳，後台的版型／配色卡片是「這台裝置的預覽」，
+ *   不應該被全站設定悄悄蓋掉。
+ */
+export function initUI({ applySiteDefault = false } = {}) {
   applyTheme(currentTheme());
   applyLayout(currentLayout());
   applyLang(currentLang());
   initNav();
   initModals();
   initLooks();
+  if (applySiteDefault) applySiteSettingsAsync();
 }
