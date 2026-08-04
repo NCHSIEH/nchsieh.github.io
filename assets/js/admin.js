@@ -19,6 +19,11 @@ import {
   listAnnouncements, publishAnnouncement, deleteAnnouncement,
   exportBackup
 } from './data.js';
+import {
+  uploadFile, isPowerPoint, humanSize, extOf, safeName,
+  getToken, setToken, getRepo, setRepo, hasToken, verifyAccess,
+  PPTX_GUIDE, SIZE_LIMIT
+} from './upload.js';
 
 let me = null;              // { user, role }
 let mounted = false;
@@ -281,6 +286,11 @@ async function openMaterials(course) {
   editorCourse = course;
   $('#matModalTitle').textContent = `${course.code || ''}　${course.titleZh || ''}`;
   banner('#matBanner', '');
+  $('#uploadList').replaceChildren();
+  if (!hasToken()) {
+    banner('#matBanner',
+      '首次上傳需先完成一次性設定：點右上角「上傳設定」貼入 GitHub 存取金鑰。', 'info');
+  }
   openModal('modalMaterials');
   await guard(refreshMaterials, '#matBanner');
 }
@@ -317,6 +327,161 @@ async function refreshMaterials() {
         }, '移除')])
       ]))
     : [emptyRow(3, '尚未設定作業。')]));
+}
+
+/* ==========================================================================
+   拖拉上傳
+   ========================================================================== */
+
+/** PPTX 擋下時，在上傳清單裡長出一張說明卡，而不是丟一句錯誤了事 */
+function pptxCard(file) {
+  return el('div', { class: 'up-item is-block' }, [
+    el('div', { class: 'up-head' }, [
+      el('span', { class: 'up-name', text: file.name }),
+      el('span', { class: 'up-tag warn', text: '需先轉檔' })
+    ]),
+    el('div', { class: 'up-guide' }, [
+      el('strong', { text: PPTX_GUIDE.title }),
+      el('p', { text: PPTX_GUIDE.why }),
+      el('ol', {}, PPTX_GUIDE.steps.map(s => el('li', { text: s }))),
+      el('p', { class: 'up-guide-alt', text: PPTX_GUIDE.mac }),
+      el('p', { class: 'up-guide-alt', text: PPTX_GUIDE.gslides })
+    ])
+  ]);
+}
+
+function uploadRow(file) {
+  const bar = el('i');
+  const msg = el('span', { class: 'up-msg', text: '等待中…' });
+  const row = el('div', { class: 'up-item' }, [
+    el('div', { class: 'up-head' }, [
+      el('span', { class: 'up-name', text: file.name }),
+      el('span', { class: 'up-size', text: humanSize(file.size) })
+    ]),
+    el('div', { class: 'up-bar' }, [bar]),
+    msg
+  ]);
+  return {
+    row,
+    progress(pct, text) { bar.style.width = `${pct}%`; msg.textContent = text; },
+    done(text) { row.classList.add('is-ok'); bar.style.width = '100%'; msg.textContent = text; },
+    fail(text) { row.classList.add('is-bad'); bar.style.width = '100%'; msg.textContent = text; }
+  };
+}
+
+async function handleFiles(files) {
+  const list = $('#uploadList');
+  const unit = $('#mfUnit').value.trim();
+
+  if (!hasToken()) {
+    banner('#matBanner',
+      '尚未設定 GitHub 存取金鑰，無法上傳。請點右上角「上傳設定」完成一次性設定。', 'warn');
+    openModal('modalUpload');
+    return;
+  }
+
+  // 檔案放在「課程代碼/單元」底下，路徑才好辨認
+  const subdir = [
+    safeName(editorCourse.code || editorCourse.id),
+    unit ? safeName(unit) : ''
+  ].filter(Boolean).join('/');
+
+  for (const file of files) {
+    if (isPowerPoint(file.name)) {
+      list.append(pptxCard(file));
+      continue;
+    }
+
+    const ui = uploadRow(file);
+    list.append(ui.row);
+
+    try {
+      const result = await uploadFile(file, subdir, ui.progress);
+      // 上傳成功後才寫入 Firestore，避免資料庫出現指向不存在檔案的紀錄
+      await saveMaterial(editorCourse.id, null, {
+        unit: unit || '課程講義',
+        name: result.name,
+        path: result.path,
+        size: result.size,
+        order: Number($('#mfOrder')?.value) || 0
+      });
+      ui.done(result.replaced ? '已覆寫既有檔案並更新紀錄' : '上傳完成');
+      await refreshMaterials();
+    } catch (err) {
+      ui.fail(err.message === 'PPTX_NEEDS_CONVERT' ? '請先轉成 PDF' : err.message);
+    }
+  }
+
+  $('#fileInput').value = '';
+}
+
+function initDropzone() {
+  const dz = $('#dropzone');
+  const input = $('#fileInput');
+  if (!dz || !input) return;
+
+  dz.addEventListener('click', () => input.click());
+  dz.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+  });
+  input.addEventListener('change', () => {
+    if (input.files.length) handleFiles([...input.files]);
+  });
+
+  ['dragenter', 'dragover'].forEach(ev =>
+    dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('is-over'); }));
+  ['dragleave', 'drop'].forEach(ev =>
+    dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('is-over'); }));
+
+  dz.addEventListener('drop', e => {
+    const files = [...(e.dataTransfer?.files || [])];
+    if (files.length) handleFiles(files);
+  });
+
+  // 避免拖到視窗其他地方時瀏覽器直接開啟檔案
+  ['dragover', 'drop'].forEach(ev =>
+    window.addEventListener(ev, e => { if (e.target !== dz && !dz.contains(e.target)) e.preventDefault(); }));
+}
+
+/* ---------- 上傳設定 ---------- */
+
+function initUploadSettings() {
+  $('#btnUploadSettings').addEventListener('click', () => {
+    $('#ghRepo').value = getRepo();
+    $('#ghToken').value = getToken();
+    banner('#upBanner', hasToken() ? '目前已設定金鑰。' : '尚未設定金鑰。', hasToken() ? 'success' : 'info');
+    openModal('modalUpload');
+  });
+
+  $('#btnSaveToken').addEventListener('click', async () => {
+    const repo = $('#ghRepo').value.trim();
+    const token = $('#ghToken').value.trim();
+    if (!repo.includes('/')) { banner('#upBanner', 'repo 格式應為「帳號/儲存庫」。', 'error'); return; }
+    if (!token) { banner('#upBanner', '請貼上存取金鑰。', 'error'); return; }
+
+    setRepo(repo); setToken(token);
+    banner('#upBanner', '測試連線中…', 'info');
+    try {
+      const info = await verifyAccess();
+      if (!info.canPush) {
+        banner('#upBanner',
+          `連上了 <code>${esc(info.fullName)}</code>，但這組金鑰沒有寫入權限。<br>` +
+          '請確認 Permissions 中的 <code>Contents</code> 設為 <strong>Read and write</strong>。', 'error');
+        return;
+      }
+      banner('#upBanner',
+        `連線成功：<code>${esc(info.fullName)}</code>（分支 <code>${esc(info.branch)}</code>）<br>現在可以拖拉上傳了。`,
+        'success');
+    } catch (err) {
+      banner('#upBanner', esc(err.message), 'error');
+    }
+  });
+
+  $('#btnClearToken').addEventListener('click', () => {
+    setToken('');
+    $('#ghToken').value = '';
+    banner('#upBanner', '金鑰已從這台裝置清除。', 'info');
+  });
 }
 
 /* ==========================================================================
@@ -455,7 +620,11 @@ function mount() {
     fillCourseForm(null); banner('#adminOpBanner', '');
   });
 
-  // 講義
+  // 上傳
+  initDropzone();
+  initUploadSettings();
+
+  // 講義（手動填寫）
   $('#btnAddMaterial').addEventListener('click', () => guard(async () => {
     const name = $('#mfName').value.trim();
     const path = $('#mfPath').value.trim();

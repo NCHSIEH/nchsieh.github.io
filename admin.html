@@ -269,19 +269,45 @@
     <div id="matBanner" class="banner"></div>
 
     <div class="panel">
-      <h4>加入講義</h4>
-      <div class="form-row">
-        <div class="form-group"><label for="mfUnit">單元名稱</label><input type="text" id="mfUnit" placeholder="單元一：CDSS 概論"></div>
-        <div class="form-group"><label for="mfOrder">排序</label><input type="number" id="mfOrder" value="0"></div>
-      </div>
-      <div class="form-group"><label for="mfName">顯示名稱</label><input type="text" id="mfName" placeholder="Lecture01_CDSS_Overview.pdf"></div>
+      <h4>
+        <span>上傳講義</span>
+        <button class="btn btn-quiet btn-sm btn-rect" type="button" id="btnUploadSettings">上傳設定</button>
+      </h4>
+
       <div class="form-group">
-        <label for="mfPath">檔案路徑</label>
-        <input type="text" id="mfPath" placeholder="HI7001/Unit1/Lecture01.pdf">
-        <div class="help">相對於 assets/courses/ 的路徑，或直接填完整 https 網址。</div>
+        <label for="mfUnit">單元名稱</label>
+        <input type="text" id="mfUnit" placeholder="單元一：CDSS 概論">
+        <div class="help">上傳的檔案會歸在這個單元底下。留空則歸入「課程講義」。</div>
       </div>
-      <div class="form-group"><label for="mfSize">檔案大小</label><input type="text" id="mfSize" placeholder="2.4 MB（選填）"></div>
-      <button class="btn btn-primary btn-rect" type="button" id="btnAddMaterial">加入講義</button>
+
+      <div class="dropzone" id="dropzone" tabindex="0" role="button"
+           aria-label="拖曳檔案至此或點擊選擇檔案">
+        <span class="dz-icon" aria-hidden="true">⬆</span>
+        <strong>把檔案拖到這裡</strong>
+        <span class="dz-sub">或點擊選擇檔案・可一次拖多個</span>
+        <span class="dz-hint">建議使用 PDF。單檔上限 25 MB。</span>
+        <input type="file" id="fileInput" multiple hidden
+               accept=".pdf,.docx,.doc,.xlsx,.csv,.zip,.py,.ipynb,.ppt,.pptx">
+      </div>
+
+      <div id="uploadList" class="upload-list"></div>
+
+      <details class="manual-add">
+        <summary>手動填寫（檔案已在 repo 裡，或要連到外部網址）</summary>
+        <div class="manual-body">
+          <div class="form-group"><label for="mfName">顯示名稱</label><input type="text" id="mfName" placeholder="Lecture01_CDSS_Overview.pdf"></div>
+          <div class="form-group">
+            <label for="mfPath">檔案路徑</label>
+            <input type="text" id="mfPath" placeholder="HI7001/Unit1/Lecture01.pdf">
+            <div class="help">相對於 assets/courses/ 的路徑，或直接填完整 https 網址。</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="mfSize">檔案大小</label><input type="text" id="mfSize" placeholder="2.4 MB（選填）"></div>
+            <div class="form-group"><label for="mfOrder">排序</label><input type="number" id="mfOrder" value="0"></div>
+          </div>
+          <button class="btn btn-primary btn-rect" type="button" id="btnAddMaterial">加入講義</button>
+        </div>
+      </details>
     </div>
 
     <div class="panel">
@@ -307,6 +333,55 @@
         <tbody id="asgTbody"></tbody>
       </table>
     </div>
+  </div>
+</div>
+
+<!-- 上傳設定：GitHub 存取金鑰 -->
+<div class="modal-overlay" id="modalUpload" aria-labelledby="upModalTitle">
+  <div class="modal-card narrow">
+    <button class="modal-close" type="button" data-close-modal aria-label="關閉">&times;</button>
+    <h2 class="modal-title" id="upModalTitle">上傳設定</h2>
+    <p class="modal-sub">設定一次即可，之後上傳都會自動使用。</p>
+
+    <div id="upBanner" class="banner"></div>
+
+    <div class="form-group">
+      <label for="ghRepo">GitHub 儲存庫</label>
+      <input type="text" id="ghRepo" placeholder="NCHSIEH/nchsieh.github.io">
+      <div class="help">格式為「帳號/儲存庫」，通常不需要修改。</div>
+    </div>
+
+    <div class="form-group">
+      <label for="ghToken">存取金鑰（Personal Access Token）</label>
+      <input type="password" id="ghToken" autocomplete="off" placeholder="github_pat_...">
+      <div class="help">
+        只會存在你這台電腦的瀏覽器裡，不會寫進程式碼，也不會被其他訪客看到。
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-rect" type="button" id="btnSaveToken">儲存並測試連線</button>
+      <button class="btn btn-quiet btn-rect" type="button" id="btnClearToken">清除金鑰</button>
+    </div>
+
+    <details style="margin-top:18px">
+      <summary style="cursor:pointer;font-size:13.5px;font-weight:600;color:var(--brand)">
+        怎麼產生金鑰？（第一次使用請展開）
+      </summary>
+      <ol class="kv" style="padding-left:20px;margin-top:10px;font-size:13px">
+        <li>開啟 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub 金鑰產生頁面 ↗</a>（需先登入 GitHub）</li>
+        <li><strong>Token name</strong> 隨意填，例如 <code>course-upload</code></li>
+        <li><strong>Expiration</strong> 建議選 90 天或 1 年，到期後重新產生即可</li>
+        <li><strong>Repository access</strong> 選 <code>Only select repositories</code>，然後只勾選 <code>nchsieh.github.io</code></li>
+        <li><strong>Permissions</strong> → <code>Repository permissions</code> → 找到 <code>Contents</code>，設為 <strong>Read and write</strong></li>
+        <li>其他權限全部保持 <code>No access</code></li>
+        <li>按 <strong>Generate token</strong>，複製那串 <code>github_pat_...</code> 貼回上面欄位</li>
+      </ol>
+      <p class="hintline" style="margin-top:10px">
+        這組金鑰只能修改這一個公開網站的內容，動不了你的其他儲存庫，也讀不到任何私人資料。
+        金鑰只會顯示一次，關掉頁面就看不到了，記得當下就複製。
+      </p>
+    </details>
   </div>
 </div>
 

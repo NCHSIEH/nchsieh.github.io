@@ -42,9 +42,12 @@
         <button type="button" class="seg" data-set-lang="zh" aria-pressed="true">中文</button>
         <button type="button" class="seg" data-set-lang="en" aria-pressed="false">EN</button>
       </div>
-      <button type="button" class="btn btn-primary" data-open-modal="modalStudent">
-        <span data-lang="zh">學生登入</span><span data-lang="en">Student Login</span>
+      <button type="button" class="btn btn-accent" data-open-modal="modalStudent">
+        <span data-lang="zh">學生登入 / 註冊</span><span data-lang="en">Student Login</span>
       </button>
+      <a href="admin.html" class="btn btn-ghost">
+        <span data-lang="zh">教師管理</span><span data-lang="en">Admin</span>
+      </a>
     </div>
   </div>
 </header>
@@ -58,6 +61,24 @@
       <span data-lang="en">Course outlines are public. Lecture materials and assignment details are available to enrolled students after email verification and instructor approval.</span>
     </p>
     <div class="access-strip" id="accessStrip"></div>
+
+    <div class="portal-cards">
+      <button type="button" class="portal-card" data-open-modal="modalStudent">
+        <span class="pc-role" data-lang="zh">修課學生</span><span class="pc-role" data-lang="en">Students</span>
+        <strong data-lang="zh">登入 / 申請帳號</strong><strong data-lang="en">Login / Apply</strong>
+        <span class="pc-desc" data-lang="zh">通過審核後可下載課程講義、查看作業截止時間</span>
+        <span class="pc-desc" data-lang="en">Download materials and view assignment deadlines after approval</span>
+        <span class="pc-go" aria-hidden="true">→</span>
+      </button>
+
+      <a href="admin.html" class="portal-card">
+        <span class="pc-role" data-lang="zh">任課教師</span><span class="pc-role" data-lang="en">Instructor</span>
+        <strong data-lang="zh">進入管理後台</strong><strong data-lang="en">Admin Console</strong>
+        <span class="pc-desc" data-lang="zh">建立課程、上傳講義、審核學生申請、發布公告</span>
+        <span class="pc-desc" data-lang="en">Manage courses, materials, student approvals and announcements</span>
+        <span class="pc-go" aria-hidden="true">→</span>
+      </a>
+    </div>
   </div>
 </div>
 

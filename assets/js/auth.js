@@ -205,6 +205,9 @@ function paintModalState() {
 async function syncIdentity(user = identity.user) {
   const info = await resolveIdentity(user);
   Object.assign(identity, { user, ...info, ready: true });
+  // 已有存取權時收起入口卡片，把版面讓給課程內容
+  document.body.classList.toggle('has-access',
+    identity.role === 'student' || identity.role === 'admin');
   paintAccessStrip();
   paintModalState();
   emit();
