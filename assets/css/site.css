@@ -984,6 +984,7 @@ main.courses { padding-top: 34px; padding-bottom: 20px; }
 }
 .admin-tablist [role="tab"]:hover { color: var(--ink); }
 .admin-tablist [role="tab"][aria-selected="true"] { color: var(--on-brand); background: var(--brand); }
+.admin-tablist [role="tab"] .mi-badge { margin-left: 6px; }
 [role="tabpanel"][hidden] { display: none; }
 
 .panel {

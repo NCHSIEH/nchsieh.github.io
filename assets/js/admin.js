@@ -6,7 +6,7 @@
    ========================================================================== */
 
 import {
-  $, $$, el, esc, banner, openModal, closeModal, fmtDateTime,
+  $, $$, el, esc, banner, openModal, closeModal, fmtDateTime, initTabs,
   renderThemePicker, renderLayoutPicker, currentTheme, currentLayout
 } from './ui.js';
 import {
@@ -35,7 +35,7 @@ let editingCourseId = null;
 let editorCourse = null;
 
 const VIEW_TITLES = {
-  viewDash: '總覽', viewCourses: '課程管理', viewStudents: '學生審核',
+  viewDash: '總覽', viewCourses: '課程管理', viewStudents: '學生管理',
   viewAnn: '公告', viewLook: '外觀', viewSystem: '系統'
 };
 
@@ -646,7 +646,7 @@ function initUploadSettings() {
 }
 
 /* ==========================================================================
-   學生審核
+   學生管理（審核佇列 + 學生名單兩個子分頁）
    ========================================================================== */
 
 const STATUS_BADGE = {
@@ -699,7 +699,7 @@ function studentRow(r, index) {
         class: 'btn btn-ok btn-sm btn-rect', type: 'button',
         onclick: () => guard(async () => {
           await decideStudent(r.id, 'approved', me.user.email);
-          await refreshStudents(); await refreshDash();
+          await refreshBoth(); await refreshDash();
           banner('#adminOpBanner', `已核准 ${r.email}。`, 'success');
         })
       }, r.status === 'suspended' ? '恢復存取' : '核准'),
@@ -707,7 +707,7 @@ function studentRow(r, index) {
         class: 'btn btn-quiet btn-sm btn-rect', type: 'button',
         onclick: () => confirmThen(`暫停 ${r.email} 的講義存取權？\n可隨時再按「恢復存取」還原，原始申請資料不會被清除。`, () => guard(async () => {
           await decideStudent(r.id, 'suspended', me.user.email);
-          await refreshStudents(); await refreshDash();
+          await refreshBoth(); await refreshDash();
           banner('#adminOpBanner', `已暫停 ${r.email} 的存取權。`, 'success');
         }))
       }, '暫停存取'),
@@ -715,7 +715,7 @@ function studentRow(r, index) {
         class: 'btn btn-danger btn-sm btn-rect', type: 'button',
         onclick: () => confirmThen(`駁回 ${r.email} 的申請？`, () => guard(async () => {
           await decideStudent(r.id, 'rejected', me.user.email);
-          await refreshStudents(); await refreshDash();
+          await refreshBoth(); await refreshDash();
         }))
       }, '駁回'),
       el('button', {
@@ -724,14 +724,67 @@ function studentRow(r, index) {
           `刪除 ${r.email} 的申請紀錄？\n\n注意：這只會移除 Firestore 紀錄。` +
           `Firebase Authentication 中的帳號仍然存在，需另行至 Console 刪除。`,
           () => guard(async () => {
-            await removeStudent(r.id); await refreshStudents(); await refreshDash();
+            await removeStudent(r.id); await refreshBoth(); await refreshDash();
           }))
       }, '刪除')
     ].filter(Boolean))])
   ]);
 }
 
-async function refreshStudents() {
+/** 審核佇列：只列待審核申請，動作精簡為核准／駁回／刪除 */
+function queueRow(r) {
+  return el('tr', {}, [
+    el('td', {}, [
+      el('div', { style: 'font-weight:600', text: r.name || '(未填姓名)' }),
+      el('div', { style: 'font-size:12px;color:var(--faint)', text: r.email || '' }),
+      el('div', { class: 'mono', style: 'font-size:11.5px;color:var(--faint);margin-top:2px',
+        text: [r.studentId && `學號 ${r.studentId}`, r.className && `班級 ${r.className}`].filter(Boolean).join('　') || '—' })
+    ]),
+    el('td', { style: 'font-size:12.5px;white-space:nowrap', text: fmtDateTime(r.createdAt) }),
+    el('td', {}, [el('div', { class: 'actions' }, [
+      el('button', {
+        class: 'btn btn-ok btn-sm btn-rect', type: 'button',
+        onclick: () => guard(async () => {
+          await decideStudent(r.id, 'approved', me.user.email);
+          await refreshBoth(); await refreshDash();
+          banner('#adminOpBanner', `已核准 ${r.email}，可到「學生名單」查看與管理。`, 'success');
+        })
+      }, '核准'),
+      el('button', {
+        class: 'btn btn-danger btn-sm btn-rect', type: 'button',
+        onclick: () => confirmThen(`駁回 ${r.email} 的申請？`, () => guard(async () => {
+          await decideStudent(r.id, 'rejected', me.user.email);
+          await refreshBoth(); await refreshDash();
+        }))
+      }, '駁回'),
+      el('button', {
+        class: 'btn btn-quiet btn-sm btn-rect', type: 'button',
+        onclick: () => confirmThen(
+          `刪除 ${r.email} 的申請紀錄？\n\n注意：這只會移除 Firestore 紀錄。` +
+          `Firebase Authentication 中的帳號仍然存在，需另行至 Console 刪除。`,
+          () => guard(async () => {
+            await removeStudent(r.id); await refreshBoth(); await refreshDash();
+          }))
+      }, '刪除')
+    ])])
+  ]);
+}
+
+async function refreshQueue() {
+  const tbody = $('#queueTbody');
+  tbody.replaceChildren(emptyRow(3, '讀取中…'));
+
+  const rows = await listStudents('pending');
+  $('#queueCount').textContent = `${rows.length} 筆`;
+  const badge = $('#queueBadge');
+  badge.textContent = rows.length;
+  badge.hidden = rows.length === 0;
+
+  if (!rows.length) { tbody.replaceChildren(emptyRow(3, '目前沒有待審核的申請。')); return; }
+  tbody.replaceChildren(...rows.map(queueRow));
+}
+
+async function refreshRoster() {
   const filter = $('#studentFilter').value;
   const tbody = $('#studentTbody');
   tbody.replaceChildren(emptyRow(6, '讀取中…'));
@@ -741,12 +794,21 @@ async function refreshStudents() {
   $('#studentCount').textContent = `${rows.length} 筆`;
 
   if (!rows.length) {
-    tbody.replaceChildren(emptyRow(6,
-      filter === 'pending' ? '目前沒有待審核的申請。' : '沒有符合條件的紀錄。'));
+    tbody.replaceChildren(emptyRow(6, '沒有符合條件的紀錄。'));
     return;
   }
 
   tbody.replaceChildren(...rows.map((r, i) => studentRow(r, i)));
+}
+
+/** 兩個子分頁的資料互相牽動（核准／駁回／刪除都會讓學生在兩邊清單間移動），統一一起刷新 */
+async function refreshBoth() {
+  await Promise.all([refreshQueue(), refreshRoster()]);
+}
+
+/** 沿用舊名稱，讓其他呼叫端（refreshAll、密碼變更後的整批刷新等）不用跟著改 */
+async function refreshStudents() {
+  await refreshBoth();
 }
 
 /** 依 uid 陣列的先後順序，把新的 order 值寫回 Firestore */
@@ -762,7 +824,7 @@ async function moveStudent(id, delta) {
   if (i < 0 || j < 0 || j >= ids.length) return;
   [ids[i], ids[j]] = [ids[j], ids[i]];
   await persistStudentOrder(ids);
-  await refreshStudents();
+  await refreshRoster();
 }
 
 /** 學生列表的拖曳排序：拖曳中即時移動 DOM，放開後才寫回資料庫 */
@@ -1040,8 +1102,10 @@ function mount() {
   }, '#matBanner'));
 
   // 學生
-  $('#studentFilter').addEventListener('change', () => guard(refreshStudents));
-  $('#btnReloadStudents').addEventListener('click', () => guard(refreshStudents));
+  initTabs($('#viewStudents'));
+  $('#btnReloadQueue').addEventListener('click', () => guard(refreshQueue));
+  $('#studentFilter').addEventListener('change', () => guard(refreshRoster));
+  $('#btnReloadStudents').addEventListener('click', () => guard(refreshRoster));
   initStudentsDrag();
 
   // 課程存取權限彈窗
@@ -1054,7 +1118,7 @@ function mount() {
       : $$('.access-course-cb').filter(cb => cb.checked).map(cb => cb.value);
     await setStudentAccess(accessStudent.id, courseIds);
     banner('#accessBanner', '已儲存。', 'success');
-    await refreshStudents();
+    await refreshRoster();
     setTimeout(() => closeModal('modalAccess'), 500);
   }, '#accessBanner'));
 

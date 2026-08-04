@@ -71,7 +71,7 @@
         <span class="mi">▦</span> 課程管理
       </button>
       <button type="button" class="admin-menu-item" data-view="viewStudents">
-        <span class="mi">▩</span> 學生審核
+        <span class="mi">▩</span> 學生管理
         <span class="mi-badge" id="pendingBadge" hidden>0</span>
       </button>
       <button type="button" class="admin-menu-item" data-view="viewAnn">
@@ -127,7 +127,7 @@
           <li>在「課程管理」建立課程，填寫代碼、名稱與學期。</li>
           <li>把講義 PDF 放進 repo 的 <code>assets/courses/</code> 並 push 到 GitHub。</li>
           <li>回到課程列，點「講義與作業」加入檔案路徑與截止日。</li>
-          <li>學生註冊並完成 Email 驗證後，到「學生審核」核准。</li>
+          <li>學生註冊並完成 Email 驗證後，到「學生管理」→「審核佇列」核准。</li>
         </ol>
       </div>
     </section>
@@ -176,32 +176,59 @@
       </div>
     </section>
 
-    <!-- 學生審核 -->
+    <!-- 學生管理 -->
     <section class="admin-view" id="viewStudents" hidden>
-      <div class="panel">
-        <h4>
-          <span>學生申請</span>
-          <span style="display:flex;gap:8px;align-items:center">
-            <select id="studentFilter" class="inline-select">
-              <option value="pending">待審核</option>
-              <option value="approved">已核准</option>
-              <option value="suspended">已暫停</option>
-              <option value="rejected">已駁回</option>
-              <option value="all">全部</option>
-            </select>
-            <button class="btn btn-ghost btn-sm btn-rect" type="button" id="btnReloadStudents">重新整理</button>
-          </span>
-        </h4>
-        <p class="hintline">
-          核准後該學生即可讀取所有課程的講義與作業（除非在「可看課程」限定範圍）。這項判斷由 Firestore
-          Security Rules 在伺服器端強制執行，學生無法透過修改瀏覽器內容繞過。
-          拖曳最左側 <span aria-hidden="true">⠿</span> 或用上／下箭頭可自訂顯示順序。
-          <span id="studentCount" style="float:right"></span>
-        </p>
-        <table class="admin-table mat-table">
-          <thead><tr><th class="col-drag"></th><th>申請人</th><th>申請時間</th><th>狀態</th><th>可看課程</th><th>操作</th></tr></thead>
-          <tbody id="studentTbody"></tbody>
-        </table>
+      <div class="admin-tablist" role="tablist" aria-label="學生管理">
+        <button type="button" role="tab" id="tabQueue" aria-selected="true" tabindex="0" aria-controls="panelQueue">
+          審核佇列<span class="mi-badge" id="queueBadge" hidden>0</span>
+        </button>
+        <button type="button" role="tab" id="tabRoster" aria-selected="false" tabindex="-1" aria-controls="panelRoster">
+          學生名單
+        </button>
+      </div>
+
+      <div role="tabpanel" id="panelQueue" aria-labelledby="tabQueue">
+        <div class="panel">
+          <h4>
+            <span>待審核申請</span>
+            <button class="btn btn-ghost btn-sm btn-rect" type="button" id="btnReloadQueue">重新整理</button>
+          </h4>
+          <p class="hintline">
+            新申請會出現在這裡。核准後會自動移到「學生名單」分頁；駁回的申請也會出現在學生名單的「已駁回」篩選中。
+            <span id="queueCount" style="float:right"></span>
+          </p>
+          <table class="admin-table">
+            <thead><tr><th>申請人</th><th>申請時間</th><th>操作</th></tr></thead>
+            <tbody id="queueTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div role="tabpanel" id="panelRoster" aria-labelledby="tabRoster" hidden>
+        <div class="panel">
+          <h4>
+            <span>學生名單</span>
+            <span style="display:flex;gap:8px;align-items:center">
+              <select id="studentFilter" class="inline-select">
+                <option value="approved">已核准</option>
+                <option value="suspended">已暫停</option>
+                <option value="rejected">已駁回</option>
+                <option value="all">全部（含審核中）</option>
+              </select>
+              <button class="btn btn-ghost btn-sm btn-rect" type="button" id="btnReloadStudents">重新整理</button>
+            </span>
+          </h4>
+          <p class="hintline">
+            核准後該學生即可讀取所有課程的講義與作業（除非在「可看課程」限定範圍）。這項判斷由 Firestore
+            Security Rules 在伺服器端強制執行，學生無法透過修改瀏覽器內容繞過。
+            拖曳最左側 <span aria-hidden="true">⠿</span> 或用上／下箭頭可自訂顯示順序。
+            <span id="studentCount" style="float:right"></span>
+          </p>
+          <table class="admin-table mat-table">
+            <thead><tr><th class="col-drag"></th><th>申請人</th><th>申請時間</th><th>狀態</th><th>可看課程</th><th>操作</th></tr></thead>
+            <tbody id="studentTbody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
