@@ -3,706 +3,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>授課與課程管理專區｜謝楠楨 Nan-Chen Hsieh 教授</title>
-<meta name="description" content="謝楠楨 Nan-Chen Hsieh 教授 授課與課程管理專區 — 提供智慧醫療、醫療資料科學、高齡長照科技等課程大綱、講義與作業繳交。">
+<title>授課與課程專區｜謝楠楨 Nan-Chen Hsieh 教授</title>
+<meta name="description" content="謝楠楨教授授課課程一覽 — 智慧醫療與臨床決策支援、醫療資料科學與機器學習、高齡健康與長照科技等課程大綱、講義與作業資訊。">
+<link rel="canonical" href="https://nchsieh.github.io/courses.html">
+
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231f3a5f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
 
-<!-- Google Fonts Noto Suite -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:site_name" content="謝楠楨 Nan-Chen Hsieh">
+<meta property="og:title" content="授課與課程專區｜謝楠楨 教授">
+<meta property="og:description" content="課程大綱公開瀏覽；講義與作業開放給通過審核的修課學生。">
+<meta property="og:url" content="https://nchsieh.github.io/courses.html">
+<meta property="og:image" content="https://nchsieh.github.io/assets/img/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@400;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-
-<!-- Firebase Compatibility SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
-<style>
-  :root {
-    --brand: #1f3a5f;
-    --brand-deep: #15293f;
-    --accent: #b0894c;
-    --ink: #222a33;
-    --muted: #5a6671;
-    --faint: #8a949d;
-    --line: #e6e3da;
-    --soft: #f6f3ec;
-    --card-bg: #ffffff;
-    --white: #ffffff;
-    --maxw: 1080px;
-    --font-serif: "Noto Serif TC", "Noto Serif", serif;
-    --font-sans: "Noto Sans TC", "Noto Sans", "Inter", system-ui, sans-serif;
-  }
-
-  body.theme-02 { --brand: #3b82f6; --brand-deep: #1e3a8a; --accent: #10b981; --ink: #f1f5f9; --muted: #94a3b8; --faint: #64748b; --line: #334155; --soft: #1e293b; --card-bg: #0f172a; --white: #0f172a; }
-  body.theme-03 { --brand: #0f172a; --brand-deep: #020617; --accent: #d97706; --ink: #1e293b; --muted: #475569; --faint: #94a3b8; --line: #e2e8f0; --soft: #f8fafc; --card-bg: #ffffff; --white: #ffffff; }
-  body.theme-04 { --brand: #064e3b; --brand-deep: #022c22; --accent: #059669; --ink: #111827; --muted: #4b5563; --faint: #9ca3af; --line: #d1fae5; --soft: #f0fdf4; --card-bg: #ffffff; --white: #ffffff; }
-  body.theme-05 { --brand: #44403c; --brand-deep: #292524; --accent: #c59b27; --ink: #292524; --muted: #78716c; --faint: #a8a29e; --line: #e7e5e4; --soft: #faf8f5; --card-bg: #ffffff; --white: #ffffff; }
-  body.theme-06 { --brand: #4a443d; --brand-deep: #322d28; --accent: #657954; --ink: #332e29; --muted: #6b645b; --faint: #9c958a; --line: #e2ddd3; --soft: #f4f1ea; --card-bg: #fdfbf7; --white: #ffffff; }
-  body.theme-07 { --brand: #06b6d4; --brand-deep: #0891b2; --accent: #8b5cf6; --ink: #e0f2fe; --muted: #7dd3fc; --faint: #38bdf8; --line: #1e293b; --soft: #111827; --card-bg: #0d1117; --white: #0d1117; }
-  body.theme-08 { --brand: #111111; --brand-deep: #000000; --accent: #dc2626; --ink: #111111; --muted: #555555; --faint: #888888; --line: #e5e5e5; --soft: #f5f5f5; --card-bg: #ffffff; --white: #ffffff; }
-  body.theme-09 { --brand: #3b2d27; --brand-deep: #27211d; --accent: #8c6d46; --ink: #2b2521; --muted: #63574e; --faint: #968a80; --line: #dcd4c9; --soft: #eae5d9; --card-bg: #f7f4ed; --white: #ffffff; }
-  body.theme-10 { --brand: #000000; --brand-deep: #000000; --accent: #d97706; --ink: #000000; --muted: #222222; --faint: #444444; --line: #000000; --soft: #fffbeb; --card-bg: #ffffff; --white: #ffffff; }
-
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--font-sans);color:var(--ink);background:var(--white);line-height:1.8;font-weight:400;-webkit-font-smoothing:antialiased;}
-  .en{display:none;}
-  body.lang-en .zh{display:none;}
-  body.lang-en .en{display:inline;}
-
-  .topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-  .topbar .wrap{max-width:var(--maxw);margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-  .brand{font-family:var(--font-serif);font-weight:700;font-size:19px;color:var(--brand);display:flex;align-items:center;gap:6px;text-decoration:none;}
-  .nav-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-
-  .btn-portal{background:var(--brand);color:#fff;border:0;padding:7px 16px;border-radius:999px;font-size:13.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;transition:.2s;}
-  .btn-portal:hover{background:var(--brand-deep);transform:translateY(-1px);}
-
-  .courses-hero{background:linear-gradient(155deg,var(--brand) 0%,var(--brand-deep) 100%);color:#fff;padding:52px 30px 44px;}
-  .courses-hero .wrap{max-width:var(--maxw);margin:0 auto;}
-  .courses-hero h1{font-family:var(--font-serif);font-size:clamp(32px,5vw,48px);font-weight:700;}
-  .courses-hero p{font-size:16px;color:#d6dfe8;margin-top:10px;max-width:640px;}
-
-  main{max-width:var(--maxw);margin:0 auto;padding:40px 30px;}
-
-  .course-lock-card{background:var(--soft);border:2px dashed var(--brand);border-radius:16px;padding:48px 24px;text-align:center;}
-  .course-lock-card h3{font-size:22px;color:var(--brand);margin-bottom:12px;}
-  .course-lock-card p{font-size:15px;color:var(--muted);max-width:620px;margin:0 auto 24px;}
-
-  .course-filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px;align-items:center;background:var(--soft);padding:16px 20px;border-radius:14px;border:1px solid var(--line);}
-  .filter-group{display:flex;align-items:center;gap:8px;font-size:14px;}
-  .filter-group select, .filter-group input{padding:7px 14px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--card-bg);color:var(--ink);}
-  .filter-search{flex:1;min-width:220px;}
-
-  .announcement-box{background:rgba(176, 137, 76, 0.1);border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 10px 10px 0;margin-bottom:28px;}
-  .announcement-box h4{font-size:15px;color:var(--brand);margin-bottom:4px;}
-
-  .course-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(340px, 1fr));gap:28px;}
-  .course-card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.04);display:flex;flex-direction:column;justify-content:space-between;transition:.2s;}
-  .course-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,0.08);}
-
-  .badge-sem{background:var(--brand);color:#fff;font-size:12px;padding:3px 10px;border-radius:999px;font-weight:600;}
-  .badge-level{background:var(--soft);color:var(--brand);border:1px solid var(--line);font-size:12px;padding:2px 8px;border-radius:6px;}
-  .course-code{font-size:13px;font-family:monospace;color:var(--faint);margin-bottom:4px;}
-  .course-title{font-family:var(--font-serif);font-size:20px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:12px;}
-  .course-summary{font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
-  .course-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
-  .course-tags span{font-size:12px;background:var(--soft);color:var(--muted);padding:3px 10px;border-radius:6px;}
-
-  .dir-tree{border-top:1px solid var(--line);padding-top:16px;margin-top:12px;}
-  .dir-header{font-size:13.5px;font-weight:700;color:var(--brand);margin-bottom:10px;}
-  .dir-folder{margin-bottom:12px;background:var(--soft);border-radius:10px;padding:12px 14px;}
-  .folder-title{font-size:13.5px;font-weight:600;color:var(--ink);}
-  .file-list{list-style:none;margin-top:8px;}
-  .file-item{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 0;border-bottom:1px dashed var(--line);}
-  .file-item:last-child{border-bottom:0;}
-  .file-name{color:var(--brand);text-decoration:none;font-weight:500;}
-  .badge-access{font-size:11px;padding:2px 7px;border-radius:4px;}
-  .badge-access.public{background:#dcfce7;color:#166534;}
-  .badge-access.locked{background:#fef3c7;color:#92400e;}
-
-  .asg-box{background:rgba(31, 58, 95, 0.04);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:16px;}
-  .asg-header{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;font-weight:700;color:var(--brand);}
-
-  /* MODAL OVERLAY & CARD */
-  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
-  .modal-overlay.active{display:flex;}
-  .modal-card{background:var(--card-bg);border:1px solid var(--line);border-radius:18px;max-width:960px;width:100%;max-height:92vh;overflow-y:auto;padding:32px;box-shadow:0 24px 50px rgba(0,0,0,0.25);position:relative;color:var(--ink);}
-  .modal-close{position:absolute;top:20px;right:22px;background:var(--soft);border:1px solid var(--line);width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;color:var(--faint);display:flex;align-items:center;justify-content:center;}
-  .modal-title{font-family:var(--font-serif);font-size:24px;font-weight:700;color:var(--brand);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
-
-  /* ADMIN CONSOLE STYLES */
-  .admin-nav-tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:24px;overflow-x:auto;padding-bottom:2px;}
-  .admin-nav-tabs .tab-btn{padding:10px 18px;border:0;background:var(--soft);font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:10px 10px 0 0;transition:.2s;white-space:nowrap;}
-  .admin-nav-tabs .tab-btn.active{color:#fff;background:var(--brand);}
-
-  .admin-card-section{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:20px;}
-  .admin-card-section h4{font-size:16px;color:var(--brand);font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
-
-  .dropzone-box{border:2px dashed var(--brand);border-radius:12px;padding:28px;text-align:center;background:rgba(31,58,95,0.02);cursor:pointer;transition:.2s;}
-  .dropzone-box:hover{background:rgba(31,58,95,0.06);}
-
-  .theme-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:14px;}
-  .theme-card{border:2px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;background:var(--card-bg);display:flex;flex-direction:column;gap:8px;}
-  .theme-card.active{border-color:var(--brand);}
-  .theme-swatch{height:28px;border-radius:6px;display:flex;overflow:hidden;border:1px solid rgba(0,0,0,0.1);}
-  .swatch-p1{flex:2;} .swatch-p2{flex:1;} .swatch-p3{flex:1;}
-
-  .form-group{margin-bottom:16px;}
-  .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink);}
-  .form-group input, .form-group textarea, .form-group select{width:100%;padding:9px 14px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--card-bg);color:var(--ink);}
-  .btn-submit{background:var(--brand);color:#fff;border:0;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;font-size:14.5px;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
-
-  .admin-table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px;}
-  .admin-table th{background:var(--card-bg);text-align:left;padding:10px;border-bottom:2px solid var(--line);color:var(--faint);font-weight:600;}
-  .admin-table td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle;}
-
-  .status-banner{padding:12px 16px;border-radius:8px;font-size:13.5px;margin-bottom:16px;display:none;}
-  .status-banner.info{background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;}
-  .status-banner.success{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;}
-  .status-banner.error{background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;}
-
-  footer{background:var(--soft);border-top:1px solid var(--line);margin-top:60px;}
-  footer .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 24px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center;font-size:13.5px;color:var(--faint);}
-  footer a{color:var(--muted);text-decoration:none;}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body class="lang-zh theme-01">
+<body class="lang-zh theme-academy">
 
-  <!-- ===== TOPBAR ===== -->
-  <header class="topbar">
-    <div class="wrap">
-      <a href="index.html" class="brand">謝楠楨 教授 <small>・ 授課與課程管理專區</small></a>
-      <div class="nav-controls">
-        <a href="index.html" class="btn-portal" style="background:var(--soft);color:var(--brand);border:1px solid var(--line);">
-          <span class="zh">🏠 返回個人簡歷</span><span class="en">🏠 Home Resume</span>
-        </a>
-        <button class="btn-portal" id="btnStudentPortal" style="background:var(--accent);">
-          <span class="zh">🎓 學生身分登入 / 註冊</span><span class="en">🎓 Student Portal</span>
-        </button>
-        <button class="btn-portal" id="btnAdminPortal">
-          <span class="zh">🔒 課程與系統管理</span><span class="en">🔒 Admin Console</span>
-        </button>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<!-- ===== 導覽列 ===== -->
+<header class="topbar">
+  <div class="wrap">
+    <a href="index.html" class="brand">謝楠楨 <small>Courses</small></a>
+
+    <nav class="sitenav" id="siteNav" aria-label="頁內導覽" style="margin-left:auto">
+      <a href="index.html"><span data-lang="zh">個人簡歷</span><span data-lang="en">Profile</span></a>
+      <a href="index.html#experience"><span data-lang="zh">經歷</span><span data-lang="en">Experience</span></a>
+    </nav>
+
+    <div class="nav-controls">
+      <div class="langtoggle" role="group" aria-label="切換語言 / Switch language">
+        <button type="button" class="seg" data-set-lang="zh" aria-pressed="true">中文</button>
+        <button type="button" class="seg" data-set-lang="en" aria-pressed="false">EN</button>
       </div>
-    </div>
-  </header>
-
-  <!-- ===== HERO ===== -->
-  <div class="courses-hero">
-    <div class="wrap">
-      <h1>📚 授課與課程管理專區</h1>
-      <p>涵蓋智慧醫療與臨床決策支援、醫療資料科學、高齡健康與長照科技等專業課程大綱、講義與作業繳交區。</p>
-    </div>
-  </div>
-
-  <main>
-    <!-- ===== UNAUTHENTICATED STATE ===== -->
-    <div id="courseUnauthenticatedState" class="course-lock-card">
-      <h3>🔒 本專區部分教學講義與作業區僅限修課學生存取</h3>
-      <p>歡迎學生進行 Email 身分登入驗證。登入後即可取得完整課程 PDF 講義下載、實作程式碼與作業繳交功能。</p>
-      <button class="btn-portal" style="font-size:15px;padding:10px 24px;" onclick="openModal('modalStudentPortal')">
-        🎓 立即進行學生登入 / 註冊驗證
+      <button type="button" class="btn btn-primary" data-open-modal="modalStudent">
+        <span data-lang="zh">學生登入</span><span data-lang="en">Student Login</span>
       </button>
     </div>
+  </div>
+</header>
 
-    <!-- ===== AUTHENTICATED STATE ===== -->
-    <div id="courseAuthenticatedState" style="display:none;">
+<!-- ===== Hero ===== -->
+<div class="courses-hero">
+  <div class="wrap">
+    <h1><span data-lang="zh">授課與課程專區</span><span data-lang="en">Courses</span></h1>
+    <p>
+      <span data-lang="zh">課程大綱公開瀏覽。講義檔案與作業截止資訊，開放給完成 Email 驗證並經任課教師核准的修課學生。</span>
+      <span data-lang="en">Course outlines are public. Lecture materials and assignment details are available to enrolled students after email verification and instructor approval.</span>
+    </p>
+    <div class="access-strip" id="accessStrip"></div>
+  </div>
+</div>
 
-      <!-- 公告區 -->
-      <div class="announcement-box">
-        <h4>📢 113-2 學期課程公告</h4>
-        <p style="font-size:14px;color:var(--muted);">請各位修課同學於每週上課前預先下載該單元講義，期中專題計畫書草案請於指定期限內完成上傳。</p>
-      </div>
+<main class="courses" id="main">
 
-      <!-- 篩選器 -->
-      <div class="course-filters">
-        <div class="filter-group">
-          <label>學期：</label>
-          <select id="filterSemester">
-            <option value="all">全部學期</option>
-            <option value="113-2" selected>113-2 學期</option>
-            <option value="113-1">113-1 學期</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>班別：</label>
-          <select id="filterLevel">
-            <option value="all">全部班別</option>
-            <option value="graduate">碩博士班</option>
-            <option value="undergraduate">大學部</option>
-          </select>
-        </div>
-        <div class="filter-group filter-search">
-          <input type="text" id="filterSearch" placeholder="🔍 搜尋課程名稱或關鍵字...">
-        </div>
-      </div>
+  <div id="announcementBox" hidden></div>
 
-      <!-- 課程列表網格 -->
-      <div class="course-grid" id="courseGrid"></div>
+  <div class="course-filters">
+    <div class="filter-group">
+      <label for="filterSemester"><span data-lang="zh">學期</span><span data-lang="en">Semester</span></label>
+      <select id="filterSemester"><option value="all">全部學期</option></select>
     </div>
-  </main>
-
-  <!-- ===== MODAL 1: STUDENT PORTAL ===== -->
-  <div class="modal-overlay" id="modalStudentPortal">
-    <div class="modal-card" style="max-width:540px;">
-      <button class="modal-close" onclick="closeModal('modalStudentPortal')">&times;</button>
-      <h3 class="modal-title">🎓 修課學生身份登入與註冊</h3>
-
-      <div id="registerStatusBanner" class="status-banner"></div>
-
-      <div class="form-group">
-        <label>學生 Email 信箱 (建議使用學校信箱 @ntunhs.edu.tw)</label>
-        <input type="email" id="studentEmail" placeholder="student@ntunhs.edu.tw">
-      </div>
-      <div class="form-group">
-        <label>密碼 (Password)</label>
-        <input type="password" id="studentPassword" placeholder="請輸入密碼">
-      </div>
-
-      <div style="display:flex;gap:12px;margin-top:20px;">
-        <button class="btn-submit" style="flex:1;" onclick="handleStudentLogin()">🔑 學生驗證登入</button>
-        <button class="btn-submit" style="flex:1;background:var(--accent);" onclick="handleStudentRegister()">📩 註冊新帳號驗證</button>
-      </div>
-      <button class="btn-submit" style="background:transparent;color:var(--muted);border:1px solid var(--line);margin-top:12px;" onclick="handleStudentLogout()">🚪 登出權限</button>
+    <div class="filter-group">
+      <label for="filterLevel"><span data-lang="zh">班別</span><span data-lang="en">Level</span></label>
+      <select id="filterLevel">
+        <option value="all">全部班別</option>
+        <option value="graduate">碩博士班</option>
+        <option value="undergraduate">大學部</option>
+      </select>
     </div>
+    <div class="filter-group filter-search">
+      <label class="visually-hidden" for="filterSearch">搜尋課程</label>
+      <input type="search" id="filterSearch" placeholder="搜尋課號、課程名稱、關鍵字…">
+    </div>
+    <span class="filter-count" id="filterCount"></span>
   </div>
 
-  <!-- ===== MODAL 2: REDESIGNED ADMIN PORTAL (5 TABS) ===== -->
-  <div class="modal-overlay" id="modalAdminPortal">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeModal('modalAdminPortal')">&times;</button>
-      <h3 class="modal-title">⚙️ <span class="zh">課程與全站系統管理控制台</span><span class="en">Admin Control Console</span></h3>
+  <div class="course-grid" id="courseGrid"></div>
 
-      <div id="adminAuthBox">
-        <div class="admin-card-section" style="text-align:center;padding:30px;">
-          <span style="font-size:42px;display:block;margin-bottom:10px;">🔒</span>
-          <h4 style="justify-content:center;margin-bottom:16px;">請輸入管理者密碼解鎖後台控制面板</h4>
-          <div class="form-group" style="max-width:320px;margin:0 auto 16px;">
-            <input type="password" id="adminPassInput" placeholder="請輸入管理密碼" style="text-align:center;">
-          </div>
-          <button class="btn-submit" style="max-width:320px;margin:0 auto;" onclick="verifyAdminPassword()">解鎖管理控制台</button>
-        </div>
-      </div>
+</main>
 
-      <div id="adminContentBox" style="display:none;">
-        <!-- 5大核心管理分頁頁籤 -->
-        <div class="admin-nav-tabs">
-          <button class="tab-btn active" onclick="switchAdminTab('tabCourseCRUD', event)">📚 課程與檔案管理</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabStudentMgmt', event)">🎓 學生帳號審核</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabAnnounce', event)">📢 消息與公告發布</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabTheme', event)">🎨 全站主題切換</button>
-          <button class="tab-btn" onclick="switchAdminTab('tabSecurity', event)">🔑 密碼與系統設定</button>
-        </div>
-
-        <!-- TAB 1: 課程與檔案管理 -->
-        <div id="tabCourseCRUD" class="admin-tab-content">
-          <div class="admin-card-section">
-            <h4>
-              <span>➕ 快速新增與設定課程</span>
-              <button class="btn-submit" style="width:auto;padding:6px 14px;font-size:12.5px;background:var(--accent);" onclick="exportFullBackupJSON()">📥 匯出全站 JSON 備份</button>
-            </h4>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-              <div class="form-group">
-                <label>課程代碼 (Course Code)</label>
-                <input type="text" id="newCrsCode" placeholder="例如：HI7003">
-              </div>
-              <div class="form-group">
-                <label>課程名稱 (Course Title)</label>
-                <input type="text" id="newCrsTitle" placeholder="例如：高齡長照科技專題">
-              </div>
-              <div class="form-group">
-                <label>開課學期 (Semester)</label>
-                <input type="text" id="newCrsSemester" placeholder="例如：114-1" value="114-1">
-              </div>
-              <div class="form-group">
-                <label>授課對象 (Level)</label>
-                <select id="newCrsLevel">
-                  <option value="graduate">碩博士班</option>
-                  <option value="undergraduate">大學部</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>課程摘要與教學重點</label>
-              <textarea id="newCrsSummary" rows="2" placeholder="請輸入課程簡介..."></textarea>
-            </div>
-            <button class="btn-submit" onclick="addNewCourseAction()">➕ 建立新課程並發布</button>
-          </div>
-
-          <div class="admin-card-section">
-            <h4>📁 PPTX/PDF 講義拖拉上傳與檔案轉換區</h4>
-            <div class="dropzone-box" onclick="document.getElementById('pptxFileInput').click()">
-              <span style="font-size:36px;display:block;margin-bottom:6px;">📄 ➔ 📑</span>
-              <p style="font-weight:600;color:var(--brand);">點擊或拖拉 PPTX / PDF 講義檔案至此</p>
-              <p style="font-size:12.5px;color:var(--faint);margin-top:4px;">系統將自動模擬將 PPTX 簡報檔轉為高清晰 PDF 講義並發布至課程選單</p>
-              <input type="file" id="pptxFileInput" style="display:none;" accept=".pptx,.pdf,.ppt" onchange="handleFileUploadSim(event)">
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 2: 學生帳號與審核管理 -->
-        <div id="tabStudentMgmt" class="admin-tab-content" style="display:none;">
-          <div class="admin-card-section">
-            <h4>⏳ 待審核學生註冊申請</h4>
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>申請學生 Email</th>
-                  <th>申請時間</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody id="pendingStudentsTbody">
-                <tr>
-                  <td>student_test01@ntunhs.edu.tw</td>
-                  <td>2026-08-04 09:12</td>
-                  <td>
-                    <button class="btn-submit" style="width:auto;padding:4px 10px;font-size:12px;background:#166534;" onclick="approveStudentSim(this, 'student_test01@ntunhs.edu.tw')">✅ 核准開通</button>
-                    <button class="btn-submit" style="width:auto;padding:4px 10px;font-size:12px;background:#991b1b;" onclick="rejectStudentSim(this)">❌ 駁回</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB 3: 全站公告發布 -->
-        <div id="tabAnnounce" class="admin-tab-content" style="display:none;">
-          <div class="admin-card-section">
-            <h4>📢 發布全站最新消息 / 課程公告</h4>
-            <div class="form-group">
-              <label>公告標題</label>
-              <input type="text" id="annTitleInput" placeholder="例如：114-1 學期課程講義已全數上傳更新">
-            </div>
-            <div class="form-group">
-              <label>公告內容</label>
-              <textarea id="annContentInput" rows="3" placeholder="請輸入詳細公告內容..."></textarea>
-            </div>
-            <button class="btn-submit" onclick="publishAnnouncementAction()">📢 即時發布公告</button>
-          </div>
-        </div>
-
-        <!-- TAB 4: 版面主題切換 -->
-        <div id="tabTheme" class="admin-tab-content" style="display:none;">
-          <div class="admin-card-section">
-            <h4>🎨 全站版面視覺主題設定 (10 Premium Themes)</h4>
-            <div class="theme-grid" id="themeCardGrid"></div>
-          </div>
-        </div>
-
-        <!-- TAB 5: 密碼與系統設定 -->
-        <div id="tabSecurity" class="admin-tab-content" style="display:none;">
-          <div class="admin-card-section">
-            <h4>🔑 修改管理控制台密碼 (Change Admin Password)</h4>
-            <div style="display:flex;gap:10px;align-items:flex-end;">
-              <div class="form-group" style="flex:1;margin-bottom:0;">
-                <label>目前舊密碼：</label>
-                <input type="password" id="oldPassInput" placeholder="目前密碼">
-              </div>
-              <div class="form-group" style="flex:1;margin-bottom:0;">
-                <label>設定新密碼：</label>
-                <input type="password" id="newPassInput" placeholder="請輸入新密碼">
-              </div>
-              <button class="btn-submit" style="width:auto;padding:9px 18px;background:var(--accent);" onclick="changeAdminPassword()">更新密碼</button>
-            </div>
-          </div>
-
-          <div class="admin-card-section">
-            <h4>🌐 Firebase Auth 與 Authorized Domain 狀態檢視</h4>
-            <div style="font-size:13.5px;color:var(--muted);line-height:1.7;">
-              <p>🟢 **Project ID**: <code>nchsieh-lms</code></p>
-              <p>🟢 **Auth Domain**: <code>nchsieh-lms.firebaseapp.com</code></p>
-              <p>🟢 **Authorized Domain**: <code>nchsieh.github.io</code>已整合授權</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<footer>
+  <div class="wrap">
+    <span>© 2026　<span class="serif" style="color:var(--brand);font-weight:700">謝楠楨 教授</span></span>
+    <span>
+      <a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a>　・
+      <a href="index.html"><span data-lang="zh">個人簡歷</span><span data-lang="en">Profile</span></a>　・
+      <a href="admin.html"><span data-lang="zh">管理</span><span data-lang="en">Admin</span></a>
+    </span>
   </div>
+</footer>
 
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <div class="wrap">
-      <span>© 2026 <span style="color:var(--brand);font-weight:700;">謝楠楨 教授</span></span>
-      <span><a href="mailto:nchsieh@ntunhs.edu.tw">nchsieh@ntunhs.edu.tw</a></span>
-    </div>
-  </footer>
+<button type="button" id="backTop" aria-label="回到頁首">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
-  <!-- ===== JAVASCRIPT LOGIC ===== -->
-  <script>
-    const masterData = {
-      courses: [
-        {
-          id: "CRS-2025-01",
-          code: "HI7001",
-          title_zh: "智慧醫療與臨床決策支援系統專題",
-          title_en: "Special Topics on Smart Healthcare & CDSS",
-          semester: "113-2",
-          level: "graduate",
-          credits: 3,
-          category: ["AI健康科技", "智慧醫療"],
-          summary_zh: "探討機器學習與深度學習於臨床決策、智慧病房與醫療大數據分析之實務應用。",
-          summary_en: "Explores machine learning and deep learning in clinical decision support and healthcare data science.",
-          directories: [
-            {
-              name: "單元一：智慧醫療與 CDSS 概論",
-              files: [
-                { name: "HI7001_Lecture01_CDSS_Overview.pdf", size: "2.4 MB", access: "public", url: "assets/courses/HI7001/Unit1/Lecture01.pdf" },
-                { name: "FHIR_Data_Standard_Guide.pdf", size: "1.8 MB", access: "locked", url: "assets/courses/HI7001/Unit1/FHIR_Guide.pdf" }
-              ]
-            },
-            {
-              name: "單元二：醫療機器學習與預測模型",
-              files: [
-                { name: "HI7001_Lecture02_ML_Models.pdf", size: "3.1 MB", access: "locked", url: "assets/courses/HI7001/Unit2/Lecture02.pdf" }
-              ]
-            }
-          ],
-          assignment: {
-            title: "作業一：CDSS 案例深度分析報告",
-            dueDate: "2026-08-15T23:59:00",
-            status: "due-normal"
-          }
-        },
-        {
-          id: "CRS-2025-02",
-          code: "HI7002",
-          title_zh: "醫療資料科學與機器學習應用",
-          title_en: "Healthcare Data Science & Machine Learning",
-          semester: "113-2",
-          level: "graduate",
-          credits: 3,
-          category: ["資料科學", "機器學習"],
-          summary_zh: "結合醫療電子病歷 (EHR) 與臨床資料集進行數據清洗、特徵工程與模型驗證。",
-          summary_en: "Hands-on data science methods applied to Electronic Health Records (EHR) and clinical datasets.",
-          directories: [
-            {
-              name: "課堂講義與實作 Code 範本",
-              files: [
-                { name: "HI7002_EHR_Data_Cleaning.pdf", size: "4.2 MB", access: "locked", url: "assets/courses/HI7002/Lecture01.pdf" }
-              ]
-            }
-          ],
-          assignment: {
-            title: "期中專題計畫書草案提交",
-            dueDate: "2026-08-05T23:59:00",
-            status: "due-urgent"
-          }
-        }
-      ]
-    };
+<script type="module">
+  import { initUI } from './assets/js/ui.js';
+  import { injectModals } from './assets/js/modals.js';
+  import { initAuth } from './assets/js/auth.js';
+  import { initCourses } from './assets/js/courses.js';
 
-    function updateAuthStateUI() {
-      const isApproved = localStorage.getItem('isStudentApproved') === 'true';
-      document.getElementById('courseUnauthenticatedState').style.display = isApproved ? 'none' : 'block';
-      document.getElementById('courseAuthenticatedState').style.display = isApproved ? 'block' : 'none';
-      if (isApproved) renderCourses();
-    }
-
-    function renderCourses() {
-      const grid = document.getElementById('courseGrid');
-      const semFilter = document.getElementById('filterSemester').value;
-      const levelFilter = document.getElementById('filterLevel').value;
-      const searchKey = document.getElementById('filterSearch').value.toLowerCase();
-
-      grid.innerHTML = '';
-      masterData.courses.forEach(c => {
-        if (semFilter !== 'all' && c.semester !== semFilter) return;
-        if (levelFilter !== 'all' && c.level !== levelFilter) return;
-        if (searchKey && !c.title_zh.toLowerCase().includes(searchKey)) return;
-
-        const card = document.createElement('div');
-        card.className = 'course-card';
-
-        let dirHtml = '';
-        c.directories.forEach(d => {
-          let fileHtml = '';
-          d.files.forEach(f => {
-            fileHtml += `
-              <li class="file-item">
-                <a href="${f.url}" class="file-name">📄 ${f.name} <small>(${f.size})</small></a>
-                <span class="badge-access ${f.access === 'locked' ? 'locked' : 'public'}">${f.access === 'locked' ? '🔒 限修課學生' : '🌐 公開'}</span>
-              </li>
-            `;
-          });
-          dirHtml += `<div class="dir-folder"><div class="folder-title">📁 ${d.name}</div><ul class="file-list">${fileHtml}</ul></div>`;
-        });
-
-        card.innerHTML = `
-          <div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-              <span class="badge-sem">${c.semester}</span>
-              <span class="badge-level">${c.level === 'graduate' ? '碩博士班' : '大學部'}・${c.credits} 學分</span>
-            </div>
-            <div class="course-code">${c.code}</div>
-            <h3 class="course-title">${c.title_zh}</h3>
-            <p class="course-summary">${c.summary_zh}</p>
-            <div class="dir-tree">
-              <div class="dir-header">📂 課程目錄與講義檔案</div>
-              ${dirHtml}
-            </div>
-          </div>
-          <div class="asg-box">
-            <div class="asg-header">
-              <span>📝 ${c.assignment.title}</span>
-            </div>
-            <div style="font-size:12px;color:var(--faint);margin-top:4px;">截止時間：2026-08-15 23:59</div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    document.getElementById('filterSemester').addEventListener('change', renderCourses);
-    document.getElementById('filterLevel').addEventListener('change', renderCourses);
-    document.getElementById('filterSearch').addEventListener('input', renderCourses);
-
-    function openModal(id) { document.getElementById(id).classList.add('active'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-    document.getElementById('btnStudentPortal').addEventListener('click', () => openModal('modalStudentPortal'));
-    document.getElementById('btnAdminPortal').addEventListener('click', () => openModal('modalAdminPortal'));
-
-    function showStatusBanner(msg, type) {
-      const banner = document.getElementById('registerStatusBanner');
-      banner.className = 'status-banner ' + type;
-      banner.style.display = 'block';
-      banner.innerHTML = msg;
-    }
-
-    function handleStudentLogin() {
-      const email = document.getElementById('studentEmail').value;
-      if (!email) { showStatusBanner('請輸入 Email 信箱', 'error'); return; }
-      localStorage.setItem('studentEmail', email);
-      localStorage.setItem('isStudentApproved', 'true');
-      updateAuthStateUI();
-      closeModal('modalStudentPortal');
-    }
-
-    function handleStudentRegister() {
-      const email = document.getElementById('studentEmail').value;
-      if (!email) { showStatusBanner('請輸入 Email 信箱以發送驗證信', 'error'); return; }
-      showStatusBanner('⏳ 正在連線 Google Firebase 郵件伺服器寄發驗證信...', 'info');
-      setTimeout(() => {
-        showStatusBanner('🎉 驗證信已發送至：<code>' + email + '</code>！請檢查【垃圾郵件 (Spam)】！', 'success');
-      }, 1000);
-    }
-
-    function handleStudentLogout() {
-      localStorage.removeItem('studentEmail');
-      localStorage.removeItem('isStudentApproved');
-      updateAuthStateUI();
-    }
-
-    // 主題與 Admin Console Logic
-    const themesList = [
-      { id: 'theme-01', name: '🎨 經典學院藍', p1: '#1f3a5f', p2: '#b0894c', p3: '#f6f3ec' },
-      { id: 'theme-02', name: '🌙 極簡深暗黑', p1: '#121820', p2: '#3b82f6', p3: '#10b981' },
-      { id: 'theme-03', name: '👑 牛津皇家藍', p1: '#0f172a', p2: '#d97706', p3: '#f8fafc' },
-      { id: 'theme-04', name: '🌿 智慧醫療綠', p1: '#064e3b', p2: '#059669', p3: '#f0fdf4' },
-      { id: 'theme-05', name: '✨ 典雅白與金', p1: '#44403c', p2: '#c59b27', p3: '#faf8f5' },
-      { id: 'theme-06', name: '🍵 日系簡約風', p1: '#4a443d', p2: '#657954', p3: '#f4f1ea' },
-      { id: 'theme-07', name: '⚡ 極光科技藍', p1: '#06b6d4', p2: '#8b5cf6', p3: '#0d1117' },
-      { id: 'theme-08', name: '🇨🇭 瑞士國際風', p1: '#111111', p2: '#dc2626', p3: '#ffffff' },
-      { id: 'theme-09', name: '🪵 京都胡桃木', p1: '#3b2d27', p2: '#8c6d46', p3: '#eae5d9' },
-      { id: 'theme-10', name: '👁️ 高對比無障礙', p1: '#000000', p2: '#d97706', p3: '#fffbeb' }
-    ];
-
-    function renderThemeCards() {
-      const grid = document.getElementById('themeCardGrid');
-      const activeTheme = localStorage.getItem('preferredTheme') || 'theme-01';
-      grid.innerHTML = '';
-      themesList.forEach(t => {
-        const card = document.createElement('div');
-        card.className = `theme-card ${t.id === activeTheme ? 'active' : ''}`;
-        card.onclick = () => setTheme(t.id);
-        card.innerHTML = `
-          <div class="theme-swatch">
-            <div class="swatch-p1" style="background:${t.p1}"></div>
-            <div class="swatch-p2" style="background:${t.p2}"></div>
-            <div class="swatch-p3" style="background:${t.p3}"></div>
-          </div>
-          <div style="font-size:13px;font-weight:600;display:flex;justify-content:space-between;">
-            <span>${t.name}</span>
-            ${t.id === activeTheme ? '<span style="color:var(--accent);">✓ 使用中</span>' : ''}
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function setTheme(themeName) {
-      document.body.className = document.body.className.replace(/\btheme-\d+\b/g, '');
-      document.body.classList.add(themeName);
-      localStorage.setItem('preferredTheme', themeName);
-      renderThemeCards();
-    }
-    const savedTheme = localStorage.getItem('preferredTheme') || 'theme-01';
-    setTheme(savedTheme);
-
-    function getAdminPassword() {
-      return localStorage.getItem('customAdminPassword') || '123456';
-    }
-
-    function verifyAdminPassword() {
-      const pass = document.getElementById('adminPassInput').value;
-      if (pass === getAdminPassword()) {
-        document.getElementById('adminAuthBox').style.display = 'none';
-        document.getElementById('adminContentBox').style.display = 'block';
-        renderThemeCards();
-      } else {
-        alert('密碼錯誤，請重新輸入！');
-      }
-    }
-
-    function changeAdminPassword() {
-      const oldP = document.getElementById('oldPassInput').value;
-      const newP = document.getElementById('newPassInput').value;
-      if (oldP !== getAdminPassword()) { alert('舊密碼輸入不正確！'); return; }
-      if (!newP || newP.length < 4) { alert('新密碼長度至少需要 4 位數以上'); return; }
-      localStorage.setItem('customAdminPassword', newP);
-      alert('🔑 管理密碼已成功更新！下次解鎖請使用新密碼。');
-      document.getElementById('oldPassInput').value = '';
-      document.getElementById('newPassInput').value = '';
-    }
-
-    function switchAdminTab(tabId, evt) {
-      document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('.admin-nav-tabs .tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById(tabId).style.display = 'block';
-      if (evt) evt.target.classList.add('active');
-    }
-
-    function addNewCourseAction() {
-      const code = document.getElementById('newCrsCode').value;
-      const title = document.getElementById('newCrsTitle').value;
-      if (!code || !title) { alert('請填寫課程代碼與課程名稱！'); return; }
-      alert('✅ 成功建立課程「' + title + ' (' + code + ')」！已寫入資料庫並同步發布。');
-      document.getElementById('newCrsCode').value = '';
-      document.getElementById('newCrsTitle').value = '';
-    }
-
-    function exportFullBackupJSON() {
-      const backupData = {
-        exportTime: new Date().toISOString(),
-        siteTitle: "謝楠楨 教授 個人官網與課程 LMS",
-        coursesCount: 2
-      };
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "NCHSIEH_Full_System_Backup.json");
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-    }
-
-    function handleFileUploadSim(evt) {
-      const file = evt.target.files[0];
-      if (file) {
-        alert('📄 成功上傳簡報講義檔案「' + file.name + '」！系統已自動完成 PDF 高清轉換與發布。');
-      }
-    }
-
-    function approveStudentSim(btn, email) {
-      alert('✅ 已核准學生「' + email + '」之開通權限，學生即刻可於課程專區登入查看講義！');
-      btn.closest('tr').remove();
-    }
-
-    function rejectStudentSim(btn) {
-      if (confirm('確定要駁回此筆學生註冊申請嗎？')) {
-        btn.closest('tr').remove();
-      }
-    }
-
-    function publishAnnouncementAction() {
-      const title = document.getElementById('annTitleInput').value;
-      if (!title) { alert('請輸入公告標題！'); return; }
-      alert('📢 成功發布全站最新公告：「' + title + '」！');
-      document.getElementById('annTitleInput').value = '';
-      document.getElementById('annContentInput').value = '';
-    }
-
-    updateAuthStateUI();
-  </script>
+  injectModals();
+  initUI();
+  initAuth();
+  initCourses();
+</script>
 </body>
 </html>

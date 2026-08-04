@@ -1,0 +1,137 @@
+rules_version = '2';
+
+// =============================================================================
+//  nchsieh-lms — Firestore Security Rules
+//
+//  這份規則是整個系統唯一真正的安全防線。
+//  前端 JS 可以被任何人竄改，但這裡的判斷在 Google 伺服器上執行，繞不過去。
+//
+//  部署方式：Firebase Console → Firestore Database → 規則 → 全部貼上 → 發布
+// =============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- 判斷函式 ----------
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // ---- 管理者名單 ----
+    //
+    // request.auth.token.email 來自 Firebase 簽發並簽章的 ID Token，
+    // 前端無法偽造，因此用 Email 比對與查資料庫一樣安全，
+    // 但省去在 Console 手動建立文件的麻煩。
+    //
+    // 要新增管理者：把 Email 加進下面陣列，重新發布規則，
+    // 並同步更新 assets/js/config.js 的 ADMIN_EMAILS。
+    function adminEmails() {
+      return [
+        'nchsieh@gmail.com'
+      ];
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in adminEmails();
+    }
+
+    function studentDoc() {
+      return get(/databases/$(database)/documents/students/$(request.auth.uid)).data;
+    }
+
+    // 已核准學生：必須同時滿足三件事
+    //   1. 已登入
+    //   2. Email 已完成驗證（點過驗證信）
+    //   3. students 文件存在且 status == 'approved'（由管理者核准）
+    function isApprovedStudent() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && exists(/databases/$(database)/documents/students/$(request.auth.uid))
+        && studentDoc().status == 'approved';
+    }
+
+    function unchanged(field) {
+      return request.resource.data[field] == resource.data[field];
+    }
+
+
+    // ---------- 學生帳號與審核狀態 ----------
+    match /students/{uid} {
+
+      // 本人可讀自己的狀態；管理者可讀全部
+      allow get:  if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+
+      // 註冊時由本人建立，但狀態強制寫死為 pending，
+      // 而且 email 必須與登入憑證一致，無法冒用他人身分建檔。
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.keys().hasOnly(
+             ['email', 'name', 'studentId', 'note', 'status', 'createdAt']
+           );
+
+      // 本人只能補填姓名與學號，改不動 status——這是審核機制的關鍵。
+      allow update: if isAdmin()
+        || (signedIn() && request.auth.uid == uid
+            && unchanged('status')
+            && unchanged('email')
+            && request.resource.data.diff(resource.data)
+                 .affectedKeys().hasOnly(['name', 'studentId', 'note']));
+
+      allow delete: if isAdmin();
+    }
+
+
+    // ---------- 課程 ----------
+    // 課程大綱公開：讓搜尋引擎與潛在學生看得到你開什麼課。
+    match /courses/{courseId} {
+      allow read:  if true;
+      allow write: if isAdmin();
+
+      // 講義清單只給已核准的修課學生。
+      // 未核准者連檔名與路徑都拿不到。
+      match /materials/{materialId} {
+        allow read:  if isApprovedStudent() || isAdmin();
+        allow write: if isAdmin();
+      }
+
+      // 作業與截止日同上
+      match /assignments/{assignmentId} {
+        allow read:  if isApprovedStudent() || isAdmin();
+        allow write: if isAdmin();
+      }
+    }
+
+
+    // ---------- 公告 ----------
+    match /announcements/{id} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+
+    // ---------- 著作論文 ----------
+    match /publications/{id} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+
+    // ---------- 研究計畫與獲獎 ----------
+    match /projects/{id} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+
+    // ---------- 其餘一律拒絕 ----------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理後台｜謝楠楨 教授</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231f3a5f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body class="lang-zh theme-academy admin-page">
+<script>
+  try {
+    var ls = localStorage;
+    document.body.className = 'lang-zh admin-page ' + (ls.getItem('site.theme') || 'theme-academy');
+  } catch (e) {}
+</script>
+
+<!-- ===== 登入閘門 ===== -->
+<div class="admin-login" id="adminGate">
+  <div class="admin-login-card">
+    <div class="login-brand">
+      <span class="login-mark" aria-hidden="true">N</span>
+      <div>
+        <strong>管理後台</strong>
+        <span>謝楠楨 教授個人網站</span>
+      </div>
+    </div>
+
+    <div id="adminBanner" class="banner"></div>
+
+    <form id="adminLoginForm" novalidate>
+      <div class="form-group">
+        <label for="adminEmail">管理者 Email</label>
+        <input type="email" id="adminEmail" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label for="adminPassword">密碼</label>
+        <input type="password" id="adminPassword" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-primary btn-block btn-rect" type="submit" id="btnAdminLogin">登入</button>
+    </form>
+
+    <p class="login-note">
+      本站不保存任何密碼，驗證由 Firebase Authentication 處理。<br>
+      尚未設定管理者帳號？請參閱 <code>FIREBASE_SETUP.md</code> 步驟 5。
+    </p>
+    <p class="login-back"><a href="index.html">← 回到網站首頁</a></p>
+  </div>
+</div>
+
+<!-- ===== 後台主體 ===== -->
+<div class="admin-shell" id="adminShell" hidden>
+
+  <!-- 左側功能選單 -->
+  <aside class="admin-side">
+    <a href="index.html" class="admin-logo">
+      <span class="login-mark" aria-hidden="true">N</span>
+      <span>管理後台</span>
+    </a>
+
+    <nav class="admin-menu" aria-label="後台功能">
+      <button type="button" class="admin-menu-item is-active" data-view="viewDash">
+        <span class="mi">▤</span> 總覽
+      </button>
+      <button type="button" class="admin-menu-item" data-view="viewCourses">
+        <span class="mi">▦</span> 課程管理
+      </button>
+      <button type="button" class="admin-menu-item" data-view="viewStudents">
+        <span class="mi">▩</span> 學生審核
+        <span class="mi-badge" id="pendingBadge" hidden>0</span>
+      </button>
+      <button type="button" class="admin-menu-item" data-view="viewAnn">
+        <span class="mi">▣</span> 公告
+      </button>
+      <button type="button" class="admin-menu-item" data-view="viewLook">
+        <span class="mi">◨</span> 外觀
+      </button>
+      <button type="button" class="admin-menu-item" data-view="viewSystem">
+        <span class="mi">◍</span> 系統
+      </button>
+    </nav>
+
+    <div class="admin-side-foot">
+      <div class="admin-user">
+        <span class="au-avatar" id="adminAvatar" aria-hidden="true"></span>
+        <span class="au-mail" id="adminWho"></span>
+      </div>
+      <button class="btn btn-quiet btn-sm btn-rect btn-block" type="button" id="btnAdminLogout">登出</button>
+      <a class="admin-side-link" href="index.html">檢視網站 ↗</a>
+    </div>
+  </aside>
+
+  <!-- 右側工作區 -->
+  <div class="admin-work">
+    <header class="admin-topbar">
+      <h1 id="viewTitle">總覽</h1>
+      <div class="admin-topbar-actions">
+        <button class="btn btn-ghost btn-sm btn-rect" type="button" id="btnRefreshAll">重新整理</button>
+        <button class="btn btn-ghost btn-sm btn-rect" type="button" id="btnBackup">匯出備份</button>
+      </div>
+    </header>
+
+    <div id="adminOpBanner" class="banner" style="margin:0 28px"></div>
+
+    <!-- 總覽 -->
+    <section class="admin-view" id="viewDash">
+      <div class="stat-row">
+        <div class="stat"><span class="s-num" id="statCourses">–</span><span class="s-lab">課程</span></div>
+        <div class="stat"><span class="s-num" id="statPending">–</span><span class="s-lab">待審核</span></div>
+        <div class="stat"><span class="s-num" id="statApproved">–</span><span class="s-lab">已核准學生</span></div>
+        <div class="stat"><span class="s-num" id="statAnn">–</span><span class="s-lab">公告</span></div>
+      </div>
+
+      <div class="panel">
+        <h4>待處理事項</h4>
+        <div id="dashTodo" class="kv"></div>
+      </div>
+
+      <div class="panel">
+        <h4>快速入門</h4>
+        <ol class="kv" style="padding-left:20px">
+          <li>在「課程管理」建立課程，填寫代碼、名稱與學期。</li>
+          <li>把講義 PDF 放進 repo 的 <code>assets/courses/</code> 並 push 到 GitHub。</li>
+          <li>回到課程列，點「講義與作業」加入檔案路徑與截止日。</li>
+          <li>學生註冊並完成 Email 驗證後，到「學生審核」核准。</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 課程管理 -->
+    <section class="admin-view" id="viewCourses" hidden>
+      <div class="split">
+        <div class="panel">
+          <h4><span id="cfHeading">新增課程</span></h4>
+          <div class="form-row">
+            <div class="form-group"><label for="cfCode">課程代碼</label><input type="text" id="cfCode" placeholder="HI7003"></div>
+            <div class="form-group"><label for="cfSemester">開課學期</label><input type="text" id="cfSemester" placeholder="114-1"></div>
+          </div>
+          <div class="form-group"><label for="cfTitleZh">課程名稱（中）</label><input type="text" id="cfTitleZh" placeholder="高齡長照科技專題"></div>
+          <div class="form-group"><label for="cfTitleEn">課程名稱（英）</label><input type="text" id="cfTitleEn"></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cfLevel">授課對象</label>
+              <select id="cfLevel"><option value="graduate">碩博士班</option><option value="undergraduate">大學部</option></select>
+            </div>
+            <div class="form-group"><label for="cfCredits">學分數</label><input type="number" id="cfCredits" value="3" min="0" max="10"></div>
+          </div>
+          <div class="form-group"><label for="cfSummaryZh">課程摘要</label><textarea id="cfSummaryZh" rows="3"></textarea></div>
+          <div class="form-group">
+            <label for="cfTags">標籤</label>
+            <input type="text" id="cfTags" placeholder="智慧醫療、機器學習">
+            <div class="help">以頓號或逗號分隔，會顯示在課程卡片並納入搜尋。</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary btn-rect" type="button" id="btnSaveCourse">建立課程</button>
+            <button class="btn btn-quiet btn-rect" type="button" id="btnCancelEdit" hidden>取消編輯</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h4>現有課程</h4>
+          <table class="admin-table">
+            <thead><tr><th>課程</th><th>學期</th><th>對象</th><th>操作</th></tr></thead>
+            <tbody id="adminCourseTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 學生審核 -->
+    <section class="admin-view" id="viewStudents" hidden>
+      <div class="panel">
+        <h4>
+          <span>學生申請</span>
+          <span style="display:flex;gap:8px;align-items:center">
+            <select id="studentFilter" class="inline-select">
+              <option value="pending">待審核</option>
+              <option value="approved">已核准</option>
+              <option value="rejected">已駁回</option>
+              <option value="all">全部</option>
+            </select>
+            <button class="btn btn-ghost btn-sm btn-rect" type="button" id="btnReloadStudents">重新整理</button>
+          </span>
+        </h4>
+        <p class="hintline">
+          核准後該學生即可讀取所有課程的講義與作業。這項判斷由 Firestore Security Rules
+          在伺服器端強制執行，學生無法透過修改瀏覽器內容繞過。
+          <span id="studentCount" style="float:right"></span>
+        </p>
+        <table class="admin-table">
+          <thead><tr><th>申請人</th><th>學號</th><th>申請時間</th><th>狀態</th><th>操作</th></tr></thead>
+          <tbody id="studentTbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 公告 -->
+    <section class="admin-view" id="viewAnn" hidden>
+      <div class="split">
+        <div class="panel">
+          <h4>發布公告</h4>
+          <div class="form-group"><label for="annTitle">標題</label><input type="text" id="annTitle" placeholder="114-1 學期講義已更新"></div>
+          <div class="form-group"><label for="annBody">內容</label><textarea id="annBody" rows="5"></textarea></div>
+          <button class="btn btn-primary btn-rect" type="button" id="btnPublishAnn">發布</button>
+        </div>
+        <div class="panel">
+          <h4>已發布</h4>
+          <table class="admin-table">
+            <thead><tr><th>公告</th><th>時間</th><th>操作</th></tr></thead>
+            <tbody id="annTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 外觀 -->
+    <section class="admin-view" id="viewLook" hidden>
+      <div class="panel">
+        <h4>版型樣板</h4>
+        <p class="hintline">
+          切換首頁的版面配置。這裡的選擇儲存在你自己的瀏覽器，只影響這台裝置。
+          若要更換所有訪客看到的預設版型，請修改 <code>assets/js/config.js</code> 的
+          <code>DEFAULT_LAYOUT</code> 與 <code>DEFAULT_THEME</code> 後 push 到 GitHub。
+        </p>
+        <div class="looks-grid wide" id="layoutPicker"></div>
+      </div>
+      <div class="panel">
+        <h4>配色主題</h4>
+        <div class="looks-grid wide" id="themePicker"></div>
+      </div>
+    </section>
+
+    <!-- 系統 -->
+    <section class="admin-view" id="viewSystem" hidden>
+      <div class="panel">
+        <h4>連線狀態</h4>
+        <div class="kv" id="sysInfo"></div>
+      </div>
+      <div class="panel">
+        <h4>講義檔案放置方式</h4>
+        <p class="hintline">
+          講義 PDF 直接放進 GitHub repo 的 <code id="matRoot"></code> 目錄，
+          在課程的「講義與作業」中填入相對路徑即可。<br><br>
+          <strong>請注意：</strong>放在 repo 的檔案本身是公開的，知道完整網址的人都能下載。
+          審核機制控制的是「誰看得到檔案清單」，而不是檔案本身的存取權。
+          若有機密講義不宜外流，請勿放入 repo。
+        </p>
+      </div>
+      <div class="panel">
+        <h4>資料備份</h4>
+        <p class="hintline">匯出包含課程、講義、作業、公告與學生名單的完整 JSON 快照。建議每學期執行一次。</p>
+        <button class="btn btn-ghost btn-rect" type="button" id="btnBackup2">匯出 JSON 備份</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- 講義與作業編輯視窗 -->
+<div class="modal-overlay" id="modalMaterials" aria-labelledby="matModalTitle">
+  <div class="modal-card">
+    <button class="modal-close" type="button" data-close-modal aria-label="關閉">&times;</button>
+    <h2 class="modal-title" id="matModalTitle"></h2>
+    <p class="modal-sub">講義與作業僅限通過審核的學生讀取。</p>
+    <div id="matBanner" class="banner"></div>
+
+    <div class="panel">
+      <h4>加入講義</h4>
+      <div class="form-row">
+        <div class="form-group"><label for="mfUnit">單元名稱</label><input type="text" id="mfUnit" placeholder="單元一：CDSS 概論"></div>
+        <div class="form-group"><label for="mfOrder">排序</label><input type="number" id="mfOrder" value="0"></div>
+      </div>
+      <div class="form-group"><label for="mfName">顯示名稱</label><input type="text" id="mfName" placeholder="Lecture01_CDSS_Overview.pdf"></div>
+      <div class="form-group">
+        <label for="mfPath">檔案路徑</label>
+        <input type="text" id="mfPath" placeholder="HI7001/Unit1/Lecture01.pdf">
+        <div class="help">相對於 assets/courses/ 的路徑，或直接填完整 https 網址。</div>
+      </div>
+      <div class="form-group"><label for="mfSize">檔案大小</label><input type="text" id="mfSize" placeholder="2.4 MB（選填）"></div>
+      <button class="btn btn-primary btn-rect" type="button" id="btnAddMaterial">加入講義</button>
+    </div>
+
+    <div class="panel">
+      <h4>目前講義</h4>
+      <table class="admin-table">
+        <thead><tr><th>單元</th><th>檔案</th><th>大小</th><th>操作</th></tr></thead>
+        <tbody id="matTbody"></tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h4>加入作業</h4>
+      <div class="form-group"><label for="afTitle">作業名稱</label><input type="text" id="afTitle" placeholder="作業一：CDSS 案例分析"></div>
+      <div class="form-group"><label for="afDue">截止時間</label><input type="datetime-local" id="afDue"></div>
+      <div class="form-group"><label for="afDesc">說明</label><textarea id="afDesc" rows="2"></textarea></div>
+      <button class="btn btn-primary btn-rect" type="button" id="btnAddAssignment">加入作業</button>
+    </div>
+
+    <div class="panel">
+      <h4>目前作業</h4>
+      <table class="admin-table">
+        <thead><tr><th>作業</th><th>截止時間</th><th>操作</th></tr></thead>
+        <tbody id="asgTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initUI } from './assets/js/ui.js';
+  import { initAdmin } from './assets/js/admin.js';
+  initUI();
+  initAdmin();
+</script>
+</body>
+</html>
