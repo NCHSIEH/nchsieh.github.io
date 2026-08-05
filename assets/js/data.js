@@ -435,9 +435,9 @@ export async function getSiteSettings() {
 }
 
 /** 只有管理者能寫入，由 firestore.rules 強制；前端這層檢查只是省一次白跑的請求 */
-export async function saveSiteSettings({ theme, layout }) {
+export async function saveSiteSettings({ theme, layout, materialsDisplay }) {
   await setDoc(doc(db, 'settings', 'site'), {
-    theme, layout, updatedAt: serverTimestamp()
+    theme, layout, materialsDisplay, updatedAt: serverTimestamp()
   }, { merge: true });
 }
 

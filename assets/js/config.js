@@ -44,6 +44,21 @@ export const LAYOUTS = [
 export const DEFAULT_LAYOUT = 'layout-table';
 
 /**
+ * 課程卡片「課程講義」清單一多時的呈現方式，後台「外觀」可切換、存在 Firestore，
+ * 即時對全站生效。三種都會保留完整清單，差別只在怎麼避免把卡片撐得比別人高：
+ *   scroll — 固定高度＋內部捲軸：份數再多，卡片高度都不變，清單在框內捲動。
+ *   expand — 預設只顯示前 5 筆，其餘收在「顯示全部」按鈕後面，點了才展開。
+ *   modal  — 卡片只放一個「查看課程講義」按鈕，完整清單另開彈窗瀏覽。
+ */
+export const MATERIALS_DISPLAY_MODES = [
+  { id: 'scroll', name: '固定高度＋捲軸',   note: '份數再多，卡片高度都不變，清單在框內捲動' },
+  { id: 'expand', name: '預設顯示前 5 筆',  note: '份數少直接看到，份數多才需要點「顯示全部」' },
+  { id: 'modal',  name: '按鈕開彈窗',       note: '卡片維持最精簡，完整清單另開彈窗瀏覽' }
+];
+
+export const DEFAULT_MATERIALS_DISPLAY = 'scroll';
+
+/**
  * 學術檔案連結。填入實際網址後才會顯示，留空會自動隱藏。
  */
 export const SCHOLAR_LINKS = [

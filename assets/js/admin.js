@@ -11,6 +11,7 @@ import {
 } from './ui.js';
 import {
   MATERIALS_ROOT, firebaseConfig, THEMES, LAYOUTS,
+  MATERIALS_DISPLAY_MODES, DEFAULT_MATERIALS_DISPLAY,
   EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY,
   DELETE_USER_API_URL
 } from './config.js';
@@ -407,9 +408,23 @@ function materialRow(m, index) {
 /** 目前顯示中的講義清單，供拖曳排序時計算新順序 */
 let currentMaterials = [];
 
+/** 新講義預設要放的順序值：接在目前清單最後面，而不是永遠回到最前面 */
+function nextMaterialOrder() {
+  return currentMaterials.length
+    ? Math.max(...currentMaterials.map(m => Number(m.order) || 0)) + 1
+    : 0;
+}
+
 async function refreshMaterials() {
   const detail = await loadCourseDetail(editorCourse.id);
   currentMaterials = detail.materials;
+
+  // 「手動加入」表單的排序欄位預設值同步成「目前最後面」，
+  // 使用者若正在該欄位打字中就不要打斷他（避免游標跳動、值被蓋掉）。
+  const orderInput = $('#mfOrder');
+  if (orderInput && document.activeElement !== orderInput) {
+    orderInput.value = String(nextMaterialOrder());
+  }
 
   $('#matTbody').replaceChildren(...(detail.materials.length
     ? detail.materials.map((m, i) => materialRow(m, i))
@@ -541,6 +556,11 @@ async function handleFiles(files) {
     unit ? safeName(unit) : ''
   ].filter(Boolean).join('/');
 
+  // 拖拉上傳一律放到目前清單最後面（不讀「手動加入」表單裡的排序欄位——
+  // 那是另一個表單的欄位，用同一個 id 只是巧合，用在這裡會讓新檔案永遠洗到最前面）。
+  // 同一批拖拉多個檔案時依序遞增，維持上傳順序。
+  let nextOrder = nextMaterialOrder();
+
   for (const file of files) {
     if (isPowerPoint(file.name)) {
       list.append(pptxCard(file));
@@ -558,7 +578,7 @@ async function handleFiles(files) {
         name: result.name,
         path: result.path,
         size: result.size,
-        order: Number($('#mfOrder')?.value) || 0
+        order: nextOrder++
       });
       ui.done(result.replaced ? '已覆寫既有檔案並更新紀錄' : '上傳完成');
       await refreshMaterials();
@@ -1024,19 +1044,40 @@ async function refreshAnnouncements() {
    外觀 — 全站預設
    ========================================================================== */
 
+/** 「課程講義呈現方式」目前選擇；初值等 refreshSiteDefault() 讀到現有設定後才會校正 */
+let selectedMaterialsDisplay = DEFAULT_MATERIALS_DISPLAY;
+
+function renderMaterialsDisplayPicker(container) {
+  if (!container) return;
+  container.replaceChildren(...MATERIALS_DISPLAY_MODES.map(m => el('button', {
+    type: 'button',
+    class: 'look-card',
+    'aria-pressed': String(m.id === selectedMaterialsDisplay),
+    onclick: () => { selectedMaterialsDisplay = m.id; renderMaterialsDisplayPicker(container); }
+  }, [
+    el('span', { class: 'name', text: m.name }),
+    el('span', { style: 'font-size:11.5px;color:var(--faint);line-height:1.5', text: m.note })
+  ])));
+}
+
 async function refreshSiteDefault() {
   const box = $('#siteDefaultInfo');
   box.innerHTML = '<p><span class="dot"></span>讀取中…</p>';
   const settings = await getSiteSettings();
+  selectedMaterialsDisplay = settings?.materialsDisplay || DEFAULT_MATERIALS_DISPLAY;
+  renderMaterialsDisplayPicker($('#materialsDisplayPicker'));
+
   if (!settings) {
     box.innerHTML = `<p><span class="dot wait"></span>尚未設定過，目前訪客看到的是程式內建預設值。</p>`;
     return;
   }
   const themeName  = THEMES.find(t => t.id === settings.theme)?.name || settings.theme || '（未知）';
   const layoutName = LAYOUTS.find(l => l.id === settings.layout)?.name || settings.layout || '（未知）';
+  const materialsName = MATERIALS_DISPLAY_MODES.find(m => m.id === selectedMaterialsDisplay)?.name || selectedMaterialsDisplay;
   box.innerHTML = `
     <p><span class="dot ok"></span>版型：<code>${esc(layoutName)}</code></p>
     <p><span class="dot ok"></span>配色：<code>${esc(themeName)}</code></p>
+    <p><span class="dot ok"></span>課程講義呈現：<code>${esc(materialsName)}</code></p>
     <p style="margin-top:6px;color:var(--faint);font-size:12.5px">${esc(fmtDateTime(settings.updatedAt))} 更新</p>`;
 }
 
@@ -1176,7 +1217,7 @@ function mount() {
   $('#btnSetSiteDefault').addEventListener('click', () => guard(async () => {
     const theme = currentTheme();
     const layout = currentLayout();
-    await saveSiteSettings({ theme, layout });
+    await saveSiteSettings({ theme, layout, materialsDisplay: selectedMaterialsDisplay });
     banner('#siteDefaultBanner', '已套用到全站，所有訪客下次載入即可看到。', 'success');
     await refreshSiteDefault();
   }, '#siteDefaultBanner'));

@@ -3,13 +3,16 @@
    課程大綱公開；講義與作業只有通過審核的學生讀得到（由 Security Rules 決定）
    ========================================================================== */
 
-import { $, el, esc, openModal, dueState, fmtDateTime, cleanText } from './ui.js';
+import { $, el, esc, openModal, closeModal, dueState, fmtDateTime, cleanText } from './ui.js';
 import { identity, onIdentity } from './auth.js';
-import { MATERIALS_ROOT } from './config.js';
-import { listCourses, loadCourseDetail, listAnnouncements, friendlyError, firebaseReady } from './data.js';
+import { MATERIALS_ROOT, DEFAULT_MATERIALS_DISPLAY } from './config.js';
+import { listCourses, loadCourseDetail, listAnnouncements, friendlyError, firebaseReady, getSiteSettings } from './data.js';
 
 let allCourses = [];
 const detailCache = new Map();
+
+/** 課程講義清單一多時要怎麼呈現，由後台「外觀」統一設定；載入前先用預設值 */
+let materialsDisplay = DEFAULT_MATERIALS_DISPLAY;
 
 /* ---------- 篩選器 ---------- */
 
@@ -68,6 +71,107 @@ function buildSummaryBlock(text) {
   }, '顯示更多');
 
   return el('div', { class: 'summary-wrap' }, [p, btn]);
+}
+
+/**
+ * 一份講義一列，若有填「單元」則在檔名前顯示成小標籤。
+ * 不再依單元分組成手風琴——實際資料常常每份講義的單元都不一樣，
+ * 分組後等於一份一個摺疊區塊，反而比不分組還要長。
+ */
+function buildFlatFileList(files) {
+  return el('ul', { class: 'file-list' }, files.map(f => el('li', { class: 'file-item' }, [
+    el('span', {}, [
+      cleanText(f.unit) ? el('span', { class: 'file-unit', text: cleanText(f.unit) }) : null,
+      el('a', {
+        class: 'file-name',
+        href: /^https?:\/\//.test(f.path) ? f.path : MATERIALS_ROOT + f.path,
+        target: '_blank', rel: 'noopener'
+      }, f.name || f.path)
+    ].filter(Boolean)),
+    f.size ? el('span', { class: 'file-size', text: f.size }) : null
+  ])));
+}
+
+/** 「按鈕開彈窗」模式共用同一個彈窗，每次開啟時換內容，不必每門課各建一個 */
+let materialsModalOverlay = null;
+
+function ensureMaterialsModal() {
+  if (materialsModalOverlay) return materialsModalOverlay;
+  const overlay = el('div', {
+    class: 'modal-overlay', id: 'modalCourseMaterials',
+    role: 'dialog', 'aria-modal': 'true', 'aria-hidden': 'true',
+    'aria-labelledby': 'courseMaterialsModalTitle'
+  });
+  overlay.addEventListener('mousedown', e => { if (e.target === overlay) closeModal(overlay); });
+  overlay.append(el('div', { class: 'modal-card' }, [
+    el('button', {
+      class: 'modal-close', type: 'button', 'aria-label': '關閉',
+      onclick: () => closeModal(overlay)
+    }, '×'),
+    el('h2', { class: 'modal-title', id: 'courseMaterialsModalTitle' }),
+    el('div', { id: 'courseMaterialsModalBody' })
+  ]));
+  document.body.append(overlay);
+  materialsModalOverlay = overlay;
+  return overlay;
+}
+
+function openMaterialsModal(course, files) {
+  const overlay = ensureMaterialsModal();
+  $('#courseMaterialsModalTitle', overlay).textContent = `${course.titleZh || course.code || ''}　課程講義`;
+  $('#courseMaterialsModalBody', overlay).replaceChildren(buildFlatFileList(files));
+  openModal(overlay);
+}
+
+/** 依後台設定的呈現方式，組出「課程講義」整個區塊 */
+function buildMaterialsBlock(course, materials) {
+  const count = materials.length;
+
+  if (!count) {
+    return el('div', { class: 'dir-tree' }, [
+      el('div', { class: 'dir-header', text: '課程講義' }),
+      el('p', { style: 'font-size:13px;color:var(--faint)', text: '本課程尚未上傳講義。' })
+    ]);
+  }
+
+  if (materialsDisplay === 'modal') {
+    return el('div', { class: 'dir-tree' }, [
+      el('div', { class: 'dir-header', text: `課程講義（${count} 份）` }),
+      el('button', {
+        class: 'btn btn-ghost btn-sm btn-block', type: 'button',
+        onclick: () => openMaterialsModal(course, materials)
+      }, '查看課程講義')
+    ]);
+  }
+
+  if (materialsDisplay === 'expand') {
+    const VISIBLE = 5;
+    const head = materials.slice(0, VISIBLE);
+    const rest = materials.slice(VISIBLE);
+    const tree = el('div', { class: 'dir-tree' }, [
+      el('div', { class: 'dir-header', text: `課程講義（${count} 份）` }),
+      buildFlatFileList(head)
+    ]);
+    if (rest.length) {
+      const restList = buildFlatFileList(rest);
+      restList.hidden = true;
+      const btn = el('button', {
+        class: 'summary-toggle', type: 'button', style: 'margin-top:6px',
+        onclick: () => {
+          restList.hidden = !restList.hidden;
+          btn.textContent = restList.hidden ? `顯示全部 ${count} 份` : '收合';
+        }
+      }, `顯示全部 ${count} 份`);
+      tree.append(restList, btn);
+    }
+    return tree;
+  }
+
+  // 'scroll'（預設）：固定高度＋內部捲軸，卡片高度不受份數影響
+  return el('div', { class: 'dir-tree' }, [
+    el('div', { class: 'dir-header', text: `課程講義（${count} 份）` }),
+    el('div', { class: 'dir-scroll' }, [buildFlatFileList(materials)])
+  ]);
 }
 
 function buildCard(c) {
@@ -137,68 +241,8 @@ async function renderDetail(course, slot) {
 
   const frag = document.createDocumentFragment();
 
-  // 講義
-  // 設計說明：課程講義一多，卡片會被拉得比其他卡片高出一大截，破壞整排卡片的
-  // 視覺節奏。改用可收合的 <details> 呈現——依教學單元分組時，只展開第一個單元，
-  // 其餘摺疊；若沒有分單元（全部塞在同一個預設分組），份數多時整區塊預設收合，
-  // 使用者點一下才展開，份數少（≤4）則直接展開，不需要多一次點擊。
-  if (detail.materials.length) {
-    const byUnit = new Map();
-    detail.materials.forEach(m => {
-      const key = m.unit || '';
-      if (!byUnit.has(key)) byUnit.set(key, []);
-      byUnit.get(key).push(m);
-    });
-
-    const buildFileList = files => el('ul', { class: 'file-list' }, files.map(f => el('li', { class: 'file-item' }, [
-      el('a', {
-        class: 'file-name',
-        href: /^https?:\/\//.test(f.path) ? f.path : MATERIALS_ROOT + f.path,
-        target: '_blank', rel: 'noopener'
-      }, f.name || f.path),
-      f.size ? el('span', { class: 'file-size', text: f.size }) : null
-    ])));
-
-    const multiUnit = byUnit.size > 1;
-
-    if (multiUnit) {
-      // 有分教學單元：每個單元一個手風琴，第一個預設展開，其餘收合。
-      const tree = el('div', { class: 'dir-tree' }, [
-        el('div', { class: 'dir-header', text: `課程講義（${detail.materials.length} 份）` })
-      ]);
-      let first = true;
-      byUnit.forEach((files, unit) => {
-        tree.append(el('details', { class: 'dir-folder', open: first ? true : null }, [
-          el('summary', { class: 'folder-title' }, [
-            el('span', { text: unit || '課程講義' }),
-            el('span', { class: 'folder-count' }, [
-              `${files.length} 份 `,
-              el('span', { class: 'chev', 'aria-hidden': 'true', text: '▾' })
-            ])
-          ]),
-          buildFileList(files)
-        ]));
-        first = false;
-      });
-      frag.append(tree);
-    } else {
-      // 沒有分單元，只有一組：份數多時整區塊預設收合，份數少就直接展開。
-      const files = [...byUnit.values()][0];
-      const openByDefault = files.length <= 4;
-      frag.append(el('details', { class: 'dir-tree', open: openByDefault ? true : null }, [
-        el('summary', {}, [
-          el('span', { text: `課程講義（${files.length} 份）` }),
-          el('span', { class: 'chev', 'aria-hidden': 'true', text: '▾' })
-        ]),
-        buildFileList(files)
-      ]));
-    }
-  } else {
-    frag.append(el('div', { class: 'dir-tree' }, [
-      el('div', { class: 'dir-header', text: '課程講義' }),
-      el('p', { style: 'font-size:13px;color:var(--faint)', text: '本課程尚未上傳講義。' })
-    ]));
-  }
+  // 講義：呈現方式（固定高度捲軸／預設展開前 5 筆／按鈕開彈窗）由後台「外觀」統一設定
+  frag.append(buildMaterialsBlock(course, detail.materials));
 
   // 作業
   if (detail.assignments.length) {
@@ -299,6 +343,13 @@ export async function initCourses() {
 
   grid.replaceChildren(...[0, 1].map(() =>
     el('div', { class: 'skeleton', style: 'height:260px;border-radius:18px' })));
+
+  // 課程講義呈現方式（固定高度捲軸／預設展開前幾筆／按鈕開彈窗）由後台設定；
+  // 讀取失敗就靜默維持 config.js 的預設值，不擋住其餘頁面渲染。
+  try {
+    const settings = await getSiteSettings();
+    if (settings?.materialsDisplay) materialsDisplay = settings.materialsDisplay;
+  } catch { /* 靜默失敗，維持預設值 */ }
 
   ['#filterSemester', '#filterLevel'].forEach(s => $(s).addEventListener('change', render));
   $('#filterSearch').addEventListener('input', render);
