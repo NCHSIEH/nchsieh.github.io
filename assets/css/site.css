@@ -854,13 +854,49 @@ main.courses { padding-top: 34px; padding-bottom: 20px; }
 .course-code { font-family: var(--font-mono); font-size: 12.5px; color: var(--faint); letter-spacing: .04em; }
 .course-title { font-family: var(--font-serif); font-size: 19px; font-weight: 700; color: var(--ink); line-height: 1.4; margin: 3px 0 10px; }
 .course-summary { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+/* 摘要過長時截斷為 3 行，避免單一課程把整排卡片的高度拉爆 */
+.course-summary.clamped {
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.summary-wrap { margin-bottom: 4px; }
+.summary-wrap .course-summary { margin-bottom: 4px; }
+.summary-toggle {
+  display: inline-block; margin-bottom: 14px; padding: 0; border: 0; background: none;
+  color: var(--brand); font-size: 12.5px; font-weight: 600; cursor: pointer;
+}
+.summary-toggle:hover { text-decoration: underline; }
+
 .course-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
 .course-tags span { font-size: 11.5px; background: var(--surface-2); color: var(--muted); padding: 3px 10px; border-radius: 6px; }
 
+/* 講義區塊：<details>/<summary> 手風琴，收合時卡片不會被拉長 */
 .dir-tree { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 12px; }
-.dir-header { font-size: 13px; font-weight: 700; color: var(--brand); margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
-.dir-folder { margin-bottom: 10px; background: var(--surface-2); border-radius: 10px; padding: 11px 14px; }
-.folder-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+.dir-tree > summary,
+.dir-header {
+  font-size: 13px; font-weight: 700; color: var(--brand); margin-bottom: 9px;
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+}
+.dir-tree > summary { cursor: pointer; list-style: none; }
+.dir-tree > summary::-webkit-details-marker { display: none; }
+.dir-tree[open] > summary { margin-bottom: 9px; }
+
+.dir-folder {
+  margin-bottom: 10px; background: var(--surface-2); border-radius: 10px; overflow: hidden;
+}
+.dir-folder > summary.folder-title {
+  font-size: 13px; font-weight: 600; color: var(--ink); cursor: pointer; list-style: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 11px 14px;
+}
+.dir-folder > summary.folder-title::-webkit-details-marker { display: none; }
+.dir-folder > summary:hover { color: var(--brand); }
+.dir-folder .folder-count { font-weight: 400; color: var(--faint); font-size: 11.5px; }
+.dir-folder .file-list { padding: 0 14px 11px; }
+
+.chev { transition: transform .2s ease; display: inline-block; color: inherit; }
+[open] > summary .chev { transform: rotate(180deg); }
+
 .file-list { list-style: none; margin-top: 7px; }
 .file-item {
   display: flex; justify-content: space-between; align-items: center; gap: 10px;

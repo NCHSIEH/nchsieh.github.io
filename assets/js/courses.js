@@ -47,6 +47,29 @@ function levelLabel(level) {
   return level === 'undergraduate' ? '大學部' : '碩博士班';
 }
 
+/**
+ * 課程摘要過長時（超過一個門檻字數）以 3 行截斷＋「顯示更多」按鈕呈現，
+ * 避免單一課程摘要把整張卡片拉得比其他卡片高出一大截。
+ */
+function buildSummaryBlock(text) {
+  const clean = cleanText(text);
+  if (!clean) return null;
+
+  const isLong = clean.length > 130;
+  const p = el('p', { class: `course-summary${isLong ? ' clamped' : ''}`, text: clean });
+  if (!isLong) return p;
+
+  const btn = el('button', {
+    class: 'summary-toggle', type: 'button',
+    onclick: () => {
+      const stillClamped = p.classList.toggle('clamped');
+      btn.textContent = stillClamped ? '顯示更多' : '收合摘要';
+    }
+  }, '顯示更多');
+
+  return el('div', { class: 'summary-wrap' }, [p, btn]);
+}
+
 function buildCard(c) {
   const card = el('article', { class: 'course-card' });
   const grow = el('div', { class: 'grow' });
@@ -63,7 +86,7 @@ function buildCard(c) {
     el('div', { class: 'course-code mono', text: c.code || '' }),
     el('h3', { class: 'course-title', text: cleanText(c.titleZh) || '(未命名課程)' }),
     cleanText(c.titleEn) ? el('div', { style: 'font-family:var(--font-latin);font-size:14px;color:var(--faint);margin:-6px 0 10px', text: cleanText(c.titleEn) }) : null,
-    cleanText(c.summaryZh) ? el('p', { class: 'course-summary', text: cleanText(c.summaryZh) }) : null
+    buildSummaryBlock(c.summaryZh)
   ].filter(Boolean));
 
   if (c.tags?.length) {
@@ -115,30 +138,61 @@ async function renderDetail(course, slot) {
   const frag = document.createDocumentFragment();
 
   // 講義
+  // 設計說明：課程講義一多，卡片會被拉得比其他卡片高出一大截，破壞整排卡片的
+  // 視覺節奏。改用可收合的 <details> 呈現——依教學單元分組時，只展開第一個單元，
+  // 其餘摺疊；若沒有分單元（全部塞在同一個預設分組），份數多時整區塊預設收合，
+  // 使用者點一下才展開，份數少（≤4）則直接展開，不需要多一次點擊。
   if (detail.materials.length) {
-    const tree = el('div', { class: 'dir-tree' }, [
-      el('div', { class: 'dir-header', text: `課程講義（${detail.materials.length} 份）` })
-    ]);
     const byUnit = new Map();
     detail.materials.forEach(m => {
-      const key = m.unit || '課程講義';
+      const key = m.unit || '';
       if (!byUnit.has(key)) byUnit.set(key, []);
       byUnit.get(key).push(m);
     });
-    byUnit.forEach((files, unit) => {
-      const list = el('ul', { class: 'file-list' }, files.map(f => el('li', { class: 'file-item' }, [
-        el('a', {
-          class: 'file-name',
-          href: /^https?:\/\//.test(f.path) ? f.path : MATERIALS_ROOT + f.path,
-          target: '_blank', rel: 'noopener'
-        }, f.name || f.path),
-        f.size ? el('span', { class: 'file-size', text: f.size }) : null
-      ])));
-      tree.append(el('div', { class: 'dir-folder' }, [
-        el('div', { class: 'folder-title', text: unit }), list
+
+    const buildFileList = files => el('ul', { class: 'file-list' }, files.map(f => el('li', { class: 'file-item' }, [
+      el('a', {
+        class: 'file-name',
+        href: /^https?:\/\//.test(f.path) ? f.path : MATERIALS_ROOT + f.path,
+        target: '_blank', rel: 'noopener'
+      }, f.name || f.path),
+      f.size ? el('span', { class: 'file-size', text: f.size }) : null
+    ])));
+
+    const multiUnit = byUnit.size > 1;
+
+    if (multiUnit) {
+      // 有分教學單元：每個單元一個手風琴，第一個預設展開，其餘收合。
+      const tree = el('div', { class: 'dir-tree' }, [
+        el('div', { class: 'dir-header', text: `課程講義（${detail.materials.length} 份）` })
+      ]);
+      let first = true;
+      byUnit.forEach((files, unit) => {
+        tree.append(el('details', { class: 'dir-folder', open: first ? true : null }, [
+          el('summary', { class: 'folder-title' }, [
+            el('span', { text: unit || '課程講義' }),
+            el('span', { class: 'folder-count' }, [
+              `${files.length} 份 `,
+              el('span', { class: 'chev', 'aria-hidden': 'true', text: '▾' })
+            ])
+          ]),
+          buildFileList(files)
+        ]));
+        first = false;
+      });
+      frag.append(tree);
+    } else {
+      // 沒有分單元，只有一組：份數多時整區塊預設收合，份數少就直接展開。
+      const files = [...byUnit.values()][0];
+      const openByDefault = files.length <= 4;
+      frag.append(el('details', { class: 'dir-tree', open: openByDefault ? true : null }, [
+        el('summary', {}, [
+          el('span', { text: `課程講義（${files.length} 份）` }),
+          el('span', { class: 'chev', 'aria-hidden': 'true', text: '▾' })
+        ]),
+        buildFileList(files)
       ]));
-    });
-    frag.append(tree);
+    }
   } else {
     frag.append(el('div', { class: 'dir-tree' }, [
       el('div', { class: 'dir-header', text: '課程講義' }),
