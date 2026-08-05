@@ -16,7 +16,7 @@ import {
   serverTimestamp, writeBatch, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
-import { firebaseConfig, ADMIN_EMAILS } from './config.js';
+import { firebaseConfig, ADMIN_EMAILS, DELETE_USER_API_URL } from './config.js';
 
 /* ---------- 初始化 ---------- */
 
@@ -72,7 +72,9 @@ export function watchAuth(callback) {
 
 export async function registerStudent({ email, password, name, studentId, className, note }) {
   const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
-  await sendEmailVerification(cred.user);
+  // Email 驗證信盡量寄，但不是必要條件（見 isApprovedStudent() 的說明）——
+  // 寄送失敗（例如免費額度或網路問題）不該連帶讓整個註冊失敗，帳號畢竟已經建立成功了。
+  try { await sendEmailVerification(cred.user); } catch (err) { console.warn('[驗證信寄送失敗]', err); }
   // 建立待審核紀錄。status 只能是 'pending'，這是 Security Rules 強制的。
   await setDoc(doc(db, 'students', cred.user.uid), {
     email: cred.user.email,
@@ -157,8 +159,10 @@ export async function resolveIdentity(user) {
     if (snap.exists()) { profile = snap.data(); status = profile.status; }
   } catch { /* 忽略 */ }
 
+  // 學生角色不要求 email 已驗證——見 firestore.rules 的 isApprovedStudent() 說明。
+  // verified 欄位仍然回傳，純粹用來在介面上顯示一句友善提醒，不作為存取門檻。
   return {
-    role: status === 'approved' && user.emailVerified ? 'student' : 'applicant',
+    role: status === 'approved' ? 'student' : 'applicant',
     verified: user.emailVerified,
     status,
     profile
@@ -218,8 +222,31 @@ export async function setStudentAccess(uid, courseIds) {
 }
 
 export async function removeStudent(uid) {
-  // 只刪除 Firestore 紀錄；Auth 帳號需在 Console 移除
+  // 只刪除 Firestore 紀錄；Auth 帳號另外由 deleteAuthAccount() 處理（若有設定）
   await deleteDoc(doc(db, 'students', uid));
+}
+
+/**
+ * 呼叫獨立部署的 Vercel serverless function，把 Firebase Authentication 帳號也刪掉。
+ * DELETE_USER_API_URL 沒設定時直接跳過（回傳 skipped: true），維持「只刪 Firestore
+ * 紀錄」的舊行為，不會噴錯——這是刻意設計成漸進增強，沒接這支 API 也完全不影響其他功能。
+ */
+export async function deleteAuthAccount(uid) {
+  if (!DELETE_USER_API_URL) return { skipped: true };
+  if (!auth.currentUser) throw new Error('尚未登入，無法驗證管理者身分。');
+
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch(DELETE_USER_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ uid, idToken })
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || `刪除失敗（HTTP ${res.status}）`);
+  }
+  return { skipped: false };
 }
 
 /* ---------- 課程 ---------- */

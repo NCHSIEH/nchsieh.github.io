@@ -42,15 +42,19 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/students/$(request.auth.uid)).data;
     }
 
-    // 已核准學生：必須同時滿足三件事
+    // 已核准學生：必須同時滿足兩件事
     //   1. 已登入
-    //   2. Email 已完成驗證（點過驗證信）
-    //   3. students 文件存在且 status == 'approved'（由管理者核准）
+    //   2. students 文件存在且 status == 'approved'（由管理者核准）
     // 注意：暫停中的學生 status 是 'suspended'，不是 'approved'，
     // 所以會自動被這裡擋下——暫停功能不需要額外的規則邏輯。
+    //
+    // 這裡刻意不要求 email_verified——因為驗證信常被學校信箱系統擋掉，
+    // 造成學生完全卡關。小班制課程改由管理者手動核對姓名／學號／班級來把關，
+    // 承擔「理論上有人可能冒用他人 Email 申請」這個極低機率的風險，換取
+    // 「驗證信收不到就永遠進不來」這個更嚴重的實際問題不再發生。
+    // （管理者帳號 isAdmin() 仍然要求 email_verified，因為那沒有人工審核這一關。）
     function isApprovedStudent() {
       return signedIn()
-        && request.auth.token.email_verified == true
         && exists(/databases/$(database)/documents/students/$(request.auth.uid))
         && studentDoc().status == 'approved';
     }

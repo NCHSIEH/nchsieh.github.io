@@ -313,6 +313,18 @@
       </div>
 
       <div class="panel">
+        <h4>刪除學生時一併刪除登入帳號</h4>
+        <div class="kv" id="deleteApiInfo"></div>
+        <p class="hintline" style="margin-top:10px">
+          預設「刪除」只會移除 Firestore 紀錄，Firebase Authentication 帳號需自行到 Console 刪除。
+          若想讓後台的「刪除」按一次就兩邊都清乾淨，需要另外部署一支獨立的免費 Vercel serverless
+          function 來保管 Admin SDK 金鑰（瀏覽器端無法直接刪除別人的帳號）。程式已經寫好在
+          <code>admin-api/</code> 資料夾，部署後把網址填入 <code>assets/js/config.js</code> 的
+          <code>DELETE_USER_API_URL</code> 即可，詳細步驟見 <code>FIREBASE_SETUP.md</code>。
+        </p>
+      </div>
+
+      <div class="panel">
         <h4>修改登入密碼</h4>
         <p class="hintline">
           修改後這台裝置與其他裝置都需要用新密碼重新登入。

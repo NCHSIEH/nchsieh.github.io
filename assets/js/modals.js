@@ -60,7 +60,7 @@ const STUDENT_MODAL = `
       </div>
 
       <p style="margin-top:16px;font-size:12.5px;color:var(--faint);line-height:1.7">
-        申請流程：註冊 → 收驗證信並點擊連結 → 任課教師核准 → 取得講義存取權限。
+        申請流程：註冊 → 任課教師核准 → 取得講義存取權限。系統也會寄驗證信，但沒收到不影響審核。
       </p>
     </div>
   </div>

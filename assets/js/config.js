@@ -101,3 +101,15 @@ export const ADMIN_EMAILS = [
 export const EMAILJS_SERVICE_ID  = '';
 export const EMAILJS_TEMPLATE_ID = '';
 export const EMAILJS_PUBLIC_KEY  = '';
+
+/**
+ * 刪除學生時，一併刪除 Firebase Authentication 帳號用的 API 網址。
+ * 留空＝維持原本行為（後台「刪除」只會刪 Firestore 紀錄，Auth 帳號需自行到 Console 刪除）。
+ *
+ * 這支 API 是獨立部署在 Vercel 的一支小 serverless function（見 admin-api/ 資料夾），
+ * 因為瀏覽器端的 Firebase SDK 沒辦法刪除別人的帳號，必須透過保管在伺服器端的
+ * Admin SDK 金鑰才能做到。設定方式見 FIREBASE_SETUP.md。
+ *
+ * 格式範例：'https://your-project.vercel.app/api/delete-student'
+ */
+export const DELETE_USER_API_URL = 'https://admin-api-liard-rho.vercel.app/api/delete-student';

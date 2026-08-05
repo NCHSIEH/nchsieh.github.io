@@ -3,7 +3,7 @@
    課程大綱公開；講義與作業只有通過審核的學生讀得到（由 Security Rules 決定）
    ========================================================================== */
 
-import { $, el, esc, openModal, dueState, fmtDateTime } from './ui.js';
+import { $, el, esc, openModal, dueState, fmtDateTime, cleanText } from './ui.js';
 import { identity, onIdentity } from './auth.js';
 import { MATERIALS_ROOT } from './config.js';
 import { listCourses, loadCourseDetail, listAnnouncements, friendlyError, firebaseReady } from './data.js';
@@ -51,16 +51,20 @@ function buildCard(c) {
   const card = el('article', { class: 'course-card' });
   const grow = el('div', { class: 'grow' });
 
-  grow.append(
+  // 注意：Element.append() 遇到 null／undefined 不會略過，會把它字面轉成
+  // 文字節點 "null"／"undefined" 塞進畫面裡——這正是課程摘要曾經顯示「null」的真正原因，
+  // 不是資料本身壞掉。所以這裡用 .filter(Boolean) 濾掉可能為 null 的可選欄位，
+  // 絕不讓 null 直接進到 append() 的參數列表。
+  grow.append(...[
     el('div', { class: 'course-head' }, [
       el('span', { class: 'badge-sem', text: c.semester || '—' }),
       el('span', { class: 'badge-level', text: `${levelLabel(c.level)}${c.credits ? `・${c.credits} 學分` : ''}` })
     ]),
     el('div', { class: 'course-code mono', text: c.code || '' }),
-    el('h3', { class: 'course-title', text: c.titleZh || '(未命名課程)' }),
-    c.titleEn ? el('div', { style: 'font-family:var(--font-latin);font-size:14px;color:var(--faint);margin:-6px 0 10px', text: c.titleEn }) : null,
-    c.summaryZh ? el('p', { class: 'course-summary', text: c.summaryZh }) : null
-  );
+    el('h3', { class: 'course-title', text: cleanText(c.titleZh) || '(未命名課程)' }),
+    cleanText(c.titleEn) ? el('div', { style: 'font-family:var(--font-latin);font-size:14px;color:var(--faint);margin:-6px 0 10px', text: cleanText(c.titleEn) }) : null,
+    cleanText(c.summaryZh) ? el('p', { class: 'course-summary', text: cleanText(c.summaryZh) }) : null
+  ].filter(Boolean));
 
   if (c.tags?.length) {
     grow.append(el('div', { class: 'course-tags' }, c.tags.map(t => el('span', { text: t }))));
@@ -90,13 +94,12 @@ async function renderDetail(course, slot) {
 
   if (!detail.allowed) {
     const guest = !identity.user;
-    const pending = identity.user && identity.status === 'pending';
-    const unverified = identity.user && !identity.verified;
 
     let msg = '講義與作業僅開放給通過審核的修課學生。';
-    if (unverified) msg = '你的 Email 尚未完成驗證，請先點開驗證信中的連結。';
-    else if (pending) msg = '你的申請正在等待任課教師核准，核准後即可看到講義。';
+    if (identity.status === 'pending') msg = '你的申請正在等待任課教師核准，核准後即可看到講義。';
     else if (identity.status === 'rejected') msg = '你的申請未通過，如有疑問請來信聯繫。';
+    else if (identity.status === 'suspended') msg = '你的存取權限已被暫停，如有疑問請來信聯繫任課教師。';
+    else if (identity.user && identity.status === 'approved') msg = '這門課不在你目前的可看課程範圍內，如有疑問請來信聯繫任課教師。';
 
     const box = el('div', { class: 'locked-hint' }, [el('p', { text: msg })]);
     if (guest) {

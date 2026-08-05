@@ -1,0 +1,12 @@
+{
+  "name": "nchsieh-admin-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "一支小小的 Vercel serverless function：保管 Firebase Admin SDK 金鑰，讓後台可以真的刪除 Firebase Authentication 帳號。與主網站（GitHub Pages）分開部署，主網站的前端程式碼完全碰不到這裡的金鑰。",
+  "dependencies": {
+    "firebase-admin": "^14.0.0"
+  },
+  "overrides": {
+    "jose": "4.15.5"
+  }
+}

@@ -17,6 +17,17 @@ export function esc(str) {
   ));
 }
 
+/**
+ * 把「看起來像空值」的字串也當成空字串處理。
+ * 背景：某些欄位若不小心把 null／undefined 直接指派給 <input>.value，
+ * 瀏覽器會把它們字面轉成 "null"／"undefined" 這兩個字串存進去，
+ * 之後不管是顯示還是重新載入編輯表單都會看到礙眼的文字。
+ * 顯示用的地方都應該先過這一層，比每個欄位各自補防呆更省事。
+ */
+export function cleanText(v) {
+  return (v && v !== 'null' && v !== 'undefined') ? v : '';
+}
+
 export function el(tag, attrs = {}, children = []) {
   const node = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {

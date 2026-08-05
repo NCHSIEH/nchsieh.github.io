@@ -6,17 +6,18 @@
    ========================================================================== */
 
 import {
-  $, $$, el, esc, banner, openModal, closeModal, fmtDateTime, initTabs,
+  $, $$, el, esc, banner, openModal, closeModal, fmtDateTime, initTabs, cleanText,
   renderThemePicker, renderLayoutPicker, currentTheme, currentLayout
 } from './ui.js';
 import {
   MATERIALS_ROOT, firebaseConfig, THEMES, LAYOUTS,
-  EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY
+  EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY,
+  DELETE_USER_API_URL
 } from './config.js';
 import {
   auth, watchAuth, loginStudent, logout, friendlyError, firebaseReady, firebaseError,
   resolveIdentity, isAdminEmail, resendVerification, refreshUser, changePassword,
-  listStudents, decideStudent, removeStudent, saveStudentOrder, setStudentAccess,
+  listStudents, decideStudent, removeStudent, deleteAuthAccount, saveStudentOrder, setStudentAccess,
   listCourses, saveCourse, deleteCourse, loadCourseDetail,
   saveMaterial, deleteMaterial, saveAssignment, deleteAssignment,
   listAnnouncements, publishAnnouncement, deleteAnnouncement, markAnnouncementReminderSent,
@@ -237,13 +238,13 @@ function courseFormValues() {
 }
 
 function fillCourseForm(c) {
-  $('#cfCode').value      = c?.code || '';
-  $('#cfTitleZh').value   = c?.titleZh || '';
-  $('#cfTitleEn').value   = c?.titleEn || '';
-  $('#cfSemester').value  = c?.semester || '';
+  $('#cfCode').value      = cleanText(c?.code);
+  $('#cfTitleZh').value   = cleanText(c?.titleZh);
+  $('#cfTitleEn').value   = cleanText(c?.titleEn);
+  $('#cfSemester').value  = cleanText(c?.semester);
   $('#cfLevel').value     = c?.level || 'graduate';
   $('#cfCredits').value   = c?.credits ?? 3;
-  $('#cfSummaryZh').value = c?.summaryZh || '';
+  $('#cfSummaryZh').value = cleanText(c?.summaryZh);
   $('#cfTags').value      = (c?.tags || []).join('、');
 
   editingCourseId = c?.id || null;
@@ -271,10 +272,10 @@ function courseRow(c, index) {
       ])
     ]),
     el('td', {}, [
-      el('div', { style: 'font-weight:600', text: c.titleZh || '(未命名)' }),
-      el('div', { class: 'mono', style: 'font-size:12px;color:var(--faint)', text: c.code || '' })
+      el('div', { style: 'font-weight:600', text: cleanText(c.titleZh) || '(未命名)' }),
+      el('div', { class: 'mono', style: 'font-size:12px;color:var(--faint)', text: cleanText(c.code) })
     ]),
-    el('td', { style: 'white-space:nowrap', text: c.semester || '—' }),
+    el('td', { style: 'white-space:nowrap', text: cleanText(c.semester) || '—' }),
     el('td', { style: 'white-space:nowrap', text: c.level === 'undergraduate' ? '大學部' : '碩博士班' }),
     el('td', {}, [el('div', { class: 'actions' }, [
       el('button', { class: 'btn btn-ghost btn-sm btn-rect', type: 'button',
@@ -659,6 +660,37 @@ const STATUS_BADGE = {
 /** 目前顯示中的學生清單，供拖曳排序與課程權限彈窗查找資料 */
 let currentStudents = [];
 
+/**
+ * 統一的「刪除學生」流程：先刪 Firestore 紀錄，再嘗試刪除 Firebase Auth 帳號
+ * （只有設定過 DELETE_USER_API_URL 才會真的呼叫；沒設定就維持舊行為，只刪 Firestore）。
+ * Auth 帳號刪除失敗不會讓整個操作報錯中斷——Firestore 紀錄畢竟已經刪掉了，
+ * 只用警告訊息提醒管理者自行到 Console 補刪。
+ */
+async function deleteStudentEverywhere(r) {
+  await removeStudent(r.id);
+  try {
+    const result = await deleteAuthAccount(r.id);
+    banner('#adminOpBanner',
+      result.skipped
+        ? `已刪除 ${r.email} 的申請紀錄。`
+        : `已刪除 ${r.email} 的申請紀錄與登入帳號。`,
+      'success');
+  } catch (err) {
+    banner('#adminOpBanner',
+      `Firestore 紀錄已刪除，但登入帳號刪除失敗：${esc(err.message || String(err))}。請至 Firebase Console 手動刪除。`,
+      'warn');
+  }
+  await refreshBoth();
+  await refreshDash();
+}
+
+function deleteConfirmMessage(r) {
+  return DELETE_USER_API_URL
+    ? `刪除 ${r.email} 的申請紀錄？\n\n這會同時刪除 Firestore 紀錄與 Firebase 登入帳號，動作無法復原。`
+    : `刪除 ${r.email} 的申請紀錄？\n\n注意：這只會移除 Firestore 紀錄。` +
+      `Firebase Authentication 中的帳號仍然存在，需另行至 Console 刪除。`;
+}
+
 function studentRow(r, index) {
   const [cls, label] = STATUS_BADGE[r.status] || ['guest', r.status || '—'];
   const canScope = r.status === 'approved' || r.status === 'suspended';
@@ -720,12 +752,7 @@ function studentRow(r, index) {
       }, '駁回'),
       el('button', {
         class: 'btn btn-quiet btn-sm btn-rect', type: 'button',
-        onclick: () => confirmThen(
-          `刪除 ${r.email} 的申請紀錄？\n\n注意：這只會移除 Firestore 紀錄。` +
-          `Firebase Authentication 中的帳號仍然存在，需另行至 Console 刪除。`,
-          () => guard(async () => {
-            await removeStudent(r.id); await refreshBoth(); await refreshDash();
-          }))
+        onclick: () => confirmThen(deleteConfirmMessage(r), () => guard(() => deleteStudentEverywhere(r)))
       }, '刪除')
     ].filter(Boolean))])
   ]);
@@ -759,12 +786,7 @@ function queueRow(r) {
       }, '駁回'),
       el('button', {
         class: 'btn btn-quiet btn-sm btn-rect', type: 'button',
-        onclick: () => confirmThen(
-          `刪除 ${r.email} 的申請紀錄？\n\n注意：這只會移除 Firestore 紀錄。` +
-          `Firebase Authentication 中的帳號仍然存在，需另行至 Console 刪除。`,
-          () => guard(async () => {
-            await removeStudent(r.id); await refreshBoth(); await refreshDash();
-          }))
+        onclick: () => confirmThen(deleteConfirmMessage(r), () => guard(() => deleteStudentEverywhere(r)))
       }, '刪除')
     ])])
   ]);
@@ -884,7 +906,7 @@ function renderAccessCourseList(student) {
     style: 'display:flex;align-items:center;gap:8px;font-size:13.5px'
   }, [
     el('input', { type: 'checkbox', class: 'access-course-cb', value: c.id, checked: allowed.has(c.id) }),
-    el('span', { text: `${c.titleZh || c.code || '(未命名)'}${c.semester ? `（${c.semester}）` : ''}` })
+    el('span', { text: `${cleanText(c.titleZh) || cleanText(c.code) || '(未命名)'}${cleanText(c.semester) ? `（${cleanText(c.semester)}）` : ''}` })
   ])));
 }
 
@@ -1184,6 +1206,11 @@ function mount() {
     ? `<p><span class="dot ok"></span>已設定，公告的「寄送提醒」按鈕可以使用。</p>
        <p><span class="dot ok"></span>Service ID：<code>${esc(EMAILJS_SERVICE_ID)}</code></p>`
     : `<p><span class="dot wait"></span>尚未設定，公告的「寄送提醒」目前會顯示提示但不會真的寄出。</p>`;
+
+  $('#deleteApiInfo').innerHTML = DELETE_USER_API_URL
+    ? `<p><span class="dot ok"></span>已設定，「學生管理」的刪除按鈕會一併刪除 Firebase 登入帳號。</p>
+       <p><span class="dot ok"></span>API：<code>${esc(DELETE_USER_API_URL)}</code></p>`
+    : `<p><span class="dot wait"></span>尚未設定，「刪除」目前只會移除 Firestore 紀錄，Auth 帳號需自行到 Console 刪除。</p>`;
 
   // 修改密碼
   $('#pwForm').addEventListener('submit', e => {

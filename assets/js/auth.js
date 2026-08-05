@@ -30,14 +30,14 @@ const STATUS_TEXT = {
   pending:   { cls: 'pending',  label: '審核中' },
   rejected:  { cls: 'rejected', label: '申請未通過' },
   suspended: { cls: 'rejected', label: '存取已暫停' },
-  unverified:{ cls: 'pending',  label: '待完成 Email 驗證' },
   guest:     { cls: 'guest',    label: '訪客・僅顯示公開課程大綱' }
 };
 
+// Email 是否驗證不再是存取門檻（驗證信常被學校信箱擋掉），
+// 這裡直接依審核狀態顯示，不會因為尚未驗證就卡住畫面。
 export function statusDescriptor() {
   if (identity.role === 'admin') return STATUS_TEXT.admin;
   if (!identity.user) return STATUS_TEXT.guest;
-  if (!identity.verified) return STATUS_TEXT.unverified;
   return STATUS_TEXT[identity.status] || STATUS_TEXT.pending;
 }
 
@@ -105,8 +105,8 @@ async function handlePrimary() {
       if (!f.name) { banner('#authBanner', '請填寫姓名，方便老師辨識你的申請。', 'error'); return; }
       await registerStudent(f);
       banner('#authBanner',
-        `申請已送出，驗證信寄至 <code>${esc(f.email)}</code>。<br>
-         請先完成信件驗證（若沒收到請查看垃圾郵件），再等候任課教師核准。`, 'success');
+        `申請已送出，請等候任課教師核准。<br>
+         系統也會寄一封驗證信到 <code>${esc(f.email)}</code>（若沒收到請查看垃圾郵件匣，沒收到也不影響審核）。`, 'success');
       $('#stPassword').value = '';
     } else {
       await loginStudent(f.email, f.password);
@@ -142,14 +142,15 @@ async function handleResend() {
   } finally { busy(false); }
 }
 
+/** 「重新檢查狀態」按鈕：主要用來確認審核進度有沒有更新，順便也刷新驗證狀態 */
 async function handleRecheck() {
   busy(true);
   try {
     await refreshUser();
     await syncIdentity();
     banner('#authBanner',
-      identity.verified ? '驗證狀態已更新。' : '尚未偵測到驗證完成，請先點開信件中的連結。',
-      identity.verified ? 'success' : 'warn');
+      identity.status === 'approved' ? '已核准！重新整理頁面即可看到講義。' : '尚未核准，請耐心等候任課教師審核。',
+      identity.status === 'approved' ? 'success' : 'info');
   } catch (err) {
     banner('#authBanner', esc(friendlyError(err)), 'error');
   } finally { busy(false); }
@@ -175,16 +176,17 @@ function paintModalState() {
     el('p', { class: 'kv', html: `帳號：<code>${esc(identity.user.email)}</code>` })
   ];
 
+  // Email 驗證不再是存取門檻（常被學校信箱擋掉），只用一句不擋路的提醒帶過，
+  // 審核狀態才是真正決定看不看得到講義的依據，所以下面直接照 status 分流。
   if (!identity.verified) {
+    rows.push(el('p', { class: 'kv', style: 'margin-top:10px;color:var(--faint);font-size:12.5px',
+      text: '提醒：你的 Email 還沒完成驗證，不影響審核與使用。若想補驗證，可點下方按鈕重寄驗證信（找不到信請查看垃圾郵件匣）。' }));
+    rows.push(el('button', { class: 'btn btn-ghost btn-sm', style: 'margin-top:8px', type: 'button', onclick: handleResend }, '重寄驗證信'));
+  }
+
+  if (identity.status === 'pending') {
     rows.push(el('p', { class: 'kv', style: 'margin-top:10px',
-      text: '你的 Email 還沒完成驗證。請點開信件中的連結，回來後按「我驗證好了」。' }));
-    rows.push(el('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;margin-top:12px' }, [
-      el('button', { class: 'btn btn-primary btn-sm', type: 'button', onclick: handleRecheck }, '我驗證好了'),
-      el('button', { class: 'btn btn-ghost btn-sm', type: 'button', onclick: handleResend }, '重寄驗證信')
-    ]));
-  } else if (identity.status === 'pending') {
-    rows.push(el('p', { class: 'kv', style: 'margin-top:10px',
-      text: 'Email 已驗證，目前等待任課教師核准。核准後重新整理頁面即可看到講義。' }));
+      text: '目前等待任課教師核准，核准後重新整理頁面即可看到講義。' }));
     rows.push(el('button', { class: 'btn btn-ghost btn-sm', style: 'margin-top:12px', type: 'button', onclick: handleRecheck }, '重新檢查狀態'));
   } else if (identity.status === 'rejected') {
     rows.push(el('p', { class: 'kv', style: 'margin-top:10px',
