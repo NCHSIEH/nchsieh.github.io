@@ -91,7 +91,7 @@ function renderProfileAssets() {
           class: 'portrait', src: PROFILE_ASSETS.portrait,
           alt: '謝楠楨教授', loading: 'lazy', decoding: 'async'
         })
-      : el('div', { class: 'portrait-fallback', 'aria-hidden': 'true' }, [el('span', { text: 'NH' })]));
+      : el('div', { class: 'portrait-fallback', 'aria-hidden': 'true' }, [el('span', { text: 'N·H' })]));
   }
 
   const cv = $('#btnCV');
