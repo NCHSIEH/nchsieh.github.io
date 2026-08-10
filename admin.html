@@ -241,8 +241,18 @@
           <div class="form-group"><label for="annBody">內容</label><textarea id="annBody" rows="5"></textarea></div>
           <div class="form-group">
             <label for="annTargetClass">指定班級</label>
-            <input type="text" id="annTargetClass" placeholder="留空＝全部班級都看得到">
-            <div class="help">需與學生註冊時填寫的班級完全相符，才會顯示給該班級、並收到提醒信。</div>
+            <select id="annTargetClass"><option value="">全部班級</option></select>
+            <div class="help">從目前已核准學生的班級中選擇，不用手動打字、不怕打錯字對不上。</div>
+          </div>
+          <div class="form-group">
+            <label for="annTargetCourse">指定課程</label>
+            <select id="annTargetCourse"><option value="">全部課程</option></select>
+            <div class="help">只會顯示／寄給有權限看這門課的學生（該學生未被限制課程範圍，或這門課在他的可看清單內）。</div>
+          </div>
+          <div class="form-group">
+            <label>指定學生（選填）</label>
+            <div class="help" style="margin-bottom:8px">留空＝符合上面班級／課程條件的學生全部都算；勾選後只會再進一步限縮到勾選的人。</div>
+            <div id="annTargetStudents" style="display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;padding:10px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface-2)"></div>
           </div>
           <div class="form-row">
             <div class="form-group"><label for="annStart">開始日期</label><input type="date" id="annStart"></div>

@@ -358,21 +358,46 @@ export async function listAnnouncements(max = 5) {
 }
 
 /**
- * targetClass 留空表示全班級可見。
+ * targetClass／targetCourseId／targetStudentIds 都留空表示所有人可見。
  * startAt / endAt 是 <input type="date"> 的字串值（如 '2026-09-01'）或 null，
  * 用來限制公告只在特定期間對公開頁顯示；兩者都留空＝立即生效、永不過期。
  */
-export async function publishAnnouncement({ title, body, targetClass, startAt, endAt }) {
+export async function publishAnnouncement({ title, body, targetClass, targetCourseId, targetStudentIds, startAt, endAt }) {
   const ref = await addDoc(collection(db, 'announcements'), {
     title: title.trim(),
     body: (body || '').trim(),
     targetClass: (targetClass || '').trim(),
+    targetCourseId: targetCourseId || '',
+    targetStudentIds: (targetStudentIds && targetStudentIds.length) ? targetStudentIds : [],
     startAt: startAt ? Timestamp.fromDate(new Date(startAt)) : null,
     endAt: endAt ? Timestamp.fromDate(new Date(endAt + 'T23:59:59')) : null,
     reminderSentAt: null,
     publishedAt: serverTimestamp()
   });
   return ref.id;
+}
+
+/**
+ * 學生是否有權限看某門課——跟 firestore.rules 的 canAccessCourse() 邏輯一致：
+ * 沒有設限（allowedCourses 不存在或為空陣列）＝不限制，可看全部課程。
+ */
+export function courseAllowedForStudent(profile, courseId) {
+  if (!courseId) return true;
+  const list = profile?.allowedCourses;
+  return !list || list.length === 0 || list.includes(courseId);
+}
+
+/**
+ * 這位學生是否符合一則公告的班級／課程／指定學生三層篩選條件（AND 關係）。
+ * 公告前台顯示（courses.js）與後台寄送提醒（admin.js）共用同一份判斷邏輯，
+ * 避免兩邊各寫一次、規則卻悄悄兜不起來。
+ */
+export function studentMatchesAnnouncement(profile, uid, a) {
+  if (!profile) return false;
+  if (a.targetClass && (profile.className || '') !== a.targetClass) return false;
+  if (a.targetCourseId && !courseAllowedForStudent(profile, a.targetCourseId)) return false;
+  if (a.targetStudentIds?.length && !a.targetStudentIds.includes(uid)) return false;
+  return true;
 }
 
 /** Email 提醒寄送完成後呼叫，記錄時間避免重複顯示「尚未寄送」 */

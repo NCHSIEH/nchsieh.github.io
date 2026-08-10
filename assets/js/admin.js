@@ -22,6 +22,7 @@ import {
   listCourses, saveCourse, deleteCourse, loadCourseDetail,
   saveMaterial, deleteMaterial, saveAssignment, deleteAssignment,
   listAnnouncements, publishAnnouncement, deleteAnnouncement, markAnnouncementReminderSent,
+  studentMatchesAnnouncement, courseAllowedForStudent,
   getSiteSettings, saveSiteSettings,
   exportBackup
 } from './data.js';
@@ -953,10 +954,80 @@ function emailjsConfigured() {
   return !!(EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY);
 }
 
-/** 依公告的 targetClass 找出應該收提醒信的已核准學生 */
+/** 發布公告表單的「指定班級／課程／學生」三層篩選——用真實資料做成下拉選單與
+    勾選清單，取代原本要手動打字、必須跟學生填的班級完全相符的做法。 */
+let annAllStudents = [];
+
+function courseLabel(c) {
+  return `${cleanText(c.titleZh) || cleanText(c.code) || '(未命名)'}${cleanText(c.semester) ? `（${cleanText(c.semester)}）` : ''}`;
+}
+
+/** 公告列表顯示用：課程可能後來被刪除，找不到時給個清楚的說明而不是空白 */
+function targetCourseLabel(a) {
+  if (!a.targetCourseId) return '';
+  const c = currentCourses.find(c => c.id === a.targetCourseId);
+  return c ? courseLabel(c) : '（課程已刪除）';
+}
+
+/** 依目前選擇的班級／課程即時過濾學生勾選清單，只列出可能符合條件的人 */
+function renderAnnTargetStudents() {
+  const box = $('#annTargetStudents');
+  if (!box) return;
+  const cls = $('#annTargetClass').value;
+  const courseId = $('#annTargetCourse').value;
+
+  // 已勾選的人即使因為改班級／課程篩選而被過濾掉，也保留勾選狀態，避免使用者
+  // 選了幾個人之後又調整上面條件，結果選擇被悄悄清空。
+  const kept = new Set($$('.ann-student-cb').filter(cb => cb.checked).map(cb => cb.value));
+
+  const visible = annAllStudents.filter(s =>
+    (!cls || (s.className || '') === cls) &&
+    (!courseId || courseAllowedForStudent(s, courseId))
+  );
+
+  if (!visible.length) {
+    box.replaceChildren(el('p', { style: 'color:var(--faint);font-size:13px;margin:0', text: '目前沒有符合班級／課程條件的學生。' }));
+    return;
+  }
+
+  box.replaceChildren(...visible.map(s => el('label', {
+    style: 'display:flex;align-items:center;gap:8px;font-size:13.5px'
+  }, [
+    el('input', { type: 'checkbox', class: 'ann-student-cb', value: s.id, checked: kept.has(s.id) }),
+    el('span', { text: `${s.name || s.email}${s.className ? `　${s.className}` : ''}` })
+  ])));
+}
+
+async function initAnnouncementTargeting() {
+  annAllStudents = await listStudents('all');
+  if (!currentCourses.length) currentCourses = await listCourses();
+
+  const classes = [...new Set(annAllStudents.map(s => s.className).filter(Boolean))].sort();
+  $('#annTargetClass').replaceChildren(
+    el('option', { value: '', text: '全部班級' }),
+    ...classes.map(c => el('option', { value: c, text: c }))
+  );
+  $('#annTargetCourse').replaceChildren(
+    el('option', { value: '', text: '全部課程' }),
+    ...currentCourses.map(c => el('option', { value: c.id, text: courseLabel(c) }))
+  );
+
+  renderAnnTargetStudents();
+  $('#annTargetClass').addEventListener('change', renderAnnTargetStudents);
+  $('#annTargetCourse').addEventListener('change', renderAnnTargetStudents);
+}
+
+function resetAnnouncementTargeting() {
+  $('#annTargetClass').value = '';
+  $('#annTargetCourse').value = '';
+  renderAnnTargetStudents();
+}
+
+/** 依公告的班級／課程／指定學生條件，找出應該收提醒信的已核准學生 */
 async function reminderTargets(a) {
   const approved = await listStudents('approved');
-  return a.targetClass ? approved.filter(s => (s.className || '') === a.targetClass) : approved;
+  if (!a.targetClass && !a.targetCourseId && !a.targetStudentIds?.length) return approved;
+  return approved.filter(s => studentMatchesAnnouncement(s, s.id, a));
 }
 
 async function sendAnnouncementReminder(a) {
@@ -972,8 +1043,9 @@ async function sendAnnouncementReminder(a) {
 
   const targets = await reminderTargets(a);
   if (!targets.length) {
+    const restricted = a.targetClass || a.targetCourseId || a.targetStudentIds?.length;
     banner('#adminOpBanner',
-      a.targetClass ? `班級「${a.targetClass}」目前沒有已核准的學生。` : '目前沒有已核准的學生。', 'warn');
+      restricted ? '符合這則公告篩選條件的已核准學生目前沒有人，沒有寄出任何信件。' : '目前沒有已核准的學生。', 'warn');
     return;
   }
 
@@ -1010,6 +1082,7 @@ function fmtAnnPeriod(a) {
 async function refreshAnnouncements() {
   const tbody = $('#annTbody');
   tbody.replaceChildren(emptyRow(4, '讀取中…'));
+  if (!currentCourses.length) currentCourses = await listCourses();
   const rows = await listAnnouncements(50);
   if (!rows.length) { tbody.replaceChildren(emptyRow(4, '尚無公告。')); return; }
 
@@ -1021,8 +1094,14 @@ async function refreshAnnouncements() {
     ]),
     el('td', { style: 'font-size:12.5px;white-space:nowrap' }, [
       el('div', { text: a.targetClass ? `班級：${a.targetClass}` : '全部班級' }),
+      a.targetCourseId
+        ? el('div', { style: 'color:var(--faint)', text: `課程：${targetCourseLabel(a)}` })
+        : null,
+      a.targetStudentIds?.length
+        ? el('div', { style: 'color:var(--faint)', text: `另外限縮到 ${a.targetStudentIds.length} 位指定學生` })
+        : null,
       el('div', { style: 'color:var(--faint);margin-top:2px', text: fmtAnnPeriod(a) })
-    ]),
+    ].filter(Boolean)),
     el('td', {}, [
       a.reminderSentAt
         ? el('span', { class: 'state-badge approved', text: `已寄送 ${fmtDateTime(a.reminderSentAt)}` })
@@ -1187,25 +1266,31 @@ function mount() {
 
   // 公告
   $('#emailjsHint').textContent = emailjsConfigured()
-    ? '會寄給所有已核准、且符合班級條件的學生。'
+    ? '會寄給所有已核准、且符合班級／課程／指定學生條件的學生。'
     : '尚未設定 EmailJS，勾選也不會真的寄出，請先至「系統」分頁完成設定。';
+  guard(initAnnouncementTargeting);
   $('#btnPublishAnn').addEventListener('click', () => guard(async () => {
     const title = $('#annTitle').value.trim();
     if (!title) { banner('#adminOpBanner', '請輸入公告標題。', 'error'); return; }
     const startAt = $('#annStart').value || null;
     const endAt = $('#annEnd').value || null;
-    const targetClass = $('#annTargetClass').value.trim();
+    const targetClass = $('#annTargetClass').value;
+    const targetCourseId = $('#annTargetCourse').value;
+    const targetStudentIds = $$('.ann-student-cb').filter(cb => cb.checked).map(cb => cb.value);
     const sendEmail = $('#annSendEmail').checked;
 
-    const id = await publishAnnouncement({ title, body: $('#annBody').value, targetClass, startAt, endAt });
-    $('#annTitle').value = ''; $('#annBody').value = ''; $('#annTargetClass').value = '';
+    const id = await publishAnnouncement({
+      title, body: $('#annBody').value, targetClass, targetCourseId, targetStudentIds, startAt, endAt
+    });
+    $('#annTitle').value = ''; $('#annBody').value = '';
     $('#annStart').value = ''; $('#annEnd').value = ''; $('#annSendEmail').checked = false;
+    resetAnnouncementTargeting();
     banner('#adminOpBanner', '公告已發布。', 'success');
     await refreshAnnouncements(); await refreshDash();
 
     if (sendEmail) {
       const rows = await listAnnouncements(50);
-      const a = rows.find(r => r.id === id) || { id, title, body: $('#annBody').value, targetClass };
+      const a = rows.find(r => r.id === id) || { id, title, body: $('#annBody').value, targetClass, targetCourseId, targetStudentIds };
       await sendAnnouncementReminder(a);
     }
   }));

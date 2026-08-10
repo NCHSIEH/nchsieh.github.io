@@ -6,7 +6,7 @@
 import { $, el, esc, openModal, closeModal, dueState, fmtDateTime, cleanText } from './ui.js';
 import { identity, onIdentity } from './auth.js';
 import { MATERIALS_ROOT, DEFAULT_MATERIALS_DISPLAY } from './config.js';
-import { listCourses, loadCourseDetail, listAnnouncements, friendlyError, firebaseReady, getSiteSettings } from './data.js';
+import { listCourses, loadCourseDetail, listAnnouncements, friendlyError, firebaseReady, getSiteSettings, studentMatchesAnnouncement } from './data.js';
 
 let allCourses = [];
 const detailCache = new Map();
@@ -302,10 +302,10 @@ function isAnnouncementActive(a) {
   return startOk && endOk;
 }
 
-/** 公告是否該顯示給目前這位訪客；沒有指定班級就是給所有人看 */
+/** 公告是否該顯示給目前這位訪客；班級／課程／指定學生都沒設限就是給所有人看 */
 function isAnnouncementForViewer(a) {
-  if (!a.targetClass) return true;
-  return identity.profile?.className === a.targetClass;
+  if (!a.targetClass && !a.targetCourseId && !a.targetStudentIds?.length) return true;
+  return studentMatchesAnnouncement(identity.profile, identity.user?.uid, a);
 }
 
 async function renderAnnouncements() {
