@@ -905,14 +905,16 @@ main.courses { padding-top: 34px; padding-bottom: 20px; }
 .file-list { list-style: none; margin-top: 7px; }
 .file-item {
   display: flex; justify-content: space-between; align-items: center; gap: 10px;
-  font-size: 13px; padding: 6px 0; border-bottom: 1px dashed var(--line);
+  padding: 8px 0; border-bottom: 1px dashed var(--line);
 }
 .file-item:last-child { border-bottom: 0; }
-.file-name { color: var(--brand); text-decoration: none; font-weight: 500; }
-.file-name:hover { text-decoration: underline; }
-.file-size { color: var(--faint); font-size: 11.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-/* 每份講義若有填「單元」，顯示成檔名前的小標籤，取代原本會無限長出手風琴的分組方式 */
-.file-unit { color: var(--faint); font-size: 11px; margin-right: 6px; }
+/* 單元名稱本身就是下載連結：字體稍大、加粗，讀起來像個小標題而不是一般內文連結 */
+.file-name {
+  color: var(--ink); text-decoration: none; font-weight: 700;
+  font-size: 14.5px; line-height: 1.45;
+}
+.file-name:hover { color: var(--brand); text-decoration: underline; }
+.file-size { color: var(--faint); font-size: 11.5px; font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
 
 .asg-box { background: var(--brand-tint); border: 1px solid var(--line); border-radius: var(--radius); padding: 13px 15px; margin-top: 14px; }
 .asg-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13.5px; }

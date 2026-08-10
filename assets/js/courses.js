@@ -74,22 +74,24 @@ function buildSummaryBlock(text) {
 }
 
 /**
- * 一份講義一列，若有填「單元」則在檔名前顯示成小標籤。
- * 不再依單元分組成手風琴——實際資料常常每份講義的單元都不一樣，
+ * 一份講義一列。單元名稱（沒填就退回檔名）直接當成連結文字顯示，
+ * 不再額外重複列出實際檔名——單元名稱本身通常已經比檔名好讀，
+ * 兩者並列只是重複資訊、徒增雜訊。
+ * 不依單元分組成手風琴——實際資料常常每份講義的單元都不一樣，
  * 分組後等於一份一個摺疊區塊，反而比不分組還要長。
  */
 function buildFlatFileList(files) {
-  return el('ul', { class: 'file-list' }, files.map(f => el('li', { class: 'file-item' }, [
-    el('span', {}, [
-      cleanText(f.unit) ? el('span', { class: 'file-unit', text: cleanText(f.unit) }) : null,
+  return el('ul', { class: 'file-list' }, files.map(f => {
+    const label = cleanText(f.unit) || cleanText(f.name) || f.path;
+    return el('li', { class: 'file-item' }, [
       el('a', {
         class: 'file-name',
         href: /^https?:\/\//.test(f.path) ? f.path : MATERIALS_ROOT + f.path,
         target: '_blank', rel: 'noopener'
-      }, f.name || f.path)
-    ].filter(Boolean)),
-    f.size ? el('span', { class: 'file-size', text: f.size }) : null
-  ])));
+      }, label),
+      f.size ? el('span', { class: 'file-size', text: f.size }) : null
+    ].filter(Boolean));
+  }));
 }
 
 /** 「按鈕開彈窗」模式共用同一個彈窗，每次開啟時換內容，不必每門課各建一個 */
