@@ -113,9 +113,9 @@ export const ADMIN_EMAILS = [
  *   3. Account → General → 取得 Public Key
  * 詳細步驟見 FIREBASE_SETUP.md。
  */
-export const EMAILJS_SERVICE_ID  = '';
-export const EMAILJS_TEMPLATE_ID = '';
-export const EMAILJS_PUBLIC_KEY  = '';
+export const EMAILJS_SERVICE_ID  = 'service_v4querw';
+export const EMAILJS_TEMPLATE_ID = 'template_h4fncrc';
+export const EMAILJS_PUBLIC_KEY  = '2Ew--YwAwoDp8d2W4';
 
 /**
  * 刪除學生時，一併刪除 Firebase Authentication 帳號用的 API 網址。
