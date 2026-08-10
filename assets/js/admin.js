@@ -363,6 +363,12 @@ function initCoursesDrag() {
 
 /* ---------- 講義與作業 ---------- */
 
+/** 講義的公開下載網址，邏輯與前台 courses.js 的 buildFlatFileList 一致 */
+function materialUrl(m) {
+  const path = m.path || '';
+  return /^https?:\/\//.test(path) ? path : MATERIALS_ROOT + path;
+}
+
 async function openMaterials(course) {
   editorCourse = course;
   $('#matModalTitle').textContent = `${course.code || ''}　${course.titleZh || ''}`;
@@ -443,6 +449,71 @@ async function refreshMaterials() {
         }, '移除')])
       ]))
     : [emptyRow(3, '尚未設定作業。')]));
+}
+
+/* ---------- 下載全部講義（ZIP，供離線編輯組織後再整批上傳） ---------- */
+
+let jsZipLoading = null;
+
+/** 動態載入 JSZip，只在真的按下下載時才拉這個 library，不拖慢一般後台載入速度 */
+function loadJSZip() {
+  if (window.JSZip) return Promise.resolve(window.JSZip);
+  if (jsZipLoading) return jsZipLoading;
+  jsZipLoading = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+    s.onload = () => resolve(window.JSZip);
+    s.onerror = () => { jsZipLoading = null; reject(new Error('JSZip 載入失敗，請檢查網路連線後再試一次。')); };
+    document.head.append(s);
+  });
+  return jsZipLoading;
+}
+
+async function downloadAllMaterials() {
+  if (!currentMaterials.length) {
+    banner('#matBanner', '目前沒有講義可以下載。', 'warn');
+    return;
+  }
+
+  banner('#matBanner', `正在打包 ${currentMaterials.length} 份檔案…`, 'info');
+  const JSZip = await loadJSZip();
+  const zip = new JSZip();
+  let ok = 0, fail = 0;
+
+  for (const m of currentMaterials) {
+    try {
+      const res = await fetch(materialUrl(m));
+      if (!res.ok) throw new Error(String(res.status));
+      const blob = await res.blob();
+      // 外部連結（https 開頭的 path）沒有實際的 repo 內路徑可以還原資料夾結構，
+      // 只好退回用檔名；其餘一律用 path，這樣 ZIP 裡的資料夾結構會跟目前的單元分類一致。
+      const zipPath = /^https?:\/\//.test(m.path || '') ? (m.name || 'file') : (m.path || m.name || 'file');
+      zip.file(zipPath, blob);
+      ok++;
+    } catch (err) {
+      fail++;
+      console.error('下載失敗：', m.name || m.path, err);
+    }
+  }
+
+  if (!ok) {
+    banner('#matBanner',
+      '全部檔案下載失敗，請確認網站已發布到 GitHub Pages（本機預覽或尚未 push 的檔案抓不到內容）。', 'error');
+    return;
+  }
+
+  const blob = await zip.generateAsync({ type: 'blob' });
+  const url = URL.createObjectURL(blob);
+  const a = el('a', {
+    href: url,
+    download: `${safeName(editorCourse.code || editorCourse.id || 'course')}-講義.zip`
+  });
+  document.body.append(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+
+  banner('#matBanner',
+    `已下載 ${ok} 份檔案${fail ? `，${fail} 份下載失敗（詳見瀏覽器主控台）` : ''}。`,
+    fail ? 'warn' : 'success');
 }
 
 /** 依 id 陣列的先後順序，把新的 order 值寫回 Firestore */
@@ -562,7 +633,13 @@ async function handleFiles(files) {
   // 同一批拖拉多個檔案時依序遞增，維持上傳順序。
   let nextOrder = nextMaterialOrder();
 
-  for (const file of files) {
+  // 整批上傳時依檔名自然排序（數字照大小比較，例如 Lecture2 排在 Lecture10 前面），
+  // 而不是依瀏覽器選取／拖放當下的任意順序——這樣離線重新整理過檔名後，
+  // 整批拖回來就能自動照正確順序排好，不必再逐一手動調整。
+  const sortedFiles = [...files].sort((a, b) =>
+    a.name.localeCompare(b.name, 'zh-Hant-TW', { numeric: true, sensitivity: 'base' }));
+
+  for (const file of sortedFiles) {
     if (isPowerPoint(file.name)) {
       list.append(pptxCard(file));
       continue;
@@ -1212,6 +1289,7 @@ function mount() {
   initUploadSettings();
   initMaterialsDrag();
   initCoursesDrag();
+  $('#btnDownloadAllMaterials')?.addEventListener('click', () => guard(downloadAllMaterials, '#matBanner'));
 
   // 講義（手動填寫）
   $('#btnAddMaterial').addEventListener('click', () => guard(async () => {

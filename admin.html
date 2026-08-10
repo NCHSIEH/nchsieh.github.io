@@ -410,8 +410,8 @@
            aria-label="拖曳檔案至此或點擊選擇檔案">
         <span class="dz-icon" aria-hidden="true">⬆</span>
         <strong>把檔案拖到這裡</strong>
-        <span class="dz-sub">或點擊選擇檔案・可一次拖多個</span>
-        <span class="dz-hint">建議使用 PDF。單檔上限 25 MB。</span>
+        <span class="dz-sub">或點擊選擇檔案・可一次拖多個（整批上傳）</span>
+        <span class="dz-hint">建議使用 PDF。單檔上限 25 MB。整批上傳會自動依檔名排序。</span>
         <input type="file" id="fileInput" multiple hidden
                accept=".pdf,.docx,.doc,.xlsx,.csv,.zip,.py,.ipynb,.ppt,.pptx">
       </div>
@@ -439,8 +439,9 @@
     <div class="panel">
       <h4>
         <span>目前講義</span>
-        <span class="hintline" style="margin:0">拖曳左側把手可調整順序，順序會反映在學生看到的講義清單上。</span>
+        <button class="btn btn-quiet btn-sm btn-rect" type="button" id="btnDownloadAllMaterials">下載全部檔案（ZIP）</button>
       </h4>
+      <p class="hintline" style="margin:0 0 10px">拖曳左側把手可調整順序，順序會反映在學生看到的講義清單上。下載 ZIP 後可離線重新編輯、組織資料夾，再用上方整批上傳（自動依檔名排序）覆寫回來。</p>
       <table class="admin-table mat-table">
         <thead><tr><th class="col-drag"></th><th>單元</th><th>檔案</th><th>大小</th><th>操作</th></tr></thead>
         <tbody id="matTbody"></tbody>
