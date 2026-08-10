@@ -77,6 +77,9 @@
       <button type="button" class="admin-menu-item" data-view="viewAnn">
         <span class="mi">▣</span> 公告
       </button>
+      <button type="button" class="admin-menu-item" data-view="viewAnalytics">
+        <span class="mi">◫</span> 訪客統計
+      </button>
       <button type="button" class="admin-menu-item" data-view="viewLook">
         <span class="mi">◨</span> 外觀
       </button>
@@ -276,6 +279,63 @@
             <tbody id="annTbody"></tbody>
           </table>
         </div>
+      </div>
+    </section>
+
+    <!-- 訪客統計 -->
+    <section class="admin-view" id="viewAnalytics" hidden>
+      <div class="panel">
+        <h4>
+          <span>統計期間</span>
+          <button class="btn btn-ghost btn-sm btn-rect" type="button" id="btnReloadAnalytics">重新整理</button>
+        </h4>
+        <div class="admin-tablist" role="tablist" aria-label="統計期間" id="anaPeriodTabs">
+          <button type="button" role="tab" data-period="today" aria-selected="true" tabindex="0">今日</button>
+          <button type="button" role="tab" data-period="7" aria-selected="false" tabindex="-1">近 7 天</button>
+          <button type="button" role="tab" data-period="30" aria-selected="false" tabindex="-1">近 30 天</button>
+          <button type="button" role="tab" data-period="90" aria-selected="false" tabindex="-1">近 90 天</button>
+          <button type="button" role="tab" data-period="custom" aria-selected="false" tabindex="-1">自訂區間</button>
+        </div>
+        <div class="form-row" id="anaCustomRange" hidden style="margin-top:12px;align-items:flex-end">
+          <div class="form-group"><label for="anaStart">起始日</label><input type="date" id="anaStart"></div>
+          <div class="form-group"><label for="anaEnd">結束日</label><input type="date" id="anaEnd"></div>
+          <div class="form-group"><button class="btn btn-primary btn-sm btn-rect" type="button" id="btnApplyAnaRange">套用</button></div>
+        </div>
+        <div id="analyticsBanner" class="banner" style="margin-top:10px"></div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><span class="s-num" id="anaTotalViews">–</span><span class="s-lab">總瀏覽次數</span></div>
+        <div class="stat"><span class="s-num" id="anaUniqueVisitors">–</span><span class="s-lab">不重複訪客</span></div>
+        <div class="stat"><span class="s-num" id="anaAvgPerDay">–</span><span class="s-lab">平均每日瀏覽</span></div>
+        <div class="stat"><span class="s-num" id="anaKnownViews">–</span><span class="s-lab">學生／管理者瀏覽</span></div>
+      </div>
+
+      <div class="panel">
+        <h4>每日統計</h4>
+        <table class="admin-table">
+          <thead><tr><th>日期</th><th>瀏覽次數</th><th>不重複訪客</th><th></th></tr></thead>
+          <tbody id="anaDayTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h4>
+          <span>依訪客統計</span>
+          <span class="hintline" style="margin:0">依瀏覽次數排序，最多顯示前 50 位。未登入訪客僅能以瀏覽器識別碼區分，無法得知真實身分。</span>
+        </h4>
+        <table class="admin-table">
+          <thead><tr><th>訪客</th><th>身分</th><th>瀏覽次數</th><th>首次造訪</th><th>最後造訪</th></tr></thead>
+          <tbody id="anaVisitorTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h4>依頁面統計</h4>
+        <table class="admin-table">
+          <thead><tr><th>頁面</th><th>瀏覽次數</th></tr></thead>
+          <tbody id="anaPageTbody"></tbody>
+        </table>
       </div>
     </section>
 

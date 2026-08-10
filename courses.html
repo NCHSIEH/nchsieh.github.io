@@ -128,13 +128,23 @@
 <script type="module">
   import { initUI } from './assets/js/ui.js';
   import { injectModals } from './assets/js/modals.js';
-  import { initAuth } from './assets/js/auth.js';
+  import { initAuth, identity, onIdentity } from './assets/js/auth.js';
   import { initCourses } from './assets/js/courses.js';
+  import { logPageview } from './assets/js/analytics.js';
 
   injectModals();
   initUI({ applySiteDefault: true });
   initAuth();
   initCourses();
+
+  // 等身分判定完成（登入狀態／審核狀態）才記錄這次瀏覽，統計時才能區分訪客／學生／管理者
+  onIdentity(id => {
+    logPageview({
+      role: id.role,
+      name: id.profile?.name || '',
+      email: id.user?.email || ''
+    });
+  });
 </script>
 </body>
 </html>

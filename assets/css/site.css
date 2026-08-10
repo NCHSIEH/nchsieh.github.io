@@ -1337,6 +1337,13 @@ body.admin-page { background: var(--surface-2); }
 
 .looks-grid.wide { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 
+/* 訪客統計：每日表格最後一欄用簡單的橫向長條圖，一眼看出哪幾天流量高，不必另外掛圖表庫 */
+.ana-bar-cell { width: 120px; }
+.ana-bar-track { background: var(--surface-2); border-radius: 4px; height: 8px; overflow: hidden; }
+.ana-bar-fill { background: var(--brand); height: 100%; border-radius: 4px; min-width: 2px; }
+.ana-visitor-id { font-family: var(--font-mono, monospace); font-size: 12px; color: var(--faint); }
+.ana-empty-hint { color: var(--faint); font-size: 12.5px; margin: 6px 0 0; }
+
 .todo-item {
   display: flex; align-items: center; gap: 10px;
   padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px;

@@ -153,6 +153,30 @@ service cloud.firestore {
     }
 
 
+    // ---------- 訪客瀏覽紀錄（後台「訪客統計」用） ----------
+    // 任何人（含訪客）造訪公開頁時都會寫入一筆瀏覽紀錄，用來統計流量；
+    // 這份資料本身不公開讀取，只有管理者能在後台查看彙整結果。
+    // 只允許「新增」，不允許事後修改或刪除單筆紀錄，避免被竄改。
+    match /pageviews/{id} {
+      allow read: if isAdmin();
+      allow create: if
+           request.resource.data.keys().hasOnly(
+             ['path', 'visitorId', 'role', 'viewerName', 'viewerEmail', 'ref', 'ua', 'day', 'ts']
+           )
+        && request.resource.data.path is string   && request.resource.data.path.size()   < 300
+        && request.resource.data.visitorId is string && request.resource.data.visitorId.size() < 100
+        && request.resource.data.day is string    && request.resource.data.day.size() == 10
+        && request.resource.data.role is string
+        && request.resource.data.viewerName is string && request.resource.data.viewerName.size() < 100
+        && request.resource.data.viewerEmail is string && request.resource.data.viewerEmail.size() < 200
+        && request.resource.data.ref is string    && request.resource.data.ref.size()    < 300
+        && request.resource.data.ua is string     && request.resource.data.ua.size()     < 300
+        // 時間戳必須是伺服器當下時間，前端無法偽造成過去或未來的時間
+        && request.resource.data.ts == request.time;
+      allow update, delete: if false;
+    }
+
+
     // ---------- 其餘一律拒絕 ----------
     match /{document=**} {
       allow read, write: if false;

@@ -24,6 +24,7 @@ import {
   listAnnouncements, publishAnnouncement, deleteAnnouncement, markAnnouncementReminderSent,
   studentMatchesAnnouncement, courseAllowedForStudent,
   getSiteSettings, saveSiteSettings,
+  listPageviews, dayKey,
   exportBackup
 } from './data.js';
 import {
@@ -39,7 +40,7 @@ let editorCourse = null;
 
 const VIEW_TITLES = {
   viewDash: '總覽', viewCourses: '課程管理', viewStudents: '學生管理',
-  viewAnn: '公告', viewLook: '外觀', viewSystem: '系統'
+  viewAnn: '公告', viewAnalytics: '訪客統計', viewLook: '外觀', viewSystem: '系統'
 };
 
 /* ---------- 共用 ---------- */
@@ -1197,6 +1198,164 @@ async function refreshAnnouncements() {
 }
 
 /* ==========================================================================
+   訪客統計
+   ========================================================================== */
+
+let anaPeriod = 'today';
+
+/** 目前選擇的期間換算成 [start, end]（含頭尾）的 day 字串，與 analytics.js 記錄格式一致 */
+function anaPeriodRange(period) {
+  const today = new Date();
+  if (period === 'today') { const t = dayKey(today); return { start: t, end: t }; }
+  if (period === 'custom') {
+    const start = $('#anaStart').value;
+    const end = $('#anaEnd').value;
+    return { start, end };
+  }
+  const days = Number(period) || 7;
+  const start = new Date(today);
+  start.setDate(start.getDate() - (days - 1));
+  return { start: dayKey(start), end: dayKey(today) };
+}
+
+/** 列出 start～end（含頭尾）之間每一天的字串，讓每日統計表就算沒有資料的那天也會顯示成 0，而不是悄悄跳過 */
+function anaDaysInRange(startDay, endDay) {
+  const out = [];
+  const d = new Date(`${startDay}T00:00:00Z`);
+  const end = new Date(`${endDay}T00:00:00Z`);
+  if (Number.isNaN(d.getTime()) || Number.isNaN(end.getTime()) || d > end) return out;
+  while (d <= end) {
+    out.push(dayKey(d));
+    d.setUTCDate(d.getUTCDate() + 1);
+  }
+  return out;
+}
+
+function anaTsMillis(ts) { return ts?.seconds ? ts.seconds * 1000 : 0; }
+
+const ANA_ROLE_LABEL = { guest: '訪客', applicant: '申請中學生', student: '學生', admin: '管理者' };
+
+/**
+ * 把一段期間內的原始瀏覽紀錄彙整成三種統計角度：
+ *   byDay     — 逐日的瀏覽次數與不重複訪客數
+ *   byVisitor — 逐訪客的瀏覽次數、首次／最後造訪、目前已知身分（取時間最新的一筆為準）
+ *   byPage    — 逐頁面的瀏覽次數
+ */
+function aggregatePageviews(rows) {
+  const byDay = new Map();
+  const byVisitor = new Map();
+  const byPage = new Map();
+  let knownViews = 0;
+
+  for (const r of rows) {
+    const t = anaTsMillis(r.ts);
+
+    const d = byDay.get(r.day) || { count: 0, visitors: new Set() };
+    d.count++; d.visitors.add(r.visitorId);
+    byDay.set(r.day, d);
+
+    const prev = byVisitor.get(r.visitorId);
+    if (!prev) {
+      byVisitor.set(r.visitorId, {
+        count: 1, firstTs: t, lastTs: t, role: r.role, name: r.viewerName, email: r.viewerEmail
+      });
+    } else {
+      prev.count++;
+      if (t && (!prev.firstTs || t < prev.firstTs)) prev.firstTs = t;
+      // 身分／姓名以時間最新的一筆為準：同一裝置可能先以訪客身分瀏覽、後來才登入
+      if (t && t >= prev.lastTs) {
+        prev.lastTs = t; prev.role = r.role; prev.name = r.viewerName; prev.email = r.viewerEmail;
+      }
+    }
+
+    byPage.set(r.path, (byPage.get(r.path) || 0) + 1);
+    if (r.role === 'student' || r.role === 'admin') knownViews++;
+  }
+
+  return { byDay, byVisitor, byPage, knownViews };
+}
+
+async function refreshAnalytics() {
+  const { start, end } = anaPeriodRange(anaPeriod);
+  if (!start || !end || start > end) {
+    banner('#analyticsBanner', '請選擇正確的日期區間（起始日不能晚於結束日）。', 'error');
+    return;
+  }
+
+  banner('#analyticsBanner', '讀取中…', 'info');
+  const rows = await listPageviews(start, end);
+  const { byDay, byVisitor, byPage, knownViews } = aggregatePageviews(rows);
+  const dayList = anaDaysInRange(start, end);
+
+  $('#anaTotalViews').textContent = String(rows.length);
+  $('#anaUniqueVisitors').textContent = String(byVisitor.size);
+  $('#anaAvgPerDay').textContent = dayList.length ? (rows.length / dayList.length).toFixed(1) : '0';
+  $('#anaKnownViews').textContent = String(knownViews);
+
+  // 每日統計：新到舊排列，長條圖依這段期間內的最高值等比例呈現
+  const maxDayCount = Math.max(1, ...dayList.map(d => byDay.get(d)?.count || 0));
+  $('#anaDayTbody').replaceChildren(...(dayList.length
+    ? [...dayList].reverse().map(day => {
+        const info = byDay.get(day);
+        const count = info?.count || 0;
+        const uniq = info?.visitors.size || 0;
+        const pct = count ? Math.max(Math.round((count / maxDayCount) * 100), 4) : 0;
+        return el('tr', {}, [
+          el('td', { text: day }),
+          el('td', { text: String(count) }),
+          el('td', { text: String(uniq) }),
+          el('td', { class: 'ana-bar-cell' }, [
+            el('div', { class: 'ana-bar-track' }, [el('div', { class: 'ana-bar-fill', style: `width:${pct}%` })])
+          ])
+        ]);
+      })
+    : [emptyRow(4, '請先選擇期間。')]));
+
+  // 依訪客統計：瀏覽次數多到少，最多顯示前 50 位（訪客規模夠小的個人課程網站，不需要分頁）
+  const visitorRows = [...byVisitor.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, 50);
+  $('#anaVisitorTbody').replaceChildren(...(visitorRows.length
+    ? visitorRows.map(([id, v]) => el('tr', {}, [
+        el('td', {}, [
+          (v.name || v.email)
+            ? el('div', {}, [
+                el('div', { style: 'font-weight:600', text: v.name || v.email }),
+                (v.name && v.email) ? el('div', { class: 'ana-visitor-id', text: v.email }) : null
+              ].filter(Boolean))
+            : el('span', { class: 'ana-visitor-id', text: `${id.slice(0, 10)}…` })
+        ]),
+        el('td', { text: ANA_ROLE_LABEL[v.role] || '訪客' }),
+        el('td', { text: String(v.count) }),
+        el('td', { style: 'white-space:nowrap;font-size:12.5px', text: v.firstTs ? fmtDateTime(new Date(v.firstTs)) : '—' }),
+        el('td', { style: 'white-space:nowrap;font-size:12.5px', text: v.lastTs ? fmtDateTime(new Date(v.lastTs)) : '—' })
+      ]))
+    : [emptyRow(5, '這段期間沒有訪客紀錄。')]));
+
+  // 依頁面統計：瀏覽次數多到少
+  const pageRows = [...byPage.entries()].sort((a, b) => b[1] - a[1]);
+  $('#anaPageTbody').replaceChildren(...(pageRows.length
+    ? pageRows.map(([path, count]) => el('tr', {}, [el('td', { class: 'mono', text: path }), el('td', { text: String(count) })]))
+    : [emptyRow(2, '這段期間沒有資料。')]));
+
+  banner('#analyticsBanner', '');
+}
+
+function initAnalyticsControls() {
+  const tabs = $$('#anaPeriodTabs [role="tab"]');
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    tabs.forEach(t => { t.setAttribute('aria-selected', String(t === tab)); t.tabIndex = t === tab ? 0 : -1; });
+    anaPeriod = tab.dataset.period;
+    $('#anaCustomRange').hidden = anaPeriod !== 'custom';
+    if (anaPeriod !== 'custom') guard(refreshAnalytics, '#analyticsBanner');
+  }));
+
+  const today = dayKey(new Date());
+  if ($('#anaEnd') && !$('#anaEnd').value) $('#anaEnd').value = today;
+
+  $('#btnApplyAnaRange')?.addEventListener('click', () => guard(refreshAnalytics, '#analyticsBanner'));
+  $('#btnReloadAnalytics')?.addEventListener('click', () => guard(refreshAnalytics, '#analyticsBanner'));
+}
+
+/* ==========================================================================
    外觀 — 全站預設
    ========================================================================== */
 
@@ -1261,6 +1420,7 @@ function refreshAll() {
   guard(refreshCourses);
   guard(refreshStudents);
   guard(refreshAnnouncements);
+  if (mounted) guard(refreshAnalytics, '#analyticsBanner');
 }
 
 function mount() {
@@ -1372,6 +1532,9 @@ function mount() {
       await sendAnnouncementReminder(a);
     }
   }));
+
+  // 訪客統計（實際資料讀取交給 refreshAll() 統一處理，這裡只掛控制項事件）
+  initAnalyticsControls();
 
   // 外觀
   renderLayoutPicker($('#layoutPicker'));

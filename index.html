@@ -483,8 +483,10 @@
 <script type="module">
   import { initUI } from './assets/js/ui.js';
   import { initHome } from './assets/js/home.js';
+  import { logPageview } from './assets/js/analytics.js';
   initUI({ applySiteDefault: true });
   initHome();
+  logPageview();
 </script>
 </body>
 </html>

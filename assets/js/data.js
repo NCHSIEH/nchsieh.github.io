@@ -466,6 +466,28 @@ export async function saveSiteSettings({ theme, layout, materialsDisplay }) {
   }, { merge: true });
 }
 
+/* ---------- 訪客瀏覽紀錄（後台「訪客統計」） ---------- */
+
+/** 與 analytics.js 記錄瀏覽紀錄時使用同一種日期字串格式（UTC，YYYY-MM-DD） */
+export function dayKey(date = new Date()) {
+  return date.toISOString().slice(0, 10);
+}
+
+/**
+ * 讀取指定期間（含起訖日）內的所有瀏覽紀錄，交給呼叫端在前端彙整成統計表。
+ * 單一小型課程網站的流量規模，遠低於需要另外設計聚合表或雲端函式的門檻，
+ * 直接抓原始紀錄回來處理最簡單、也最不容易在彙整邏輯裡藏錯。
+ */
+export async function listPageviews(startDay, endDay) {
+  const q = query(
+    collection(db, 'pageviews'),
+    where('day', '>=', startDay),
+    where('day', '<=', endDay)
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
 /* ---------- 備份 ---------- */
 
 export async function exportBackup() {
