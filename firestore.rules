@@ -177,6 +177,99 @@ service cloud.firestore {
     }
 
 
+    // =========================================================================
+    //  VMH-EcoMap 專案協作區
+    //
+    //  這一區跟課程系統完全分開：學生看不到，協作區成員也看不到課程資料。
+    //  存取條件比課程嚴格——因為這裡放的是業主的機密文件。
+    //  未核准或已暫停的帳號，連文件標題都拿不到。
+    // =========================================================================
+
+    function vmhDoc() {
+      return get(/databases/$(database)/documents/vmh_members/$(request.auth.uid)).data;
+    }
+
+    // 已核准的協作區成員。管理者（顧問）一律視為成員。
+    function isVmhMember() {
+      return isAdmin()
+        || (signedIn()
+            && exists(/databases/$(database)/documents/vmh_members/$(request.auth.uid))
+            && vmhDoc().status == 'approved');
+    }
+
+    // ---------- 協作區成員名冊 ----------
+    match /vmh_members/{uid} {
+      allow get:  if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+
+      // 註冊時由本人建立，status 強制寫死 pending，email 必須與登入憑證一致。
+      // 沒有這兩個條件，任何人都能自己把自己設成 approved 直接看到全部檔案。
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && (request.resource.data.status == 'pending'
+            || request.resource.data.email in adminEmails())
+        && request.resource.data.keys().hasOnly(
+             ['email', 'name', 'org', 'role', 'status', 'createdAt']
+           );
+
+      // 只有管理者能改 status——這是整個審核機制的關鍵。
+      // 本人僅能補填姓名與單位。
+      allow update: if isAdmin()
+        || (signedIn() && request.auth.uid == uid
+            && unchanged('status')
+            && unchanged('email')
+            && request.resource.data.diff(resource.data)
+                 .affectedKeys().hasOnly(['name', 'org']));
+
+      allow delete: if isAdmin();
+    }
+
+    // ---------- 文件與版本歷程 ----------
+    match /vmh_docs/{docId} {
+      allow read:   if isVmhMember();
+      allow create: if isVmhMember();
+      allow update: if isVmhMember();
+      allow delete: if isAdmin();          // 刪除整份文件只有顧問可以做
+
+      // 版本一旦建立就不允許修改或刪除單筆——
+      // 歷程可以被追加，但不可以被竄改，否則版本控制就失去意義。
+      match /versions/{versionId} {
+        allow read:   if isVmhMember();
+        allow create: if isVmhMember()
+                      && request.resource.data.uploadedBy == request.auth.uid;
+        allow update: if false;
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ---------- 訊息與討論 ----------
+    match /vmh_messages/{msgId} {
+      allow read:   if isVmhMember();
+      allow create: if isVmhMember()
+                    && request.resource.data.createdBy == request.auth.uid;
+      // 回覆數要能累加，所以允許成員更新；刪除只有顧問。
+      allow update: if isVmhMember();
+      allow delete: if isAdmin();
+
+      match /replies/{replyId} {
+        allow read:   if isVmhMember();
+        allow create: if isVmhMember()
+                      && request.resource.data.createdBy == request.auth.uid;
+        allow update: if false;
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ---------- 動態時間軸 ----------
+    // 只能追加，不能修改或刪除，確保歷程可稽核。
+    match /vmh_activity/{id} {
+      allow read:   if isVmhMember();
+      allow create: if isVmhMember() && request.resource.data.by == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+
     // ---------- 其餘一律拒絕 ----------
     match /{document=**} {
       allow read, write: if false;

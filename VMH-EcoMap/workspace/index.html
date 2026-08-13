@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>專案協作區｜VMH-EcoMap 越南現代醫院生態計畫</title>
+<meta name="description" content="VMH-EcoMap 專案協作區：檔案上傳、版本控制與訊息傳遞。僅限受邀成員檢視。">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230b4f45'/%3E%3Ctext x='50' y='67' font-family='Georgia,serif' font-size='42' font-weight='700' fill='%23fff' text-anchor='middle'%3EVM%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/vmh.css">
+<link rel="stylesheet" href="assets/css/workspace.css">
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar__inner">
+    <a class="appbar__brand" href="#/feed">
+      VMH-EcoMap 專案協作區
+      <small>越南現代醫院生態計畫</small>
+    </a>
+    <span class="appbar__spacer"></span>
+    <span class="appbar__who" id="who"></span>
+    <button class="iconbtn" id="themeBtn" type="button" title="切換深淺色">☾</button>
+    <button class="btn btn--ghost btn--sm" id="logoutBtn" type="button" style="display:none">登出</button>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="主導覽"></nav>
+</header>
+
+<div class="wrap" style="padding-bottom:0">
+  <div id="toast" style="display:none"></div>
+</div>
+
+<main id="app">
+  <div class="wrap"><div class="empty">載入中…</div></div>
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+
+<script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
