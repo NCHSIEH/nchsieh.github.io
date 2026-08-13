@@ -1,0 +1,641 @@
+[
+ {
+  "id": "VN-LAW-15",
+  "category": "越南法規",
+  "title": "Law on Medical Examination and Treatment No.15/2023/QH15",
+  "authority": "National Assembly",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G1",
+   "G2",
+   "G3"
+  ],
+  "owner": "Legal Lead",
+  "url": "https://english.luatvietnam.vn/law-on-medical-examination-and-treatment-no-15-2023-qh15-242305-doc1.html",
+  "note": "Legal verification required"
+ },
+ {
+  "id": "VN-DEC-96",
+  "category": "越南法規",
+  "title": "Decree 96/2023/ND-CP implementing the Medical Examination and Treatment Law",
+  "authority": "Government",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G1",
+   "G2",
+   "G3"
+  ],
+  "owner": "Legal Lead",
+  "url": "https://english.luatvietnam.vn/y-te/decree-96-2023-nd-cp-detailing-the-law-on-medical-examination-and-treatment-288711-d1.html",
+  "note": "Confirm official Vietnamese text"
+ },
+ {
+  "id": "VN-EMR-13",
+  "category": "越南法規",
+  "title": "Circular 13/2025/TT-BYT on electronic medical records",
+  "authority": "Ministry of Health",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Health IT + Legal",
+  "url": "https://moh.gov.vn/thong-tin-chi-dao-dieu-hanh/-/asset_publisher/DOHhlnDN87WZ/content/huong-dan-moi-nhat-trien-khai-ho-so-benh-an-ien-tu?inheritRedirect=false",
+  "note": "Current implementation status must be checked"
+ },
+ {
+  "id": "VN-MD-98",
+  "category": "越南法規",
+  "title": "Decree 98/2021 and amendments on medical device management",
+  "authority": "Ministry of Health",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4"
+  ],
+  "owner": "Device Regulatory Lead",
+  "url": "https://moh.gov.vn/thong-tin-chi-dao-dieu-hanh/-/asset_publisher/DOHhlnDN87WZ/content/van-ban-hop-nhat-quy-inh-ve-phan-loai-thiet-bi-y-te",
+  "note": "Product-by-product verification"
+ },
+ {
+  "id": "VN-PDP-91",
+  "category": "越南法規",
+  "title": "PDPL — Law on Personal Data Protection No.91/2025/QH15 + Decree 356/2025（2026/1/1生效，取代 Decree 13/2023）",
+  "authority": "Government",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G1",
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Privacy Lead",
+  "url": "https://english.luatvietnam.vn/",
+  "note": "病歷列敏感資料；外洩72小時通報；跨境傳輸影響評估60日內報公安部"
+ },
+ {
+  "id": "VN-DATA-60",
+  "category": "越南法規",
+  "title": "Law on Data No.60/2024/QH15",
+  "authority": "National Assembly",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G1",
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Data Governance Lead",
+  "url": "https://english.luatvietnam.vn/thong-tin/law-on-data-2024-no-60-2024-qh15-380165-d1.html",
+  "note": "Confirm implementing decrees"
+ },
+ {
+  "id": "VN-CYBER-53",
+  "category": "越南法規",
+  "title": "Decree 53/2022/ND-CP implementing Cybersecurity Law",
+  "authority": "Government",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G1",
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "CISO + Legal",
+  "url": "https://mst.gov.vn/van-ban-phap-luat/24998.htm",
+  "note": "Scope depends on service model"
+ },
+ {
+  "id": "WHO-DIIG",
+  "category": "WHO指引",
+  "title": "Digital Implementation Investment Guide",
+  "authority": "WHO",
+  "level": "參考",
+  "status": "通過",
+  "stages": [
+   "G1",
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "PI Office",
+  "url": "https://www.who.int/publications/i/item/9789240010567",
+  "note": "Core planning method"
+ },
+ {
+  "id": "WHO-DHP",
+  "category": "WHO/ITU指引",
+  "title": "Digital Health Platform Handbook",
+  "authority": "WHO & ITU",
+  "level": "參考",
+  "status": "通過",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Enterprise Architect",
+  "url": "https://www.who.int/publications/i/item/9789240013728",
+  "note": "Architecture reference"
+ },
+ {
+  "id": "WHO-HOSPITAL",
+  "category": "WHO指引",
+  "title": "Hospitals in Viet Nam: system role and performance challenges",
+  "authority": "WHO Viet Nam",
+  "level": "參考",
+  "status": "通過",
+  "stages": [
+   "G1",
+   "G2"
+  ],
+  "owner": "Clinical Planner",
+  "url": "https://www.who.int/vietnam/health-topics/hospitals",
+  "note": "Country context"
+ },
+ {
+  "id": "WHO-CLIMATE",
+  "category": "WHO指引",
+  "title": "Climate-resilient and environmentally sustainable health care",
+  "authority": "WHO",
+  "level": "參考",
+  "status": "通過",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "ESG Lead",
+  "url": "https://www.who.int/australia/news/feature-stories/detail/climate-resilience-and-sustainability-for-safer-health-care-in-viet-nam",
+  "note": "Adapt to local hazards"
+ },
+ {
+  "id": "WHO-IPC",
+  "category": "WHO指引",
+  "title": "Infection prevention and control core components",
+  "authority": "WHO",
+  "level": "參考",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "IPC Lead",
+  "url": "https://www.who.int/teams/integrated-health-services/infection-prevention-control/core-components",
+  "note": "Select current technical guidance"
+ },
+ {
+  "id": "WHO-SUPPLY",
+  "category": "WHO指引",
+  "title": "Digital transformation handbook for health supply chain architecture",
+  "authority": "WHO",
+  "level": "參考",
+  "status": "通過",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Supply Chain Lead",
+  "url": "https://www.who.int/publications/i/item/9789240101197",
+  "note": "Use for pharmacy and consumables"
+ },
+ {
+  "id": "JCI-HOSP",
+  "category": "認證",
+  "title": "JCI Hospital Accreditation Standards",
+  "authority": "Joint Commission International",
+  "level": "契約",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Quality Director",
+  "url": "https://www.jointcommission.org/en/accreditation/hospital?sc_lang=en",
+  "note": "Confirm target edition and accreditation intent"
+ },
+ {
+  "id": "HIMSS-EMRAM",
+  "category": "成熟度",
+  "title": "Electronic Medical Record Adoption Model",
+  "authority": "HIMSS",
+  "level": "參考",
+  "status": "待確認",
+  "stages": [
+   "G1",
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "CMIO / Health IT",
+  "url": "https://www.himss.org/maturity-models/emram/",
+  "note": "Licensed assessment may be required"
+ },
+ {
+  "id": "HIMSS-INFRAM",
+  "category": "成熟度",
+  "title": "Infrastructure Adoption Model",
+  "authority": "HIMSS",
+  "level": "參考",
+  "status": "待確認",
+  "stages": [
+   "G1",
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Digital Infrastructure Lead",
+  "url": "https://www.himss.org/news-center/himss-launches-modernized-infrastructure-adoption-model-support-global-digital-health/",
+  "note": "Useful for 群晶 workstream"
+ },
+ {
+  "id": "HL7-FHIR",
+  "category": "互通",
+  "title": "HL7 FHIR",
+  "authority": "HL7 International",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Interoperability Architect",
+  "url": "https://fhir.hl7.org/fhir/overview.html",
+  "note": "Define Vietnam implementation profiles"
+ },
+ {
+  "id": "HL7-V2",
+  "category": "互通",
+  "title": "HL7 Version 2 messaging",
+  "authority": "HL7 International",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Interoperability Architect",
+  "url": "https://www.hl7.org/implement/standards/product_brief.cfm?product_id=185",
+  "note": "Needed for legacy and device integration"
+ },
+ {
+  "id": "DICOM",
+  "category": "互通",
+  "title": "DICOM standard",
+  "authority": "DICOM Standards Committee",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Imaging Lead",
+  "url": "https://www.dicomstandard.org/",
+  "note": "Use with IHE profiles"
+ },
+ {
+  "id": "IHE",
+  "category": "互通",
+  "title": "IHE integration profiles",
+  "authority": "IHE International",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Interoperability Architect",
+  "url": "https://www.ihe.net/resources/profiles/",
+  "note": "Choose profiles by use case"
+ },
+ {
+  "id": "ICD",
+  "category": "術語",
+  "title": "WHO ICD classifications",
+  "authority": "WHO",
+  "level": "依用途",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Data Governance Lead",
+  "url": "https://www.who.int/standards/classifications/classification-of-diseases",
+  "note": "Confirm Vietnam-required version"
+ },
+ {
+  "id": "LOINC",
+  "category": "術語",
+  "title": "LOINC",
+  "authority": "Regenstrief Institute",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Lab + Data Lead",
+  "url": "https://loinc.org/",
+  "note": "Licensing and localization review"
+ },
+ {
+  "id": "SNOMED",
+  "category": "術語",
+  "title": "SNOMED CT",
+  "authority": "SNOMED International",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Data Governance Lead",
+  "url": "https://www.snomed.org/",
+  "note": "Confirm Vietnam membership/licensing"
+ },
+ {
+  "id": "ISO-27001",
+  "category": "資安",
+  "title": "ISO/IEC 27001",
+  "authority": "ISO/IEC",
+  "level": "契約",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "CISO",
+  "url": "https://www.iso.org/standard/27001",
+  "note": "Certification scope to be defined"
+ },
+ {
+  "id": "ISO-27799",
+  "category": "資安",
+  "title": "ISO 27799 Health informatics — information security",
+  "authority": "ISO",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "CISO",
+  "url": "https://www.iso.org/standard/62777.html",
+  "note": "Check current edition"
+ },
+ {
+  "id": "ISO-22301",
+  "category": "持續營運",
+  "title": "ISO 22301 Business continuity",
+  "authority": "ISO",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "BCM Lead",
+  "url": "https://www.iso.org/standard/75106.html",
+  "note": "Apply to hospital-wide continuity"
+ },
+ {
+  "id": "IEC-80001",
+  "category": "醫療IT風險",
+  "title": "IEC 80001-1",
+  "authority": "IEC",
+  "level": "設計",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Clinical Engineering + CISO",
+  "url": "https://www.iso.org/standard/72026.html",
+  "note": "Verify current publication"
+ },
+ {
+  "id": "ISO-13485",
+  "category": "醫材品質",
+  "title": "ISO 13485",
+  "authority": "ISO",
+  "level": "供應商",
+  "status": "待確認",
+  "stages": [
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Device Regulatory Lead",
+  "url": "https://www.iso.org/standard/59752.html",
+  "note": "Supplier evidence"
+ },
+ {
+  "id": "ISO-14971",
+  "category": "醫材風險",
+  "title": "ISO 14971",
+  "authority": "ISO",
+  "level": "供應商",
+  "status": "待確認",
+  "stages": [
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Clinical Engineering",
+  "url": "https://www.iso.org/standard/72704.html",
+  "note": "Supplier and integration evidence"
+ },
+ {
+  "id": "IEC-60601",
+  "category": "醫電安全",
+  "title": "IEC 60601 series",
+  "authority": "IEC",
+  "level": "供應商",
+  "status": "待確認",
+  "stages": [
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Clinical Engineering",
+  "url": "https://www.iec.ch/medical-equipment",
+  "note": "Product-specific evidence"
+ },
+ {
+  "id": "WB-VN-PPP",
+  "category": "PPP指引",
+  "title": "Public-Private Partnerships for Health in Vietnam: Issues and Options",
+  "authority": "World Bank",
+  "level": "參考",
+  "status": "通過",
+  "stages": [
+   "G1",
+   "G2",
+   "G3"
+  ],
+  "owner": "PPP Advisor",
+  "url": "https://ppp.worldbank.org/library/public-private-partnerships-health-vietnam-issues-and-options",
+  "note": "Avoid assuming fully integrated PPP"
+ },
+ {
+  "id": "NHS-GDE",
+  "category": "複製模式",
+  "title": "Global Digital Exemplar Blueprints",
+  "authority": "NHS England",
+  "level": "參考",
+  "status": "通過",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "PI Office",
+  "url": "https://www.england.nhs.uk/digitaltechnology/connecteddigitalsystems/exemplars/gde-blueprints/",
+  "note": "Adapt, do not copy blindly"
+ },
+ {
+  "id": "VN-PPP-71",
+  "category": "越南法規",
+  "title": "Decree 71/2025/ND-CP on PPP（取消醫療PPP投資規模門檻）",
+  "authority": "Government",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G0",
+   "G1",
+   "G2"
+  ],
+  "owner": "PPP Advisor + Legal",
+  "url": "https://english.luatvietnam.vn/",
+  "note": "全國健康PPP僅2案（安沛/峴港），先行者需自建先例；OPP-01的立案依據"
+ },
+ {
+  "id": "VN-ERX-26",
+  "category": "越南法規",
+  "title": "Circular 26/2025/TT-BYT on electronic prescriptions（電子處方強制）",
+  "authority": "Ministry of Health",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "CMIO / Pharmacy Lead",
+  "url": "https://moh.gov.vn/",
+  "note": "醫院2025/10/1、其他機構2026/1/1起強制；OPP-41依據"
+ },
+ {
+  "id": "VN-AI-134",
+  "category": "越南法規",
+  "title": "Law on Artificial Intelligence No.134/2025（醫療AI列高風險）",
+  "authority": "National Assembly",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6"
+  ],
+  "owner": "Regulatory + Health IT",
+  "url": "https://english.luatvietnam.vn/",
+  "note": "2026/3/1生效；高風險AI須登記/留存紀錄/在地法律代表；既有系統2027/9/1前補件；17個F族群商機全部適用"
+ },
+ {
+  "id": "VN-FHIR-2146",
+  "category": "越南法規",
+  "title": "Decision 2146/QĐ-BYT — HL7 FHIR R4 + DICOM 為國家互通標準",
+  "authority": "Ministry of Health",
+  "level": "強制",
+  "status": "待確認",
+  "stages": [
+   "G2",
+   "G3",
+   "G4",
+   "G5"
+  ],
+  "owner": "Interoperability Architect",
+  "url": "https://moh.gov.vn/",
+  "note": "越南本地FHIR IG仍為試用版；EMR驗收的互通前提"
+ },
+ {
+  "id": "VN-CHK-72",
+  "category": "越南法規",
+  "title": "Resolution 72-NQ/TW — 全民免費健康檢查（2026起）",
+  "authority": "Politburo / Government",
+  "level": "參考",
+  "status": "待確認",
+  "stages": [
+   "G1",
+   "G6"
+  ],
+  "owner": "Clinical Planner",
+  "url": "https://vietnamnews.vn/",
+  "note": "政策需求來源：全國優先族群約US$227m/年、HCMC約US$95m/年；OPP-23/75依據"
+ }
+]

@@ -1,0 +1,102 @@
+{
+ "generatedAt": "2026-08-13 14:04",
+ "sourceFile": "VMH-EcoMap-1_主工具_越南醫院生態盤點_v1.0.xlsx",
+ "toolVersion": "1.0",
+ "toolVersionDate": "2026-08-11",
+ "profile": [
+  {
+   "field": "Project name｜專案名稱",
+   "value": "Vietnam Modern Hospital Ecosystem / 越南現代醫院生態計畫",
+   "note": "Working title; update after sponsor confirmation"
+  },
+  {
+   "field": "Primary location｜主要地點",
+   "value": "Hanoi candidate / 河內候選",
+   "note": "Capital-level opportunity; exact site TBD"
+  },
+  {
+   "field": "Opportunity scenario｜商機情境",
+   "value": "Portfolio - All / 組合型（全納入）",
+   "note": "Do not exclude viable business models at screening stage"
+  },
+  {
+   "field": "Hospital type｜醫院定位",
+   "value": "Custom / 客製",
+   "note": "Each opportunity requires its own clinical and commercial plan"
+  },
+  {
+   "field": "Delivery scope｜交付範圍",
+   "value": "Advisory + Build + Operate / 顧問＋建置＋營運",
+   "note": "Consortium must evidence all three capabilities"
+  },
+  {
+   "field": "Alliance convener｜聯盟召集人",
+   "value": "群晶科技 (English legal name TBD)",
+   "note": "Convener and digital-infrastructure workstream lead"
+  },
+  {
+   "field": "Transaction model｜交易模式",
+   "value": "TBD / 未定",
+   "note": "Compare procurement, PPP, JV and private investment"
+  },
+  {
+   "field": "Government sponsor｜政府贊助",
+   "value": "Capital-level political sponsor / 首都層級政治贊助",
+   "note": "Secretary assistance; formal mandate still required"
+  },
+  {
+   "field": "Workbook language｜活頁簿語言",
+   "value": "Chinese / English｜中／英文",
+   "note": "Vietnamese version can be generated after official terminology review"
+  },
+  {
+   "field": "Illustrative start｜示意起始",
+   "value": "2026-09-01",
+   "note": "Replace with authorized programme start"
+  },
+  {
+   "field": "Planning horizon (months)｜規劃月數",
+   "value": 60,
+   "note": "Scenario driver for the roadmap"
+  }
+ ],
+ "weights": [
+  {
+   "field": "準則",
+   "value": "定義",
+   "note": "權重"
+  },
+  {
+   "field": "政府與政策",
+   "value": "政府契合、政策優先性與贊助授權",
+   "note": 0.35
+  },
+  {
+   "field": "臨床價值",
+   "value": "安全、品質與健康成果貢獻",
+   "note": 0.3
+  },
+  {
+   "field": "商業潛力",
+   "value": "收入、可簽約性、可擴散與重複生意",
+   "note": 0.35
+  },
+  {
+   "field": "權重檢查",
+   "value": null,
+   "note": 1
+  }
+ ],
+ "counts": {
+  "capabilities": 60,
+  "partners": 29,
+  "gates": 37,
+  "workpackages": 20,
+  "risks": 21,
+  "kpis": 25,
+  "opportunities": 85,
+  "pipeline": 8,
+  "decisions": 15,
+  "sources": 15
+ }
+}

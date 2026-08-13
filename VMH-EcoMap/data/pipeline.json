@@ -1,0 +1,163 @@
+[
+ {
+  "oppId": "OPP-24",
+  "name": "醫院IDC機房與院區網路建置",
+  "family": "D 數位基建與資安",
+  "vnMaturity": "② 起步中：剛開始有人做",
+  "domains": [
+   "D04"
+  ],
+  "capCount": 3.0,
+  "avgValue": 3.9,
+  "avgReady": 3.4,
+  "gapCount": 0.0,
+  "payer": "醫院業主資本支出(CAPEX)",
+  "txnMode": "統包工程(EPC)",
+  "amountTier": "2M-10M USD",
+  "dealStage": "Proposal / 已提案",
+  "lead": "Digital Infrastructure Lead",
+  "nextAction": "提交IDC與院區網路架構技術規格書，爭取先簽這一包",
+  "note": "（示範）群晶核心強項、缺口最少，建議當第一個示範案"
+ },
+ {
+  "oppId": "OPP-14",
+  "name": "影像設備整批交鑰匙（CT/MRI/DSA＋機房）",
+  "family": "C 醫材與臨床設備",
+  "vnMaturity": "① 已成熟：在地已有供應商",
+  "domains": [
+   "D05"
+  ],
+  "capCount": 2.0,
+  "avgValue": 4.7,
+  "avgReady": 2.4,
+  "gapCount": 1.0,
+  "payer": "醫院業主資本支出(CAPEX)",
+  "txnMode": "設施/設備PPP",
+  "amountTier": "2M-10M USD",
+  "dealStage": "Qualified / 已篩選",
+  "lead": "Imaging Lead",
+  "nextAction": "確認影像設備代理權與越南醫材註冊時程",
+  "note": "（示範）金額大但要先補齊PACS整合夥伴"
+ },
+ {
+  "oppId": "OPP-01",
+  "name": "醫院投資規劃與PPP交易架構顧問",
+  "family": "A 規劃投資與交易架構",
+  "vnMaturity": "② 起步中：剛開始有人做",
+  "domains": [
+   "D01",
+   "D10"
+  ],
+  "capCount": 9.0,
+  "avgValue": 3.7,
+  "avgReady": 2.0,
+  "gapCount": 0.0,
+  "payer": "越南政府／衛生部預算",
+  "txnMode": "顧問服務",
+  "amountTier": "500K-2M USD",
+  "dealStage": "Negotiation / 議約中",
+  "lead": "PPP Advisor",
+  "nextAction": "取得正式授權文件與交易架構共識",
+  "note": "（示範）金額不大但是所有後續商機的前提，優先度最高"
+ },
+ {
+  "oppId": "OPP-31",
+  "name": "HIS／EMR核心平台導入",
+  "family": "E 醫療資訊與資料",
+  "vnMaturity": "② 起步中：剛開始有人做",
+  "domains": [
+   "D06"
+  ],
+  "capCount": 2.0,
+  "avgValue": 4.9,
+  "avgReady": 2.4,
+  "gapCount": 0.0,
+  "payer": "醫院營運預算(OPEX)",
+  "txnMode": "租賃／以租代購",
+  "amountTier": "500K-2M USD",
+  "dealStage": "Qualified / 已篩選",
+  "lead": "Health IT Lead",
+  "nextAction": "用以租代購模式提案，避開資本支出審批",
+  "note": "（示範）約1370家醫院未達無紙化，是2026-2030最大的量"
+ },
+ {
+  "oppId": "OPP-43",
+  "name": "結核胸片AI篩檢(CAD)",
+  "family": "F AI與智慧醫療",
+  "vnMaturity": "② 起步中：剛開始有人做",
+  "domains": [
+   "（尚無對應能力）"
+  ],
+  "capCount": 0.0,
+  "avgValue": null,
+  "avgReady": null,
+  "gapCount": 0.0,
+  "payer": "國際開發援助(ODA／世銀／ADB)",
+  "txnMode": "ODA／贈款",
+  "amountTier": "100K-500K USD",
+  "dealStage": "Lead / 潛在",
+  "lead": "Imaging Lead",
+  "nextAction": "接洽國家結核防治計畫與國際捐助方，確認CAD產品採購管道",
+  "note": "（示範）★白地商機：越南結核負擔全球第12、捐助資金已到位，但聯盟目前沒有對應能力"
+ },
+ {
+  "oppId": "OPP-64",
+  "name": "院內物流SPD委外",
+  "family": "H 供應鏈與維運服務",
+  "vnMaturity": "③ 尚未出現：幾乎空白",
+  "domains": [
+   "D09"
+  ],
+  "capCount": 2.0,
+  "avgValue": 3.9,
+  "avgReady": 3.0,
+  "gapCount": 0.0,
+  "payer": "醫院營運預算(OPEX)",
+  "txnMode": "管理服務",
+  "amountTier": "500K-2M USD",
+  "dealStage": "Lead / 潛在",
+  "lead": "Supply Chain Lead",
+  "nextAction": "盤點一家示範醫院的耗材金額與人力，估算SPD管理費",
+  "note": "（示範）越南沒有SPD業者，台日模式可直接移植"
+ },
+ {
+  "oppId": "OPP-75",
+  "name": "健檢連鎖與行動篩檢營運",
+  "family": "I 照護服務新業態",
+  "vnMaturity": "② 起步中：剛開始有人做",
+  "domains": [
+   "D02"
+  ],
+  "capCount": 2.0,
+  "avgValue": 4.9,
+  "avgReady": 2.7,
+  "gapCount": 0.0,
+  "payer": "省級衛生局預算",
+  "txnMode": "分潤／服務分成",
+  "amountTier": "2M-10M USD",
+  "dealStage": "Lead / 潛在",
+  "lead": "Clinical Operator",
+  "nextAction": "鎖定一個省，提出全民健檢承接方案與行動篩檢車配置",
+  "note": "（示範）2026年起全民免費健檢，是時程確定的需求衝擊"
+ },
+ {
+  "oppId": "OPP-49",
+  "name": "越南語AI病歷書寫助理",
+  "family": "F AI與智慧醫療",
+  "vnMaturity": "③ 尚未出現：幾乎空白",
+  "domains": [
+   "（尚無對應能力）"
+  ],
+  "capCount": 0.0,
+  "avgValue": null,
+  "avgReady": null,
+  "gapCount": 0.0,
+  "payer": "醫院營運預算(OPEX)",
+  "txnMode": "軟體授權／訂閱",
+  "amountTier": "100K-500K USD",
+  "dealStage": "Lead / 潛在",
+  "lead": "Health IT Lead",
+  "nextAction": "找越南語醫療語音辨識夥伴，先在一家醫院做PoC",
+  "note": "（示範）★白地商機：最大的AI空白，語言就是護城河"
+ }
+]

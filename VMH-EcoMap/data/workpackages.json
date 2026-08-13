@@ -1,0 +1,431 @@
+[
+ {
+  "id": "WP-01",
+  "stage": "G0",
+  "name": "政府授權與計畫章程",
+  "lead": "PI Office",
+  "partners": [
+   "Government sponsor",
+   "群晶科技"
+  ],
+  "predecessors": [],
+  "startMonth": 1.0,
+  "months": 2.0,
+  "endMonth": 2.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Sponsor charter signed",
+  "caps": "CAP-001; CAP-002"
+ },
+ {
+  "id": "WP-02",
+  "stage": "G1",
+  "name": "商機與場址快速評估",
+  "lead": "PI Office",
+  "partners": [
+   "Local counsel",
+   "Architect",
+   "Clinical planner"
+  ],
+  "predecessors": [
+   "WP-01"
+  ],
+  "startMonth": 2.0,
+  "months": 3.0,
+  "endMonth": 4.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Screening report accepted",
+  "caps": "CAP-007; CAP-013"
+ },
+ {
+  "id": "WP-03",
+  "stage": "G1",
+  "name": "醫療需求與服務模式",
+  "lead": "Clinical Planner",
+  "partners": [
+   "Operator",
+   "Reference hospital"
+  ],
+  "predecessors": [
+   "WP-02"
+  ],
+  "startMonth": 3.0,
+  "months": 4.0,
+  "endMonth": 6.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Service portfolio approved",
+  "caps": "CAP-007 to CAP-012"
+ },
+ {
+  "id": "WP-04",
+  "stage": "G1",
+  "name": "法規、資料與執照盤點",
+  "lead": "Legal Lead",
+  "partners": [
+   "Health IT",
+   "Device regulatory",
+   "Architect"
+  ],
+  "predecessors": [
+   "WP-01"
+  ],
+  "startMonth": 2.0,
+  "months": 4.0,
+  "endMonth": 5.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "No-go register and licensing route approved",
+  "caps": "CAP-004"
+ },
+ {
+  "id": "WP-05",
+  "stage": "G2",
+  "name": "醫院功能與總體規劃",
+  "lead": "Healthcare Architect",
+  "partners": [
+   "Clinical planner",
+   "MEP",
+   "Operator"
+  ],
+  "predecessors": [
+   "WP-03",
+   "WP-04"
+  ],
+  "startMonth": 6.0,
+  "months": 8.0,
+  "endMonth": 13.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Functional programme and masterplan approved",
+  "caps": "CAP-013 to CAP-019"
+ },
+ {
+  "id": "WP-06",
+  "stage": "G2",
+  "name": "企業架構與標準藍圖",
+  "lead": "Enterprise Architect",
+  "partners": [
+   "群晶科技",
+   "Health IT",
+   "Clinical engineering"
+  ],
+  "predecessors": [
+   "WP-03",
+   "WP-04"
+  ],
+  "startMonth": 6.0,
+  "months": 6.0,
+  "endMonth": 11.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Architecture review passed",
+  "caps": "CAP-020 to CAP-039"
+ },
+ {
+  "id": "WP-07",
+  "stage": "G2",
+  "name": "聯盟夥伴資格審查",
+  "lead": "PI Office",
+  "partners": [
+   "All candidate partners"
+  ],
+  "predecessors": [
+   "WP-01"
+  ],
+  "startMonth": 4.0,
+  "months": 6.0,
+  "endMonth": 9.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Minimum consortium coverage achieved",
+  "caps": "CAP-005"
+ },
+ {
+  "id": "WP-08",
+  "stage": "G2",
+  "name": "商業模式與交易架構",
+  "lead": "PPP Advisor",
+  "partners": [
+   "Government",
+   "Investors",
+   "Operator"
+  ],
+  "predecessors": [
+   "WP-02",
+   "WP-03",
+   "WP-04"
+  ],
+  "startMonth": 6.0,
+  "months": 7.0,
+  "endMonth": 12.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Preferred model and risk allocation approved",
+  "caps": "CAP-003; CAP-056 to CAP-060"
+ },
+ {
+  "id": "WP-09",
+  "stage": "G3",
+  "name": "可行性與投資決策",
+  "lead": "PI Office",
+  "partners": [
+   "Finance",
+   "Legal",
+   "Independent assurance"
+  ],
+  "predecessors": [
+   "WP-05",
+   "WP-06",
+   "WP-08"
+  ],
+  "startMonth": 12.0,
+  "months": 6.0,
+  "endMonth": 17.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Investment committee decision",
+  "caps": "CAP-056; CAP-059"
+ },
+ {
+  "id": "WP-10",
+  "stage": "G3",
+  "name": "設計深化、許可與採購",
+  "lead": "EPC / Design Lead",
+  "partners": [
+   "Legal",
+   "Procurement",
+   "PI Office"
+  ],
+  "predecessors": [
+   "WP-09"
+  ],
+  "startMonth": 15.0,
+  "months": 12.0,
+  "endMonth": 26.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Permits and contract awards",
+  "caps": "CAP-014 to CAP-019; CAP-051"
+ },
+ {
+  "id": "WP-11",
+  "stage": "G4",
+  "name": "土建、機電與關鍵公用系統",
+  "lead": "EPC Lead",
+  "partners": [
+   "Architect",
+   "MEP",
+   "IPC",
+   "Assurance"
+  ],
+  "predecessors": [
+   "WP-10"
+  ],
+  "startMonth": 24.0,
+  "months": 18.0,
+  "endMonth": 41.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Facility and utilities commissioned",
+  "caps": "CAP-013 to CAP-019"
+ },
+ {
+  "id": "WP-12",
+  "stage": "G4",
+  "name": "IDC、網路、資安與IoT",
+  "lead": "群晶科技",
+  "partners": [
+   "EPC",
+   "Security",
+   "BMS/IoT partners"
+  ],
+  "predecessors": [
+   "WP-10"
+  ],
+  "startMonth": 26.0,
+  "months": 14.0,
+  "endMonth": 39.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Infrastructure acceptance and DR test",
+  "caps": "CAP-020 to CAP-026"
+ },
+ {
+  "id": "WP-13",
+  "stage": "G4",
+  "name": "醫材採購、安裝與介接",
+  "lead": "Medical Device Integrator",
+  "partners": [
+   "Clinical engineering",
+   "Health IT"
+  ],
+  "predecessors": [
+   "WP-10",
+   "WP-11"
+  ],
+  "startMonth": 28.0,
+  "months": 14.0,
+  "endMonth": 41.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Device acceptance and asset register",
+  "caps": "CAP-027 to CAP-032"
+ },
+ {
+  "id": "WP-14",
+  "stage": "G4",
+  "name": "HIS／EMR與資料平台",
+  "lead": "Health IT Lead",
+  "partners": [
+   "Operator",
+   "Reference hospital",
+   "Cloud partner"
+  ],
+  "predecessors": [
+   "WP-06",
+   "WP-10",
+   "WP-12"
+  ],
+  "startMonth": 26.0,
+  "months": 16.0,
+  "endMonth": 41.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "System validation and adoption readiness",
+  "caps": "CAP-033 to CAP-039"
+ },
+ {
+  "id": "WP-15",
+  "stage": "G4",
+  "name": "品質、病安與營運制度",
+  "lead": "Clinical Operator",
+  "partners": [
+   "Quality advisor",
+   "Reference hospital"
+  ],
+  "predecessors": [
+   "WP-03",
+   "WP-07"
+  ],
+  "startMonth": 22.0,
+  "months": 18.0,
+  "endMonth": 39.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Operating manuals and audit readiness",
+  "caps": "CAP-040 to CAP-044"
+ },
+ {
+  "id": "WP-16",
+  "stage": "G4",
+  "name": "人才招募、訓練與技轉",
+  "lead": "Clinical Operator",
+  "partners": [
+   "Reference hospital",
+   "Vendors",
+   "University"
+  ],
+  "predecessors": [
+   "WP-03",
+   "WP-07",
+   "WP-15"
+  ],
+  "startMonth": 24.0,
+  "months": 18.0,
+  "endMonth": 41.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Staffing and competency thresholds met",
+  "caps": "CAP-045 to CAP-049"
+ },
+ {
+  "id": "WP-17",
+  "stage": "G4",
+  "name": "供應鏈、SPD與維運準備",
+  "lead": "Operations Lead",
+  "partners": [
+   "Logistics",
+   "FM",
+   "Clinical engineering"
+  ],
+  "predecessors": [
+   "WP-10",
+   "WP-13"
+  ],
+  "startMonth": 30.0,
+  "months": 12.0,
+  "endMonth": 41.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Opening stock, contracts and SLA ready",
+  "caps": "CAP-050 to CAP-054"
+ },
+ {
+  "id": "WP-18",
+  "stage": "G5",
+  "name": "整合測試與開院模擬",
+  "lead": "Independent Assurance",
+  "partners": [
+   "All workstream leads"
+  ],
+  "predecessors": [
+   "WP-11",
+   "WP-12",
+   "WP-13",
+   "WP-14",
+   "WP-15",
+   "WP-16",
+   "WP-17"
+  ],
+  "startMonth": 39.0,
+  "months": 4.0,
+  "endMonth": 42.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Critical risks closed and readiness signed",
+  "caps": "CAP-044; CAP-048"
+ },
+ {
+  "id": "WP-19",
+  "stage": "G5",
+  "name": "分階段開院與穩定",
+  "lead": "Clinical Operator",
+  "partners": [
+   "PI Office",
+   "All workstreams"
+  ],
+  "predecessors": [
+   "WP-18"
+  ],
+  "startMonth": 43.0,
+  "months": 6.0,
+  "endMonth": 48.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Stabilization KPIs achieved",
+  "caps": "CAP-039; CAP-060"
+ },
+ {
+  "id": "WP-20",
+  "stage": "G6",
+  "name": "認證、效益與複製",
+  "lead": "PI Office",
+  "partners": [
+   "Government",
+   "Operator",
+   "Quality advisor"
+  ],
+  "predecessors": [
+   "WP-19"
+  ],
+  "startMonth": 49.0,
+  "months": 12.0,
+  "endMonth": 60.0,
+  "status": "未開始",
+  "percent": 0.0,
+  "acceptance": "Benefits report and replication package approved",
+  "caps": "CAP-040; CAP-060"
+ }
+]

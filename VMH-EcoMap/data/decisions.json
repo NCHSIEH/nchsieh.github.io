@@ -1,0 +1,122 @@
+[
+ {
+  "id": "D-001",
+  "date": "2026-08-11",
+  "topic": "Opportunity scope",
+  "decision": "Include greenfield, upgrade, co-located JV and other viable hospital opportunities",
+  "by": "User",
+  "status": "生效"
+ },
+ {
+  "id": "D-002",
+  "date": "2026-08-11",
+  "topic": "Location",
+  "decision": "Hanoi/capital is a candidate; secretary assistance noted, formal sponsor TBD",
+  "by": "User",
+  "status": "生效"
+ },
+ {
+  "id": "D-003",
+  "date": "2026-08-11",
+  "topic": "Hospital model",
+  "decision": "Use bespoke consulting plans by hospital type, scale and service role",
+  "by": "User",
+  "status": "生效"
+ },
+ {
+  "id": "D-004",
+  "date": "2026-08-11",
+  "topic": "Scope of alliance",
+  "decision": "Provide advisory, actual build and operations capability",
+  "by": "User",
+  "status": "生效"
+ },
+ {
+  "id": "D-005",
+  "date": "2026-08-11",
+  "topic": "Transaction",
+  "decision": "Transaction model remains open",
+  "by": "User",
+  "status": "生效"
+ },
+ {
+  "id": "D-006",
+  "date": "2026-08-11",
+  "topic": "Alliance leadership",
+  "decision": "群晶科技 is positioned initially as alliance convener",
+  "by": "User",
+  "status": "生效"
+ },
+ {
+  "id": "D-007",
+  "date": "2026-08-11",
+  "topic": "Language",
+  "decision": "Workbook is Chinese/English; Vietnamese terminology review is a later work package",
+  "by": "User",
+  "status": "生效"
+ },
+ {
+  "id": "D-008",
+  "date": "2026-08-11",
+  "topic": "工具架構",
+  "decision": "v0.2起採三軸藍圖：X軸=階段(A)、Y軸=能力模組(C)、B=各階段法規門檻列；以03能力總表為單一資料源",
+  "by": "PI + User",
+  "status": "生效"
+ },
+ {
+  "id": "D-009",
+  "date": "2026-08-11",
+  "topic": "欄位擴充",
+  "decision": "v1.0：03能力總表新增AB-AF五欄（能力成熟度/驗收指標KPI/資料系統依賴/證據成熟度/所屬商機包），一律加在AA欄右側，不插入既有欄位，不影響前27欄公式；AB-AE四欄60項既有能力留空待PI逐項評估補齊，AF為新增14商機清單分頁的關聯鍵。",
+  "by": "PI + User",
+  "status": "生效"
+ },
+ {
+  "id": "D-010",
+  "date": "2026-08-11",
+  "topic": "商機呈現",
+  "decision": "03能力總表是能力/工作包資料庫，不等於商機清單；新增14_商機清單_Pipeline分頁，由PI在03的AF欄把相關CAP標同一PKG代號後自動彙整CAP數與平均分數，業主簡報一律用14頁，不直接看03的CAP明細。04夥伴拼圖新增T欄「代號＋名稱」，03/12分頁候選夥伴下拉改顯示代號＋名稱以避免同類角色混淆。",
+  "by": "PI + User",
+  "status": "生效"
+ },
+ {
+  "id": "D-011",
+  "date": "2026-08-11",
+  "topic": "夥伴表輸入防呆",
+  "decision": "04夥伴拼圖：A欄(夥伴ID)改為公式接續編號、F欄(涵蓋領域)改由U-AD十個D01-D10勾選欄自動組成，兩者都不再手動輸入以避免格式/編號錯誤；B欄(夥伴/角色中)改為建議式下拉(98分頁L_PartnerCand維護候選清單)，可選也可直接輸入全新名稱。VMH-EcoMap-3的貼上範圍同步由A7:O7調整為B7:O7（跳過A欄）。",
+  "by": "PI + User",
+  "status": "生效"
+ },
+ {
+  "id": "D-012",
+  "date": "2026-08-11",
+  "topic": "全檔防呆與易用性",
+  "decision": "①全分頁無密碼保護：黃格/✓格/示範列可編輯，公式格鎖定（校閱→取消保護即可解除，無密碼；篩選可用、排序需先解除保護）；10決策紀錄為自由書寫區不上鎖。②新增「儀表板」分頁（族群分佈/越南現況/各領域缺口/管線階段，全公式連動）。③每頁加「⌂回使用說明」導覽連結、設定列印重複表頭。④03的X-AE欄改為群組摺疊，按「＋」展開。⑤11/12/13自動清單加超量警示（超過顯示上限會提醒）。⑥修正03!X5、06!F5殘留的「None」字串。",
+  "by": "PI + User",
+  "status": "生效"
+ },
+ {
+  "id": "D-013",
+  "date": "2026-08-11",
+  "topic": "內容實質校準(v1.1)",
+  "decision": "①03價值分依99新增之行為錨定量表重新校準（原60項全4-5分無鑑別力；商業分改依16矩陣商機對應數定錨0個→2分…4個以上→5分，治理/商模/數位後勤類之臨床分與政府分下修），商業判斷由僅Go/Prepare兩種恢復為四種分佈；校準值仍可逐項覆寫。②05法規更新：VN-PDP-13(Decree 13/2023已失效)換版為VN-PDP-91(PDPL 91/2025+Decree 356)，新增PPP71/電子處方26/AI法134/FHIR2146/全民健檢72五條。③07預填2025 HCMC實價基準(建造單價US$1,460/㎡，規劃假設值)。④09修正KPI-OPS-02方向(情境判斷→越高越好)。⑤15新增「主要競爭者/在地玩家」「我們的切入角度」兩欄(約30個商機已填研究所得競爭情報，餘標待調查)。⑥13新增第④區塊「商機行動」(自動列出14管線中缺口>0或白地商機)。⑦16矩陣加註：目前✓為PI初判v1.0，須逐商機覆核。",
+  "by": "PI + User",
+  "status": "生效"
+ },
+ {
+  "id": "D-014",
+  "date": "2026-08-11",
+  "topic": "商機-能力-推展閉環(v1.1)",
+  "decision": "①15新增X群晶主導CAP數/Y攻擊優先分/Z攻擊順位三個公式欄（優先分＝0.45×價值＋0.35×準備＋0.2×越南現況分－缺口扣分，白地商機不列入排序另走13④），儀表板同步Top 10表。②新增17商機作戰卡分頁：選一個商機自動組出「需要哪些能力/誰在做誰還缺/對手是誰/憑什麼贏/卡哪些門檻」的作戰頁。③11缺口招募新增「牽動商機數」欄（來源16矩陣每列✓數），招募順序改依牽動生意多寡排定。④16新增「群晶主導CAP數」統計列與每列「牽動商機數」欄。⑤99新增商機成熟階段進入條件表（防止管線灌水）。",
+  "by": "PI + User",
+  "status": "生效"
+ },
+ {
+  "id": "D-015",
+  "date": "2026-08-11",
+  "topic": "風險/商業KPI/證據壓力(v1.1)",
+  "decision": "①08補6條商機層風險(R-016~021：匯率匯出/VSS給付/AI法時程/白地市場風險/關鍵夥伴談不成/在地國家隊卡位)。②09新增聯盟商業KPI六條(管線數/後段占比/簽約數/缺口數/夥伴確認數/矩陣覆核數)。③03的AE證據成熟度全欄預填「推測」誠實起點，判斷=Go但證據仍為推測者紅底警示——22個Go須沿證據階梯上爬才可對外承諾。④VMH-EcoMap-3新增商機對照頁；VMH-EcoMap-5新增商機篇章。⑤98候選名冊填入實名候選公司。⑥新增VMH-EcoMap-6重建維護SOP。",
+  "by": "PI + User",
+  "status": "生效"
+ }
+]

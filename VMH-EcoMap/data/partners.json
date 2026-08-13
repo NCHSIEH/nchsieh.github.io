@@ -1,0 +1,788 @@
+[
+ {
+  "id": "P-001",
+  "name": "群晶科技",
+  "nameEn": "English legal name TBD",
+  "type": "Alliance convener / 聯盟召集人",
+  "country": "Taiwan",
+  "domains": [
+   "D01",
+   "D04",
+   "D09"
+  ],
+  "role": "Alliance convener; IDC/IoT/smart-infrastructure lead",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 3.0,
+   "advisory": 3.0,
+   "build": 4.0,
+   "operate": 3.0,
+   "finance": 2.0,
+   "interop": 4.0,
+   "localization": 3.0
+  },
+  "fit": 3.1,
+  "sourceRisk": "Medium / 中",
+  "status": "Target / 目標邀請",
+  "nextAction": "Confirm legal name, references, Vietnam presence and accountable executive",
+  "label": "P-001 群晶科技"
+ },
+ {
+  "id": "P-002",
+  "name": "越南政府贊助單位",
+  "nameEn": "Vietnam government sponsor",
+  "type": "Government / 政府",
+  "country": "Vietnam",
+  "domains": [
+   "D01",
+   "D10"
+  ],
+  "role": "Mandate, approvals, site and inter-agency coordination",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 3.0,
+   "advisory": 2.0,
+   "build": 2.0,
+   "operate": 2.0,
+   "finance": 3.0,
+   "interop": 2.0,
+   "localization": 5.0
+  },
+  "fit": 2.7,
+  "sourceRisk": "Low / 低",
+  "status": "Engaged / 已接觸",
+  "nextAction": "Convert political support into formal governance and named owners",
+  "label": "P-002 越南政府贊助單位"
+ },
+ {
+  "id": "P-003",
+  "name": "越南在地醫院營運者",
+  "nameEn": "Vietnam local hospital operator",
+  "type": "Clinical operator / 臨床營運",
+  "country": "Vietnam",
+  "domains": [
+   "D02",
+   "D07",
+   "D08",
+   "D10"
+  ],
+  "role": "Licensed clinical operator and long-term accountable owner",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 1.0,
+   "advisory": 3.0,
+   "build": 2.0,
+   "operate": 5.0,
+   "finance": 2.0,
+   "interop": 3.0,
+   "localization": 5.0
+  },
+  "fit": 3.0,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Identify licensed operators and verify outcomes",
+  "label": "P-003 越南在地醫院營運者"
+ },
+ {
+  "id": "P-004",
+  "name": "台灣參考醫院",
+  "nameEn": "Taiwan reference hospital",
+  "type": "Reference hospital / 參考醫院",
+  "country": "Taiwan",
+  "domains": [
+   "D02",
+   "D07",
+   "D08"
+  ],
+  "role": "Clinical model, quality, training and transfer",
+  "vnPresence": "No / 否",
+  "scores": {
+   "references": 2.0,
+   "advisory": 5.0,
+   "build": 2.0,
+   "operate": 3.0,
+   "finance": 1.0,
+   "interop": 4.0,
+   "localization": 4.0
+  },
+  "fit": 3.0,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Select by target specialties and willingness to transfer",
+  "label": "P-004 台灣參考醫院"
+ },
+ {
+  "id": "P-005",
+  "name": "醫療建築與總體規劃團隊",
+  "nameEn": "Healthcare architect and planner",
+  "type": "Design / 設計",
+  "country": "TBD",
+  "domains": [
+   "D02",
+   "D03"
+  ],
+  "role": "Clinical planning, masterplan and room data sheets",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 1.0,
+   "advisory": 5.0,
+   "build": 4.0,
+   "operate": 2.0,
+   "finance": 1.0,
+   "interop": 3.0,
+   "localization": 3.0
+  },
+  "fit": 2.7,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Request regional hospital references",
+  "label": "P-005 醫療建築與總體規劃團隊"
+ },
+ {
+  "id": "P-006",
+  "name": "越南EPC／機電夥伴",
+  "nameEn": "Vietnam EPC and MEP partner",
+  "type": "EPC / 工程",
+  "country": "Vietnam",
+  "domains": [
+   "D03",
+   "D04"
+  ],
+  "role": "Local design, permits, construction and MEP delivery",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 1.0,
+   "advisory": 2.0,
+   "build": 5.0,
+   "operate": 2.0,
+   "finance": 2.0,
+   "interop": 2.0,
+   "localization": 5.0
+  },
+  "fit": 2.7,
+  "sourceRisk": "Medium / 中",
+  "status": "Target / 目標邀請",
+  "nextAction": "Prequalify for healthcare and data-centre capability",
+  "label": "P-006 越南EPC／機電夥伴"
+ },
+ {
+  "id": "P-007",
+  "name": "醫療資訊整合商",
+  "nameEn": "Health IT integrator",
+  "type": "Technology / 科技",
+  "country": "TBD",
+  "domains": [
+   "D05",
+   "D06"
+  ],
+  "role": "HIS/EMR, interfaces, data and go-live integration",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 1.0,
+   "advisory": 4.0,
+   "build": 4.0,
+   "operate": 4.0,
+   "finance": 2.0,
+   "interop": 5.0,
+   "localization": 4.0
+  },
+  "fit": 3.4,
+  "sourceRisk": "Medium / 中",
+  "status": "Target / 目標邀請",
+  "nextAction": "Issue architecture and conformance questionnaire",
+  "label": "P-007 醫療資訊整合商"
+ },
+ {
+  "id": "P-008",
+  "name": "美國雲端服務商",
+  "nameEn": "US cloud service provider",
+  "type": "Cloud / 雲端",
+  "country": "United States",
+  "domains": [
+   "D04",
+   "D06"
+  ],
+  "role": "Cloud platform subject to Vietnam data and security review",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 4.0,
+   "advisory": 3.0,
+   "build": 4.0,
+   "operate": 5.0,
+   "finance": 3.0,
+   "interop": 5.0,
+   "localization": 2.0
+  },
+  "fit": 3.7,
+  "sourceRisk": "High / 高",
+  "status": "Due diligence / 審查中",
+  "nextAction": "Assess Vietnam region, data transfer and key control",
+  "label": "P-008 美國雲端服務商"
+ },
+ {
+  "id": "P-009",
+  "name": "醫材整合商",
+  "nameEn": "Medical device integrator",
+  "type": "Medical device / 醫材",
+  "country": "TBD",
+  "domains": [
+   "D05",
+   "D09"
+  ],
+  "role": "Equipment planning, registration, installation and lifecycle",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 1.0,
+   "advisory": 4.0,
+   "build": 5.0,
+   "operate": 4.0,
+   "finance": 2.0,
+   "interop": 4.0,
+   "localization": 4.0
+  },
+  "fit": 3.4,
+  "sourceRisk": "Medium / 中",
+  "status": "Target / 目標邀請",
+  "nextAction": "Separate planning neutrality from sales incentives",
+  "label": "P-009 醫材整合商"
+ },
+ {
+  "id": "P-010",
+  "name": "資安與隱私獨立驗證",
+  "nameEn": "Cybersecurity and privacy assurance",
+  "type": "Independent assurance / 獨立驗證",
+  "country": "TBD",
+  "domains": [
+   "D01",
+   "D04",
+   "D06"
+  ],
+  "role": "Independent threat, privacy and go-live assurance",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 1.0,
+   "advisory": 5.0,
+   "build": 2.0,
+   "operate": 3.0,
+   "finance": 1.0,
+   "interop": 5.0,
+   "localization": 3.0
+  },
+  "fit": 2.9,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Define assurance scope and remediation authority",
+  "label": "P-010 資安與隱私獨立驗證"
+ },
+ {
+  "id": "P-011",
+  "name": "財務與PPP顧問",
+  "nameEn": "Finance and PPP advisor",
+  "type": "Advisor / 顧問",
+  "country": "TBD",
+  "domains": [
+   "D01",
+   "D10"
+  ],
+  "role": "Business case, bankability, financing and risk allocation",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 1.0,
+   "advisory": 5.0,
+   "build": 2.0,
+   "operate": 2.0,
+   "finance": 5.0,
+   "interop": 2.0,
+   "localization": 3.0
+  },
+  "fit": 2.9,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Engage before selecting transaction model",
+  "label": "P-011 財務與PPP顧問"
+ },
+ {
+  "id": "P-012",
+  "name": "越南法律與法規顧問",
+  "nameEn": "Vietnam legal and regulatory counsel",
+  "type": "Legal / 法律",
+  "country": "Vietnam",
+  "domains": [
+   "D01",
+   "D05",
+   "D06",
+   "D10"
+  ],
+  "role": "Licensing, investment, procurement, data and contracting",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 1.0,
+   "advisory": 5.0,
+   "build": 2.0,
+   "operate": 2.0,
+   "finance": 2.0,
+   "interop": 2.0,
+   "localization": 5.0
+  },
+  "fit": 2.7,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Appoint counsel with health and data expertise",
+  "label": "P-012 越南法律與法規顧問"
+ },
+ {
+  "id": "P-013",
+  "name": "品質與JCI顧問",
+  "nameEn": "Quality and JCI advisor",
+  "type": "Quality / 品質",
+  "country": "TBD",
+  "domains": [
+   "D02",
+   "D07",
+   "D08"
+  ],
+  "role": "Quality system, accreditation and readiness audits",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 1.0,
+   "advisory": 5.0,
+   "build": 2.0,
+   "operate": 4.0,
+   "finance": 1.0,
+   "interop": 3.0,
+   "localization": 3.0
+  },
+  "fit": 2.7,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Decide whether formal JCI accreditation is a target",
+  "label": "P-013 品質與JCI顧問"
+ },
+ {
+  "id": "P-014",
+  "name": "物流／SPD與冷鏈夥伴",
+  "nameEn": "Logistics, SPD and cold-chain partner",
+  "type": "Logistics / 物流",
+  "country": "Vietnam",
+  "domains": [
+   "D09"
+  ],
+  "role": "Local supply, warehouse, distribution and cold chain",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 1.0,
+   "advisory": 3.0,
+   "build": 4.0,
+   "operate": 4.0,
+   "finance": 2.0,
+   "interop": 3.0,
+   "localization": 5.0
+  },
+  "fit": 3.1,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Map service levels and geographic coverage",
+  "label": "P-014 物流／SPD與冷鏈夥伴"
+ },
+ {
+  "id": "P-015",
+  "name": "獨立臨床與成本驗證",
+  "nameEn": "Independent clinical and cost assurance",
+  "type": "Independent assurance / 獨立驗證",
+  "country": "TBD",
+  "domains": [
+   "D01",
+   "D02",
+   "D03",
+   "D05",
+   "D10"
+  ],
+  "role": "Validate demand, design, cost and clinical readiness",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 1.0,
+   "advisory": 5.0,
+   "build": 2.0,
+   "operate": 3.0,
+   "finance": 1.0,
+   "interop": 3.0,
+   "localization": 3.0
+  },
+  "fit": 2.6,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "Define stage-gate assurance reports",
+  "label": "P-015 獨立臨床與成本驗證"
+ },
+ {
+  "id": "P-016",
+  "name": "PI 計畫辦公室",
+  "nameEn": "Programme Office (PI)",
+  "type": "顧問 / PI",
+  "country": "TBD / 待確認",
+  "domains": [
+   "D01",
+   "D07",
+   "D10"
+  ],
+  "role": "需求、架構、階段門檻與效益驗收；維持供應商中立",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 3.0,
+   "advisory": 5.0,
+   "build": 2.0,
+   "operate": 2.0,
+   "finance": 2.0,
+   "interop": 4.0,
+   "localization": 3.0
+  },
+  "fit": 3.0,
+  "sourceRisk": "Low / 低",
+  "status": "Qualified / 已通過",
+  "nextAction": "確認人力配置與獨立性",
+  "label": "P-016 PI 計畫辦公室"
+ },
+ {
+  "id": "P-017",
+  "name": "越南公共事務顧問",
+  "nameEn": "Vietnam public affairs advisor",
+  "type": "顧問 / PI",
+  "country": "Vietnam",
+  "domains": [
+   "D01"
+  ],
+  "role": "利害關係人與權力地圖、政府溝通",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 1.0,
+   "advisory": 4.0,
+   "build": 1.0,
+   "operate": 1.0,
+   "finance": 1.0,
+   "interop": 1.0,
+   "localization": 5.0
+  },
+  "fit": 2.0,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "確認政商往來合規性",
+  "label": "P-017 越南公共事務顧問"
+ },
+ {
+  "id": "P-018",
+  "name": "越南環保與廢棄物處理商",
+  "nameEn": "Vietnam environmental & waste partner",
+  "type": "環保 / 廢棄物",
+  "country": "Vietnam",
+  "domains": [
+   "D03",
+   "D09"
+  ],
+  "role": "醫療廢棄物、水處理與環評",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 1.0,
+   "advisory": 2.0,
+   "build": 4.0,
+   "operate": 4.0,
+   "finance": 1.0,
+   "interop": 1.0,
+   "localization": 5.0
+  },
+  "fit": 2.6,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "確認醫療廢棄物處理許可",
+  "label": "P-018 越南環保與廢棄物處理商"
+ },
+ {
+  "id": "P-019",
+  "name": "影像設備與PACS整合商",
+  "nameEn": "Imaging & PACS integrator",
+  "type": "醫材",
+  "country": "TBD / 待確認",
+  "domains": [
+   "D05",
+   "D06"
+  ],
+  "role": "影像設備供應＋PACS/RIS 整合與報告流程",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Medium / 中",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需 DICOM/IHE 實績與越南醫材註冊路徑",
+  "label": "P-019 影像設備與PACS整合商"
+ },
+ {
+  "id": "P-020",
+  "name": "檢驗自動化與LIS供應商",
+  "nameEn": "Lab automation & LIS vendor",
+  "type": "醫材",
+  "country": "TBD / 待確認",
+  "domains": [
+   "D05",
+   "D06"
+  ],
+  "role": "實驗室自動化產線與 LIS",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Medium / 中",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需 HL7 v2/LOINC 對接實績",
+  "label": "P-020 檢驗自動化與LIS供應商"
+ },
+ {
+  "id": "P-021",
+  "name": "手術室與重症設備整合商",
+  "nameEn": "OR & ICU integration vendor",
+  "type": "醫材",
+  "country": "TBD / 待確認",
+  "domains": [
+   "D05"
+  ],
+  "role": "手術室、麻醉、重症監視與整合",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Medium / 中",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需 IEC 60601/80001 證明",
+  "label": "P-021 手術室與重症設備整合商"
+ },
+ {
+  "id": "P-022",
+  "name": "越南數位身分介接夥伴",
+  "nameEn": "Vietnam digital identity partner",
+  "type": "科技 / 系統整合",
+  "country": "Vietnam",
+  "domains": [
+   "D06"
+  ],
+  "role": "VNeID 與主病人索引身分整合",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Medium / 中",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需政府平台介接資格",
+  "label": "P-022 越南數位身分介接夥伴"
+ },
+ {
+  "id": "P-023",
+  "name": "病人App與在地支付夥伴",
+  "nameEn": "Patient app & local payment partner",
+  "type": "支付 / 金流",
+  "country": "Vietnam",
+  "domains": [
+   "D06",
+   "D10"
+  ],
+  "role": "病人入口、行動掛號、線上支付",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Medium / 中",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需越南支付牌照與個資合規",
+  "label": "P-023 病人App與在地支付夥伴"
+ },
+ {
+  "id": "P-024",
+  "name": "越南醫護大學／人力機構",
+  "nameEn": "Vietnam nursing & medical university",
+  "type": "教育 / 人力",
+  "country": "Vietnam",
+  "domains": [
+   "D08"
+  ],
+  "role": "人力供給、實習、職能訓練與認證",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Low / 低",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需人力供給規模與訓練量能",
+  "label": "P-024 越南醫護大學／人力機構"
+ },
+ {
+  "id": "P-025",
+  "name": "越南健保申報介接夥伴",
+  "nameEn": "Vietnam social insurance (VSS) integrator",
+  "type": "科技 / 系統整合",
+  "country": "Vietnam",
+  "domains": [
+   "D10"
+  ],
+  "role": "健保申報、數位理賠與對帳",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Medium / 中",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需 VSS 實際申報介接經驗",
+  "label": "P-025 越南健保申報介接夥伴"
+ },
+ {
+  "id": "P-026",
+  "name": "醫院收費與金流服務商",
+  "nameEn": "Hospital revenue cycle & payment provider",
+  "type": "支付 / 金流",
+  "country": "TBD / 待確認",
+  "domains": [
+   "D10"
+  ],
+  "role": "收費、現金流、收入週期管理",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Medium / 中",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需醫院收費系統與金流合規",
+  "label": "P-026 醫院收費與金流服務商"
+ },
+ {
+  "id": "P-027",
+  "name": "國際醫療行銷與保險通路",
+  "nameEn": "International patient & insurance channel",
+  "type": "行銷 / 通路",
+  "country": "TBD / 待確認",
+  "domains": [
+   "D10"
+  ],
+  "role": "國際醫療客源、保險給付通路",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 0.0,
+   "advisory": 0.0,
+   "build": 0.0,
+   "operate": 0.0,
+   "finance": 0.0,
+   "interop": 0.0,
+   "localization": 0.0
+  },
+  "fit": 0.0,
+  "sourceRisk": "Medium / 中",
+  "status": "缺口-待尋找",
+  "nextAction": "★缺口：需國際保險合約與客源實績",
+  "label": "P-027 國際醫療行銷與保險通路"
+ },
+ {
+  "id": "P-028",
+  "name": "越南在地維修服務網",
+  "nameEn": "Vietnam local service network",
+  "type": "醫材",
+  "country": "Vietnam",
+  "domains": [
+   "D05",
+   "D09"
+  ],
+  "role": "備品、維修、校正與汰換",
+  "vnPresence": "Yes / 是",
+  "scores": {
+   "references": 1.0,
+   "advisory": 1.0,
+   "build": 3.0,
+   "operate": 5.0,
+   "finance": 1.0,
+   "interop": 2.0,
+   "localization": 5.0
+  },
+  "fit": 2.6,
+  "sourceRisk": "Low / 低",
+  "status": "Target / 目標邀請",
+  "nextAction": "確認覆蓋省份與回應時間",
+  "label": "P-028 越南在地維修服務網"
+ },
+ {
+  "id": "P-029",
+  "name": "智慧院區設備商（BMS/RTLS）",
+  "nameEn": "Smart hospital device vendor",
+  "type": "科技 / 系統整合",
+  "country": "TBD / 待確認",
+  "domains": [
+   "D04"
+  ],
+  "role": "BMS、RTLS、護理呼叫與感測",
+  "vnPresence": "TBD / 待確認",
+  "scores": {
+   "references": 2.0,
+   "advisory": 3.0,
+   "build": 4.0,
+   "operate": 3.0,
+   "finance": 1.0,
+   "interop": 4.0,
+   "localization": 3.0
+  },
+  "fit": 2.9,
+  "sourceRisk": "Medium / 中",
+  "status": "Due diligence / 審查中",
+  "nextAction": "與群晶整合分工需先界定",
+  "label": "P-029 智慧院區設備商（BMS/RTLS）"
+ }
+]
