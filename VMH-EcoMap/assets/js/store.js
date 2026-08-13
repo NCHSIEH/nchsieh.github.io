@@ -48,8 +48,21 @@ const FILES = [
 /** 全域資料庫，載入後不再變動 */
 export const db = {};
 
-/** 讀取所有 JSON 並建立交叉索引 */
+/** 讀取所有 JSON 並建立交叉索引
+ *
+ *  兩種來源，優先用內嵌的：
+ *    1. window.__VMH_DATA__ — 單檔版（tools/build_single_file.py 產生）把知識庫直接寫進 HTML，
+ *       整站只有一個檔案，不需要伺服器也不需要維護資料夾結構。
+ *    2. data/*.json — 一般版，資料與程式分開，方便逐檔比對修改歷程。
+ */
 export async function load() {
+  const embedded = typeof window !== 'undefined' ? window.__VMH_DATA__ : null;
+  if (embedded) {
+    FILES.forEach(name => { db[camel(name)] = embedded[name]; });
+    buildIndexes();
+    return db;
+  }
+
   const results = await Promise.all(
     FILES.map(async name => {
       const res = await fetch(`data/${name}.json`, { cache: 'no-cache' });
