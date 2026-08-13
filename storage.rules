@@ -1,0 +1,66 @@
+rules_version = '2';
+
+// =============================================================================
+//  nchsieh-lms — Firebase Storage Security Rules
+//
+//  這份規則是業主機密檔案的唯一防線。
+//  沒有它，只要猜到檔案路徑，任何人都能下載——包含沒登入的人。
+//
+//  部署方式：Firebase Console → Storage → Rules → 全部貼上 → 發布
+//  （必須連同 firestore.rules 一起發布，因為這裡會去讀 Firestore 的成員名冊）
+// =============================================================================
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function adminEmails() {
+      return [
+        'nchsieh@gmail.com'
+      ];
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in adminEmails();
+    }
+
+    // 成員資格以 Firestore 的 vmh_members 為準，與 firestore.rules 同一份名冊，
+    // 不需要在兩個地方各維護一份狀態。
+    function isVmhMember() {
+      return isAdmin()
+        || (signedIn()
+            && firestore.exists(/databases/(default)/documents/vmh_members/$(request.auth.uid))
+            && firestore.get(/databases/(default)/documents/vmh_members/$(request.auth.uid))
+                 .data.status == 'approved');
+    }
+
+    // ---------- 協作區檔案 ----------
+    // 路徑格式：vmh/{docId}/v{n}/{檔名}
+    match /vmh/{docId}/{version}/{fileName} {
+
+      // 只有已核准的成員讀得到。未登入、待審核、已暫停一律擋下。
+      allow read: if isVmhMember();
+
+      // 上傳限制在 100 MB 以內，避免有人把儲存空間灌爆。
+      // 版本路徑帶版號，所以既有版本不會被同名檔案覆蓋掉。
+      allow create: if isVmhMember()
+                    && request.resource.size < 100 * 1024 * 1024;
+
+      // 已上傳的版本不允許覆寫——歷程可以追加，不可以被竄改。
+      allow update: if false;
+
+      // 刪除只有顧問可以做（刪除整份文件時會用到）。
+      allow delete: if isAdmin();
+    }
+
+    // ---------- 其餘一律拒絕 ----------
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
