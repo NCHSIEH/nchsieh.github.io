@@ -5,6 +5,7 @@
 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>越南醫療情報站｜VMH-EcoMap</title>
+<meta name="description" content="越南醫療情報站：法規時鐘、競合廠商動態、市場數據與 115 家廠商名冊，每筆附出處與查證日。">
 <style>
 :root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
 --bg:#F4F6FA;--sf:#FFFFFF;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff}
@@ -117,7 +118,24 @@ body.edit .editbar{display:block}
 .i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
 @media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
 
-</style></head><body><div class="i18nsw">
+</style><!-- VMH-PATCH-2026-08-16 start -->
+<link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.html">
+<link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.en.html">
+<link rel="alternate" hreflang="vi" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.vi.html">
+<link rel="alternate" hreflang="x-default" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VMH-EcoMap 越南醫院生態系工具站">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:url" content="https://nchsieh.github.io/VMH-EcoMap/tools/intel.html">
+<meta property="og:title" content="越南醫療情報站｜VMH-EcoMap">
+<meta property="og:description" content="越南醫療情報站：法規時鐘、競合廠商動態、市場數據與 115 家廠商名冊，每筆附出處與查證日。">
+<meta property="og:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/intel.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="越南醫療情報站｜VMH-EcoMap">
+<meta name="twitter:description" content="越南醫療情報站：法規時鐘、競合廠商動態、市場數據與 115 家廠商名冊，每筆附出處與查證日。">
+<meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/intel.jpg">
+<!-- VMH-PATCH-2026-08-16 end -->
+</head><body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ 中文</button>
  <div class="i18panel">
    <a href="../index.html" class="i18home">🏠 回首頁</a>
@@ -175,7 +193,8 @@ body.edit .editbar{display:block}
 </main>
 <div class="editbar">編輯模式：虛線框內文字都可以直接點擊修改；「✕ 刪除」移除該筆、「＋ 新增」加一筆。改完按右上角「✓ 完成編輯」，再按「⬇ 匯出資料檔」存成新的 intel_data.json。</div>
 <div class="ovl" id="ovl" onclick="closePl()"></div>
-<footer>VMH-EcoMap 越南醫療情報站｜群晶科技 × 越南現代醫院聯盟｜所有結論以查證日為準，情報有半衰期。</footer>
+<footer>VMH-EcoMap 越南醫療情報站｜群晶科技 × 越南現代醫院聯盟｜所有結論以查證日為準，情報有半衰期。<div class="datastamp">資料版本 主工具 v1.0（資料產出 2026-08-13）· 情報查證日 2026-08-15</div>
+</footer>
 <script>
 let D={
  "asof": "2026-08-15",

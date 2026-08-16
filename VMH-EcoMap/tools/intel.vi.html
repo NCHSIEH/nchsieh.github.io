@@ -1,10 +1,11 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<!doctype html><html lang="vi"><head><meta charset="utf-8">
 <script>try{var _m=localStorage.getItem('vmh_mode');if(_m)document.documentElement.setAttribute('data-mode',_m);}catch(e){}</script>
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Trung tâm Tình báo Y tế Việt Nam | VMH-EcoMap</title>
+<meta name="description" content="Trạm thông tin y tế Việt Nam: đồng hồ pháp lý, động thái đối thủ, dữ liệu thị trường và danh mục 115 nhà cung cấp — mỗi mục đều có nguồn và ngày xác minh.">
 <style>
 :root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
 --bg:#F4F6FA;--sf:#FFFFFF;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff}
@@ -117,7 +118,24 @@ body.edit .editbar{display:block}
 .i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
 @media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
 
-</style></head><body><div class="i18nsw">
+</style><!-- VMH-PATCH-2026-08-16 start -->
+<link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.html">
+<link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.en.html">
+<link rel="alternate" hreflang="vi" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.vi.html">
+<link rel="alternate" hreflang="x-default" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VMH-EcoMap — Bộ công cụ hệ sinh thái bệnh viện Việt Nam">
+<meta property="og:locale" content="vi_VN">
+<meta property="og:url" content="https://nchsieh.github.io/VMH-EcoMap/tools/intel.vi.html">
+<meta property="og:title" content="Trung tâm Tình báo Y tế Việt Nam | VMH-EcoMap">
+<meta property="og:description" content="Trạm thông tin y tế Việt Nam: đồng hồ pháp lý, động thái đối thủ, dữ liệu thị trường và danh mục 115 nhà cung cấp — mỗi mục đều có nguồn và ngày xác minh.">
+<meta property="og:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/intel.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trung tâm Tình báo Y tế Việt Nam | VMH-EcoMap">
+<meta name="twitter:description" content="Trạm thông tin y tế Việt Nam: đồng hồ pháp lý, động thái đối thủ, dữ liệu thị trường và danh mục 115 nhà cung cấp — mỗi mục đều có nguồn và ngày xác minh.">
+<meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/intel.jpg">
+<!-- VMH-PATCH-2026-08-16 end -->
+</head><body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ VI</button>
  <div class="i18panel">
    <a href="../index.vi.html" class="i18home">🏠 Về trang chủ</a>
@@ -175,7 +193,8 @@ Sau khi sửa xong, nhấn “⬇ Xuất tệp dữ liệu” để tải về m
 </main>
 <div class="editbar">Chế độ chỉnh sửa: mọi văn bản trong khung nét đứt đều có thể nhấp để sửa trực tiếp; “✕ Xóa” để xóa mục đó, “+ Thêm” để thêm một mục mới. Sau khi sửa xong, nhấn “✓ Hoàn tất chỉnh sửa” ở góc trên bên phải, rồi nhấn “⬇ Xuất tệp dữ liệu” để lưu thành intel_data.json mới.</div>
 <div class="ovl" id="ovl" onclick="closePl()"></div>
-<footer>Trung tâm Tình báo Y tế Việt Nam VMH-EcoMap | Chunjing Technology × Liên minh Bệnh viện Hiện đại Việt Nam | Mọi kết luận đều tính đến ngày xác minh — tình báo có chu kỳ bán rã.</footer>
+<footer>Trung tâm Tình báo Y tế Việt Nam VMH-EcoMap | Chunjing Technology × Liên minh Bệnh viện Hiện đại Việt Nam | Mọi kết luận đều tính đến ngày xác minh — tình báo có chu kỳ bán rã.<div class="datastamp">Phiên bản dữ liệu: bộ công cụ chính v1.0 (tạo 2026-08-13) · Thông tin xác minh 2026-08-15</div>
+</footer>
 <script>
 let D={
  "asof": "2026-08-15",
