@@ -70,17 +70,37 @@
   .foot b{color:var(--navy);}
 </style>
 <style>
-.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
- border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
- font-family:system-ui,sans-serif}
-.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
- text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
-.i18nsw a.on{background:#fff;color:#152C4E}
-.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
-.i18nsw a.home{border-right:1px solid rgba(255,255,255,.25);margin-right:2px;padding-right:9px;font-size:.85rem}
-@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18btn:hover{background:#1F3864}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18home:hover{background:#E7EEF6}
+.i18row{display:flex;gap:4px;flex-wrap:wrap}
+.i18row a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.i18row a.on{background:#152C4E;color:#fff}
+.i18row a:hover:not(.on){background:#E1E7EF}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
 </style></head>
-<body><div class="i18nsw"><a href="../index.vi.html" class="home" title="Trang chủ">🏠</a><a href="sheetmap.html">中文</a><a href="sheetmap.en.html">EN</a><a href="sheetmap.vi.html" class="on">VI</a></div>
+<body><div class="i18nsw">
+ <button type="button" class="i18btn">⚙ VI</button>
+ <div class="i18panel">
+   <a href="../index.vi.html" class="i18home">🏠 Về trang chủ</a>
+   <div class="i18gt">Ngôn ngữ</div>
+   <div class="i18row"><a href="sheetmap.html">中文</a><a href="sheetmap.en.html">EN</a><a href="sheetmap.vi.html" class="on">VI</a></div>
+   
+ </div>
+</div>
 <div class="page">
   <h1>Bộ công cụ chính VMH-EcoMap | Sơ đồ liên kết 21 trang tính</h1>
   <p class="sub">
@@ -346,5 +366,15 @@
   fit();
 })();
 </script>
-</body>
+
+<script>
+(function(){
+ document.querySelectorAll('.i18btn').forEach(function(b){
+   b.addEventListener('click', function(){ b.parentElement.classList.toggle('open'); });
+ });
+ document.addEventListener('click', function(e){
+   document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
+ });
+})();
+</script></body>
 </html>

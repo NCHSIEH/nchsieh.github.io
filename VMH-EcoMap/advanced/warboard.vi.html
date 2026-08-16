@@ -48,21 +48,42 @@ h2{font-size:1.12rem;color:var(--navy);margin:20px 0 10px}
 .note{background:#FFF9E3;border-radius:10px;padding:10px 14px;font-size:.78rem;color:#6B4E00;margin-top:18px}
 @media(max-width:760px){.tcard{grid-template-columns:70px 1fr}}
 </style><style>
-.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
- border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
- font-family:system-ui,sans-serif}
-.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
- text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
-.i18nsw a.on{background:#fff;color:#152C4E}
-.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
-.i18nsw a.home{border-right:1px solid rgba(255,255,255,.25);margin-right:2px;padding-right:9px;font-size:.85rem}
-@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
-.i18nsw .modesw2{display:flex;gap:4px;margin-left:2px;padding-left:7px;border-left:1px solid rgba(255,255,255,.25)}
-.i18nsw .modesw2 a{display:block;width:15px;height:15px}
-.i18nsw .modesw2 i{display:block;width:14px;height:14px;border-radius:50%;box-sizing:border-box}
-.i18nsw .modesw2 a.on i{outline:2px solid #fff;outline-offset:1px}
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18btn:hover{background:#1F3864}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18home:hover{background:#E7EEF6}
+.i18row{display:flex;gap:4px;flex-wrap:wrap}
+.i18row a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.i18row a.on{background:#152C4E;color:#fff}
+.i18row a:hover:not(.on){background:#E1E7EF}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
 
-</style></head><body><div class="i18nsw"><a href="../index.vi.html" class="home" title="Trang chủ">🏠</a><a href="warboard.html">中文</a><a href="warboard.en.html">EN</a><a href="warboard.vi.html" class="on">VI</a><span class="modesw2"><a href="#" data-md="business" title="Xanh navy" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i></a><a href="#" data-md="light" title="Sáng" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i></a><a href="#" data-md="dark" title="Tối" onclick="return setMode(event,'dark')"><i style="background:#0B1626;border:1px solid #0B1626"></i></a></span></div>
+</style></head><body><div class="i18nsw">
+ <button type="button" class="i18btn">⚙ VI</button>
+ <div class="i18panel">
+   <a href="../index.vi.html" class="i18home">🏠 Về trang chủ</a>
+   <div class="i18gt">Ngôn ngữ</div>
+   <div class="i18row"><a href="warboard.html">中文</a><a href="warboard.en.html">EN</a><a href="warboard.vi.html" class="on">VI</a></div>
+   <div class="i18gt">Giao diện</div>
+   <div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>Xanh navy</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>Sáng</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>Tối</a>
+   </div>
+ </div>
+</div>
 <header><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>Bảng chiến tình đấu thầu</b><span class="n" id="src">Chưa tải dữ liệu</span>
 <button onclick="document.getElementById('f').click()">Tải tệp số 15 (Excel radar đấu thầu)</button>
 <input id="f" type="file" accept=".xlsx" style="display:none" onchange="load(this.files[0])">
@@ -174,9 +195,19 @@ function setMode(e,m){
  if(e)e.preventDefault();
  document.documentElement.setAttribute('data-mode', m);
  try{localStorage.setItem('vmh_mode', m);}catch(err){}
- document.querySelectorAll('.modesw2 a').forEach(function(a){a.classList.toggle('on', a.getAttribute('data-md')===m)});
+ document.querySelectorAll('.i18modes a').forEach(function(a){a.classList.toggle('on', a.getAttribute('data-md')===m)});
  return false;
 }
-(function(){try{var m=localStorage.getItem('vmh_mode')||'business';document.querySelectorAll('.modesw2 a[data-md="'+m+'"]').forEach(function(a){a.classList.add('on')});}catch(e){}})();
+(function(){try{var m=localStorage.getItem('vmh_mode')||'business';document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(function(a){a.classList.add('on')});}catch(e){}})();
 </script>
-</body></html>
+
+<script>
+(function(){
+ document.querySelectorAll('.i18btn').forEach(function(b){
+   b.addEventListener('click', function(){ b.parentElement.classList.toggle('open'); });
+ });
+ document.addEventListener('click', function(e){
+   document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
+ });
+})();
+</script></body></html>

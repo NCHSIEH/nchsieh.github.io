@@ -17,6 +17,13 @@ header{background:var(--hdrbg);color:var(--hdrfg);position:sticky;top:0;z-index:
 .hw nav{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
 .hw nav a{color:var(--hdrfg2);text-decoration:none;padding:7px 13px;border-radius:8px;font-size:.86rem}
 .hw nav a:hover,.hw nav a.on{background:var(--hdroverlay);color:var(--hdrfg)}
+.hw nav a{position:relative}
+.hw nav a[data-tip]:hover:after{content:attr(data-tip);position:absolute;top:calc(100% + 9px);left:50%;transform:translateX(-50%);
+ width:220px;white-space:normal;background:var(--sf);color:var(--ink);font-size:.72rem;font-weight:400;line-height:1.55;
+ padding:9px 11px;border-radius:9px;box-shadow:0 8px 24px rgba(10,20,40,.25);border:1px solid var(--line);z-index:150;pointer-events:none}
+.hw nav a[data-tip]:hover:before{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+ border:6px solid transparent;border-bottom-color:var(--sf);z-index:151;pointer-events:none}
+@media(max-width:860px){.hw nav a[data-tip]:hover:after,.hw nav a[data-tip]:hover:before{display:none}}
 .hero{background:linear-gradient(160deg,var(--hdrbg) 0%,var(--hdrbg2) 70%,var(--hdrbg3) 100%);color:var(--hdrfg);padding:52px 24px 44px;transition:background .2s,color .2s}
 .hin{max-width:1200px;margin:0 auto}
 .hero .eyebrow{font-size:.76rem;letter-spacing:3px;color:var(--hdrfg2);font-weight:700}
