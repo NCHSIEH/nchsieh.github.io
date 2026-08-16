@@ -2,6 +2,9 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+
 <title>VMH-EcoMap Hospital Owner Quick Guide</title>
 <style>
   :root{
@@ -90,9 +93,10 @@
  text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
 .i18nsw a.on{background:#fff;color:#152C4E}
 .i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+.i18nsw a.home{border-right:1px solid rgba(255,255,255,.25);margin-right:2px;padding-right:9px;font-size:.85rem}
 @media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
 </style></head>
-<body><div class="i18nsw"><a href="owner.html">中文</a><a href="owner.en.html" class="on">EN</a><a href="owner.vi.html">VI</a></div>
+<body><div class="i18nsw"><a href="../index.en.html" class="home" title="Home">🏠</a><a href="owner.html">中文</a><a href="owner.en.html" class="on">EN</a><a href="owner.vi.html">VI</a></div>
 <div class="page">
 
   <div class="hd">
@@ -276,5 +280,28 @@
     <b>Tabs you don’t need to look at:</b>02 / 05 / 06 / 07 / 08 / 09 / 10 / 12 / 16 / 98 / 99 are maintained by the consultant, who will proactively bring them up for discussion when needed.
   </p>
 </div>
+
+<script>
+(function(){
+  function fit(){
+    var page=document.querySelector('.page'); if(!page) return;
+    var natW=page.scrollWidth||page.offsetWidth, natH=page.scrollHeight||page.offsetHeight;
+    var vw=window.innerWidth;
+    if(vw<natW){
+      var scale=vw/natW;
+      page.style.transform='scale('+scale+')';
+      page.style.transformOrigin='top left';
+      document.body.style.height=(natH*scale)+'px';
+      document.body.style.overflowX='hidden';
+    }else{
+      page.style.transform='none';
+      document.body.style.height='auto';
+    }
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  fit();
+})();
+</script>
 </body>
 </html>

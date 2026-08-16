@@ -2,6 +2,10 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode');if(_m)document.documentElement.setAttribute('data-mode',_m);}catch(e){}</script>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VMH-EcoMap 生態導覽器 v0.3｜越南醫院生意藍圖</title>
 <style>
@@ -18,6 +22,8 @@
 html[data-theme="forest"]{--navy:#134E3A;--teal:#0D9488;--accent:#0F766E;--hbg:#0F3D2E;--gold:#8B6F1F;}
 html[data-theme="terracotta"]{--navy:#7C2D12;--teal:#B45309;--accent:#C2410C;--hbg:#6B2A0F;--gold:#9C6B1F;}
 html[data-theme="obsidian"]{--navy:#0F172A;--teal:#0891B2;--accent:#0891B2;--hbg:#0A0F1C;--gold:#A6841F;}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+  --greenL:#123321;--amberL:#3A2A10;--redL:#3A1418;--green:#4ADE80;--amber:#F2B84B;--red:#F87171;}
 /* ---------- density presets ---------- */
 html[data-density="compact"] main{padding:16px 20px 50px}
 html[data-density="compact"] h1{font-size:1.36rem;margin-bottom:4px}
@@ -209,8 +215,10 @@ details.efm textarea{grid-column:1/-1;resize:vertical;min-height:54px}
 .mxcell{width:17px;height:24px;flex:none;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #F8FAFC;cursor:pointer}
 .mxcell i{width:11px;height:11px;border-radius:3px;background:#EEF2F6;display:block}
 .mxcell:hover i{outline:2px solid var(--navy)}
-.mxdom{height:26px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;color:#fff;flex:none;
-  border-right:1px solid #fff;cursor:default}
+.mxdom{height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px 3px;
+  font-size:.68rem;font-weight:800;color:#fff;flex:none;border-right:1px solid #fff;cursor:default;text-align:center}
+.mxdom .mxdomname{font-size:.56rem;font-weight:600;line-height:1.05;opacity:.92;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;word-break:break-all}
 .mxpct{font-size:.68rem;font-weight:800;padding:1px 6px;border-radius:5px;margin-left:auto;flex:none}
 /* ---------- print ---------- */
 .noprint{}
@@ -320,11 +328,17 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
  text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
 .i18nsw a.on{background:#fff;color:#152C4E}
 .i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+.i18nsw a.home{border-right:1px solid rgba(255,255,255,.25);margin-right:2px;padding-right:9px;font-size:.85rem}
 @media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+.i18nsw .modesw2{display:flex;gap:4px;margin-left:2px;padding-left:7px;border-left:1px solid rgba(255,255,255,.25)}
+.i18nsw .modesw2 a{display:block;width:15px;height:15px}
+.i18nsw .modesw2 i{display:block;width:14px;height:14px;border-radius:50%;box-sizing:border-box}
+.i18nsw .modesw2 a.on i{outline:2px solid #fff;outline-offset:1px}
+
 </style></head>
-<body><div class="i18nsw"><a href="explorer.html" class="on">中文</a><a href="explorer.en.html">EN</a><a href="explorer.vi.html">VI</a></div>
+<body><div class="i18nsw"><a href="../index.html" class="home" title="首頁">🏠</a><a href="explorer.html" class="on">中文</a><a href="explorer.en.html">EN</a><a href="explorer.vi.html">VI</a><span class="modesw2"><a href="#" data-md="business" title="深藍商務" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i></a><a href="#" data-md="light" title="淺色" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i></a><a href="#" data-md="dark" title="深色" onclick="return setMode(event,'dark')"><i style="background:#0B1626;border:1px solid #0B1626"></i></a></span></div>
 <header><div class="hwrap">
-  <div class="brand" onclick="go('')"><span class="dot9"></span><span class="t">VMH-EcoMap 生態導覽器</span><span style="display:none">VMH</span></div>
+  <div class="brand" onclick="go('')"><svg class="brandmark" viewBox="0 0 32 32" width="20" height="20" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-4px;margin-right:6px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><span class="t">VMH-EcoMap 生態導覽器</span><span style="display:none">VMH</span></div>
   <nav id="nav"></nav>
   <div class="srch">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9FB0CC" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
@@ -463,7 +477,7 @@ function verdict(oid){
 }
 /* ================= router ================= */
 const CLAIMO=new Set(),CLAIMC=new Set(),EDITS=[];
-const NAVS=[['','總覽'],['opps','商機圖鑑'],['caps','能力'],['parts','夥伴'],['layers','層級地圖'],['matrix','總表'],['map','生態地圖'],['sim','組合模擬'],['decide','決策嚮導']];
+const NAVS=[['','總覽'],['opps','商機圖鑑'],['layers','層級地圖'],['map','生態地圖'],['caps','能力'],['parts','夥伴'],['sim','組合模擬'],['matrix','總表'],['decide','決策嚮導']];
 const SELO=new Set(),SELC=new Set();let SIM={mode:'o',incl:1,q:''};
 function go(h){location.hash='#/'+h}
 function nav(){
@@ -1104,8 +1118,9 @@ function mxHtml(){
   const doms=[];caps.forEach(c=>{const d=(c.dom.match(/D\d\d/)||[''])[0];
     if(doms.length&&doms[doms.length-1].d===d)doms[doms.length-1].n++;else doms.push({d,n:1,full:c.dom});});
   const DOMC=['#1F3864','#2F5597','#0F766E','#7C3AED','#BE123C','#4F46E5','#15803D','#B45309','#475569','#0E7490'];
-  let h=`<div class="mxrow mxhead"><div class="mxlbl" style="height:26px;font-weight:800">生意 ↓ ／ 能力 →</div>`+
-    doms.map((g,i)=>`<div class="mxdom" style="width:${g.n*17}px;background:${DOMC[i%10]}" title="${esc(g.full)}">${g.d}</div>`).join('')+`</div>`;
+  let h=`<div class="mxrow mxhead"><div class="mxlbl" style="height:42px;font-weight:800">生意 ↓ ／ 能力 →</div>`+
+    doms.map((g,i)=>{const nm=g.full.replace(/^D\d\d\s*/,'');
+      return `<div class="mxdom" style="width:${g.n*17}px;background:${DOMC[i%10]}" title="${esc(g.full)}"><b>${g.d}</b><span class="mxdomname">${esc(nm)}</span></div>`}).join('')+`</div>`;
   h+=opps.map(o=>{
     const L=new Set(opp2cap[o.id]||[]);
     const tot=L.size, ok=[...L].filter(c=>C[c].puz!=='缺口-待尋找').length;
@@ -1591,6 +1606,17 @@ if(!DATA.opps.length){document.getElementById('xlab').textContent='尚未載入'
   document.getElementById('xsrc').textContent='這份網頁不含任何資料，請選擇你自己的 Excel。';}
 if(PUB)document.getElementById('pubbar').style.display='block';
 render();
+</script>
+
+<script>
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode', m);
+ try{localStorage.setItem('vmh_mode', m);}catch(err){}
+ document.querySelectorAll('.modesw2 a').forEach(function(a){a.classList.toggle('on', a.getAttribute('data-md')===m)});
+ return false;
+}
+(function(){try{var m=localStorage.getItem('vmh_mode')||'business';document.querySelectorAll('.modesw2 a[data-md="'+m+'"]').forEach(function(a){a.classList.add('on')});}catch(e){}})();
 </script>
 </body>
 </html>
