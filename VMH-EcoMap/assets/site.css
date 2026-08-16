@@ -204,3 +204,33 @@ button:focus-visible,
     scroll-behavior: auto !important;
   }
 }
+
+/* ══ VMH-FIX-DESIGN-2026-08-16 ══ */
+
+/* 第 2 項　首頁 KPI 口徑說明 */
+.kpinote {
+  margin-top: 14px;
+  max-width: 62em;
+  font-size: .82rem;
+  line-height: 1.75;
+  opacity: .82;
+}
+.kpinote b { opacity: 1; font-weight: 600; }
+
+/* 第 4 項　三種東西的關係 */
+.threekinds {
+  margin: 0 0 26px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  background: rgba(21, 44, 78, .045);
+  border-left: 3px solid #2A5470;
+}
+.threekinds > p { margin: 0 0 10px; font-size: .88rem; font-weight: 600; }
+.threekinds dl { margin: 0; display: grid; gap: 7px; }
+.threekinds dt { font-weight: 600; font-size: .86rem; }
+.threekinds dd { margin: 0 0 2px; font-size: .84rem; line-height: 1.65; opacity: .85; }
+@media (min-width: 700px) {
+  .threekinds dl { grid-template-columns: max-content 1fr; column-gap: 18px; row-gap: 9px; align-items: baseline; }
+  .threekinds dt { grid-column: 1; white-space: nowrap; }
+  .threekinds dd { grid-column: 2; }
+}
