@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Cẩm nang nhanh cho Chủ đầu tư bệnh viện VMH-EcoMap</title>
+<style>
+  :root{
+    --navy:#1F3864; --midblue:#2F5597; --teal:#2E747A; --green:#548235;
+    --gold:#BF8F00; --purple:#7030A0; --red:#B03A2E;
+    --ink:#16202E; --muted:#5C6675; --line:#DDE3EC;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#EEF1F6; color:var(--ink);
+       font-family:"Microsoft JhengHei","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;}
+  .page{width:1680px; margin:0 auto; padding:30px 26px 40px; background:#fff;}
+
+  .hd{display:flex; align-items:flex-end; gap:22px; border-bottom:4px solid var(--navy); padding-bottom:14px;}
+  .hd h1{font-size:38px; margin:0; color:var(--navy); letter-spacing:1px; line-height:1.15;}
+  .hd .sub{font-size:15px; color:var(--muted); line-height:1.6; padding-bottom:4px;}
+  .hd .sub b{color:var(--navy);}
+
+  /* Phân công vai trò */
+  .roles{display:grid; grid-template-columns:1fr 1fr 1.35fr; gap:16px; margin:20px 0 26px;}
+  .role{border-radius:12px; padding:14px 18px; border:2px solid; position:relative;}
+  .role .tag{font-size:12px; font-weight:800; letter-spacing:2px; opacity:.9;}
+  .role .who{font-size:22px; font-weight:800; margin:3px 0 6px;}
+  .role .txt{font-size:13.5px; line-height:1.65; color:#37414F;}
+  .r1{border-color:var(--teal); background:#EFF7F8;} .r1 .tag,.r1 .who{color:var(--teal);}
+  .r2{border-color:#9AA3AE; background:#F3F5F7; border-style:dashed;} .r2 .tag,.r2 .who{color:#5A626C;}
+  .r3{border-color:var(--gold); background:#FFF8E8;} .r3 .tag,.r3 .who{color:#8A6800;}
+  .r3 .txt b{color:#8A6800;}
+
+  /* Luồng thao tác */
+  .flowhd{font-size:22px; font-weight:800; color:var(--navy); margin:0 0 4px;}
+  .flowsub{font-size:14px; color:var(--muted); margin:0 0 16px;}
+  .flow{display:grid; grid-template-columns:repeat(5, 1fr); gap:14px; position:relative;}
+  .step{border:2px solid var(--line); border-radius:14px; background:#fff; overflow:hidden;
+        box-shadow:0 2px 10px rgba(31,56,100,.07); display:flex; flex-direction:column;}
+  .step .top{padding:12px 14px 10px; color:#fff;}
+  .step .num{font-size:13px; font-weight:800; letter-spacing:2px; opacity:.85;}
+  .step .q{font-size:19px; font-weight:800; line-height:1.3; margin-top:3px;}
+  .step .pg{font-size:12.5px; font-weight:700; margin-top:7px; background:rgba(255,255,255,.22);
+            display:inline-block; padding:3px 9px; border-radius:20px;}
+  .step .body{padding:12px 14px 6px; flex:1;}
+  .step .lb{font-size:11.5px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:4px;}
+  .step ul{margin:0 0 10px; padding-left:17px;}
+  .step li{font-size:13px; line-height:1.6; margin-bottom:3px;}
+  .step .now{margin:0 14px 13px; border-radius:9px; padding:9px 11px; background:#F5F7FA; border:1px solid var(--line);}
+  .step .now .t{font-size:11px; font-weight:800; letter-spacing:1px; color:var(--muted);}
+  .step .now .v{font-size:13px; line-height:1.55; margin-top:3px;}
+  .step .now .v b{font-size:16px;}
+  .s1 .top{background:var(--purple);} .s1 .now .v b{color:var(--purple);}
+  .s2 .top{background:var(--navy);}   .s2 .now .v b{color:var(--navy);}
+  .s3 .top{background:var(--midblue);}.s3 .now .v b{color:var(--midblue);}
+  .s4 .top{background:var(--teal);}   .s4 .now .v b{color:var(--teal);}
+  .s5 .top{background:var(--green);}  .s5 .now .v b{color:#3F6427;}
+  .arrow{position:absolute; top:74px; font-size:26px; color:#B9C4D4; font-weight:800;}
+
+  /* Sau khi quyết định theo đuổi */
+  .after{display:grid; grid-template-columns:auto 1fr 1fr; gap:16px; align-items:stretch; margin-top:24px;}
+  .afterlab{background:var(--navy); color:#fff; border-radius:12px; padding:16px 14px; width:132px;
+            display:flex; flex-direction:column; justify-content:center; text-align:center;}
+  .afterlab .a{font-size:12px; letter-spacing:2px; font-weight:800; opacity:.85;}
+  .afterlab .b{font-size:21px; font-weight:800; line-height:1.3; margin-top:5px;}
+  .acard{border:2px solid var(--line); border-radius:12px; padding:13px 16px; background:#FBFCFE;}
+  .acard .h{font-size:17px; font-weight:800; color:var(--navy);}
+  .acard .h span{font-size:12.5px; font-weight:700; color:#fff; background:var(--teal);
+                 padding:3px 9px; border-radius:20px; margin-right:8px; vertical-align:2px;}
+  .acard .d{font-size:13px; line-height:1.7; margin-top:7px; color:#37414F;}
+  .acard .d b{color:var(--navy);}
+
+  /* Lưu ý */
+  .tips{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:24px;}
+  .tip{border-radius:12px; padding:13px 16px; border-left:6px solid; background:#F7F9FC;}
+  .tip .h{font-size:15px; font-weight:800; margin-bottom:4px;}
+  .tip .d{font-size:12.8px; line-height:1.65; color:#37414F;}
+  .t1{border-color:var(--gold);} .t1 .h{color:#8A6800;}
+  .t2{border-color:var(--red);}  .t2 .h{color:var(--red);}
+  .t3{border-color:var(--teal);} .t3 .h{color:var(--teal);}
+
+  .foot{margin-top:20px; padding-top:12px; border-top:1px solid var(--line);
+        font-size:12px; color:var(--muted); line-height:1.7;}
+  .foot b{color:var(--navy);}
+</style>
+<style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head>
+<body><div class="i18nsw"><a href="owner.html">中文</a><a href="owner.en.html">EN</a><a href="owner.vi.html" class="on">VI</a></div>
+<div class="page">
+
+  <div class="hd">
+    <h1>Kinh doanh bệnh viện tại Việt Nam<br>Chủ đầu tư bệnh viện chỉ cần xem năm trang này</h1>
+    <div class="sub">
+      Công cụ chính VMH-EcoMap có tổng cộng 21 tab, nhưng<b>chủ đầu tư bệnh viện không cần xem hết</b>。<br>
+      Dữ liệu do tư vấn duy trì, số liệu do hệ thống tự động tính toán. Bạn chỉ cần làm theo năm bước dưới đây,<b>và trong mười phút bạn sẽ biết: cơ hội ở đâu, chúng ta có bao nhiêu năng lực, còn thiếu ai, nên làm cái nào trước, và có sinh lời hay không.</b>
+    </div>
+  </div>
+
+  <div class="roles">
+    <div class="role r1">
+      <div class="tag">WHO MAINTAINS</div>
+      <div class="who">Tư vấn / Văn phòng PI</div>
+      <div class="txt">Chỉ duy trì ba nơi: 03 Bảng tổng hợp năng lực (năng lực và phân bổ đối tác), 16 Ma trận năng lực - cơ hội (đánh dấu ✓), và 15 Từ điển cơ hội (mô tả cơ hội). Tất cả những phần còn lại không cần động đến.</div>
+    </div>
+    <div class="role r2">
+      <div class="tag">WHAT THE TOOL DOES</div>
+      <div class="who">Hệ thống tự động tính toán</div>
+      <div class="txt">Khoảng 18,000 công thức: các ô chữ xanh, bốn danh sách tự động, biểu đồ bảng điều khiển, và thứ tự ưu tiên tấn công đều được cập nhật tự động — chỉ cần thay đổi một chỗ, toàn bộ tệp sẽ liên động.</div>
+    </div>
+    <div class="role r3">
+      <div class="tag">WHAT YOU LOOK AT</div>
+      <div class="who">Chủ đầu tư bệnh viện / Ông chủ</div>
+      <div class="txt"><b>Chỉ xem năm trang, theo thứ tự 1→5.</b>Mỗi trang chỉ trả lời một câu hỏi — không cần hiểu Excel, không cần chạm vào bất kỳ ô nào.</div>
+    </div>
+  </div>
+
+  <p class="flowhd">Luồng thao tác của chủ đầu tư bệnh viện: năm bước, mỗi bước một câu hỏi</p>
+  <p class="flowsub">“Câu trả lời hiện tại” bên dưới là con số thực tế được tệp này tính toán ngay lúc này — khi dữ liệu được cập nhật, câu trả lời sẽ thay đổi.</p>
+
+  <div class="flow">
+    <div class="arrow" style="left:calc(20% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(40% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(60% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(80% - 16px);">▶</div>
+
+    <div class="step s1">
+      <div class="top">
+        <div class="num">STEP 1</div>
+        <div class="q">Cơ hội ở đâu?</div>
+        <div class="pg">Bảng điều khiển + 15 Từ điển cơ hội</div>
+      </div>
+      <div class="body">
+        <div class="lb">Xem các cột sau</div>
+        <ul>
+          <li><b>Cột E</b>　Mảng kinh doanh này bán gì, ai trả tiền</li>
+          <li><b>Cột F</b>　Hiện trạng tại Việt Nam (③ = hầu như chưa ai làm)</li>
+          <li><b>Cột P</b>　Khoảng giá trị điển hình</li>
+        </ul>
+        <div class="lb">Bạn sẽ có được</div>
+        <ul><li>Bức tranh toàn cảnh về các mảng kinh doanh có thể đàm phán độc lập trong thị trường bệnh viện Việt Nam, và những mảng nào vẫn là thị trường bỏ trống</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Câu trả lời hiện tại</div>
+        <div class="v"><b>85</b>  mảng kinh doanh | trong đó <b>40</b>  hầu như chưa ai làm tại Việt Nam</div>
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="top">
+        <div class="num">STEP 2</div>
+        <div class="q">Chúng ta có bao nhiêu năng lực?</div>
+        <div class="pg">03 Bảng tổng hợp năng lực</div>
+      </div>
+      <div class="body">
+        <div class="lb">Chỉ xem ba cột (phần còn lại do tư vấn duy trì)</div>
+        <ul>
+          <li><b>Cột H: Trạng thái mảnh ghép</b>　Ai đang thực hiện mục này</li>
+          <li><b>Cột W: Đánh giá kinh doanh</b>　Go / bổ sung điều kiện trước / …</li>
+          <li><b>Cột AF: Cơ hội liên quan</b>　Năng lực này có thể bán vào những mảng kinh doanh nào</li>
+        </ul>
+        <div class="lb">Bạn sẽ có được</div>
+        <ul><li>Chúng ta có 60 năng lực trong tay — mục nào có thể triển khai ngay bây giờ</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Câu trả lời hiện tại</div>
+        <div class="v">60 năng lực | có thể triển khai ngay <b>19</b> mục<br>Do 群晶 dẫn dắt <b>8</b> mục</div>
+      </div>
+    </div>
+
+    <div class="step s3">
+      <div class="top">
+        <div class="num">STEP 3</div>
+        <div class="q">Khi nào có thể tiếp nhận<br>những dự án nào?</div>
+        <div class="pg">01 Bản đồ tổng thể</div>
+      </div>
+      <div class="body">
+        <div class="lb">Cách đọc biểu đồ này</div>
+        <ul>
+          <li><b>Trục dọc</b>　= làm gì (mười lĩnh vực năng lực chính)</li>
+          <li><b>Trục ngang</b>　= khi nào làm (G0→G6)</li>
+          <li><b>Nền đỏ</b>　= chưa có ai thực hiện ô này</li>
+          <li>Hàng 8 = <b>ngưỡng pháp lý</b> của mỗi giai đoạn — nếu không đạt thì không thể tiếp tục</li>
+        </ul>
+      </div>
+      <div class="now">
+        <div class="t">Câu trả lời hiện tại</div>
+        <div class="v">Đang đàm phán <b>43</b>  mục | Thiếu hụt <b>9</b> mục<br>Quy định bắt buộc chờ xác nhận <b>11</b> quy định</div>
+      </div>
+    </div>
+
+    <div class="step s4">
+      <div class="top">
+        <div class="num">STEP 4</div>
+        <div class="q">Còn thiếu ai?</div>
+        <div class="pg">04 Mảnh ghép đối tác + 11 Tuyển dụng lấp khoảng trống</div>
+      </div>
+      <div class="body">
+        <div class="lb">Xem hai điều sau</div>
+        <ul>
+          <li>Phần dưới của 04　<b>Ma trận bao phủ</b>: lĩnh vực nào chưa có ai</li>
+          <li>Cột ngoài cùng bên phải của 11　<b>Số cơ hội bị ảnh hưởng</b>: khoảng trống này đang chặn bao nhiêu mảng kinh doanh (≥3 chuyển đỏ)</li>
+        </ul>
+        <div class="lb">Bạn sẽ có được</div>
+        <ul><li>Bổ sung ai trước, ai sau — tuyển dụng có thứ tự ưu tiên, không phải theo cảm tính</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Câu trả lời hiện tại</div>
+        <div class="v">Trong số 29 vai trò đối tác,<b>9</b>  vẫn chưa có ai<br>Cấp bách nhất: tích hợp phòng mổ (đang chặn <b>7</b>  mảng kinh doanh)</div>
+      </div>
+    </div>
+
+    <div class="step s5">
+      <div class="top">
+        <div class="num">STEP 5</div>
+        <div class="q">Nên làm cái nào trước?<br>Có sinh lời không?</div>
+        <div class="pg">Bảng điều khiển Top 10 + 14 Danh sách cơ hội</div>
+      </div>
+      <div class="body">
+        <div class="lb">Xem hai chỗ sau</div>
+        <ul>
+          <li>Bảng điều khiển<b>Top 10 thứ tự ưu tiên tấn công</b>: giá trị + mức độ sẵn sàng + mức độ thị trường trống − khoảng trống, tự động sắp xếp</li>
+          <li>14 Danh sách cơ hội: dự án đang đàm phán đã tiến đến giai đoạn nào</li>
+        </ul>
+        <div class="lb">Cần tính toán tài chính</div>
+        <ul><li>Chọn một dự án → mở <b>Công cụ tính toán VMH-EcoMap-2</b>để tính NPV / IRR / thời gian hoàn vốn</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Câu trả lời hiện tại</div>
+        <div class="v">Đề xuất ưu tiên tấn công:<b>Chăm sóc y tế tại nhà</b>, phục hồi chức năng bán cấp, cấp phát thuốc vòng kín<br>(đều chưa ai làm + chúng ta không có khoảng trống nào)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="after">
+    <div class="afterlab">
+      <div class="a">DECIDED？</div>
+      <div class="b">Đã quyết định theo đuổi<br>sau đó</div>
+    </div>
+    <div class="acard">
+      <div class="h"><span>17</span>Thẻ tác chiến cơ hội</div>
+      <div class="d">Dùng menu thả xuống để chọn một cơ hội — xem toàn bộ trên một trang<b>Cách triển khai</b>: cần những năng lực nào, ai đang phụ trách từng năng lực và ai còn thiếu,
+        đối thủ tại địa phương là ai, chúng ta thắng nhờ điều gì, và đang bị chặn bởi những ngưỡng pháp lý nào.<b>Chiếu trang này tại cuộc họp tác chiến</b>, và ghi kết luận vào mục “Bước tiếp theo” trong 14.</div>
+    </div>
+    <div class="acard">
+      <div class="h"><span>-2</span>Công cụ tính mô hình kinh doanh dự án (một tệp riêng)</div>
+      <div class="d">Đơn vị của công cụ chính là “hạng mục năng lực”, nên không thể trả lời câu hỏi “máy CT này có đáng đầu tư không”. Sau khi chọn một dự án,<b>mở một công cụ tính toán riêng</b>，
+        để điền chi phí và doanh thu, tính NPV / IRR / thời gian hoàn vốn và độ nhạy.<b>Cố ý không tự động điền</b> — bất kỳ số tiền nào trước khi có báo giá đều chỉ là ước đoán.</div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <div class="tip t1">
+      <div class="h">Chỉ ô màu vàng mới cần điền</div>
+      <div class="d">Nền vàng = có thể chỉnh sửa;<b>Chữ xanh = công thức — một khi đã sửa thì sẽ không bao giờ tự động cập nhật lại</b>. Tệp đã được bảo vệ chống lỗi thao tác (không mật khẩu — tư vấn có thể gỡ bỏ).</div>
+    </div>
+    <div class="tip t2">
+      <div class="h">Màu đỏ = cơ hội, không phải tin xấu</div>
+      <div class="d">Khoảng trống nền đỏ = vị trí chưa có ai thực hiện, đây chính là<b>lý lẽ thuyết phục nhất để tuyển dụng đối tác bên ngoài</b>; ★ cơ hội thị trường trống = mảng kinh doanh này đã có tại Việt Nam nhưng chúng ta chưa có năng lực để tiếp nhận.</div>
+    </div>
+    <div class="tip t3">
+      <div class="h">Số tiền và hiện trạng là “giả định lập kế hoạch”</div>
+      <div class="d">Khoảng giá trị trong 15, đơn giá xây dựng trong 07, và mức nền KPI trong 09 đều là giá trị tham khảo để lập kế hoạch.<b>Trước khi báo giá chính thức hoặc cam kết ra bên ngoài, nhất định phải nhờ đối tác tại địa phương xác minh lại một lần nữa.</b></div>
+    </div>
+  </div>
+
+  <p class="foot">
+    <b>Ghi nhớ toàn bộ bộ công cụ trong một câu:</b>Tư vấn chỉ nhập dữ liệu tại ba nơi (03 Năng lực, 16 đánh dấu ✓, 15 mô tả cơ hội); hệ thống tự động tính toán 18 trang còn lại, và chủ đầu tư bệnh viện có thể ra quyết định chỉ bằng cách làm theo các bước 1→5.<br>
+    <b>Cách vận hành cuộc họp hàng tuần:</b>Chiếu bảng điều khiển và đọc sáu con số → xem bốn danh sách trên 13 Bảng việc cần làm (quy định / rủi ro / khoảng trống / hành động cơ hội) → chuyển sang 17 Thẻ tác chiến cho cơ hội đang được thúc đẩy → ghi kết luận vào 10 Nhật ký quyết định.<br>
+    <b>Các tab không cần xem:</b>02 / 05 / 06 / 07 / 08 / 09 / 10 / 12 / 16 / 98 / 99 do tư vấn duy trì, và tư vấn sẽ chủ động đưa ra thảo luận khi cần thiết.
+  </p>
+</div>
+</body>
+</html>

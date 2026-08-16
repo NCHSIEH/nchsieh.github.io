@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>VMH-EcoMap 業主懶人包</title>
+<style>
+  :root{
+    --navy:#1F3864; --midblue:#2F5597; --teal:#2E747A; --green:#548235;
+    --gold:#BF8F00; --purple:#7030A0; --red:#B03A2E;
+    --ink:#16202E; --muted:#5C6675; --line:#DDE3EC;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#EEF1F6; color:var(--ink);
+       font-family:"Microsoft JhengHei","微軟正黑體","Noto Sans TC",system-ui,sans-serif;}
+  .page{width:1680px; margin:0 auto; padding:30px 26px 40px; background:#fff;}
+
+  .hd{display:flex; align-items:flex-end; gap:22px; border-bottom:4px solid var(--navy); padding-bottom:14px;}
+  .hd h1{font-size:38px; margin:0; color:var(--navy); letter-spacing:1px; line-height:1.15;}
+  .hd .sub{font-size:15px; color:var(--muted); line-height:1.6; padding-bottom:4px;}
+  .hd .sub b{color:var(--navy);}
+
+  /* 角色分工 */
+  .roles{display:grid; grid-template-columns:1fr 1fr 1.35fr; gap:16px; margin:20px 0 26px;}
+  .role{border-radius:12px; padding:14px 18px; border:2px solid; position:relative;}
+  .role .tag{font-size:12px; font-weight:800; letter-spacing:2px; opacity:.9;}
+  .role .who{font-size:22px; font-weight:800; margin:3px 0 6px;}
+  .role .txt{font-size:13.5px; line-height:1.65; color:#37414F;}
+  .r1{border-color:var(--teal); background:#EFF7F8;} .r1 .tag,.r1 .who{color:var(--teal);}
+  .r2{border-color:#9AA3AE; background:#F3F5F7; border-style:dashed;} .r2 .tag,.r2 .who{color:#5A626C;}
+  .r3{border-color:var(--gold); background:#FFF8E8;} .r3 .tag,.r3 .who{color:#8A6800;}
+  .r3 .txt b{color:#8A6800;}
+
+  /* 動線 */
+  .flowhd{font-size:22px; font-weight:800; color:var(--navy); margin:0 0 4px;}
+  .flowsub{font-size:14px; color:var(--muted); margin:0 0 16px;}
+  .flow{display:grid; grid-template-columns:repeat(5, 1fr); gap:14px; position:relative;}
+  .step{border:2px solid var(--line); border-radius:14px; background:#fff; overflow:hidden;
+        box-shadow:0 2px 10px rgba(31,56,100,.07); display:flex; flex-direction:column;}
+  .step .top{padding:12px 14px 10px; color:#fff;}
+  .step .num{font-size:13px; font-weight:800; letter-spacing:2px; opacity:.85;}
+  .step .q{font-size:19px; font-weight:800; line-height:1.3; margin-top:3px;}
+  .step .pg{font-size:12.5px; font-weight:700; margin-top:7px; background:rgba(255,255,255,.22);
+            display:inline-block; padding:3px 9px; border-radius:20px;}
+  .step .body{padding:12px 14px 6px; flex:1;}
+  .step .lb{font-size:11.5px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:4px;}
+  .step ul{margin:0 0 10px; padding-left:17px;}
+  .step li{font-size:13px; line-height:1.6; margin-bottom:3px;}
+  .step .now{margin:0 14px 13px; border-radius:9px; padding:9px 11px; background:#F5F7FA; border:1px solid var(--line);}
+  .step .now .t{font-size:11px; font-weight:800; letter-spacing:1px; color:var(--muted);}
+  .step .now .v{font-size:13px; line-height:1.55; margin-top:3px;}
+  .step .now .v b{font-size:16px;}
+  .s1 .top{background:var(--purple);} .s1 .now .v b{color:var(--purple);}
+  .s2 .top{background:var(--navy);}   .s2 .now .v b{color:var(--navy);}
+  .s3 .top{background:var(--midblue);}.s3 .now .v b{color:var(--midblue);}
+  .s4 .top{background:var(--teal);}   .s4 .now .v b{color:var(--teal);}
+  .s5 .top{background:var(--green);}  .s5 .now .v b{color:#3F6427;}
+  .arrow{position:absolute; top:74px; font-size:26px; color:#B9C4D4; font-weight:800;}
+
+  /* 決定要打之後 */
+  .after{display:grid; grid-template-columns:auto 1fr 1fr; gap:16px; align-items:stretch; margin-top:24px;}
+  .afterlab{background:var(--navy); color:#fff; border-radius:12px; padding:16px 14px; width:132px;
+            display:flex; flex-direction:column; justify-content:center; text-align:center;}
+  .afterlab .a{font-size:12px; letter-spacing:2px; font-weight:800; opacity:.85;}
+  .afterlab .b{font-size:21px; font-weight:800; line-height:1.3; margin-top:5px;}
+  .acard{border:2px solid var(--line); border-radius:12px; padding:13px 16px; background:#FBFCFE;}
+  .acard .h{font-size:17px; font-weight:800; color:var(--navy);}
+  .acard .h span{font-size:12.5px; font-weight:700; color:#fff; background:var(--teal);
+                 padding:3px 9px; border-radius:20px; margin-right:8px; vertical-align:2px;}
+  .acard .d{font-size:13px; line-height:1.7; margin-top:7px; color:#37414F;}
+  .acard .d b{color:var(--navy);}
+
+  /* 提醒 */
+  .tips{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:24px;}
+  .tip{border-radius:12px; padding:13px 16px; border-left:6px solid; background:#F7F9FC;}
+  .tip .h{font-size:15px; font-weight:800; margin-bottom:4px;}
+  .tip .d{font-size:12.8px; line-height:1.65; color:#37414F;}
+  .t1{border-color:var(--gold);} .t1 .h{color:#8A6800;}
+  .t2{border-color:var(--red);}  .t2 .h{color:var(--red);}
+  .t3{border-color:var(--teal);} .t3 .h{color:var(--teal);}
+
+  .foot{margin-top:20px; padding-top:12px; border-top:1px solid var(--line);
+        font-size:12px; color:var(--muted); line-height:1.7;}
+  .foot b{color:var(--navy);}
+</style>
+<style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head>
+<body><div class="i18nsw"><a href="owner.html" class="on">中文</a><a href="owner.en.html">EN</a><a href="owner.vi.html">VI</a></div>
+<div class="page">
+
+  <div class="hd">
+    <h1>越南醫院生意<br>業主看這五頁就夠</h1>
+    <div class="sub">
+      VMH-EcoMap 主工具共 21 個分頁，但<b>業主不需要全部看</b>。<br>
+      資料由顧問維護、數字由系統自動算，你只要照下面五步走一遍，<b>十分鐘就知道：機會在哪、我們有多少實力、缺誰、先做哪一個、賺不賺錢。</b>
+    </div>
+  </div>
+
+  <div class="roles">
+    <div class="role r1">
+      <div class="tag">WHO MAINTAINS</div>
+      <div class="who">顧問／PI 辦公室</div>
+      <div class="txt">只維護三處：03 能力總表（能力與夥伴配置）、16 能力商機矩陣（打✓）、15 商機字典（商機描述）。其餘全部不用碰。</div>
+    </div>
+    <div class="role r2">
+      <div class="tag">WHAT THE TOOL DOES</div>
+      <div class="who">系統自動計算</div>
+      <div class="txt">約 18,000 個公式：藍字欄位、四張自動清單、儀表板圖表、攻擊順位全部自動更新，改一個地方全檔連動。</div>
+    </div>
+    <div class="role r3">
+      <div class="tag">WHAT YOU LOOK AT</div>
+      <div class="who">業主／老闆</div>
+      <div class="txt"><b>只看五頁，照 1→5 的順序走。</b>每一頁都只回答一個問題，不需要懂 Excel、不需要動任何一格。</div>
+    </div>
+  </div>
+
+  <p class="flowhd">業主動線：五步，一步一個問題</p>
+  <p class="flowsub">下方「目前的答案」是這份檔案此刻算出來的真實數字——資料一更新，答案就會變。</p>
+
+  <div class="flow">
+    <div class="arrow" style="left:calc(20% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(40% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(60% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(80% - 16px);">▶</div>
+
+    <div class="step s1">
+      <div class="top">
+        <div class="num">STEP 1</div>
+        <div class="q">機會在哪裡？</div>
+        <div class="pg">儀表板 ＋ 15 商機字典</div>
+      </div>
+      <div class="body">
+        <div class="lb">看這幾欄</div>
+        <ul>
+          <li><b>E 欄</b>　這門生意在賣什麼、誰付錢</li>
+          <li><b>F 欄</b>　越南現況（③＝幾乎沒人做）</li>
+          <li><b>P 欄</b>　典型金額級距</li>
+        </ul>
+        <div class="lb">你會得到</div>
+        <ul><li>越南醫院市場可以獨立談的生意全貌，以及哪些還是空白市場</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">目前的答案</div>
+        <div class="v"><b>85</b> 門生意｜其中 <b>40</b> 門越南幾乎沒人做</div>
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="top">
+        <div class="num">STEP 2</div>
+        <div class="q">我們有多少實力？</div>
+        <div class="pg">03 能力總表</div>
+      </div>
+      <div class="body">
+        <div class="lb">只看三欄（其餘是顧問在維護）</div>
+        <ul>
+          <li><b>H 拼圖狀態</b>　誰在做這項</li>
+          <li><b>W 商業判斷</b>　Go／先補條件／…</li>
+          <li><b>AF 所屬商機</b>　這項能力能賣進哪幾門生意</li>
+        </ul>
+        <div class="lb">你會得到</div>
+        <ul><li>我們手上 60 項能力，哪些現在就能出手</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">目前的答案</div>
+        <div class="v">60 項能力｜可立即推進 <b>19</b> 項<br>群晶主導 <b>8</b> 項</div>
+      </div>
+    </div>
+
+    <div class="step s3">
+      <div class="top">
+        <div class="num">STEP 3</div>
+        <div class="q">什麼時候能接<br>什麼案子？</div>
+        <div class="pg">01 總藍圖</div>
+      </div>
+      <div class="body">
+        <div class="lb">怎麼看這張圖</div>
+        <ul>
+          <li><b>直的</b>　＝做什麼（十大能力領域）</li>
+          <li><b>橫的</b>　＝什麼時候做（G0→G6）</li>
+          <li><b>紅底</b>　＝這一格還沒有人做</li>
+          <li>第 8 列＝每階段的<b>法規門檻</b>，沒過不能往下走</li>
+        </ul>
+      </div>
+      <div class="now">
+        <div class="t">目前的答案</div>
+        <div class="v">洽談中 <b>43</b> 項｜缺口 <b>9</b> 項<br>強制法規待確認 <b>11</b> 條</div>
+      </div>
+    </div>
+
+    <div class="step s4">
+      <div class="top">
+        <div class="num">STEP 4</div>
+        <div class="q">還缺誰？</div>
+        <div class="pg">04 夥伴拼圖 ＋ 11 缺口招募</div>
+      </div>
+      <div class="body">
+        <div class="lb">看這兩件事</div>
+        <ul>
+          <li>04 底部　<b>覆蓋矩陣</b>：哪個領域沒人</li>
+          <li>11 最右欄　<b>牽動商機數</b>：這個缺口卡住幾門生意（≥3 轉紅）</li>
+        </ul>
+        <div class="lb">你會得到</div>
+        <ul><li>先補誰、後補誰——招募有先後順序，不是憑感覺</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">目前的答案</div>
+        <div class="v">29 個夥伴角色，<b>9</b> 個還沒有人<br>最急：手術室整合（卡 <b>7</b> 門生意）</div>
+      </div>
+    </div>
+
+    <div class="step s5">
+      <div class="top">
+        <div class="num">STEP 5</div>
+        <div class="q">先做哪一個？<br>賺不賺錢？</div>
+        <div class="pg">儀表板 Top 10 ＋ 14 商機清單</div>
+      </div>
+      <div class="body">
+        <div class="lb">看這兩處</div>
+        <ul>
+          <li>儀表板<b>攻擊順位 Top 10</b>：價值＋準備度＋空白程度－缺口，自動排序</li>
+          <li>14 商機清單：正在談的案子推到哪一階段了</li>
+        </ul>
+        <div class="lb">要算錢</div>
+        <ul><li>挑定一案 → 開 <b>VMH-EcoMap-2 試算器</b>算 NPV／IRR／回收期</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">目前的答案</div>
+        <div class="v">建議先攻：<b>居家醫療</b>、復健亞急性、閉環給藥<br>（都是沒人做＋我們零缺口）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="after">
+    <div class="afterlab">
+      <div class="a">DECIDED？</div>
+      <div class="b">決定要打<br>之後</div>
+    </div>
+    <div class="acard">
+      <div class="h"><span>17</span>商機作戰卡</div>
+      <div class="d">下拉選一個商機，一頁看完<b>怎麼打</b>：需要哪幾項能力、每項誰在做誰還缺、
+        在地對手是誰、我們憑什麼贏、卡住哪些法規門檻。<b>作戰會議就投影這一頁</b>，結論寫回 14 的「下一步」。</div>
+    </div>
+    <div class="acard">
+      <div class="h"><span>-2</span>專案商模試算器（另一個檔案）</div>
+      <div class="d">主工具的單位是「能力項」，回答不了「這一台 CT 划不划算」。挑定一案後<b>另開一份試算器</b>，
+        填成本與收入，算出 NPV／IRR／回收期與敏感度。<b>刻意不自動帶入</b>——還沒報價前的任何金額都是猜的。</div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <div class="tip t1">
+      <div class="h">黃色格才是要填的</div>
+      <div class="d">黃底＝可以改；<b>藍字＝公式，改了就永遠不會再自動更新</b>。檔案已上防呆保護（無密碼，顧問可解除）。</div>
+    </div>
+    <div class="tip t2">
+      <div class="h">紅色＝機會，不是壞消息</div>
+      <div class="d">紅底缺口＝還沒有人做的位置，正是<b>對外招募夥伴最有力的說法</b>；★白地商機＝越南有這門生意但我們還沒有能力接。</div>
+    </div>
+    <div class="tip t3">
+      <div class="h">金額與現況是「規劃假設值」</div>
+      <div class="d">15 的金額級距、07 的建造單價、09 的 KPI 基線都是規劃參考值。<b>正式報價或對外承諾前，務必請在地夥伴再查證一次。</b></div>
+    </div>
+  </div>
+
+  <p class="foot">
+    <b>一句話記住整套工具：</b>顧問只在三個地方輸入（03 能力、16 打✓、15 商機描述），系統把其餘 18 頁全部算出來，業主照 1→5 走完就能做決策。<br>
+    <b>週會怎麼跑：</b>投影儀表板念六個數字 → 看 13 待辦看板的四張清單（法規／風險／缺口／商機行動）→ 要推哪個商機就切 17 作戰卡 → 結論記進 10 決策紀錄。<br>
+    <b>不用看的分頁：</b>02／05／06／07／08／09／10／12／16／98／99 由顧問維護，需要時他會主動提出來討論。
+  </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Page not found｜VMH-EcoMap</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
+<link rel="stylesheet" href="assets/site.css">
+</head><body>
+<header><div class="hw">
+ <a class="logo" href="index.en.html"><b>VMH-EcoMap</b><span>Vietnam Hospital Ecosystem Toolkit</span></a>
+ <nav><a href="index.en.html#tools">Online Tools</a><a href="index.en.html#onepagers">One-Pagers</a><a href="index.en.html#adv">Advanced / Partner</a><a href="index.en.html#downloads">Downloads</a><a href="index.en.html#about">About</a></nav>
+ <div class="langsw"><a class="lp" data-lang="zh" href="#">中文</a><a class="lp on" data-lang="en" href="#">English</a><a class="lp" data-lang="vi" href="#">Tiếng Việt</a></div>
+</div></header><main>
+<div class="card" style="text-align:center;padding:60px 30px">
+<h1 style="color:var(--navy);font-size:1.6rem">Page not found</h1>
+<p style="color:var(--sub);margin:10px 0 20px">The URL may be wrong, or this file has been renamed.</p>
+<a class="btn" href="index.en.html">Back to home</a></div></main><footer><div class="fin">
+ <div><b style="color:#C7D6EA">VMH-EcoMap</b><br>VMH-EcoMap　Vietnam Hospital Ecosystem Toolkit　v1.0　2026-08<br>Chunghing Technology × Vietnam Modern Hospital Alliance</div>
+ <div style="text-align:right">All figures on this site carry a source and verification date; preset cases are market-rate<br>estimates, not actual quotes from any institution. Intelligence has a half-life — trust the verification date.</div>
+</div></footer>
+<script>
+(function(){
+ var LANGS=['zh','en','vi'];
+ document.querySelectorAll('.langsw a[data-lang]').forEach(function(a){
+   a.addEventListener('click', function(e){
+     e.preventDefault();
+     var target=a.getAttribute('data-lang');
+     var path=location.pathname;
+     var file=path.split('/').pop();
+     var dir=path.slice(0, path.length-file.length);
+     var m=file.match(/^(.*?)(\.(en|vi))?\.html$/);
+     if(!m) return;
+     var base=m[1];
+     var newFile = target==='zh' ? base+'.html' : base+'.'+target+'.html';
+     location.href = dir + newFile + location.hash;
+   });
+ });
+})();
+</script></body></html>

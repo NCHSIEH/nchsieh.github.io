@@ -1,0 +1,130 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>越南醫療缺口地圖｜VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:var(--navy);color:#fff;padding:13px 22px}
+header b{font-size:1.05rem}
+header .n{font-size:.75rem;color:#9FB0CC;margin-left:12px}
+main{max-width:1220px;margin:0 auto;padding:20px}
+.gaps{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;margin-bottom:18px}
+.gap{background:var(--sf);border-radius:12px;box-shadow:0 1px 4px rgba(16,26,45,.08);padding:13px 16px;border-top:3px solid var(--red)}
+.gap .v{font-size:1.6rem;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+.gap .k{font-size:.8rem;font-weight:700}
+.gap .n{font-size:.72rem;color:var(--sub);margin-top:3px;line-height:1.5}
+.wrap{display:grid;grid-template-columns:minmax(340px,480px) 1fr;gap:18px;align-items:start}
+.mapc{background:var(--sf);border-radius:14px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:16px}
+.mapc h3{font-size:.92rem;color:var(--navy);margin-bottom:4px}
+.mapc .lg{font-size:.7rem;color:var(--sub);margin-bottom:8px;display:flex;gap:12px;flex-wrap:wrap}
+.lg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.side{background:var(--sf);border-radius:14px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:18px;min-height:420px}
+.side h2{font-size:1.15rem;color:var(--navy)}
+.side .reg{font-size:.76rem;color:var(--sub);margin-bottom:10px}
+.fact{border-left:3px solid var(--teal);background:#F2F8F6;border-radius:0 9px 9px 0;padding:9px 12px;margin-bottom:8px;font-size:.85rem}
+.fact b{color:var(--teal);font-size:.72rem;display:block}
+.pill{display:inline-block;background:#DCE6F4;color:var(--navy);border-radius:7px;padding:2px 9px;font-size:.72rem;font-weight:700;margin:2px 4px 2px 0}
+.nof{color:var(--sub);font-size:.85rem;background:#F4F6FA;border-radius:9px;padding:12px}
+.note{background:#FFF9E3;border-radius:10px;padding:10px 14px;font-size:.76rem;color:#6B4E00;margin-top:16px}
+svg text{font-family:inherit;pointer-events:none}
+svg rect{cursor:pointer;transition:opacity .12s}
+svg rect:hover{opacity:.75}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}}
+</style><style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head><body><div class="i18nsw"><a href="gapmap.html" class="on">中文</a><a href="gapmap.en.html">EN</a><a href="gapmap.vi.html">VI</a></div>
+<header style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><b>越南醫療缺口地圖</b>
+<span class="n">2025 年行政區合併後 34 省市・點省份看已查證的事實・查證日 <span id="asof"></span></span>
+<button id="upbtn" onclick="document.getElementById('upf').click()"
+ style="margin-left:auto;background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer">⟳ 載入更新資料</button>
+<input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
+</header>
+<main>
+<div class="gaps" id="gaps"></div>
+<div class="wrap">
+ <div class="mapc"><h3>34 省市磚圖（位置示意，非精確地理）</h3>
+  <div class="lg"><span><i style="background:#0E6E6B"></i>有查證情報（愈深愈多）</span>
+   <span><i style="background:#D9AF3C"></i>醫療觀光試點（2026-28）</span>
+   <span><i style="background:#E4E8EF"></i>尚無省級情報（未查得）</span></div>
+  <svg id="map" width="100%" viewBox="0 0 480 640"></svg></div>
+ <div class="side" id="side"></div>
+</div>
+<div class="note"><b>資料怎麼來的：</b>國家級缺口（紅卡）取自公開研究與官方文件（每卡附出處）；省級事實來自 2026-08 的整輪市場查證，
+只收錄「查得到出處」的項目——灰色省份是「我們還沒有情報」，不是「那裡沒有市場」。<br>
+<b>怎麼更新：</b>本圖由月度情報排程維護，每月自動重新查證後產出新版；右上角「⟳ 載入更新資料」可隨時載入新的 map_data.json（放在 工具腳本/），
+整頁立即重繪，載入只在本機進行、不上傳。</div>
+</main>
+<script>
+/* 34 省市（2025 合併後）：[名, 中文, col,row, region] */
+const P=[
+['Hà Nội','河內',2,2,'北'],['Cao Bằng','高平',3,0,'北'],['Lạng Sơn','諒山',3,1,'北'],
+['Lai Châu','萊州',0,1,'北'],['Điện Biên','奠邊',0,2,'北'],['Sơn La','山羅',1,2,'北'],
+['Lào Cai','老街',1,1,'北'],['Thái Nguyên','太原',2,1,'北'],['Tuyên Quang','宣光',2,0,'北'],
+['Phú Thọ','富壽',1,3,'北'],['Bắc Ninh','北寧',3,2,'北'],['Hưng Yên','興安',3,3,'北'],
+['Hải Phòng','海防',4,3,'北'],['Quảng Ninh','廣寧',4,2,'北'],['Ninh Bình','寧平',2,4,'北'],
+['Thanh Hóa','清化',2,5,'中'],['Nghệ An','乂安',2,6,'中'],['Hà Tĩnh','河靜',3,7,'中'],
+['Quảng Trị','廣治',3,8,'中'],['Huế','順化',3,9,'中'],['Đà Nẵng','峴港',4,9,'中'],
+['Quảng Ngãi','廣義',4,10,'中'],['Gia Lai','嘉萊',3,10,'中'],['Đắk Lắk','多樂',3,11,'中'],
+['Khánh Hòa','慶和',4,11,'中'],['Lâm Đồng','林同',3,12,'南'],['Đồng Nai','同奈',2,12,'南'],
+['TP.HCM','胡志明市',2,13,'南'],['Tây Ninh','西寧',1,12,'南'],['Đồng Tháp','同塔',1,13,'南'],
+['Vĩnh Long','永隆',2,14,'南'],['An Giang','安江',0,13,'南'],['Cần Thơ','芹苴',1,14,'南'],
+['Cà Mau','金甌',1,15,'南']];
+/* 已查證的省級事實 */
+let MD={"asof":"2026-08-15","F":{"Hà Nội":[["公立旗艦群","白梅、越德、K 醫院、108 軍醫院——K 醫院籌建北越首座質子中心（4.2 兆越盾）"],["市場","河內與胡志明市合計吸納全國約 60% 病人流——省級醫院缺口即轉診壓力來源"],["觀光試點","醫療觀光 2026-28 五個試點城市之一"],["數位","市屬 42 家公立醫院中 11 家完成 EMR（2025-04）——補課空間大"],["個案","河內市眼科醫院新建：718.9 tỷ VND、250 床＝每床約 11 萬美元（造價基準）"]],"TP.HCM":[["公立旗艦群","Chợ Rẫy（曾驗證 Olympus 內視鏡 AI）；市血液醫院＝全國第一家公立 JCI（9.89/10）"],["私立熱區","Vinmec Can Gio（×Cleveland Clinic）、Tâm Anh C2/C3（BMS 節能 20-30% 得獎案）、FV（Thomson 3.81 億美元收購）"],["觀光試點","醫療觀光試點城市；國際病人主要入口"],["在建","三家區域醫院在建：1,000＋700＋1,000 床"],["市場","介入心臟市場佔東南亞 36.4% 的主要貢獻地"]],"Đà Nẵng":[["PPP","全國僅有的 2 個健康 PPP 案之一"],["觀光試點","醫療觀光試點城市"],["數位","智慧城市政策先行區"]],"Quảng Ninh":[["觀光試點","醫療觀光試點城市（下龍灣旅遊人流）"]],"Khánh Hòa":[["觀光試點","醫療觀光試點城市（芽莊）"],["個案","Thai Hoa 綜合醫院＝研華 iHospital 越南首案（原寧順，合併後屬慶和）"]],"Huế":[["個案","順化國際綜合醫院：2,300+ tỷ VND、260+ 床、Hospital-Hotel 模式＝高端私立造價天花板（每床約 34 萬美元）"],["公立","順化中央醫院列六大升級醫院之一"]],"Ninh Bình":[["警示案","白梅二院／越德二院（原河南省）：千床工程停擺 6-7 年、追加 1.54 億美元、限 2025-11-30 投運——公立 EPC 治理風險的實證"]],"Hưng Yên":[["個案","Hung Ha 綜合醫院 MEP 動土（Searefico 承包，29,930 m²）"],["個案","太平綜合醫院（原太平省）：約 4,700 tỷ VND、1,200 床、智慧化導向＝北部最大智慧醫院新建案之一"]],"Lào Cai":[["PPP","安沛健康 PPP 案（原安沛省，合併後屬老街）＝全國僅有的 2 案之一"]],"Cần Thơ":[["定位","湄公河三角洲醫療中心；區域轉診樞紐（省級情報待補）"]],"Nghệ An":[["市場","人口大省（合併後居前列）；省級醫院升級需求大（具體個案未查得）"]]},"GAPS":[["82 台","直線加速器全國總量","0.82 台/百萬人 vs 標準 4-8；43% 老舊。達低標需約 400 台","JCO Global Oncology"],["1/3","透析需求覆蓋率","需求逾 10 萬人、實際服務約 3.6 萬","Kidney360/PMC"],["12 台","PET/CT 全國總量","年新增癌症 18 萬例；迴旋加速器僅 3 台","GLOBOCAN/OncoDaily"],["5.8%","私立床位占比","2030 目標 15%、2050 目標 25%——官方要它倍增再倍增","醫療網總體規劃"],["200%+","公立醫院超載","普遍運作於設計量能兩倍以上","B-Company"],["60%","兩大城吸納病人流","河內＋胡志明市吸納全國六成病人＝省級是結構缺口","trade.gov CCG"]]};
+let F=MD.F;
+let GAPS=MD.GAPS;
+function loadUpdate(f){
+  if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{try{
+    const nd=JSON.parse(rd.result);
+    if(!nd.F||!nd.GAPS){alert('格式不對：需要含 F / GAPS 的 map_data.json');return;}
+    MD=nd;F=MD.F;GAPS=MD.GAPS;renderAll();
+    document.getElementById('upbtn').textContent='✓ 已載入 '+(MD.asof||'更新資料');
+  }catch(e){alert('讀取失敗：'+e.message);}};
+  rd.readAsText(f,'utf-8');
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TOUR0=new Set(['Hà Nội','TP.HCM','Đà Nẵng','Quảng Ninh','Khánh Hòa']);
+function renderAll(){
+document.getElementById('asof').textContent=MD.asof||'—';
+document.getElementById('gaps').innerHTML=GAPS.map(([v,k,n,s])=>
+ `<div class="gap"><div class="v">${v}</div><div class="k">${k}</div><div class="n">${n}<br><span style="color:#8A93A3">出處：${s}</span></div></div>`).join('');
+const CW=88,CH=36,GX=6,GY=5,OX=14,OY=14;
+let svg='';
+P.forEach(([vn,zh,c,r,reg])=>{
+  const x=OX+c*(CW+GX),y=OY+r*(CH+GY);
+  const nf=(F[vn]||[]).length;
+  const fill=nf?(nf>=4?'#0E6E6B':nf>=2?'#3E8B87':'#7FB5B0'):'#E4E8EF';
+  const stroke=TOUR0.has(vn)?'#D9AF3C':'#FFFFFF';
+  svg+=`<rect x="${x}" y="${y}" width="${CW}" height="${CH}" rx="6" fill="${fill}"
+    stroke="${stroke}" stroke-width="${TOUR0.has(vn)?3:1.5}" onclick="pick('${vn}')"/>`;
+  svg+=`<text x="${x+CW/2}" y="${y+15}" text-anchor="middle" font-size="11" font-weight="700"
+    fill="${nf?'#FFFFFF':'#55607A'}">${zh}</text>`;
+  svg+=`<text x="${x+CW/2}" y="${y+28}" text-anchor="middle" font-size="8"
+    fill="${nf?'#D8E8E6':'#9AA3B2'}">${vn}</text>`;});
+document.getElementById('map').innerHTML=svg;
+}
+function pick(vn){
+  const p=P.find(x=>x[0]===vn); const facts=F[vn]||[];
+  document.getElementById('side').innerHTML=`
+   <h2>${esc(p[1])}　<span style="font-size:.85rem;color:var(--sub)">${esc(vn)}</span></h2>
+   <div class="reg">${esc(p[4])}部${TOUR0.has(vn)?'　<span class="pill" style="background:#FCF1DC;color:#B77A10">醫療觀光試點 2026-28</span>':''}</div>
+   ${facts.length?facts.map(([k,t])=>`<div class="fact"><b>${esc(k)}</b>${esc(t)}</div>`).join('')
+    :`<div class="nof">這個省還沒有查證過的省級情報。<br><br>「未查得」不代表沒市場——全國缺口（上方紅卡）平均分佈的機率很低，
+      省級醫院正是 2030 年 35 床/萬人目標的主要補口。要深入這個省，先做的事：查省衛生廳（Sở Y tế）公告、
+      掃該省在採購網的標案、找當地台商引薦。</div>`}
+   <div style="margin-top:12px;font-size:.74rem;color:var(--sub)">2025 年行政區合併：63 省市 → 34。舊省名（如安沛、河南、太平）已併入現行省份，談判對口全面更換——舊人脈要重新對地圖。</div>`;
+}
+renderAll();
+pick('Hà Nội');
+</script></body></html>

@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deal Calculator Guide｜VMH-EcoMap</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
+<link rel="stylesheet" href="../assets/site.css">
+</head><body>
+<header><div class="hw">
+ <a class="logo" href="../index.en.html"><b>VMH-EcoMap</b><span>Vietnam Hospital Ecosystem Toolkit</span></a>
+ <nav><a class="on" href="../index.en.html#tools">Online Tools</a><a href="../index.en.html#onepagers">One-Pagers</a><a href="../index.en.html#adv">Advanced / Partner</a><a href="../index.en.html#downloads">Downloads</a><a href="../index.en.html#about">About</a></nav>
+ <div class="langsw"><a class="lp" data-lang="zh" href="#">中文</a><a class="lp on" data-lang="en" href="#">English</a><a class="lp" data-lang="vi" href="#">Tiếng Việt</a></div>
+</div></header><main>
+<div class="crumb"><a href="../index.en.html">Home</a> ／ <a href="../index.en.html#tools">Interactive Tools</a> ／ Deal Calculator</div>
+<div class="dhero"><div class="top">
+ <div class="txt"><div class="cat">Interactive Tool · Financial Decisions</div>
+  <h1>Deal Calculator</h1>
+  <p class="lead">Use the wrong method on the same deal and you get the wrong answer. This tool builds in the correct financial method for each of six investment categories — NPV for revenue deals, least-cost comparison for regulatory mandates, crossover-year analysis for replacements — so you just pick the category, drag the sliders, and the conclusion appears.</p></div>
+ <div class="img" style="background-image:url(../assets/shots/calculator.jpg)"></div></div></div>
+
+<div class="dgrid"><div>
+ <div class="card"><h3>When to use it</h3><div class="scen"><div class="s"><b>Scenario 1　Live modeling in an owner meeting</b>The director asks "does this CT scanner pay back in 3 years?" Pick "A Revenue-generating → CT Imaging Center", adjust daily volume and self-pay ratio to their real numbers, and NPV plus payback period appear instantly.</div><div class="s"><b>Scenario 2　Making the case to replace old equipment</b>Pick "E Replacement & Sustaining" — the tool plots cumulative cost curves for keeping vs. replacing and marks the crossover year. Far more persuasive than just saying "the new one is cheaper."</div><div class="s"><b>Scenario 3　Mandatory spend ahead of a regulatory deadline</b>Pick "C Regulatory-mandated" and compare in-house vs. outsourced total cost. This category isn't about ROI — it's about complying at the lowest cost.</div></div></div>
+ <div class="card"><h3>Three steps</h3><ol class="steps" style="font-size:.88rem;line-height:1.9"><li><b>Pick a category</b>——Six buttons up top: A Revenue-generating / B Enabling / C Regulatory-mandated / D Cost-reduction / E Replacement & Sustaining / F Strategic positioning. Each has its own parameters and charts.</li><li><b>Load a preset case</b>——Each category ships 3-4 presets (CT imaging, IVF, data center, medical wastewater, BMS energy, UPS replacement, HIS data platform...) — start from whichever is closest.</li><li><b>Adjust and watch it update</b>——Hover the ⓘ next to any field for a plain-language explanation. KPIs and charts recalculate live; the sensitivity chart shows the discount rate at which the deal stops making sense.</li></ol></div>
+ <div class="card"><h3>What you'll see</h3>
+  <p style="font-size:.86rem">Depending on category, the results card shows: Net Present Value (NPV), Modified Internal Rate of Return (MIRR), payback period, total cost of ownership delta (ΔTCO), annual savings, life-cycle cost (LCC) and cost crossover year, or option value. Two charts below show cash flow / cost curves and sensitivity to discount rate.</p>
+  <div class="warn" style="margin-top:11px"><b>Data & limitations: </b>Preset case numbers are <b>market-rate estimates</b> for demonstration and training — not an actual quote from any hospital. Replace with real pricing and hospital data before a formal proposal. All calculation runs in your browser; nothing you enter is uploaded.</div></div>
+</div>
+<div class="side"><div class="card">
+ <a class="big" href="../tools/calculator.en.html">▶ Open Deal Calculator</a>
+ <a class="big g" href="../index.en.html#tools">← Back to all tools</a>
+ <h3 style="margin-top:16px">Related Tools</h3>
+ <div class="rel"><a href="../tools/intel.en.html">→ Vietnam Healthcare Intel Station (check regulatory timing)</a><br><a href="../index.en.html#onepagers">→ Calculator one-pager</a><br><a href="../tools/gapmap.en.html">→ Vietnam Gap Map (pick a province first)</a><br></div>
+ <h3 style="margin-top:16px">Specifications</h3>
+ <div class="spec">Format：Single-file HTML<br>Size：~26 KB<br>Needs internet：No (works offline once opened)<br>Best on：Desktop / tablet<br>Version：v1.0 (2026-08)<br></div>
+</div></div></div>
+</main><footer><div class="fin">
+ <div><b style="color:#C7D6EA">VMH-EcoMap</b><br>VMH-EcoMap　Vietnam Hospital Ecosystem Toolkit　v1.0　2026-08<br>Chunghing Technology × Vietnam Modern Hospital Alliance</div>
+ <div style="text-align:right">All figures on this site carry a source and verification date; preset cases are market-rate<br>estimates, not actual quotes from any institution. Intelligence has a half-life — trust the verification date.</div>
+</div></footer>
+<script>
+(function(){
+ var LANGS=['zh','en','vi'];
+ document.querySelectorAll('.langsw a[data-lang]').forEach(function(a){
+   a.addEventListener('click', function(e){
+     e.preventDefault();
+     var target=a.getAttribute('data-lang');
+     var path=location.pathname;
+     var file=path.split('/').pop();
+     var dir=path.slice(0, path.length-file.length);
+     var m=file.match(/^(.*?)(\.(en|vi))?\.html$/);
+     if(!m) return;
+     var base=m[1];
+     var newFile = target==='zh' ? base+'.html' : base+'.'+target+'.html';
+     location.href = dir + newFile + location.hash;
+   });
+ });
+})();
+</script></body></html>

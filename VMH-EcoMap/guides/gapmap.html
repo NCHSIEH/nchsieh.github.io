@@ -1,0 +1,56 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>越南缺口地圖　使用說明｜VMH-EcoMap</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
+<link rel="stylesheet" href="../assets/site.css">
+</head><body>
+<header><div class="hw">
+ <a class="logo" href="../index.html"><b>VMH-EcoMap</b><span>越南醫院生態系工具站</span></a>
+ <nav><a class="on" href="../index.html#tools">線上工具</a><a href="../index.html#onepagers">一頁圖說</a><a href="../index.html#adv">進階／夥伴</a><a href="../index.html#downloads">下載中心</a><a href="../index.html#about">關於本站</a></nav>
+ <div class="langsw"><a class="lp on" data-lang="zh" href="#">中文</a><a class="lp" data-lang="en" href="#">English</a><a class="lp" data-lang="vi" href="#">Tiếng Việt</a></div>
+</div></header><main>
+<div class="crumb"><a href="../index.html">首頁</a> ／ <a href="../index.html#tools">線上互動工具</a> ／ 越南缺口地圖</div>
+<div class="dhero"><div class="top">
+ <div class="txt"><div class="cat">線上互動工具 ・ 市場地理</div>
+  <h1>越南缺口地圖</h1>
+  <p class="lead">「先打哪一省」是進入越南市場的第一個決定。這張圖用磚格排列 34 個省市（2025 年行政區合併後的新制），點下去就看到該省的在地事實；下方六張全國性缺口卡，講的是整個市場結構性的空白。</p></div>
+ <div class="img" style="background-image:url(../assets/shots/gapmap.jpg)"></div></div></div>
+
+<div class="dgrid"><div>
+ <div class="card"><h3>什麼時候用它</h3><div class="scen"><div class="s"><b>場景一　決定優先攻略區域</b>把資源投在哪一省？先看磚格圖上哪些省份有具體的醫療建設動態與缺口。</div><div class="s"><b>場景二　向業主說明在地機會</b>跟某省的醫院談之前，先調出該省的事實卡——你知道他們的處境，談話的層次就不同。</div><div class="s"><b>場景三　抓全國性市場空白</b>六張全國缺口卡（放療設備、透析覆蓋、資料中心、整合層…）是結構性機會，不受單一省份影響。</div></div></div>
+ <div class="card"><h3>操作三步驟</h3><ol class="steps" style="font-size:.88rem;line-height:1.9"><li><b>點省份磚格</b>——右側展開該省的在地事實與資料來源。金色外框代表觀光醫療試點城市。</li><li><b>看全國缺口卡</b>——下方六張卡片是跨省的結構性缺口，每張附完整出處與查證日。</li><li><b>更新資料</b>——右上角「⟳ 載入更新資料」可載入新的地圖資料檔；每月排程也會自動重新查證各省新聞。</li></ol></div>
+ <div class="card"><h3>你會看到什麼</h3>
+  <p style="font-size:.86rem">34 個省市磚格（依地理位置排列，分北中南三區）、11 個已有詳細事實的省份、6 張全國性缺口卡。</p>
+  <div class="warn" style="margin-top:11px"><b>資料與限制：</b>磚格為示意排列，非精確地理投影。目前有詳細事實的省份為 11 個，其餘省份待後續補充；越南 2025 年已將 63 省市合併為 34 個，本圖採用新制。</div></div>
+</div>
+<div class="side"><div class="card">
+ <a class="big" href="../tools/gapmap.html">▶ 開啟越南缺口地圖</a>
+ <a class="big g" href="../index.html#tools">← 回工具總覽</a>
+ <h3 style="margin-top:16px">相關工具</h3>
+ <div class="rel"><a href="../tools/intel.html">→ 越南醫療情報站（法規與競合）</a><br><a href="../tools/calculator.html">→ 互動商模試算器（算單案）</a><br><a href="../tools/explorer.html">→ 生態導覽器（商機全景）</a><br></div>
+ <h3 style="margin-top:16px">規格</h3>
+ <div class="spec">格式：單檔 HTML<br>大小：約 12 KB<br>需要網路：否<br>更新頻率：每月自動重新查證<br>版本：v1.0（2026-08）<br></div>
+</div></div></div>
+</main><footer><div class="fin">
+ <div><b style="color:#C7D6EA">VMH-EcoMap</b><br>VMH-EcoMap　越南醫院生態系工具站　v1.0　2026-08<br>群晶科技 × 越南現代醫院聯盟</div>
+ <div style="text-align:right">本站數據均附出處與查證日；預載案例為市場推估值，<br>非任何特定機構之實際報價。情報有半衰期，以查證日為準。</div>
+</div></footer>
+<script>
+(function(){
+ var LANGS=['zh','en','vi'];
+ document.querySelectorAll('.langsw a[data-lang]').forEach(function(a){
+   a.addEventListener('click', function(e){
+     e.preventDefault();
+     var target=a.getAttribute('data-lang');
+     var path=location.pathname;
+     var file=path.split('/').pop();
+     var dir=path.slice(0, path.length-file.length);
+     var m=file.match(/^(.*?)(\.(en|vi))?\.html$/);
+     if(!m) return;
+     var base=m[1];
+     var newFile = target==='zh' ? base+'.html' : base+'.'+target+'.html';
+     location.href = dir + newFile + location.hash;
+   });
+ });
+})();
+</script></body></html>

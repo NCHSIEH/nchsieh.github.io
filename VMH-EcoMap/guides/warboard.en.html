@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tender War-Board Guide｜VMH-EcoMap</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
+<link rel="stylesheet" href="../assets/site.css">
+</head><body>
+<header><div class="hw">
+ <a class="logo" href="../index.en.html"><b>VMH-EcoMap</b><span>Vietnam Hospital Ecosystem Toolkit</span></a>
+ <nav><a href="../index.en.html#tools">Online Tools</a><a href="../index.en.html#onepagers">One-Pagers</a><a class="on" href="../index.en.html#adv">Advanced / Partner</a><a href="../index.en.html#downloads">Downloads</a><a href="../index.en.html#about">About</a></nav>
+ <div class="langsw"><a class="lp" data-lang="zh" href="#">中文</a><a class="lp on" data-lang="en" href="#">English</a><a class="lp" data-lang="vi" href="#">Tiếng Việt</a></div>
+</div></header><main>
+<div class="crumb"><a href="../index.en.html">Home</a> ／ <a href="../index.en.html#adv">Advanced / Partner Zone</a> ／ Tender War-Board</div>
+<div class="dhero"><div class="top">
+ <div class="txt"><div class="cat">Advanced / Partner Zone · Tender Management</div>
+  <h1>Tender War-Board</h1>
+  <p class="lead">Tender management isn't about watching a calendar — it's about "how many days left" and "is the paperwork ready." This read-only war-board reads your tender-radar Excel and automatically computes closing-date countdowns, go/no-go distribution, and qualification-document readiness. Data stays in Excel; this just makes status visible at a glance.</p></div>
+ <div class="img" style="background-image:url(../assets/shots/warboard.jpg)"></div></div></div>
+
+<div class="dgrid"><div>
+ <div class="card"><h3>When to use it</h3><div class="scen"><div class="s"><b>Scenario 1　Quick status scan before a weekly meeting</b>Load the latest Excel before the meeting — tenders closing within 14 days auto-flag red and sort to the top, no need to scroll row by row.</div><div class="s"><b>Scenario 2　Checking if qualification documents are ready</b>Document readiness is visible at a glance; documents nearing expiry flag red as a reminder to renew.</div></div></div>
+ <div class="card"><h3>Three steps</h3><ol class="steps" style="font-size:.88rem;line-height:1.9"><li><b>Prepare your tender-radar Excel</b>——Log tenders and document status in VMH-EcoMap-15 Tender Radar & Qualification Files.xlsx first.</li><li><b>Load the war-board</b>——Click "Load File 15" and select that Excel — parsing happens entirely on your computer; the file is never uploaded.</li><li><b>Update weekly as routine</b>——Scan the procurement site → log into Excel → reload the war-board, and status updates.</li></ol></div>
+ <div class="card"><h3>What you'll see</h3>
+  <p style="font-size:.86rem">Four KPIs: tenders being tracked, closing within 14 days, decided-to-bid count, and qualification-document readiness rate; tender cards sorted by closing date; document list sorted by urgency.</p>
+  <div class="warn" style="margin-top:11px"><b>Data & limitations: </b>This is a read-only tool. All data maintenance happens in Excel — the war-board itself stores no edits.</div></div>
+</div>
+<div class="side"><div class="card">
+ <a class="big" href="../advanced/warboard.en.html">▶ Open Tender War-Board</a>
+ <a class="big g" href="../index.en.html#adv">← Back to all tools</a>
+ <h3 style="margin-top:16px">Specifications</h3>
+ <div class="spec">Format：Single-file HTML<br>Needs internet：No<br>Pairs with：VMH-EcoMap-15 Tender Radar & Qualification Files.xlsx<br></div>
+</div></div></div>
+</main><footer><div class="fin">
+ <div><b style="color:#C7D6EA">VMH-EcoMap</b><br>VMH-EcoMap　Vietnam Hospital Ecosystem Toolkit　v1.0　2026-08<br>Chunghing Technology × Vietnam Modern Hospital Alliance</div>
+ <div style="text-align:right">All figures on this site carry a source and verification date; preset cases are market-rate<br>estimates, not actual quotes from any institution. Intelligence has a half-life — trust the verification date.</div>
+</div></footer>
+<script>
+(function(){
+ var LANGS=['zh','en','vi'];
+ document.querySelectorAll('.langsw a[data-lang]').forEach(function(a){
+   a.addEventListener('click', function(e){
+     e.preventDefault();
+     var target=a.getAttribute('data-lang');
+     var path=location.pathname;
+     var file=path.split('/').pop();
+     var dir=path.slice(0, path.length-file.length);
+     var m=file.match(/^(.*?)(\.(en|vi))?\.html$/);
+     if(!m) return;
+     var base=m[1];
+     var newFile = target==='zh' ? base+'.html' : base+'.'+target+'.html';
+     location.href = dir + newFile + location.hash;
+   });
+ });
+})();
+</script></body></html>

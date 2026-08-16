@@ -1,0 +1,1543 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>越南醫療情報站｜VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#FFFFFF;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+header{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;box-shadow:0 2px 10px rgba(16,26,45,.18)}
+.hw{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hw b{font-size:1.05rem}
+.hw nav{display:flex;gap:4px;margin-left:auto}
+.hw nav a{color:#C7D2E4;text-decoration:none;padding:6px 12px;border-radius:8px;font-size:.9rem}
+.hw nav a:hover{background:rgba(255,255,255,.12);color:#fff}
+.asof{font-size:.76rem;color:#9FB0CC}
+main{max-width:1180px;margin:0 auto;padding:26px 20px 70px}
+h1{font-size:1.5rem;color:var(--navy);margin:26px 0 4px}
+.sub{color:var(--sub);font-size:.9rem;margin-bottom:16px}
+.grid{display:grid;gap:12px}
+.g3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.g4{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.card{background:var(--sf);border-radius:12px;box-shadow:0 1px 4px rgba(16,26,45,.08);padding:16px 18px}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700}
+.b-red{background:#FBE6E2;color:var(--red)}.b-amb{background:#FCF1DC;color:#B77A10}
+.b-grn{background:#DCEBD0;color:var(--green)}.b-gry{background:#EDEFF3;color:#55607A}
+.b-nav{background:#DCE6F4;color:var(--navy)}
+.lay{display:inline-block;padding:1px 7px;border-radius:6px;font-size:.68rem;font-weight:700;color:#fff}
+.reg{display:grid;grid-template-columns:120px 1fr 210px;gap:16px;background:var(--sf);border-radius:12px;
+ box-shadow:0 1px 4px rgba(16,26,45,.08);padding:15px 18px;margin-bottom:10px;align-items:start}
+.reg .dd{font-weight:800;font-size:1.02rem;color:var(--navy)}
+.reg .cd{font-size:.78rem;margin-top:4px;font-weight:700}
+.reg h3{font-size:.98rem;color:var(--ink);margin-bottom:3px}
+.reg .doc{font-size:.74rem;color:var(--sub);font-family:Consolas,monospace}
+.reg p{font-size:.85rem;color:#3C4552;margin-top:5px}
+.reg .act{font-size:.8rem;background:#F2F8F6;border-left:3px solid var(--teal);padding:8px 10px;border-radius:0 8px 8px 0}
+.reg .act b{color:var(--teal);font-size:.74rem;display:block;margin-bottom:2px}
+.pl h3{font-size:1rem;color:var(--navy)}
+.pl .pos{font-size:.8rem;color:var(--sub);margin:2px 0 8px}
+.mv{font-size:.82rem;padding:5px 0;border-top:1px dashed var(--line);display:flex;gap:8px}
+.mv .d{color:var(--sub);font-size:.74rem;white-space:nowrap;padding-top:2px}
+.mean{margin-top:9px;font-size:.8rem;background:#FDF8EC;border-left:3px solid var(--gold);padding:7px 10px;border-radius:0 8px 8px 0;color:#5C4708}
+.stat{background:var(--sf);border-radius:12px;box-shadow:0 1px 4px rgba(16,26,45,.08);padding:14px 16px}
+.stat .v{font-size:1.7rem;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.stat .k{font-size:.85rem;font-weight:700;margin-top:1px}
+.stat .n{font-size:.76rem;color:var(--sub);margin-top:4px;line-height:1.5}
+.stat .s{font-size:.68rem;color:#8A93A3;margin-top:6px}
+.note{background:#EEF3F9;border-radius:12px;padding:14px 18px;font-size:.85rem;color:#26456E;margin:14px 0}
+footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:.75rem;color:var(--sub)}
+.fresh{font-size:.68rem;margin-left:6px}
+.hbtn{background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer}
+body.edit [data-e]{outline:1.5px dashed #B77A10;outline-offset:2px;border-radius:4px;min-width:16px;display:inline-block;cursor:text;background:#FFFDF4}
+body.edit .dd[data-e]{display:block}
+body.edit .lay [data-e]{color:#333}
+body.edit [data-e]:focus{outline:2px solid var(--gold);background:#fff}
+.delx{display:none;float:right;background:#FBE6E2;color:var(--red);border:0;border-radius:7px;
+ padding:2px 9px;font-size:.72rem;font-weight:700;cursor:pointer;margin-left:8px}
+.addb{display:none;background:#EDF3EC;color:var(--green);border:1.5px dashed var(--green);border-radius:10px;
+ padding:9px 18px;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer;margin:4px 0 14px;width:100%}
+body.edit .delx,body.edit .addb{display:block}
+.editbar{display:none;position:sticky;bottom:0;z-index:60;background:#3D3416;color:#FCE9B8;
+ padding:10px 20px;font-size:.82rem;text-align:center}
+body.edit .editbar{display:block}
+.pl h3 .nm{cursor:pointer;border-bottom:1.5px dashed #9FB0CC}
+.pl h3 .nm:hover{color:var(--teal);border-bottom-color:var(--teal)}
+.hint{font-size:.68rem;color:#8A93A3;font-weight:400;margin-left:6px}
+.ovl{display:none;position:fixed;inset:0;background:rgba(16,26,45,.55);z-index:100;padding:30px 16px;overflow:auto}
+.ovl.on{display:block}
+.dlg{max-width:780px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden}
+.dlg .top{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:start;gap:12px}
+.dlg .top h2{font-size:1.15rem;flex:1}
+.dlg .top .x{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:8px;
+ padding:4px 12px;font-size:1rem;cursor:pointer}
+.dlg .bd{padding:18px 22px 24px}
+.dlg .prof{font-size:.88rem;background:#EEF3F9;border-radius:10px;padding:11px 14px;color:#26456E;margin-bottom:14px}
+.dlg h4{font-size:.92rem;color:var(--navy);margin:14px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--line)}
+.pj{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:.85rem}
+.pj .y{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;font-size:.8rem}
+.pj .s{font-size:.68rem;color:#8A93A3;margin-top:3px}
+.dlg .mean2{margin-top:14px;font-size:.84rem;background:#FDF8EC;border-left:3px solid var(--gold);padding:9px 12px;border-radius:0 8px 8px 0;color:#5C4708}
+.rgrp{margin-bottom:20px}
+.rgrp .rh{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.rgrp .rh h3{font-size:1rem;color:var(--navy)}
+.rlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 14px}
+.ritem{font-size:.82rem;padding:6px 0;border-bottom:1px dashed var(--line);display:flex;flex-direction:column}
+.ritem b{font-weight:700}
+.ritem b a{color:var(--teal);text-decoration:none;border-bottom:1px dashed var(--teal)}
+.ritem .rn{color:var(--sub);font-size:.74rem;margin-top:1px}
+@media(max-width:760px){.reg{grid-template-columns:1fr}.hw nav{width:100%;margin-left:0;overflow-x:auto}}
+</style><style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head><body><div class="i18nsw"><a href="intel.html" class="on">中文</a><a href="intel.en.html">EN</a><a href="intel.vi.html">VI</a></div>
+<header><div class="hw"><b>越南醫療情報站</b>
+<span class="asof">資料查證日 <span id="asof"></span>・<span id="freshNote"></span></span>
+<nav><a href="#regs">法規時鐘</a><a href="#players">競合動態</a><a href="#roster">完整名冊</a><a href="#stats">市場數據</a><a href="#how">如何更新</a></nav>
+<button id="upbtn" class="hbtn" onclick="document.getElementById('upf').click()">⟳ 載入更新資料</button>
+<button id="edbtn" class="hbtn" onclick="toggleEdit()">✎ 編輯資料</button>
+<button class="hbtn" onclick="exportData()">⬇ 匯出資料檔</button>
+<input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
+</div></header>
+<main>
+<div class="note">這一頁回答三個問題：<b>什麼時候該動</b>（法規時鐘）、<b>誰在動</b>（競合廠商動態）、<b>市場多大多缺</b>（數據儀表）。
+每一筆都附出處與查證日；超過 120 天未更新的資料會標「待更新」。資料由月度情報排程維護；右上角可載入更新檔、也可直接在頁面上編輯後匯出。</div>
+
+<h1 id="regs">法規時鐘</h1>
+<p class="sub">已簽發、有生效日的才列進來——這不是預測，是日曆。依剩餘天數排序，已生效的沉底。</p>
+<div id="regList"></div>
+
+<h1 id="players">競合廠商動態</h1>
+<p class="sub">誰在越南醫療市場裡動、動了什麼、對我們的意義。<b>點公司名稱</b>可展開公司概況與其過去／目前承接的專案（含出處）。</p>
+<div class="grid g3" id="plList"></div>
+
+<h1 id="roster">完整廠商名冊</h1>
+<p class="sub">以群晶科技核心業務（機房／UPS／IDC）為主軸，盡量收錄越南市場中與此相關的廠商——由內而外依「機房基礎設施→機電/樓宇→醫院端資訊/AI/設備/投資方」排列。
+<b>目前只列名稱與一行定位，尚未逐家深入查證</b>；藍色底線的名稱已有上方詳細卡片可點閱，其餘若要展開查證，跟我說要看哪些即可。</p>
+<div id="rosterList"></div>
+
+<h1 id="stats">市場數據儀表</h1>
+<p class="sub">被追問「你憑什麼」時，答案在每張卡的出處列。</p>
+<div class="grid g4" id="stList"></div>
+
+<h1 id="how">如何更新</h1>
+<div class="card" style="font-size:.88rem;line-height:1.8">
+<b>資料檔怎麼來：</b>本頁所有內容都已內嵌在這個 HTML 裡，單檔即可離線開啟。intel_data.json 是同一份資料的「更新包」，放在 工具腳本/ 資料夾。<br>
+<b>自動（不必按任何鍵）：</b>「月度情報排程」每月 1 日在雲端自動執行：逐項重新上網查證（法規時程異動、廠商新動作、數據更新），
+然後直接把新版 HTML 與 intel_data.json 寫回 01_分析工具/ 資料夾——下次打開檔案就是新的。若當時電腦不在線上，更新檔會送到工作區對話，
+存回資料夾覆蓋舊檔即可。<br>
+<b>為什麼頁面上沒有「一鍵重查」按鈕：</b>重新查證需要上網搜尋與研判來源，這超出瀏覽器裡單一 HTML 檔的能力（本頁無伺服器、不連網），
+所以「產生新資料」由雲端排程代勞，頁面負責「顯示、載入、編輯、匯出」。<br>
+<b>手動載入：</b>右上角「⟳ 載入更新資料」可隨時載入新的 intel_data.json，整頁立即重繪；只在本機進行、不上傳。<br>
+<b>頁內編輯：</b>不必等排程、也不必改 JSON——按右上角「✎ 編輯資料」即可直接在頁面上修改任何欄位、新增或刪除項目，
+改完按「⬇ 匯出資料檔」就會下載一份新的 intel_data.json；把它放回 工具腳本/ 蓋掉舊檔，日後任何人載入的就是你改過的版本。<br>
+<b>誠實原則：</b>查不到的標「未查得」、估計值標「估計」，不編數字；每筆附出處與查證日。</div>
+</main>
+<div class="editbar">編輯模式：虛線框內文字都可以直接點擊修改；「✕ 刪除」移除該筆、「＋ 新增」加一筆。改完按右上角「✓ 完成編輯」，再按「⬇ 匯出資料檔」存成新的 intel_data.json。</div>
+<div class="ovl" id="ovl" onclick="closePl()"></div>
+<footer>VMH-EcoMap 越南醫療情報站｜群晶科技 × 越南現代醫院聯盟｜所有結論以查證日為準，情報有半衰期。</footer>
+<script>
+let D={
+ "asof": "2026-08-15",
+ "regs": [
+  {
+   "date": "2027-02-01",
+   "name": "建築能效新規範上路（≥2,500 m² 醫院納管，含能效監控構面）",
+   "doc": "QCVN 04-3:2026/BXD（Thông tư 61/2026/TT-BXD）",
+   "layer": "L1",
+   "what": "取代 QCVN 09:2017。新建與改建醫院的設計許可將檢核建築能效，五大管制構面之一是能效監控——醫院第一次被納入強制建築節能規範。",
+   "opps": "OPP-26 智慧院區AIoT、OPP-12 綠色醫院ESCO",
+   "act": "調規範全文確認「能效監控」的條文強度；把 BMS 提案的法遵論述準備好，鎖定 2027 前送件的新建案。",
+   "src": "vietq.vn／baoxaydung.vn（轉述，需調全文複核）"
+  },
+  {
+   "date": "2027-01-01",
+   "name": "醫師國家執業能力考試上路",
+   "doc": "Law 15/2023/QH15",
+   "layer": "L6",
+   "what": "醫師須通過國考、5 年換照＋繼續教育，後續逐年擴及護理與助產。終身執照時代結束。",
+   "opps": "OPP-62 臨床人才培訓與模擬中心",
+   "act": "考前培訓、題庫、OSCE 模擬是新產業鏈；與台灣醫學教育資源對接的窗口正在打開。",
+   "src": "CLEAR（2025-06）"
+  },
+  {
+   "date": "2026-12-31",
+   "name": "基層醫療機構完成電子病歷期限",
+   "doc": "Circular 13/2025/TT-BYT",
+   "layer": "L4",
+   "what": "需求從 1,600 家醫院擴到上萬家基層機構。醫院端 2025-09-30 期限的實際完成率為 53.6%（2025-10），基層量體更大、資源更少。",
+   "opps": "OPP-31 HIS/EMR、OPP-40 IT代管、OPP-29 DR/BCM",
+   "act": "基層市場以「輕量、代管、以租代購」切入；醫院端的二次工程（PACS、閉環給藥、BI）同步開跑。",
+   "src": "thuvienphapluat／VietnamPlus（2025-10）"
+  },
+  {
+   "date": "2026-07-01",
+   "name": "網路安全法生效（資料落地＋系統分級）",
+   "doc": "Law 116/2025/QH15",
+   "layer": "L2",
+   "what": "使用者資料須儲存於越南境內，資訊系統五級分類管理。醫療是否列關鍵資訊基礎設施待確認。",
+   "opps": "OPP-24 醫院IDC、OPP-25 主權雲、OPP-27 資安定級",
+   "act": "所有方案預設「資料落地越南」架構；資安定級顧問服務進場窗口 2026-2028。",
+   "src": "Law 116/2025 條文"
+  },
+  {
+   "date": "2026-01-01",
+   "name": "個資保護法 PDPL 生效",
+   "doc": "Law 91/2025/QH15（取代 Decree 13/2023）",
+   "layer": "G",
+   "what": "健康資料屬敏感個資；罰款上限年營收 5%。第 31 條直接規範位置追蹤（RTLS 直接受規範）；敏感個資累計 10 萬人以上構成核心資料，跨境須公安部書面核准。",
+   "opps": "OPP-28 個資合規、CAP-024 RTLS、OPP-58 資料湖",
+   "act": "RTLS 產品須內建可暫停／可解綁；平台一律部署境內；合約加 PDPL 資料處理附件。",
+   "src": "Tilleke & Gibbins（2025）"
+  },
+  {
+   "date": "2026-01-01",
+   "name": "數位科技產業法生效（越南首部含 AI 專章法律）",
+   "doc": "Law on Digital Technology Industry（2025-06-14 通過）",
+   "layer": "L5",
+   "what": "要求 AI 透明性與課責、高風險 AI 須政府許可。另有 AI 專法草案審議中（風險分級、參考歐盟），通過後將取代本法 AI 條款。",
+   "opps": "OPP-59 SaMD登記、F 家族全部 AI 商機",
+   "act": "追蹤 AI 專法時程；醫療 AI 及早完成 MOH 醫材註冊（Decree 98/2021 路徑）築合規門檻。",
+   "src": "DFDL／IAPP（2025-10）"
+  },
+  {
+   "date": "2025-10-01",
+   "name": "所有醫院強制電子處方",
+   "doc": "Circular 26/2025/TT-BYT",
+   "layer": "L4",
+   "what": "醫院 2025-10-01 起強制、其他機構 2026-01-01 起。CPOE 從自願變法定。",
+   "opps": "OPP-41 電子處方、OPP-42 閉環給藥、CAP-037 CPOE",
+   "act": "閉環給藥（條碼、給藥核對）是電子處方之後的自然下一步，及早卡位。",
+   "src": "thuvienphapluat"
+  },
+  {
+   "date": "2025-09-30",
+   "name": "全國醫院完成電子病歷期限（已到期，完成率 53.6%）",
+   "doc": "Circular 13/2025/TT-BYT（取代 46/2018）",
+   "layer": "L4",
+   "what": "1,645 家醫院中 991 家如期上線。近半數醫院仍在補課＝需求仍在；已達標者進入深化期。",
+   "opps": "OPP-31、OPP-32 PACS、OPP-39 VNA",
+   "act": "對未達標醫院賣「快速達標包」、對已達標醫院賣「二次工程」。EMR 備援要求是 DR 採購的直接法源。",
+   "src": "VietnamPlus（2025-10-06）"
+  },
+  {
+   "date": "2025-07-01",
+   "name": "醫材進口過渡措施全面終止",
+   "doc": "Decree 98/2021/ND-CP 過渡期滿",
+   "layer": "G",
+   "what": "須在地 MAH、ISO 13485、C/D 類 CSDT 申報。註冊流程約 2-3 年。",
+   "opps": "OPP-22 醫材登記代理",
+   "act": "登記代理需求剛性化；代理設備投標必備原廠授權書（MAF）。",
+   "src": "Thema-Med（2025-06）"
+  },
+  {
+   "date": "2025-07-01",
+   "name": "健保法修正生效（取消行政界線轉診限制）",
+   "doc": "2024 修正健保法",
+   "layer": "L7",
+   "what": "重症可直達專深層級並獲全額給付。短期加劇大醫院虹吸、倒逼分流設計。",
+   "opps": "OPP-82 健保申報RCM、CAP-011 轉診網絡",
+   "act": "轉診網絡設計與下轉機制成為公私立共同痛點——顧問切入點。",
+   "src": "SGGP／Acclime"
+  }
+ ],
+ "players": [
+  {
+   "name": "FPT（eHospital）",
+   "cat": "本土 IT 三強",
+   "pos": "HIS 市占領先者，部署速度是武器",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "eHospital 6 個月部署 70+ 家醫院，趕 EMR 期限潮",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024",
+     "t": "拿下 Hoàn Mỹ 集團 100 tỷ VND、14 院 8 診所純軟體合約",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "L4 正面對撞打不贏。切入點：他們不做的機房、資安、BMS 與國際私立醫院深化模組。",
+   "profile": "FPT 集團成立於 1988 年，為越南最大民營 IT 集團；旗下 FPT IS 自 2000 年起開發 FPT.eHospital 醫院資訊系統（HIS），是越南醫院資訊化市場的龍頭供應商之一，累計部署逾 300 家醫院與醫療機構。",
+   "proj": [
+    {
+     "y": "2000-2015",
+     "t": "FPT.eHospital 第一代 15 年間部署至近 100 家大型/龍頭醫院，包含胡志明市大水鑊醫院（Chợ Rẫy）、河內白梅醫院（Bạch Mai）、醫藥大學醫院、Hoàn Mỹ 醫療集團等。",
+     "st": "過去",
+     "src": "FPT 官網 (2026-08)"
+    },
+    {
+     "y": "2019",
+     "t": "FPT.eHospital 2.0+ 已應用於 6 個省市衛生廳及 300+ 家醫院/醫療機構（含白梅醫院、大水鑊醫院、廣寧婦幼醫院），掛號時間由 4 分鐘縮至 1 分鐘。",
+     "st": "進行中",
+     "src": "VietnamNet (2026-08)"
+    },
+    {
+     "y": "2020-2023",
+     "t": "Hoàn Mỹ 醫療集團智慧醫院專案：為 14 家醫院、8 家專科診所導入 FPT.eHospital 2.0＋FPT.EMR＋FPT Hi Gio Cloud，合約總值約 1,000 億越盾、工期 28 個月，目標無紙化智慧醫院。",
+     "st": "過去",
+     "src": "FPT 官網 (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "6 個月內為全國 70+ 家醫院部署 FPT.EMR 電子病歷；海防國際綜合醫院為全國首家獲衛生部認可無紙化電子病歷的醫院，廣寧省綜合醫院管理 13 萬+ 份病歷。",
+     "st": "進行中",
+     "src": "FPT IS 官網 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Viettel",
+   "cat": "本土 IT 三強",
+   "pos": "軍方背景電信商：HIS＋IDC＋雲全都做",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "與統一醫院共建「智慧醫院生態系」——清單全是軟體，無 IoT/BMS/RTLS",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2025",
+     "t": "IDC 擴建中（規劃 140MW 超大規模園區）",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "既是對手也是潛在載體：他們的雲與機房可以是我們方案的部署位置。智慧醫院定義權已被他們佔走——避開這個詞。",
+   "profile": "Viettel 為越南軍隊工業電信集團、全國最大電信商；旗下 Viettel Solutions 承接衛生部多項國家級醫療資訊平台，Viettel IDC 則為越南最大資料中心/雲端服務商之一，深度參與公立醫療體系數位轉型。",
+   "proj": [
+    {
+     "y": "2020",
+     "t": "為衛生部開發並部署 Telehealth 遠距會診平台，2020 年 9-10 月完成連接 1,000 個基層據點與 27 家中央級核心醫院（含山區、海島），較原定計畫提前 15 天。",
+     "st": "過去",
+     "src": "越南政府電子報 baochinhphu.vn (2026-08)"
+    },
+    {
+     "y": "2021",
+     "t": "建置並營運國家 COVID-19 疫苗接種管理平台（含接種登記、電子健康手冊 Sổ sức khỏe điện tử），於全國範圍上線支撐大規模接種作業。",
+     "st": "過去",
+     "src": "CAND／Người Lao Động 報 (2026-08)"
+    },
+    {
+     "y": "2010s-2026",
+     "t": "十餘年間為衛生部建置近 20 套衛生管理與防疫系統（含國家疫苗接種資訊系統、國家藥品供應鏈資料庫等），屬長期合作框架。",
+     "st": "進行中",
+     "src": "越南政府電子報 baochinhphu.vn (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "受國防部指示，2 個月內為 15 省市 27 家軍醫院部署電子病歷（提前 8 天完成），整合 300+ 台影像診斷設備與 200+ 台檢驗設備、培訓 3,800+ 名醫護，日服務 12,600+ 名病患。",
+     "st": "過去",
+     "src": "Viettel Solutions 官網 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "VNPT",
+   "cat": "本土 IT 三強",
+   "pos": "國營電信，公立醫院 HIS 存量大",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "VNPT HIS 綁 VNeID 健康簿國家工程",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "公立存量市場的守方。與其搶 HIS，不如做他們系統之上的整合與加值。",
+   "profile": "VNPT 為越南國有郵政電信集團，其 VNPT HIS 醫院資訊系統以公立基層與省級醫療體系為主力市場，約 7,500 家醫療機構採用，並延伸出 EMR、LIS、RIS/PACS 等醫療數位生態系。",
+   "proj": [
+    {
+     "y": "2015-2020",
+     "t": "VNPT HIS 於 5 年內部署至全國約 7,500 家各級醫療機構（涵蓋第 1 至第 4 級，從鄉級衛生站到大型醫院），並對接衛生部及各省衛生廳系統。",
+     "st": "進行中",
+     "src": "VNPT Media (2026-08)"
+    },
+    {
+     "y": "2023",
+     "t": "永福省 3 家醫院（Lạc Việt 友誼醫院、省婦幼醫院、Phúc Yên 區域綜合醫院）導入 VNPT EMR 電子病歷，合約約 90 億越盾，為 VNPT 集團全國首批 EMR 成功案例。",
+     "st": "過去",
+     "src": "VNPT Media (2026-08)"
+    },
+    {
+     "y": "2023-2024",
+     "t": "南定省兒童醫院 VNPT EMR 專案歷時約 18 個月，2024 年 10 月通過驗收，成為南定省首家啟用電子病歷的醫院，並作為全省推廣試點。",
+     "st": "過去",
+     "src": "VietnamNet (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "胡志明市郵電綜合醫院部署 VNPT HIS＋LIS＋RIS 三模組雲端醫院管理系統，為電子病歷做準備。",
+     "st": "進行中",
+     "src": "郵電綜合醫院官網 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "VinBrain（Vingroup）",
+   "cat": "醫療 AI",
+   "pos": "本土 AI 旗艦：DrAid 胸片 AI、FDA 510(k)",
+   "moves": [
+    {
+     "d": "2024-02",
+     "t": "與全球基金簽約：32 套授權、目標篩檢 100 萬人、單例成本壓到約 1 美元",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2023",
+     "t": "宣稱部署逾 100 家醫院；NVIDIA 合作",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "影像 AI 的本土價格殺手。L5 要做就做他們沒做的：營運 AI、申報審核、越南語臨床文書。",
+   "profile": "VinBrain 為 Vingroup 於 2019 年創立的醫療 AI 新創，旗艦產品 DrAid 醫療影像 AI（X 光/CT/MRI，可偵測 95 種異常）為獲美國 FDA 認證的東南亞 AI 診斷輔助產品；2024 年 12 月被 NVIDIA 收購，NVIDIA 計畫將其發展為在越 AI 設計中心。",
+   "proj": [
+    {
+     "y": "2019-2024",
+     "t": "DrAid 累計部署至越南及美國、印度、澳洲等地 182+ 家醫院，服務約 2,000 名醫師與 200 萬+ 名病患。",
+     "st": "進行中",
+     "src": "CafeF (2026-08)"
+    },
+    {
+     "y": "2019-2024",
+     "t": "與越南中央肺醫院合作（2019 年起研究、2024 年 6 月簽署戰略合作），將 DrAid 肺結核 AI 納入國家防癆計畫篩查（敏感度 94%、特異度 98%），單人篩查成本由 50-60 美元降至約 1 美元。",
+     "st": "進行中",
+     "src": "中央肺醫院官網 (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "成為 Global Fund 唯一簽署 AI 技術轉讓協議的夥伴，2024 年 4 月起以 DrAid 肺結核 AI 在越南篩查 100 萬名結核病疑似個案，為當時越南最大規模篩查行動。",
+     "st": "進行中",
+     "src": "CafeF (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "2024 年 12 月 NVIDIA 宣布收購 VinBrain（金額未公開；收購前 Vingroup 持股 49.74%），Jensen Huang 表示將發展為越南頂尖設計中心。",
+     "st": "過去",
+     "src": "Vietnam News (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "研華 Advantech",
+   "cat": "台系競合",
+   "pos": "iHospital 整案（含 RTLS 與 iBuilding），已設越南法人",
+   "moves": [
+    {
+     "d": "2022-01",
+     "t": "Thai Hoa 綜合醫院：越南第一個 iHospital 案（與 Intel）",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2023",
+     "t": "Hong Ngoc 醫院婦產智慧方案；同院機電由本土 REE 承包",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "能力最重疊的廠商。不正面對撞：他們強在病房終端，我們強在機房/骨幹/OT 資安——可談互補或當其基礎層供應商。",
+   "profile": "台灣工業電腦龍頭研華（1983 年成立）透過越南法人 Advantech Vietnam Technology 推動 iHospital 智慧醫院與 iBuilding 方案，2022 年與 Intel 合作落地「越南第一家智慧醫院」，在越南定位為智慧醫療系統整合方案商而非機電承包商。",
+   "proj": [
+    {
+     "y": "2022",
+     "t": "與 Intel 合作為寧順省 Thai Hoa 綜合醫院導入 iHospital 全套方案（智慧門診叫號、床邊照護、智慧手術室、智慧病房、遠距醫療、智慧藥局、病人智慧卡），為越南第一個智慧醫院案。",
+     "st": "過去",
+     "src": "VIR／Advantech 官網 (2026-08)"
+    },
+    {
+     "y": "2021",
+     "t": "與 Intel、Dones 合作在河內 Hong Ngoc 醫院 Phuc Truong Minh 院區產科部署 iWard 智慧病房（護理站系統、床邊 Patient Terminal、RTLS 定位），首期金額約 3 萬美元。",
+     "st": "過去",
+     "src": "Hong Ngoc 醫院官網／Advantech 官網 (2026-08)"
+    },
+    {
+     "y": "2022-",
+     "t": "越南官網持續推廣 iWard、iTeleMed、iOutpatient、RTLS、iHospital 指揮中心及 iBuilding 醫院設施管理模組，以 Hong Ngoc、Thai Hoa 為指標實績。",
+     "st": "進行中",
+     "src": "Advantech Vietnam smartcity 網站 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "REE M&E",
+   "cat": "本土機電",
+   "pos": "1977 年成立、995 人、1,286 案；服務含 ELV 與 BMS",
+   "moves": [
+    {
+     "d": "2024-05",
+     "t": "取得 Hong Ngoc Phuc Truong Minh 二期 MEP 合約",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "第一順位在地夥伴候選：機電施工與售後網絡。要問清楚 BMS 是自建還是轉包、品牌綁定。",
+   "profile": "REE M&E 為 REE Corporation（1977 年成立、胡志明市上市公司）旗下機電工程公司，連續多年獲評越南前十大機電承包商，醫院類實績以高端私立醫院 MEP 總包為主。",
+   "proj": [
+    {
+     "y": "2016-2017",
+     "t": "胡志明市美國國際醫院（AIH）機電系統供應與安裝總包：19,418 m²、1 地下層＋12 層、153 床、6 間 JCI 美標手術室，越南首家美式醫院。",
+     "st": "過去",
+     "src": "REE M&E 官網 (2026-08)"
+    },
+    {
+     "y": "2024-",
+     "t": "河內 Hong Ngoc 綜合醫院 Phuc Truong Minh 院區二期（老年醫療大樓，約 30,500 m²、2 地下層＋18 層）MEP 工程，2024 年 5 月得標。",
+     "st": "進行中",
+     "src": "REE M&E 官網 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Searefico E&C",
+   "cat": "本土機電",
+   "pos": "醫院 MEP 經驗最豐（Vinmec、UMC HCMC）",
+   "moves": [
+    {
+     "d": "2025-08",
+     "t": "Hung Ha 綜合醫院 MEP 動土（29,930 m²）",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "第一順位在地夥伴候選之二。與 REE 二擇一或分區合作。",
+   "profile": "Searefico E&C 隸屬 Searefico 集團（前身 1977 年成立之冷凍工程公司，HOSE: SRF），為越南資深機電承包商，醫院 MEP 實績涵蓋 UMC 醫藥大學醫院、Vinmec、Hoa Lam 等公私立大型醫院。",
+   "proj": [
+    {
+     "y": "2025-",
+     "t": "興安省 Hung Ha 綜合醫院（29,930 m²、2 地下層＋18 層）技術樓、住院、門診及行政大樓全套 MEP 總包，2025 年 8 月動工。",
+     "st": "進行中",
+     "src": "Searefico 官網 (2026-08)"
+    },
+    {
+     "y": "2017",
+     "t": "胡志明市腫瘤醫院第二院區（1,000 床、12 萬 m²）施工標案，屬中央級五大醫院計畫之一。",
+     "st": "過去",
+     "src": "Searefico 官網 (2026-08)"
+    },
+    {
+     "y": "2016",
+     "t": "胡志明市 Hoa Lam-Shangri-La 高科技醫療園區內 Hoa Lam 國際醫院（10 層、351 床）機電 MEP 承包。",
+     "st": "過去",
+     "src": "Searefico 官網 (2026-08)"
+    },
+    {
+     "y": "2017 以前",
+     "t": "胡志明市醫藥大學醫院（UMC HCMC）新大樓機電工程。",
+     "st": "過去",
+     "src": "Searefico 官網 (2026-08)"
+    },
+    {
+     "y": "年份未確認",
+     "t": "Vinmec 醫院機電工程：官網將 Vinmec 與 Hoa Lam、UMC 並列為既有醫療實績（具體院區與年份未查得）。",
+     "st": "過去",
+     "src": "Searefico 官網 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Thomson Medical",
+   "cat": "外資醫療集團",
+   "pos": "新加坡集團，越南史上最大醫療收購",
+   "moves": [
+    {
+     "d": "2023",
+     "t": "以 3.81 億美元收購 FV 醫院（16.8× EBITDA）",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "外資湧入私立醫院的估值標竿；FV 這類國際私立醫院是我們高端方案的理想首案客戶。",
+   "profile": "新加坡上市醫療集團（Peter Lim 家族控股），2023 年以最高 3.814 億美元收購胡志明市 FV 醫院母公司，創下越南史上最大醫療收購案，以 FV 作為進軍越南及東南亞市場的據點。",
+   "proj": [
+    {
+     "y": "2023",
+     "t": "宣布以最高 3.814 億美元收購 FV 醫院母公司 Far East Medical Vietnam 100% 股權，為越南史上最大醫療交易。",
+     "st": "過去",
+     "src": "Forbes／Vietnam News (2026-08)"
+    },
+    {
+     "y": "2023-12",
+     "t": "完成收購，FV 醫院（胡志明市第七郡，約 200 床、逾 30 個專科、1,600 餘名員工）正式併入 Thomson Medical Group。",
+     "st": "過去",
+     "src": "Forbes／FV Hospital 官網 (2026-08)"
+    },
+    {
+     "y": "2023-24",
+     "t": "併購範圍含第一郡門診中心及 American Chiropractic Clinic 連鎖（越南 4 家診所），形成醫院＋基層診所網絡並持續營運。",
+     "st": "進行中",
+     "src": "Health365.sg (2026-08)"
+    },
+    {
+     "y": "2023-25",
+     "t": "推進 FV 院區 7 層新大樓（H Building）擴建，擴充癌症中心（PET、CyberKnife）並新增生殖醫學、洗腎與心臟／泌尿／腸胃門診服務。",
+     "st": "進行中",
+     "src": "Health365.sg (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "FV 醫院第四度連續通過 JCI 國際醫院評鑑；集團 FY2025 年報稱將續加碼投資越南。",
+     "st": "進行中",
+     "src": "Thomson Medical FY2025 年報 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Vinmec × Cleveland Clinic",
+   "cat": "外資醫療集團",
+   "pos": "本土豪華連鎖＋美國頂級品牌",
+   "moves": [
+    {
+     "d": "2025-04",
+     "t": "合作開發芹耶（Can Gio）國際綜合醫院",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024-10",
+     "t": "Vinmec Smart City 開幕（60,000 m²、1,500 tỷ VND）",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "新建案智慧化規格的風向標；跨院複製藍圖的在地範本。",
+   "profile": "Vingroup 旗下 Vinmec 為越南最大私立國際醫院連鎖之一，自 2023 年起與美國 Cleveland Clinic 透過「Cleveland Clinic Connected」會員及策略顧問合作，是越南唯一符合該計畫資格的醫療體系。",
+   "proj": [
+    {
+     "y": "2023-01",
+     "t": "河內 Vinmec Times City 國際醫院加入 Cleveland Clinic Connected，成為越南暨東南亞首家會員醫院。",
+     "st": "進行中",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2024-05",
+     "t": "胡志明市 Vinmec Central Park 國際醫院成為越南第二家 Cleveland Clinic Connected 會員醫院。",
+     "st": "進行中",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "與 Cleveland Clinic 合作於胡志明市芹耶 Vinhomes Green Paradise 開發 Vinmec Can Gio 國際綜合醫院，Cleveland Clinic 任策略顧問，2025 年 8 月動工。",
+     "st": "進行中",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2025-",
+     "t": "Cleveland Clinic 為 Vinmec Can Gio 提供人員赴美觀摩與交流計畫，建成後預計加入 Connected 網絡。",
+     "st": "進行中",
+     "src": "Cleveland Clinic Newsroom／Vinmec 官網 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "B. Braun",
+   "cat": "設備外商",
+   "pos": "透析設備與中心佈局",
+   "moves": [
+    {
+     "d": "—",
+     "t": "河內透析中心佈局（長期）",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "透析白地（覆蓋僅 1/3）的先行者訊號——連鎖透析若要做，對標或合作對象。",
+   "profile": "德國醫材集團 B. Braun 深耕越南逾 30 年，河內 Thanh Oai 醫療生產複合基地僱用逾 1,400 名員工，為越南最大德資直接投資者之一，主力輸液與血液透析產品。",
+   "proj": [
+    {
+     "y": "2014",
+     "t": "與河內市政府商定在 Thanh Oai 工業區追加約 1 億美元投資擴建醫療設備生產，並規劃於河內設立血液透析中心，因應當時河內僅一家醫院可治療腎衰竭的缺口。",
+     "st": "過去",
+     "src": "VietnamPlus (2026-08)"
+    },
+    {
+     "y": "2022",
+     "t": "於河內 Thanh Oai 工業區動土興建血液透析濃縮液新廠：初期投資 500 萬美元、廠房約 4,000 m²，年產逾 250 萬桶透析濃縮液，供越南及國際市場。",
+     "st": "過去",
+     "src": "B. Braun 官方新聞稿 (2026-08)"
+    },
+    {
+     "y": "1990s-",
+     "t": "河內醫療生產複合基地（含血液透析器材產線）僱用逾 1,400 名技術員工，為 B. Braun 亞太重要生產出口據點。",
+     "st": "進行中",
+     "src": "B. Braun 官方新聞稿 (2026-08)"
+    },
+    {
+     "y": "持續",
+     "t": "持續向越南醫院供應 Dialog 系列血液透析機及腎科產品（經越南衛生部醫材登錄），支援各省洗腎科室建置。",
+     "st": "進行中",
+     "src": "越南衛生部 VIMDA／B. Braun Vietnam 官網 (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Qure.ai / Olympus / Orbis",
+   "cat": "醫療 AI",
+   "pos": "外商 AI 在越南的灘頭堡",
+   "moves": [
+    {
+     "d": "2022-23",
+     "t": "Olympus EndoBRAIN-EYE 於 Cho Ray、108 醫院完成驗證",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024",
+     "t": "Orbis Cybersight AI 眼底篩檢啟動；qXR 隨 NTP 結核篩檢 9 省 57 萬人",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "驗證過的外商 AI 都走「捐助方/計畫買單」模式——商業化通路仍空白，這是機會也是警訊。",
+   "profile": "國際廠商與 NGO 在越南的醫療 AI 落地案例：Qure.ai 以 qXR 胸部 X 光 AI 支援結核病主動篩檢，Olympus 在河內與胡志明市大型醫院試行內視鏡 AI 並培訓醫師，Orbis 以 Cybersight AI 在湄公河三角洲推動糖尿病視網膜病變篩檢。",
+   "proj": [
+    {
+     "y": "2020-2022",
+     "t": "Qure.ai qXR 胸部 X 光 AI 結合 GeneXpert 檢測（「Double X」策略）執行結核病主動篩檢，逾 96,000 人受檢、確診 1,144 例，其中約 51% 為無症狀亞臨床結核。",
+     "st": "過去",
+     "src": "Qure.ai 官網研究頁 (2026-08)"
+    },
+    {
+     "y": "2022-2023",
+     "t": "Olympus 參與日本總務省計畫，在胡志明市 Cho Ray 醫院與河內 108 軍醫院驗證大腸內視鏡 AI（EndoBRAIN-EYE），並由日本專家培訓越南內視鏡醫師。",
+     "st": "過去",
+     "src": "Olympus 官方新聞稿 (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Olympus Medical Systems Vietnam 支持「Train the Trainer」計畫，邀日本專家培訓越南醫師 ESD 早期癌內視鏡治療技術。",
+     "st": "進行中",
+     "src": "Olympus 官方新聞稿 (2026-08)"
+    },
+    {
+     "y": "2024-2026",
+     "t": "Orbis 與 NIDEK 三年計畫：在芹苴綜合醫院、前江中央綜合醫院等 3 省 6 家眼科機構部署 Cybersight AI 眼底篩檢，目標篩檢約 72,000 名糖尿病患。",
+     "st": "進行中",
+     "src": "Orbis 官網／PR Newswire (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Johnson Controls / Schneider / Siemens",
+   "cat": "BMS 外商",
+   "pos": "四大樓宇外商在越南醫療的存在感低",
+   "moves": [
+    {
+     "d": "2026",
+     "t": "JCI 官網明言「正在建立本地團隊」；Schneider 有醫院產品頁但零越南客戶名",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "★ 整合層是空的——外商有產品沒有在地醫療整合團隊，這正是群晶的切入位。",
+   "profile": "三家外商在越南醫療布局深淺不一：Siemens 以 Healthineers 醫療設備／智慧診斷與多家醫院簽長期戰略合作最活躍；Johnson Controls 1995 年起經營越南但未查得具名醫院專案；Schneider 在越逾 30 年、推廣 EcoStruxure 醫療方案，亦未查得具名醫院導入案。",
+   "proj": [
+    {
+     "y": "2025-",
+     "t": "Siemens Healthineers 與河內 Phuong Dong 綜合醫院戰略合作：部署 MAGNETOM Lumina MRI、NAEOTOM Alpha 光子計數 CT 等影像設備並含培訓與臨床研究。",
+     "st": "進行中",
+     "src": "Siemens Healthineers 越南官網 (2026-08)"
+    },
+    {
+     "y": "2021-2029",
+     "t": "Siemens Healthineers 與芹苴 SIS 國際綜合醫院簽 8 年全面合作：越南首套 Corindus 介入機器人、syngo 遠端診斷平台、東南亞中風治療培訓中心。",
+     "st": "進行中",
+     "src": "Siemens Healthineers 越南官網 (2026-08)"
+    },
+    {
+     "y": "2021-2025",
+     "t": "Siemens Healthineers 與胡志明市 Thong Nhat 醫院簽 MoU，分階段建置中風／心血管介入中心與腫瘤中心並提供國際培訓。",
+     "st": "進行中",
+     "src": "Siemens Healthineers 越南官網 (2026-08)"
+    },
+    {
+     "y": "1995-",
+     "t": "Johnson Controls 自 1995 年進入越南、2021 年成立 JCI-Hitachi 越南辦公室；官方頁面未列任何具名醫院專案（未查得醫院實績）。",
+     "st": "進行中",
+     "src": "Johnson Controls 官網越南頁 (2026-08)"
+    },
+    {
+     "y": "1994-",
+     "t": "Schneider Electric 在越南經營逾 30 年並銷售 EcoStruxure for Healthcare 方案，但公開來源未查得具名越南醫院導入案例。",
+     "st": "進行中",
+     "src": "Schneider Electric 越南官網／VnExpress (2026-08)"
+    }
+   ]
+  }
+ ],
+ "stats": [
+  {
+   "k": "醫院電子病歷完成率",
+   "v": "53.6%",
+   "unit": "",
+   "note": "991／1,645 家（2025-10）；18 個月前僅 8.6%——政策執行力的實證",
+   "src": "VietnamPlus",
+   "asof": "2025-10-06"
+  },
+  {
+   "k": "健保覆蓋率",
+   "v": "95.2%",
+   "unit": "",
+   "note": "提前 5 年達標；年給付 1.955 億人次",
+   "src": "VSS／vietnam.vn",
+   "asof": "2026-02-01"
+  },
+  {
+   "k": "直線加速器",
+   "v": "82",
+   "unit": "台",
+   "note": "0.82 台／百萬人（標準 4-8）；43% 老舊。達低標需約 400 台",
+   "src": "JCO Global Oncology",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "透析覆蓋率",
+   "v": "約 1/3",
+   "unit": "",
+   "note": "需求逾 10 萬人、實際服務約 3.6 萬人；健保給付約 25 美元/次",
+   "src": "Kidney360/PMC",
+   "asof": "2025-01-01"
+  },
+  {
+   "k": "PET/CT",
+   "v": "12",
+   "unit": "台",
+   "note": "迴旋加速器僅 3 台；年新增癌症 18 萬例",
+   "src": "OncoDaily/GLOBOCAN",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "IVF 年週期數",
+   "v": "5 萬+",
+   "unit": "週期",
+   "note": "65 家持照中心；單價為已開發國家 1/5",
+   "src": "Vietnam News",
+   "asof": "2025-04-23"
+  },
+  {
+   "k": "資料中心市場",
+   "v": "22",
+   "unit": "億美元",
+   "note": "41 座 DC／221MW；電信法已開放外資 100%",
+   "src": "trade.gov",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "數位健康市場",
+   "v": "28.4→95.2",
+   "unit": "億美元",
+   "note": "2025→2034，CAGR 14.4%",
+   "src": "IMARC",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "智慧醫院市場",
+   "v": "0.3",
+   "unit": "億美元",
+   "note": "2024 年基準——僅為泰國（14 億）的 1/47，落差即空間",
+   "src": "Ken Research",
+   "asof": "2026-01-01"
+  },
+  {
+   "k": "VNeID 健康簿",
+   "v": "2,444",
+   "unit": "萬本",
+   "note": "34/34 省全上線；2026 起與紙本同等法律效力",
+   "src": "baochinhphu",
+   "asof": "2025-07-20"
+  },
+  {
+   "k": "JCI 認證機構",
+   "v": "9",
+   "unit": "家",
+   "note": "公立僅 1 家；衛生部已正式承認 JCI，2030 目標 15-20 家",
+   "src": "vietnam.vn／4024/QĐ-BYT",
+   "asof": "2026-01-15"
+  },
+  {
+   "k": "2030 床位目標",
+   "v": "35",
+   "unit": "床/萬人",
+   "note": "私立床位占比目標 15%（現況 5.8%）→ 2050 年 25%",
+   "src": "醫療網總體規劃",
+   "asof": "2024-02-27"
+  },
+  {
+   "k": "出境就醫",
+   "v": "約 20",
+   "unit": "億美元/年",
+   "note": "衛生部估計（約 4 萬人/年）；2030 醫療觀光目標 75 萬人次",
+   "src": "MOH 估計／DTiNews",
+   "asof": "2026-08-12",
+   "est": true
+  },
+  {
+   "k": "醫院智慧化投資基準",
+   "v": "5,700-12,000",
+   "unit": "USD/床",
+   "note": "BMS+RTLS+護士呼叫+整合平台的在地化推估區間",
+   "src": "AIoT 深研報告（推估）",
+   "asof": "2026-08-15",
+   "est": true
+  },
+  {
+   "k": "公立醫院超載",
+   "v": "200%+",
+   "unit": "",
+   "note": "公立醫院普遍運作於設計量能兩倍以上",
+   "src": "B-Company",
+   "asof": "2025-09-04"
+  },
+  {
+   "k": "醫護人力",
+   "v": "12.5 / 11.4",
+   "unit": "每萬人",
+   "note": "醫師/護理 vs 2030 目標 19/33——人力是所有擴張的共同瓶頸",
+   "src": "MOH／VnExpress",
+   "asof": "2024-03-01"
+  }
+ ],
+ "roster": [
+  {
+   "cat": "資料中心／IDC 業者",
+   "tag": "L2 機房",
+   "items": [
+    {
+     "name": "Viettel IDC",
+     "note": "越南軍方電信集團旗下最大機房營運商"
+    },
+    {
+     "name": "VNPT IDC",
+     "note": "越南郵電集團全國性資料中心業者"
+    },
+    {
+     "name": "FPT Telecom（FPT Data Center）",
+     "note": "越南三大電信商之一的機房服務"
+    },
+    {
+     "name": "CMC Telecom（CMC Data Center）",
+     "note": "越南資通訊集團旗下機房子公司"
+    },
+    {
+     "name": "VNG Cloud",
+     "note": "越南科技巨頭 VNG 雲端與機房業務"
+    },
+    {
+     "name": "NTT Global Data Centers Vietnam",
+     "note": "日商 NTT 在越南投資的國際機房品牌"
+    },
+    {
+     "name": "One Mount Data Center",
+     "note": "越南本土集團新進大型機房開發商"
+    },
+    {
+     "name": "Gaw NP Capital",
+     "note": "外資私募主導越南機房開發項目"
+    },
+    {
+     "name": "ST Telemedia Global Data Centres（STT GDC）",
+     "note": "新加坡機房開發商進軍越南市場"
+    },
+    {
+     "name": "Saigontel",
+     "note": "越南本土地產集團跨足機房開發"
+    },
+    {
+     "name": "QTSC Data Center",
+     "note": "西貢軟體園區官方機房設施"
+    },
+    {
+     "name": "VNTT",
+     "note": "越南本土電信基礎設施機房業者"
+    },
+    {
+     "name": "DTS（DTS Communication Technologies）",
+     "note": "越南本土機房與通訊技術服務商"
+    },
+    {
+     "name": "Hoan Cau Smart Data Center",
+     "note": "越南本土智慧型機房營運商"
+    },
+    {
+     "name": "Worldwide DC Solution",
+     "note": "新加坡資本投資越南機房建設"
+    },
+    {
+     "name": "Bizfly Cloud",
+     "note": "越南本土雲端與機房服務新創"
+    }
+   ]
+  },
+  {
+   "cat": "UPS／不斷電系統",
+   "tag": "L2 機房",
+   "items": [
+    {
+     "name": "Schneider Electric／APC Vietnam",
+     "note": "全球 UPS 龍頭於越南官方銷售通路"
+    },
+    {
+     "name": "SLA Vietnam",
+     "note": "APC／Schneider 越南主要授權代理商"
+    },
+    {
+     "name": "Eaton（合作夥伴 Digiworld）",
+     "note": "國際 UPS 大廠攜手越南數位世界集團"
+    },
+    {
+     "name": "Vertiv",
+     "note": "全球關鍵基礎設施大廠越南多通路經銷"
+    },
+    {
+     "name": "Elite Technology JSC",
+     "note": "Vertiv 於越南南部經銷合作夥伴"
+    },
+    {
+     "name": "Light JSC",
+     "note": "Vertiv 於越南的通路經銷合作夥伴"
+    },
+    {
+     "name": "Viettel Distribution",
+     "note": "越南電信集團旗下 Vertiv 產品經銷商"
+    },
+    {
+     "name": "Santak Vietnam",
+     "note": "台達集團山特 UPS 越南官方代理"
+    },
+    {
+     "name": "Riello UPS Vietnam（LisaTech）",
+     "note": "義大利 Riello UPS 越南獨家代理商"
+    },
+    {
+     "name": "N-TEK",
+     "note": "CyberPower 不斷電系統越南代理商"
+    },
+    {
+     "name": "Delta Electronics Vietnam",
+     "note": "台達電子越南分公司提供電源方案"
+    },
+    {
+     "name": "ABB Vietnam",
+     "note": "瑞士電力自動化大廠越南銷售通路"
+    },
+    {
+     "name": "Socomec Vietnam",
+     "note": "法商工業級 UPS 越南代理與整合商"
+    },
+    {
+     "name": "Legrand Vietnam",
+     "note": "法商電氣大廠越南配電與 UPS 產品線"
+    }
+   ]
+  },
+  {
+   "cat": "精密空調／機房冷卻",
+   "tag": "L2 機房",
+   "items": [
+    {
+     "name": "Vertiv Liebert",
+     "note": "全球機房精密空調領導品牌越南通路"
+    },
+    {
+     "name": "Stulz",
+     "note": "德商精密空調專家提供越南機房方案"
+    },
+    {
+     "name": "Schneider Electric Uniflair",
+     "note": "精密空調品牌於越南官方銷售通路"
+    },
+    {
+     "name": "Voi MT",
+     "note": "Liebert 精密空調越南代理商"
+    },
+    {
+     "name": "Voi MB",
+     "note": "Liebert XDC 機房冷卻越南代理商"
+    },
+    {
+     "name": "Thai Son",
+     "note": "Liebert CRV 機房空調越南代理商"
+    },
+    {
+     "name": "IDT Vietnam",
+     "note": "APC Uniflair 精密空調越南代理商"
+    },
+    {
+     "name": "DCSS",
+     "note": "越南機房精密空調系統整合服務商"
+    },
+    {
+     "name": "Airedale by Modine",
+     "note": "英商關鍵冷卻設備國際品牌供應商"
+    },
+    {
+     "name": "Daikin Vietnam",
+     "note": "日商空調大廠具機房專用產品線"
+    },
+    {
+     "name": "Mitsubishi Electric Vietnam",
+     "note": "日商空調大廠提供機房精密空調"
+    }
+   ]
+  },
+  {
+   "cat": "機電總包（M&E，含醫院工程經驗）",
+   "tag": "L1 實體",
+   "items": [
+    {
+     "name": "REE M&E",
+     "note": "越南龍頭機電總包商，40 年經驗含醫院工程"
+    },
+    {
+     "name": "Searefico E&C",
+     "note": "近 30 年冷凍空調與機電工程老牌總包商"
+    },
+    {
+     "name": "Hawee Mechanical & Electrical",
+     "note": "大型機電總包商，曾承接都市鐵路等國家級專案"
+    },
+    {
+     "name": "Sigma Engineering（Sigma JSC）",
+     "note": "全國最大機電承包商之一，15 年逾百案經驗"
+    },
+    {
+     "name": "Alphanam E&C",
+     "note": "逾 25 年機電設計施工，涵蓋商辦與工業案"
+    },
+    {
+     "name": "HVC Group",
+     "note": "2011 年成立，大型越南企業長期機電合作夥伴"
+    },
+    {
+     "name": "TDI Group",
+     "note": "2009 年成立，服務國內外客戶之機電承包商"
+    },
+    {
+     "name": "Doan Nhat M&E",
+     "note": "2007 年成立，逾 450 名技術人員之機電總包商"
+    },
+    {
+     "name": "HEM（Hanoi Electrical Machinery Mfg JSC）",
+     "note": "1961 年成立，馬達變壓器發電機製造與機電工程"
+    },
+    {
+     "name": "Shinryo Vietnam",
+     "note": "日商背景，專攻空調與電氣系統設計施工"
+    },
+    {
+     "name": "Coteccons",
+     "note": "越南最大營造總包商，具 MEP／機電施工能量"
+    },
+    {
+     "name": "Hòa Bình Corporation",
+     "note": "大型營造總包商，內含機電工程部門"
+    },
+    {
+     "name": "Ricons",
+     "note": "主要營造總包商之一，承做機電工程項目"
+    },
+    {
+     "name": "PC1 Group（PCC1）",
+     "note": "電力產業 EPC 總包商，強項輸配電機電工程"
+    },
+    {
+     "name": "Delta E&C（Delta Group）",
+     "note": "綜合營造與 EPC 總包商，跨產業廠房案"
+    }
+   ]
+  },
+  {
+   "cat": "BMS／樓宇自動化",
+   "tag": "L1/L2 邊界",
+   "items": [
+    {
+     "name": "Johnson Controls Vietnam",
+     "note": "國際大廠，樓宇自動化與 BMS 系統在地經營"
+    },
+    {
+     "name": "Schneider Electric Vietnam",
+     "note": "EcoStruxure Building 平台，越南 BMS 主要供應商"
+    },
+    {
+     "name": "Siemens Vietnam",
+     "note": "Desigo 系統，樓宇自動化國際品牌在地團隊"
+    },
+    {
+     "name": "Honeywell Vietnam",
+     "note": "國際品牌，提供 BMS 與樓宇控制解決方案"
+    },
+    {
+     "name": "AIControl Vietnam（ABB 代理）",
+     "note": "ABB 越南官方代理商暨 BMS 系統整合商"
+    },
+    {
+     "name": "BMSCorp Vietnam（Delta Controls 代理）",
+     "note": "Delta Controls 越南授權代理，服務醫院商辦"
+    },
+    {
+     "name": "Anh Nguyen Corporation",
+     "note": "越南本地 BMS 整合龍頭，2025 年被大金收購"
+    },
+    {
+     "name": "Mitsubishi Electric Vietnam",
+     "note": "提供樓宇解決方案 BMS 事業部"
+    },
+    {
+     "name": "Azbil Vietnam",
+     "note": "日商背景，樓宇與工業自動化 BMS 專家"
+    },
+    {
+     "name": "FRA",
+     "note": "施耐德最高級整合商，電力自動化兼 BMS 工程"
+    },
+    {
+     "name": "Distech Controls（越南通路夥伴）",
+     "note": "開放式 BMS 控制品牌，經在地夥伴布局越南"
+    }
+   ]
+  },
+  {
+   "cat": "醫院資訊系統（HIS／EMR）",
+   "tag": "L4 資料",
+   "items": [
+    {
+     "name": "FPT.eHospital（FPT IS）",
+     "note": "越南最大民營 HIS 供應商，服務公私立醫院"
+    },
+    {
+     "name": "Viettel HIS",
+     "note": "越南電信集團旗下醫療資訊系統子公司"
+    },
+    {
+     "name": "VNPT HIS",
+     "note": "越南郵電集團開發之醫院管理系統"
+    },
+    {
+     "name": "Vietsens",
+     "note": "本土電子病歷（EMR）App 開發商"
+    },
+    {
+     "name": "ISOFT",
+     "note": "專攻科別部門管理之本土 HIS 廠商"
+    },
+    {
+     "name": "HSOFT",
+     "note": "鎖定私人診所與中小型醫院市場"
+    },
+    {
+     "name": "Medisoft",
+     "note": "由醫師與工程師共同創立之 HIS 廠商"
+    },
+    {
+     "name": "EvoMed",
+     "note": "多專科整合型醫院管理解決方案"
+    },
+    {
+     "name": "NANO",
+     "note": "整合行政與臨床功能之本土 HIS"
+    },
+    {
+     "name": "TCSOFT",
+     "note": "全流程醫院作業優化軟體供應商"
+    },
+    {
+     "name": "Synodus",
+     "note": "客製化 HIS／EMR 開發商，服務東南亞多國醫院"
+    }
+   ]
+  },
+  {
+   "cat": "醫療 AI",
+   "tag": "L5 智慧",
+   "items": [
+    {
+     "name": "VinBrain",
+     "note": "Vingroup 旗下醫療影像 AI，DrAid 平台"
+    },
+    {
+     "name": "Gene Solutions",
+     "note": "越南領先基因檢測與精準醫療新創"
+    },
+    {
+     "name": "Genetica",
+     "note": "基因檢測與個人化醫療新創公司"
+    },
+    {
+     "name": "Metamed",
+     "note": "AI 輔助影像診斷與病患風險預測平台"
+    },
+    {
+     "name": "Mio Health",
+     "note": "行動預防保健與慢病管理 AI 生態系"
+    },
+    {
+     "name": "BlueOC Tech",
+     "note": "AI 驅動之雲端醫院管理平台"
+    },
+    {
+     "name": "TMA AI Center",
+     "note": "隸屬 TMA Solutions，做醫療影像分析"
+    },
+    {
+     "name": "eDoctor",
+     "note": "遠距問診與個人健康紀錄管理 App"
+    },
+    {
+     "name": "Med247",
+     "note": "O2O 家庭醫師與智慧診所平台"
+    },
+    {
+     "name": "VAIS（Vietnam AI Solutions）",
+     "note": "越南語音辨識／NLP 新創，含醫療應用場景"
+    },
+    {
+     "name": "CMC Corporation",
+     "note": "大型科技集團跨足醫院軟體與數據安全"
+    },
+    {
+     "name": "Qure.ai",
+     "note": "印度肺結核篩檢 AI，越南防癆計畫夥伴"
+    },
+    {
+     "name": "Olympus",
+     "note": "日商內視鏡 AI 於越南醫院試行驗證"
+    },
+    {
+     "name": "Orbis",
+     "note": "國際 NGO，Cybersight AI 眼科篩檢平台"
+    }
+   ]
+  },
+  {
+   "cat": "醫材設備外商",
+   "tag": "L3 設備",
+   "items": [
+    {
+     "name": "B. Braun Vietnam",
+     "note": "德商醫材大廠，越南設有大型生產基地"
+    },
+    {
+     "name": "GE HealthCare Vietnam",
+     "note": "美商影像診斷設備代理與服務據點"
+    },
+    {
+     "name": "Philips Healthcare Vietnam",
+     "note": "荷商醫療影像與病患監護設備代理"
+    },
+    {
+     "name": "Siemens Healthineers Vietnam",
+     "note": "德商影像診斷與檢驗設備代理商"
+    },
+    {
+     "name": "Fujifilm Healthcare Vietnam",
+     "note": "日商內視鏡與醫療影像設備代理"
+    },
+    {
+     "name": "Medtronic Vietnam",
+     "note": "美商心血管與手術器材代理商"
+    },
+    {
+     "name": "Terumo Vietnam Medical Equipment",
+     "note": "日商導管與輸液耗材製造代理"
+    },
+    {
+     "name": "Getz Healthcare Vietnam",
+     "note": "醫材與耗材區域經銷代理商"
+    },
+    {
+     "name": "Mindray Vietnam",
+     "note": "中國醫療影像與監護設備代理商"
+    },
+    {
+     "name": "TNT Medical",
+     "note": "本土大型醫療器材經銷商"
+    },
+    {
+     "name": "Medvitek",
+     "note": "本土醫療設備經銷代理商"
+    }
+   ]
+  },
+  {
+   "cat": "外資／私立醫院投資集團",
+   "tag": "L6 營運",
+   "items": [
+    {
+     "name": "Vinmec（Vingroup／VMC Holding）",
+     "note": "越南本土最大私立醫院集團"
+    },
+    {
+     "name": "Thomson Medical Group（FV Hospital）",
+     "note": "新加坡集團收購越南 FV 醫院"
+    },
+    {
+     "name": "Hoan My Medical Corporation",
+     "note": "越南全國連鎖私立醫院集團"
+    },
+    {
+     "name": "Tam Anh Hospital",
+     "note": "越南快速擴張之高端私立醫院集團"
+    },
+    {
+     "name": "Xuyen A Hospital",
+     "note": "獲 Warburg Pincus 投資之私院集團"
+    },
+    {
+     "name": "Thu Cuc International Hospital",
+     "note": "獲 VinaCapital 入股之連鎖私院"
+    },
+    {
+     "name": "Hong Ngoc Hospital",
+     "note": "河內起家之連鎖私立醫院集團"
+    },
+    {
+     "name": "Hanh Phuc Hospital",
+     "note": "專攻婦幼與試管嬰兒之私立醫院"
+    },
+    {
+     "name": "Phuong Dong Hospital",
+     "note": "專科導向之醫療複合體經營模式"
+    },
+    {
+     "name": "Raffles Medical Group（AIH）",
+     "note": "新加坡集團入主美國國際醫院"
+    },
+    {
+     "name": "Columbia Asia Vietnam",
+     "note": "馬來西亞醫院集團在越南設分院"
+    },
+    {
+     "name": "GIC",
+     "note": "新加坡主權基金投資 Vinmec 控股公司"
+    }
+   ]
+  }
+ ]
+};
+function loadUpdate(f){
+  if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{try{
+    const nd=JSON.parse(rd.result);
+    if(!nd.regs||!nd.players||!nd.stats){alert('格式不對：需要含 regs / players / stats 的 intel_data.json');return;}
+    D=nd; renderAll();
+    document.getElementById('upbtn').textContent='✓ 已載入 '+ (D.asof||'更新資料');
+  }catch(e){alert('讀取失敗：'+e.message);}};
+  rd.readAsText(f,'utf-8');
+}
+const LAYC={L1:'8C6D46',L2:'2C5F8A',L3:'7A4E8A',L4:'2E7D64',L5:'B0632E',L6:'4E6E52',L7:'8A2E4A',G:'555F6E'};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=new Date(); today.setHours(0,0,0,0);
+const days=d=>Math.round((new Date(d)-today)/864e5);
+const age=d=>Math.round((today-new Date(d))/864e5);
+function renderAll(){
+document.getElementById('asof').textContent=D.asof;
+const staleN=[...D.stats,...D.players.flatMap(p=>p.moves)].filter(x=>age(x.asof||x.d||D.asof)>120).length;
+document.getElementById('freshNote').textContent=age(D.asof)>120?'⚠ 整體資料已超過 120 天，建議更新':'資料在保鮮期內';
+const fresh=a=>age(a)>120?`<span class="badge b-amb fresh">待更新</span>`:'';
+
+/* 法規時鐘（依截止排序但保留原始索引，編輯才寫得回正確筆） */
+const order=[...D.regs.keys()].sort((a,b)=>{
+  const da=days(D.regs[a].date),db=days(D.regs[b].date);
+  const ka=da<0?1e6+da:da, kb=db<0?1e6+db:db;   // 未生效在前（近的先），已生效沉底
+  return ka-kb;});
+document.getElementById('regList').innerHTML=order.map(i=>{
+  const r=D.regs[i], n=days(r.date);
+  const cd=n>0?`<span class="cd" style="color:${n<120?'var(--red)':'var(--gold)'}">還有 ${n} 天生效</span>`
+             :`<span class="cd" style="color:var(--green)">已生效 ${-n} 天</span>`;
+  return `<div class="reg"><div>
+     <button class="delx" onclick="delItem('regs',${i})">✕ 刪除</button>
+     <div class="dd" data-e="regs.${i}.date">${esc(r.date)}</div>${cd}
+     <div style="margin-top:6px"><span class="lay" style="background:#${LAYC[r.layer]||'555F6E'}"><span data-e="regs.${i}.layer">${esc(r.layer)}</span> 層</span></div></div>
+   <div><h3 data-e="regs.${i}.name">${esc(r.name)}</h3><div class="doc" data-e="regs.${i}.doc">${esc(r.doc)}</div><p data-e="regs.${i}.what">${esc(r.what)}</p>
+     <p style="font-size:.76rem;color:var(--sub)">牽動商機：<span data-e="regs.${i}.opps">${esc(r.opps||'')}</span></p></div>
+   <div class="act"><b>我們該做什麼</b><span data-e="regs.${i}.act">${esc(r.act)}</span>
+     <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">出處：<span data-e="regs.${i}.src">${esc(r.src)}</span></div></div>
+  </div>`;}).join('')+`<button class="addb" onclick="addItem('regs')">＋ 新增一筆法規</button>`;
+
+/* 競合廠商 */
+document.getElementById('plList').innerHTML=D.players.map((p,i)=>`
+ <div class="card pl"><button class="delx" onclick="delItem('players',${i})">✕ 刪除</button>
+  <span class="badge b-nav" data-e="players.${i}.cat">${esc(p.cat)}</span>
+  <h3 style="margin-top:6px"><span class="nm" onclick="openPl(${i})" title="點開看公司概況與承接專案"><span data-e="players.${i}.name">${esc(p.name)}</span></span>${(p.proj&&p.proj.length)?`<span class="hint">▸ 承接專案 ${p.proj.length} 筆</span>`:''}</h3>
+  <div class="pos" data-e="players.${i}.pos">${esc(p.pos)}</div>
+  ${p.moves.map((m,j)=>`<div class="mv"><span class="d" data-e="players.${i}.moves.${j}.d">${esc(m.d)}</span><span><span data-e="players.${i}.moves.${j}.t">${esc(m.t)}</span>${fresh(m.asof||m.d+'-01')}</span></div>`).join('')}
+  <button class="addb" style="padding:5px 12px;font-size:.74rem" onclick="addMove(${i})">＋ 新增動作</button>
+  <div class="mean">對我們：<span data-e="players.${i}.mean">${esc(p.mean)}</span></div></div>`).join('')
+ +`<button class="addb" onclick="addItem('players')">＋ 新增廠商</button>`;
+
+/* 完整廠商名冊 */
+const RKEY=[['FPT',0],['Viettel',1],['VNPT',2],['VinBrain',3],['Advantech',4],['REE',5],
+ ['Searefico',6],['Thomson Medical',7],['Vinmec',8],['B. Braun',9],['Qure.ai',10],['Olympus',10],
+ ['Orbis',10],['Johnson Controls',11],['Schneider',11],['Siemens',11]];
+function rlink(name){
+  for(const [kw,idx] of RKEY) if(name.indexOf(kw)>-1)
+    return `<b><a href="#players" onclick="setTimeout(()=>openPl(${idx}),50)">${esc(name)}</a></b>`;
+  return `<b>${esc(name)}</b>`;
+}
+document.getElementById('rosterList').innerHTML=(D.roster||[]).map(sec=>`
+ <div class="rgrp"><div class="rh"><h3>${esc(sec.cat)}</h3><span class="badge b-gry">${esc(sec.tag)}</span>
+  <span style="font-size:.72rem;color:var(--sub)">共 ${sec.items.length} 家</span></div>
+  <div class="rlist">${sec.items.map(it=>`<div class="ritem">${rlink(it.name)}<span class="rn">${esc(it.note)}</span></div>`).join('')}</div>
+ </div>`).join('');
+
+/* 數據 */
+document.getElementById('stList').innerHTML=D.stats.map((s,i)=>`
+ <div class="stat"><button class="delx" onclick="delItem('stats',${i})">✕ 刪除</button>
+  <div class="v"><span data-e="stats.${i}.v">${esc(s.v)}</span><span style="font-size:.85rem;font-weight:600;color:var(--sub)"> <span data-e="stats.${i}.unit">${esc(s.unit||'')}</span></span></div>
+  <div class="k"><span data-e="stats.${i}.k">${esc(s.k)}</span> ${s.est?'<span class="badge b-gry">估計</span>':''}${fresh(s.asof)}</div>
+  <div class="n" data-e="stats.${i}.note">${esc(s.note)}</div>
+  <div class="s"><span data-e="stats.${i}.src">${esc(s.src)}</span>・查證 <span data-e="stats.${i}.asof">${esc(s.asof)}</span></div></div>`).join('')
+ +`<button class="addb" onclick="addItem('stats')">＋ 新增數據</button>`;
+applyEditState();
+}
+
+/* ── 頁內編輯與匯出：本頁自己就能產出 intel_data.json ── */
+let EDIT=false;
+function applyEditState(){
+  document.body.classList.toggle('edit',EDIT);
+  document.querySelectorAll('[data-e]').forEach(el=>el.contentEditable=EDIT);
+  document.getElementById('edbtn').textContent=EDIT?'✓ 完成編輯':'✎ 編輯資料';
+}
+function harvest(){   // 把畫面上的編輯寫回 D
+  document.querySelectorAll('[data-e]').forEach(el=>{
+    const p=el.dataset.e.split('.'); let o=D;
+    for(let k=0;k<p.length-1;k++)o=o[isNaN(p[k])?p[k]:+p[k]];
+    o[p[p.length-1]]=el.textContent.trim();
+  });
+}
+function toggleEdit(){
+  if(EDIT){harvest();EDIT=false;renderAll();}
+  else{EDIT=true;applyEditState();}
+}
+function delItem(key,i){if(!confirm('確定刪除這一筆？'))return;harvest();D[key].splice(i,1);renderAll();}
+function addItem(key){
+  harvest();
+  if(key==='regs')D.regs.push({date:'2026-12-31',name:'（新法規名稱）',doc:'（文號）',layer:'G',what:'（一句話：規定了什麼）',opps:'',act:'（我們該做什麼）',src:'（出處）'});
+  if(key==='players')D.players.push({name:'（廠商名稱）',cat:'（類別）',pos:'（定位一句話）',moves:[{d:'2026-08',t:'（動作）'}],mean:'（對我們的意義）'});
+  if(key==='stats')D.stats.push({k:'（指標名）',v:'0',unit:'',note:'（這個數字說明什麼）',src:'（出處）',asof:D.asof});
+  renderAll();
+}
+function addMove(i){harvest();D.players[i].moves.push({d:'2026-08',t:'（新動作）'});renderAll();}
+
+/* ── 公司細節視窗：概況＋過去/目前承接專案 ── */
+function openPl(i){
+  if(EDIT)return;               // 編輯模式下點名稱是要改字，不開視窗
+  const p=D.players[i];
+  const grp=st=>((p.proj||[]).filter(x=>x.st===st).map(x=>`
+    <div class="pj"><div class="y">${esc(x.y)}</div>
+     <div>${esc(x.t)}<div class="s">出處：${esc(x.src)}</div></div></div>`).join('')||'<p style="font-size:.8rem;color:var(--sub);padding:6px 0">未查得公開專案實績。</p>');
+  document.getElementById('ovl').innerHTML=`<div class="dlg" onclick="event.stopPropagation()">
+   <div class="top"><h2>${esc(p.name)}<span class="badge b-nav" style="margin-left:10px;vertical-align:3px">${esc(p.cat)}</span></h2>
+    <button class="x" onclick="closePl()">✕</button></div>
+   <div class="bd">
+    ${p.profile?`<div class="prof">${esc(p.profile)}</div>`:''}
+    <h4>目前承接／進行中</h4>${grp('進行中')}
+    <h4>過去承接實績</h4>${grp('過去')}
+    ${p.moves&&p.moves.length?`<h4>近期動態</h4>${p.moves.map(m=>`<div class="pj"><div class="y">${esc(m.d)}</div><div>${esc(m.t)}</div></div>`).join('')}`:''}
+    <div class="mean2">對我們的意義：${esc(p.mean)}</div>
+   </div></div>`;
+  document.getElementById('ovl').classList.add('on');
+}
+function closePl(){document.getElementById('ovl').classList.remove('on');}
+function exportData(){
+  if(EDIT)harvest();
+  const blob=new Blob([JSON.stringify(D,null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='intel_data.json';a.click();URL.revokeObjectURL(a.href);
+}
+renderAll();
+</script></body></html>
