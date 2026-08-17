@@ -120,6 +120,14 @@
   line-height: 1.6;
 }
 .opnote a { color: inherit; }
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ A：右上角語言鈕壓到頁首按鈕 → 改固定右下角 */
+.i18nsw{top:auto !important;bottom:16px !important;right:16px !important}
+.i18panel{top:auto !important;bottom:calc(100% + 8px) !important}
+@media(max-width:640px){.i18nsw{bottom:14px !important;right:14px !important}}
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ H：面板小標放大到 11px */
+.i18gt{font-size:11px}
 </style><!-- VMH-PATCH-2026-08-16 start -->
 <link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/onepagers/owner.html">
 <link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/onepagers/owner.en.html">
@@ -137,6 +145,7 @@
 <meta name="twitter:description" content="VMH-EcoMap — turning “what businesses exist in Vietnam's hospitals” into a map you can operate, verify and model.">
 <meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
 <!-- VMH-PATCH-2026-08-16 end -->
+<!-- VMH-SCANFIX-2026-08-17 --><link rel="canonical" href="https://nchsieh.github.io/VMH-EcoMap/onepagers/owner.en.html">
 </head>
 <body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ EN</button>
@@ -155,7 +164,7 @@
       The VMH-EcoMap main tool has 21 tabs in total, but<b>hospital owners don’t need to look at all of them</b>。<br>
       Data is maintained by the consultant, and figures are calculated automatically by the system. You just need to follow the five steps below,<b>and in ten minutes you’ll know: where the opportunities are, how much capability we have, who we’re missing, which one to do first, and whether it’s profitable.</b>
     </div>
-<div class="opnote"><!--VMH-FIX-DESIGN-2026-08-16-->This page explains the <b>downloadable Excel master workbook</b>. If you would rather stay in the browser, use the <a href="../index.en.html#tools">four online tools</a> on the home page.</div>
+<div class="opnote"><!--VMH-FIX-DESIGN-2026-08-16-->This page explains the <b>downloadable Excel master workbook</b>. If you would rather stay in the browser, use the <a href="../tools/index.en.html">four online tools</a> on the home page.</div>
   </div>
 
   <div class="roles">

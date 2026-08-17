@@ -358,6 +358,41 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
   .hwrap { padding-right: 14px; }
   .hwrap nav, header nav { -webkit-mask-image: none; mask-image: none; }
 }
+
+/* VMH-ANCHOR-FIX */[id]{scroll-margin-top:120px}
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ A：右上角語言鈕壓到頁首按鈕 → 改固定右下角 */
+.i18nsw{top:auto !important;bottom:16px !important;right:16px !important}
+.i18panel{top:auto !important;bottom:calc(100% + 8px) !important}
+@media(max-width:640px){.i18nsw{bottom:14px !important;right:14px !important}}
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ B：語系／配色切換的無障礙角色 */
+.i18row span.on,.lp.on{cursor:default}
+
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ H：面板小標放大到 11px */
+.i18gt{font-size:11px}
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ I：標題階層修正後沿用原本外觀 */
+h2.sech1{font-size:1.5rem;color:var(--navy,#12365C);margin:26px 0 4px;font-weight:700}
+.a11y-h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ G：標籤列排不下時自動獨占一列 */
+.hwrap.hstack{flex-wrap:wrap;height:auto;min-height:58px;align-content:center}
+.hwrap.hstack > nav{order:9;flex:1 0 100%;min-width:100%;margin-top:2px;padding-bottom:6px}
+.hwrap.hstack{padding-bottom:2px}
+/* 桌機／平板：標籤獨占一列後仍排不下就換行，保證 9 個標籤全部看得到 */
+@media(min-width:700px){
+  .hwrap.hstack > nav{flex-wrap:wrap;overflow-x:visible;row-gap:2px}
+}
+/* 手機：維持橫向捲動，但把捲軸顯示出來，讓使用者知道還有標籤 */
+@media(max-width:699px){
+  .hwrap.hstack > nav{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.35) transparent}
+  .hwrap.hstack > nav::-webkit-scrollbar{height:4px}
+  .hwrap.hstack > nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);border-radius:4px}
+}
 </style><!-- VMH-PATCH-2026-08-16 start -->
 <link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.html">
 <link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.en.html">
@@ -375,6 +410,7 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
 <meta name="twitter:description" content="Trình khám phá hệ sinh thái: duyệt và đối chiếu 85 cơ hội với 10 năng lực; có thể nạp bảng tính của bạn.">
 <meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
 <!-- VMH-PATCH-2026-08-16 end -->
+<!-- VMH-SCANFIX-2026-08-17 --><link rel="canonical" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.vi.html">
 </head>
 <body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ VI</button>
@@ -384,12 +420,13 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
    <div class="i18row"><a href="explorer.html">中文</a><a href="explorer.en.html">EN</a><a href="explorer.vi.html" class="on">VI</a></div>
    <div class="i18gt">Giao diện</div>
    <div class="i18modes">
-    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>Xanh navy</a>
-    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>Sáng</a>
-    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>Tối</a>
+    <a href="#" role="button" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>Xanh navy</a>
+    <a href="#" role="button" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>Sáng</a>
+    <a href="#" role="button" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>Tối</a>
    </div>
  </div>
 </div>
+<h1 class="a11y-h1">VMH-EcoMap Trình khám phá hệ sinh thái v1.0</h1>
 <header><div class="hwrap">
   <div class="brand" onclick="go('')"><svg class="brandmark" viewBox="0 0 32 32" width="20" height="20" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-4px;margin-right:6px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><span class="t">VMH-EcoMap Trình khám phá hệ sinh thái</span><span style="display:none">VMH</span></div>
   <nav id="nav"></nav>
@@ -601,7 +638,7 @@ function vLanding(){
   const nGap=gapCaps.length, nWhite=DATA.opps.filter(o=>o.status.startsWith('★')).length,
         n3=DATA.opps.filter(o=>o.vn.startsWith('③')).length;
   return `
-  <h1>Toàn bộ bản thiết kế của mảng kinh doanh bệnh viện tại Việt Nam,<br>dẫn dắt bạn theo đúng vai trò của bạn.</h1>
+  <h2 class="sech1">Toàn bộ bản thiết kế của mảng kinh doanh bệnh viện tại Việt Nam,<br>dẫn dắt bạn theo đúng vai trò của bạn.</h2>
   <p class="sub">${DATA.opps.length}  mảng kinh doanh × ${DATA.caps.length}  năng lực × ${DATA.parts.length}  đối tác và vai trò, mọi quan hệ giữa chúng đều có thể nhấp để truy vết. Trước hết hãy chọn bạn là ai — </p>
   <div class="grid g2" style="margin-top:22px">
     <div class="role" style="border-top-color:#0F766E" onclick="go('p')">
@@ -637,7 +674,7 @@ function vPartnerHome(){
   const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,6);
   const white=DATA.opps.filter(o=>o.status.startsWith('★')).sort(byRank).slice(0,6);
   return `${crumb(['Tổng quan',''],['Góc nhìn đối tác','p'])}
-  <h1>Tìm vị trí của bạn trong bản thiết kế này</h1>
+  <h2 class="sech1">Tìm vị trí của bạn trong bản thiết kế này</h2>
   <p class="sub">Chỉ ba bước: xem các mảng kinh doanh → xem vùng trắng → nhận khoảng trống. Toàn bộ quá trình không phải điền bất cứ thứ gì.</p>
   <div class="card" style="margin-top:18px"><div class="steps">
     <div class="step"><span class="n"></span><div><b>Xem danh mục cơ hội kinh doanh</b> — 85 mảng kinh doanh được phân theo nhóm, hãy tìm bằng từ khóa của ngành nghề chính của bạn (ví dụ “trung tâm dữ liệu”, “PACS”, “chạy thận”).
@@ -658,7 +695,7 @@ function vOwnerHome(){
   const fams={}; DATA.opps.forEach(o=>fams[o.fam]=(fams[o.fam]||0)+1);
   const mx=Math.max(...Object.values(fams));
   return `${crumb(['Tổng quan',''],['Góc nhìn chủ đầu tư bệnh viện','o'])}
-  <h1>Toàn cảnh chung và ${RKL}</h1>
+  <h2 class="sech1">Toàn cảnh chung và ${RKL}</h2>
   <p class="sub">Thứ hạng = giá trị × mức độ sẵn sàng × hiện trạng Việt Nam − điểm trừ do khoảng trống, tính toán hoàn toàn tự động.<b>Điểm cao không đồng nghĩa với triển khai được</b>— nhãn khoảng trống ở bên phải mới là tiêu chí quyết định có bắt tay vào làm được hay không.</p>
   <div class="ctrl noprint"><span class="btn" onclick="go('report/top')">Xuất ${RKL} bảng tổng hợp (A4)</span></div>
   <h2>${RKL} Top 10</h2>
@@ -683,7 +720,7 @@ function vPiHome(){
   const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,8);
   const talking=DATA.parts.filter(p=>/Engaged|Due/.test(p.stat));
   return `${crumb(['Tổng quan',''],['Khung nhìn quản trị PI','g'])}
-  <h1>Ba việc cần theo dõi trong tuần này</h1>
+  <h2 class="sech1">Ba việc cần theo dõi trong tuần này</h2>
   <p class="sub">Thứ tự cố định: quy định bắt buộc chưa xác nhận ＞ khoảng trống có mức ảnh hưởng cao ＞ đối tác đang đàm phán. Quy định pháp luật là Gate chứ không phải Task, làm muộn cũng không dễ hơn.</p>
   <div class="ctrl noprint"><span class="btn" onclick="go('report/pi')">Xuất danh sách họp tuần (A4)</span></div>
   <h2 style="color:var(--red)">① Quy định bắt buộc chưa xác nhận (${badGates.length}）</h2>
@@ -712,7 +749,7 @@ function vOpps(qs){
   const tiers=[...new Set(DATA.opps.map(o=>o.tier))].sort();
   const stages=[...new Set(DATA.opps.map(o=>o.stage))].sort();
   return `${crumb(['Tổng quan',''],['Danh mục cơ hội kinh doanh','opps'])}
-  <h1>Danh mục cơ hội kinh doanh <span style="font-size:1rem;color:var(--sub);font-weight:400">85 mảng kinh doanh</span></h1>
+  <h2 class="sech1">Danh mục cơ hội kinh doanh <span style="font-size:1rem;color:var(--sub);font-weight:400">85 mảng kinh doanh</span></h2>
   <div class="ctrl">
     <input type="search" id="oq" placeholder="Tìm mảng kinh doanh, từ khóa…" value="${esc(F.q)}" oninput="F.q=this.value;drawOpps()">
     <select onchange="F.sort=this.value;drawOpps()">
@@ -753,7 +790,7 @@ function vOpp(id){
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${famChip(o.fam)}
     <span class="chip">${vnShort(o.vn)}</span><span class="chip num">${o.rank>0?`${RKL} #${o.rank}｜${o.score} điểm`:`Chưa xếp hạng (cơ hội vùng trắng)`}</span>
     ${layBadge(o.lay)}</div>
-  <h1 style="margin-top:8px">${esc(o.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(o.name)}</h2>
   <p class="sub">${esc(o.en)}</p>
   <div class="verd" style="background:${v.bg};color:${v.c};margin:14px 0 12px">
     ${v.t}<div style="font-weight:400;font-size:.87rem;margin-top:3px">${v.d}</div></div>
@@ -797,7 +834,7 @@ let CF={puz:'',q:''};
 function vCaps(qs){
   if(qs){const u=new URLSearchParams(qs);CF={puz:u.get('puz')||'',q:''};}
   return `${crumb(['Tổng quan',''],['Năng lực','caps'])}
-  <h1>60 năng lực <span style="font-size:.95rem;color:var(--sub);font-weight:400">Phân nhóm theo lĩnh vực D01–D10</span></h1>
+  <h2 class="sech1">60 năng lực <span style="font-size:.95rem;color:var(--sub);font-weight:400">Phân nhóm theo lĩnh vực D01–D10</span></h2>
   <div class="ctrl">
     <input type="search" placeholder="Tìm năng lực…" oninput="CF.q=this.value;drawCaps()">
     ${Object.entries(PUZS).map(([k,s])=>`<span class="chipbtn chip sm ${CF.puz===k||(CF.puz==='gap'&&k==='Khoảng trống - cần tìm đối tác')?'on':''}"
@@ -829,7 +866,7 @@ function vCap(id){
     <span class="chip">${esc(c.dom)}</span><span class="chip">${esc(c.stage)}</span>
     <span class="tag" style="background:${PUZC[c.puz]}15;color:${PUZC[c.puz]};font-size:.82rem">● ${esc(c.puz)}</span>
     ${layBadge(c.lay)}</div>
-  <h1 style="margin-top:8px">${esc(c.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(c.name)}</h2>
   <p class="sub">${esc(c.en)}｜${esc(c.out)}</p>
   ${c.puz==='Khoảng trống - cần tìm đối tác'?`<div class="verd" style="background:var(--redL);color:var(--red);margin:12px 0">
     Đây là khoảng trống — ${esc(c.gapnote)||'chưa tìm được đối tác phù hợp'}<div style="font-weight:400;font-size:.86rem;margin-top:3px">
@@ -858,7 +895,7 @@ let PF='all';
 function vParts(){
   const buckets=[['all','Tất cả'],['q','Đã đạt / đang thẩm định'],['e','Đã tiếp xúc'],['t','Mục tiêu mời tham gia'],['gap','Vai trò cần tuyển']];
   return `${crumb(['Tổng quan',''],['Đối tác','parts'])}
-  <h1> đối tác và vai trò ứng viên <span style="font-size:.95rem;color:var(--sub);font-weight:400">${DATA.parts.length}  bản ghi</span></h1>
+  <h2 class="sech1"> đối tác và vai trò ứng viên <span style="font-size:.95rem;color:var(--sub);font-weight:400">${DATA.parts.length}  bản ghi</span></h2>
   <p class="sub">“Vai trò cần tuyển” là những vị trí liên minh đã xác định nhưng chưa có công ty nào nhận phụ trách — khi tìm đối tác chính là lấy danh sách này ra đối chiếu.</p>
   <div class="ctrl">${buckets.map(([k,t])=>`<span class="chipbtn chip ${PF===k?'on':''}" style="${PF===k?'background:var(--navy)':''}"
     onclick="PF='${k}';render()">${t}</span>`).join('')}</div>
@@ -884,7 +921,7 @@ function vPart(id){
   return `${crumb(['Tổng quan',''],['Đối tác','parts'],[p.id,''])}
   <div style="display:flex;gap:8px;flex-wrap:wrap">${p.stat?`<span class="chip">${esc(p.stat)}</span>`:''}
     ${p.cty?`<span class="chip">${esc(p.cty)}</span>`:''}<span class="chip">${esc(p.typ)}</span></div>
-  <h1 style="margin-top:8px">${esc(p.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(p.name)}</h2>
   <p class="sub">${esc(p.role)}</p>
   <div class="grid g2" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:14px">
     <div class="card"><h2 style="margin-top:0">Định vị</h2><dl class="kv">
@@ -915,7 +952,7 @@ function vMap(qs){
   const doms=[...new Set(DATA.caps.map(c=>c.dom))].sort();
   if(!doms.includes(MD))MD=doms.find(d=>d.startsWith(MD))||doms[0];
   return `${crumb(['Tổng quan',''],['Bản đồ hệ sinh thái','map'])}
-  <h1>Bản đồ hệ sinh thái: đối tác → năng lực → cơ hội kinh doanh</h1>
+  <h2 class="sech1">Bản đồ hệ sinh thái: đối tác → năng lực → cơ hội kinh doanh</h2>
   <p class="sub">Chọn một lĩnh vực để xem ai kết nối với ai trên chuỗi ngành này.<b style="color:var(--red)">Đường đỏ = khoảng trống</b>— khi đường đó đứt, mảng kinh doanh bên phải sẽ khuyết một mảnh không ghép được. Mọi nút đều có thể nhấp vào.</p>
   <div class="ctrl">${doms.map(d=>`<span class="chipbtn chip sm ${MD===d?'on':''}" style="${MD===d?'background:var(--navy)':''}"
     onclick="MD='${d}';render()">${esc(d)}</span>`).join('')}</div>
@@ -975,7 +1012,7 @@ function vDecide(qs){
   const top=DATA.opps.filter(o=>o.rank>0).sort(byRank).slice(0,10);
   const gapsRank=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id));
   return `${crumb(['Tổng quan',''],['Trình hướng dẫn quyết định','decide'])}
-  <h1>Trình hướng dẫn quyết định</h1>
+  <h2 class="sech1">Trình hướng dẫn quyết định</h2>
   <p class="sub">Ba quyết định thường gặp nhất, mỗi quyết định đều được tính bằng dữ liệu tức thời để bạn xem, không cần tự tra bảng.</p>
 
   <h2>① Cơ hội kinh doanh này có triển khai được không?</h2>
@@ -1048,7 +1085,7 @@ function addEdit(kind,id){
 function vChanges(){
   const txt=EDITS.map((e,i)=>`${i+1}. [${e.kind}] ${e.id} ${e.name}\n   Trường: ${e.f}\n   Sửa thành: ${e.v}\n   Lý do: ${e.w||'—'}`).join('\n');
   return `${crumb(['Tổng quan',''],['Phiếu đề xuất thay đổi','changes'])}
-  <h1>Phiếu đề xuất thay đổi <span style="font-size:.95rem;color:var(--sub);font-weight:400">${EDITS.length}  bản ghi</span></h1>
+  <h2 class="sech1">Phiếu đề xuất thay đổi <span style="font-size:.95rem;color:var(--sub);font-weight:400">${EDITS.length}  bản ghi</span></h2>
   <p class="sub">Sau khi tổng hợp, hãy sao chép trọn khối nội dung gửi cho PI (hoặc in ra). Chỉ khi PI sửa công cụ Excel chính theo phiếu rồi tạo lại trình duyệt khám phá thì thay đổi mới có hiệu lực — bước này là có chủ đích: mọi thay đổi về con số đều phải đi qua cùng một người kiểm soát.</p>
   ${EDITS.length?`<div class="rows" style="margin-top:14px">${EDITS.map((e,i)=>`
     <div class="row" style="cursor:default"><span class="chip sm">${esc(e.kind)}</span>
@@ -1067,7 +1104,7 @@ function vClaim(){
   return `${crumb(['Tổng quan',''],['Phiếu nhận phụ trách','claim'])}
   <div class="ctrl noprint" style="justify-content:flex-end;margin:0 0 4px">
     <span class="btn" onclick="window.print()">In / lưu PDF</span></div>
-  <h1>Phiếu nhận phụ trách của đối tác (bản nháp)</h1>
+  <h2 class="sech1">Phiếu nhận phụ trách của đối tác (bản nháp)</h2>
   <p class="sub">Phiếu này khớp với các trường của Phiếu trả lời đề xuất đối tác VMH-EcoMap-3. Sau khi in hoặc lưu PDF, hãy điền đầy đủ thông tin công ty và gửi lại cho PI Office.</p>
   <div class="card" style="margin-top:14px"><dl class="kv">
     <dt>Tên công ty</dt><dd>＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</dd>
@@ -1107,7 +1144,7 @@ function vLayers(){
   }).join('');
   const gap=order.filter(k=>DATA.opps.filter(o=>o.lay===k).length>0&&DATA.caps.filter(c=>c.lay===k).length===0);
   return `${crumb(['Tổng quan',''],['Bản đồ tầng','layers'])}
-  <h1>Ngăn xếp bảy tầng của hệ sinh thái bệnh viện</h1>
+  <h2 class="sech1">Ngăn xếp bảy tầng của hệ sinh thái bệnh viện</h2>
   <p class="sub">Giống như mạng Internet, tầng dưới là nền móng của tầng trên. Xác định được chuyên môn của bạn thuộc tầng nào thì sẽ biết có thể đảm nhận những mảng kinh doanh nào và phải dựa vào ai ở tầng trên, tầng dưới. Nhấp vào bất kỳ tầng nào để xem chi tiết.</p>
   ${gap.length?`<div class="verd" style="background:var(--redL);color:var(--red);margin:16px 0">
     ★ ${gap.map(k=>k+' '+esc(DATA.layers[k].n)).join('、')} Có mảng kinh doanh nhưng không có năng lực tương ứng
@@ -1123,7 +1160,7 @@ function vLayer(k){
   return `${crumb(['Tổng quan',''],['Bản đồ tầng','layers'],[k,''])}
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${layBadge(k)}
     <span class="chip">${os.length}  mảng kinh doanh</span><span class="chip">${cs.length}  năng lực</span></div>
-  <h1 style="margin-top:8px">${esc(L.n)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(L.n)}</h2>
   <p class="sub">${esc(L.en)}｜${esc(L.d)}</p>
   <div class="verd" style="background:#EEF3F9;color:var(--navy);margin:14px 0">Ai định vị tại tầng này
     <div style="font-weight:400;font-size:.88rem;margin-top:4px">${esc(L.who)}</div></div>
@@ -1146,7 +1183,7 @@ function vLayer(k){
 }
 function vMatrix(){
   return `${crumb(['Tổng quan',''],['Bảng tổng hợp','matrix'])}
-  <h1>Bảng tổng hợp: 85 cơ hội kinh doanh × 60 năng lực</h1>
+  <h2 class="sech1">Bảng tổng hợp: 85 cơ hội kinh doanh × 60 năng lực</h2>
   <p class="sub">Một hàng = một cơ hội kinh doanh, một ô = một năng lực cần thiết (màu sắc = trạng thái hiện tại).<b>Hàng không có ô đỏ = cơ hội kinh doanh có thể ghép được</b>。
   Tỷ lệ phần trăm bên trái = mức độ sẵn sàng của năng lực (tỷ lệ hạng mục không phải khoảng trống). Nhấp vào ô để xem năng lực, nhấp vào tên hàng để xem thẻ tác chiến.</p>
   <div class="ctrl">
@@ -1201,7 +1238,7 @@ function vReport(type,id){
     const gateIds=new Set();caps.forEach(c=>(c.gates.match(/[A-Z][A-Z0-9-]+/g)||[]).forEach(g=>{if(G[g])gateIds.add(g)}));
     return `${bar}
     <p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">Báo cáo cơ hội kinh doanh | OPPORTUNITY BRIEF</p>
-    <h1>${esc(o.name)}</h1>
+    <h2 class="sech1">${esc(o.name)}</h2>
     <p class="sub">${esc(o.en)}｜${esc(o.fam)}｜${vnShort(o.vn)}${o.rank>0?`｜${RKL} #${o.rank}（${o.score}  điểm)`:' | Cơ hội kinh doanh vùng trắng'}</p>
     <div class="verd" style="background:${v.bg};color:${v.c};margin:12px 0">${v.t}
       <div style="font-weight:400;font-size:.86rem;margin-top:3px">${v.d}</div></div>
@@ -1230,7 +1267,7 @@ function vReport(type,id){
   if(type==='top'){
     const L=DATA.opps.filter(o=>o.rank>0).sort(byRank).slice(0,20);
     return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">${RKL}Bảng tổng hợp | TOP 20</p>
-    <h1>85 cơ hội kinh doanh theo ${RKL} (20 hạng mục đầu)</h1>
+    <h2 class="sech1">85 cơ hội kinh doanh theo ${RKL} (20 hạng mục đầu)</h2>
     <p class="sub">Điểm = giá trị × mức độ sẵn sàng × thực trạng Việt Nam − điểm trừ khoảng trống. Cột kết luận mới quyết định có thể bắt tay làm hay không: khoảng trống = 0 ưu tiên triển khai; ≤2 có thể khởi động; ≥3 phải tìm đối tác trước.</p>
     <div class="rows" style="margin-top:14px">${L.map(o=>{const g=oppGaps(o.id).length;return `
       <div class="row" style="cursor:default"><span class="rankb ${o.rank<=10?'top':''}">${o.rank}</span>
@@ -1243,7 +1280,7 @@ function vReport(type,id){
     const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,10);
     const talking=DATA.parts.filter(p=>/Engaged|Due/.test(p.stat));
     return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">Danh mục họp tuần PI</p>
-    <h1>Ba việc cần theo dõi trong tuần này</h1>
+    <h2 class="sech1">Ba việc cần theo dõi trong tuần này</h2>
     <h2 style="color:var(--red)">① Quy định bắt buộc chưa được xác nhận (${badGates.length}）</h2>
     <div class="rows">${badGates.map(g=>`<div class="row" style="cursor:default">
       <span class="tag" style="background:var(--redL);color:var(--red)">${esc(g.stat)}</span>
@@ -1264,7 +1301,7 @@ function vReport(type,id){
       const {caps,gaps,partIds,gateIds}=simCalc();
       const os=[...SELO].map(o=>O[o]).sort(byRank);
       return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">Báo cáo tác chiến tổ hợp | PORTFOLIO BRIEF</p>
-      <h1>${os.length}  cơ hội kinh doanh — đánh giá tổ hợp</h1>
+      <h2 class="sech1">${os.length}  cơ hội kinh doanh — đánh giá tổ hợp</h2>
       <p class="sub">${os.map(o=>esc(o.name)).join('、')}</p>
       <div class="verd" style="background:${gaps.length?'var(--amberL)':'var(--greenL)'};color:${gaps.length?'var(--amber)':'var(--green)'};margin:12px 0">
         ${gaps.length?`Tổ hợp này cần tổng cộng ${caps.length}  năng lực, trong đó ${gaps.length}  là khoảng trống`:`Tổ hợp này cần tổng cộng ${caps.length}  năng lực, tất cả đều có người phụ trách, không có khoảng trống`}
@@ -1293,7 +1330,7 @@ function vReport(type,id){
       const r=simCalc(); const cs=[...SELC].map(c=>C[c]);
       const nNew=r.ready.filter(x=>x.newUnlock).length;
       return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">Báo cáo tổ hợp năng lực | CAPABILITY-FIT BRIEF</p>
-      <h1>Với ${cs.length}  năng lực này, có thể ghép được những gì</h1>
+      <h2 class="sech1">Với ${cs.length}  năng lực này, có thể ghép được những gì</h2>
       <p class="sub">${cs.map(c=>esc(c.name)).join('、')}｜${SIM.incl?'Đã gộp năng lực hiện có của liên minh':'Chỉ đánh giá riêng với các năng lực đã tích chọn'}</p>
       <div class="verd" style="background:var(--greenL);color:var(--green);margin:12px 0">
         Ghép được ${r.ready.length}  | thiếu một hạng mục ${r.near.length}  ${nNew?` | trong đó ★ mới mở khóa ${nNew}  (từ chỗ không thể ghép trở thành ghép được nhờ nhóm năng lực này)`:''}</div>
@@ -1344,7 +1381,7 @@ function vSim(){
     <span class="chipbtn chip ${SIM.mode==='c'?'on':''}" style="${SIM.mode==='c'?'background:var(--teal)':''}"
       onclick="SIM.mode='c';render()">Chọn năng lực → xem cơ hội kinh doanh có thể ghép</span></div>`;
   return `${crumb(['Tổng quan',''],['Mô phỏng tổ hợp','sim'])}
-  <h1>Mô phỏng tổ hợp: chỉ cần tích chọn, câu trả lời sẽ tự hiện ra</h1>
+  <h2 class="sech1">Mô phỏng tổ hợp: chỉ cần tích chọn, câu trả lời sẽ tự hiện ra</h2>
   <p class="sub">${SIM.mode==='o'
     ?'Hãy tích chọn các cơ hội kinh doanh muốn triển khai cùng nhau, khung bên phải sẽ tổng hợp theo thời gian thực: tổng cộng cần những năng lực nào, thiếu gì, liên quan đến đối tác và ngưỡng nào.'
     :'Hãy tích chọn các năng lực mà quý vị (hoặc một đối tác nào đó) có thể mang lại, khung bên phải sẽ tính ngay: những cơ hội kinh doanh nào nhờ đó mà ghép được.<b>★ Mới mở khóa</b>= những cơ hội kinh doanh mà liên minh vốn không thể ghép, nay trở nên khả thi nhờ nhóm năng lực này — đây chính là đóng góp biên của nhóm năng lực đó.'}</p>
@@ -1690,5 +1727,24 @@ function setMode(e,m){
    document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
  });
 })();
-</script></body>
+</script><script>
+/* ══ VMH-SCANFIX3-2026-08-17 ══ G：量到排不下才換行，與語言無關 */
+(function(){
+  function fit(){
+    var w=document.querySelector('.hwrap'), n=w&&w.querySelector('nav');
+    if(!w||!n||!n.children.length) return;
+    w.classList.remove('hstack');
+    if(n.scrollWidth>n.clientWidth+2) w.classList.add('hstack');
+  }
+  window.addEventListener('resize',fit);
+  window.addEventListener('load',fit);
+  if(window.ResizeObserver){
+    var n=document.querySelector('.hwrap nav');
+    if(n) new ResizeObserver(fit).observe(n);
+  }
+  var t=0, iv=setInterval(function(){ fit(); if(++t>20) clearInterval(iv); },150);
+  fit();
+})();
+</script>
+</body>
 </html>

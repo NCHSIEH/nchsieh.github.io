@@ -358,6 +358,41 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
   .hwrap { padding-right: 14px; }
   .hwrap nav, header nav { -webkit-mask-image: none; mask-image: none; }
 }
+
+/* VMH-ANCHOR-FIX */[id]{scroll-margin-top:120px}
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ A：右上角語言鈕壓到頁首按鈕 → 改固定右下角 */
+.i18nsw{top:auto !important;bottom:16px !important;right:16px !important}
+.i18panel{top:auto !important;bottom:calc(100% + 8px) !important}
+@media(max-width:640px){.i18nsw{bottom:14px !important;right:14px !important}}
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ B：語系／配色切換的無障礙角色 */
+.i18row span.on,.lp.on{cursor:default}
+
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ H：面板小標放大到 11px */
+.i18gt{font-size:11px}
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ I：標題階層修正後沿用原本外觀 */
+h2.sech1{font-size:1.5rem;color:var(--navy,#12365C);margin:26px 0 4px;font-weight:700}
+.a11y-h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ G：標籤列排不下時自動獨占一列 */
+.hwrap.hstack{flex-wrap:wrap;height:auto;min-height:58px;align-content:center}
+.hwrap.hstack > nav{order:9;flex:1 0 100%;min-width:100%;margin-top:2px;padding-bottom:6px}
+.hwrap.hstack{padding-bottom:2px}
+/* 桌機／平板：標籤獨占一列後仍排不下就換行，保證 9 個標籤全部看得到 */
+@media(min-width:700px){
+  .hwrap.hstack > nav{flex-wrap:wrap;overflow-x:visible;row-gap:2px}
+}
+/* 手機：維持橫向捲動，但把捲軸顯示出來，讓使用者知道還有標籤 */
+@media(max-width:699px){
+  .hwrap.hstack > nav{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.35) transparent}
+  .hwrap.hstack > nav::-webkit-scrollbar{height:4px}
+  .hwrap.hstack > nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);border-radius:4px}
+}
 </style><!-- VMH-PATCH-2026-08-16 start -->
 <link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.html">
 <link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.en.html">
@@ -375,6 +410,7 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
 <meta name="twitter:description" content="Ecosystem explorer: browse and cross-reference 85 opportunities against 10 capabilities; load your own workbook.">
 <meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
 <!-- VMH-PATCH-2026-08-16 end -->
+<!-- VMH-SCANFIX-2026-08-17 --><link rel="canonical" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.en.html">
 </head>
 <body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ EN</button>
@@ -384,12 +420,13 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
    <div class="i18row"><a href="explorer.html">中文</a><a href="explorer.en.html" class="on">EN</a><a href="explorer.vi.html">VI</a></div>
    <div class="i18gt">Theme</div>
    <div class="i18modes">
-    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>Navy Business</a>
-    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>Light</a>
-    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>Dark</a>
+    <a href="#" role="button" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>Navy Business</a>
+    <a href="#" role="button" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>Light</a>
+    <a href="#" role="button" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>Dark</a>
    </div>
  </div>
 </div>
+<h1 class="a11y-h1">VMH-EcoMap Ecosystem Explorer v1.0</h1>
 <header><div class="hwrap">
   <div class="brand" onclick="go('')"><svg class="brandmark" viewBox="0 0 32 32" width="20" height="20" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-4px;margin-right:6px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><span class="t">VMH-EcoMap Ecosystem Explorer</span><span style="display:none">VMH</span></div>
   <nav id="nav"></nav>
@@ -601,7 +638,7 @@ function vLanding(){
   const nGap=gapCaps.length, nWhite=DATA.opps.filter(o=>o.status.startsWith('★')).length,
         n3=DATA.opps.filter(o=>o.vn.startsWith('③')).length;
   return `
-  <h1>The complete blueprint of the Vietnamese hospital business,<br>guided according to who you are.</h1>
+  <h2 class="sech1">The complete blueprint of the Vietnamese hospital business,<br>guided according to who you are.</h2>
   <p class="sub">${DATA.opps.length}  businesses × ${DATA.caps.length}  capabilities × ${DATA.parts.length}  partners and roles, with every relationship between them clickable and traceable. First, choose who you are — </p>
   <div class="grid g2" style="margin-top:22px">
     <div class="role" style="border-top-color:#0F766E" onclick="go('p')">
@@ -637,7 +674,7 @@ function vPartnerHome(){
   const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,6);
   const white=DATA.opps.filter(o=>o.status.startsWith('★')).sort(byRank).slice(0,6);
   return `${crumb(['Overview',''],['Partner view','p'])}
-  <h1>Find your position in this blueprint</h1>
+  <h2 class="sech1">Find your position in this blueprint</h2>
   <p class="sub">Just three steps: browse the businesses → review the white spaces → claim a gap. Nothing has to be filled in at any point.</p>
   <div class="card" style="margin-top:18px"><div class="steps">
     <div class="step"><span class="n"></span><div><b>Browse the opportunity catalogue</b> — the 85 businesses are grouped by family; search using keywords from your own field (for example “data centre”, “PACS”, “dialysis”).
@@ -658,7 +695,7 @@ function vOwnerHome(){
   const fams={}; DATA.opps.forEach(o=>fams[o.fam]=(fams[o.fam]||0)+1);
   const mx=Math.max(...Object.values(fams));
   return `${crumb(['Overview',''],['Hospital owner view','o'])}
-  <h1>Overall landscape and ${RKL}</h1>
+  <h2 class="sech1">Overall landscape and ${RKL}</h2>
   <p class="sub">Ranking = value × readiness × Vietnam market situation − gap deductions, calculated fully automatically.<b>A high score does not mean it is actionable</b>— the gap labels on the right are the real criterion for whether work can begin.</p>
   <div class="ctrl noprint"><span class="btn" onclick="go('report/top')">Export ${RKL} master table (A4)</span></div>
   <h2>${RKL} Top 10</h2>
@@ -683,7 +720,7 @@ function vPiHome(){
   const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,8);
   const talking=DATA.parts.filter(p=>/Engaged|Due/.test(p.stat));
   return `${crumb(['Overview',''],['PI governance view','g'])}
-  <h1>Three things to watch this week</h1>
+  <h2 class="sech1">Three things to watch this week</h2>
   <p class="sub">The order is fixed: unconfirmed mandatory regulations > high-impact gaps > partners in discussion. Regulation is a gate, not a task; leaving it late does not make it easier.</p>
   <div class="ctrl noprint"><span class="btn" onclick="go('report/pi')">Export the weekly meeting checklist (A4)</span></div>
   <h2 style="color:var(--red)">① Unconfirmed mandatory regulations (${badGates.length}）</h2>
@@ -712,7 +749,7 @@ function vOpps(qs){
   const tiers=[...new Set(DATA.opps.map(o=>o.tier))].sort();
   const stages=[...new Set(DATA.opps.map(o=>o.stage))].sort();
   return `${crumb(['Overview',''],['Opportunity catalogue','opps'])}
-  <h1>Opportunity catalogue <span style="font-size:1rem;color:var(--sub);font-weight:400">85 businesses</span></h1>
+  <h2 class="sech1">Opportunity catalogue <span style="font-size:1rem;color:var(--sub);font-weight:400">85 businesses</span></h2>
   <div class="ctrl">
     <input type="search" id="oq" placeholder="Search businesses, keywords…" value="${esc(F.q)}" oninput="F.q=this.value;drawOpps()">
     <select onchange="F.sort=this.value;drawOpps()">
@@ -753,7 +790,7 @@ function vOpp(id){
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${famChip(o.fam)}
     <span class="chip">${vnShort(o.vn)}</span><span class="chip num">${o.rank>0?`${RKL} #${o.rank}｜${o.score} pts`:`Unranked (white-space opportunity)`}</span>
     ${layBadge(o.lay)}</div>
-  <h1 style="margin-top:8px">${esc(o.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(o.name)}</h2>
   <p class="sub">${esc(o.en)}</p>
   <div class="verd" style="background:${v.bg};color:${v.c};margin:14px 0 12px">
     ${v.t}<div style="font-weight:400;font-size:.87rem;margin-top:3px">${v.d}</div></div>
@@ -797,7 +834,7 @@ let CF={puz:'',q:''};
 function vCaps(qs){
   if(qs){const u=new URLSearchParams(qs);CF={puz:u.get('puz')||'',q:''};}
   return `${crumb(['Overview',''],['Capabilities','caps'])}
-  <h1>60 capabilities <span style="font-size:.95rem;color:var(--sub);font-weight:400">Grouped by domain D01–D10</span></h1>
+  <h2 class="sech1">60 capabilities <span style="font-size:.95rem;color:var(--sub);font-weight:400">Grouped by domain D01–D10</span></h2>
   <div class="ctrl">
     <input type="search" placeholder="Search capabilities…" oninput="CF.q=this.value;drawCaps()">
     ${Object.entries(PUZS).map(([k,s])=>`<span class="chipbtn chip sm ${CF.puz===k||(CF.puz==='gap'&&k==='Gap - to be identified')?'on':''}"
@@ -829,7 +866,7 @@ function vCap(id){
     <span class="chip">${esc(c.dom)}</span><span class="chip">${esc(c.stage)}</span>
     <span class="tag" style="background:${PUZC[c.puz]}15;color:${PUZC[c.puz]};font-size:.82rem">● ${esc(c.puz)}</span>
     ${layBadge(c.lay)}</div>
-  <h1 style="margin-top:8px">${esc(c.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(c.name)}</h2>
   <p class="sub">${esc(c.en)}｜${esc(c.out)}</p>
   ${c.puz==='Gap - to be identified'?`<div class="verd" style="background:var(--redL);color:var(--red);margin:12px 0">
     This is a gap — ${esc(c.gapnote)||'a suitable partner has yet to be found'}<div style="font-weight:400;font-size:.86rem;margin-top:3px">
@@ -858,7 +895,7 @@ let PF='all';
 function vParts(){
   const buckets=[['all','All'],['q','Qualified / under review'],['e','Engaged'],['t','Target invitation'],['gap','Roles to be recruited']];
   return `${crumb(['Overview',''],['Partners','parts'])}
-  <h1> partners and candidate roles <span style="font-size:.95rem;color:var(--sub);font-weight:400">${DATA.parts.length}  records</span></h1>
+  <h2 class="sech1"> partners and candidate roles <span style="font-size:.95rem;color:var(--sub);font-weight:400">${DATA.parts.length}  records</span></h2>
   <p class="sub">“Roles to be recruited” are positions the alliance has already defined but that no company has yet claimed — this is the list to work from when looking for partners.</p>
   <div class="ctrl">${buckets.map(([k,t])=>`<span class="chipbtn chip ${PF===k?'on':''}" style="${PF===k?'background:var(--navy)':''}"
     onclick="PF='${k}';render()">${t}</span>`).join('')}</div>
@@ -884,7 +921,7 @@ function vPart(id){
   return `${crumb(['Overview',''],['Partners','parts'],[p.id,''])}
   <div style="display:flex;gap:8px;flex-wrap:wrap">${p.stat?`<span class="chip">${esc(p.stat)}</span>`:''}
     ${p.cty?`<span class="chip">${esc(p.cty)}</span>`:''}<span class="chip">${esc(p.typ)}</span></div>
-  <h1 style="margin-top:8px">${esc(p.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(p.name)}</h2>
   <p class="sub">${esc(p.role)}</p>
   <div class="grid g2" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:14px">
     <div class="card"><h2 style="margin-top:0">Positioning</h2><dl class="kv">
@@ -915,7 +952,7 @@ function vMap(qs){
   const doms=[...new Set(DATA.caps.map(c=>c.dom))].sort();
   if(!doms.includes(MD))MD=doms.find(d=>d.startsWith(MD))||doms[0];
   return `${crumb(['Overview',''],['Ecosystem map','map'])}
-  <h1>Ecosystem map: partners → capabilities → business opportunities</h1>
+  <h2 class="sech1">Ecosystem map: partners → capabilities → business opportunities</h2>
   <p class="sub">Select a domain to see who is connected to whom along this industry chain.<b style="color:var(--red)">Red lines = gaps</b>— where that line is broken, one piece of the business on the right cannot be assembled. All nodes are clickable.</p>
   <div class="ctrl">${doms.map(d=>`<span class="chipbtn chip sm ${MD===d?'on':''}" style="${MD===d?'background:var(--navy)':''}"
     onclick="MD='${d}';render()">${esc(d)}</span>`).join('')}</div>
@@ -975,7 +1012,7 @@ function vDecide(qs){
   const top=DATA.opps.filter(o=>o.rank>0).sort(byRank).slice(0,10);
   const gapsRank=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id));
   return `${crumb(['Overview',''],['Decision guide','decide'])}
-  <h1>Decision guide</h1>
+  <h2 class="sech1">Decision guide</h2>
   <p class="sub">The three most common decisions, each calculated for you from live data, with no need to work through tables yourself.</p>
 
   <h2>① Is this business opportunity actionable?</h2>
@@ -1048,7 +1085,7 @@ function addEdit(kind,id){
 function vChanges(){
   const txt=EDITS.map((e,i)=>`${i+1}. [${e.kind}] ${e.id} ${e.name}\n   Field: ${e.f}\n   Change to: ${e.v}\n   Reason: ${e.w||'—'}`).join('\n');
   return `${crumb(['Overview',''],['Change request form','changes'])}
-  <h1>Change request form <span style="font-size:.95rem;color:var(--sub);font-weight:400">${EDITS.length}  records</span></h1>
+  <h2 class="sech1">Change request form <span style="font-size:.95rem;color:var(--sub);font-weight:400">${EDITS.length}  records</span></h2>
   <p class="sub">Once compiled, copy the whole block to the PI (or print it). Changes take effect only after the PI amends the master Excel tool accordingly and regenerates the explorer — this step is deliberate: every change to the figures must pass through the same gatekeeper.</p>
   ${EDITS.length?`<div class="rows" style="margin-top:14px">${EDITS.map((e,i)=>`
     <div class="row" style="cursor:default"><span class="chip sm">${esc(e.kind)}</span>
@@ -1067,7 +1104,7 @@ function vClaim(){
   return `${crumb(['Overview',''],['Claim form','claim'])}
   <div class="ctrl noprint" style="justify-content:flex-end;margin:0 0 4px">
     <span class="btn" onclick="window.print()">Print / save as PDF</span></div>
-  <h1>Partner claim form (draft)</h1>
+  <h2 class="sech1">Partner claim form (draft)</h2>
   <p class="sub">This form matches the fields of the VMH-EcoMap-3 partner proposal response form. Print it or save it as PDF, complete the company details, and return it to the PI Office.</p>
   <div class="card" style="margin-top:14px"><dl class="kv">
     <dt>Company name</dt><dd>＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</dd>
@@ -1107,7 +1144,7 @@ function vLayers(){
   }).join('');
   const gap=order.filter(k=>DATA.opps.filter(o=>o.lay===k).length>0&&DATA.caps.filter(c=>c.lay===k).length===0);
   return `${crumb(['Overview',''],['Layer map','layers'])}
-  <h1>The seven-layer stack of the hospital ecosystem</h1>
+  <h2 class="sech1">The seven-layer stack of the hospital ecosystem</h2>
   <p class="sub">As with the internet, each lower layer is the foundation of the one above. Identify which layer your expertise falls into and you will know which businesses you can take on and whom you must rely on in the layers above and below. Click any layer for details.</p>
   ${gap.length?`<div class="verd" style="background:var(--redL);color:var(--red);margin:16px 0">
     ★ ${gap.map(k=>k+' '+esc(DATA.layers[k].n)).join('、')} Businesses exist, but there is no corresponding capability
@@ -1123,7 +1160,7 @@ function vLayer(k){
   return `${crumb(['Overview',''],['Layer map','layers'],[k,''])}
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${layBadge(k)}
     <span class="chip">${os.length}  businesses</span><span class="chip">${cs.length}  capabilities</span></div>
-  <h1 style="margin-top:8px">${esc(L.n)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(L.n)}</h2>
   <p class="sub">${esc(L.en)}｜${esc(L.d)}</p>
   <div class="verd" style="background:#EEF3F9;color:var(--navy);margin:14px 0">Who positions themselves in this layer
     <div style="font-weight:400;font-size:.88rem;margin-top:4px">${esc(L.who)}</div></div>
@@ -1146,7 +1183,7 @@ function vLayer(k){
 }
 function vMatrix(){
   return `${crumb(['Overview',''],['Master table','matrix'])}
-  <h1>Master matrix: 85 business opportunities × 60 capabilities</h1>
+  <h2 class="sech1">Master matrix: 85 business opportunities × 60 capabilities</h2>
   <p class="sub">One row = one business opportunity; one cell = one required capability (color = current status).<b>A row with no red cells = a business opportunity that can be assembled</b>。
   The percentage on the left = capability readiness (share of non-gap items). Click a cell to view the capability; click a row name to view the action card.</p>
   <div class="ctrl">
@@ -1201,7 +1238,7 @@ function vReport(type,id){
     const gateIds=new Set();caps.forEach(c=>(c.gates.match(/[A-Z][A-Z0-9-]+/g)||[]).forEach(g=>{if(G[g])gateIds.add(g)}));
     return `${bar}
     <p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">Business Opportunity Report | OPPORTUNITY BRIEF</p>
-    <h1>${esc(o.name)}</h1>
+    <h2 class="sech1">${esc(o.name)}</h2>
     <p class="sub">${esc(o.en)}｜${esc(o.fam)}｜${vnShort(o.vn)}${o.rank>0?`｜${RKL} #${o.rank}（${o.score}  pts)`:' | White-space business opportunity'}</p>
     <div class="verd" style="background:${v.bg};color:${v.c};margin:12px 0">${v.t}
       <div style="font-weight:400;font-size:.86rem;margin-top:3px">${v.d}</div></div>
@@ -1230,7 +1267,7 @@ function vReport(type,id){
   if(type==='top'){
     const L=DATA.opps.filter(o=>o.rank>0).sort(byRank).slice(0,20);
     return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">${RKL}Master list | TOP 20</p>
-    <h1>85 business opportunities ranked by ${RKL} (top 20)</h1>
+    <h2 class="sech1">85 business opportunities ranked by ${RKL} (top 20)</h2>
     <p class="sub">Score = value × readiness × Vietnam context − gap deductions. The verdict column is what determines whether work can start: gaps = 0, top priority; ≤2, may be launched; ≥3, find partners first.</p>
     <div class="rows" style="margin-top:14px">${L.map(o=>{const g=oppGaps(o.id).length;return `
       <div class="row" style="cursor:default"><span class="rankb ${o.rank<=10?'top':''}">${o.rank}</span>
@@ -1243,7 +1280,7 @@ function vReport(type,id){
     const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,10);
     const talking=DATA.parts.filter(p=>/Engaged|Due/.test(p.stat));
     return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">PI weekly meeting checklist</p>
-    <h1>Three things to watch this week</h1>
+    <h2 class="sech1">Three things to watch this week</h2>
     <h2 style="color:var(--red)">① Unconfirmed mandatory regulations (${badGates.length}）</h2>
     <div class="rows">${badGates.map(g=>`<div class="row" style="cursor:default">
       <span class="tag" style="background:var(--redL);color:var(--red)">${esc(g.stat)}</span>
@@ -1264,7 +1301,7 @@ function vReport(type,id){
       const {caps,gaps,partIds,gateIds}=simCalc();
       const os=[...SELO].map(o=>O[o]).sort(byRank);
       return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">Portfolio Action Report | PORTFOLIO BRIEF</p>
-      <h1>${os.length}  business opportunities — portfolio assessment</h1>
+      <h2 class="sech1">${os.length}  business opportunities — portfolio assessment</h2>
       <p class="sub">${os.map(o=>esc(o.name)).join('、')}</p>
       <div class="verd" style="background:${gaps.length?'var(--amberL)':'var(--greenL)'};color:${gaps.length?'var(--amber)':'var(--green)'};margin:12px 0">
         ${gaps.length?`This portfolio requires a total of ${caps.length}  capabilities, of which ${gaps.length}  are gaps`:`This portfolio requires a total of ${caps.length}  capabilities, all with an assigned owner and no gaps`}
@@ -1293,7 +1330,7 @@ function vReport(type,id){
       const r=simCalc(); const cs=[...SELC].map(c=>C[c]);
       const nNew=r.ready.filter(x=>x.newUnlock).length;
       return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">Capability Portfolio Report | CAPABILITY-FIT BRIEF</p>
-      <h1>These ${cs.length}  capabilities — what can they assemble?</h1>
+      <h2 class="sech1">These ${cs.length}  capabilities — what can they assemble?</h2>
       <p class="sub">${cs.map(c=>esc(c.name)).join('、')}｜${SIM.incl?'Alliance’s existing capabilities included':'Assessed on the selected capabilities alone'}</p>
       <div class="verd" style="background:var(--greenL);color:var(--green);margin:12px 0">
         Assemblable ${r.ready.length}  | one capability short ${r.near.length}  ${nNew?` | including ★ newly unlocked ${nNew}  (previously not assemblable, now assemblable thanks to this capability set)`:''}</div>
@@ -1344,7 +1381,7 @@ function vSim(){
     <span class="chipbtn chip ${SIM.mode==='c'?'on':''}" style="${SIM.mode==='c'?'background:var(--teal)':''}"
       onclick="SIM.mode='c';render()">Select capabilities → see the business opportunities they can assemble</span></div>`;
   return `${crumb(['Overview',''],['Portfolio simulation','sim'])}
-  <h1>Portfolio simulation: tick the boxes and the answer emerges on its own</h1>
+  <h2 class="sech1">Portfolio simulation: tick the boxes and the answer emerges on its own</h2>
   <p class="sub">${SIM.mode==='o'
     ?'Tick the business opportunities you want to pursue together; the right panel summarizes in real time which capabilities are required in total, what is missing, and which partners and gates are involved.'
     :'Tick the capabilities you (or a given partner) can bring in; the right panel calculates in real time which business opportunities thereby become assemblable.<b>★ Newly unlocked</b>= business opportunities the alliance previously could not assemble but now can thanks to this capability set — this is the marginal contribution of the set.'}</p>
@@ -1690,5 +1727,24 @@ function setMode(e,m){
    document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
  });
 })();
-</script></body>
+</script><script>
+/* ══ VMH-SCANFIX3-2026-08-17 ══ G：量到排不下才換行，與語言無關 */
+(function(){
+  function fit(){
+    var w=document.querySelector('.hwrap'), n=w&&w.querySelector('nav');
+    if(!w||!n||!n.children.length) return;
+    w.classList.remove('hstack');
+    if(n.scrollWidth>n.clientWidth+2) w.classList.add('hstack');
+  }
+  window.addEventListener('resize',fit);
+  window.addEventListener('load',fit);
+  if(window.ResizeObserver){
+    var n=document.querySelector('.hwrap nav');
+    if(n) new ResizeObserver(fit).observe(n);
+  }
+  var t=0, iv=setInterval(function(){ fit(); if(++t>20) clearInterval(iv); },150);
+  fit();
+})();
+</script>
+</body>
 </html>

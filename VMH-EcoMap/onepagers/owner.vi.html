@@ -120,6 +120,14 @@
   line-height: 1.6;
 }
 .opnote a { color: inherit; }
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ A：右上角語言鈕壓到頁首按鈕 → 改固定右下角 */
+.i18nsw{top:auto !important;bottom:16px !important;right:16px !important}
+.i18panel{top:auto !important;bottom:calc(100% + 8px) !important}
+@media(max-width:640px){.i18nsw{bottom:14px !important;right:14px !important}}
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ H：面板小標放大到 11px */
+.i18gt{font-size:11px}
 </style><!-- VMH-PATCH-2026-08-16 start -->
 <link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/onepagers/owner.html">
 <link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/onepagers/owner.en.html">
@@ -137,6 +145,7 @@
 <meta name="twitter:description" content="VMH-EcoMap — biến “bệnh viện Việt Nam có những cơ hội kinh doanh nào” thành một bản đồ có thể thao tác, xác minh và mô hình hóa.">
 <meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
 <!-- VMH-PATCH-2026-08-16 end -->
+<!-- VMH-SCANFIX-2026-08-17 --><link rel="canonical" href="https://nchsieh.github.io/VMH-EcoMap/onepagers/owner.vi.html">
 </head>
 <body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ VI</button>
@@ -155,7 +164,7 @@
       Công cụ chính VMH-EcoMap có tổng cộng 21 tab, nhưng<b>chủ đầu tư bệnh viện không cần xem hết</b>。<br>
       Dữ liệu do tư vấn duy trì, số liệu do hệ thống tự động tính toán. Bạn chỉ cần làm theo năm bước dưới đây,<b>và trong mười phút bạn sẽ biết: cơ hội ở đâu, chúng ta có bao nhiêu năng lực, còn thiếu ai, nên làm cái nào trước, và có sinh lời hay không.</b>
     </div>
-<div class="opnote"><!--VMH-FIX-DESIGN-2026-08-16-->Trang này giải thích <b>bộ công cụ Excel có thể tải về</b>. Nếu bạn chỉ muốn xem trên trình duyệt, hãy dùng <a href="../index.vi.html#tools">bốn công cụ trực tuyến</a> ở trang chủ.</div>
+<div class="opnote"><!--VMH-FIX-DESIGN-2026-08-16-->Trang này giải thích <b>bộ công cụ Excel có thể tải về</b>. Nếu bạn chỉ muốn xem trên trình duyệt, hãy dùng <a href="../tools/index.vi.html">bốn công cụ trực tuyến</a> ở trang chủ.</div>
   </div>
 
   <div class="roles">

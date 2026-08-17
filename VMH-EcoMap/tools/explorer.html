@@ -358,6 +358,41 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
   .hwrap { padding-right: 14px; }
   .hwrap nav, header nav { -webkit-mask-image: none; mask-image: none; }
 }
+
+/* VMH-ANCHOR-FIX */[id]{scroll-margin-top:120px}
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ A：右上角語言鈕壓到頁首按鈕 → 改固定右下角 */
+.i18nsw{top:auto !important;bottom:16px !important;right:16px !important}
+.i18panel{top:auto !important;bottom:calc(100% + 8px) !important}
+@media(max-width:640px){.i18nsw{bottom:14px !important;right:14px !important}}
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ B：語系／配色切換的無障礙角色 */
+.i18row span.on,.lp.on{cursor:default}
+
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ H：面板小標放大到 11px */
+.i18gt{font-size:11px}
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ I：標題階層修正後沿用原本外觀 */
+h2.sech1{font-size:1.5rem;color:var(--navy,#12365C);margin:26px 0 4px;font-weight:700}
+.a11y-h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ G：標籤列排不下時自動獨占一列 */
+.hwrap.hstack{flex-wrap:wrap;height:auto;min-height:58px;align-content:center}
+.hwrap.hstack > nav{order:9;flex:1 0 100%;min-width:100%;margin-top:2px;padding-bottom:6px}
+.hwrap.hstack{padding-bottom:2px}
+/* 桌機／平板：標籤獨占一列後仍排不下就換行，保證 9 個標籤全部看得到 */
+@media(min-width:700px){
+  .hwrap.hstack > nav{flex-wrap:wrap;overflow-x:visible;row-gap:2px}
+}
+/* 手機：維持橫向捲動，但把捲軸顯示出來，讓使用者知道還有標籤 */
+@media(max-width:699px){
+  .hwrap.hstack > nav{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.35) transparent}
+  .hwrap.hstack > nav::-webkit-scrollbar{height:4px}
+  .hwrap.hstack > nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);border-radius:4px}
+}
 </style><!-- VMH-PATCH-2026-08-16 start -->
 <link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.html">
 <link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.en.html">
@@ -375,6 +410,7 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
 <meta name="twitter:description" content="生態導覽器：85 門商機 × 10 項能力的全景瀏覽與交叉比對，可載入自己的 Excel。">
 <meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
 <!-- VMH-PATCH-2026-08-16 end -->
+<!-- VMH-SCANFIX-2026-08-17 --><link rel="canonical" href="https://nchsieh.github.io/VMH-EcoMap/tools/explorer.html">
 </head>
 <body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ 中文</button>
@@ -384,12 +420,13 @@ footer{max-width:1180px;margin:0 auto;padding:18px 20px 40px;color:var(--sub);fo
    <div class="i18row"><a href="explorer.html" class="on">中文</a><a href="explorer.en.html">EN</a><a href="explorer.vi.html">VI</a></div>
    <div class="i18gt">外觀</div>
    <div class="i18modes">
-    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
-    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色</a>
-    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色</a>
+    <a href="#" role="button" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" role="button" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色</a>
+    <a href="#" role="button" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色</a>
    </div>
  </div>
 </div>
+<h1 class="a11y-h1">VMH-EcoMap 生態導覽器 v1.0</h1>
 <header><div class="hwrap">
   <div class="brand" onclick="go('')"><svg class="brandmark" viewBox="0 0 32 32" width="20" height="20" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-4px;margin-right:6px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><span class="t">VMH-EcoMap 生態導覽器</span><span style="display:none">VMH</span></div>
   <nav id="nav"></nav>
@@ -601,7 +638,7 @@ function vLanding(){
   const nGap=gapCaps.length, nWhite=DATA.opps.filter(o=>o.status.startsWith('★')).length,
         n3=DATA.opps.filter(o=>o.vn.startsWith('③')).length;
   return `
-  <h1>越南醫院生意的整張藍圖，<br>照你的身分帶你走。</h1>
+  <h2 class="sech1">越南醫院生意的整張藍圖，<br>照你的身分帶你走。</h2>
   <p class="sub">${DATA.opps.length} 門生意 × ${DATA.caps.length} 項能力 × ${DATA.parts.length} 個夥伴與角色，彼此的關係全部可以點擊追蹤。先選你是誰——</p>
   <div class="grid g2" style="margin-top:22px">
     <div class="role" style="border-top-color:#0F766E" onclick="go('p')">
@@ -637,7 +674,7 @@ function vPartnerHome(){
   const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,6);
   const white=DATA.opps.filter(o=>o.status.startsWith('★')).sort(byRank).slice(0,6);
   return `${crumb(['總覽',''],['夥伴視角','p'])}
-  <h1>找到你在這張藍圖裡的位置</h1>
+  <h2 class="sech1">找到你在這張藍圖裡的位置</h2>
   <p class="sub">三步就好：逛生意 → 看白地 → 認缺口。全程不用填任何東西。</p>
   <div class="card" style="margin-top:18px"><div class="steps">
     <div class="step"><span class="n"></span><div><b>逛商機圖鑑</b> — 85 門生意按族群分類，用你的本業關鍵字搜（例如「機房」「PACS」「洗腎」）。
@@ -658,7 +695,7 @@ function vOwnerHome(){
   const fams={}; DATA.opps.forEach(o=>fams[o.fam]=(fams[o.fam]||0)+1);
   const mx=Math.max(...Object.values(fams));
   return `${crumb(['總覽',''],['業主視角','o'])}
-  <h1>整體盤勢與${RKL}</h1>
+  <h2 class="sech1">整體盤勢與${RKL}</h2>
   <p class="sub">順位＝價值 × 準備度 × 越南現況 − 缺口扣分，全自動計算。<b>分數高不等於打得動</b>——右側的缺口標籤才是能不能動手的判準。</p>
   <div class="ctrl noprint"><span class="btn" onclick="go('report/top')">輸出${RKL}總表（A4）</span></div>
   <h2>${RKL} Top 10</h2>
@@ -683,7 +720,7 @@ function vPiHome(){
   const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,8);
   const talking=DATA.parts.filter(p=>/Engaged|Due/.test(p.stat));
   return `${crumb(['總覽',''],['PI 治理視圖','g'])}
-  <h1>本週要盯的三件事</h1>
+  <h2 class="sech1">本週要盯的三件事</h2>
   <p class="sub">排序固定：未確認的強制法規 ＞ 高牽動缺口 ＞ 洽談中夥伴。法規是 Gate 不是 Task,不會因為晚做就變簡單。</p>
   <div class="ctrl noprint"><span class="btn" onclick="go('report/pi')">輸出週會清單（A4）</span></div>
   <h2 style="color:var(--red)">① 未確認的強制法規（${badGates.length}）</h2>
@@ -712,7 +749,7 @@ function vOpps(qs){
   const tiers=[...new Set(DATA.opps.map(o=>o.tier))].sort();
   const stages=[...new Set(DATA.opps.map(o=>o.stage))].sort();
   return `${crumb(['總覽',''],['商機圖鑑','opps'])}
-  <h1>商機圖鑑 <span style="font-size:1rem;color:var(--sub);font-weight:400">85 門生意</span></h1>
+  <h2 class="sech1">商機圖鑑 <span style="font-size:1rem;color:var(--sub);font-weight:400">85 門生意</span></h2>
   <div class="ctrl">
     <input type="search" id="oq" placeholder="搜生意、關鍵字…" value="${esc(F.q)}" oninput="F.q=this.value;drawOpps()">
     <select onchange="F.sort=this.value;drawOpps()">
@@ -753,7 +790,7 @@ function vOpp(id){
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${famChip(o.fam)}
     <span class="chip">${vnShort(o.vn)}</span><span class="chip num">${o.rank>0?`${RKL} #${o.rank}｜${o.score} 分`:`未排名（白地商機）`}</span>
     ${layBadge(o.lay)}</div>
-  <h1 style="margin-top:8px">${esc(o.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(o.name)}</h2>
   <p class="sub">${esc(o.en)}</p>
   <div class="verd" style="background:${v.bg};color:${v.c};margin:14px 0 12px">
     ${v.t}<div style="font-weight:400;font-size:.87rem;margin-top:3px">${v.d}</div></div>
@@ -797,7 +834,7 @@ let CF={puz:'',q:''};
 function vCaps(qs){
   if(qs){const u=new URLSearchParams(qs);CF={puz:u.get('puz')||'',q:''};}
   return `${crumb(['總覽',''],['能力','caps'])}
-  <h1>60 項能力 <span style="font-size:.95rem;color:var(--sub);font-weight:400">依領域 D01–D10 分組</span></h1>
+  <h2 class="sech1">60 項能力 <span style="font-size:.95rem;color:var(--sub);font-weight:400">依領域 D01–D10 分組</span></h2>
   <div class="ctrl">
     <input type="search" placeholder="搜能力…" oninput="CF.q=this.value;drawCaps()">
     ${Object.entries(PUZS).map(([k,s])=>`<span class="chipbtn chip sm ${CF.puz===k||(CF.puz==='gap'&&k==='缺口-待尋找')?'on':''}"
@@ -829,7 +866,7 @@ function vCap(id){
     <span class="chip">${esc(c.dom)}</span><span class="chip">${esc(c.stage)}</span>
     <span class="tag" style="background:${PUZC[c.puz]}15;color:${PUZC[c.puz]};font-size:.82rem">● ${esc(c.puz)}</span>
     ${layBadge(c.lay)}</div>
-  <h1 style="margin-top:8px">${esc(c.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(c.name)}</h2>
   <p class="sub">${esc(c.en)}｜${esc(c.out)}</p>
   ${c.puz==='缺口-待尋找'?`<div class="verd" style="background:var(--redL);color:var(--red);margin:12px 0">
     這是缺口——${esc(c.gapnote)||'待尋找合適夥伴'}<div style="font-weight:400;font-size:.86rem;margin-top:3px">
@@ -858,7 +895,7 @@ let PF='all';
 function vParts(){
   const buckets=[['all','全部'],['q','已通過/審查中'],['e','已接觸'],['t','目標邀請'],['gap','待招募角色']];
   return `${crumb(['總覽',''],['夥伴','parts'])}
-  <h1>夥伴與候選角色 <span style="font-size:.95rem;color:var(--sub);font-weight:400">${DATA.parts.length} 筆</span></h1>
+  <h2 class="sech1">夥伴與候選角色 <span style="font-size:.95rem;color:var(--sub);font-weight:400">${DATA.parts.length} 筆</span></h2>
   <p class="sub">「待招募角色」是聯盟已經定義好、但還沒有公司認領的位置——找夥伴時就是拿這張清單去比對。</p>
   <div class="ctrl">${buckets.map(([k,t])=>`<span class="chipbtn chip ${PF===k?'on':''}" style="${PF===k?'background:var(--navy)':''}"
     onclick="PF='${k}';render()">${t}</span>`).join('')}</div>
@@ -884,7 +921,7 @@ function vPart(id){
   return `${crumb(['總覽',''],['夥伴','parts'],[p.id,''])}
   <div style="display:flex;gap:8px;flex-wrap:wrap">${p.stat?`<span class="chip">${esc(p.stat)}</span>`:''}
     ${p.cty?`<span class="chip">${esc(p.cty)}</span>`:''}<span class="chip">${esc(p.typ)}</span></div>
-  <h1 style="margin-top:8px">${esc(p.name)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(p.name)}</h2>
   <p class="sub">${esc(p.role)}</p>
   <div class="grid g2" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:14px">
     <div class="card"><h2 style="margin-top:0">定位</h2><dl class="kv">
@@ -915,7 +952,7 @@ function vMap(qs){
   const doms=[...new Set(DATA.caps.map(c=>c.dom))].sort();
   if(!doms.includes(MD))MD=doms.find(d=>d.startsWith(MD))||doms[0];
   return `${crumb(['總覽',''],['生態地圖','map'])}
-  <h1>生態地圖：夥伴 → 能力 → 商機</h1>
+  <h2 class="sech1">生態地圖：夥伴 → 能力 → 商機</h2>
   <p class="sub">選一個領域,看這條產業鏈上誰連著誰。<b style="color:var(--red)">紅線＝缺口</b>——那條線斷著,右邊的生意就有一塊拼不起來。所有節點都可以點。</p>
   <div class="ctrl">${doms.map(d=>`<span class="chipbtn chip sm ${MD===d?'on':''}" style="${MD===d?'background:var(--navy)':''}"
     onclick="MD='${d}';render()">${esc(d)}</span>`).join('')}</div>
@@ -975,7 +1012,7 @@ function vDecide(qs){
   const top=DATA.opps.filter(o=>o.rank>0).sort(byRank).slice(0,10);
   const gapsRank=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id));
   return `${crumb(['總覽',''],['決策嚮導','decide'])}
-  <h1>決策嚮導</h1>
+  <h2 class="sech1">決策嚮導</h2>
   <p class="sub">三個最常見的決策,每一個都用即時資料算給你看,不用自己翻表。</p>
 
   <h2>① 這個商機,打得動嗎？</h2>
@@ -1048,7 +1085,7 @@ function addEdit(kind,id){
 function vChanges(){
   const txt=EDITS.map((e,i)=>`${i+1}. [${e.kind}] ${e.id} ${e.name}\n   欄位：${e.f}\n   改為：${e.v}\n   理由：${e.w||'—'}`).join('\n');
   return `${crumb(['總覽',''],['異動單','changes'])}
-  <h1>異動單 <span style="font-size:.95rem;color:var(--sub);font-weight:400">${EDITS.length} 筆</span></h1>
+  <h2 class="sech1">異動單 <span style="font-size:.95rem;color:var(--sub);font-weight:400">${EDITS.length} 筆</span></h2>
   <p class="sub">彙整後整段複製給 PI（或列印）。PI 依單修改 Excel 主工具後重產導覽器，異動才會生效——這一步是刻意的：所有數字的變更都要經過同一個把關的人。</p>
   ${EDITS.length?`<div class="rows" style="margin-top:14px">${EDITS.map((e,i)=>`
     <div class="row" style="cursor:default"><span class="chip sm">${esc(e.kind)}</span>
@@ -1067,7 +1104,7 @@ function vClaim(){
   return `${crumb(['總覽',''],['認領單','claim'])}
   <div class="ctrl noprint" style="justify-content:flex-end;margin:0 0 4px">
     <span class="btn" onclick="window.print()">列印／存 PDF</span></div>
-  <h1>夥伴認領單（草稿）</h1>
+  <h2 class="sech1">夥伴認領單（草稿）</h2>
   <p class="sub">這一張對齊 VMH-EcoMap-3 夥伴提案回覆表的欄位。列印或存 PDF 後填妥公司資訊，交回 PI Office。</p>
   <div class="card" style="margin-top:14px"><dl class="kv">
     <dt>公司名稱</dt><dd>＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</dd>
@@ -1107,7 +1144,7 @@ function vLayers(){
   }).join('');
   const gap=order.filter(k=>DATA.opps.filter(o=>o.lay===k).length>0&&DATA.caps.filter(c=>c.lay===k).length===0);
   return `${crumb(['總覽',''],['層級地圖','layers'])}
-  <h1>醫院生態的七層堆疊</h1>
+  <h2 class="sech1">醫院生態的七層堆疊</h2>
   <p class="sub">像網際網路一樣，下層是上層的地基。找到你的專長落在哪一層，就知道能接哪些生意、上下層要靠誰。點任何一層看細節。</p>
   ${gap.length?`<div class="verd" style="background:var(--redL);color:var(--red);margin:16px 0">
     ★ ${gap.map(k=>k+' '+esc(DATA.layers[k].n)).join('、')} 有生意、卻沒有對應能力
@@ -1123,7 +1160,7 @@ function vLayer(k){
   return `${crumb(['總覽',''],['層級地圖','layers'],[k,''])}
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${layBadge(k)}
     <span class="chip">${os.length} 門生意</span><span class="chip">${cs.length} 項能力</span></div>
-  <h1 style="margin-top:8px">${esc(L.n)}</h1>
+  <h2 class="sech1" style="margin-top:8px">${esc(L.n)}</h2>
   <p class="sub">${esc(L.en)}｜${esc(L.d)}</p>
   <div class="verd" style="background:#EEF3F9;color:var(--navy);margin:14px 0">誰在這一層找定位
     <div style="font-weight:400;font-size:.88rem;margin-top:4px">${esc(L.who)}</div></div>
@@ -1146,7 +1183,7 @@ function vLayer(k){
 }
 function vMatrix(){
   return `${crumb(['總覽',''],['總表','matrix'])}
-  <h1>總表：85 門生意 × 60 項能力</h1>
+  <h2 class="sech1">總表：85 門生意 × 60 項能力</h2>
   <p class="sub">一列＝一門生意，一格＝需要的一項能力（顏色＝目前狀態）。<b>整列沒有紅格＝拼得起來的生意</b>。
   左側百分比＝能力就緒度（非缺口的比例）。點格子看能力、點列名看作戰卡。</p>
   <div class="ctrl">
@@ -1201,7 +1238,7 @@ function vReport(type,id){
     const gateIds=new Set();caps.forEach(c=>(c.gates.match(/[A-Z][A-Z0-9-]+/g)||[]).forEach(g=>{if(G[g])gateIds.add(g)}));
     return `${bar}
     <p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">商機報告｜OPPORTUNITY BRIEF</p>
-    <h1>${esc(o.name)}</h1>
+    <h2 class="sech1">${esc(o.name)}</h2>
     <p class="sub">${esc(o.en)}｜${esc(o.fam)}｜${vnShort(o.vn)}${o.rank>0?`｜${RKL} #${o.rank}（${o.score} 分）`:'｜白地商機'}</p>
     <div class="verd" style="background:${v.bg};color:${v.c};margin:12px 0">${v.t}
       <div style="font-weight:400;font-size:.86rem;margin-top:3px">${v.d}</div></div>
@@ -1230,7 +1267,7 @@ function vReport(type,id){
   if(type==='top'){
     const L=DATA.opps.filter(o=>o.rank>0).sort(byRank).slice(0,20);
     return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">${RKL}總表｜TOP 20</p>
-    <h1>85 門生意的${RKL}（前 20）</h1>
+    <h2 class="sech1">85 門生意的${RKL}（前 20）</h2>
     <p class="sub">分數＝價值 × 準備 × 越南現況 − 缺口扣分。判定欄才是能不能動手：缺口=0 優先打；≤2 可啟動；≥3 先找夥伴。</p>
     <div class="rows" style="margin-top:14px">${L.map(o=>{const g=oppGaps(o.id).length;return `
       <div class="row" style="cursor:default"><span class="rankb ${o.rank<=10?'top':''}">${o.rank}</span>
@@ -1243,7 +1280,7 @@ function vReport(type,id){
     const topGaps=[...gapCaps].sort((a,b)=>pull(b.id)-pull(a.id)).slice(0,10);
     const talking=DATA.parts.filter(p=>/Engaged|Due/.test(p.stat));
     return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">PI 週會清單</p>
-    <h1>本週要盯的三件事</h1>
+    <h2 class="sech1">本週要盯的三件事</h2>
     <h2 style="color:var(--red)">① 未確認強制法規（${badGates.length}）</h2>
     <div class="rows">${badGates.map(g=>`<div class="row" style="cursor:default">
       <span class="tag" style="background:var(--redL);color:var(--red)">${esc(g.stat)}</span>
@@ -1264,7 +1301,7 @@ function vReport(type,id){
       const {caps,gaps,partIds,gateIds}=simCalc();
       const os=[...SELO].map(o=>O[o]).sort(byRank);
       return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">組合作戰報告｜PORTFOLIO BRIEF</p>
-      <h1>${os.length} 門生意的組合評估</h1>
+      <h2 class="sech1">${os.length} 門生意的組合評估</h2>
       <p class="sub">${os.map(o=>esc(o.name)).join('、')}</p>
       <div class="verd" style="background:${gaps.length?'var(--amberL)':'var(--greenL)'};color:${gaps.length?'var(--amber)':'var(--green)'};margin:12px 0">
         ${gaps.length?`此組合共需 ${caps.length} 項能力，其中 ${gaps.length} 項是缺口`:`此組合共需 ${caps.length} 項能力，全部有人負責，沒有缺口`}
@@ -1293,7 +1330,7 @@ function vReport(type,id){
       const r=simCalc(); const cs=[...SELC].map(c=>C[c]);
       const nNew=r.ready.filter(x=>x.newUnlock).length;
       return `${bar}<p style="font-size:.78rem;color:var(--sub);letter-spacing:.1em;font-weight:700">能力組合報告｜CAPABILITY-FIT BRIEF</p>
-      <h1>這 ${cs.length} 項能力，能拚出什麼</h1>
+      <h2 class="sech1">這 ${cs.length} 項能力，能拚出什麼</h2>
       <p class="sub">${cs.map(c=>esc(c.name)).join('、')}｜${SIM.incl?'已合併聯盟既有能力':'僅以勾選能力單獨評估'}</p>
       <div class="verd" style="background:var(--greenL);color:var(--green);margin:12px 0">
         拚得起來 ${r.ready.length} 門｜差一項 ${r.near.length} 門${nNew?`｜其中 ★新解鎖 ${nNew} 門（因這組能力而從拚不動變可拚）`:''}</div>
@@ -1344,7 +1381,7 @@ function vSim(){
     <span class="chipbtn chip ${SIM.mode==='c'?'on':''}" style="${SIM.mode==='c'?'background:var(--teal)':''}"
       onclick="SIM.mode='c';render()">選能力 → 看可拚的生意</span></div>`;
   return `${crumb(['總覽',''],['組合模擬','sim'])}
-  <h1>組合模擬：勾一勾，答案自己浮出來</h1>
+  <h2 class="sech1">組合模擬：勾一勾，答案自己浮出來</h2>
   <p class="sub">${SIM.mode==='o'
     ?'把想一起推的生意勾起來，右邊即時彙總：總共需要哪些能力、缺什麼、牽涉哪些夥伴與門檻。'
     :'勾你（或某家夥伴）帶得進來的能力，右邊即時算出：哪些生意因此拚得起來。<b>★新解鎖</b>＝原本聯盟拚不動、因為這組能力而變可拚的生意——這就是這組能力的邊際貢獻。'}</p>
@@ -1690,5 +1727,24 @@ function setMode(e,m){
    document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
  });
 })();
-</script></body>
+</script><script>
+/* ══ VMH-SCANFIX3-2026-08-17 ══ G：量到排不下才換行，與語言無關 */
+(function(){
+  function fit(){
+    var w=document.querySelector('.hwrap'), n=w&&w.querySelector('nav');
+    if(!w||!n||!n.children.length) return;
+    w.classList.remove('hstack');
+    if(n.scrollWidth>n.clientWidth+2) w.classList.add('hstack');
+  }
+  window.addEventListener('resize',fit);
+  window.addEventListener('load',fit);
+  if(window.ResizeObserver){
+    var n=document.querySelector('.hwrap nav');
+    if(n) new ResizeObserver(fit).observe(n);
+  }
+  var t=0, iv=setInterval(function(){ fit(); if(++t>20) clearInterval(iv); },150);
+  fit();
+})();
+</script>
+</body>
 </html>

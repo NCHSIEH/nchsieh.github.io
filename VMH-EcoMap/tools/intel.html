@@ -118,6 +118,45 @@ body.edit .editbar{display:block}
 .i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
 @media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
 
+
+/* VMH-ANCHOR-FIX */[id]{scroll-margin-top:120px}
+
+
+
+/* ══ VMH-ROSTER-FILTER-2026-08-17 ══ 名冊搜尋與篩選 */
+#rosterTools{margin:14px 0 18px;display:grid;gap:10px}
+#rosterTools .rf-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#rosterTools .rf-search{position:relative;flex:1 1 22em;max-width:30em}
+#rosterTools input{width:100%;font:inherit;font-size:.9rem;padding:10px 34px 10px 14px;
+  border:1px solid var(--line,#d8dfe8);border-radius:9px;background:var(--card,#fff);color:inherit}
+#rosterTools input:focus{outline:2px solid var(--acc,#2A5480);outline-offset:1px}
+#rosterTools .rf-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  border:0;background:transparent;color:var(--sub,#6b7c91);font:inherit;font-size:.8rem;cursor:pointer;padding:4px 6px}
+#rosterTools .rf-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+#rosterTools .rf-lab{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub,#6b7c91);margin-right:4px}
+#rosterTools .rf-chip{font:inherit;font-size:.8rem;padding:5px 13px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line,#d8dfe8);background:transparent;color:inherit;transition:.15s}
+#rosterTools .rf-chip:hover{border-color:var(--acc,#2A5480)}
+#rosterTools .rf-chip.on{background:var(--acc,#12365C);border-color:var(--acc,#12365C);color:#fff;font-weight:500}
+#rosterTools .rf-count{font-size:.8rem;color:var(--sub,#6b7c91);font-variant-numeric:tabular-nums;white-space:nowrap}
+#rosterEmpty{padding:28px;text-align:center;color:var(--sub,#6b7c91);font-size:.88rem}
+.rgrp[hidden],.ritem[hidden]{display:none !important}
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ A：右上角語言鈕壓到頁首按鈕 → 改固定右下角 */
+.i18nsw{top:auto !important;bottom:16px !important;right:16px !important}
+.i18panel{top:auto !important;bottom:calc(100% + 8px) !important}
+@media(max-width:640px){.i18nsw{bottom:14px !important;right:14px !important}}
+
+/* ══ VMH-SCANFIX-2026-08-17 ══ B：語系／配色切換的無障礙角色 */
+.i18row span.on,.lp.on{cursor:default}
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ H：面板小標放大到 11px */
+.i18gt{font-size:11px}
+
+/* ══ VMH-SCANFIX3-2026-08-17 ══ I：標題階層修正後沿用原本外觀 */
+h2.sech1{font-size:1.5rem;color:var(--navy,#12365C);margin:26px 0 4px;font-weight:700}
+.a11y-h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 </style><!-- VMH-PATCH-2026-08-16 start -->
 <link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.html">
 <link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.en.html">
@@ -135,6 +174,7 @@ body.edit .editbar{display:block}
 <meta name="twitter:description" content="越南醫療情報站：法規時鐘、競合廠商動態、市場數據與 115 家廠商名冊，每筆附出處與查證日。">
 <meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/intel.jpg">
 <!-- VMH-PATCH-2026-08-16 end -->
+<!-- VMH-SCANFIX-2026-08-17 --><link rel="canonical" href="https://nchsieh.github.io/VMH-EcoMap/tools/intel.html">
 </head><body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ 中文</button>
  <div class="i18panel">
@@ -143,9 +183,9 @@ body.edit .editbar{display:block}
    <div class="i18row"><a href="intel.html" class="on">中文</a><a href="intel.en.html">EN</a><a href="intel.vi.html">VI</a></div>
    <div class="i18gt">外觀</div>
    <div class="i18modes">
-    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
-    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色</a>
-    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色</a>
+    <a href="#" role="button" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" role="button" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色</a>
+    <a href="#" role="button" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色</a>
    </div>
  </div>
 </div>
@@ -166,24 +206,24 @@ body.edit .editbar{display:block}
 <p class="sub">已簽發、有生效日的才列進來——這不是預測，是日曆。依剩餘天數排序，已生效的沉底。</p>
 <div id="regList"></div>
 
-<h1 id="tenders">標案雷達　<span class="asof" style="color:var(--sub)">標案雷達最後更新 <span id="tdAsof"></span></span></h1>
+<h2 class="sech1" id="tenders">標案雷達　<span class="asof" style="color:var(--sub)">標案雷達最後更新 <span id="tdAsof"></span></span></h2>
 <p class="sub">每週掃到的醫院標案／報價邀請，一標一筆；截標剩餘天數 <14 天標 ★。與 07_專案爭取工具/VMH-EcoMap-15 標案登錄同步維護，更新頻率與上方「資料查證日」（月度情報）分開算。</p>
 <div id="tdList"></div>
 
-<h1 id="players">競合廠商動態</h1>
+<h2 class="sech1" id="players">競合廠商動態</h2>
 <p class="sub">誰在越南醫療市場裡動、動了什麼、對我們的意義。<b>點公司名稱</b>可展開公司概況與其過去／目前承接的專案（含出處）。</p>
 <div class="grid g3" id="plList"></div>
 
-<h1 id="roster">完整廠商名冊</h1>
+<h2 class="sech1" id="roster">完整廠商名冊</h2>
 <p class="sub">以群晶科技核心業務（機房／UPS／IDC）為主軸，盡量收錄越南市場中與此相關的廠商——由內而外依「機房基礎設施→機電/樓宇→醫院端資訊/AI/設備/投資方」排列。
 <b>目前只列名稱與一行定位，尚未逐家深入查證</b>；藍色底線的名稱已有上方詳細卡片可點閱，其餘若要展開查證，跟我說要看哪些即可。</p>
 <div id="rosterList"></div>
 
-<h1 id="stats">市場數據儀表</h1>
+<h2 class="sech1" id="stats">市場數據儀表</h2>
 <p class="sub">被追問「你憑什麼」時，答案在每張卡的出處列。</p>
 <div class="grid g4" id="stList"></div>
 
-<h1 id="how">如何更新</h1>
+<h2 class="sech1" id="how">如何更新</h2>
 <div class="card" style="font-size:.88rem;line-height:1.8">
 <b>資料檔怎麼來：</b>本頁所有內容都已內嵌在這個 HTML 裡，單檔即可離線開啟。intel_data.json 是同一份資料的「更新包」，放在 工具腳本/ 資料夾。<br>
 <b>自動（不必按任何鍵）：</b>「月度情報排程」每月 1 日在雲端自動執行：逐項重新上網查證（法規時程異動、廠商新動作、數據更新），
@@ -1800,4 +1840,98 @@ function setMode(e,m){
    document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
  });
 })();
-</script></body></html>
+</script><script>
+/* ══ VMH-ROSTER-FILTER-2026-08-17 ══ 名冊搜尋與篩選 */
+(function(){
+  var T={"ph": "搜尋廠商名稱或定位…", "all": "全部", "cat": "類別", "show": "顯示 {n} / {t} 家", "none": "沒有符合的廠商，請換個關鍵字或選「全部」。", "clear": "清除"};
+  var bar=null,empty=null,groups=[],q='',cat='',sig='';
+  /* 本頁的 D 是 let 宣告，不掛在 window 上，必須用詞法作用域直接取 */
+  function DD(){ try{ return (typeof D!=='undefined'&&D)?D:(window.D||null); }catch(e){ return null; } }
+  function host(){return document.getElementById('rosterList');}
+  function norm(s){return (s||'').toLowerCase();}
+
+  function chips(){
+    var cats=DD().roster.map(function(s){return s.cat;});
+    var s=cats.join('\u0001'); if(s===sig) return; sig=s;
+    var box=bar.querySelector('.rf-chips');
+    box.innerHTML='<span class="rf-lab">'+T.cat+'</span>'+
+      '<button type="button" class="rf-chip'+(cat===''?' on':'')+'" data-cat="">'+T.all+'</button>'+
+      cats.map(function(c,i){
+        return '<button type="button" class="rf-chip'+(cat===String(i)?' on':'')+'" data-cat="'+i+'">'+c+'</button>';
+      }).join('');
+    if(cat!==''&&+cat>=cats.length) cat='';
+  }
+
+  function mount(){
+    var h=host(); if(!h) return false;
+    if(!bar){
+      bar=document.createElement('div'); bar.id='rosterTools';
+      bar.innerHTML='<div class="rf-row"><div class="rf-search">'+
+        '<input type="search" id="rfQ" placeholder="'+T.ph+'" autocomplete="off">'+
+        '<button type="button" class="rf-clear" id="rfClear" hidden>'+T.clear+'</button></div>'+
+        '<span class="rf-count" id="rfCount"></span></div>'+
+        '<div class="rf-chips"></div>';
+      h.parentNode.insertBefore(bar,h);
+      bar.querySelector('#rfQ').addEventListener('input',function(e){q=norm(e.target.value.trim());apply();});
+      bar.querySelector('#rfClear').addEventListener('click',function(){
+        var i=bar.querySelector('#rfQ'); i.value=''; q=''; apply(); i.focus();});
+      bar.addEventListener('click',function(e){
+        var b=e.target.closest?e.target.closest('.rf-chip'):null; if(!b)return;
+        cat=b.getAttribute('data-cat');
+        [].forEach.call(bar.querySelectorAll('.rf-chip'),function(x){
+          if(x===b)x.classList.add('on'); else x.classList.remove('on');});
+        apply();
+      });
+    }
+    if(!empty){
+      empty=document.createElement('div'); empty.id='rosterEmpty'; empty.hidden=true;
+      empty.textContent=T.none; h.parentNode.insertBefore(empty,h.nextSibling);
+    }
+    chips();
+    groups=[].slice.call(h.querySelectorAll('.rgrp'));
+    groups.forEach(function(g){
+      var c=g.querySelector('.rh span:last-child');
+      if(c&&!c.hasAttribute('data-orig')) c.setAttribute('data-orig',c.textContent);
+    });
+    return true;
+  }
+
+  function apply(){
+    var shown=0,total=0,live=(cat!==''||q!=='');
+    groups.forEach(function(g,gi){
+      var src=(DD().roster[gi]&&DD().roster[gi].items)||[];
+      var items=[].slice.call(g.querySelectorAll('.ritem')),vis=0;
+      var catOK=(cat===''||+cat===gi);
+      items.forEach(function(it,ii){
+        var d=src[ii]||{};
+        var hay=norm(d.name)+' '+norm(d.note)+' '+norm(it.textContent);
+        var ok=catOK&&(q===''||hay.indexOf(q)>-1);
+        it.hidden=!ok; if(ok){vis++;shown++;}
+      });
+      total+=items.length;
+      g.hidden=(vis===0);
+      var c=g.querySelector('.rh span:last-child');
+      if(c&&c.hasAttribute('data-orig'))
+        c.textContent=live?(vis+' / '+items.length):c.getAttribute('data-orig');
+    });
+    var n=bar.querySelector('#rfCount');
+    if(n) n.textContent=T.show.replace('{n}',shown).replace('{t}',total);
+    empty.hidden=(shown>0);
+    bar.querySelector('#rfClear').hidden=(q==='');
+  }
+
+  function build(){ if(mount()) apply(); }
+
+  function boot(){
+    var d=DD(); if(!d||!d.roster||!host()) return;
+    if(typeof window.renderAll==='function'&&!window.renderAll.__rf){
+      var orig=window.renderAll;
+      var wrap=function(){var r=orig.apply(this,arguments); try{build();}catch(e){} return r;};
+      wrap.__rf=1; window.renderAll=wrap;
+    }
+    build();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+</script>
+</body></html>
