@@ -151,8 +151,9 @@ body.edit .editbar{display:block}
 </div>
 <header><div class="hw"><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>越南醫療情報站</b>
 <span class="asof">資料查證日 <span id="asof"></span>・<span id="freshNote"></span></span>
-<nav><a href="#regs">法規時鐘</a><a href="#players">競合動態</a><a href="#roster">完整名冊</a><a href="#stats">市場數據</a><a href="#how">如何更新</a></nav>
-<button id="upbtn" class="hbtn" onclick="document.getElementById('upf').click()">⟳ 載入更新資料</button>
+<nav><a href="#regs">法規時鐘</a><a href="#tenders">標案雷達</a><a href="#players">競合動態</a><a href="#roster">完整名冊</a><a href="#stats">市場數據</a><a href="#how">如何更新</a></nav>
+<button id="upbtn" class="hbtn" title="請選擇：本頁「⬇ 匯出資料檔」產生的 intel_data.json，或跟站方索取最新版" onclick="document.getElementById('upf').click()">⟳ 載入更新資料</button>
+<span style="font-size:.68rem;color:#9FB0CC">（選「⬇ 匯出資料檔」產生的 intel_data.json）</span>
 <button id="edbtn" class="hbtn" onclick="toggleEdit()">✎ 編輯資料</button>
 <button class="hbtn" onclick="exportData()">⬇ 匯出資料檔</button>
 <input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
@@ -164,6 +165,10 @@ body.edit .editbar{display:block}
 <h1 id="regs">法規時鐘</h1>
 <p class="sub">已簽發、有生效日的才列進來——這不是預測，是日曆。依剩餘天數排序，已生效的沉底。</p>
 <div id="regList"></div>
+
+<h1 id="tenders">標案雷達　<span class="asof" style="color:var(--sub)">標案雷達最後更新 <span id="tdAsof"></span></span></h1>
+<p class="sub">每週掃到的醫院標案／報價邀請，一標一筆；截標剩餘天數 <14 天標 ★。與 07_專案爭取工具/VMH-EcoMap-15 標案登錄同步維護，更新頻率與上方「資料查證日」（月度情報）分開算。</p>
+<div id="tdList"></div>
 
 <h1 id="players">競合廠商動態</h1>
 <p class="sub">誰在越南醫療市場裡動、動了什麼、對我們的意義。<b>點公司名稱</b>可展開公司概況與其過去／目前承接的專案（含出處）。</p>
@@ -197,17 +202,52 @@ body.edit .editbar{display:block}
 </footer>
 <script>
 let D={
- "asof": "2026-08-15",
+ "asof": "2026-08-17",
+ "tendersAsof": "2026-08-17",
+ "tenders": [
+  {
+   "found": "2026-08-17",
+   "tbmt": "",
+   "org": "Bệnh viện Bưu điện（郵電醫院）",
+   "hosp": "河內市・郵電醫院",
+   "desc": "2027-2031 年醫療設備供應商遴選前期報價邀請（尚非正式招標）",
+   "layer": "L3 設備",
+   "budget": "未載明",
+   "pub": "2026-08-14",
+   "due": "2026-08-24",
+   "decision": "評估中",
+   "link": "https://baodauthau.vn/benh-vien-buu-dien-thong-bao-moi-chao-gia-post205125.html",
+   "owner": "NC",
+   "status": "追蹤中",
+   "note": "週報 2026-08-17 發現；非正式 TBMT，留意後續是否轉正式招標"
+  },
+  {
+   "found": "2026-08-17",
+   "tbmt": "",
+   "org": "Bệnh viện Đà Nẵng（峴港醫院）",
+   "hosp": "峴港市・峴港醫院",
+   "desc": "2026-2027 年度血液學/生化/微生物/病理解剖用化學試劑、醫用耗材、檢驗物料報價邀請",
+   "layer": "L3 設備（耗材類）",
+   "budget": "未載明",
+   "pub": "2026-08-12",
+   "due": "2026-08-25",
+   "decision": "不投",
+   "link": "https://baodauthau.vn/benh-vien-da-nang-yeu-cau-bao-gia-post204938.html",
+   "owner": "NC",
+   "status": "追蹤中",
+   "note": "週報 2026-08-17 發現；純耗材採購，與主力業務關聯度低，暫列不投"
+  }
+ ],
  "regs": [
   {
    "date": "2027-02-01",
    "name": "建築能效新規範上路（≥2,500 m² 醫院納管，含能效監控構面）",
-   "doc": "QCVN 04-3:2026/BXD（Thông tư 61/2026/TT-BXD）",
+   "doc": "QCVN 04-3:2026/BXD（Thông tư 61/2026/TT-BXD，2026-07-30 正式發布）",
    "layer": "L1",
-   "what": "取代 QCVN 09:2017。新建與改建醫院的設計許可將檢核建築能效，五大管制構面之一是能效監控——醫院第一次被納入強制建築節能規範。",
+   "what": "取代 QCVN 09:2017。新建與改建醫院（≥2,500 m²）設計許可將檢核建築能效，五大管制構面之一是能效監控——醫院第一次被納入強制建築節能規範。2026-07-30 已由建設部正式以通函發布，不再是傳聞階段。",
    "opps": "OPP-26 智慧院區AIoT、OPP-12 綠色醫院ESCO",
    "act": "調規範全文確認「能效監控」的條文強度；把 BMS 提案的法遵論述準備好，鎖定 2027 前送件的新建案。",
-   "src": "vietq.vn／baoxaydung.vn（轉述，需調全文複核）"
+   "src": "moc.gov.vn（QCVN04-3-2026-BXD 官方文本）／baoxaydung.vn（2026-08）"
   },
   {
    "date": "2027-01-01",
@@ -230,6 +270,16 @@ let D={
    "src": "thuvienphapluat／VietnamPlus（2025-10）"
   },
   {
+   "date": "2026-07-31",
+   "name": "全民健保覆蓋率 2026-2030 逐年指標下達地方",
+   "doc": "Quyết định 1468/QĐ-TTg（2026-07-31）",
+   "layer": "G",
+   "what": "副總理核定全國健保覆蓋率逐年目標：2026 年 95.98%、2027 年 96.86%、2028 年 97.76%、2029 年 98.67%、2030 年達 100%，並要求各省市依此指標衝刺覆蓋率。",
+   "opps": "OPP-82 健保申報RCM",
+   "act": "地方為衝刺覆蓋率指標可能加碼基層健檢／行政系統採購，留意地方衛生廳相關標案。",
+   "src": "cafef.vn／baochinhphu.vn／vtv.vn（2026-08-01）"
+  },
+  {
    "date": "2026-07-01",
    "name": "網路安全法生效（資料落地＋系統分級）",
    "doc": "Law 116/2025/QH15",
@@ -238,6 +288,26 @@ let D={
    "opps": "OPP-24 醫院IDC、OPP-25 主權雲、OPP-27 資安定級",
    "act": "所有方案預設「資料落地越南」架構；資安定級顧問服務進場窗口 2026-2028。",
    "src": "Law 116/2025 條文"
+  },
+  {
+   "date": "2026-07-01",
+   "name": "健保給付範圍擴大＋費率隨新基本薪資調整",
+   "doc": "Nghị định 188/2025/NĐ-CP、Nghị định 161/2026/NĐ-CP",
+   "layer": "L7",
+   "what": "自 2026-07-01 起擴大健保基金對預防、篩檢、定期健檢等部分服務之給付範圍，並依新基本薪資調整繳費與給付水準。",
+   "opps": "OPP-82 健保申報RCM、CAP-011 轉診網絡",
+   "act": "追蹤新納入給付之篩檢/健檢項目清單，評估與健檢中心、基層診所之給付流程系統整合商機。",
+   "src": "thuvienphapluat.vn／baophapluat.vn／eva.vn（2026-06～07）"
+  },
+  {
+   "date": "2026-04-10",
+   "name": "全國病歷電子化 2026-2030 部署計畫核定",
+   "doc": "Quyết định 965/QĐ-BYT（2026-04-10）",
+   "layer": "L4",
+   "what": "衛生部核定 2026-2030 全國病歷電子化（不用紙本病歷）部署計畫，目標 2030 年 100% 醫療院所完成，是既有 Circular 13/2025/TT-BYT 期限規定之外的長期路線圖，並明定病歷電子化為智慧醫院／數位醫院之核心構成。",
+   "opps": "OPP-31 HIS/EMR、OPP-39 VNA、OPP-40 IT代管",
+   "act": "以此計畫為依據對衛生廳／醫院提案長期維運與二次工程合約，而非僅搶短期達標潮。",
+   "src": "thuvienphapluat.vn／luatvietnam.vn（2026-04～08）"
   },
   {
    "date": "2026-01-01",
@@ -254,10 +324,10 @@ let D={
    "name": "數位科技產業法生效（越南首部含 AI 專章法律）",
    "doc": "Law on Digital Technology Industry（2025-06-14 通過）",
    "layer": "L5",
-   "what": "要求 AI 透明性與課責、高風險 AI 須政府許可。另有 AI 專法草案審議中（風險分級、參考歐盟），通過後將取代本法 AI 條款。",
+   "what": "要求 AI 透明性與課責、高風險 AI 須政府許可；AI 風險採三級分類（高／中／低），AI 生成之音訊、圖像、影像須標示來源以防詐騙與深偽。2026-01-01 生效並已有配套細則陸續發布，AI 專法草案仍在審議中。",
    "opps": "OPP-59 SaMD登記、F 家族全部 AI 商機",
    "act": "追蹤 AI 專法時程；醫療 AI 及早完成 MOH 醫材註冊（Decree 98/2021 路徑）築合規門檻。",
-   "src": "DFDL／IAPP（2025-10）"
+   "src": "DFDL／IAPP（2025-10）；mst.gov.vn／phaply.net.vn（2026-08 覆核）"
   },
   {
    "date": "2025-10-01",
@@ -298,6 +368,16 @@ let D={
    "opps": "OPP-82 健保申報RCM、CAP-011 轉診網絡",
    "act": "轉診網絡設計與下轉機制成為公私立共同痛點——顧問切入點。",
    "src": "SGGP／Acclime"
+  },
+  {
+   "date": "2026-04-10",
+   "name": "衛生部核定全國電子病歷推廣計畫（2026-2030）",
+   "doc": "Quyết định 965/QĐ-BYT",
+   "layer": "L4",
+   "what": "在 Circular 13/2025/TT-BYT 基礎上，核定全國分階段推廣電子病歷的具體實施計畫，涵蓋2026-2030年，補上基層機構2026-12-31期限之外的中長期路線圖。",
+   "opps": "OPP-31 HIS/EMR、OPP-32 PACS、OPP-40 IT代管",
+   "act": "拿這份計畫當作與省級衛生廳/基層醫療集團對話的官方依據，時間軸對齊2026-2030分階段預算編列。",
+   "src": "luatvietnam.vn（2026-08 查證）"
   }
  ],
  "players": [
@@ -351,6 +431,11 @@ let D={
    "cat": "本土 IT 三強",
    "pos": "軍方背景電信商：HIS＋IDC＋雲全都做",
    "moves": [
+    {
+     "d": "2025-11",
+     "t": "Viettel Solutions 加速病歷電子化，全國約 70% 醫院已完成病歷電子化審核，推動 2026 年『無紙無片』醫院目標",
+     "asof": "2026-08-17"
+    },
     {
      "d": "2025",
      "t": "與統一醫院共建「智慧醫院生態系」——清單全是軟體，無 IoT/BMS/RTLS",
@@ -436,6 +521,11 @@ let D={
    "cat": "醫療 AI",
    "pos": "本土 AI 旗艦：DrAid 胸片 AI、FDA 510(k)",
    "moves": [
+    {
+     "d": "2025-2026",
+     "t": "被 NVIDIA 收購後持續擴大部署：DrAid 累計進駐越南、緬甸、紐西蘭、美國 100+ 家醫院，月篩檢逾 12 萬名病患",
+     "asof": "2026-08-17"
+    },
     {
      "d": "2024-02",
      "t": "與全球基金簽約：32 套授權、目標篩檢 100 萬人、單例成本壓到約 1 美元",
@@ -524,6 +614,11 @@ let D={
      "d": "2024-05",
      "t": "取得 Hong Ngoc Phuc Truong Minh 二期 MEP 合約",
      "asof": "2026-08-15"
+    },
+    {
+     "d": "2026",
+     "t": "投標黎文盛醫院（Lê Văn Thịnh Hospital）空調系統清潔維護包（2026年度）",
+     "asof": "2026-08-17"
     }
    ],
    "mean": "第一順位在地夥伴候選：機電施工與售後網絡。要問清楚 BMS 是自建還是轉包、品牌綁定。",
@@ -549,9 +644,19 @@ let D={
    "pos": "醫院 MEP 經驗最豐（Vinmec、UMC HCMC）",
    "moves": [
     {
+     "d": "2025-10-31",
+     "t": "正式簽署興安省 Hung Ha 綜合醫院 MEP 施工合約（先前為動土，此為簽約里程碑），推升在手訂單至近 2,000 億越盾，挹注 2026-2027 年營收",
+     "asof": "2026-08-17"
+    },
+    {
      "d": "2025-08",
      "t": "Hung Ha 綜合醫院 MEP 動土（29,930 m²）",
      "asof": "2026-08-15"
+    },
+    {
+     "d": "2025-10",
+     "t": "正式簽署 Hưng Hà 綜合醫院 MEP 總包合約，帶動2026年在手訂單(backlog)近2,000億越盾",
+     "asof": "2026-08-17"
     }
    ],
    "mean": "第一順位在地夥伴候選之二。與 REE 二擇一或分區合作。",
@@ -595,9 +700,19 @@ let D={
    "pos": "新加坡集團，越南史上最大醫療收購",
    "moves": [
     {
+     "d": "2026-H1",
+     "t": "FV 醫院 2026 上半年營收 5,130 萬新幣、EBITDA 830 萬新幣，但 EBITDA 率降至 16.2%（顯示併購後維持獲利效率的壓力）；越南占集團 FY2025 營收約 25%",
+     "asof": "2026-08-17"
+    },
+    {
      "d": "2023",
      "t": "以 3.81 億美元收購 FV 醫院（16.8× EBITDA）",
      "asof": "2026-08-15"
+    },
+    {
+     "d": "2026-H1",
+     "t": "FV醫院上半年營收5,130萬新加坡元（約千億越盾）、EBITDA 830萬新加坡元；新增2,000億越盾設備投資，越南市場貢獻集團2025年營收約25%",
+     "asof": "2026-08-17"
     }
    ],
    "mean": "外資湧入私立醫院的估值標竿；FV 這類國際私立醫院是我們高端方案的理想首案客戶。",
@@ -771,9 +886,29 @@ let D={
    "pos": "四大樓宇外商在越南醫療的存在感低",
    "moves": [
     {
+     "d": "2026-03",
+     "t": "Siemens Healthineers 與 Vinmec 簽署合作備忘錄，共同推動心臟、過敏免疫、骨科、腫瘤等領域臨床科技創新研究",
+     "asof": "2026-08-17"
+    },
+    {
+     "d": "2026-05",
+     "t": "Siemens Healthineers 與河內白梅醫院（Bach Mai）簽 MOU，導入 NAEOTOM Alpha 光子計數 CT 等尖端影像技術，聚焦培訓、研究與卓越中心建置",
+     "asof": "2026-08-17"
+    },
+    {
      "d": "2026",
      "t": "JCI 官網明言「正在建立本地團隊」；Schneider 有醫院產品頁但零越南客戶名",
      "asof": "2026-08-15"
+    },
+    {
+     "d": "2026-03",
+     "t": "與 Vinmec 醫療體系簽署 MoU：聚焦臨床培訓、卓越中心建設（心臟科/過敏免疫科/骨科運動醫學/腫瘤科等）與聯合科研",
+     "asof": "2026-08-17"
+    },
+    {
+     "d": "2026-05",
+     "t": "與白梅醫院簽署 MoU，推廣 NAEOTOM Alpha 光子計數 CT 等尖端影像技術，含培訓與卓越中心建設",
+     "asof": "2026-08-17"
     }
    ],
    "mean": "★ 整合層是空的——外商有產品沒有在地醫療整合團隊，這正是群晶的切入位。",
@@ -808,6 +943,18 @@ let D={
      "t": "Schneider Electric 在越南經營逾 30 年並銷售 EcoStruxure for Healthcare 方案，但公開來源未查得具名越南醫院導入案例。",
      "st": "進行中",
      "src": "Schneider Electric 越南官網／VnExpress (2026-08)"
+    },
+    {
+     "y": "2026-03",
+     "t": "與 Vinmec 醫療體系（旗下10院7診所）簽署合作 MoU，範圍含臨床培訓、卓越中心建設與新技術聯合科研。",
+     "st": "進行中",
+     "src": "Siemens Healthineers 越南官網 (2026-08)"
+    },
+    {
+     "y": "2026-05",
+     "t": "與白梅醫院簽署 MoU，推廣 NAEOTOM Alpha 光子計數 CT 應用，含培訓、研究與卓越中心建設。",
+     "st": "進行中",
+     "src": "Siemens Healthineers 越南官網 (2026-08)"
     }
    ]
   }
@@ -815,27 +962,29 @@ let D={
  "stats": [
   {
    "k": "醫院電子病歷完成率",
-   "v": "53.6%",
+   "v": "約73.3%",
    "unit": "",
-   "note": "991／1,645 家（2025-10）；18 個月前僅 8.6%——政策執行力的實證",
-   "src": "VietnamPlus",
-   "asof": "2025-10-06"
+   "note": "約1,210／1,650家醫院已宣布導入EMR（2026年初）；較2025-10的53.6%明顯推進，另有Quyết định 965/QĐ-BYT核定2026-2030全國推廣計畫",
+   "src": "vietnamnews.vn／re-solveglobalhealth.com",
+   "asof": "2026-02-01",
+   "est": true
   },
   {
    "k": "健保覆蓋率",
    "v": "95.2%",
    "unit": "",
-   "note": "提前 5 年達標；年給付 1.955 億人次",
-   "src": "VSS／vietnam.vn",
+   "note": "2026-02 實測值 95.2%；2026-07-31 政府以 Quyết định 1468/QĐ-TTg 下達 2026 年目標 95.98%，並訂 2027-2029 逐年指標，2030 年達 100%",
+   "src": "VSS／vietnam.vn（實測）；cafef.vn／baochinhphu.vn（2026-08-01，目標路徑）",
    "asof": "2026-02-01"
   },
   {
    "k": "直線加速器",
-   "v": "82",
+   "v": "84",
    "unit": "台",
-   "note": "0.82 台／百萬人（標準 4-8）；43% 老舊。達低標需約 400 台",
-   "src": "JCO Global Oncology",
-   "asof": "2025-06-01"
+   "note": "0.84 台／百萬人（標準 4-8）；僅滿足 60-70% 基本需求，需再增置 35-40 台達標；2026-06 芹苴市首度啟用 Halcyon 直線加速器（105 億越盾，公立系統首例）",
+   "src": "baochinhphu.vn（2026-06）／daibieunhandan.vn（2026）",
+   "asof": "2026-06-08",
+   "est": true
   },
   {
    "k": "透析覆蓋率",
@@ -887,19 +1036,20 @@ let D={
   },
   {
    "k": "VNeID 健康簿",
-   "v": "2,444",
-   "unit": "萬本",
-   "note": "34/34 省全上線；2026 起與紙本同等法律效力",
-   "src": "baochinhphu",
-   "asof": "2025-07-20"
+   "v": "30+",
+   "unit": "百萬本",
+   "note": "官方標題「30 triệu sổ sức khỏe trên VNeID」；另一報導稱2026年初已逾3,400萬份電子健康紀錄整合進VNeID——不同口徑數字略有差異，先取較保守的30百萬",
+   "src": "mst.gov.vn",
+   "asof": "2026-03-22",
+   "est": true
   },
   {
    "k": "JCI 認證機構",
-   "v": "9",
+   "v": "13",
    "unit": "家",
-   "note": "公立僅 1 家；衛生部已正式承認 JCI，2030 目標 15-20 家",
-   "src": "vietnam.vn／4024/QĐ-BYT",
-   "asof": "2026-01-15"
+   "note": "公立僅 1 家；13 家中含西貢眼科醫療集團（Saigon Medical Group）5 家分院；衛生部已於 2026-01 正式承認 JCI 標準，持續推動醫院品質國際化，2030 目標 15-20 家",
+   "src": "thanhnien.vn（2026-08-03）／vietnam.vn／4024/QĐ-BYT",
+   "asof": "2026-08-03"
   },
   {
    "k": "2030 床位目標",
@@ -911,11 +1061,11 @@ let D={
   },
   {
    "k": "出境就醫",
-   "v": "約 20",
+   "v": "20-30",
    "unit": "億美元/年",
-   "note": "衛生部估計（約 4 萬人/年）；2030 醫療觀光目標 75 萬人次",
-   "src": "MOH 估計／DTiNews",
-   "asof": "2026-08-12",
+   "note": "衛生部估計越南人每年出境就醫花費約 20-30 億美元（2026-08 最新報導區間，較先前單點估計更新為區間值）；同期外國人來越醫療觀光收入僅 10-20 億美元，逆差明顯；2026-2030 醫療觀光發展規劃草案已擬定，目標 2030 年吸引 75 萬人次",
+   "src": "suckhoedoisong.vn／thethaovanhoa.vn（2026-08-12～13，MOH 估計）",
+   "asof": "2026-08-13",
    "est": true
   },
   {
@@ -1012,6 +1162,10 @@ let D={
     {
      "name": "Bizfly Cloud",
      "note": "越南本土雲端與機房服務新創"
+    },
+    {
+     "name": "G42（阿聯酋）",
+     "note": "2026 年與 FPT、越泰集團簽 10 億美元框架協議，另提案 20 億美元 AI 超大型資料中心"
     }
    ]
   },
@@ -1467,6 +1621,7 @@ function loadUpdate(f){
   rd.onload=()=>{try{
     const nd=JSON.parse(rd.result);
     if(!nd.regs||!nd.players||!nd.stats){alert('格式不對：需要含 regs / players / stats 的 intel_data.json');return;}
+    if(!nd.tenders)nd.tenders=[];
     D=nd; renderAll();
     document.getElementById('upbtn').textContent='✓ 已載入 '+ (D.asof||'更新資料');
   }catch(e){alert('讀取失敗：'+e.message);}};
@@ -1501,6 +1656,35 @@ document.getElementById('regList').innerHTML=order.map(i=>{
    <div class="act"><b>我們該做什麼</b><span data-e="regs.${i}.act">${esc(r.act)}</span>
      <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">出處：<span data-e="regs.${i}.src">${esc(r.src)}</span></div></div>
   </div>`;}).join('')+`<button class="addb" onclick="addItem('regs')">＋ 新增一筆法規</button>`;
+
+/* 標案雷達（依截標剩餘天數排序，未定日期沉底、已截止更沉底） */
+document.getElementById('tdAsof').textContent=D.tendersAsof||'未記錄';
+const T=D.tenders||[];
+const torder=[...T.keys()].sort((a,b)=>{
+  const da=T[a].due?days(T[a].due):9999, db=T[b].due?days(T[b].due):9999;
+  const ka=da<0?1e6+da:da, kb=db<0?1e6+db:db;
+  return ka-kb;});
+document.getElementById('tdList').innerHTML=(T.length?torder.map(i=>{
+  const t=T[i], n=t.due?days(t.due):null;
+  const cd = n===null?`<span class="cd" style="color:var(--sub)">截標日未定</span>`
+    : n>0?`<span class="cd" style="color:${n<14?'var(--red)':'var(--gold)'}">${n<14?'★ ':''}還有 ${n} 天截標</span>`
+    : `<span class="cd" style="color:var(--sub)">已截止 ${-n} 天</span>`;
+  const decCls = t.decision==='投'?'b-grn':t.decision==='不投'?'b-gry':'b-amb';
+  return `<div class="reg"><div>
+     <button class="delx" onclick="delItem('tenders',${i})">✕ 刪除</button>
+     <div class="dd" data-e="tenders.${i}.due">${esc(t.due||'')}</div>${cd}
+     <div style="margin-top:6px"><span class="lay" style="background:#${LAYC[(t.layer||'').slice(0,2)]||'555F6E'}"><span data-e="tenders.${i}.layer">${esc(t.layer||'')}</span></span></div></div>
+   <div><h3><span data-e="tenders.${i}.org">${esc(t.org)}</span></h3>
+     <div class="doc" data-e="tenders.${i}.hosp">${esc(t.hosp||'')}</div>
+     <p data-e="tenders.${i}.desc">${esc(t.desc||'')}</p>
+     <p style="font-size:.76rem;color:var(--sub)">TBMT：<span data-e="tenders.${i}.tbmt">${esc(t.tbmt||'未載明')}</span>　預算：<span data-e="tenders.${i}.budget">${esc(t.budget||'未載明')}</span>　公告日：<span data-e="tenders.${i}.pub">${esc(t.pub||'')}</span></p></div>
+   <div class="act"><span class="badge ${decCls}" data-e="tenders.${i}.decision">${esc(t.decision||'評估中')}</span>
+     <div style="margin-top:6px;font-size:.78rem"><a href="${esc(t.link||'#')}" target="_blank" style="color:var(--teal)">查看來源 ↗</a></div>
+     <div style="margin-top:6px;font-size:.76rem;color:#5C4708" data-e="tenders.${i}.note">${esc(t.note||'')}</div>
+     <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">負責人：<span data-e="tenders.${i}.owner">${esc(t.owner||'')}</span>・狀態：<span data-e="tenders.${i}.status">${esc(t.status||'追蹤中')}</span></div></div>
+  </div>`;}).join('')
+  :'<p style="font-size:.85rem;color:var(--sub);margin-bottom:10px">本週未查得新標案。</p>')
+  +`<button class="addb" onclick="addItem('tenders')">＋ 新增一筆標案</button>`;
 
 /* 競合廠商 */
 document.getElementById('plList').innerHTML=D.players.map((p,i)=>`
@@ -1563,6 +1747,7 @@ function addItem(key){
   if(key==='regs')D.regs.push({date:'2026-12-31',name:'（新法規名稱）',doc:'（文號）',layer:'G',what:'（一句話：規定了什麼）',opps:'',act:'（我們該做什麼）',src:'（出處）'});
   if(key==='players')D.players.push({name:'（廠商名稱）',cat:'（類別）',pos:'（定位一句話）',moves:[{d:'2026-08',t:'（動作）'}],mean:'（對我們的意義）'});
   if(key==='stats')D.stats.push({k:'（指標名）',v:'0',unit:'',note:'（這個數字說明什麼）',src:'（出處）',asof:D.asof});
+  if(key==='tenders')D.tenders.push({found:D.asof,tbmt:'',org:'（招標單位）',hosp:'（醫院/省份）',desc:'（標的摘要）',layer:'L3',budget:'未載明',pub:'',due:'',decision:'評估中',link:'',owner:'NC',status:'追蹤中',note:''});
   renderAll();
 }
 function addMove(i){harvest();D.players[i].moves.push({d:'2026-08',t:'（新動作）'});renderAll();}

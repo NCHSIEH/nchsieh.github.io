@@ -151,8 +151,9 @@ body.edit .editbar{display:block}
 </div>
 <header><div class="hw"><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>Trung tâm Tình báo Y tế Việt Nam</b>
 <span class="asof">Ngày xác minh dữ liệu <span id="asof"></span>・<span id="freshNote"></span></span>
-<nav><a href="#regs">Đồng hồ pháp lý</a><a href="#players">Động thái đối thủ cạnh tranh</a><a href="#roster">Danh mục đầy đủ</a><a href="#stats">Dữ liệu thị trường</a><a href="#how">Cách cập nhật</a></nav>
-<button id="upbtn" class="hbtn" onclick="document.getElementById('upf').click()">⟳ Tải dữ liệu cập nhật</button>
+<nav><a href="#regs">Đồng hồ pháp lý</a><a href="#tenders">Radar đấu thầu</a><a href="#players">Động thái đối thủ cạnh tranh</a><a href="#roster">Danh mục đầy đủ</a><a href="#stats">Dữ liệu thị trường</a><a href="#how">Cách cập nhật</a></nav>
+<button id="upbtn" class="hbtn" title="Vui lòng chọn tệp intel_data.json xuất ra từ nút "⬇ Xuất dữ liệu" trên trang này, hoặc xin bản mới nhất từ quản trị trang" onclick="document.getElementById('upf').click()">⟳ Tải dữ liệu cập nhật</button>
+<span style="font-size:.68rem;color:#9FB0CC">(chọn intel_data.json xuất từ “⬇ Xuất dữ liệu”)</span>
 <button id="edbtn" class="hbtn" onclick="toggleEdit()">✎ Chỉnh sửa dữ liệu</button>
 <button class="hbtn" onclick="exportData()">⬇ Xuất tệp dữ liệu</button>
 <input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
@@ -164,6 +165,10 @@ Mỗi mục đều kèm nguồn và ngày xác minh; dữ liệu chưa cập nh�
 <h1 id="regs">Đồng hồ pháp lý</h1>
 <p class="sub">Chỉ những quy định đã ban hành và có ngày hiệu lực mới được liệt kê ở đây — đây không phải dự báo, mà là lịch. Sắp xếp theo số ngày còn lại, các mục đã có hiệu lực nằm ở cuối.</p>
 <div id="regList"></div>
+
+<h1 id="tenders">Radar đấu thầu　<span class="asof" style="color:var(--sub)">Radar đấu thầu cập nhật lần cuối <span id="tdAsof"></span></span></h1>
+<p class="sub">Các gói thầu／mời báo giá bệnh viện phát hiện qua rà soát hàng tuần, mỗi dòng một gói; còn dưới 14 ngày sẽ đánh dấu ★. Đồng bộ với sổ đấu thầu VMH-EcoMap-15 (07_Bộ công cụ theo đuổi dự án), cập nhật theo chu kỳ tuần riêng, tách biệt với "ngày kiểm chứng" ở trên.</p>
+<div id="tdList"></div>
 
 <h1 id="players">Động thái đối thủ cạnh tranh</h1>
 <p class="sub">Ai đang hành động trong thị trường y tế Việt Nam, họ đang làm gì, và điều đó có ý nghĩa gì với chúng ta.<b>Nhấp vào tên công ty</b>để mở rộng hồ sơ công ty và các dự án đã/đang thực hiện (kèm nguồn).</p>
@@ -198,6 +203,41 @@ Sau khi sửa xong, nhấn “⬇ Xuất tệp dữ liệu” để tải về m
 <script>
 let D={
  "asof": "2026-08-15",
+ "tendersAsof": "2026-08-17",
+ "tenders":  [
+  {
+   "found": "2026-08-17",
+   "tbmt": "",
+   "org": "Bệnh viện Bưu điện",
+   "hosp": "Hà Nội · Bệnh viện Bưu điện",
+   "desc": "Mời báo giá sơ bộ để chọn nhà cung cấp thiết bị y tế giai đoạn 2027-2031 (chưa phải đấu thầu chính thức)",
+   "layer": "L3 Thiết bị",
+   "budget": "Chưa công bố",
+   "pub": "2026-08-14",
+   "due": "2026-08-24",
+   "decision": "Đang đánh giá",
+   "link": "https://baodauthau.vn/benh-vien-buu-dien-thong-bao-moi-chao-gia-post205125.html",
+   "owner": "NC",
+   "status": "Đang theo dõi",
+   "note": "Phát hiện trong bản tin tuần 2026-08-17; chưa có TBMT chính thức, cần theo dõi xem có chuyển thành đấu thầu chính thức không"
+  },
+  {
+   "found": "2026-08-17",
+   "tbmt": "",
+   "org": "Bệnh viện Đà Nẵng",
+   "hosp": "Đà Nẵng · Bệnh viện Đà Nẵng",
+   "desc": "Mời báo giá hóa chất, vật tư y tế, vật tư xét nghiệm chuyên khoa Huyết học-Truyền máu/Sinh hóa/Vi sinh/Giải phẫu bệnh năm 2026-2027",
+   "layer": "L3 Thiết bị (vật tư tiêu hao)",
+   "budget": "Chưa công bố",
+   "pub": "2026-08-12",
+   "due": "2026-08-25",
+   "decision": "Không tham gia",
+   "link": "https://baodauthau.vn/benh-vien-da-nang-yeu-cau-bao-gia-post204938.html",
+   "owner": "NC",
+   "status": "Đang theo dõi",
+   "note": "Phát hiện trong bản tin tuần 2026-08-17; mua sắm vật tư tiêu hao thuần túy, ít liên quan đến mảng kinh doanh chính — tạm xếp không tham gia"
+  }
+ ],
  "regs": [
   {
    "date": "2027-02-01",
@@ -1467,6 +1507,7 @@ function loadUpdate(f){
   rd.onload=()=>{try{
     const nd=JSON.parse(rd.result);
     if(!nd.regs||!nd.players||!nd.stats){alert('Sai định dạng: intel_data.json cần có regs / players / stats');return;}
+    if(!nd.tenders)nd.tenders=[];
     D=nd; renderAll();
     document.getElementById('upbtn').textContent='✓ Đã tải '+ (D.asof||'Cập nhật dữ liệu');
   }catch(e){alert('Tải thất bại:'+e.message);}};
@@ -1501,6 +1542,35 @@ document.getElementById('regList').innerHTML=order.map(i=>{
    <div class="act"><b>Chúng ta nên làm gì</b><span data-e="regs.${i}.act">${esc(r.act)}</span>
      <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">Nguồn:<span data-e="regs.${i}.src">${esc(r.src)}</span></div></div>
   </div>`;}).join('')+`<button class="addb" onclick="addItem('regs')">+ Thêm một quy định</button>`;
+
+/* Radar đấu thầu (sắp theo số ngày còn lại đến hạn; chưa rõ hạn chìm xuống, đã đóng chìm sâu hơn) */
+document.getElementById('tdAsof').textContent=D.tendersAsof||'chưa ghi nhận';
+const T=D.tenders||[];
+const torder=[...T.keys()].sort((a,b)=>{
+  const da=T[a].due?days(T[a].due):9999, db=T[b].due?days(T[b].due):9999;
+  const ka=da<0?1e6+da:da, kb=db<0?1e6+db:db;
+  return ka-kb;});
+document.getElementById('tdList').innerHTML=(T.length?torder.map(i=>{
+  const t=T[i], n=t.due?days(t.due):null;
+  const cd = n===null?`<span class="cd" style="color:var(--sub)">Chưa rõ hạn</span>`
+    : n>0?`<span class="cd" style="color:${n<14?'var(--red)':'var(--gold)'}">${n<14?'★ ':''}còn ${n} ngày đến hạn</span>`
+    : `<span class="cd" style="color:var(--sub)">Đã đóng ${-n} ngày</span>`;
+  const decCls = t.decision==='Tham gia'?'b-grn':t.decision==='Không tham gia'?'b-gry':'b-amb';
+  return `<div class="reg"><div>
+     <button class="delx" onclick="delItem('tenders',${i})">✕ Xóa</button>
+     <div class="dd" data-e="tenders.${i}.due">${esc(t.due||'')}</div>${cd}
+     <div style="margin-top:6px"><span class="lay" style="background:#${LAYC[(t.layer||'').slice(0,2)]||'555F6E'}"><span data-e="tenders.${i}.layer">${esc(t.layer||'')}</span></span></div></div>
+   <div><h3><span data-e="tenders.${i}.org">${esc(t.org)}</span></h3>
+     <div class="doc" data-e="tenders.${i}.hosp">${esc(t.hosp||'')}</div>
+     <p data-e="tenders.${i}.desc">${esc(t.desc||'')}</p>
+     <p style="font-size:.76rem;color:var(--sub)">TBMT:<span data-e="tenders.${i}.tbmt">${esc(t.tbmt||'chưa công bố')}</span>　Ngân sách:<span data-e="tenders.${i}.budget">${esc(t.budget||'chưa công bố')}</span>　Ngày đăng:<span data-e="tenders.${i}.pub">${esc(t.pub||'')}</span></p></div>
+   <div class="act"><span class="badge ${decCls}" data-e="tenders.${i}.decision">${esc(t.decision||'Đang đánh giá')}</span>
+     <div style="margin-top:6px;font-size:.78rem"><a href="${esc(t.link||'#')}" target="_blank" style="color:var(--teal)">Xem nguồn ↗</a></div>
+     <div style="margin-top:6px;font-size:.76rem;color:#5C4708" data-e="tenders.${i}.note">${esc(t.note||'')}</div>
+     <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">Người phụ trách:<span data-e="tenders.${i}.owner">${esc(t.owner||'')}</span>・Trạng thái:<span data-e="tenders.${i}.status">${esc(t.status||'Đang theo dõi')}</span></div></div>
+  </div>`;}).join('')
+  :'<p style="font-size:.85rem;color:var(--sub);margin-bottom:10px">Tuần này chưa tìm thấy gói thầu mới.</p>')
+  +`<button class="addb" onclick="addItem('tenders')">+ Thêm một gói thầu</button>`;
 
 /* Đối thủ cạnh tranh */
 document.getElementById('plList').innerHTML=D.players.map((p,i)=>`
@@ -1563,6 +1633,7 @@ function addItem(key){
   if(key==='regs')D.regs.push({date:'2026-12-31',name:'(tên quy định mới)',doc:'(số hiệu văn bản)',layer:'G',what:'(một câu: quy định điều gì)',opps:'',act:'(chúng ta nên làm gì)',src:'(nguồn)'});
   if(key==='players')D.players.push({name:'(tên nhà cung cấp)',cat:'(loại)',pos:'(định vị một câu)',moves:[{d:'2026-08',t:'(động thái)'}],mean:'(ý nghĩa đối với chúng ta)'});
   if(key==='stats')D.stats.push({k:'(tên chỉ số)',v:'0',unit:'',note:'(con số này nói lên điều gì)',src:'(nguồn)',asof:D.asof});
+  if(key==='tenders')D.tenders.push({found:D.asof,tbmt:'',org:'(đơn vị mời thầu)',hosp:'(bệnh viện / tỉnh)',desc:'(tóm tắt phạm vi)',layer:'L3',budget:'chưa công bố',pub:'',due:'',decision:'Đang đánh giá',link:'',owner:'NC',status:'Đang theo dõi',note:''});
   renderAll();
 }
 function addMove(i){harvest();D.players[i].moves.push({d:'2026-08',t:'(động thái mới)'});renderAll();}

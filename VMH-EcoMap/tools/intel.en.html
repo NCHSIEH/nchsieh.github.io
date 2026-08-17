@@ -151,8 +151,9 @@ body.edit .editbar{display:block}
 </div>
 <header><div class="hw"><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>Vietnam Healthcare Intelligence Hub</b>
 <span class="asof">Data verified date <span id="asof"></span>・<span id="freshNote"></span></span>
-<nav><a href="#regs">Regulatory clock</a><a href="#players">Competitor moves</a><a href="#roster">Full directory</a><a href="#stats">Market data</a><a href="#how">How updates work</a></nav>
-<button id="upbtn" class="hbtn" onclick="document.getElementById('upf').click()">⟳ Load updated data</button>
+<nav><a href="#regs">Regulatory clock</a><a href="#tenders">Tender radar</a><a href="#players">Competitor moves</a><a href="#roster">Full directory</a><a href="#stats">Market data</a><a href="#how">How updates work</a></nav>
+<button id="upbtn" class="hbtn" title="Please select an intel_data.json exported via "⬇ Export data" on this page, or request the latest from the site owner" onclick="document.getElementById('upf').click()">⟳ Load updated data</button>
+<span style="font-size:.68rem;color:#9FB0CC">(pick an intel_data.json exported via “⬇ Export data”)</span>
 <button id="edbtn" class="hbtn" onclick="toggleEdit()">✎ Edit data</button>
 <button class="hbtn" onclick="exportData()">⬇ Export data file</button>
 <input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
@@ -164,6 +165,10 @@ Every entry includes a source and verified date; data not updated for over 120 d
 <h1 id="regs">Regulatory clock</h1>
 <p class="sub">Only regulations that have been issued and have an effective date are listed here — this is not a forecast, it is a calendar. Sorted by days remaining, with already-effective items at the bottom.</p>
 <div id="regList"></div>
+
+<h1 id="tenders">Tender radar　<span class="asof" style="color:var(--sub)">Tender radar last updated <span id="tdAsof"></span></span></h1>
+<p class="sub">Hospital tenders / RFQs found in the weekly scan, one row each; a countdown under 14 days is flagged ★. Kept in sync with the VMH-EcoMap-15 tender log (07_Project Pursuit Toolkit), on its own weekly update cadence separate from the "verified as of" date above.</p>
+<div id="tdList"></div>
 
 <h1 id="players">Competitor moves</h1>
 <p class="sub">Who is moving in Vietnam’s healthcare market, what they are doing, and what it means for us.<b>Click a company name</b>to expand the company profile and its past/current projects (with sources).</p>
@@ -198,6 +203,41 @@ When done, click “⬇ Export data file” to download a new intel_data.json; p
 <script>
 let D={
  "asof": "2026-08-15",
+ "tendersAsof": "2026-08-17",
+ "tenders":  [
+  {
+   "found": "2026-08-17",
+   "tbmt": "",
+   "org": "Bệnh viện Bưu điện (Postal Hospital)",
+   "hosp": "Hanoi · Postal Hospital",
+   "desc": "Preliminary RFQ for 2027-2031 medical equipment supplier selection (not yet a formal tender)",
+   "layer": "L3 Equipment",
+   "budget": "Not disclosed",
+   "pub": "2026-08-14",
+   "due": "2026-08-24",
+   "decision": "Evaluating",
+   "link": "https://baodauthau.vn/benh-vien-buu-dien-thong-bao-moi-chao-gia-post205125.html",
+   "owner": "NC",
+   "status": "Tracking",
+   "note": "Found in the 2026-08-17 weekly scan; not yet a formal TBMT — watch whether it converts into a formal tender"
+  },
+  {
+   "found": "2026-08-17",
+   "tbmt": "",
+   "org": "Bệnh viện Đà Nẵng (Da Nang Hospital)",
+   "hosp": "Da Nang · Da Nang Hospital",
+   "desc": "RFQ for chemical reagents, medical consumables and lab supplies (hematology/blood transfusion, biochemistry, microbiology, pathology) FY2026-2027",
+   "layer": "L3 Equipment (consumables)",
+   "budget": "Not disclosed",
+   "pub": "2026-08-12",
+   "due": "2026-08-25",
+   "decision": "Pass",
+   "link": "https://baodauthau.vn/benh-vien-da-nang-yeu-cau-bao-gia-post204938.html",
+   "owner": "NC",
+   "status": "Tracking",
+   "note": "Found in the 2026-08-17 weekly scan; pure consumables procurement, low relevance to our core business — provisionally passed"
+  }
+ ],
  "regs": [
   {
    "date": "2027-02-01",
@@ -1467,6 +1507,7 @@ function loadUpdate(f){
   rd.onload=()=>{try{
     const nd=JSON.parse(rd.result);
     if(!nd.regs||!nd.players||!nd.stats){alert('Wrong format: intel_data.json must include regs / players / stats');return;}
+    if(!nd.tenders)nd.tenders=[];
     D=nd; renderAll();
     document.getElementById('upbtn').textContent='✓ Loaded '+ (D.asof||'Update data');
   }catch(e){alert('Failed to load:'+e.message);}};
@@ -1501,6 +1542,35 @@ document.getElementById('regList').innerHTML=order.map(i=>{
    <div class="act"><b>What we should do</b><span data-e="regs.${i}.act">${esc(r.act)}</span>
      <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">Source:<span data-e="regs.${i}.src">${esc(r.src)}</span></div></div>
   </div>`;}).join('')+`<button class="addb" onclick="addItem('regs')">+ Add a regulation</button>`;
+
+/* Tender radar (sorted by days remaining to deadline; TBD sinks, closed sinks further) */
+document.getElementById('tdAsof').textContent=D.tendersAsof||'not recorded';
+const T=D.tenders||[];
+const torder=[...T.keys()].sort((a,b)=>{
+  const da=T[a].due?days(T[a].due):9999, db=T[b].due?days(T[b].due):9999;
+  const ka=da<0?1e6+da:da, kb=db<0?1e6+db:db;
+  return ka-kb;});
+document.getElementById('tdList').innerHTML=(T.length?torder.map(i=>{
+  const t=T[i], n=t.due?days(t.due):null;
+  const cd = n===null?`<span class="cd" style="color:var(--sub)">Deadline TBD</span>`
+    : n>0?`<span class="cd" style="color:${n<14?'var(--red)':'var(--gold)'}">${n<14?'★ ':''}${n} days to deadline</span>`
+    : `<span class="cd" style="color:var(--sub)">Closed ${-n} days ago</span>`;
+  const decCls = t.decision==='Bid'?'b-grn':t.decision==='Pass'?'b-gry':'b-amb';
+  return `<div class="reg"><div>
+     <button class="delx" onclick="delItem('tenders',${i})">✕ Delete</button>
+     <div class="dd" data-e="tenders.${i}.due">${esc(t.due||'')}</div>${cd}
+     <div style="margin-top:6px"><span class="lay" style="background:#${LAYC[(t.layer||'').slice(0,2)]||'555F6E'}"><span data-e="tenders.${i}.layer">${esc(t.layer||'')}</span></span></div></div>
+   <div><h3><span data-e="tenders.${i}.org">${esc(t.org)}</span></h3>
+     <div class="doc" data-e="tenders.${i}.hosp">${esc(t.hosp||'')}</div>
+     <p data-e="tenders.${i}.desc">${esc(t.desc||'')}</p>
+     <p style="font-size:.76rem;color:var(--sub)">TBMT:<span data-e="tenders.${i}.tbmt">${esc(t.tbmt||'not disclosed')}</span>　Budget:<span data-e="tenders.${i}.budget">${esc(t.budget||'not disclosed')}</span>　Published:<span data-e="tenders.${i}.pub">${esc(t.pub||'')}</span></p></div>
+   <div class="act"><span class="badge ${decCls}" data-e="tenders.${i}.decision">${esc(t.decision||'Evaluating')}</span>
+     <div style="margin-top:6px;font-size:.78rem"><a href="${esc(t.link||'#')}" target="_blank" style="color:var(--teal)">View source ↗</a></div>
+     <div style="margin-top:6px;font-size:.76rem;color:#5C4708" data-e="tenders.${i}.note">${esc(t.note||'')}</div>
+     <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">Owner:<span data-e="tenders.${i}.owner">${esc(t.owner||'')}</span>・Status:<span data-e="tenders.${i}.status">${esc(t.status||'Tracking')}</span></div></div>
+  </div>`;}).join('')
+  :'<p style="font-size:.85rem;color:var(--sub);margin-bottom:10px">No new tenders found this week.</p>')
+  +`<button class="addb" onclick="addItem('tenders')">+ Add a tender</button>`;
 
 /* Competitor vendors */
 document.getElementById('plList').innerHTML=D.players.map((p,i)=>`
@@ -1563,6 +1633,7 @@ function addItem(key){
   if(key==='regs')D.regs.push({date:'2026-12-31',name:'(new regulation name)',doc:'(reference number)',layer:'G',what:'(one sentence: what it requires)',opps:'',act:'(what we should do)',src:'(source)'});
   if(key==='players')D.players.push({name:'(vendor name)',cat:'(category)',pos:'(one-line positioning)',moves:[{d:'2026-08',t:'(action)'}],mean:'(what it means for us)'});
   if(key==='stats')D.stats.push({k:'(metric name)',v:'0',unit:'',note:'(what this number shows)',src:'(source)',asof:D.asof});
+  if(key==='tenders')D.tenders.push({found:D.asof,tbmt:'',org:'(issuing organization)',hosp:'(hospital / province)',desc:'(scope summary)',layer:'L3',budget:'not disclosed',pub:'',due:'',decision:'Evaluating',link:'',owner:'NC',status:'Tracking',note:''});
   renderAll();
 }
 function addMove(i){harvest();D.players[i].moves.push({d:'2026-08',t:'(new action)'});renderAll();}

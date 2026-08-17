@@ -97,8 +97,9 @@ svg rect:hover{opacity:.75}
 </div>
 <header style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>越南醫療缺口地圖</b>
 <span class="n">2025 年行政區合併後 34 省市・點省份看已查證的事實・查證日 <span id="asof"></span></span>
-<button id="upbtn" onclick="document.getElementById('upf').click()"
+<button id="upbtn" title="請選擇：本頁若有「⬇ 匯出資料檔」產生的 map_data.json，或跟站方索取最新版" onclick="document.getElementById('upf').click()"
  style="margin-left:auto;background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer">⟳ 載入更新資料</button>
+<span style="font-size:.7rem;color:#6B4E00">（選 map_data.json，跟站方索取最新版）</span>
 <input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
 </header>
 <main>

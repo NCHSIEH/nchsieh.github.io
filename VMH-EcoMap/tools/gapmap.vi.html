@@ -97,8 +97,9 @@ svg rect:hover{opacity:.75}
 </div>
 <header style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>Bản đồ khoảng trống y tế Việt Nam</b>
 <span class="n">34 tỉnh, thành phố sau sáp nhập hành chính năm 2025・Nhấp vào tỉnh để xem các dữ kiện đã kiểm chứng・Ngày kiểm chứng <span id="asof"></span></span>
-<button id="upbtn" onclick="document.getElementById('upf').click()"
+<button id="upbtn" title="Vui lòng chọn tệp map_data.json xuất từ trang này, hoặc xin bản mới nhất từ quản trị trang" onclick="document.getElementById('upf').click()"
  style="margin-left:auto;background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer">⟳ Tải dữ liệu cập nhật</button>
+<span style="font-size:.7rem;color:#6B4E00">(chọn map_data.json — xin bản mới nhất từ quản trị trang)</span>
 <input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
 </header>
 <main>
