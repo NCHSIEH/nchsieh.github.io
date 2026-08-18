@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>聯盟體檢儀表板｜VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff;
+--s1:#2a78d6;--s1l:#86b6ef;--s2:#eb6834;--s3:#1baf7a;--ok:#0ca30c;--warn:#fab219;--serious:#ec835a;--crit:#d03b3b;--axis:#c3c2b7}
+html[data-mode="light"]{--hdrbg:#F3F6FA;--hdrfg:#1F3864}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--red:#F87171;--green:#4ADE80;--hdrbg:#0B1626;--hdrfg:#fff;
+--s1:#3987e5;--s1l:#1c5cab;--s2:#d95926;--s3:#199e70;--crit:#e66767;--axis:#383835}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:var(--hdrbg);color:var(--hdrfg);padding:13px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header b{font-size:1.05rem}
+header .n{font-size:.78rem;opacity:.75}
+.hbtn{background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer}
+main{max-width:1240px;margin:0 auto;padding:22px 20px 60px}
+h2{font-size:1.05rem;margin:26px 0 4px}
+.sub{font-size:.82rem;color:var(--sub);margin-bottom:12px}
+.card{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:18px 20px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
+.kpi{background:var(--sf);border-radius:12px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:15px 17px}
+.kpi .k{font-size:.76rem;color:var(--sub);font-weight:700}
+.kpi .v{font-size:1.7rem;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .n{font-size:.71rem;color:var(--sub);margin-top:3px;line-height:1.45}
+.lg{display:flex;gap:15px;flex-wrap:wrap;font-size:.75rem;color:var(--sub);margin-bottom:10px}
+.lg span{display:flex;align-items:center;gap:5px}
+.lg i{width:11px;height:11px;border-radius:3px;display:block}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{background:var(--line);font-size:.71rem;letter-spacing:.4px;padding:7px 9px;text-align:left;white-space:nowrap}
+td{padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;display:inline-block}
+.p-ok{background:rgba(12,163,12,.14);color:var(--ok)}
+.p-warn{background:rgba(250,178,25,.18);color:#8a6100}
+.p-serious{background:rgba(236,131,90,.18);color:#a54a26}
+.p-crit{background:rgba(208,59,59,.14);color:var(--crit)}
+html[data-mode="dark"] .p-warn{color:var(--warn)}
+html[data-mode="dark"] .p-serious{color:var(--serious)}
+.tipbox{position:fixed;pointer-events:none;background:var(--sf);color:var(--ink);border:1px solid var(--line);
+ border-radius:9px;padding:8px 11px;font-size:.76rem;box-shadow:0 8px 24px rgba(10,20,40,.25);z-index:999;display:none;max-width:270px}
+.note{background:rgba(31,56,100,.06);border-left:3px solid var(--navy);border-radius:0 8px 8px 0;
+ padding:10px 13px;font-size:.79rem;margin-top:12px}
+.ib{display:inline-flex;width:15px;height:15px;border-radius:50%;background:var(--line);color:var(--sub);
+ font-size:.68rem;align-items:center;justify-content:center;cursor:help;font-weight:700;vertical-align:1px}
+/* 方法論抽屜 */
+details.meth{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);margin-bottom:14px}
+details.meth summary{padding:13px 20px;font-weight:700;font-size:.9rem;cursor:pointer;color:var(--teal)}
+details.meth .mb{padding:0 20px 16px;font-size:.82rem;line-height:1.75}
+details.meth .mb h4{font-size:.82rem;margin:10px 0 3px;color:var(--navy)}
+html[data-mode="dark"] details.meth .mb h4{color:var(--s1)}
+details.meth .mb a{color:var(--teal)}
+/* 導覽 overlay */
+.tour{position:fixed;inset:0;background:rgba(10,20,40,.55);z-index:2000;display:none;align-items:center;justify-content:center}
+.tour.show{display:flex}
+.tourbox{background:var(--sf);color:var(--ink);border-radius:15px;max-width:430px;width:92%;padding:24px 26px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.tourbox .st{font-size:.7rem;font-weight:800;letter-spacing:1.5px;color:var(--teal)}
+.tourbox h3{font-size:1.05rem;margin:5px 0 8px}
+.tourbox p{font-size:.85rem;color:var(--sub);line-height:1.7}
+.tourbox .tf{display:flex;gap:8px;margin-top:16px;align-items:center}
+.tourbox .btn{background:var(--navy);color:#fff;border:0;border-radius:8px;padding:8px 18px;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer}
+html[data-mode="dark"] .tourbox .btn{background:var(--s1)}
+.tourbox .skip{background:none;border:0;color:var(--sub);font:inherit;font-size:.78rem;cursor:pointer;margin-left:auto}
+.i18nsw{position:fixed;right:14px;top:14px;z-index:1500;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}main{padding:16px 12px 50px}}
+
+.hm{display:grid;grid-template-columns:150px 1fr;gap:6px;align-items:center}
+.hmrow{display:flex;gap:4px;flex-wrap:wrap}
+.hmcell{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+ font-size:.62rem;font-weight:800;color:#fff;cursor:pointer}
+.hmcell:hover{outline:2px solid var(--navy)}
+.hmlab{font-size:.76rem;font-weight:700;text-align:right;padding-right:4px}
+.hmlab small{display:block;font-weight:400;color:var(--sub);font-size:.66rem}
+.depbar{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:.78rem}
+.depbar .nm{width:190px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.depbar .tr{flex:1;background:var(--line);border-radius:5px;height:18px;position:relative}
+.depbar .fl{height:18px;border-radius:5px;background:var(--s1);display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:#fff;font-size:.68rem;font-weight:700}
+.fbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:var(--sf);border:1px solid var(--line);border-radius:8px;padding:5px 12px;font-size:.76rem;cursor:pointer;font-weight:700}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+html[data-mode="dark"] .chip.on{background:var(--s1)}
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head>
+<body>
+<div class="i18nsw"><button type="button" class="i18btn">⚙ 設定</button>
+ <div class="i18panel"><a href="../index.html" class="i18home">🏠 回首頁</a>
+   <a href="datahub.html" class="i18home">🗄️ 資料中心</a>
+  <div class="i18gt">外觀</div><div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div></div></div>
+<header>
+<svg viewBox="0 0 32 32" width="22" height="22" style="flex:none"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg>
+<b>聯盟體檢儀表板</b><span class="n" id="src">內建快照（與 9 號導覽器同源，2026-08）</span>
+<button class="hbtn" onclick="document.getElementById('f').click()">載入 22 號檔（體檢 Excel）</button>
+<button class="hbtn" style="background:transparent;color:inherit;border:1px solid rgba(255,255,255,.3)" onclick="openTour()">❓ 導覽</button>
+<input id="f" type="file" accept=".xlsx" style="display:none" onchange="loadX(this.files[0])">
+</header>
+<main>
+
+<div class="kpis" id="kpis"></div>
+
+<h2>能力冗餘熱力圖 <span class="ib" data-t="每一格＝一項能力。分數＝有效冗餘分：按夥伴狀態加權（已通過資格1.0／盡調0.7／接觸0.5／目標邀請0.25／缺口0）。">i</span></h2>
+<p class="sub">每格一項能力，顏色＝有效冗餘分。紅＝連候選人都沒有；橙＝只有還沒談的名單；綠＝可承諾給客戶。點格子看細節。</p>
+<div class="card">
+ <div class="lg">
+  <span><i style="background:#d03b3b"></i>🔴 零覆蓋（0）</span>
+  <span><i style="background:#ec835a"></i>🟠 高風險（≤0.35）</span>
+  <span><i style="background:#fab219"></i>🟡 待補強（＜1.0）</span>
+  <span><i style="background:#0ca30c"></i>🟢 可承諾（≥1.0）</span>
+ </div>
+ <div class="hm" id="hm"></div>
+</div>
+
+<h2>夥伴依賴排行 <span class="ib" data-t="這家夥伴是多少項能力的唯一候選來源。承擔越多、狀態越淺（還沒談），倒下時越痛。">i</span></h2>
+<p class="sub">承擔能力數 ≥2 的夥伴。條長＝承擔數；紅字＝仍在「目標邀請」狀態（名單上有、實際還沒談）。</p>
+<div class="card" id="dep"></div>
+
+<h2>清單檢視</h2>
+<div class="fbar" id="fbar"></div>
+<div class="card" style="overflow-x:auto" id="tbl"></div>
+
+<details class="meth"><summary>📚 學理依據與方法說明</summary><div class="mb">
+<h4>為什麼看「冗餘」而不是「有沒有」</h4>
+資源依賴理論（Pfeffer &amp; Salancik, 1978）指出：組織的脆弱性來自對外部資源的依賴結構，而不只是資源缺不缺。供應鏈風險管理把這件事操作化為 N+1 冗餘原則——關鍵環節至少要有一個備援來源；只有一家供應者的環節稱為單點失效（SPOF）。
+<h4>有效冗餘分</h4>
+名單上有人 ≠ 靠得住。本工具把夥伴狀態換算成權重（已通過資格 1.0、盡職調查 0.7、已接觸 0.5、目標邀請 0.25、缺口 0），一項能力的分數＝候選夥伴權重加總。分數 ≥1.0 才算「可承諾給客戶」。
+<h4>依賴集中度</h4>
+單一夥伴承擔的能力數越多，其議價力與其倒下的衝擊越大——概念上借自衡量市場集中度的 HHI 指標。管理動作是替承擔數高的夥伴準備第二來源。
+<h4>限制</h4>
+權重是管理判斷不是測量值；體檢分數適合看「趨勢」（逐月是否進步）勝過看絕對值。<br>
+<a href="kb.html#redundancy" target="_blank">→ 到方法論知識庫查更多</a>
+</div></details>
+<div class="note" id="foot"></div>
+</main>
+<div class="tipbox" id="tip"></div>
+<div class="tour" id="tour"><div class="tourbox"><div class="st"></div><h3></h3><p></p>
+<div class="tf"><button class="btn" onclick="tourNext()">下一步</button><button class="skip" onclick="closeTour()">跳過</button></div></div></div>
+
+<script src="../assets/xlsx.min.js"></script>
+<script src="../assets/vmhdata.js"></script>
+<script>
+const RAW={"caps":[{"id":"CAP-001","name":"政府授權與計畫章程","dom":"D01 治理與投資","puz":"夥伴洽談中","pid":"P-002","pname":"越南政府贊助單位","pstat":"Engaged","score":0.5},{"id":"CAP-002","name":"利害關係人與權力地圖","dom":"D01 治理與投資","puz":"夥伴洽談中","pid":"P-017","pname":"越南公共事務顧問","pstat":"Target","score":0.25},{"id":"CAP-003","name":"交易模式選擇","dom":"D01 治理與投資","puz":"夥伴洽談中","pid":"P-011","pname":"財務與PPP顧問","pstat":"Target","score":0.25},{"id":"CAP-004","name":"法規與執照路徑","dom":"D01 治理與投資","puz":"夥伴洽談中","pid":"P-012","pname":"越南法律與法規顧問","pstat":"Target","score":0.25},{"id":"CAP-005","name":"聯盟治理與利益衝突","dom":"D01 治理與投資","puz":"夥伴洽談中","pid":"P-016","pname":"PI 計畫辦公室","pstat":"Qualified","score":1.0},{"id":"CAP-006","name":"績效契約與變更控制","dom":"D01 治理與投資","puz":"夥伴洽談中","pid":"P-003","pname":"越南在地醫院營運者","pstat":"Target","score":0.25},{"id":"CAP-007","name":"人口需求與病例量預測","dom":"D02 臨床服務模式","puz":"夥伴洽談中","pid":"P-004","pname":"台灣參考醫院","pstat":"Target","score":0.25},{"id":"CAP-008","name":"醫院定位與服務組合","dom":"D02 臨床服務模式","puz":"夥伴洽談中","pid":"P-003","pname":"越南在地醫院營運者","pstat":"Target","score":0.25},{"id":"CAP-009","name":"重點專科優先化","dom":"D02 臨床服務模式","puz":"夥伴洽談中","pid":"P-004","pname":"台灣參考醫院","pstat":"Target","score":0.25},{"id":"CAP-010","name":"病人流程與容量設計","dom":"D02 臨床服務模式","puz":"夥伴洽談中","pid":"P-013","pname":"品質與JCI顧問","pstat":"Target","score":0.25},{"id":"CAP-011","name":"轉診與區域照護網絡","dom":"D02 臨床服務模式","puz":"夥伴洽談中","pid":"P-003","pname":"越南在地醫院營運者","pstat":"Target","score":0.25},{"id":"CAP-012","name":"臨床治理與責任架構","dom":"D02 臨床服務模式","puz":"夥伴洽談中","pid":"P-004","pname":"台灣參考醫院","pstat":"Target","score":0.25},{"id":"CAP-013","name":"場址與醫院總體規劃","dom":"D03 醫院設施與機電","puz":"夥伴洽談中","pid":"P-006","pname":"越南EPC／機電夥伴","pstat":"Target","score":0.25},{"id":"CAP-014","name":"醫療建築功能計畫","dom":"D03 醫院設施與機電","puz":"夥伴洽談中","pid":"P-005","pname":"醫療建築與總體規劃團隊","pstat":"Target","score":0.25},{"id":"CAP-015","name":"感染控制與潔污動線","dom":"D03 醫院設施與機電","puz":"夥伴洽談中","pid":"P-005","pname":"醫療建築與總體規劃團隊","pstat":"Target","score":0.25},{"id":"CAP-016","name":"電力、備援與微電網","dom":"D03 醫院設施與機電","puz":"群晶主導","pid":"P-001","pname":"群晶科技","pstat":"Target","score":1.0},{"id":"CAP-017","name":"醫療氣體與關鍵公用系統","dom":"D03 醫院設施與機電","puz":"夥伴洽談中","pid":"P-006","pname":"越南EPC／機電夥伴","pstat":"Target","score":0.25},{"id":"CAP-018","name":"醫療廢棄物與水資源","dom":"D03 醫院設施與機電","puz":"夥伴洽談中","pid":"P-018","pname":"越南環保與廢棄物處理商","pstat":"Target","score":0.25},{"id":"CAP-019","name":"綠色與氣候韌性醫院","dom":"D03 醫院設施與機電","puz":"夥伴洽談中","pid":"P-006","pname":"越南EPC／機電夥伴","pstat":"Target","score":0.25},{"id":"CAP-020","name":"IDC與邊緣運算底座","dom":"D04 數位基建與物聯網","puz":"群晶主導","pid":"P-001","pname":"群晶科技","pstat":"Target","score":1.0},{"id":"CAP-021","name":"有線無線網路與分區","dom":"D04 數位基建與物聯網","puz":"群晶主導","pid":"P-001","pname":"群晶科技","pstat":"Target","score":1.0},{"id":"CAP-022","name":"資安營運與零信任","dom":"D04 數位基建與物聯網","puz":"夥伴洽談中","pid":"P-010","pname":"資安與隱私獨立驗證","pstat":"Target","score":0.25},{"id":"CAP-023","name":"BMS與能源管理","dom":"D04 數位基建與物聯網","puz":"群晶主導","pid":"P-001","pname":"群晶科技","pstat":"Target","score":1.0},{"id":"CAP-024","name":"RTLS與資產／人員定位","dom":"D04 數位基建與物聯網","puz":"群晶主導","pid":"P-001","pname":"群晶科技","pstat":"Target","score":1.0},{"id":"CAP-025","name":"智慧病房、護理呼叫與感測","dom":"D04 數位基建與物聯網","puz":"群晶主導","pid":"P-001","pname":"群晶科技","pstat":"Target","score":1.0},{"id":"CAP-026","name":"災難復原與營運持續","dom":"D04 數位基建與物聯網","puz":"群晶主導","pid":"P-001","pname":"群晶科技","pstat":"Target","score":1.0},{"id":"CAP-027","name":"醫材需求與設備計畫","dom":"D05 醫材與診斷","puz":"夥伴洽談中","pid":"P-009","pname":"醫材整合商","pstat":"Target","score":0.25},{"id":"CAP-028","name":"影像設備、PACS與報告流程","dom":"D05 醫材與診斷","puz":"缺口-待尋找","pid":"P-019","pname":"影像設備與PACS整合商","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-029","name":"實驗室自動化與LIS","dom":"D05 醫材與診斷","puz":"缺口-待尋找","pid":"P-020","pname":"檢驗自動化與LIS供應商","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-030","name":"手術室與重症整合","dom":"D05 醫材與診斷","puz":"缺口-待尋找","pid":"P-021","pname":"手術室與重症設備整合商","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-031","name":"醫材介接與裝置身分","dom":"D05 醫材與診斷","puz":"夥伴洽談中","pid":"P-007","pname":"醫療資訊整合商","pstat":"Target","score":0.25},{"id":"CAP-032","name":"醫療工程與設備生命週期","dom":"D05 醫材與診斷","puz":"夥伴洽談中","pid":"P-028","pname":"越南在地維修服務網","pstat":"Target","score":0.25},{"id":"CAP-033","name":"HIS／EMR核心平台","dom":"D06 醫療資訊與資料","puz":"夥伴洽談中","pid":"P-007","pname":"醫療資訊整合商","pstat":"Target","score":0.25},{"id":"CAP-034","name":"FHIR介接與API管理","dom":"D06 醫療資訊與資料","puz":"夥伴洽談中","pid":"P-007","pname":"醫療資訊整合商","pstat":"Target","score":0.25},{"id":"CAP-035","name":"主病人索引與身分整合","dom":"D06 醫療資訊與資料","puz":"缺口-待尋找","pid":"P-022","pname":"越南數位身分介接夥伴","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-036","name":"臨床術語與主資料治理","dom":"D06 醫療資訊與資料","puz":"夥伴洽談中","pid":"P-004","pname":"台灣參考醫院","pstat":"Target","score":0.25},{"id":"CAP-037","name":"電子醫囑、用藥與決策支援","dom":"D06 醫療資訊與資料","puz":"夥伴洽談中","pid":"P-007","pname":"醫療資訊整合商","pstat":"Target","score":0.25},{"id":"CAP-038","name":"資料平台、BI與營運指揮","dom":"D06 醫療資訊與資料","puz":"夥伴洽談中","pid":"P-008","pname":"美國雲端服務商","pstat":"Due diligence","score":0.7},{"id":"CAP-039","name":"病人入口、行動服務與VNeID準備","dom":"D06 醫療資訊與資料","puz":"缺口-待尋找","pid":"P-023","pname":"病人App與在地支付夥伴","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-040","name":"品質管理與JCI路線圖","dom":"D07 品質與病安","puz":"夥伴洽談中","pid":"P-013","pname":"品質與JCI顧問","pstat":"Target","score":0.25},{"id":"CAP-041","name":"感染預防與控制制度","dom":"D07 品質與病安","puz":"夥伴洽談中","pid":"P-003","pname":"越南在地醫院營運者","pstat":"Target","score":0.25},{"id":"CAP-042","name":"用藥安全閉環","dom":"D07 品質與病安","puz":"夥伴洽談中","pid":"P-003","pname":"越南在地醫院營運者","pstat":"Target","score":0.25},{"id":"CAP-043","name":"事件通報與根因改善","dom":"D07 品質與病安","puz":"夥伴洽談中","pid":"P-003","pname":"越南在地醫院營運者","pstat":"Target","score":0.25},{"id":"CAP-044","name":"開院臨床安全驗證","dom":"D07 品質與病安","puz":"夥伴洽談中","pid":"P-015","pname":"獨立臨床與成本驗證","pstat":"Target","score":0.25},{"id":"CAP-045","name":"人力與輪班模型","dom":"D08 人才與技轉","puz":"缺口-待尋找","pid":"P-024","pname":"越南醫護大學／人力機構","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-046","name":"職能矩陣與授權","dom":"D08 人才與技轉","puz":"夥伴洽談中","pid":"P-004","pname":"台灣參考醫院","pstat":"Target","score":0.25},{"id":"CAP-047","name":"種子教師與技術移轉","dom":"D08 人才與技轉","puz":"夥伴洽談中","pid":"P-004","pname":"台灣參考醫院","pstat":"Target","score":0.25},{"id":"CAP-048","name":"模擬中心與開院演練","dom":"D08 人才與技轉","puz":"夥伴洽談中","pid":"P-004","pname":"台灣參考醫院","pstat":"Target","score":0.25},{"id":"CAP-049","name":"變革管理與使用者採納","dom":"D08 人才與技轉","puz":"夥伴洽談中","pid":"P-016","pname":"PI 計畫辦公室","pstat":"Qualified","score":1.0},{"id":"CAP-050","name":"整合採購與供應商治理","dom":"D09 供應鏈與維運","puz":"夥伴洽談中","pid":"P-016","pname":"PI 計畫辦公室","pstat":"Qualified","score":1.0},{"id":"CAP-051","name":"藥品耗材與SPD物流","dom":"D09 供應鏈與維運","puz":"夥伴洽談中","pid":"P-014","pname":"物流／SPD與冷鏈夥伴","pstat":"Target","score":0.25},{"id":"CAP-052","name":"冷鏈與特殊物料","dom":"D09 供應鏈與維運","puz":"夥伴洽談中","pid":"P-014","pname":"物流／SPD與冷鏈夥伴","pstat":"Target","score":0.25},{"id":"CAP-053","name":"CMMS與設施維運","dom":"D09 供應鏈與維運","puz":"群晶主導","pid":"P-001","pname":"群晶科技","pstat":"Target","score":1.0},{"id":"CAP-054","name":"在地備品、維修與汰換","dom":"D09 供應鏈與維運","puz":"夥伴洽談中","pid":"P-028","pname":"越南在地維修服務網","pstat":"Target","score":0.25},{"id":"CAP-055","name":"全生命週期成本模型","dom":"D10 商模與病人生態","puz":"夥伴洽談中","pid":"P-011","pname":"財務與PPP顧問","pstat":"Target","score":0.25},{"id":"CAP-056","name":"健保申報與數位理賠","dom":"D10 商模與病人生態","puz":"缺口-待尋找","pid":"P-025","pname":"越南健保申報介接夥伴","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-057","name":"現金流、支付與收入週期","dom":"D10 商模與病人生態","puz":"缺口-待尋找","pid":"P-026","pname":"醫院收費與金流服務商","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-058","name":"國際醫療與高價值服務","dom":"D10 商模與病人生態","puz":"缺口-待尋找","pid":"P-027","pname":"國際醫療行銷與保險通路","pstat":"缺口-待尋找","score":0.0},{"id":"CAP-059","name":"PPP／JV財務與風險分配","dom":"D10 商模與病人生態","puz":"夥伴洽談中","pid":"P-011","pname":"財務與PPP顧問","pstat":"Target","score":0.25},{"id":"CAP-060","name":"效益實現與複製藍圖","dom":"D10 商模與病人生態","puz":"夥伴洽談中","pid":"P-016","pname":"PI 計畫辦公室","pstat":"Qualified","score":1.0}],"parts":[{"id":"P-001","name":"群晶科技","stat":"Target","cty":"Taiwan"},{"id":"P-002","name":"越南政府贊助單位","stat":"Engaged","cty":"Vietnam"},{"id":"P-003","name":"越南在地醫院營運者","stat":"Target","cty":"Vietnam"},{"id":"P-004","name":"台灣參考醫院","stat":"Target","cty":"Taiwan"},{"id":"P-005","name":"醫療建築與總體規劃團隊","stat":"Target","cty":"TBD"},{"id":"P-006","name":"越南EPC／機電夥伴","stat":"Target","cty":"Vietnam"},{"id":"P-007","name":"醫療資訊整合商","stat":"Target","cty":"TBD"},{"id":"P-008","name":"美國雲端服務商","stat":"Due diligence","cty":"United States"},{"id":"P-009","name":"醫材整合商","stat":"Target","cty":"TBD"},{"id":"P-010","name":"資安與隱私獨立驗證","stat":"Target","cty":"TBD"},{"id":"P-011","name":"財務與PPP顧問","stat":"Target","cty":"TBD"},{"id":"P-012","name":"越南法律與法規顧問","stat":"Target","cty":"Vietnam"},{"id":"P-013","name":"品質與JCI顧問","stat":"Target","cty":"TBD"},{"id":"P-014","name":"物流／SPD與冷鏈夥伴","stat":"Target","cty":"Vietnam"},{"id":"P-015","name":"獨立臨床與成本驗證","stat":"Target","cty":"TBD"},{"id":"P-016","name":"PI 計畫辦公室","stat":"Qualified","cty":"TBD / 待確認"},{"id":"P-017","name":"越南公共事務顧問","stat":"Target","cty":"Vietnam"},{"id":"P-018","name":"越南環保與廢棄物處理商","stat":"Target","cty":"Vietnam"},{"id":"P-019","name":"影像設備與PACS整合商","stat":"缺口-待尋找","cty":"TBD / 待確認"},{"id":"P-020","name":"檢驗自動化與LIS供應商","stat":"缺口-待尋找","cty":"TBD / 待確認"},{"id":"P-021","name":"手術室與重症設備整合商","stat":"缺口-待尋找","cty":"TBD / 待確認"},{"id":"P-022","name":"越南數位身分介接夥伴","stat":"缺口-待尋找","cty":"Vietnam"},{"id":"P-023","name":"病人App與在地支付夥伴","stat":"缺口-待尋找","cty":"Vietnam"},{"id":"P-024","name":"越南醫護大學／人力機構","stat":"缺口-待尋找","cty":"Vietnam"},{"id":"P-025","name":"越南健保申報介接夥伴","stat":"缺口-待尋找","cty":"Vietnam"},{"id":"P-026","name":"醫院收費與金流服務商","stat":"缺口-待尋找","cty":"TBD / 待確認"},{"id":"P-027","name":"國際醫療行銷與保險通路","stat":"缺口-待尋找","cty":"TBD / 待確認"},{"id":"P-028","name":"越南在地維修服務網","stat":"Target","cty":"Vietnam"},{"id":"P-029","name":"智慧院區設備商（BMS/RTLS）","stat":"Due diligence","cty":"TBD / 待確認"},{"id":"P-001 群晶科技","name":"✓","stat":"未登錄","cty":"✓"},{"id":"P-002 越南政府贊助單位","name":"✓","stat":"未登錄","cty":""},{"id":"P-003 越南在地醫院營運者","name":"","stat":"未登錄","cty":""},{"id":"P-004 台灣參考醫院","name":"","stat":"未登錄","cty":""},{"id":"P-005 醫療建築與總體規劃團隊","name":"","stat":"未登錄","cty":""},{"id":"P-006 越南EPC／機電夥伴","name":"","stat":"未登錄","cty":"✓"},{"id":"P-007 醫療資訊整合商","name":"","stat":"未登錄","cty":""},{"id":"P-008 美國雲端服務商","name":"","stat":"未登錄","cty":"✓"},{"id":"P-009 醫材整合商","name":"","stat":"未登錄","cty":""},{"id":"P-010 資安與隱私獨立驗證","name":"✓","stat":"未登錄","cty":"✓"},{"id":"P-011 財務與PPP顧問","name":"✓","stat":"未登錄","cty":""},{"id":"P-012 越南法律與法規顧問","name":"✓","stat":"未登錄","cty":""},{"id":"P-013 品質與JCI顧問","name":"","stat":"未登錄","cty":""},{"id":"P-014 物流／SPD與冷鏈夥伴","name":"","stat":"未登錄","cty":""},{"id":"P-015 獨立臨床與成本驗證","name":"✓","stat":"未登錄","cty":""},{"id":"P-016 PI 計畫辦公室","name":"✓","stat":"未登錄","cty":""},{"id":"P-017 越南公共事務顧問","name":"✓","stat":"未登錄","cty":""},{"id":"P-018 越南環保與廢棄物處理商","name":"","stat":"未登錄","cty":""},{"id":"P-019 影像設備與PACS整合商","name":"","stat":"未登錄","cty":""},{"id":"P-020 檢驗自動化與LIS供應商","name":"","stat":"未登錄","cty":""},{"id":"P-021 手術室與重症設備整合商","name":"","stat":"未登錄","cty":""},{"id":"P-022 越南數位身分介接夥伴","name":"","stat":"未登錄","cty":""},{"id":"P-023 病人App與在地支付夥伴","name":"","stat":"未登錄","cty":""},{"id":"P-024 越南醫護大學／人力機構","name":"","stat":"未登錄","cty":""},{"id":"P-025 越南健保申報介接夥伴","name":"","stat":"未登錄","cty":""},{"id":"P-026 醫院收費與金流服務商","name":"","stat":"未登錄","cty":""},{"id":"P-027 國際醫療行銷與保險通路","name":"","stat":"未登錄","cty":""},{"id":"P-028 越南在地維修服務網","name":"","stat":"未登錄","cty":""},{"id":"P-029 智慧院區設備商（BMS/RTLS）","name":"","stat":"未登錄","cty":"✓"}]};
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode',m);
+ try{localStorage.setItem('vmh_mode',m);}catch(err){}
+ document.querySelectorAll('.i18modes a').forEach(a=>a.classList.toggle('on',a.getAttribute('data-md')===m));
+ return false;
+}
+(function(){
+ document.querySelectorAll('.i18btn').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
+ document.addEventListener('click',e=>{document.querySelectorAll('.i18nsw.open').forEach(w=>{if(!w.contains(e.target))w.classList.remove('open');});});
+ try{const m=localStorage.getItem('vmh_mode')||'business';
+   document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(a=>a.classList.add('on'));}catch(e){}
+})();
+function bindTip(sel){
+  const tip=document.getElementById('tip');
+  document.querySelectorAll(sel+' [data-t]').forEach(el=>{
+    el.addEventListener('mousemove',e=>{tip.textContent=el.getAttribute('data-t');
+      tip.style.display='block';tip.style.left=Math.min(e.clientX+14,innerWidth-290)+'px';tip.style.top=(e.clientY+14)+'px';});
+    el.addEventListener('mouseleave',()=>tip.style.display='none');
+  });
+}
+/* L1 首次導覽 */
+function initTour(key,steps){
+  const seen=(()=>{try{return localStorage.getItem('vmh_tour_'+key)}catch(e){return '1'}})();
+  const el=document.getElementById('tour');
+  let i=0;
+  function draw(){
+    el.querySelector('.st').textContent='導覽 '+(i+1)+' / '+steps.length;
+    el.querySelector('h3').textContent=steps[i][0];
+    el.querySelector('p').textContent=steps[i][1];
+    el.querySelector('.btn').textContent=i===steps.length-1?'開始使用':'下一步';
+  }
+  window.tourNext=()=>{ if(i<steps.length-1){i++;draw();} else closeTour(); };
+  window.closeTour=()=>{el.classList.remove('show');try{localStorage.setItem('vmh_tour_'+key,'1')}catch(e){}};
+  window.openTour=()=>{i=0;draw();el.classList.add('show');};
+  if(!seen){openTour();}
+}
+/* 資料主檔自動讀取：站上發布 → 內建範例（fallback）→ 手動讀檔（優先） */
+function autoloadXlsx(relPath,onWB){
+  if(location.protocol==='file:')return;   // 本機直接開檔時不嘗試
+  fetch(relPath).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer();})
+   .then(b=>{const wb=XLSX.read(new Uint8Array(b),{type:'array'});onWB(wb,'資料主檔（站上發布版）');})
+   .catch(()=>{});
+}
+
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+let CAPS=RAW.caps.slice(), FILTER='all';
+const W={'Qualified':1.0,'Due diligence':0.7,'Engaged':0.5,'Target':0.25,'未登錄':0.1,'缺口-待尋找':0.0};
+const bandOf=s=>s===0?['crit','🔴 零覆蓋','#d03b3b']:s<=0.35?['serious','🟠 高風險','#ec835a']:s<1?['warn','🟡 待補強','#fab219']:['ok','🟢 可承諾','#0ca30c'];
+
+function kpis(){
+  const total=CAPS.length;
+  const avg=CAPS.reduce((a,c)=>a+c.score,0)/total;
+  const zero=CAPS.filter(c=>c.score===0).length;
+  const hi=CAPS.filter(c=>c.score>0&&c.score<=0.35).length;
+  const ok=CAPS.filter(c=>c.score>=1).length;
+  const K=[
+   ['體檢總分',Math.round(avg*100),'／100　平均有效冗餘分×100，逐月追蹤',''],
+   ['🔴 零覆蓋',zero,'項　連候選人都沒有','alert'],
+   ['🟠 高風險',hi,'項　只有還沒談的目標名單',''],
+   ['🟢 可承諾',ok,'項　至少一家可靠來源',''],
+   ['單一來源',CAPS.filter(c=>c.pid).length,'項　候選只有一家——第二來源是中期目標',''],
+  ];
+  document.getElementById('kpis').innerHTML=K.map(([k,v,n,a])=>
+   `<div class="kpi"><div class="k">${k}</div><div class="v" style="${a?'color:var(--crit)':''}">${v}</div><div class="n">${n}</div></div>`).join('');
+}
+function heat(){
+  const doms=[...new Set(CAPS.map(c=>c.dom))].sort();
+  document.getElementById('hm').innerHTML=doms.map(d=>{
+    const L=CAPS.filter(c=>c.dom===d);
+    const avg=L.reduce((a,c)=>a+c.score,0)/L.length;
+    return `<div class="hmlab">${esc(d.slice(0,3))}<small>${esc(d.slice(4))}・均 ${avg.toFixed(2)}</small></div>
+     <div class="hmrow">${L.map(c=>{const [,,col]=bandOf(c.score);
+       return `<div class="hmcell" style="background:${col}" data-t="${esc(c.id+' '+c.name)}｜分數 ${c.score}｜${esc(c.pname||'無候選')}（${esc(c.pstat)}）">${c.score>=1?'✓':c.score===0?'✗':c.score.toFixed(2).slice(1)}</div>`;}).join('')}</div>`;
+  }).join('');
+  bindTip('#hm');
+}
+function dep(){
+  const cnt={};
+  CAPS.forEach(c=>{if(c.pid)(cnt[c.pid]=cnt[c.pid]||{n:0,name:c.pname,stat:c.pstat}).n++;});
+  const rows=Object.entries(cnt).map(([id,o])=>({id,...o})).filter(r=>r.n>=2).sort((a,b)=>b.n-a.n);
+  const max=Math.max(...rows.map(r=>r.n),1);
+  document.getElementById('dep').innerHTML=rows.map(r=>
+   `<div class="depbar"><div class="nm">${esc(r.id)} ${esc(r.name)}</div>
+    <div class="tr"><div class="fl" style="width:${r.n/max*100}%" data-t="${esc(r.name)}｜唯一來源 ${r.n} 項｜狀態 ${esc(r.stat)}">${r.n}</div></div>
+    <span class="pill ${r.stat==='Target'?'p-crit':r.stat==='Qualified'?'p-ok':'p-warn'}">${r.stat==='Target'?'未洽談':esc(r.stat)}</span></div>`).join('')
+   ||'<div class="sub">沒有承擔 ≥2 項的夥伴</div>';
+  bindTip('#dep');
+}
+function tbl(){
+  const L=CAPS.filter(c=>{
+    if(FILTER==='all')return true;
+    const [b]=bandOf(c.score); return b===FILTER;
+  }).sort((a,b)=>a.score-b.score);
+  document.getElementById('tbl').innerHTML=
+   `<table><thead><tr><th>能力</th><th>領域</th><th>候選夥伴</th><th>夥伴狀態</th><th class="num">冗餘分</th><th>燈號</th></tr></thead><tbody>`+
+   L.map(c=>{const [b,lab]=bandOf(c.score);
+    return `<tr><td><b>${esc(c.id)}</b> ${esc(c.name)}</td><td>${esc(c.dom.slice(0,3))}</td>
+     <td>${esc(c.pname||'—')}</td><td>${esc(c.pstat)}</td>
+     <td class="num">${c.score.toFixed(2)}</td><td><span class="pill p-${b}">${lab}</span></td></tr>`;}).join('')+'</tbody></table>';
+}
+function fbar(){
+  const F=[['all','全部'],['crit','🔴 零覆蓋'],['serious','🟠 高風險'],['warn','🟡 待補強'],['ok','🟢 可承諾']];
+  document.getElementById('fbar').innerHTML=F.map(([k,t])=>
+   `<span class="chip ${FILTER===k?'on':''}" onclick="FILTER='${k}';fbar();tbl()">${t}</span>`).join('');
+}
+function render(){kpis();heat();dep();fbar();tbl();
+  document.getElementById('foot').textContent='資料快照與 9 號導覽器同源。夥伴狀態變動時，更新 22 號 Excel 後點「載入」即可反映；權重規則在 Excel 的選單頁可調整。';
+}
+function useWB(wb,label){
+  const ws=wb.Sheets['01_能力覆蓋表_Coverage']; if(!ws)throw new Error('找不到能力覆蓋表分頁');
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,range:3,defval:null});
+  const out=[];
+  for(let i=1;i<rows.length;i++){
+    const r=rows[i]; if(!r||!r[0])continue;
+    const puz=String(r[3]||''), pstat=String(r[7]||'未登錄');
+    const w=puz==='群晶主導'?1:puz==='缺口-待尋找'?0:(W[pstat]??0.1);
+    out.push({id:r[0],name:r[1]||'',dom:r[2]||'',puz,pid:r[5]||'',pname:r[6]||'',pstat,score:w});
+  }
+  if(!out.length)throw new Error('沒有資料列');
+  CAPS=out; document.getElementById('src').textContent='已載入 '+label+'（'+out.length+' 項）'; render();
+}
+function loadX(file){
+  if(!file)return;
+  const rd=new FileReader();
+  rd.onload=e=>{try{useWB(XLSX.read(new Uint8Array(e.target.result),{type:'array'}),file.name);}
+   catch(err){document.getElementById('src').textContent='讀取失敗：'+err.message;}};
+  rd.readAsArrayBuffer(file);
+}
+VMHData.resolve('t22',{published:'data/VMH-EcoMap-22.xlsx',onData:(wb,label,origin)=>{try{useWB(wb,label)}catch(e){}}});
+initTour('t22',[
+ ['這是聯盟的健康檢查','導覽器告訴你市場缺什麼；這裡告訴你：名單上的 58 個夥伴，有多少是真的靠得住。'],
+ ['先看體檢總分','平均有效冗餘分×100。目前的結構性事實：每項能力都只有一家候選，總分是聯盟建設的月度 KPI。'],
+ ['紅色和橙色格子是重點','紅＝連候選人都沒有；橙＝名單上有人但根本還沒談。點任何格子看是哪項能力、卡在誰身上。'],
+ ['依賴排行看「誰倒了最痛」','一家夥伴承擔太多項能力時，它就是你的單點風險——這排行是找第二來源的優先順序。'],
+]);
+render();
+</script>
+</body></html>

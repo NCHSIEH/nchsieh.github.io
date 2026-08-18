@@ -1,11 +1,10 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8">
-<script>try{var _m=localStorage.getItem('vmh_mode');if(_m)document.documentElement.setAttribute('data-mode',_m);}catch(e){}</script>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Bảng chiến tình đấu thầu | VMH-EcoMap</title>
-<meta name="description" content="VMH-EcoMap — biến “bệnh viện Việt Nam có những cơ hội kinh doanh nào” thành một bản đồ có thể thao tác, xác minh và mô hình hóa.">
 <style>
 :root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
 --bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff}
@@ -71,44 +70,9 @@ h2{font-size:1.12rem;color:var(--navy);margin:20px 0 10px}
 .i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
 @media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
 
-
-/* VMH-ANCHOR-FIX */[id]{scroll-margin-top:120px}
-
-/* ══ VMH-SCANFIX-2026-08-17 ══ A：右上角語言鈕壓到頁首按鈕 → 改固定右下角 */
-.i18nsw{top:auto !important;bottom:16px !important;right:16px !important}
-.i18panel{top:auto !important;bottom:calc(100% + 8px) !important}
-@media(max-width:640px){.i18nsw{bottom:14px !important;right:14px !important}}
-
-/* ══ VMH-SCANFIX-2026-08-17 ══ B：語系／配色切換的無障礙角色 */
-.i18row span.on,.lp.on{cursor:default}
-
-/* ══ VMH-SCANFIX3-2026-08-17 ══ H：面板小標放大到 11px */
-.i18gt{font-size:11px}
-
-/* ══ VMH-SCANFIX3-2026-08-17 ══ I：標題階層修正後沿用原本外觀 */
-h2.sech1{font-size:1.5rem;color:var(--navy,#12365C);margin:26px 0 4px;font-weight:700}
-.a11y-h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
-  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
-</style><!-- VMH-PATCH-2026-08-16 start -->
-<meta name="robots" content="noindex,nofollow">
-<link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/advanced/warboard.html">
-<link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/advanced/warboard.en.html">
-<link rel="alternate" hreflang="vi" href="https://nchsieh.github.io/VMH-EcoMap/advanced/warboard.vi.html">
-<link rel="alternate" hreflang="x-default" href="https://nchsieh.github.io/VMH-EcoMap/advanced/warboard.html">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="VMH-EcoMap — Bộ công cụ hệ sinh thái bệnh viện Việt Nam">
-<meta property="og:locale" content="vi_VN">
-<meta property="og:url" content="https://nchsieh.github.io/VMH-EcoMap/advanced/warboard.vi.html">
-<meta property="og:title" content="Bảng chiến tình đấu thầu | VMH-EcoMap">
-<meta property="og:description" content="VMH-EcoMap — biến “bệnh viện Việt Nam có những cơ hội kinh doanh nào” thành một bản đồ có thể thao tác, xác minh và mô hình hóa.">
-<meta property="og:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Bảng chiến tình đấu thầu | VMH-EcoMap">
-<meta name="twitter:description" content="VMH-EcoMap — biến “bệnh viện Việt Nam có những cơ hội kinh doanh nào” thành một bản đồ có thể thao tác, xác minh và mô hình hóa.">
-<meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
-<!-- VMH-PATCH-2026-08-16 end -->
-<!-- VMH-SCANFIX-2026-08-17 --><link rel="canonical" href="https://nchsieh.github.io/VMH-EcoMap/advanced/warboard.vi.html">
-</head><body><div class="i18nsw">
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head><body><div class="i18nsw">
  <button type="button" class="i18btn">⚙ VI</button>
  <div class="i18panel">
    <a href="../index.vi.html" class="i18home">🏠 Về trang chủ</a>
@@ -116,9 +80,12 @@ h2.sech1{font-size:1.5rem;color:var(--navy,#12365C);margin:26px 0 4px;font-weigh
    <div class="i18row"><a href="warboard.html">中文</a><a href="warboard.en.html">EN</a><a href="warboard.vi.html" class="on">VI</a></div>
    <div class="i18gt">Giao diện</div>
    <div class="i18modes">
-    <a href="#" role="button" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>Xanh navy</a>
-    <a href="#" role="button" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>Sáng</a>
-    <a href="#" role="button" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>Tối</a>
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
    </div>
  </div>
 </div>
@@ -127,7 +94,6 @@ h2.sech1{font-size:1.5rem;color:var(--navy,#12365C);margin:26px 0 4px;font-weigh
 <input id="f" type="file" accept=".xlsx" style="display:none" onchange="load(this.files[0])">
 </header>
 <main id="app">
-<h1 class="a11y-h1">Bảng chiến tình đấu thầu</h1>
 <div class="empty"><h2>Tải Radar đấu thầu của bạn</h2>
 <p>Chọn <b>VMH-EcoMap-15_標案雷達與資格文件庫_v1.0.xlsx</b>, bảng chiến tình sẽ tự động tạo ra:<br>
 Đếm ngược ngày đóng thầu, phân bố đấu/không đấu, và tỷ lệ hoàn thiện hồ sơ năng lực. Toàn bộ quá trình phân tích diễn ra trên máy tính của bạn — tệp không được tải lên.</p>

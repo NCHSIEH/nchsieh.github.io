@@ -1,68 +1,155 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
-<script>try{var _m=localStorage.getItem('vmh_mode');if(_m)document.documentElement.setAttribute('data-mode',_m);}catch(e){}</script>
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Home｜VMH-EcoMap</title>
-<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
-<link rel="icon" href="assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap">
-<link rel="stylesheet" href="assets/theme.css">
-<!-- VMH-MULTIPAGE-2026-08-16 -->
-<link rel="alternate" hreflang="zh-Hant" href="https://nchsieh.github.io/VMH-EcoMap/index.html">
-<link rel="alternate" hreflang="en" href="https://nchsieh.github.io/VMH-EcoMap/index.en.html">
-<link rel="alternate" hreflang="vi" href="https://nchsieh.github.io/VMH-EcoMap/index.vi.html">
-<link rel="alternate" hreflang="x-default" href="https://nchsieh.github.io/VMH-EcoMap/index.html">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="VMH-EcoMap Vietnam Hospital Ecosystem Toolkit">
-<meta property="og:locale" content="en_US">
-<meta property="og:url" content="https://nchsieh.github.io/VMH-EcoMap/index.en.html">
-<meta property="og:title" content="Home｜VMH-EcoMap">
-<meta property="og:description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
-<meta property="og:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Home｜VMH-EcoMap">
-<meta name="twitter:description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
-<meta name="twitter:image" content="https://nchsieh.github.io/VMH-EcoMap/assets/shots/explorer.jpg">
-<!-- VMH-SCANFIX-2026-08-17 --><link rel="canonical" href="https://nchsieh.github.io/VMH-EcoMap/index.en.html">
-</head><body>
-<a class="skiplink" href="#main">Skip to content</a>
-<header><div class="hw">
- <a class="logo" href="index.en.html"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0E2340"/><polygon points="12,5 19,11 12,17 5,11" fill="#2DD4BF"/><polygon points="20,5 27,11 20,17 13,11" fill="#F2B84B"/><polygon points="16,13 23,19 16,25 9,19" fill="#fff" fill-opacity=".95"/></svg><span class="txt"><b>VMH-EcoMap</b><span>Vietnam Hospital Ecosystem Toolkit</span></span></a>
- <nav><a href="index.en.html#roles">Where to start</a><a href="tools/index.en.html">Online tools</a><a href="onepagers/index.en.html">One-pagers</a><a href="downloads/index.en.html">Downloads</a><a href="about/index.en.html">About</a></nav>
- <div class="setwrap">
-  <button type="button" class="setbtn" onclick="this.parentElement.classList.toggle('open')">⚙ EN</button>
-  <div class="setpanel">
-   <div class="setgt">Language</div>
-   <div class="langsw"><a class="lp" data-lang="zh" href="index.html">中文</a><span class="lp on" aria-current="page">English</span><a class="lp" data-lang="vi" href="index.vi.html">Tiếng Việt</a></div>
-   <div class="setgt">Appearance</div>
-   <div class="modesw"><a href="#" role="button" data-md="business" onclick="return setMode(event,'business')"><span class="dot" style="background:linear-gradient(135deg,#0E2340,#2A5480)"></span>Navy</a><a href="#" role="button" data-md="graphite" onclick="return setMode(event,'graphite')"><span class="dot" style="background:linear-gradient(135deg,#33404D,#5B6E80)"></span>Graphite</a><a href="#" role="button" data-md="pine" onclick="return setMode(event,'pine')"><span class="dot" style="background:linear-gradient(135deg,#14453C,#2C7566)"></span>Pine</a><a href="#" role="button" data-md="claret" onclick="return setMode(event,'claret')"><span class="dot" style="background:linear-gradient(135deg,#5A1F2C,#96404F)"></span>Claret</a><a href="#" role="button" data-md="indigo" onclick="return setMode(event,'indigo')"><span class="dot" style="background:linear-gradient(135deg,#2A2E7A,#4E54B0)"></span>Indigo</a><a href="#" role="button" data-md="dark" onclick="return setMode(event,'dark')"><span class="dot" style="background:linear-gradient(135deg,#0A1017,#233043)"></span>Dark</a></div>
-  </div>
- </div>
-</div></header>
-<section class="hero"><div class="hin"><div><span class="eyebrow">CHUNGHING TECHNOLOGY × VIETNAM MODERN HOSPITAL ALLIANCE</span><h1>Turning "what businesses exist in Vietnam's hospitals"<br>into a map you can <u>operate</u>, <u>verify</u>, and <u>model</u></h1><p class="lede">This is a working toolkit, not a slide deck. From market landscape and regulatory timing to deal math and gap analysis — every tool runs directly in your browser, and every figure is sourced.</p><div class="cta"><a class="btn" href="#roles">Where to start</a><a class="btn ghost" href="tools/index.en.html">Online tools</a></div></div><div class="panel"><div class="pk"><span>opportunities mapped</span><b>85</b></div><div class="pk"><span>layer framework</span><b>7</b></div><div class="pk"><span>vendors in directory</span><b>115</b></div><div class="pk"><span>provinces on the gap map</span><b>34</b></div><p class="pnote">How to read these figures: <b>115</b> is the market-side directory of suppliers and competitors (maintained in the intelligence station, 9 categories, verified 2026-08-15). The alliance itself has <b>29</b> roles to fill, 9 of which are still open — that list lives in the ecosystem explorer.</p></div></div></section><main id="main"><h2 class="sec" id="roles">First, tell us who you are</h2>
-<p class="secsub">Different roles care about different questions — here are direct paths, no need to hunt.</p>
-<div class="roles">
- <div class="role"><h3>Hospital Owner</h3><div class="q">"What should my campus invest in first?"</div>
-  <div class="path"><b>1.</b> <a href="tools/gapmap.en.html">Gap Map</a>　check your province<br><b>2.</b> <a href="tools/calculator.en.html">Deal Calculator</a>　model your project<br><b>3.</b> <a href="onepagers/owner.en.html">Owner one-pager</a>　take it to the meeting<br></div></div>
- <div class="role"><h3>Investor</h3><div class="q">"Where does this number come from?"</div>
-  <div class="path"><b>1.</b> <a href="guides/calculator.en.html">Six investment methods</a>　calculator guide<br><b>2.</b> <a href="tools/intel.en.html#regs">Regulatory clock</a>　check the timing<br><b>3.</b> <a href="tools/intel.en.html#stats">Market data</a>　every figure sourced<br></div></div>
- <div class="role"><h3>Alliance Partner</h3><div class="q">"Where do I fit on this map?"</div>
-  <div class="path"><b>1.</b> <a href="tools/explorer.en.html">Ecosystem Explorer</a>　find your layer<br><b>2.</b> <a href="tools/intel.en.html#roster">Vendor directory</a>　see who else is there<br><b>3.</b> <a href="onepagers/sheetmap.en.html">Sheet map</a>　see the whole picture<br></div></div>
- <div class="role"><h3>Advisor / Internal</h3><div class="q">"Where does the data come from?"</div>
-  <div class="path"><b>1.</b> <a href="guides/intel.en.html">Intel station guide</a>　verification principles<br><b>2.</b> <a href="tools/intel.en.html#how">How updates work</a>　maintenance model<br><b>3.</b> <a href="partners/index.en.html">Advanced / Partner zone</a>　tender & dossier tools<br></div></div></div>
+<title>VMH-EcoMap｜Vietnam Hospital Ecosystem Toolkit</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, pipeline, bid economics, delivery and risk tools.">
+<style>
+:root{--navy:#152C4E;--navy2:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--green:#2F6B3D;--wine:#8A2E4A;
+--bg:#F2F6F5;--sf:#fff;--ink:#22303E;--sub:#67737F;--line:#DCE5E3;--hdrfg:#22303E}
+html[data-mode="business"]{--bg:#EEF2F6;--sf:#fff}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--green:#4ADE80;--navy:#E7ECF3;--hdrfg:#E7ECF3}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+header{background:var(--sf);padding:13px 34px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 10px rgba(16,26,45,.07);position:sticky;top:0;z-index:100}
+header .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+header b{font-size:1rem}
+header .st{font-size:.62rem;color:var(--sub);letter-spacing:2px;display:block}
+header nav{margin-left:auto;display:flex;gap:2px;font-size:.8rem;flex-wrap:wrap}
+header nav a{color:var(--ink);padding:7px 12px;border-radius:9px;text-decoration:none;white-space:nowrap}
+header nav a:hover{background:var(--bg)}
+.hero{text-align:center;padding:44px 24px 6px;max-width:840px;margin:0 auto}
+.hero .eyebrow{font-size:.66rem;letter-spacing:3px;color:var(--teal);font-weight:700}
+.hero h1{font-size:1.9rem;line-height:1.5;margin:10px 0 10px;font-weight:800;color:var(--navy)}
+.hero p{font-size:.9rem;color:var(--sub)}
+.journey{max-width:1180px;margin:4px auto 44px;padding:0 26px;position:relative}
+.path{position:absolute;left:56px;right:56px;top:96px;height:6px;border-radius:3px;
+ background:linear-gradient(90deg,#0E6E6B 0 24%,#1F3864 24% 50%,#9A6B10 50% 76%,#2F6B3D 76% 100%);opacity:.3}
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative}
+.node{text-align:center;padding-top:22px}
+.pin{width:58px;height:58px;border-radius:50% 50% 50% 6px;transform:rotate(-45deg);margin:0 auto;
+ display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(16,26,45,.22);position:relative;z-index:2}
+.pin span{transform:rotate(45deg);color:#fff;font-weight:800;font-size:1.05rem}
+.n1 .pin{background:#0E6E6B}.n2 .pin{background:#1F3864}.n3 .pin{background:#9A6B10}.n4 .pin{background:#2F6B3D}
+.node h3{margin:16px 0 2px;font-size:1.04rem;color:var(--navy)}
+.node .q{font-size:.72rem;color:var(--sub);margin-bottom:13px;line-height:1.6}
+.tlist{display:flex;flex-direction:column;gap:8px}
+.tl{background:var(--sf);border-radius:12px;padding:11px 12px;text-align:left;display:flex;gap:10px;align-items:center;
+ box-shadow:0 1px 6px rgba(16,26,45,.07);text-decoration:none;color:var(--ink);border-left:4px solid transparent;transition:transform .1s}
+.tl{cursor:pointer}
+.tl:hover{transform:translateX(3px)}
+.n1 .tl{border-left-color:#0E6E6B}.n2 .tl{border-left-color:#1F3864}
+.n3 .tl{border-left-color:#9A6B10}.n4 .tl{border-left-color:#2F6B3D}
+html[data-mode="dark"] .n2 .tl{border-left-color:#3987e5}
+.tl .ic{width:32px;height:32px;border-radius:9px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1rem;flex:none}
+.tl .tx{flex:1;min-width:0}
+.tl b{font-size:.82rem;display:block}
+.tl span{font-size:.65rem;color:var(--sub);display:block;line-height:1.45}
+.tl .mk{font-size:.62rem;flex:none;display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+.tl .mk .zh{background:var(--line);border-radius:4px;padding:1px 5px;color:var(--sub);font-weight:700}
+.tl .mk a{color:var(--teal);text-decoration:none;font-weight:700}
+.lockhint{text-align:center;font-size:.72rem;color:var(--sub);margin-top:16px}
+.startbar{max-width:1000px;margin:0 auto 40px;padding:0 26px}
+.startbar .in{background:var(--sf);border-radius:16px;box-shadow:0 2px 12px rgba(16,26,45,.08);
+ padding:18px 26px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.startbar b{font-size:.86rem;color:var(--navy)}
+.startbar a{font-size:.76rem;color:var(--teal);border:1.5px solid var(--teal);border-radius:20px;padding:6px 15px;text-decoration:none;font-weight:700}
+.startbar a:hover{background:var(--teal);color:#fff}
+.startbar a small{display:block;font-weight:400;color:var(--sub);font-size:.62rem}
+section.blk{max-width:1180px;margin:0 auto 34px;padding:0 26px}
+section.blk h2{font-size:1.12rem;color:var(--navy);border-left:5px solid var(--teal);padding-left:11px;margin-bottom:3px}
+section.blk .ss{font-size:.78rem;color:var(--sub);margin-bottom:14px;padding-left:16px}
+.dlgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.dlrow{background:var(--sf);border-radius:11px;padding:11px 14px;display:flex;gap:10px;align-items:center;box-shadow:0 1px 5px rgba(16,26,45,.06);font-size:.78rem}
+.dlrow .tx{flex:1;min-width:0}
+.dlrow b{display:block;font-size:.79rem;line-height:1.45}
+.dlrow span{color:var(--sub);font-size:.68rem}
+.dlrow .bt{background:var(--navy2);color:#fff;border-radius:7px;padding:5px 12px;font-size:.72rem;font-weight:700;text-decoration:none;flex:none}
+html[data-mode="dark"] .dlrow .bt{background:#3987e5}
+.dlrow .bt.g{background:var(--line);color:var(--ink)}
+.about{background:var(--sf);border-radius:14px;box-shadow:0 1px 6px rgba(16,26,45,.07);padding:20px 24px;font-size:.83rem;color:var(--sub);line-height:1.9}
+.about a{color:var(--teal)}
+footer{background:var(--navy2);color:#9FB3CD;text-align:center;font-size:.74rem;padding:24px;line-height:1.9}
+html[data-mode="dark"] footer{background:#0d1b2e}
+.setwrap{position:relative;margin-left:6px}
+.setbtn{background:var(--navy2);color:#fff;border:0;border-radius:9px;padding:7px 13px;font:inherit;font-size:.76rem;font-weight:700;cursor:pointer}
+html[data-mode="dark"] .setbtn{background:#3987e5}
+.setpanel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;border-radius:12px;
+ box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:215px;border:1px solid #E1E7EF;z-index:300}
+.setwrap.open .setpanel{display:block}
+.setgt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.setgt:first-child{margin-top:2px}
+.lrow{display:flex;gap:4px;flex-wrap:wrap}
+.lrow a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.lrow a.on{background:#152C4E;color:#fff}
+.modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:900px){.cols{grid-template-columns:repeat(2,1fr)}.path{display:none}}
+@media(max-width:560px){.cols{grid-template-columns:1fr}header{padding:11px 16px}header nav{width:100%;overflow-x:auto}}
+</style>
+<link rel="stylesheet" href="assets/themes.css">
+<link rel="stylesheet" href="assets/type.css"></head><body>
+<header>
+<a class="logo" href="index.en.html"><svg viewBox="0 0 32 32" width="24" height="24"><polygon points="11,2 20,10 11,18 2,10" fill="#0E6E6B"/><polygon points="21,2 30,10 21,18 12,10" fill="#9A6B10"/><polygon points="16,12 25,20 16,28 7,20" fill="#152C4E" fill-opacity=".85"/></svg>
+<div><b>VMH-EcoMap</b><span class="st">Vietnam Hospital Ecosystem Toolkit</span></div></a>
+<nav><a href="#stages">By stage</a><a href="#roles">By role</a><a href="tools/datahub.html">Data Hub</a><a href="tools/kb.html">Knowledge base</a><a href="#downloads">Downloads</a><a href="#about">About</a></nav>
+<div class="setwrap">
+ <button type="button" class="setbtn">⚙ English</button>
+ <div class="setpanel">
+  <div class="setgt">Language</div><div class="lrow"><a href="index.html" class="">中文</a><a href="index.en.html" class="on">English</a><a href="index.vi.html" class="">Tiếng Việt</a></div>
+  <div class="setgt">Theme</div><div class="modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div></div></div>
+</header>
 
-<h2 class="sec">Online tools</h2><div class="threekinds"><!--VMH-FIX-DESIGN-2026-08-16--><p>Three kinds of things live here, for three different jobs:</p><dl><dt>Online tools</dt><dd>Run straight in the browser — for looking something up mid-meeting, or when you would rather not install anything.</dd><dt>Excel master workbook (Downloads)</dt><dd>21 tabs and roughly 18,000 formulas — for changing parameters yourself and keeping an auditable copy.</dd><dt>One-pagers</dt><dd>These explain how the Excel master workbook works. Read one before deciding whether to download it.</dd></dl></div><div class="tools"><div class="tool tool--slim" style="--c:var(--c-calc)"><span class="bar"></span><div><div class="head"><h3>Deal Calculator</h3><span class="tag">Interactive modeling</span></div><p class="one">6 investment categories × 20 preset cases — drag a slider, get a conclusion</p></div><div class="mid"></div><div class="foot"><a class="btn" href="tools/calculator.en.html">Open Tool</a>
-    <a class="btn ghost" href="guides/calculator.en.html">Guide</a>
-    <span class="meta">Single-file HTML<br>~26 KB</span></div></div><div class="tool tool--slim" style="--c:var(--c-intel)"><span class="bar"></span><div><div class="head"><h3>Vietnam Healthcare Intel Station</h3><span class="tag">Intel · Monthly refresh</span></div><p class="one">Regulatory clock, competitor activity, market data, a 115-vendor directory</p></div><div class="mid"></div><div class="foot"><a class="btn" href="tools/intel.en.html">Open Tool</a>
-    <a class="btn ghost" href="guides/intel.en.html">Guide</a>
-    <span class="meta">Single-file HTML<br>~65 KB</span></div></div><div class="tool tool--slim" style="--c:var(--c-gap)"><span class="bar"></span><div><div class="head"><h3>Vietnam Gap Map</h3><span class="tag">National view</span></div><p class="one">A 34-province tile grid — click a province for local facts and gaps</p></div><div class="mid"></div><div class="foot"><a class="btn" href="tools/gapmap.en.html">Open Tool</a>
-    <a class="btn ghost" href="guides/gapmap.en.html">Guide</a>
-    <span class="meta">Single-file HTML<br>~12 KB</span></div></div><div class="tool tool--slim" style="--c:var(--c-exp)"><span class="bar"></span><div><div class="head"><h3>Ecosystem Explorer</h3><span class="tag">Opportunity landscape</span></div><p class="one">85 opportunities × 10 capabilities — browse and cross-reference the whole landscape</p></div><div class="mid"></div><div class="foot"><a class="btn" href="tools/explorer.en.html">Open Tool</a>
-    <a class="btn ghost" href="guides/explorer.en.html">Guide</a>
-    <span class="meta">Single-file HTML (snapshot included)<br>~1.4 MB</span></div></div></div><p class="more"><a href="tools/index.en.html">See full details for all four tools →</a></p><h2 class="sec">Recently updated</h2><ul class="recent"><li><time>2026-08-16</time>Fixed the partner count in the explorer (58 → 29) and wired up the three-language switch</li><li><time>2026-08-15</time>Intelligence station and gap map re-verified for the month</li><li><time>2026-08-13</time>Master workbook v1.0 data generated — 85 opportunities, 60 capabilities</li></ul></main><footer><div class="fin">
- <div><b>VMH-EcoMap</b>　Vietnam Hospital Ecosystem Toolkit　v1.0　2026-08<br>群晶科技 × 越南現代醫院聯盟<br>
- <span class="fnav"><a href="tools/index.en.html">Online tools</a> · <a href="onepagers/index.en.html">One-pagers</a> · <a href="downloads/index.en.html">Downloads</a> · <a href="about/index.en.html">About</a></span></div>
- <div class="fright">Every figure on this site carries a source and a verification date. Preloaded cases are market estimates, not any institution's actual quotation.<div class="datastamp">Data version: master workbook v1.0 (generated 2026-08-13) · Intel verified 2026-08-15</div></div>
-</div></footer>
-<script>function setMode(e,m){e.preventDefault();document.documentElement.setAttribute('data-mode',m);try{localStorage.setItem('vmh_mode',m)}catch(x){};return false}</script>
+<div class="hero">
+<div class="eyebrow">CHUNGHING TECHNOLOGY × VIETNAM MODERN HOSPITAL ALLIANCE</div>
+<h1>One road — from reading the market to signing and delivering</h1>
+<p>13 decision tools laid out along the journey — every figure sourced, every method grounded in theory.</p>
+</div>
+
+<div class="journey" id="stages">
+<div class="path"></div>
+<div class="cols"><div class="node n1"><div class="pin"><span>1</span></div><h3>Read the market</h3><div class="q">What business exists,<br>who does it, where the gaps are</div><div class="tlist"><div class="tl" onclick="location.href='tools/explorer.en.html'"><div class="ic">🧭</div><div class="tx"><b>Ecosystem Explorer</b><span>85 opps × 60 caps × 58 partners</span></div><div class="mk"><a href="guides/explorer.en.html" onclick="event.stopPropagation()">Guide</a></div></div><div class="tl" onclick="location.href='tools/intel.en.html'"><div class="ic">📡</div><div class="tx"><b>Intel Station</b><span>Regulatory clock · rivals · 115-vendor directory</span></div><div class="mk"><a href="guides/intel.en.html" onclick="event.stopPropagation()">Guide</a></div></div><div class="tl" onclick="location.href='tools/gapmap.en.html'"><div class="ic">🗺️</div><div class="tx"><b>Gap Map</b><span>Supply gaps across 34 provinces</span></div><div class="mk"><a href="guides/gapmap.en.html" onclick="event.stopPropagation()">Guide</a></div></div></div></div><div class="node n2"><div class="pin"><span>2</span></div><h3>Evaluate & decide</h3><div class="q">Is it worth doing,<br>with whom, and whom to engage</div><div class="tlist"><div class="tl" onclick="location.href='tools/calculator.en.html'"><div class="ic">🧮</div><div class="tx"><b>Deal Calculator</b><span>Owner-side NPV / IRR</span></div><div class="mk"><a href="guides/calculator.en.html" onclick="event.stopPropagation()">Guide</a></div></div><div class="tl" onclick="location.href='tools/health.html'"><div class="ic">🩺</div><div class="tx"><b>Alliance Health Check</b><span>Redundancy & single points of failure</span></div><div class="mk"><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='tools/stakeholder.html'"><div class="ic">🤝</div><div class="tx"><b>Stakeholder Map</b><span>Power × support quadrants</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div></div></div><div class="node n3"><div class="pin"><span>3</span></div><h3>Pursue & sign</h3><div class="q">How far along, what to bid,<br>where the floor is</div><div class="tlist"><div class="tl" onclick="location.href='tools/pipeline.html'"><div class="ic">🔻</div><div class="tx"><b>Pipeline Funnel</b><span>Weighted pipeline & stall detection</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='tools/bidcalc.html'"><div class="ic">💰</div><div class="tx"><b>Bid Economics</b><span>Cost buildup & walk-away price</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='advanced/warboard.en.html'"><div class="ic">📋</div><div class="tx"><b>Tender War-board</b><span>Deadline countdown & readiness</span></div><div class="mk"><span>🔒</span><a href="guides/warboard.en.html" onclick="event.stopPropagation()">Guide</a></div></div></div></div><div class="node n4"><div class="pin"><span>4</span></div><h3>Deliver & collect</h3><div class="q">How it is going, is cash in,<br>where the risks are</div><div class="tlist"><div class="tl" onclick="location.href='tools/delivery.html'"><div class="ic">📈</div><div class="tx"><b>Delivery & Receivables</b><span>EVM & cash ladder</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='tools/risk.html'"><div class="ic">⚠️</div><div class="tx"><b>Risk Register & Simulation</b><span>Matrix · P10/P50/P90</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='tools/kb.html'"><div class="ic">📚</div><div class="tx"><b>Methodology KB</b><span>Searchable theory index</span></div><div class="mk"><span class="zh">ZH</span></div></div></div></div></div>
+<div class="lockhint">🔒 = Advanced / partner zone — check your role with the alliance desk first</div>
+</div>
+
+<div class="startbar" id="roles"><div class="in"><b>Not sure where to start? Follow your role:</b><a href="guides/gapmap.en.html">Hospital owner<small>Gap map → Deal calculator → Owner one-pager</small></a><a href="guides/calculator.en.html">Investor<small>Six-type methodology → Regulatory clock → Market data</small></a><a href="guides/explorer.en.html">Alliance partner<small>Ecosystem explorer → Alliance health check → Sheet map</small></a><a href="guides/intel.en.html">Consultant / internal<small>Intel station → Pipeline funnel → Knowledge base</small></a></div></div>
+
+<section class="blk"><h2>One-pagers</h2><div class="ss">Single-page summaries — skim or print</div>
+<div class="dlgrid"><div class="dlrow"><div class="tx"><b>Owner one-pager</b><span>HTML</span></div><a class="bt" href="onepagers/owner.en.html">→</a></div><div class="dlrow"><div class="tx"><b>Calculator one-pager</b><span>HTML</span></div><a class="bt" href="onepagers/calculator.en.html">→</a></div><div class="dlrow"><div class="tx"><b>Sheet map</b><span>HTML</span></div><a class="bt" href="onepagers/sheetmap.en.html">→</a></div></div></section>
+
+<section class="blk" id="downloads"><h2>Download center</h2><div class="ss">Files for real work. Open Excel on desktop; documents also ship as PDF.</div>
+<div class="dlgrid"><div class="dlrow"><div class="tx"><b>Master tool (21 sheets)</b><span>XLSX</span></div><a class="bt" href="downloads/xlsx/VMH-EcoMap-1_主工具_越南醫院生態盤點_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>Master tool — partner edition</b><span>XLSX</span></div><a class="bt" href="downloads/xlsx/VMH-EcoMap-1P_夥伴版_我在這張藍圖的哪裡_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>Deal calculator</b><span>XLSX</span></div><a class="bt" href="downloads/xlsx/VMH-EcoMap-2_專案商模試算器_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>Partner proposal form</b><span>XLSX</span></div><a class="bt" href="downloads/xlsx/VMH-EcoMap-3_夥伴提案回覆表_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>User manual</b><span>DOCX＋PDF</span></div><div style="display:flex;gap:5px"><a class="bt" href="downloads/docs/VMH-EcoMap-4_使用手冊_v1.0.docx">DOCX</a><a class="bt g" href="downloads/docs/VMH-EcoMap-4_使用手冊_v1.0.pdf">PDF</a></div></div><div class="dlrow"><div class="tx"><b>Methodology & investment framework</b><span>PPTX＋PDF</span></div><div style="display:flex;gap:5px"><a class="bt" href="downloads/docs/VMH-EcoMap-7_方法論與投資決策架構_v1.0.pptx">PPTX</a><a class="bt g" href="downloads/docs/VMH-EcoMap-7_方法論與投資決策架構_v1.0.pdf">PDF</a></div></div></div></section>
+
+<section class="blk"><h2>Advanced / partner Excel</h2><div class="ss">Once filled with real data, do not re-upload to any public site — the site hosts blank templates only.</div>
+<div class="dlgrid"><div class="dlrow"><div class="tx"><b>14 Hospital dossier & qualification</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-14_醫院作戰檔案與資格審查_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>15 Tender radar & document vault</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-15_標案雷達與資格文件庫_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>20 Pipeline funnel</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-20_商機推進漏斗_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>21 Bid economics</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-21_投標經濟性試算器_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>22 Alliance health check</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-22_聯盟體檢儀表板_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>23 Stakeholder map (★ never online once filled)</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-23_利害關係人地圖_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>24 Delivery & receivables</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-24_交付與收款儀表板_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>25 Risk register & simulation</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-25_風險登錄與情境模擬_v1.0.xlsx">Download</a></div></div></section>
+
+<section class="blk" id="about"><h2>About</h2><div class="ss"></div>
+<div class="about">Every figure on this site carries a source and verification date; preset cases are market-rate estimates, not quotes. Intelligence has a half-life — judge freshness by the verification date. Methodology lives in the Knowledge base; each tool has a 📚 drawer for its own methods.<br><a href="assets/sitemap.en.html">Site map →</a></div></section>
+
+<footer>VMH-EcoMap　Vietnam Hospital Ecosystem Toolkit　v2.0　2026-08<br>Chunghing Technology × Vietnam Modern Hospital Alliance</footer>
+
+<script>
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode',m);
+ try{localStorage.setItem('vmh_mode',m);}catch(err){}
+ document.querySelectorAll('.modes a').forEach(a=>a.classList.toggle('on',a.getAttribute('data-md')===m));
+ return false;
+}
+(function(){
+ document.querySelectorAll('.setbtn').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
+ document.addEventListener('click',e=>{document.querySelectorAll('.setwrap.open').forEach(w=>{if(!w.contains(e.target))w.classList.remove('open');});});
+ try{const m=localStorage.getItem('vmh_mode')||'business';
+   document.querySelectorAll('.modes a[data-md="'+m+'"]').forEach(a=>a.classList.add('on'));}catch(e){}
+})();
+</script>
 </body></html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>投標經濟性試算器｜VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff;
+--s1:#2a78d6;--s1l:#86b6ef;--s2:#eb6834;--ok:#0ca30c;--warn:#fab219;--crit:#d03b3b;--axis:#c3c2b7}
+html[data-mode="light"]{--hdrbg:#F3F6FA;--hdrfg:#1F3864}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--red:#F87171;--green:#4ADE80;--hdrbg:#0B1626;--hdrfg:#fff;
+--s1:#3987e5;--s1l:#1c5cab;--s2:#d95926;--ok:#0ca30c;--warn:#fab219;--crit:#e66767;--axis:#383835}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:var(--hdrbg);color:var(--hdrfg);padding:13px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header b{font-size:1.05rem}
+header .n{font-size:.78rem;opacity:.75}
+main{max-width:1240px;margin:0 auto;padding:20px;display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
+.panel{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:17px 19px}
+.gt{font-size:.7rem;font-weight:800;letter-spacing:1px;color:var(--teal);margin:16px 0 7px}
+.gt:first-child{margin-top:0}
+.row{margin-bottom:11px}
+.row label{display:flex;justify-content:space-between;align-items:baseline;font-size:.8rem;margin-bottom:3px}
+.row label b{font-variant-numeric:tabular-nums;color:var(--s1);font-size:.86rem}
+input[type=range]{width:100%;accent-color:var(--s1)}
+.hint{font-size:.7rem;color:var(--sub);margin-top:1px;line-height:1.4}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:11px;margin-bottom:14px}
+.kpi{background:var(--sf);border-radius:12px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:14px 16px}
+.kpi .k{font-size:.74rem;color:var(--sub);font-weight:700}
+.kpi .v{font-size:1.6rem;font-weight:800;margin-top:1px;font-variant-numeric:tabular-nums}
+.kpi .n{font-size:.7rem;color:var(--sub);margin-top:2px;line-height:1.4}
+.card{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:17px 19px;margin-bottom:14px}
+.card h3{font-size:.98rem;margin-bottom:2px}
+.card .s{font-size:.78rem;color:var(--sub);margin-bottom:12px}
+.verd{border-radius:10px;padding:11px 14px;font-weight:700;font-size:.9rem;margin-bottom:14px;display:flex;gap:9px;align-items:flex-start}
+.v-ok{background:rgba(12,163,12,.13);color:var(--ok)}
+.v-warn{background:rgba(250,178,25,.16);color:#8a6100}
+.v-crit{background:rgba(208,59,59,.13);color:var(--crit)}
+html[data-mode="dark"] .v-warn{color:var(--warn)}
+.verd .d{font-weight:400;font-size:.82rem;color:var(--ink);margin-top:2px}
+.lg{display:flex;gap:15px;flex-wrap:wrap;font-size:.75rem;color:var(--sub);margin-bottom:9px}
+.lg span{display:flex;align-items:center;gap:5px}
+.lg i{width:11px;height:11px;border-radius:3px;display:block}
+table{width:100%;border-collapse:collapse;font-size:.79rem}
+th{background:var(--line);font-size:.71rem;letter-spacing:.4px;padding:7px 8px;text-align:left}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:6px;display:inline-block}
+.p-ok{background:rgba(12,163,12,.14);color:var(--ok)}
+.p-crit{background:rgba(208,59,59,.14);color:var(--crit)}
+.note{background:rgba(31,56,100,.06);border-left:3px solid var(--navy);border-radius:0 8px 8px 0;
+ padding:10px 13px;font-size:.79rem;margin-top:12px}
+.tipbox{position:fixed;pointer-events:none;background:var(--sf);color:var(--ink);border:1px solid var(--line);
+ border-radius:9px;padding:8px 11px;font-size:.76rem;box-shadow:0 8px 24px rgba(10,20,40,.25);z-index:999;display:none;max-width:250px}
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}main{padding:14px 12px 50px}}
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head>
+<body><div class="i18nsw">
+ <button type="button" class="i18btn">⚙ 設定</button>
+ <div class="i18panel">
+   <a href="../index.html" class="i18home">🏠 回首頁</a>
+   <a href="datahub.html" class="i18home">🗄️ 資料中心</a>
+   <div class="i18gt">外觀</div>
+   <div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div>
+ </div>
+</div>
+<header>
+<svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg>
+<b>投標經濟性試算器</b><span class="n" id="src">拉桿為示意探索；正式數字以 21 號 Excel 為準</span>
+<button class="hbtn" style="background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer" onclick="document.getElementById('f').click()">載入 21 號檔比對</button>
+<input id="f" type="file" accept=".xlsx" style="display:none" onchange="loadX(this.files[0])">
+</header>
+<main>
+
+<div class="panel">
+  <div class="gt">報價決策</div>
+  <div class="row" id="r-price"></div>
+
+  <div class="gt">成本（千USD）</div>
+  <div class="row" id="r-imp"></div>
+  <div class="row" id="r-impo"></div>
+  <div class="row" id="r-loc"></div>
+
+  <div class="gt">稅費與分潤</div>
+  <div class="row" id="r-duty"></div>
+  <div class="row" id="r-share"></div>
+  <div class="row" id="r-warr"></div>
+  <div class="row" id="r-risk"></div>
+
+  <div class="gt">決策門檻</div>
+  <div class="row" id="r-minm"></div>
+  <div class="row" id="r-tgtm"></div>
+  <div class="hint">最低可接受毛利率決定走人價，請先跟決策者講好再填——不是算完再回頭喬。</div>
+</div>
+
+<div>
+  <div class="kpis" id="kpis"></div>
+  <div id="verdict"></div>
+
+  <div class="card">
+    <h3>成本瀑布｜報價怎麼被吃掉的</h3>
+    <p class="s">從報價出發，逐項扣掉成本，最後剩下的就是毛利。長條愈長代表這一項吃掉愈多。</p>
+    <div class="lg">
+      <span><i style="background:var(--s1)"></i>成本項目</span>
+      <span><i style="background:var(--ok)"></i>毛利（正）</span>
+      <span><i style="background:var(--crit)"></i>毛利（負）</span>
+    </div>
+    <div id="waterfall"></div>
+  </div>
+
+  <div class="card">
+    <h3>報價區間帶｜可讓價空間</h3>
+    <p class="s">議價前請把這張圖看熟：走人價以下就退出，不是「再想想」。</p>
+    <div id="band"></div>
+  </div>
+
+  <div class="card">
+    <h3>龍捲風｜哪個變數最傷</h3>
+    <p class="s">各變數獨立試算，長條愈長代表毛利率受它影響愈大。影響最大的前三項，就是合約裡最該寫清楚的三件事。</p>
+    <div class="lg">
+      <span><i style="background:var(--crit)"></i>不利情境</span>
+      <span><i style="background:var(--s1)"></i>有利情境</span>
+    </div>
+    <div id="tornado"></div>
+    <div id="tortbl" style="margin-top:14px"></div>
+  </div>
+
+  <div id="xchk"></div>
+  <div class="note">
+    走人價公式：報價 ×（1 − 分潤率 − 保固率 − 最低毛利率）＝ 直接成本 ＋ 風險準備。<br>
+    因為分潤與保固準備是「占報價的百分比」，報價一降這兩項也跟著降——所以走人價<b>不是</b>「成本 ÷（1−最低毛利率）」那麼簡單。
+    直覺算法會把底價算得太高，議價時反而錯失可以接的案子。
+  </div>
+</div>
+</main>
+<div class="tipbox" id="tip"></div>
+
+<script src="../assets/xlsx.min.js"></script>
+<script src="../assets/vmhdata.js"></script>
+<script>
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const fmt=n=>(n==null||isNaN(n))?'—':Number(n).toLocaleString('zh-TW',{maximumFractionDigits:0});
+const pc=n=>(n==null||isNaN(n))?'—':(n*100).toFixed(1)+'%';
+
+const P={price:3680,imp:1205,impo:350,loc:790,duty:.08,share:.06,warr:.03,risk:.05,minm:.12,tgtm:.22};
+const DEF=[
+ ['r-price','price','我方報價',1000,6000,10,'k','唯一要你決定的數字'],
+ ['r-imp','imp','進口設備',0,3000,5,'k','關稅與原廠漲價的計算基礎'],
+ ['r-impo','impo','其他進口成本',0,1500,5,'k','物流、駐點、備品、投標成本'],
+ ['r-loc','loc','在地成本',0,2000,5,'k','工程、裝修、在地PM——匯率風險在這裡'],
+ ['r-duty','duty','進口關稅率',0,.25,.005,'p','★ HS Code 認定差異大，開標前要確認'],
+ ['r-share','share','夥伴分潤率',0,.20,.005,'p','占報價，隨報價等比變動'],
+ ['r-warr','warr','保固準備率',0,.10,.005,'p','★ 三年保固建議 2–4%，填 0 是自欺欺人'],
+ ['r-risk','risk','風險準備率',0,.15,.005,'p','占直接成本。首次進入的市場建議 5–8%'],
+ ['r-minm','minm','最低可接受毛利率',0,.35,.005,'p','★★ 走人價的依據'],
+ ['r-tgtm','tgtm','目標毛利率',0,.45,.005,'p','正常情況希望達到的水準'],
+];
+
+function calc(o){
+  const p=o||P;
+  const duty=p.imp*p.duty;
+  const direct=p.imp+p.impo+p.loc+duty;
+  const share=p.price*p.share, warr=p.price*p.warr, risk=direct*p.risk;
+  const total=direct+share+warr+risk;
+  const gm=p.price-total, gmr=p.price?gm/p.price:0;
+  const den=1-p.share-p.warr-p.minm, denT=1-p.share-p.warr-p.tgtm;
+  const walk=den>0?(direct+risk)/den:NaN;
+  const target=denT>0?(direct+risk)/denT:NaN;
+  return {duty,direct,share,warr,risk,total,gm,gmr,walk,target,
+          room:p.price-walk,roomPct:p.price?(p.price-walk)/p.price:0};
+}
+/* 用替代直接成本重算毛利率（敏感度用）——與 21 號 Excel 同一套公式 */
+function gmrWith(dDirect,dPrice){
+  const p={...P}, price=dPrice??p.price;
+  const direct=calc().direct+dDirect;
+  const total=direct+price*p.share+price*p.warr+direct*p.risk;
+  return price?(price-total)/price:0;
+}
+
+function drawInputs(){
+  DEF.forEach(([id,key,label,min,max,step,kind,hint])=>{
+    const el=document.getElementById(id);
+    el.innerHTML=`<label><span>${esc(label)}</span><b id="v-${key}"></b></label>
+      <input type="range" min="${min}" max="${max}" step="${step}" value="${P[key]}" data-k="${key}" data-kind="${kind}">
+      <div class="hint">${esc(hint)}</div>`;
+    el.querySelector('input').addEventListener('input',e=>{
+      P[e.target.dataset.k]=parseFloat(e.target.value); render();
+    });
+  });
+}
+function syncLabels(){
+  DEF.forEach(([,key,,,,,kind])=>{
+    document.getElementById('v-'+key).textContent = kind==='p'?pc(P[key]):fmt(P[key]);
+  });
+}
+
+function drawKpi(){
+  const c=calc();
+  const K=[
+   ['毛利率',pc(c.gmr),'折現前。要回填到 20 號漏斗',c.gmr<P.minm?'var(--crit)':(c.gmr<P.tgtm?'var(--warn)':'var(--ok)')],
+   ['毛利額',fmt(c.gm),'千USD',c.gm<0?'var(--crit)':'var(--ink)'],
+   ['走人價',fmt(c.walk),'千USD　低於此價就退出','var(--ink)'],
+   ['可讓價空間',fmt(c.room),`千USD（${pc(c.roomPct)}）`,c.room<0?'var(--crit)':'var(--ink)'],
+   ['總成本',fmt(c.total),'千USD　含分潤、保固、風險準備','var(--ink)'],
+  ];
+  document.getElementById('kpis').innerHTML=K.map(([k,v,n,col])=>
+   `<div class="kpi"><div class="k">${esc(k)}</div><div class="v" style="color:${col}">${v}</div><div class="n">${esc(n)}</div></div>`).join('');
+}
+
+function drawVerdict(){
+  const c=calc(); let cls,icon,t,d;
+  if(c.gm<0||P.price<c.walk){cls='v-crit';icon='✗';t='低於走人價，應退出';
+    d=`目前報價 ${fmt(P.price)} 低於走人價 ${fmt(c.walk)} 千USD。要嘛提高報價，要嘛把成本或風險透過合約條款移轉出去，否則不該投。`;}
+  else if(c.gmr<P.tgtm){cls='v-warn';icon='△';t='可接，但低於目標毛利';
+    d=`毛利率 ${pc(c.gmr)}，未達目標 ${pc(P.tgtm)}，但仍在走人價之上，還有 ${fmt(c.room)} 千USD（${pc(c.roomPct)}）的讓價空間。`;}
+  else{cls='v-ok';icon='✓';t='達目標毛利';
+    d=`毛利率 ${pc(c.gmr)}，已達目標 ${pc(P.tgtm)}。讓價空間 ${fmt(c.room)} 千USD（${pc(c.roomPct)}）。`;}
+  document.getElementById('verdict').innerHTML=
+   `<div class="verd ${cls}"><span style="font-size:1.1rem">${icon}</span><div>${esc(t)}<div class="d">${esc(d)}</div></div></div>`;
+}
+
+function drawWaterfall(){
+  const c=calc();
+  const items=[['進口設備',P.imp],['其他進口',P.impo],['進口關稅',c.duty],['在地成本',P.loc],
+               ['夥伴分潤',c.share],['保固準備',c.warr],['風險準備',c.risk]];
+  const W=760,PADL=98,PADR=96,BW=W-PADL-PADR,RH=30,H=(items.length+2)*RH+22;
+  const max=P.price||1;
+  let sv=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" style="max-width:100%">`;
+  // 報價列
+  sv+=`<text x="${PADL-9}" y="24" text-anchor="end" font-size="12" font-weight="700" fill="var(--ink)">報價</text>`;
+  sv+=`<rect x="${PADL}" y="8" width="${BW}" height="20" rx="4" fill="var(--s1l)" data-t="報價 ${fmt(P.price)} 千USD"/>`;
+  sv+=`<text x="${PADL+BW+8}" y="23" font-size="12" font-weight="700" fill="var(--ink)">${fmt(P.price)}</text>`;
+  let run=P.price;
+  items.forEach((it,i)=>{
+    const [nm,v]=it, y=(i+1)*RH+8;
+    const x0=(run-v)/max*BW, w=Math.max(1,v/max*BW);
+    run-=v;
+    sv+=`<text x="${PADL-9}" y="${y+15}" text-anchor="end" font-size="12" fill="var(--ink)">${esc(nm)}</text>`;
+    sv+=`<line x1="${PADL+x0+w}" y1="${y-8}" x2="${PADL+x0+w}" y2="${y+2}" stroke="var(--axis)" stroke-width="1"/>`;
+    sv+=`<rect x="${PADL+x0}" y="${y+2}" width="${w}" height="20" rx="3.5" fill="var(--s1)"
+      data-t="${esc(nm)} −${fmt(v)} 千USD（占報價 ${pc(v/max)}）"/>`;
+    // 值標籤若會撞到左側項目名，改畫在長條右側
+    const outL=PADL+x0-8>=PADL+34;
+    sv+=`<text x="${outL?PADL+x0-8:PADL+x0+w+7}" y="${y+17}" text-anchor="${outL?'end':'start'}"
+      font-size="11.5" fill="var(--sub)">−${fmt(v)}</text>`;
+  });
+  // 毛利列
+  const y=(items.length+1)*RH+8, gw=Math.abs(c.gm)/max*BW;
+  const gx=c.gm>=0?PADL:PADL-gw;
+  sv+=`<text x="${PADL-9}" y="${y+16}" text-anchor="end" font-size="12" font-weight="800" fill="var(--ink)">毛利</text>`;
+  sv+=`<rect x="${Math.max(0,gx)}" y="${y+2}" width="${Math.max(1,gw)}" height="22" rx="4"
+    fill="${c.gm>=0?'var(--ok)':'var(--crit)'}" data-t="毛利 ${fmt(c.gm)} 千USD（${pc(c.gmr)}）"/>`;
+  sv+=`<text x="${Math.max(0,gx)+gw+8}" y="${y+18}" font-size="12.5" font-weight="800"
+    fill="${c.gm>=0?'var(--ok)':'var(--crit)'}">${fmt(c.gm)}　${pc(c.gmr)}</text>`;
+  sv+='</svg>';
+  document.getElementById('waterfall').innerHTML=sv;
+  bindTip('#waterfall');
+}
+
+function drawBand(){
+  const c=calc();
+  const W=760,PADL=20,PADR=20,BW=W-PADL-PADR,H=132,TY=62;
+  const lo=Math.min(c.walk,P.price,c.target)*.92, hi=Math.max(c.walk,P.price,c.target)*1.06;
+  const x=v=>PADL+(v-lo)/(hi-lo)*BW;
+  let sv=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" style="max-width:100%">`;
+  sv+=`<rect x="${PADL}" y="${TY}" width="${BW}" height="12" rx="6" fill="var(--line)"/>`;
+  // 走人價以下 = 紅區
+  sv+=`<rect x="${PADL}" y="${TY}" width="${Math.max(0,x(c.walk)-PADL)}" height="12" rx="6" fill="var(--crit)" fill-opacity=".55"
+    data-t="走人價以下：不該投的區間"/>`;
+  // 走人價→目標價 = 可接但未達標
+  sv+=`<rect x="${x(c.walk)}" y="${TY}" width="${Math.max(0,x(c.target)-x(c.walk))}" height="12" fill="var(--warn)" fill-opacity=".55"
+    data-t="可接受區間：在走人價之上、目標價之下"/>`;
+  // 目標價以上 = 綠
+  sv+=`<rect x="${x(c.target)}" y="${TY}" width="${Math.max(0,PADL+BW-x(c.target))}" height="12" rx="6" fill="var(--ok)" fill-opacity=".5"
+    data-t="達標區間：毛利率達目標以上"/>`;
+  const mark=(v,lab,col,up)=>{
+    if(isNaN(v))return '';
+    const px=Math.max(PADL+2,Math.min(PADL+BW-2,x(v)));
+    return `<line x1="${px}" y1="${up?42:TY+12}" x2="${px}" y2="${up?TY:TY+28}" stroke="${col}" stroke-width="2"/>`+
+      `<circle cx="${px}" cy="${TY+6}" r="5.5" fill="${col}" stroke="var(--sf)" stroke-width="2"/>`+
+      `<text x="${px}" y="${up?36:TY+42}" text-anchor="middle" font-size="11.5" font-weight="700" fill="${col}">${esc(lab)}</text>`+
+      `<text x="${px}" y="${up?22:TY+56}" text-anchor="middle" font-size="10.5" fill="var(--sub)">${fmt(v)}</text>`;
+  };
+  sv+=mark(c.walk,'走人價','var(--crit)',false);
+  sv+=mark(c.target,'目標價','var(--ok)',false);
+  sv+=mark(P.price,'目前報價','var(--s1)',true);
+  sv+='</svg>';
+  document.getElementById('band').innerHTML=sv;
+  bindTip('#band');
+}
+
+const VARS=[
+ ['VND 匯率 ±10%',()=>P.loc*0.1111,()=>-P.loc*0.0909,
+  '在地採購合約以 VND 計價並鎖總價，把匯率風險留在對方'],
+ ['進口設備成本 ±15%',()=>P.imp*0.15,()=>-P.imp*0.15,
+  '取得有效期涵蓋決標日的原廠報價，並約定漲價分攤'],
+ ['進口關稅 ±5pp',()=>P.imp*0.05,()=>-P.imp*0.05,
+  '★ 開標前向海關取得預先歸類（advance ruling），不要用猜的'],
+ ['工程延誤 6 個月',()=>calc().direct*0.06,()=>0,
+  '合約明訂工地交付前置條件與延誤責任，逾期由對方吸收'],
+ ['保固索賠超支',()=>P.price*0.03,()=>-P.price*0.015,
+  '備品在地化、遠端診斷、明確排除人為損壞與電網品質問題'],
+ ['夥伴分潤上調 3pp',()=>P.price*0.03,()=>0,
+  '提早簽定分潤上限條款，避免決標後被回頭加碼'],
+];
+function drawTornado(){
+  const base=calc().gmr;
+  const rows=VARS.map(([nm,bad,good,act])=>{
+    const lo=gmrWith(bad()), hi=gmrWith(good());
+    return {nm,lo,hi,span:Math.abs(hi-lo),act};
+  }).sort((a,b)=>b.span-a.span);
+  const maxd=Math.max(...rows.map(r=>Math.max(Math.abs(r.lo-base),Math.abs(r.hi-base))),.01);
+  const W=760,PADL=150,PADR=70,BW=W-PADL-PADR,RH=34,H=rows.length*RH+34;
+  const cx=PADL+BW/2, sc=(BW/2)/maxd;
+  let sv=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" style="max-width:100%">`;
+  sv+=`<line x1="${cx}" y1="16" x2="${cx}" y2="${rows.length*RH+18}" stroke="var(--axis)" stroke-width="1.5"/>`;
+  sv+=`<text x="${cx}" y="${rows.length*RH+32}" text-anchor="middle" font-size="10.5" fill="var(--sub)">基準毛利率 ${pc(base)}</text>`;
+  rows.forEach((r,i)=>{
+    const y=i*RH+20;
+    sv+=`<text x="${PADL-10}" y="${y+15}" text-anchor="end" font-size="11.5" fill="var(--ink)">${esc(r.nm)}</text>`;
+    [[r.lo,'var(--crit)','不利'],[r.hi,'var(--s1)','有利']].forEach(([v,col,lab])=>{
+      const d=(v-base)*sc, x0=d<0?cx+d:cx, w=Math.max(1.5,Math.abs(d));
+      sv+=`<rect x="${x0}" y="${y+2}" width="${w}" height="19" rx="3.5" fill="${col}"
+        data-t="${esc(r.nm)}｜${lab}情境毛利率 ${pc(v)}（基準 ${pc(base)}）"/>`;
+    });
+    const lx=cx+(r.lo-base)*sc, hx=cx+(r.hi-base)*sc;
+    const loX=Math.min(lx,hx), hiX=Math.max(lx,hx);
+    // 標籤若會撞到左側類別名，就改畫在長條內側（白字），避免重疊
+    const outside=loX-6>=PADL+4;
+    sv+=`<text x="${outside?loX-6:loX+7}" y="${y+16}" text-anchor="${outside?'end':'start'}" font-size="10.5"
+      font-weight="${outside?'400':'700'}" fill="${outside?'var(--crit)':'#fff'}">${pc(Math.min(r.lo,r.hi))}</text>`;
+    sv+=`<text x="${hiX+6}" y="${y+16}" font-size="10.5" fill="var(--s1)">${pc(Math.max(r.lo,r.hi))}</text>`;
+  });
+  sv+='</svg>';
+  document.getElementById('tornado').innerHTML=sv;
+  bindTip('#tornado');
+  document.getElementById('tortbl').innerHTML=
+   `<table><thead><tr><th>風險排序</th><th class="num">不利時毛利率</th><th class="num">影響幅度</th><th>應對方向（合約要寫什麼）</th></tr></thead><tbody>`+
+   rows.map((r,i)=>`<tr><td><b>${i+1}.</b> ${esc(r.nm)}</td>
+     <td class="num" style="color:${Math.min(r.lo,r.hi)<P.minm?'var(--crit)':'inherit'}">${pc(Math.min(r.lo,r.hi))}</td>
+     <td class="num">${(r.span*100).toFixed(1)} pp</td>
+     <td>${esc(r.act)}</td></tr>`).join('')+'</tbody></table>';
+}
+
+function bindTip(sel){
+  const tip=document.getElementById('tip');
+  document.querySelectorAll(sel+' [data-t]').forEach(el=>{
+    el.addEventListener('mousemove',e=>{tip.textContent=el.getAttribute('data-t');
+      tip.style.display='block';tip.style.left=Math.min(e.clientX+14,innerWidth-260)+'px';tip.style.top=(e.clientY+14)+'px';});
+    el.addEventListener('mouseleave',()=>tip.style.display='none');
+  });
+}
+function render(){syncLabels();drawKpi();drawVerdict();drawWaterfall();drawBand();drawTornado();}
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode',m);
+ try{localStorage.setItem('vmh_mode',m);}catch(err){}
+ document.querySelectorAll('.i18modes a').forEach(a=>a.classList.toggle('on',a.getAttribute('data-md')===m));
+ return false;
+}
+(function(){
+ document.querySelectorAll('.i18btn').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
+ document.addEventListener('click',e=>{document.querySelectorAll('.i18nsw.open').forEach(w=>{if(!w.contains(e.target))w.classList.remove('open');});});
+ try{const m=localStorage.getItem('vmh_mode')||'business';
+   document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(a=>a.classList.add('on'));}catch(e){}
+})();
+/* ── 與 21 號 Excel 的一致性檢查 ── */
+function useWB21(wb,label){
+  const su=wb.Sheets['01_專案設定_Setup'], pr=wb.Sheets['05_報價與毛利_Pricing'],
+        cb=wb.Sheets['02_成本堆疊_CostBuildup'];
+  if(!su||!pr||!cb)throw new Error('找不到 21 號檔的分頁（專案設定／報價與毛利／成本堆疊）');
+  const g=(ws,a)=>{const c=ws[a];return c&&c.v!=null?Number(c.v):null;};
+  const xPrice=g(pr,'C6'), xDirect=g(pr,'C9'), xTotal=g(pr,'C13'),
+        xGmr=g(pr,'C17'), xWalk=g(pr,'C23');
+  if(xPrice==null||xGmr==null)throw new Error('Excel 尚未重算（請用 Excel 開啟並存檔一次，公式結果才會寫進檔案）');
+  // 依 Excel 參數重設拉桿，讓兩邊比較同一組輸入
+  P.price=xPrice; P.duty=g(su,'C18')??P.duty; P.share=g(su,'C24')??P.share;
+  P.warr=g(su,'C25')??P.warr; P.risk=g(su,'C26')??P.risk;
+  P.minm=g(su,'C32')??P.minm; P.tgtm=g(su,'C33')??P.tgtm;
+  // 成本：用 Excel 的直接成本反推三段（維持總額一致）
+  const imported=g(cb,'H46')??0, local=g(cb,'H47')??0;
+  let eq=0; for(let r=5;r<=44;r++){
+    const cat=cb['C'+r], src=cb['D'+r], v=cb['H'+r];
+    if(cat&&src&&v&&cat.v==='設備'&&src.v==='進口')eq+=Number(v.v)||0;}
+  const duty=eq*P.duty;
+  P.imp=Math.round(eq*10)/10; P.loc=Math.round(local*10)/10;
+  P.impo=Math.round((imported-eq-duty)*10)/10;
+  DEF.forEach(([id,key])=>{const el=document.querySelector('#'+id+' input'); if(el)el.value=P[key];});
+  render();
+  const c=calc();
+  const d=(a,b)=>(a==null||b==null)?null:Math.abs(a-b);
+  const rows=[
+    ['直接成本（千USD）',xDirect,c.direct,d(xDirect,c.direct),1],
+    ['總成本（千USD）',xTotal,c.total,d(xTotal,c.total),1],
+    ['毛利率',xGmr,c.gmr,d(xGmr,c.gmr),0.001],
+    ['走人價（千USD）',xWalk,c.walk,d(xWalk,c.walk),1],
+  ];
+  const bad=rows.filter(r=>r[3]!=null&&r[3]>r[4]);
+  document.getElementById('src').textContent='已比對 '+label;
+  document.getElementById('xchk').innerHTML=
+   `<div class="card"><h3>${bad.length?'⚠ 與 Excel 有差異':'✓ 與 Excel 一致'}</h3>
+    <p class="s">${bad.length
+      ? '下列項目超出容差，請以 <b>Excel 為準</b>；差異多半來自 Excel 有本頁未建模的成本列（如履約保證金隨報價變動）。'
+      : '本頁重算結果與 21 號 Excel 的公式結果相符（容差內），可放心用拉桿探索情境。'}</p>
+    <table><thead><tr><th>項目</th><th class="num">Excel</th><th class="num">本頁重算</th><th class="num">差異</th><th>判定</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td>${esc(r[0])}</td>
+      <td class="num">${r[0].includes('率')?pc(r[1]):fmt(r[1])}</td>
+      <td class="num">${r[0].includes('率')?pc(r[2]):fmt(r[2])}</td>
+      <td class="num">${r[3]==null?'—':(r[0].includes('率')?(r[3]*100).toFixed(2)+' pp':r[3].toFixed(1))}</td>
+      <td><span class="pill ${r[3]!=null&&r[3]>r[4]?'p-crit':'p-ok'}">${r[3]!=null&&r[3]>r[4]?'不一致':'一致'}</span></td></tr>`).join('')+
+    '</tbody></table></div>';
+}
+function loadX(file){
+  if(!file)return;
+  const rd=new FileReader();
+  rd.onload=e=>{try{useWB21(XLSX.read(new Uint8Array(e.target.result),{type:'array'}),file.name);}
+   catch(err){document.getElementById('src').textContent='讀取失敗：'+err.message;}};
+  rd.readAsArrayBuffer(file);
+}
+drawInputs();render();
+</script>
+</body></html>
