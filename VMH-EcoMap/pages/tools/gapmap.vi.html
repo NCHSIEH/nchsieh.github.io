@@ -1,0 +1,191 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bản đồ khoảng trống y tế Việt Nam | VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff}
+html[data-mode="light"]{--hdrbg:#F3F6FA;--hdrfg:#1F3864}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--red:#F87171;--green:#4ADE80;--hdrbg:#0B1626;--hdrfg:#fff}
+
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:var(--hdrbg);color:var(--hdrfg);padding:13px 22px}
+header b{font-size:1.05rem}
+header .n{font-size:.75rem;color:#9FB0CC;margin-left:12px}
+main{max-width:1220px;margin:0 auto;padding:20px}
+.gaps{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;margin-bottom:18px}
+.gap{background:var(--sf);border-radius:12px;box-shadow:0 1px 4px rgba(16,26,45,.08);padding:13px 16px;border-top:3px solid var(--red)}
+.gap .v{font-size:1.6rem;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+.gap .k{font-size:.8rem;font-weight:700}
+.gap .n{font-size:.72rem;color:var(--sub);margin-top:3px;line-height:1.5}
+.wrap{display:grid;grid-template-columns:minmax(340px,480px) 1fr;gap:18px;align-items:start}
+.mapc{background:var(--sf);border-radius:14px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:16px}
+.mapc h3{font-size:.92rem;color:var(--navy);margin-bottom:4px}
+.mapc .lg{font-size:.7rem;color:var(--sub);margin-bottom:8px;display:flex;gap:12px;flex-wrap:wrap}
+.lg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.side{background:var(--sf);border-radius:14px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:18px;min-height:420px}
+.side h2{font-size:1.15rem;color:var(--navy)}
+.side .reg{font-size:.76rem;color:var(--sub);margin-bottom:10px}
+.fact{border-left:3px solid var(--teal);background:#F2F8F6;border-radius:0 9px 9px 0;padding:9px 12px;margin-bottom:8px;font-size:.85rem}
+.fact b{color:var(--teal);font-size:.72rem;display:block}
+.pill{display:inline-block;background:#DCE6F4;color:var(--navy);border-radius:7px;padding:2px 9px;font-size:.72rem;font-weight:700;margin:2px 4px 2px 0}
+.nof{color:var(--sub);font-size:.85rem;background:#F4F6FA;border-radius:9px;padding:12px}
+.note{background:#FFF9E3;border-radius:10px;padding:10px 14px;font-size:.76rem;color:#6B4E00;margin-top:16px}
+svg text{font-family:inherit;pointer-events:none}
+svg rect{cursor:pointer;transition:opacity .12s}
+svg rect:hover{opacity:.75}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}}
+</style><style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18btn:hover{background:#1F3864}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18home:hover{background:#E7EEF6}
+.i18row{display:flex;gap:4px;flex-wrap:wrap}
+.i18row a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.i18row a.on{background:#152C4E;color:#fff}
+.i18row a:hover:not(.on){background:#E1E7EF}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
+
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head><body><div class="i18nsw">
+ <button type="button" class="i18btn">⚙ VI</button>
+ <div class="i18panel">
+   <a href="../index.vi.html" class="i18home">🏠 Về trang chủ</a>
+   <div class="i18gt">Ngôn ngữ</div>
+   <div class="i18row"><a href="gapmap.html">中文</a><a href="gapmap.en.html">EN</a><a href="gapmap.vi.html" class="on">VI</a></div>
+   <div class="i18gt">Giao diện</div>
+   <div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div>
+ </div>
+</div>
+<header style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>Bản đồ khoảng trống y tế Việt Nam</b>
+<span class="n">34 tỉnh, thành phố sau sáp nhập hành chính năm 2025・Nhấp vào tỉnh để xem các dữ kiện đã kiểm chứng・Ngày kiểm chứng <span id="asof"></span></span>
+<button id="upbtn" onclick="document.getElementById('upf').click()"
+ style="margin-left:auto;background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer">⟳ Tải dữ liệu cập nhật</button>
+<input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
+</header>
+<main>
+<div class="gaps" id="gaps"></div>
+<div class="wrap">
+ <div class="mapc"><h3>Bản đồ ô 34 tỉnh, thành (vị trí mang tính minh họa, không chính xác về địa lý)</h3>
+  <div class="lg"><span><i style="background:#0E6E6B"></i>Có thông tin đã kiểm chứng (màu càng đậm càng nhiều)</span>
+   <span><i style="background:#D9AF3C"></i>Thí điểm du lịch y tế (2026-28)</span>
+   <span><i style="background:#E4E8EF"></i>Chưa có thông tin cấp tỉnh (chưa tra được)</span></div>
+  <svg id="map" width="100%" viewBox="0 0 480 640"></svg></div>
+ <div class="side" id="side"></div>
+</div>
+<div class="note"><b>Dữ liệu đến từ đâu: </b>Khoảng trống cấp quốc gia (thẻ đỏ) được lấy từ nghiên cứu công khai và tài liệu chính thức (mỗi thẻ kèm nguồn); dữ kiện cấp tỉnh đến từ một vòng kiểm chứng thị trường đầy đủ vào 2026-08,
+chỉ ghi nhận những hạng mục “tra được nguồn” — tỉnh màu xám nghĩa là “chúng tôi chưa có thông tin”, không phải “nơi đó không có thị trường”.<br>
+<b>Cách cập nhật: </b>Bản đồ này được duy trì theo lịch thu thập thông tin hằng tháng, mỗi tháng tự động kiểm chứng lại rồi tạo phiên bản mới; nút “⟳ Tải dữ liệu cập nhật” ở góc trên bên phải có thể nạp tệp map_data.json mới (đặt trong Tool Scripts/) bất cứ lúc nào,
+toàn trang sẽ được vẽ lại ngay lập tức; việc nạp chỉ diễn ra trên máy cục bộ, không tải lên.</div>
+</main>
+<script>
+/* 34 tỉnh, thành phố (sau sáp nhập 2025): [tên, tiếng Trung, col, row, region] */
+const P=[
+['Hà Nội','Hà Nội',2,2,'Miền Bắc'],['Cao Bằng','Cao Bằng',3,0,'Miền Bắc'],['Lạng Sơn','Lạng Sơn',3,1,'Miền Bắc'],
+['Lai Châu','Lai Châu',0,1,'Miền Bắc'],['Điện Biên','Điện Biên',0,2,'Miền Bắc'],['Sơn La','Sơn La',1,2,'Miền Bắc'],
+['Lào Cai','Lào Cai',1,1,'Miền Bắc'],['Thái Nguyên','Thái Nguyên',2,1,'Miền Bắc'],['Tuyên Quang','Tuyên Quang',2,0,'Miền Bắc'],
+['Phú Thọ','Phú Thọ',1,3,'Miền Bắc'],['Bắc Ninh','Bắc Ninh',3,2,'Miền Bắc'],['Hưng Yên','Hưng Yên',3,3,'Miền Bắc'],
+['Hải Phòng','Hải Phòng',4,3,'Miền Bắc'],['Quảng Ninh','Quảng Ninh',4,2,'Miền Bắc'],['Ninh Bình','Ninh Bình',2,4,'Miền Bắc'],
+['Thanh Hóa','Thanh Hóa',2,5,'Miền Trung'],['Nghệ An','Nghệ An',2,6,'Miền Trung'],['Hà Tĩnh','Hà Tĩnh',3,7,'Miền Trung'],
+['Quảng Trị','Quảng Trị',3,8,'Miền Trung'],['Huế','Huế',3,9,'Miền Trung'],['Đà Nẵng','Đà Nẵng',4,9,'Miền Trung'],
+['Quảng Ngãi','Quảng Ngãi',4,10,'Miền Trung'],['Gia Lai','Gia Lai',3,10,'Miền Trung'],['Đắk Lắk','Đắk Lắk',3,11,'Miền Trung'],
+['Khánh Hòa','Khánh Hòa',4,11,'Miền Trung'],['Lâm Đồng','Lâm Đồng',3,12,'Miền Nam'],['Đồng Nai','Đồng Nai',2,12,'Miền Nam'],
+['TP.HCM','Thành phố Hồ Chí Minh',2,13,'Miền Nam'],['Tây Ninh','Tây Ninh',1,12,'Miền Nam'],['Đồng Tháp','Đồng Tháp',1,13,'Miền Nam'],
+['Vĩnh Long','Vĩnh Long',2,14,'Miền Nam'],['An Giang','An Giang',0,13,'Miền Nam'],['Cần Thơ','Cần Thơ',1,14,'Miền Nam'],
+['Cà Mau','Cà Mau',1,15,'Miền Nam']];
+/* Dữ kiện cấp tỉnh đã kiểm chứng */
+let MD={"asof":"2026-08-15","F":{"Hà Nội":[["Nhóm bệnh viện công đầu ngành","Bạch Mai, Việt Đức, Bệnh viện K, Bệnh viện Trung ương Quân đội 108 — Bệnh viện K đang chuẩn bị xây trung tâm proton đầu tiên của miền Bắc (4,2 nghìn tỷ VND)"],["Thị trường","Hà Nội và Thành phố Hồ Chí Minh cộng lại thu hút khoảng 60% lưu lượng bệnh nhân cả nước — khoảng trống của bệnh viện tuyến tỉnh chính là nguồn gốc áp lực chuyển tuyến"],["Thí điểm du lịch","Một trong năm thành phố thí điểm du lịch y tế 2026-28"],["Số hóa","11 trong số 42 bệnh viện công trực thuộc thành phố đã hoàn thành EMR (2025-04) — còn nhiều dư địa để bắt kịp"],["Dự án điển hình","Xây mới Bệnh viện Mắt Hà Nội: 718,9 tỷ VND, 250 giường = khoảng 110.000 USD mỗi giường (chuẩn suất đầu tư)"]],"TP.HCM":[["Nhóm bệnh viện công đầu ngành","Chợ Rẫy (từng thẩm định AI nội soi Olympus); Bệnh viện Truyền máu Huyết học thành phố = bệnh viện công đầu tiên cả nước đạt JCI (9,89/10)"],["Điểm nóng của khối tư nhân","Vinmec Cần Giờ (× Cleveland Clinic), Tâm Anh C2/C3 (dự án đoạt giải với BMS tiết kiệm năng lượng 20-30%), FV (Thomson mua lại với giá 381 triệu USD)"],["Thí điểm du lịch","Thành phố thí điểm du lịch y tế; cửa ngõ chính của bệnh nhân quốc tế"],["Đang xây dựng","Ba bệnh viện khu vực đang xây dựng: 1.000 + 700 + 1.000 giường"],["Thị trường","Địa bàn đóng góp chính cho thị trường tim mạch can thiệp vốn chiếm 36,4% Đông Nam Á"]],"Đà Nẵng":[["PPP","Một trong chỉ 2 dự án PPP y tế trên cả nước"],["Thí điểm du lịch","Thành phố thí điểm du lịch y tế"],["Số hóa","Khu vực đi đầu về chính sách thành phố thông minh"]],"Quảng Ninh":[["Thí điểm du lịch","Thành phố thí điểm du lịch y tế (lưu lượng du khách vịnh Hạ Long)"]],"Khánh Hòa":[["Thí điểm du lịch","Thành phố thí điểm du lịch y tế (Nha Trang)"],["Dự án điển hình","Bệnh viện Đa khoa Thai Hoa = dự án iHospital đầu tiên của Advantech tại Việt Nam (trước là Ninh Thuận, sau sáp nhập thuộc Khánh Hòa)"]],"Huế":[["Dự án điển hình","Bệnh viện Đa khoa Quốc tế Huế: 2.300+ tỷ VND, 260+ giường, mô hình Hospital-Hotel = trần suất đầu tư của khối tư nhân cao cấp (khoảng 340.000 USD mỗi giường)"],["Khối công lập","Bệnh viện Trung ương Huế nằm trong sáu bệnh viện được nâng cấp trọng điểm"]],"Ninh Bình":[["Trường hợp cảnh báo","Bệnh viện Bạch Mai cơ sở 2 / Bệnh viện Việt Đức cơ sở 2 (trước thuộc tỉnh Hà Nam): công trình quy mô nghìn giường đình trệ 6-7 năm, bổ sung 154 triệu USD, hạn đưa vào vận hành 2025-11-30 — bằng chứng thực tế về rủi ro quản trị của các dự án EPC công lập"]],"Hưng Yên":[["Dự án điển hình","Khởi công phần MEP Bệnh viện Đa khoa Hưng Hà (Searefico thi công, 29.930 m²)"],["Dự án điển hình","Bệnh viện Đa khoa Thái Bình (trước thuộc tỉnh Thái Bình): khoảng 4.700 tỷ VND, 1.200 giường, định hướng thông minh = một trong những dự án xây mới bệnh viện thông minh lớn nhất miền Bắc"]],"Lào Cai":[["PPP","Dự án PPP y tế Yên Bái (trước là tỉnh Yên Bái, sau sáp nhập thuộc Lào Cai) = một trong chỉ 2 dự án trên cả nước"]],"Cần Thơ":[["Định vị","Trung tâm y tế Đồng bằng sông Cửu Long; đầu mối chuyển tuyến khu vực (thông tin cấp tỉnh còn phải bổ sung)"]],"Nghệ An":[["Thị trường","Tỉnh đông dân (thuộc nhóm dẫn đầu sau sáp nhập); nhu cầu nâng cấp bệnh viện tuyến tỉnh lớn (chưa tra được dự án cụ thể)"]]},"GAPS":[["82 máy","Tổng số máy gia tốc tuyến tính toàn quốc","0,82 máy/triệu dân so với chuẩn 4-8; 43% đã cũ. Để đạt chuẩn tối thiểu cần khoảng 400 máy","JCO Global Oncology"],["1/3","Tỷ lệ đáp ứng nhu cầu lọc máu","Hơn 100.000 người có nhu cầu, thực tế chỉ phục vụ khoảng 36.000","Kidney360/PMC"],["12 máy","Tổng số máy PET/CT toàn quốc","Mỗi năm có thêm 180.000 ca ung thư; chỉ có 3 máy cyclotron","GLOBOCAN/OncoDaily"],["5.8%","Tỷ trọng giường bệnh tư nhân","Mục tiêu 15% vào năm 2030, 25% vào năm 2050 — nhà nước muốn con số này tăng gấp đôi rồi lại gấp đôi","Quy hoạch tổng thể mạng lưới y tế"],["200%+","Quá tải bệnh viện công","Phổ biến hoạt động ở mức hơn hai lần công suất thiết kế","B-Company"],["60%","Hai đô thị lớn hút lưu lượng bệnh nhân","Hà Nội + Thành phố Hồ Chí Minh hút 60% bệnh nhân cả nước = tuyến tỉnh là khoảng trống mang tính cấu trúc","trade.gov CCG"]]};
+let F=MD.F;
+let GAPS=MD.GAPS;
+function loadUpdate(f){
+  if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{try{
+    const nd=JSON.parse(rd.result);
+    if(!nd.F||!nd.GAPS){alert('Sai định dạng: cần tệp map_data.json có chứa F / GAPS');return;}
+    MD=nd;F=MD.F;GAPS=MD.GAPS;renderAll();
+    document.getElementById('upbtn').textContent='✓ Đã tải '+(MD.asof||'Dữ liệu cập nhật');
+  }catch(e){alert('Đọc thất bại: '+e.message);}};
+  rd.readAsText(f,'utf-8');
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TOUR0=new Set(['Hà Nội','TP.HCM','Đà Nẵng','Quảng Ninh','Khánh Hòa']);
+function renderAll(){
+document.getElementById('asof').textContent=MD.asof||'—';
+document.getElementById('gaps').innerHTML=GAPS.map(([v,k,n,s])=>
+ `<div class="gap"><div class="v">${v}</div><div class="k">${k}</div><div class="n">${n}<br><span style="color:#8A93A3">Nguồn: ${s}</span></div></div>`).join('');
+const CW=88,CH=36,GX=6,GY=5,OX=14,OY=14;
+let svg='';
+P.forEach(([vn,zh,c,r,reg])=>{
+  const x=OX+c*(CW+GX),y=OY+r*(CH+GY);
+  const nf=(F[vn]||[]).length;
+  const fill=nf?(nf>=4?'#0E6E6B':nf>=2?'#3E8B87':'#7FB5B0'):'#E4E8EF';
+  const stroke=TOUR0.has(vn)?'#D9AF3C':'#FFFFFF';
+  svg+=`<rect x="${x}" y="${y}" width="${CW}" height="${CH}" rx="6" fill="${fill}"
+    stroke="${stroke}" stroke-width="${TOUR0.has(vn)?3:1.5}" onclick="pick('${vn}')"/>`;
+  svg+=`<text x="${x+CW/2}" y="${y+15}" text-anchor="middle" font-size="11" font-weight="700"
+    fill="${nf?'#FFFFFF':'#55607A'}">${zh}</text>`;
+  svg+=`<text x="${x+CW/2}" y="${y+28}" text-anchor="middle" font-size="8"
+    fill="${nf?'#D8E8E6':'#9AA3B2'}">${vn}</text>`;});
+document.getElementById('map').innerHTML=svg;
+}
+function pick(vn){
+  const p=P.find(x=>x[0]===vn); const facts=F[vn]||[];
+  document.getElementById('side').innerHTML=`
+   <h2>${esc(p[1])}　<span style="font-size:.85rem;color:var(--sub)">${esc(vn)}</span></h2>
+   <div class="reg">${esc(p[4])} ${TOUR0.has(vn)?'　<span class="pill" style="background:#FCF1DC;color:#B77A10">Thí điểm du lịch y tế 2026-28</span>':''}</div>
+   ${facts.length?facts.map(([k,t])=>`<div class="fact"><b>${esc(k)}</b>${esc(t)}</div>`).join('')
+    :`<div class="nof">Tỉnh này chưa có thông tin cấp tỉnh đã được kiểm chứng.<br><br>“Chưa tra được” không có nghĩa là không có thị trường — khả năng các khoảng trống toàn quốc (thẻ đỏ phía trên) phân bố đều là rất thấp,
+      bệnh viện tuyến tỉnh chính là nơi bù đắp chủ yếu cho mục tiêu 35 giường/vạn dân vào năm 2030. Muốn đi sâu vào tỉnh này, việc cần làm trước tiên: tra thông báo của Sở Y tế tỉnh,
+      rà soát các gói thầu của tỉnh trên cổng đấu thầu, tìm doanh nhân Đài Loan tại địa phương giới thiệu.</div>`}
+   <div style="margin-top:12px;font-size:.74rem;color:var(--sub)">Sáp nhập hành chính năm 2025: 63 tỉnh, thành → 34. Các tên tỉnh cũ (như Yên Bái, Hà Nam, Thái Bình) đã nhập vào các tỉnh hiện hành, đầu mối đàm phán thay đổi toàn diện — quan hệ cũ phải được đối chiếu lại với bản đồ mới.</div>`;
+}
+renderAll();
+pick('Hà Nội');
+</script>
+<script>
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode', m);
+ try{localStorage.setItem('vmh_mode', m);}catch(err){}
+ document.querySelectorAll('.i18modes a').forEach(function(a){a.classList.toggle('on', a.getAttribute('data-md')===m)});
+ return false;
+}
+(function(){try{var m=localStorage.getItem('vmh_mode')||'business';document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(function(a){a.classList.add('on')});}catch(e){}})();
+</script>
+
+<script>
+(function(){
+ document.querySelectorAll('.i18btn').forEach(function(b){
+   b.addEventListener('click', function(){ b.parentElement.classList.toggle('open'); });
+ });
+ document.addEventListener('click', function(e){
+   document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
+ });
+})();
+</script></body></html>

@@ -1,0 +1,1604 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vietnam Healthcare Intelligence Hub | VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#FFFFFF;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff}
+html[data-mode="light"]{--hdrbg:#F3F6FA;--hdrfg:#1F3864}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--red:#F87171;--green:#4ADE80;--hdrbg:#0B1626;--hdrfg:#fff}
+
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+header{position:sticky;top:0;z-index:50;background:var(--hdrbg);color:var(--hdrfg);box-shadow:0 2px 10px rgba(16,26,45,.18)}
+.hw{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hw b{font-size:1.05rem}
+.hw nav{display:flex;gap:4px;margin-left:auto}
+.hw nav a{color:#C7D2E4;text-decoration:none;padding:6px 12px;border-radius:8px;font-size:.9rem}
+.hw nav a:hover{background:rgba(255,255,255,.12);color:#fff}
+.asof{font-size:.76rem;color:#9FB0CC}
+main{max-width:1180px;margin:0 auto;padding:26px 20px 70px}
+h1{font-size:1.5rem;color:var(--navy);margin:26px 0 4px}
+.sub{color:var(--sub);font-size:.9rem;margin-bottom:16px}
+.grid{display:grid;gap:12px}
+.g3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.g4{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.card{background:var(--sf);border-radius:12px;box-shadow:0 1px 4px rgba(16,26,45,.08);padding:16px 18px}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700}
+.b-red{background:#FBE6E2;color:var(--red)}.b-amb{background:#FCF1DC;color:#B77A10}
+.b-grn{background:#DCEBD0;color:var(--green)}.b-gry{background:#EDEFF3;color:#55607A}
+.b-nav{background:#DCE6F4;color:var(--navy)}
+.lay{display:inline-block;padding:1px 7px;border-radius:6px;font-size:.68rem;font-weight:700;color:#fff}
+.reg{display:grid;grid-template-columns:120px 1fr 210px;gap:16px;background:var(--sf);border-radius:12px;
+ box-shadow:0 1px 4px rgba(16,26,45,.08);padding:15px 18px;margin-bottom:10px;align-items:start}
+.reg .dd{font-weight:800;font-size:1.02rem;color:var(--navy)}
+.reg .cd{font-size:.78rem;margin-top:4px;font-weight:700}
+.reg h3{font-size:.98rem;color:var(--ink);margin-bottom:3px}
+.reg .doc{font-size:.74rem;color:var(--sub);font-family:Consolas,monospace}
+.reg p{font-size:.85rem;color:#3C4552;margin-top:5px}
+.reg .act{font-size:.8rem;background:#F2F8F6;border-left:3px solid var(--teal);padding:8px 10px;border-radius:0 8px 8px 0}
+.reg .act b{color:var(--teal);font-size:.74rem;display:block;margin-bottom:2px}
+.pl h3{font-size:1rem;color:var(--navy)}
+.pl .pos{font-size:.8rem;color:var(--sub);margin:2px 0 8px}
+.mv{font-size:.82rem;padding:5px 0;border-top:1px dashed var(--line);display:flex;gap:8px}
+.mv .d{color:var(--sub);font-size:.74rem;white-space:nowrap;padding-top:2px}
+.mean{margin-top:9px;font-size:.8rem;background:#FDF8EC;border-left:3px solid var(--gold);padding:7px 10px;border-radius:0 8px 8px 0;color:#5C4708}
+.stat{background:var(--sf);border-radius:12px;box-shadow:0 1px 4px rgba(16,26,45,.08);padding:14px 16px}
+.stat .v{font-size:1.7rem;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.stat .k{font-size:.85rem;font-weight:700;margin-top:1px}
+.stat .n{font-size:.76rem;color:var(--sub);margin-top:4px;line-height:1.5}
+.stat .s{font-size:.68rem;color:#8A93A3;margin-top:6px}
+.note{background:#EEF3F9;border-radius:12px;padding:14px 18px;font-size:.85rem;color:#26456E;margin:14px 0}
+footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:.75rem;color:var(--sub)}
+.fresh{font-size:.68rem;margin-left:6px}
+.hbtn{background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer}
+body.edit [data-e]{outline:1.5px dashed #B77A10;outline-offset:2px;border-radius:4px;min-width:16px;display:inline-block;cursor:text;background:#FFFDF4}
+body.edit .dd[data-e]{display:block}
+body.edit .lay [data-e]{color:#333}
+body.edit [data-e]:focus{outline:2px solid var(--gold);background:#fff}
+.delx{display:none;float:right;background:#FBE6E2;color:var(--red);border:0;border-radius:7px;
+ padding:2px 9px;font-size:.72rem;font-weight:700;cursor:pointer;margin-left:8px}
+.addb{display:none;background:#EDF3EC;color:var(--green);border:1.5px dashed var(--green);border-radius:10px;
+ padding:9px 18px;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer;margin:4px 0 14px;width:100%}
+body.edit .delx,body.edit .addb{display:block}
+.editbar{display:none;position:sticky;bottom:0;z-index:60;background:#3D3416;color:#FCE9B8;
+ padding:10px 20px;font-size:.82rem;text-align:center}
+body.edit .editbar{display:block}
+.pl h3 .nm{cursor:pointer;border-bottom:1.5px dashed #9FB0CC}
+.pl h3 .nm:hover{color:var(--teal);border-bottom-color:var(--teal)}
+.hint{font-size:.68rem;color:#8A93A3;font-weight:400;margin-left:6px}
+.ovl{display:none;position:fixed;inset:0;background:rgba(16,26,45,.55);z-index:100;padding:30px 16px;overflow:auto}
+.ovl.on{display:block}
+.dlg{max-width:780px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden}
+.dlg .top{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:start;gap:12px}
+.dlg .top h2{font-size:1.15rem;flex:1}
+.dlg .top .x{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:8px;
+ padding:4px 12px;font-size:1rem;cursor:pointer}
+.dlg .bd{padding:18px 22px 24px}
+.dlg .prof{font-size:.88rem;background:#EEF3F9;border-radius:10px;padding:11px 14px;color:#26456E;margin-bottom:14px}
+.dlg h4{font-size:.92rem;color:var(--navy);margin:14px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--line)}
+.pj{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:.85rem}
+.pj .y{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;font-size:.8rem}
+.pj .s{font-size:.68rem;color:#8A93A3;margin-top:3px}
+.dlg .mean2{margin-top:14px;font-size:.84rem;background:#FDF8EC;border-left:3px solid var(--gold);padding:9px 12px;border-radius:0 8px 8px 0;color:#5C4708}
+.rgrp{margin-bottom:20px}
+.rgrp .rh{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.rgrp .rh h3{font-size:1rem;color:var(--navy)}
+.rlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 14px}
+.ritem{font-size:.82rem;padding:6px 0;border-bottom:1px dashed var(--line);display:flex;flex-direction:column}
+.ritem b{font-weight:700}
+.ritem b a{color:var(--teal);text-decoration:none;border-bottom:1px dashed var(--teal)}
+.ritem .rn{color:var(--sub);font-size:.74rem;margin-top:1px}
+@media(max-width:760px){.reg{grid-template-columns:1fr}.hw nav{width:100%;margin-left:0;overflow-x:auto}}
+</style><style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18btn:hover{background:#1F3864}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18home:hover{background:#E7EEF6}
+.i18row{display:flex;gap:4px;flex-wrap:wrap}
+.i18row a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.i18row a.on{background:#152C4E;color:#fff}
+.i18row a:hover:not(.on){background:#E1E7EF}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
+
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head><body><div class="i18nsw">
+ <button type="button" class="i18btn">⚙ EN</button>
+ <div class="i18panel">
+   <a href="../index.en.html" class="i18home">🏠 Back to home</a>
+   <div class="i18gt">Language</div>
+   <div class="i18row"><a href="intel.html">中文</a><a href="intel.en.html" class="on">EN</a><a href="intel.vi.html">VI</a></div>
+   <div class="i18gt">Theme</div>
+   <div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div>
+ </div>
+</div>
+<header><div class="hw"><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>Vietnam Healthcare Intelligence Hub</b>
+<span class="asof">Data verified date <span id="asof"></span>・<span id="freshNote"></span></span>
+<nav><a href="#regs">Regulatory clock</a><a href="#players">Competitor moves</a><a href="#roster">Full directory</a><a href="#stats">Market data</a><a href="#how">How updates work</a></nav>
+<button id="upbtn" class="hbtn" onclick="document.getElementById('upf').click()">⟳ Load updated data</button>
+<button id="edbtn" class="hbtn" onclick="toggleEdit()">✎ Edit data</button>
+<button class="hbtn" onclick="exportData()">⬇ Export data file</button>
+<input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
+</div></header>
+<main>
+<div class="note">This page answers three questions:<b>When to act</b>(regulatory clock),<b>who is moving</b>(competitor moves),<b>how big and how underserved the market is</b>(market data dashboard).
+Every entry includes a source and verified date; data not updated for over 120 days is flagged “Needs update.” Data is maintained on a monthly intelligence schedule; use the top-right controls to load an updated file, or edit directly on the page and export.</div>
+
+<h1 id="regs">Regulatory clock</h1>
+<p class="sub">Only regulations that have been issued and have an effective date are listed here — this is not a forecast, it is a calendar. Sorted by days remaining, with already-effective items at the bottom.</p>
+<div id="regList"></div>
+
+<h1 id="players">Competitor moves</h1>
+<p class="sub">Who is moving in Vietnam’s healthcare market, what they are doing, and what it means for us.<b>Click a company name</b>to expand the company profile and its past/current projects (with sources).</p>
+<div class="grid g3" id="plList"></div>
+
+<h1 id="roster">Full vendor directory</h1>
+<p class="sub">Centered on Chunjing Technology’s core business (data center / UPS / IDC), covering as many related vendors in the Vietnam market as possible — arranged from the inside out: “data center infrastructure → M&E/building → hospital-side IT/AI/equipment/investors.”
+<b>Currently only names and a one-line positioning are listed; individual vendors have not yet been verified in depth</b>; names with a blue underline already have a detailed card above that you can click open — for the rest, just tell me which ones you’d like expanded and verified.</p>
+<div id="rosterList"></div>
+
+<h1 id="stats">Market data dashboard</h1>
+<p class="sub">When asked “what’s your evidence,” the answer is in the source line on each card.</p>
+<div class="grid g4" id="stList"></div>
+
+<h1 id="how">How updates work</h1>
+<div class="card" style="font-size:.88rem;line-height:1.8">
+<b>Where the data file comes from:</b>All content on this page is already embedded in this HTML file, so a single file can be opened offline. intel_data.json is an “update package” of the same data, stored in the Tool Scripts/ folder.<br>
+<b>Automatic (no action needed):</b>The “monthly intelligence schedule” runs automatically in the cloud on the 1st of every month: it re-verifies each item online (regulatory timeline changes, new vendor moves, updated data),
+then writes the new HTML and intel_data.json directly back to the 01_Analysis Tools/ folder — the next time you open the file, it’s already updated. If the computer was offline at the time, the update file is sent to the workspace conversation instead;
+just save it back to the folder to overwrite the old file.<br>
+<b>Why there is no “one-click re-verify” button on the page:</b>Re-verification requires searching the web and evaluating sources, which is beyond what a single HTML file in a browser can do (this page has no server and is not connected to the internet);
+so “generating new data” is handled by the cloud schedule, while the page’s job is to “display, load, edit, and export.”<br>
+<b>Manual load:</b>The “⟳ Load updated data” button in the top right can load a new intel_data.json at any time, redrawing the whole page instantly; this happens locally only and nothing is uploaded.<br>
+<b>In-page editing:</b>No need to wait for the schedule or edit JSON — click “✎ Edit data” in the top right to modify any field, or add or remove items, directly on the page.
+When done, click “⬇ Export data file” to download a new intel_data.json; put it back in the Tool Scripts/ folder to overwrite the old file, and anyone who loads it afterward will get your edited version.<br>
+<b>Honesty principle:</b>Items that could not be found are labeled “Not found,” estimates are labeled “Estimated” — figures are never fabricated; every entry includes a source and a verified date.</div>
+</main>
+<div class="editbar">Edit mode: any text inside a dashed box can be clicked and edited directly; “✕ Delete” removes that entry, “+ Add” adds a new one. When done, click “✓ Finish editing” in the top right, then “⬇ Export data file” to save it as a new intel_data.json.</div>
+<div class="ovl" id="ovl" onclick="closePl()"></div>
+<footer>VMH-EcoMap Vietnam Healthcare Intelligence Hub | Chunjing Technology × Vietnam Modern Hospital Alliance | All conclusions are as of the verified date — intelligence has a half-life.</footer>
+<script>
+let D={
+ "asof": "2026-08-15",
+ "regs": [
+  {
+   "date": "2027-02-01",
+   "name": "New building energy efficiency code takes effect (hospitals ≥2,500 m² brought under regulation, including energy monitoring dimension)",
+   "doc": "QCVN 04-3:2026/BXD（Thông tư 61/2026/TT-BXD）",
+   "layer": "L1",
+   "what": "Replaces QCVN 09:2017. Design permits for new and renovated hospitals will now check building energy efficiency; energy monitoring is one of five regulated dimensions — the first time hospitals have been brought under mandatory building energy-saving regulation.",
+   "opps": "OPP-26 smart-campus AIoT, OPP-12 green hospital ESCO",
+   "act": "Check the full regulation text to confirm the strength of the “energy monitoring” clause; prepare the compliance case for BMS proposals, targeting new-build submissions before 2027.",
+   "src": "vietq.vn / baoxaydung.vn (secondary report, needs cross-check against the full text)"
+  },
+  {
+   "date": "2027-01-01",
+   "name": "National physician licensing exam takes effect",
+   "doc": "Law 15/2023/QH15",
+   "layer": "L6",
+   "what": "Physicians must pass a national exam, renew licenses every 5 years plus complete continuing education, with the requirement gradually extending to nursing and midwifery. The era of lifetime licenses is over.",
+   "opps": "OPP-62 clinical talent training and simulation centers",
+   "act": "Pre-exam training, question banks, and OSCE simulation form a new industry chain; a channel connecting with Taiwan’s medical education resources is opening up.",
+   "src": "CLEAR（2025-06）"
+  },
+  {
+   "date": "2026-12-31",
+   "name": "Deadline for primary care facilities to complete electronic medical records",
+   "doc": "Circular 13/2025/TT-BYT",
+   "layer": "L4",
+   "what": "Demand expands from 1,600 hospitals to tens of thousands of primary care facilities. The hospital-side completion rate as of the 2025-09-30 deadline was 53.6% (as of 2025-10) — primary care has an even larger volume and fewer resources.",
+   "opps": "OPP-31 HIS/EMR, OPP-40 managed IT, OPP-29 DR/BCM",
+   "act": "Approach the primary care market with a “lightweight, managed service, rent-instead-of-buy” model; secondary hospital-side projects (PACS, closed-loop medication, BI) are launching in parallel.",
+   "src": "thuvienphapluat／VietnamPlus（2025-10）"
+  },
+  {
+   "date": "2026-07-01",
+   "name": "Cybersecurity Law takes effect (data localization + system tiering)",
+   "doc": "Law 116/2025/QH15",
+   "layer": "L2",
+   "what": "User data must be stored within Vietnam, and information systems are classified into five tiers. Whether healthcare is classified as critical information infrastructure is still to be confirmed.",
+   "opps": "OPP-24 hospital IDC, OPP-25 sovereign cloud, OPP-27 security tiering",
+   "act": "All solutions now default to a “data localized in Vietnam” architecture; the window for security-tiering consulting services opens 2026-2028.",
+   "src": "Law 116/2025 provisions"
+  },
+  {
+   "date": "2026-01-01",
+   "name": "Personal Data Protection Law (PDPL) takes effect",
+   "doc": "Law 91/2025/QH15 (replaces Decree 13/2023)",
+   "layer": "G",
+   "what": "Health data is classified as sensitive personal data; the penalty cap is 5% of annual revenue. Article 31 directly regulates location tracking (RTLS is directly subject to regulation); sensitive personal data on 100,000+ individuals constitutes core data, and cross-border transfer requires written approval from the Ministry of Public Security.",
+   "opps": "OPP-28 personal data compliance, CAP-024 RTLS, OPP-58 data lake",
+   "act": "RTLS products must have built-in pause/unbind capability; platforms must be deployed in-country across the board; add a PDPL data processing addendum to contracts.",
+   "src": "Tilleke & Gibbins（2025）"
+  },
+  {
+   "date": "2026-01-01",
+   "name": "Digital Technology Industry Law takes effect (Vietnam’s first law with a dedicated AI chapter)",
+   "doc": "Law on Digital Technology Industry (passed 2025-06-14)",
+   "layer": "L5",
+   "what": "Requires transparency and accountability for AI, and government licensing for high-risk AI. A separate draft AI law is also under review (risk-tiered, referencing the EU model); once passed, it will replace this law’s AI provisions.",
+   "opps": "OPP-59 SaMD registration, all F-family AI business opportunities",
+   "act": "Track the timeline for the dedicated AI law; complete MOH medical device registration for medical AI early (via the Decree 98/2021 pathway) to build a compliance barrier.",
+   "src": "DFDL／IAPP（2025-10）"
+  },
+  {
+   "date": "2025-10-01",
+   "name": "Mandatory e-prescription for all hospitals",
+   "doc": "Circular 26/2025/TT-BYT",
+   "layer": "L4",
+   "what": "Mandatory for hospitals from 2025-10-01, and for other facilities from 2026-01-01. CPOE moves from voluntary to statutory.",
+   "opps": "OPP-41 e-prescription, OPP-42 closed-loop medication, CAP-037 CPOE",
+   "act": "Closed-loop medication administration (barcode, medication verification) is the natural next step after e-prescription — worth positioning for early.",
+   "src": "thuvienphapluat"
+  },
+  {
+   "date": "2025-09-30",
+   "name": "Deadline for nationwide hospitals to complete electronic medical records (already passed, completion rate 53.6%)",
+   "doc": "Circular 13/2025/TT-BYT (replaces 46/2018)",
+   "layer": "L4",
+   "what": "991 of 1,645 hospitals went live on schedule. Nearly half of hospitals are still catching up — meaning demand still exists; those that have met the target are moving into a deepening phase.",
+   "opps": "OPP-31、OPP-32 PACS、OPP-39 VNA",
+   "act": "Sell a “fast-track compliance package” to hospitals that haven’t met the target, and “secondary projects” to those that have. The EMR backup requirement is a direct legal basis for DR procurement.",
+   "src": "VietnamPlus（2025-10-06）"
+  },
+  {
+   "date": "2025-07-01",
+   "name": "Transitional measures for medical device imports fully terminated",
+   "doc": "Transition period under Decree 98/2021/ND-CP has expired",
+   "layer": "G",
+   "what": "A local MAH, ISO 13485, and Class C/D CSDT filings are now required. The registration process takes roughly 2-3 years.",
+   "opps": "OPP-22 medical device registration agency",
+   "act": "Demand for registration agency services becomes rigid; an original manufacturer’s authorization (MAF) is now mandatory for equipment bids by agents.",
+   "src": "Thema-Med（2025-06）"
+  },
+  {
+   "date": "2025-07-01",
+   "name": "Health insurance law amendment takes effect (removes administrative-boundary referral restrictions)",
+   "doc": "2024 amended Health Insurance Law",
+   "layer": "L7",
+   "what": "Serious cases can go directly to specialized/tertiary-level facilities with full reimbursement. In the short term this intensifies the pull toward large hospitals, forcing a rethink of patient-flow design.",
+   "opps": "OPP-82 health insurance claims RCM, CAP-011 referral network",
+   "act": "Referral network design and downward-referral mechanisms have become a shared pain point for public and private facilities alike — a natural entry point for consulting.",
+   "src": "SGGP／Acclime"
+  }
+ ],
+ "players": [
+  {
+   "name": "FPT（eHospital）",
+   "cat": "Domestic IT big three",
+   "pos": "HIS market leader, deployment speed is the weapon",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "eHospital deployed to 70+ hospitals in 6 months, racing the EMR deadline wave",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024",
+     "t": "Won the Hoàn Mỹ Group contract: 100 tỷ VND, pure-software deal covering 14 hospitals and 8 clinics",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Cannot win a head-on fight with L4. Entry points: the data center, cybersecurity, BMS, and deepened modules for international private hospitals that they don’t do.",
+   "profile": "Founded in 1988, FPT Group is Vietnam’s largest private IT group; its subsidiary FPT IS has developed the FPT.eHospital hospital information system (HIS) since 2000 and is one of the leading suppliers in Vietnam’s hospital informatization market, with cumulative deployment to over 300 hospitals and healthcare facilities.",
+   "proj": [
+    {
+     "y": "2000-2015",
+     "t": "Over 15 years, FPT.eHospital’s first generation was deployed to nearly 100 major/leading hospitals, including Chợ Rẫy Hospital in Ho Chi Minh City, Bạch Mai Hospital in Hà Nội, University Medical Center, and the Hoàn Mỹ Medical Group.",
+     "st": "Past",
+     "src": "FPT official website (2026-08)"
+    },
+    {
+     "y": "2019",
+     "t": "FPT.eHospital 2.0+ has been applied at 6 provincial/municipal health departments and 300+ hospitals/healthcare facilities (including Bạch Mai Hospital, Chợ Rẫy Hospital, and Quảng Ninh Obstetrics & Pediatrics Hospital), cutting registration time from 4 minutes to 1 minute.",
+     "st": "Ongoing",
+     "src": "VietnamNet (2026-08)"
+    },
+    {
+     "y": "2020-2023",
+     "t": "Hoàn Mỹ Medical Group smart hospital project: deploying FPT.eHospital 2.0 + FPT.EMR + FPT Hi Gio Cloud across 14 hospitals and 8 specialty clinics, with a total contract value of about 100 billion VND and a 28-month timeline, targeting a paperless smart hospital.",
+     "st": "Past",
+     "src": "FPT official website (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Deployed FPT.EMR electronic medical records to 70+ hospitals nationwide within 6 months; Hải Phòng International General Hospital became the first hospital nationwide to be recognized by the Ministry of Health as a paperless EMR facility, and Quảng Ninh General Hospital manages 130,000+ medical records.",
+     "st": "Ongoing",
+     "src": "FPT IS official website (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Viettel",
+   "cat": "Domestic IT big three",
+   "pos": "Military-affiliated telecom operator: HIS + IDC + cloud, all in one",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "Building a “smart hospital ecosystem” with Thống Nhất Hospital — the entire lineup is software, with no IoT/BMS/RTLS",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2025",
+     "t": "IDC expansion underway (planning a hyperscale 140MW campus)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Both a competitor and a potential platform: their cloud and data centers could be deployment sites for our solutions. They have already claimed ownership of the “smart hospital” term — avoid using it.",
+   "profile": "Viettel is Vietnam’s Military Industry-Telecoms Group and the country’s largest telecom operator; its subsidiary Viettel Solutions has undertaken multiple national-level healthcare IT platforms for the Ministry of Health, while Viettel IDC is one of Vietnam’s largest data center/cloud service providers, deeply involved in the digital transformation of the public healthcare system.",
+   "proj": [
+    {
+     "y": "2020",
+     "t": "Developed and deployed the Telehealth remote consultation platform for the Ministry of Health; between September and October 2020, it connected 1,000 grassroots sites and 27 central-level core hospitals (including mountainous and island areas), completing 15 days ahead of the original schedule.",
+     "st": "Past",
+     "src": "Vietnam Government Electronic Newspaper baochinhphu.vn (2026-08)"
+    },
+    {
+     "y": "2021",
+     "t": "Built and operated the national COVID-19 vaccination management platform (including vaccination registration and the electronic health record “Sổ sức khỏe điện tử”), launched nationwide to support large-scale vaccination operations.",
+     "st": "Past",
+     "src": "CAND / Người Lao Động newspaper (2026-08)"
+    },
+    {
+     "y": "2010s-2026",
+     "t": "Over more than a decade, built nearly 20 health management and disease-prevention systems for the Ministry of Health (including the national vaccination information system and national drug supply chain database), under a long-term cooperation framework.",
+     "st": "Ongoing",
+     "src": "Vietnam Government Electronic Newspaper baochinhphu.vn (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "At the direction of the Ministry of National Defence, deployed electronic medical records to 27 military hospitals across 15 provinces/cities within 2 months (completed 8 days ahead of schedule), integrating 300+ imaging diagnostic devices and 200+ testing devices, training 3,800+ medical staff, and serving 12,600+ patients daily.",
+     "st": "Past",
+     "src": "Viettel Solutions official website (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "VNPT",
+   "cat": "Domestic IT big three",
+   "pos": "State-owned telecom, large installed base of HIS in public hospitals",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "VNPT HIS tied to the national VNeID health record program",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Defender of the installed public-sector market. Rather than compete for HIS, build integration and value-add on top of their systems.",
+   "profile": "VNPT is Vietnam’s state-owned post and telecommunications group; its VNPT HIS hospital information system primarily targets the public primary-care and provincial healthcare system, adopted by about 7,500 healthcare facilities, and has extended into an EMR, LIS, and RIS/PACS digital healthcare ecosystem.",
+   "proj": [
+    {
+     "y": "2015-2020",
+     "t": "Over 5 years, VNPT HIS was deployed to about 7,500 healthcare facilities of all levels nationwide (covering tiers 1 through 4, from commune health stations to large hospitals), interfacing with Ministry of Health and provincial health department systems.",
+     "st": "Ongoing",
+     "src": "VNPT Media (2026-08)"
+    },
+    {
+     "y": "2023",
+     "t": "Three hospitals in Vĩnh Phúc province (Lạc Việt Friendship Hospital, the Provincial Obstetrics & Pediatrics Hospital, and Phúc Yên Regional General Hospital) adopted VNPT EMR electronic medical records, with a contract worth about 9 billion VND — VNPT Group’s first successful EMR cases nationwide.",
+     "st": "Past",
+     "src": "VNPT Media (2026-08)"
+    },
+    {
+     "y": "2023-2024",
+     "t": "Nam Định Children’s Hospital’s VNPT EMR project took about 18 months and passed acceptance in October 2024, making it the first hospital in Nam Định province to launch electronic medical records and serving as the province’s rollout pilot.",
+     "st": "Past",
+     "src": "VietnamNet (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "Ho Chi Minh City Post and Telecommunications General Hospital deployed a cloud-based hospital management system combining VNPT HIS + LIS + RIS modules in preparation for electronic medical records.",
+     "st": "Ongoing",
+     "src": "Post and Telecommunications General Hospital official website (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "VinBrain（Vingroup）",
+   "cat": "Medical AI",
+   "pos": "Domestic AI flagship: DrAid chest X-ray AI, FDA 510(k)",
+   "moves": [
+    {
+     "d": "2024-02",
+     "t": "Signed agreement with a global fund: 32 licenses, targeting screening of 1 million people, per-case cost driven down to about USD 1",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2023",
+     "t": "Claims deployment to 100+ hospitals; NVIDIA partnership",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "The domestic price disruptor for imaging AI. If L5 wants in, it should do what they don’t: operational AI, claims-review AI, and Vietnamese-language clinical documentation.",
+   "profile": "VinBrain is a medical AI startup founded by Vingroup in 2019; its flagship product DrAid is a medical imaging AI (X-ray/CT/MRI, capable of detecting 95 types of abnormalities) and is a Southeast Asian AI diagnostic-assist product with US FDA clearance. It was acquired by NVIDIA in December 2024, and NVIDIA plans to develop it into an AI design center in Vietnam.",
+   "proj": [
+    {
+     "y": "2019-2024",
+     "t": "DrAid has been deployed to 182+ hospitals across Vietnam, the US, India, Australia, and other locations, serving about 2,000 physicians and 2 million+ patients.",
+     "st": "Ongoing",
+     "src": "CafeF (2026-08)"
+    },
+    {
+     "y": "2019-2024",
+     "t": "Partnered with Vietnam’s National Lung Hospital (research collaboration since 2019, strategic partnership signed June 2024) to incorporate DrAid’s tuberculosis AI into the National Tuberculosis Program’s screening (94% sensitivity, 98% specificity), cutting the per-person screening cost from USD 50-60 to about USD 1.",
+     "st": "Ongoing",
+     "src": "National Lung Hospital official website (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "Became the Global Fund’s only partner to sign an AI technology transfer agreement; starting April 2024, used DrAid’s tuberculosis AI to screen 1 million suspected TB cases in Vietnam, the largest screening effort in Vietnam at the time.",
+     "st": "Ongoing",
+     "src": "CafeF (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "In December 2024, NVIDIA announced the acquisition of VinBrain (deal amount undisclosed; Vingroup held a 49.74% stake pre-acquisition); Jensen Huang said it would be developed into a top design center in Vietnam.",
+     "st": "Past",
+     "src": "Vietnam News (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Advantech",
+   "cat": "Taiwanese competitor",
+   "pos": "Full iHospital solution (including RTLS and iBuilding), Vietnam legal entity already established",
+   "moves": [
+    {
+     "d": "2022-01",
+     "t": "Thai Hoa General Hospital: Vietnam’s first iHospital case (with Intel)",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2023",
+     "t": "Hong Ngoc Hospital obstetrics smart solution; M&E for the same hospital handled by local firm REE",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "The vendor with the most overlapping capabilities. Avoid a head-on clash: they are strong at ward-side terminals, we are strong at data centers/backbone/OT security — worth discussing complementary positioning or being their infrastructure-layer supplier.",
+   "profile": "Advantech, Taiwan’s leading industrial computer company (founded 1983), promotes its iHospital smart hospital and iBuilding solutions through its Vietnamese entity Advantech Vietnam Technology; in 2022, it partnered with Intel to deliver “Vietnam’s first smart hospital,” positioning itself in Vietnam as a smart healthcare systems integrator rather than an M&E contractor.",
+   "proj": [
+    {
+     "y": "2022",
+     "t": "Partnered with Intel to deploy a full iHospital solution at Thai Hoa General Hospital in Ninh Thuận province (smart outpatient queuing, bedside care, smart operating rooms, smart wards, telemedicine, smart pharmacy, patient smart cards) — Vietnam’s first smart hospital case.",
+     "st": "Past",
+     "src": "VIR / Advantech official website (2026-08)"
+    },
+    {
+     "y": "2021",
+     "t": "Partnered with Intel and Dones to deploy the iWard smart ward system (nurse station system, bedside Patient Terminal, RTLS positioning) in the maternity department of Hong Ngoc Hospital’s Phuc Truong Minh campus in Hà Nội, with an initial contract value of about USD 30,000.",
+     "st": "Past",
+     "src": "Hong Ngoc Hospital official website / Advantech official website (2026-08)"
+    },
+    {
+     "y": "2022-",
+     "t": "Advantech’s Vietnam website continues to promote iWard, iTeleMed, iOutpatient, RTLS, the iHospital command center, and iBuilding facility management modules, using Hong Ngoc and Thai Hoa as flagship references.",
+     "st": "Ongoing",
+     "src": "Advantech Vietnam smartcity website (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "REE M&E",
+   "cat": "Domestic M&E",
+   "pos": "Founded 1977, 995 employees, 1,286 projects; services include ELV and BMS",
+   "moves": [
+    {
+     "d": "2024-05",
+     "t": "Won the Hong Ngoc Phuc Truong Minh phase 2 MEP contract",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Top-tier candidate for a local partner: M&E construction and after-sales network. Need to clarify whether BMS is done in-house or subcontracted, and any brand lock-in.",
+   "profile": "REE M&E is the M&E engineering arm of REE Corporation (founded 1977, listed in Ho Chi Minh City), ranked among Vietnam’s top ten M&E contractors for multiple consecutive years, with hospital-sector track record centered on MEP general contracting for high-end private hospitals.",
+   "proj": [
+    {
+     "y": "2016-2017",
+     "t": "General contractor for MEP system supply and installation at American International Hospital (AIH) in Ho Chi Minh City: 19,418 m², 1 basement + 12 floors, 153 beds, 6 JCI US-standard operating rooms — Vietnam’s first American-style hospital.",
+     "st": "Past",
+     "src": "REE M&E official website (2026-08)"
+    },
+    {
+     "y": "2024-",
+     "t": "MEP works for phase 2 (geriatric building, approx. 30,500 m², 2 basements + 18 floors) of Hong Ngoc General Hospital’s Phuc Truong Minh campus in Hà Nội, awarded May 2024.",
+     "st": "Ongoing",
+     "src": "REE M&E official website (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Searefico E&C",
+   "cat": "Domestic M&E",
+   "pos": "Most extensive hospital MEP experience (Vinmec, UMC HCMC)",
+   "moves": [
+    {
+     "d": "2025-08",
+     "t": "Groundbreaking for Hung Ha General Hospital MEP (29,930 m²)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Second top-tier candidate for a local partner. Choose between REE or a regional split with them.",
+   "profile": "Searefico E&C is part of the Searefico Group (originally a refrigeration engineering firm founded in 1977, HOSE: SRF), a veteran Vietnamese M&E contractor with hospital MEP track record covering UMC University Medical Center, Vinmec, Hoa Lam, and other major public and private hospitals.",
+   "proj": [
+    {
+     "y": "2025-",
+     "t": "Full MEP general contract for the technical building, inpatient, outpatient, and administration buildings of Hung Ha General Hospital (29,930 m², 2 basements + 18 floors) in Hưng Yên province, groundbreaking August 2025.",
+     "st": "Ongoing",
+     "src": "Searefico official website (2026-08)"
+    },
+    {
+     "y": "2017",
+     "t": "Construction bid for phase 2 of Ho Chi Minh City Oncology Hospital (1,000 beds, 120,000 m²), one of the five major central-level hospital projects.",
+     "st": "Past",
+     "src": "Searefico official website (2026-08)"
+    },
+    {
+     "y": "2016",
+     "t": "MEP contract for Hoa Lam International Hospital (10 floors, 351 beds) within the Hoa Lam-Shangri-La high-tech medical park in Ho Chi Minh City.",
+     "st": "Past",
+     "src": "Searefico official website (2026-08)"
+    },
+    {
+     "y": "Before 2017",
+     "t": "M&E engineering for the new building of University Medical Center Ho Chi Minh City (UMC HCMC).",
+     "st": "Past",
+     "src": "Searefico official website (2026-08)"
+    },
+    {
+     "y": "Year unconfirmed",
+     "t": "Vinmec hospital M&E engineering: the official website lists Vinmec alongside Hoa Lam and UMC as prior healthcare track record (specific campus and year not found).",
+     "st": "Past",
+     "src": "Searefico official website (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Thomson Medical",
+   "cat": "Foreign healthcare groups",
+   "pos": "Singaporean group, Vietnam’s largest-ever healthcare acquisition",
+   "moves": [
+    {
+     "d": "2023",
+     "t": "Acquired FV Hospital for USD 381 million (16.8x EBITDA)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "A valuation benchmark for foreign capital flowing into private hospitals; international private hospitals like FV are the ideal first-account customer for our high-end solutions.",
+   "profile": "A Singapore-listed healthcare group (controlled by the Peter Lim family), in 2023 acquired the parent company of FV Hospital in Ho Chi Minh City for up to USD 381.4 million, Vietnam’s largest-ever healthcare acquisition, using FV as its base for expanding into Vietnam and Southeast Asia.",
+   "proj": [
+    {
+     "y": "2023",
+     "t": "Announced acquisition of 100% of Far East Medical Vietnam, the parent company of FV Hospital, for up to USD 381.4 million — Vietnam’s largest healthcare deal ever.",
+     "st": "Past",
+     "src": "Forbes／Vietnam News (2026-08)"
+    },
+    {
+     "y": "2023-12",
+     "t": "Completed the acquisition; FV Hospital (District 7, Ho Chi Minh City, about 200 beds, 30+ specialties, 1,600+ staff) formally became part of Thomson Medical Group.",
+     "st": "Past",
+     "src": "Forbes / FV Hospital official website (2026-08)"
+    },
+    {
+     "y": "2023-24",
+     "t": "The acquisition scope includes the District 1 outpatient center and the American Chiropractic Clinic chain (4 clinics in Vietnam), forming a hospital + primary-care clinic network that continues to operate.",
+     "st": "Ongoing",
+     "src": "Health365.sg (2026-08)"
+    },
+    {
+     "y": "2023-25",
+     "t": "Advancing a 7-story new building (H Building) expansion at FV Hospital, expanding the cancer center (PET, CyberKnife) and adding reproductive medicine, dialysis, and cardiology/urology/gastroenterology outpatient services.",
+     "st": "Ongoing",
+     "src": "Health365.sg (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "FV Hospital passed JCI international hospital accreditation for the fourth consecutive time; the group’s FY2025 annual report states it will continue increasing investment in Vietnam.",
+     "st": "Ongoing",
+     "src": "Thomson Medical FY2025 annual report (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Vinmec × Cleveland Clinic",
+   "cat": "Foreign healthcare groups",
+   "pos": "Domestic premium chain + top-tier US brand",
+   "moves": [
+    {
+     "d": "2025-04",
+     "t": "Co-developing Can Gio International General Hospital",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024-10",
+     "t": "Vinmec Smart City opened (60,000 m², 1,500 tỷ VND)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "A bellwether for smart-hospital specifications in new-build projects; a local template for replicating the blueprint across hospitals.",
+   "profile": "Vinmec, part of Vingroup, is one of Vietnam’s largest private international hospital chains; since 2023 it has partnered with US-based Cleveland Clinic through the “Cleveland Clinic Connected” membership and strategic advisory program, making it the only healthcare system in Vietnam that qualifies for this program.",
+   "proj": [
+    {
+     "y": "2023-01",
+     "t": "Vinmec Times City International Hospital in Hà Nội joined Cleveland Clinic Connected, becoming the first member hospital in Vietnam and Southeast Asia.",
+     "st": "Ongoing",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2024-05",
+     "t": "Vinmec Central Park International Hospital in Ho Chi Minh City became the second Cleveland Clinic Connected member hospital in Vietnam.",
+     "st": "Ongoing",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Partnered with Cleveland Clinic to develop Vinmec Can Gio International General Hospital at Vinhomes Green Paradise in Can Gio, Ho Chi Minh City, with Cleveland Clinic serving as strategic advisor; groundbreaking August 2025.",
+     "st": "Ongoing",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2025-",
+     "t": "Cleveland Clinic is providing staff exchange and study-visit programs in the US for Vinmec Can Gio, which is expected to join the Connected network once built.",
+     "st": "Ongoing",
+     "src": "Cleveland Clinic Newsroom / Vinmec official website (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "B. Braun",
+   "cat": "Foreign equipment vendors",
+   "pos": "Dialysis equipment and center footprint",
+   "moves": [
+    {
+     "d": "—",
+     "t": "Hà Nội dialysis center footprint (long-term)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "A first-mover signal in the dialysis white space (only about a third covered) — a benchmark or partner if a dialysis chain is pursued.",
+   "profile": "German medical device group B. Braun has been established in Vietnam for over 30 years; its Thanh Oai medical manufacturing complex in Hà Nội employs 1,400+ people, making it one of the largest German direct investors in Vietnam, with a focus on infusion and blood dialysis products.",
+   "proj": [
+    {
+     "y": "2014",
+     "t": "Agreed with the Hà Nội city government to add about USD 100 million in investment to expand medical device manufacturing at the Thanh Oai industrial zone, and planned to establish a blood dialysis center in Hà Nội, addressing a gap at the time when only one hospital in Hà Nội could treat kidney failure.",
+     "st": "Past",
+     "src": "VietnamPlus (2026-08)"
+    },
+    {
+     "y": "2022",
+     "t": "Broke ground on a new blood dialysis concentrate plant at the Thanh Oai industrial zone in Hà Nội: initial investment of USD 5 million, a facility of about 4,000 m², producing over 2.5 million barrels of dialysis concentrate per year for the Vietnamese and international markets.",
+     "st": "Past",
+     "src": "B. Braun official press release (2026-08)"
+    },
+    {
+     "y": "1990s-",
+     "t": "The Hà Nội medical manufacturing complex (including a blood dialysis equipment production line) employs 1,400+ technical staff, a key production and export hub for B. Braun in Asia-Pacific.",
+     "st": "Ongoing",
+     "src": "B. Braun official press release (2026-08)"
+    },
+    {
+     "y": "Ongoing",
+     "t": "Continues supplying Vietnamese hospitals with Dialog series blood dialysis machines and nephrology products (registered with the Vietnam Ministry of Health’s medical device registry), supporting the establishment of dialysis departments across provinces.",
+     "st": "Ongoing",
+     "src": "Vietnam Ministry of Health VIMDA / B. Braun Vietnam official website (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Qure.ai / Olympus / Orbis",
+   "cat": "Medical AI",
+   "pos": "Foreign AI’s beachhead in Vietnam",
+   "moves": [
+    {
+     "d": "2022-23",
+     "t": "Olympus EndoBRAIN-EYE validated at Cho Ray and Hospital 108",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024",
+     "t": "Orbis Cybersight AI diabetic retinopathy screening launched; qXR screened 570,000 people across 9 provinces under the National Tuberculosis Program",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "All validated foreign AI runs on a “donor/program-funded” model — the commercialization channel remains empty, both an opportunity and a warning sign.",
+   "profile": "Examples of international vendors and NGOs deploying medical AI in Vietnam: Qure.ai’s qXR supports active tuberculosis screening with chest X-ray AI; Olympus is piloting endoscopy AI at large hospitals in Hà Nội and Ho Chi Minh City and training physicians; Orbis uses Cybersight AI to drive diabetic retinopathy screening in the Mekong Delta.",
+   "proj": [
+    {
+     "y": "2020-2022",
+     "t": "Qure.ai’s qXR chest X-ray AI, combined with GeneXpert testing (the “Double X” strategy), conducted active tuberculosis screening on 96,000+ people, confirming 1,144 cases, of which about 51% were asymptomatic subclinical tuberculosis.",
+     "st": "Past",
+     "src": "Qure.ai official research page (2026-08)"
+    },
+    {
+     "y": "2022-2023",
+     "t": "Olympus, participating in a Japanese Ministry of Internal Affairs and Communications program, validated colonoscopy AI (EndoBRAIN-EYE) at Cho Ray Hospital in Ho Chi Minh City and Hospital 108 in Hà Nội, with Japanese experts training Vietnamese endoscopists.",
+     "st": "Past",
+     "src": "Olympus official press release (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Olympus Medical Systems Vietnam supports a “Train the Trainer” program, inviting Japanese experts to train Vietnamese physicians in ESD techniques for early-stage cancer endoscopic treatment.",
+     "st": "Ongoing",
+     "src": "Olympus official press release (2026-08)"
+    },
+    {
+     "y": "2024-2026",
+     "t": "A three-year program by Orbis and NIDEK: deploying Cybersight AI diabetic retinopathy screening at 6 ophthalmology facilities across 3 provinces, including Can Tho General Hospital and Tien Giang Central General Hospital, targeting screening of about 72,000 diabetic patients.",
+     "st": "Ongoing",
+     "src": "Orbis official website / PR Newswire (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Johnson Controls / Schneider / Siemens",
+   "cat": "Foreign BMS vendors",
+   "pos": "The four major building-technology multinationals have a low presence in Vietnam’s healthcare sector",
+   "moves": [
+    {
+     "d": "2026",
+     "t": "JCI’s official website explicitly states it is “building a local team”; Schneider has a hospital product page but no named Vietnamese customers",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "★ The integration layer is empty — foreign vendors have products but no local healthcare integration team, which is exactly Chunjing’s entry point.",
+   "profile": "The three foreign vendors’ presence in Vietnam’s healthcare sector varies: Siemens, through Healthineers medical equipment and smart diagnostics, is the most active, with long-term strategic partnerships signed with multiple hospitals; Johnson Controls has operated in Vietnam since 1995 but no named hospital project has been found; Schneider has been in Vietnam for over 30 years, promoting EcoStruxure healthcare solutions, but no named hospital deployment case has been found either.",
+   "proj": [
+    {
+     "y": "2025-",
+     "t": "Siemens Healthineers has a strategic partnership with Phuong Dong General Hospital in Hà Nội: deploying MAGNETOM Lumina MRI, NAEOTOM Alpha photon-counting CT and other imaging equipment, including training and clinical research.",
+     "st": "Ongoing",
+     "src": "Siemens Healthineers Vietnam official website (2026-08)"
+    },
+    {
+     "y": "2021-2029",
+     "t": "Siemens Healthineers signed an 8-year comprehensive partnership with SIS International General Hospital in Can Tho: Vietnam’s first Corindus interventional robot, the syngo remote diagnostics platform, and a Southeast Asian stroke treatment training center.",
+     "st": "Ongoing",
+     "src": "Siemens Healthineers Vietnam official website (2026-08)"
+    },
+    {
+     "y": "2021-2025",
+     "t": "Siemens Healthineers signed an MoU with Thong Nhat Hospital in Ho Chi Minh City to build a stroke/cardiovascular intervention center and an oncology center in phases, with international training provided.",
+     "st": "Ongoing",
+     "src": "Siemens Healthineers Vietnam official website (2026-08)"
+    },
+    {
+     "y": "1995-",
+     "t": "Johnson Controls entered Vietnam in 1995 and established the JCI-Hitachi Vietnam office in 2021; official pages do not list any named hospital project (no hospital track record found).",
+     "st": "Ongoing",
+     "src": "Johnson Controls official Vietnam website (2026-08)"
+    },
+    {
+     "y": "1994-",
+     "t": "Schneider Electric has operated in Vietnam for over 30 years and sells the EcoStruxure for Healthcare solution, but no named Vietnamese hospital deployment case has been found in public sources.",
+     "st": "Ongoing",
+     "src": "Schneider Electric Vietnam official website / VnExpress (2026-08)"
+    }
+   ]
+  }
+ ],
+ "stats": [
+  {
+   "k": "Hospital electronic medical record completion rate",
+   "v": "53.6%",
+   "unit": "",
+   "note": "991/1,645 hospitals (2025-10); up from just 8.6% 18 months earlier — hard evidence of policy execution",
+   "src": "VietnamPlus",
+   "asof": "2025-10-06"
+  },
+  {
+   "k": "Health insurance coverage rate",
+   "v": "95.2%",
+   "unit": "",
+   "note": "Reached the target 5 years ahead of schedule; 195.5 million reimbursement claims per year",
+   "src": "VSS／vietnam.vn",
+   "asof": "2026-02-01"
+  },
+  {
+   "k": "Linear accelerators",
+   "v": "82",
+   "unit": "units",
+   "note": "0.82 per million people (standard 4-8); 43% aging equipment. Reaching the low-end benchmark requires about 400 units",
+   "src": "JCO Global Oncology",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "Dialysis coverage rate",
+   "v": "about 1/3",
+   "unit": "",
+   "note": "Demand exceeds 100,000 people, actual service reaches about 36,000; health insurance reimbursement is about USD 25/session",
+   "src": "Kidney360/PMC",
+   "asof": "2025-01-01"
+  },
+  {
+   "k": "PET/CT",
+   "v": "12",
+   "unit": "units",
+   "note": "Only 3 cyclotrons; 180,000 new cancer cases per year",
+   "src": "OncoDaily/GLOBOCAN",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "Annual IVF cycles",
+   "v": "50,000+",
+   "unit": "cycles",
+   "note": "65 licensed centers; per-cycle price is 1/5 that of developed countries",
+   "src": "Vietnam News",
+   "asof": "2025-04-23"
+  },
+  {
+   "k": "Data center market",
+   "v": "22",
+   "unit": "USD hundred million",
+   "note": "41 data centers / 221MW; the Telecommunications Law has opened up to 100% foreign ownership",
+   "src": "trade.gov",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "Digital health market",
+   "v": "28.4→95.2",
+   "unit": "USD hundred million",
+   "note": "2025→2034，CAGR 14.4%",
+   "src": "IMARC",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "Smart hospital market",
+   "v": "0.3",
+   "unit": "USD hundred million",
+   "note": "2024 baseline — just 1/47 of Thailand’s (USD 1.4 billion) — the gap is the opportunity",
+   "src": "Ken Research",
+   "asof": "2026-01-01"
+  },
+  {
+   "k": "VNeID health record",
+   "v": "2,444",
+   "unit": "10,000 units",
+   "note": "Live in all 34/34 provinces; from 2026 has the same legal validity as the paper version",
+   "src": "baochinhphu",
+   "asof": "2025-07-20"
+  },
+  {
+   "k": "JCI-accredited facilities",
+   "v": "9",
+   "unit": "facilities",
+   "note": "Only 1 public facility; the Ministry of Health has formally recognized JCI, targeting 15-20 by 2030",
+   "src": "vietnam.vn／4024/QĐ-BYT",
+   "asof": "2026-01-15"
+  },
+  {
+   "k": "2030 bed target",
+   "v": "35",
+   "unit": "beds per 10,000 people",
+   "note": "Private bed share target 15% (currently 5.8%) → 25% by 2050",
+   "src": "National healthcare network master plan",
+   "asof": "2024-02-27"
+  },
+  {
+   "k": "Outbound medical travel",
+   "v": "about 20",
+   "unit": "USD hundred million/year",
+   "note": "Ministry of Health estimate (about 40,000 people/year); 2030 medical tourism target is 750,000 visits",
+   "src": "MOH estimate / DTiNews",
+   "asof": "2026-08-12",
+   "est": true
+  },
+  {
+   "k": "Hospital smart-infrastructure investment benchmark",
+   "v": "5,700-12,000",
+   "unit": "USD/bed",
+   "note": "Localized estimate range for BMS + RTLS + nurse call + integration platform",
+   "src": "AIoT deep-dive report (estimate)",
+   "asof": "2026-08-15",
+   "est": true
+  },
+  {
+   "k": "Public hospital overload",
+   "v": "200%+",
+   "unit": "",
+   "note": "Public hospitals commonly operate at more than double their designed capacity",
+   "src": "B-Company",
+   "asof": "2025-09-04"
+  },
+  {
+   "k": "Healthcare workforce",
+   "v": "12.5 / 11.4",
+   "unit": "per 10,000 people",
+   "note": "Physicians/nurses vs. the 2030 target of 19/33 — workforce is the shared bottleneck for all expansion",
+   "src": "MOH／VnExpress",
+   "asof": "2024-03-01"
+  }
+ ],
+ "roster": [
+  {
+   "cat": "Data center / IDC operators",
+   "tag": "L2 data centers",
+   "items": [
+    {
+     "name": "Viettel IDC",
+     "note": "Largest data center operator under Vietnam’s military telecom group"
+    },
+    {
+     "name": "VNPT IDC",
+     "note": "Nationwide data center operator under Vietnam’s postal and telecom group"
+    },
+    {
+     "name": "FPT Telecom（FPT Data Center）",
+     "note": "Data center services from one of Vietnam’s three major telecom operators"
+    },
+    {
+     "name": "CMC Telecom（CMC Data Center）",
+     "note": "Data center subsidiary of Vietnam’s ICT group"
+    },
+    {
+     "name": "VNG Cloud",
+     "note": "Cloud and data center business of Vietnamese tech giant VNG"
+    },
+    {
+     "name": "NTT Global Data Centers Vietnam",
+     "note": "International data center brand invested in Vietnam by Japan’s NTT"
+    },
+    {
+     "name": "One Mount Data Center",
+     "note": "New large-scale data center developer from a domestic Vietnamese group"
+    },
+    {
+     "name": "Gaw NP Capital",
+     "note": "Foreign private-equity-led data center development project in Vietnam"
+    },
+    {
+     "name": "ST Telemedia Global Data Centres（STT GDC）",
+     "note": "Singaporean data center developer entering the Vietnam market"
+    },
+    {
+     "name": "Saigontel",
+     "note": "Domestic Vietnamese real estate group expanding into data center development"
+    },
+    {
+     "name": "QTSC Data Center",
+     "note": "Official data center facility of the Saigon Software Park"
+    },
+    {
+     "name": "VNTT",
+     "note": "Domestic Vietnamese telecom infrastructure data center operator"
+    },
+    {
+     "name": "DTS（DTS Communication Technologies）",
+     "note": "Domestic Vietnamese data center and communications technology service provider"
+    },
+    {
+     "name": "Hoan Cau Smart Data Center",
+     "note": "Domestic Vietnamese smart data center operator"
+    },
+    {
+     "name": "Worldwide DC Solution",
+     "note": "Singaporean capital invested in Vietnam data center construction"
+    },
+    {
+     "name": "Bizfly Cloud",
+     "note": "Domestic Vietnamese cloud and data center service startup"
+    }
+   ]
+  },
+  {
+   "cat": "UPS / uninterruptible power supply",
+   "tag": "L2 data centers",
+   "items": [
+    {
+     "name": "Schneider Electric／APC Vietnam",
+     "note": "Global UPS leader’s official Vietnam sales channel"
+    },
+    {
+     "name": "SLA Vietnam",
+     "note": "APC/Schneider’s main authorized Vietnam distributor"
+    },
+    {
+     "name": "Eaton (partner: Digiworld)",
+     "note": "International UPS major partnering with Vietnam’s Digiworld group"
+    },
+    {
+     "name": "Vertiv",
+     "note": "Global critical infrastructure major’s multi-channel Vietnam distribution"
+    },
+    {
+     "name": "Elite Technology JSC",
+     "note": "Vertiv’s distribution partner in southern Vietnam"
+    },
+    {
+     "name": "Light JSC",
+     "note": "Vertiv’s distribution partner in Vietnam"
+    },
+    {
+     "name": "Viettel Distribution",
+     "note": "Vertiv product distributor under Vietnam’s telecom group"
+    },
+    {
+     "name": "Santak Vietnam",
+     "note": "Delta Group’s Santak UPS official Vietnam agent"
+    },
+    {
+     "name": "Riello UPS Vietnam（LisaTech）",
+     "note": "Italian Riello UPS exclusive Vietnam agent"
+    },
+    {
+     "name": "N-TEK",
+     "note": "CyberPower uninterruptible power supply Vietnam agent"
+    },
+    {
+     "name": "Delta Electronics Vietnam",
+     "note": "Delta Electronics Vietnam branch providing power solutions"
+    },
+    {
+     "name": "ABB Vietnam",
+     "note": "Swiss power automation major’s official Vietnam sales channel"
+    },
+    {
+     "name": "Socomec Vietnam",
+     "note": "French industrial-grade UPS Vietnam agent and integrator"
+    },
+    {
+     "name": "Legrand Vietnam",
+     "note": "French electrical major’s Vietnam power distribution and UPS product line"
+    }
+   ]
+  },
+  {
+   "cat": "Precision air conditioning / data center cooling",
+   "tag": "L2 data centers",
+   "items": [
+    {
+     "name": "Vertiv Liebert",
+     "note": "Global data center precision cooling leading brand’s Vietnam channel"
+    },
+    {
+     "name": "Stulz",
+     "note": "German precision cooling specialist providing Vietnam data center solutions"
+    },
+    {
+     "name": "Schneider Electric Uniflair",
+     "note": "Precision cooling brand’s official Vietnam sales channel"
+    },
+    {
+     "name": "Voi MT",
+     "note": "Liebert precision cooling Vietnam agent"
+    },
+    {
+     "name": "Voi MB",
+     "note": "Liebert XDC data center cooling Vietnam agent"
+    },
+    {
+     "name": "Thai Son",
+     "note": "Liebert CRV data center cooling Vietnam agent"
+    },
+    {
+     "name": "IDT Vietnam",
+     "note": "APC Uniflair precision cooling Vietnam agent"
+    },
+    {
+     "name": "DCSS",
+     "note": "Vietnam data center precision cooling systems integration service provider"
+    },
+    {
+     "name": "Airedale by Modine",
+     "note": "UK critical cooling equipment international brand supplier"
+    },
+    {
+     "name": "Daikin Vietnam",
+     "note": "Japanese air conditioning major with a data-center-specific product line"
+    },
+    {
+     "name": "Mitsubishi Electric Vietnam",
+     "note": "Japanese air conditioning major providing data center precision cooling"
+    }
+   ]
+  },
+  {
+   "cat": "M&E general contracting (including hospital project experience)",
+   "tag": "L1 physical",
+   "items": [
+    {
+     "name": "REE M&E",
+     "note": "Vietnam’s leading M&E general contractor, 40 years’ experience including hospital projects"
+    },
+    {
+     "name": "Searefico E&C",
+     "note": "Nearly 30-year-old veteran refrigeration/air conditioning and M&E general contractor"
+    },
+    {
+     "name": "Hawee Mechanical & Electrical",
+     "note": "Large M&E general contractor that has undertaken national-level projects such as urban rail"
+    },
+    {
+     "name": "Sigma Engineering（Sigma JSC）",
+     "note": "One of the country’s largest M&E contractors, 15 years’ experience with 100+ projects"
+    },
+    {
+     "name": "Alphanam E&C",
+     "note": "25+ years of M&E design and construction, covering commercial and industrial projects"
+    },
+    {
+     "name": "HVC Group",
+     "note": "Founded 2011, long-term M&E partner to large Vietnamese enterprises"
+    },
+    {
+     "name": "TDI Group",
+     "note": "Founded 2009, M&E contractor serving domestic and international clients"
+    },
+    {
+     "name": "Doan Nhat M&E",
+     "note": "Founded 2007, M&E general contractor with 450+ technical staff"
+    },
+    {
+     "name": "HEM（Hanoi Electrical Machinery Mfg JSC）",
+     "note": "Founded 1961, manufacturer of motors, transformers and generators plus M&E engineering"
+    },
+    {
+     "name": "Shinryo Vietnam",
+     "note": "Japanese-affiliated, specializing in HVAC and electrical system design and construction"
+    },
+    {
+     "name": "Coteccons",
+     "note": "Vietnam’s largest general construction contractor, with MEP/M&E construction capability"
+    },
+    {
+     "name": "Hòa Bình Corporation",
+     "note": "Large general construction contractor with an in-house M&E engineering division"
+    },
+    {
+     "name": "Ricons",
+     "note": "One of the major general construction contractors, undertaking M&E engineering scope"
+    },
+    {
+     "name": "PC1 Group（PCC1）",
+     "note": "Power industry EPC contractor, specializing in transmission/distribution M&E engineering"
+    },
+    {
+     "name": "Delta E&C（Delta Group）",
+     "note": "General construction and EPC contractor, cross-industry plant projects"
+    }
+   ]
+  },
+  {
+   "cat": "BMS / building automation",
+   "tag": "L1/L2 boundary",
+   "items": [
+    {
+     "name": "Johnson Controls Vietnam",
+     "note": "International major, established local operations in building automation and BMS systems"
+    },
+    {
+     "name": "Schneider Electric Vietnam",
+     "note": "EcoStruxure Building platform, Vietnam’s leading BMS supplier"
+    },
+    {
+     "name": "Siemens Vietnam",
+     "note": "Desigo system, international building automation brand with local team"
+    },
+    {
+     "name": "Honeywell Vietnam",
+     "note": "International brand offering BMS and building control solutions"
+    },
+    {
+     "name": "AIControl Vietnam (ABB agent)",
+     "note": "ABB’s official Vietnam agent and BMS systems integrator"
+    },
+    {
+     "name": "BMSCorp Vietnam (Delta Controls agent)",
+     "note": "Delta Controls authorized agent in Vietnam, serving hospitals and offices"
+    },
+    {
+     "name": "Anh Nguyen Corporation",
+     "note": "Vietnam’s leading local BMS integrator, acquired by Daikin in 2025"
+    },
+    {
+     "name": "Mitsubishi Electric Vietnam",
+     "note": "Provides a BMS business unit for building solutions"
+    },
+    {
+     "name": "Azbil Vietnam",
+     "note": "Japanese-affiliated, BMS specialist in building and industrial automation"
+    },
+    {
+     "name": "FRA",
+     "note": "Schneider’s top-tier integrator, power automation and BMS engineering"
+    },
+    {
+     "name": "Distech Controls (Vietnam channel partner)",
+     "note": "Open BMS control brand, entering Vietnam through local partners"
+    }
+   ]
+  },
+  {
+   "cat": "Hospital information systems (HIS/EMR)",
+   "tag": "L4 data",
+   "items": [
+    {
+     "name": "FPT.eHospital（FPT IS）",
+     "note": "Vietnam’s largest private HIS supplier, serving public and private hospitals"
+    },
+    {
+     "name": "Viettel HIS",
+     "note": "Healthcare information systems subsidiary of Vietnam’s telecom group"
+    },
+    {
+     "name": "VNPT HIS",
+     "note": "Hospital management system developed by Vietnam’s postal and telecom group"
+    },
+    {
+     "name": "Vietsens",
+     "note": "Domestic electronic medical record (EMR) app developer"
+    },
+    {
+     "name": "ISOFT",
+     "note": "Domestic HIS vendor focused on department-level management"
+    },
+    {
+     "name": "HSOFT",
+     "note": "Targets the private clinic and small/mid-size hospital market"
+    },
+    {
+     "name": "Medisoft",
+     "note": "HIS vendor co-founded by physicians and engineers"
+    },
+    {
+     "name": "EvoMed",
+     "note": "Multi-specialty integrated hospital management solution"
+    },
+    {
+     "name": "NANO",
+     "note": "Domestic HIS integrating administrative and clinical functions"
+    },
+    {
+     "name": "TCSOFT",
+     "note": "Full-workflow hospital operations optimization software supplier"
+    },
+    {
+     "name": "Synodus",
+     "note": "Custom HIS/EMR developer serving hospitals across multiple Southeast Asian countries"
+    }
+   ]
+  },
+  {
+   "cat": "Medical AI",
+   "tag": "L5 smart",
+   "items": [
+    {
+     "name": "VinBrain",
+     "note": "Vingroup’s medical imaging AI, the DrAid platform"
+    },
+    {
+     "name": "Gene Solutions",
+     "note": "Vietnam’s leading genetic testing and precision medicine startup"
+    },
+    {
+     "name": "Genetica",
+     "note": "Genetic testing and personalized medicine startup"
+    },
+    {
+     "name": "Metamed",
+     "note": "AI-assisted imaging diagnostics and patient risk prediction platform"
+    },
+    {
+     "name": "Mio Health",
+     "note": "Mobile preventive care and chronic disease management AI ecosystem"
+    },
+    {
+     "name": "BlueOC Tech",
+     "note": "AI-driven cloud hospital management platform"
+    },
+    {
+     "name": "TMA AI Center",
+     "note": "Part of TMA Solutions, working on medical image analysis"
+    },
+    {
+     "name": "eDoctor",
+     "note": "Telemedicine and personal health record management app"
+    },
+    {
+     "name": "Med247",
+     "note": "O2O family doctor and smart clinic platform"
+    },
+    {
+     "name": "VAIS（Vietnam AI Solutions）",
+     "note": "Vietnamese speech recognition/NLP startup with healthcare applications"
+    },
+    {
+     "name": "CMC Corporation",
+     "note": "Large tech group expanding into hospital software and data security"
+    },
+    {
+     "name": "Qure.ai",
+     "note": "Indian tuberculosis screening AI, partner in Vietnam’s tuberculosis program"
+    },
+    {
+     "name": "Olympus",
+     "note": "Japanese endoscopy AI piloted and validated at Vietnamese hospitals"
+    },
+    {
+     "name": "Orbis",
+     "note": "International NGO, Cybersight AI ophthalmology screening platform"
+    }
+   ]
+  },
+  {
+   "cat": "Foreign medical equipment vendors",
+   "tag": "L3 equipment",
+   "items": [
+    {
+     "name": "B. Braun Vietnam",
+     "note": "German medical device major with a large manufacturing base in Vietnam"
+    },
+    {
+     "name": "GE HealthCare Vietnam",
+     "note": "US imaging diagnostic equipment agent and service center"
+    },
+    {
+     "name": "Philips Healthcare Vietnam",
+     "note": "Dutch medical imaging and patient monitoring equipment agent"
+    },
+    {
+     "name": "Siemens Healthineers Vietnam",
+     "note": "German imaging diagnostics and laboratory equipment agent"
+    },
+    {
+     "name": "Fujifilm Healthcare Vietnam",
+     "note": "Japanese endoscopy and medical imaging equipment agent"
+    },
+    {
+     "name": "Medtronic Vietnam",
+     "note": "US cardiovascular and surgical equipment agent"
+    },
+    {
+     "name": "Terumo Vietnam Medical Equipment",
+     "note": "Japanese catheter and infusion consumables manufacturer and agent"
+    },
+    {
+     "name": "Getz Healthcare Vietnam",
+     "note": "Regional distributor and agent for medical devices and consumables"
+    },
+    {
+     "name": "Mindray Vietnam",
+     "note": "Chinese medical imaging and monitoring equipment agent"
+    },
+    {
+     "name": "TNT Medical",
+     "note": "Large domestic medical equipment distributor"
+    },
+    {
+     "name": "Medvitek",
+     "note": "Domestic medical equipment distributor and agent"
+    }
+   ]
+  },
+  {
+   "cat": "Foreign/private hospital investment groups",
+   "tag": "L6 operations",
+   "items": [
+    {
+     "name": "Vinmec（Vingroup／VMC Holding）",
+     "note": "Vietnam’s largest domestic private hospital group"
+    },
+    {
+     "name": "Thomson Medical Group（FV Hospital）",
+     "note": "Singaporean group that acquired Vietnam’s FV Hospital"
+    },
+    {
+     "name": "Hoan My Medical Corporation",
+     "note": "Nationwide private hospital chain in Vietnam"
+    },
+    {
+     "name": "Tam Anh Hospital",
+     "note": "Rapidly expanding high-end private hospital group in Vietnam"
+    },
+    {
+     "name": "Xuyen A Hospital",
+     "note": "Private hospital group backed by investment from Warburg Pincus"
+    },
+    {
+     "name": "Thu Cuc International Hospital",
+     "note": "Private hospital chain with equity investment from VinaCapital"
+    },
+    {
+     "name": "Hong Ngoc Hospital",
+     "note": "Private hospital chain originating in Hà Nội"
+    },
+    {
+     "name": "Hanh Phuc Hospital",
+     "note": "Private hospital focused on obstetrics/pediatrics and IVF"
+    },
+    {
+     "name": "Phuong Dong Hospital",
+     "note": "Specialty-focused medical complex operating model"
+    },
+    {
+     "name": "Raffles Medical Group（AIH）",
+     "note": "Singaporean group takes control of American International Hospital"
+    },
+    {
+     "name": "Columbia Asia Vietnam",
+     "note": "Malaysian hospital group establishing a branch in Vietnam"
+    },
+    {
+     "name": "GIC",
+     "note": "Singaporean sovereign wealth fund investing in Vinmec’s holding company"
+    }
+   ]
+  }
+ ]
+};
+function loadUpdate(f){
+  if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{try{
+    const nd=JSON.parse(rd.result);
+    if(!nd.regs||!nd.players||!nd.stats){alert('Wrong format: intel_data.json must include regs / players / stats');return;}
+    D=nd; renderAll();
+    document.getElementById('upbtn').textContent='✓ Loaded '+ (D.asof||'Update data');
+  }catch(e){alert('Failed to load:'+e.message);}};
+  rd.readAsText(f,'utf-8');
+}
+const LAYC={L1:'8C6D46',L2:'2C5F8A',L3:'7A4E8A',L4:'2E7D64',L5:'B0632E',L6:'4E6E52',L7:'8A2E4A',G:'555F6E'};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=new Date(); today.setHours(0,0,0,0);
+const days=d=>Math.round((new Date(d)-today)/864e5);
+const age=d=>Math.round((today-new Date(d))/864e5);
+function renderAll(){
+document.getElementById('asof').textContent=D.asof;
+const staleN=[...D.stats,...D.players.flatMap(p=>p.moves)].filter(x=>age(x.asof||x.d||D.asof)>120).length;
+document.getElementById('freshNote').textContent=age(D.asof)>120?'⚠ Overall data is more than 120 days old, an update is recommended':'Data is within its freshness window';
+const fresh=a=>age(a)>120?`<span class="badge b-amb fresh">Needs update</span>`:'';
+
+/* Regulatory clock (sorted by deadline but original index preserved, so edits write back to the correct entry) */
+const order=[...D.regs.keys()].sort((a,b)=>{
+  const da=days(D.regs[a].date),db=days(D.regs[b].date);
+  const ka=da<0?1e6+da:da, kb=db<0?1e6+db:db;   // Not-yet-effective items first (soonest first), effective items sink to the bottom
+  return ka-kb;});
+document.getElementById('regList').innerHTML=order.map(i=>{
+  const r=D.regs[i], n=days(r.date);
+  const cd=n>0?`<span class="cd" style="color:${n<120?'var(--red)':'var(--gold)'}">Effective in ${n} days</span>`
+             :`<span class="cd" style="color:var(--green)">Effective ${-n} days ago</span>`;
+  return `<div class="reg"><div>
+     <button class="delx" onclick="delItem('regs',${i})">✕ Delete</button>
+     <div class="dd" data-e="regs.${i}.date">${esc(r.date)}</div>${cd}
+     <div style="margin-top:6px"><span class="lay" style="background:#${LAYC[r.layer]||'555F6E'}"><span data-e="regs.${i}.layer">${esc(r.layer)}</span> layer</span></div></div>
+   <div><h3 data-e="regs.${i}.name">${esc(r.name)}</h3><div class="doc" data-e="regs.${i}.doc">${esc(r.doc)}</div><p data-e="regs.${i}.what">${esc(r.what)}</p>
+     <p style="font-size:.76rem;color:var(--sub)">Related business opportunity:<span data-e="regs.${i}.opps">${esc(r.opps||'')}</span></p></div>
+   <div class="act"><b>What we should do</b><span data-e="regs.${i}.act">${esc(r.act)}</span>
+     <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">Source:<span data-e="regs.${i}.src">${esc(r.src)}</span></div></div>
+  </div>`;}).join('')+`<button class="addb" onclick="addItem('regs')">+ Add a regulation</button>`;
+
+/* Competitor vendors */
+document.getElementById('plList').innerHTML=D.players.map((p,i)=>`
+ <div class="card pl"><button class="delx" onclick="delItem('players',${i})">✕ Delete</button>
+  <span class="badge b-nav" data-e="players.${i}.cat">${esc(p.cat)}</span>
+  <h3 style="margin-top:6px"><span class="nm" onclick="openPl(${i})" title="Click to view company profile and projects"><span data-e="players.${i}.name">${esc(p.name)}</span></span>${(p.proj&&p.proj.length)?`<span class="hint">▸ Projects ${p.proj.length} entries</span>`:''}</h3>
+  <div class="pos" data-e="players.${i}.pos">${esc(p.pos)}</div>
+  ${p.moves.map((m,j)=>`<div class="mv"><span class="d" data-e="players.${i}.moves.${j}.d">${esc(m.d)}</span><span><span data-e="players.${i}.moves.${j}.t">${esc(m.t)}</span>${fresh(m.asof||m.d+'-01')}</span></div>`).join('')}
+  <button class="addb" style="padding:5px 12px;font-size:.74rem" onclick="addMove(${i})">+ Add an action</button>
+  <div class="mean">For us:<span data-e="players.${i}.mean">${esc(p.mean)}</span></div></div>`).join('')
+ +`<button class="addb" onclick="addItem('players')">+ Add vendor</button>`;
+
+/* Full vendor directory */
+const RKEY=[['FPT',0],['Viettel',1],['VNPT',2],['VinBrain',3],['Advantech',4],['REE',5],
+ ['Searefico',6],['Thomson Medical',7],['Vinmec',8],['B. Braun',9],['Qure.ai',10],['Olympus',10],
+ ['Orbis',10],['Johnson Controls',11],['Schneider',11],['Siemens',11]];
+function rlink(name){
+  for(const [kw,idx] of RKEY) if(name.indexOf(kw)>-1)
+    return `<b><a href="#players" onclick="setTimeout(()=>openPl(${idx}),50)">${esc(name)}</a></b>`;
+  return `<b>${esc(name)}</b>`;
+}
+document.getElementById('rosterList').innerHTML=(D.roster||[]).map(sec=>`
+ <div class="rgrp"><div class="rh"><h3>${esc(sec.cat)}</h3><span class="badge b-gry">${esc(sec.tag)}</span>
+  <span style="font-size:.72rem;color:var(--sub)">Total ${sec.items.length} facilities</span></div>
+  <div class="rlist">${sec.items.map(it=>`<div class="ritem">${rlink(it.name)}<span class="rn">${esc(it.note)}</span></div>`).join('')}</div>
+ </div>`).join('');
+
+/* Data */
+document.getElementById('stList').innerHTML=D.stats.map((s,i)=>`
+ <div class="stat"><button class="delx" onclick="delItem('stats',${i})">✕ Delete</button>
+  <div class="v"><span data-e="stats.${i}.v">${esc(s.v)}</span><span style="font-size:.85rem;font-weight:600;color:var(--sub)"> <span data-e="stats.${i}.unit">${esc(s.unit||'')}</span></span></div>
+  <div class="k"><span data-e="stats.${i}.k">${esc(s.k)}</span> ${s.est?'<span class="badge b-gry">Estimated</span>':''}${fresh(s.asof)}</div>
+  <div class="n" data-e="stats.${i}.note">${esc(s.note)}</div>
+  <div class="s"><span data-e="stats.${i}.src">${esc(s.src)}</span>・Verified <span data-e="stats.${i}.asof">${esc(s.asof)}</span></div></div>`).join('')
+ +`<button class="addb" onclick="addItem('stats')">+ Add data</button>`;
+applyEditState();
+}
+
+/* ── In-page editing and export: this page can generate intel_data.json on its own ── */
+let EDIT=false;
+function applyEditState(){
+  document.body.classList.toggle('edit',EDIT);
+  document.querySelectorAll('[data-e]').forEach(el=>el.contentEditable=EDIT);
+  document.getElementById('edbtn').textContent=EDIT?'✓ Finish editing':'✎ Edit data';
+}
+function harvest(){   // Write the on-screen edits back to D
+  document.querySelectorAll('[data-e]').forEach(el=>{
+    const p=el.dataset.e.split('.'); let o=D;
+    for(let k=0;k<p.length-1;k++)o=o[isNaN(p[k])?p[k]:+p[k]];
+    o[p[p.length-1]]=el.textContent.trim();
+  });
+}
+function toggleEdit(){
+  if(EDIT){harvest();EDIT=false;renderAll();}
+  else{EDIT=true;applyEditState();}
+}
+function delItem(key,i){if(!confirm('Delete this entry?'))return;harvest();D[key].splice(i,1);renderAll();}
+function addItem(key){
+  harvest();
+  if(key==='regs')D.regs.push({date:'2026-12-31',name:'(new regulation name)',doc:'(reference number)',layer:'G',what:'(one sentence: what it requires)',opps:'',act:'(what we should do)',src:'(source)'});
+  if(key==='players')D.players.push({name:'(vendor name)',cat:'(category)',pos:'(one-line positioning)',moves:[{d:'2026-08',t:'(action)'}],mean:'(what it means for us)'});
+  if(key==='stats')D.stats.push({k:'(metric name)',v:'0',unit:'',note:'(what this number shows)',src:'(source)',asof:D.asof});
+  renderAll();
+}
+function addMove(i){harvest();D.players[i].moves.push({d:'2026-08',t:'(new action)'});renderAll();}
+
+/* ── Company detail window: profile + past/current projects ── */
+function openPl(i){
+  if(EDIT)return;               // In edit mode, clicking the name is for editing text, not opening the window
+  const p=D.players[i];
+  const grp=st=>((p.proj||[]).filter(x=>x.st===st).map(x=>`
+    <div class="pj"><div class="y">${esc(x.y)}</div>
+     <div>${esc(x.t)}<div class="s">Source: ${esc(x.src)}</div></div></div>`).join('')||'<p style="font-size:.8rem;color:var(--sub);padding:6px 0">No public project track record found.</p>');
+  document.getElementById('ovl').innerHTML=`<div class="dlg" onclick="event.stopPropagation()">
+   <div class="top"><h2>${esc(p.name)}<span class="badge b-nav" style="margin-left:10px;vertical-align:3px">${esc(p.cat)}</span></h2>
+    <button class="x" onclick="closePl()">✕</button></div>
+   <div class="bd">
+    ${p.profile?`<div class="prof">${esc(p.profile)}</div>`:''}
+    <h4>Current / ongoing</h4>${grp('Ongoing')}
+    <h4>Past track record</h4>${grp('Past')}
+    ${p.moves&&p.moves.length?`<h4>Recent activity</h4>${p.moves.map(m=>`<div class="pj"><div class="y">${esc(m.d)}</div><div>${esc(m.t)}</div></div>`).join('')}`:''}
+    <div class="mean2">What it means for us: ${esc(p.mean)}</div>
+   </div></div>`;
+  document.getElementById('ovl').classList.add('on');
+}
+function closePl(){document.getElementById('ovl').classList.remove('on');}
+function exportData(){
+  if(EDIT)harvest();
+  const blob=new Blob([JSON.stringify(D,null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='intel_data.json';a.click();URL.revokeObjectURL(a.href);
+}
+renderAll();
+</script>
+<script>
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode', m);
+ try{localStorage.setItem('vmh_mode', m);}catch(err){}
+ document.querySelectorAll('.i18modes a').forEach(function(a){a.classList.toggle('on', a.getAttribute('data-md')===m)});
+ return false;
+}
+(function(){try{var m=localStorage.getItem('vmh_mode')||'business';document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(function(a){a.classList.add('on')});}catch(e){}})();
+</script>
+
+<script>
+(function(){
+ document.querySelectorAll('.i18btn').forEach(function(b){
+   b.addEventListener('click', function(){ b.parentElement.classList.toggle('open'); });
+ });
+ document.addEventListener('click', function(e){
+   document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
+ });
+})();
+</script></body></html>

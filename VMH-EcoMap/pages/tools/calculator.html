@@ -1,0 +1,396 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>互動商模試算器｜VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff}
+html[data-mode="light"]{--hdrbg:#F3F6FA;--hdrfg:#1F3864}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--red:#F87171;--green:#4ADE80;--hdrbg:#0B1626;--hdrfg:#fff}
+
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:var(--hdrbg);color:var(--hdrfg);padding:14px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header b{font-size:1.05rem}
+header .n{font-size:.76rem;color:#9FB0CC}
+main{max-width:1240px;margin:0 auto;padding:20px;display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start}
+.panel{background:var(--sf);border-radius:14px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:18px}
+.cats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.cats button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 4px;
+ font:inherit;font-size:.76rem;cursor:pointer;font-weight:700;color:var(--sub);line-height:1.3}
+.cats button.on{color:#fff}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.presets button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+ font:inherit;font-size:.76rem;cursor:pointer;color:var(--sub)}
+.presets button.on{background:#EEF3F9;border-color:var(--navy);color:var(--navy);font-weight:700}
+.cat{font-size:.78rem;border-left:3px solid var(--teal);background:#F2F8F6;border-radius:0 8px 8px 0;padding:8px 10px;margin:10px 0 14px}
+.sl{margin-bottom:13px}
+.sl label{display:flex;justify-content:space-between;font-size:.82rem;font-weight:700;margin-bottom:3px;align-items:center}
+.sl label span.val{color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap;margin-left:8px}
+.sl input{width:100%;accent-color:var(--teal)}
+.q{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;
+ background:#DCE6F4;color:var(--navy);font-size:.66rem;font-weight:800;margin-left:5px;cursor:help;position:relative;flex:none}
+.q .tip{display:none;position:absolute;left:50%;bottom:130%;transform:translateX(-50%);width:250px;
+ background:#26303F;color:#fff;font-size:.72rem;font-weight:400;line-height:1.55;padding:9px 11px;
+ border-radius:9px;z-index:40;text-align:left;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.q:hover .tip{display:block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--sf);border-radius:12px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:13px 15px}
+.kpi .v{font-size:1.45rem;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi .k{font-size:.76rem;color:var(--sub);font-weight:700}
+.kpi .m{font-size:.68rem;color:#8A93A3}
+.verd{border-radius:12px;padding:13px 16px;font-weight:700;margin-bottom:14px;font-size:.93rem;line-height:1.55}
+.chart{background:var(--sf);border-radius:14px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:16px}
+.chart h3{font-size:.9rem;color:var(--navy);margin-bottom:6px}
+svg text{font-family:inherit}
+.foot{grid-column:1/-1;font-size:.74rem;color:var(--sub);line-height:1.7;background:#FFF9E3;border-radius:10px;padding:10px 14px}
+@media(max-width:920px){main{grid-template-columns:1fr}}
+</style><style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18btn:hover{background:#1F3864}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18home:hover{background:#E7EEF6}
+.i18row{display:flex;gap:4px;flex-wrap:wrap}
+.i18row a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.i18row a.on{background:#152C4E;color:#fff}
+.i18row a:hover:not(.on){background:#E1E7EF}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
+
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head><body><div class="i18nsw">
+ <button type="button" class="i18btn">⚙ 中文</button>
+ <div class="i18panel">
+   <a href="../index.html" class="i18home">🏠 回首頁</a>
+   <a href="datahub.html" class="i18home">🗄️ 資料中心</a>
+   <div class="i18gt">語言</div>
+   <div class="i18row"><a href="calculator.html" class="on">中文</a><a href="calculator.en.html">EN</a><a href="calculator.vi.html">VI</a></div>
+   <div class="i18gt">外觀</div>
+   <div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div>
+ </div>
+</div>
+<header><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>互動商模試算器</b><span class="n">六種投資類別，各有各的尺——拉桿即時看結論。示意值供探索，正式數字以 VMH-EcoMap-2 Excel 試算器為準</span></header>
+<main>
+<div class="panel">
+  <div style="font-size:.74rem;font-weight:700;color:var(--sub);margin-bottom:5px">① 選投資類別（判準跟著換）</div>
+  <div class="cats" id="cats"></div>
+  <div style="font-size:.74rem;font-weight:700;color:var(--sub);margin-bottom:5px">② 選示範專案</div>
+  <div class="presets" id="presets"></div>
+  <div class="cat" id="catNote"></div>
+  <div style="font-size:.74rem;font-weight:700;color:var(--sub);margin-bottom:5px">③ 拉桿看結論怎麼變（游標停在 ⓘ 看說明）</div>
+  <div id="sliders"></div>
+</div>
+<div>
+  <div class="kpis" id="kpis"></div>
+  <div class="verd" id="verd"></div>
+  <div class="chart"><h3 id="c1t"></h3><svg id="cf" width="100%" height="280" viewBox="0 0 820 280" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="chart" style="margin-top:14px"><h3 id="c2t"></h3><svg id="sv" width="100%" height="175" viewBox="0 0 820 175" preserveAspectRatio="xMidYMid meet"></svg></div>
+</div>
+<div class="foot">★ 這是<b>探索工具</b>：所有預設專案的數字為示意值，用途是感受「哪個假設最左右結論」與「不同類別為什麼要用不同的尺」。
+正式投資判斷請用 VMH-EcoMap-2 專案商模試算器（Excel）——它含稅務、營運資金、殘值與送審檢查十項。
+分類方法論見 VMH-EcoMap-7 簡報第 10-12 頁。</div>
+</main>
+<script>
+/* ═══ 參數定義：每類別一組，含懸停說明 ═══ */
+const PD={
+ capex:{l:'初始投資 CAPEX',u:'百萬',mn:10,mx:400,st:1,h:'一次性建置成本：設備、工程、導入、首年授權。不含日常營運。'},
+ rev:{l:'年收入',u:'百萬/年',mn:5,mx:120,st:1,h:'滿載時的年收入（健保給付＋自費）。實際收入＝年收入×利用率。'},
+ opex:{l:'年營運成本',u:'百萬/年',mn:2,mx:60,st:1,h:'人力、耗材、電力、維護、授權年費——每年都要付的錢。'},
+ g:{l:'效益年成長率',u:'%',mn:0,mx:12,st:.5,h:'收入或節省逐年成長的速度（量成長、調價、滲透率提升）。'},
+ util:{l:'量能利用率',u:'%',mn:30,mx:100,st:1,h:'實際使用量佔設計量能的比例。新設施通常從 5-6 成爬坡。這支桿往往比任何成本都更左右結論。'},
+ wacc:{l:'折現率 WACC',u:'%',mn:6,mx:20,st:.1,h:'資金成本＝把未來的錢換算成今天的錢的利率。越南專案含國家風險溢酬 3.90%（CAPM 推算）。它比任何一筆成本估算都更能左右 NPV。'},
+ yrs:{l:'評估年期',u:'年',mn:5,mx:15,st:1,h:'現金流評估的年數。設備類通常取經濟壽命 8-10 年。'},
+ ownop:{l:'自建年營運成本',u:'百萬/年',mn:2,mx:60,st:1,h:'自己建、自己養的年成本：電力、人力值班、維護合約。'},
+ altfee:{l:'替代方案年費用',u:'百萬/年',mn:5,mx:120,st:1,h:'不自建的話每年要付的錢：外包代管費、租用費。B 使能型的「收入」其實就是這筆避免掉的費用。'},
+ down:{l:'替代方案年風險成本',u:'百萬/年',mn:0,mx:60,st:1,h:'用替代方案的隱藏代價：當機損失、資料外移風險、擴充受限。常被低估——這正是「兩種算法、相反結論」的關鍵。'},
+ capA:{l:'方案A 一次性投資（自辦）',u:'百萬',mn:5,mx:300,st:1,h:'自建設施達到法規要求的一次性投資。'},
+ opA:{l:'方案A 年營運成本',u:'百萬/年',mn:1,mx:50,st:1,h:'自辦後每年的維運成本。'},
+ feeB:{l:'方案B 年費用（委外）',u:'百萬/年',mn:2,mx:80,st:1,h:'不自建、委外服務化的年費。'},
+ pen:{l:'不作為年風險成本',u:'百萬/年',mn:0,mx:200,st:5,h:'不合規的代價：罰款、停業、拿不到執照/評鑑。法規強制型的重點是「不做不是選項」——這欄只是提醒代價多大。'},
+ save:{l:'年節省金額',u:'百萬/年',mn:2,mx:80,st:1,h:'導入後每年省下的錢：能源、人力工時、耗損、租金。要能對帳單驗證，不能只是「感覺有省」。'},
+ addop:{l:'新增年維運成本',u:'百萬/年',mn:0,mx:30,st:.5,h:'新系統自己的年成本：授權、維護、值班。淨節省＝年節省－這筆。'},
+ old0:{l:'舊設備目前年成本',u:'百萬/年',mn:2,mx:60,st:1,h:'續用舊設備的年維護＋能耗。'},
+ oldg:{l:'舊設備成本年增率',u:'%',mn:0,mx:25,st:1,h:'設備老化的速度：維修愈來愈貴、當機愈來愈多。這支桿決定「何時換最划算」。'},
+ failc:{l:'舊設備年故障風險',u:'百萬/年',mn:0,mx:60,st:1,h:'突發故障的期望損失（停機×影響）。醫療設備的故障代價常大於維修費本身。'},
+ newop:{l:'新設備年成本',u:'百萬/年',mn:1,mx:40,st:1,h:'換新後的年維護＋能耗（通常較低且保固期內更低）。'},
+ direct:{l:'年直接效益',u:'百萬/年',mn:0,mx:60,st:1,h:'看得見、算得出的效益：人力、紙張、申報改善。策略型專案的直接效益通常撐不起投資——這是正常的。'},
+ prob:{l:'解鎖成功機率',u:'%',mn:5,mx:95,st:5,h:'這筆投資開的門，後續真的走進去的機率（例：建了資料平台後，AI 應用真的落地）。'},
+ optv:{l:'解鎖商機價值',u:'百萬',mn:0,mx:600,st:10,h:'門後面那些生意的淨現值總和（例：HIS 之後的 AI、BI、第二院區複製）。這是策略型的真正標的。'}};
+
+/* ═══ 六類別 ═══ */
+const CATS={
+ A:{n:'A 營收型',en:'NPV／MIRR',col:'#BF8F00',
+   note:'做一件收一件的生意。判準：NPV>0 且 MIRR>資金成本。量能利用率是最常被高估的假設。',
+   ps:['capex','rev','opex','g','util','wacc','yrs'],
+   presets:[
+    {n:'CT 影像中心',v:{capex:95,rev:42,opex:16,g:3,util:80,wacc:11.5,yrs:10}},
+    {n:'IVF 生殖實驗室',v:{capex:70,rev:38,opex:15,g:5,util:70,wacc:11.5,yrs:10}},
+    {n:'健檢中心',v:{capex:45,rev:26,opex:12,g:4,util:75,wacc:11.5,yrs:8}},
+    {n:'衛星洗腎中心',v:{capex:55,rev:30,opex:14,g:3,util:85,wacc:11.5,yrs:10}}]},
+ B:{n:'B 使能型',en:'ΔTCO',col:'#2E747A',
+   note:'不直接賺錢、讓上面的系統站得起來的地基。判準：自建總持有成本 < 替代方案總成本（含風險）。用 NPV 算它一定被否決——那是用錯尺。',
+   ps:['capex','ownop','altfee','down','g','wacc','yrs'],
+   presets:[
+    {n:'IDC 機房',v:{capex:120,ownop:12,altfee:36,down:10,g:2,wacc:10.8,yrs:10}},
+    {n:'院區網路骨幹',v:{capex:40,ownop:4,altfee:12,down:6,g:2,wacc:10.8,yrs:10}},
+    {n:'DR 異地備援',v:{capex:55,ownop:8,altfee:18,down:12,g:2,wacc:10.8,yrs:10}}]},
+ C:{n:'C 法規強制型',en:'MINCOST',col:'#C0392B',
+   note:'不做拿不到執照、過不了評鑑。判準不是做不做（不做不是選項），是「哪個方案最便宜地合規」。',
+   ps:['capA','opA','feeB','pen','wacc','yrs'],
+   presets:[
+    {n:'醫療廢水處理（QCVN 28）',v:{capA:60,opA:6,feeB:22,pen:60,wacc:11,yrs:10}},
+    {n:'資安定級與備援（網安法）',v:{capA:35,opA:8,feeB:20,pen:80,wacc:11,yrs:8}},
+    {n:'個資合規體系（PDPL）',v:{capA:15,opA:5,feeB:12,pen:120,wacc:11,yrs:5}}]},
+ D:{n:'D 降本型',en:'SAVING',col:'#548235',
+   note:'花錢是為了省錢。判準：節省的淨現值>投資，回收期越短越好。節省要能對帳單驗證。',
+   ps:['capex','save','addop','g','wacc','yrs'],
+   presets:[
+    {n:'BMS 能源管理',v:{capex:30,save:11,addop:2,g:1,wacc:10.8,yrs:10}},
+    {n:'設備預測維護',v:{capex:18,save:8,addop:1.5,g:2,wacc:10.8,yrs:8}},
+    {n:'SPD 院內物流',v:{capex:25,save:10,addop:3,g:2,wacc:10.8,yrs:8}}]},
+ E:{n:'E 汰換維持型',en:'LCC',col:'#6B3FA0',
+   note:'舊的越養越貴，新的要花一筆。判準：生命週期成本（LCC）——找出「續用」與「換新」累積成本的交叉年，在交叉前換就是划算。',
+   ps:['old0','oldg','failc','capex','newop','wacc','yrs'],
+   presets:[
+    {n:'UPS 與電力系統汰換',v:{old0:9,oldg:12,failc:15,capex:45,newop:4,wacc:10.8,yrs:10}},
+    {n:'影像設備汰換（10年機齡）',v:{old0:14,oldg:10,failc:20,capex:85,newop:8,wacc:11,yrs:8}},
+    {n:'空調主機汰換',v:{old0:12,oldg:8,failc:8,capex:38,newop:6,wacc:10.8,yrs:10}}]},
+ F:{n:'F 策略布局型',en:'OPTION',col:'#1F3864',
+   note:'買的不是現金流，是門票。判準：直接效益 NPV＋（成功機率×解鎖價值）>投資。單看 NPV 為負不等於不做——等於它的價值在門後面。',
+   ps:['capex','direct','opex','g','wacc','yrs','prob','optv'],
+   presets:[
+    {n:'HIS／EMR 核心平台',v:{capex:60,direct:14,opex:9,g:4,wacc:12,yrs:10,prob:60,optv:180}},
+    {n:'醫院資料湖與 AI 底座',v:{capex:40,direct:6,opex:6,g:5,wacc:12,yrs:10,prob:50,optv:220}},
+    {n:'FHIR／國家平台介接',v:{capex:15,direct:4,opex:2,g:3,wacc:12,yrs:8,prob:70,optv:60}}]}};
+
+let cat='B', pi=0, P={};
+function loadPreset(){P={...CATS[cat].presets[pi].v};}
+loadPreset();
+const fmt=x=>x.toLocaleString('zh-TW',{maximumFractionDigits:1});
+const esc=s=>String(s).replace(/</g,'&lt;');
+const pv=(f,r)=>f.reduce((a,c,t)=>a+c/Math.pow(1+r,t),0);
+function irr(f){let lo=-0.9,hi=3;const g=r=>pv(f,r);if(g(lo)*g(hi)>0)return null;
+ for(let i=0;i<80;i++){const m=(lo+hi)/2;(g(lo)*g(m)<=0)?hi=m:lo=m;}return (lo+hi)/2;}
+function mirr(f,r){const n=f.length-1;let p_=0,fv=0;
+ f.forEach((c,t)=>{if(c<0)p_+=c/Math.pow(1+r,t);else fv+=c*Math.pow(1+r,n-t);});
+ if(p_>=0||fv<=0)return null;return Math.pow(fv/-p_,1/n)-1;}
+function payback(f){let cum=0;for(let t=0;t<f.length;t++){const pr=cum;cum+=f[t];
+ if(cum>=0&&t>0)return t-1+(pr<0?-pr/f[t]:0);}return null;}
+
+/* 各類別的現金流／成本流 */
+function calc(){
+ const r=P.wacc/100, Y=P.yrs;
+ if(cat==='A'){
+   const f=[-P.capex];for(let t=1;t<=Y;t++)f.push(P.rev*(P.util/100)*Math.pow(1+P.g/100,t-1)-P.opex);
+   return {f,mode:'flow'};}
+ if(cat==='B'){
+   const f=[-P.capex];for(let t=1;t<=Y;t++){
+     const alt=(P.altfee+P.down)*Math.pow(1+P.g/100,t-1);
+     f.push(alt-P.ownop);}
+   return {f,mode:'flow'};}
+ if(cat==='C'){
+   const A=[P.capA],B=[0];for(let t=1;t<=Y;t++){A.push(P.opA);B.push(P.feeB);}
+   return {A,B,mode:'cost'};}
+ if(cat==='D'){
+   const f=[-P.capex];for(let t=1;t<=Y;t++)f.push(P.save*Math.pow(1+P.g/100,t-1)-P.addop);
+   return {f,mode:'flow'};}
+ if(cat==='E'){
+   const A=[0],B=[P.capex];   // A=續用 B=換新
+   for(let t=1;t<=Y;t++){
+     A.push((P.old0)*Math.pow(1+P.oldg/100,t-1)+P.failc);
+     B.push(P.newop);}
+   return {A,B,mode:'cost'};}
+ if(cat==='F'){
+   const f=[-P.capex];for(let t=1;t<=Y;t++)f.push(P.direct*Math.pow(1+P.g/100,t-1)-P.opex);
+   return {f,mode:'flow'};}
+}
+
+function render(){
+ const C=CATS[cat];
+ document.getElementById('cats').innerHTML=Object.entries(CATS).map(([k,c])=>
+  `<button class="${k===cat?'on':''}" style="${k===cat?'background:'+c.col+';border-color:'+c.col:''}"
+    onclick="cat='${k}';pi=0;loadPreset();render()">${c.n}<br><span style="font-size:.64rem;font-weight:400">${c.en}</span></button>`).join('');
+ document.getElementById('presets').innerHTML=C.presets.map((x,i)=>
+  `<button class="${i===pi?'on':''}" onclick="pi=${i};loadPreset();render()">${esc(x.n)}</button>`).join('');
+ const cn=document.getElementById('catNote');cn.textContent=C.note;cn.style.borderColor=C.col;
+ document.getElementById('sliders').innerHTML=C.ps.map(k=>{const d=PD[k];return `
+  <div class="sl"><label><span style="display:flex;align-items:center">${d.l}
+    <span class="q">ⓘ<span class="tip">${d.h}</span></span></span>
+    <span class="val">${fmt(P[k])} ${d.u}</span></label>
+  <input type="range" min="${d.mn}" max="${d.mx}" step="${d.st}" value="${P[k]}"
+    oninput="P['${k}']=+this.value;render()"></div>`;}).join('');
+
+ const r=P.wacc/100, res=calc();
+ let kp=[],vd='',vgood=true;
+ if(res.mode==='flow'){
+   const f=res.f, NPV=pv(f,r), M=mirr(f,r), PB=payback(f);
+   if(cat==='F'){
+     const OPT=(P.prob/100)*P.optv/Math.pow(1+r,2), TOT=NPV+OPT; vgood=TOT>0;
+     kp=[['直接效益 NPV',fmt(NPV)+' 百萬',NPV>=0?'var(--green)':'var(--red)','只算看得見的部分'],
+         ['選擇權期望值',fmt(OPT)+' 百萬','var(--navy)',`成功率 ${P.prob}% × 解鎖 ${fmt(P.optv)}（折現）`],
+         ['策略總價值',fmt(TOT)+' 百萬',TOT>=0?'var(--green)':'var(--red)','直接＋門後面的'],
+         ['回收期',PB!=null?PB.toFixed(1)+' 年':'—','var(--gold)','僅計直接效益']];
+     vd=TOT>0?(NPV>0?'直接效益已自足，策略選擇權是額外紅利——罕見的好案。'
+       :'單看直接效益是負的（策略型的常態），但加上門後面的價值後為正——這正是它該被核准的理由。用這個口徑跟董事會溝通，不要硬拗 NPV。')
+       :'連選擇權都救不回來——檢查「解鎖價值」是否真的存在、成功機率是否誠實。策略型最怕的就是用「戰略」包裝一個純虧損。';
+   }else if(cat==='B'){
+     vgood=NPV>0;
+     kp=[['ΔTCO（自建省下）',fmt(NPV)+' 百萬',NPV>=0?'var(--green)':'var(--red)','替代方案總成本－自建總成本（現值）'],
+         ['MIRR',M!=null?(M*100).toFixed(1)+'%':'—',M!=null&&M>r?'var(--green)':'var(--red)','把避免成本當現金流'],
+         ['回收期',PB!=null?PB.toFixed(1)+' 年':'—',PB!=null&&PB<=5?'var(--green)':'var(--gold)','幾年把自己付掉'],
+         ['年淨避免成本',fmt(P.altfee+P.down-P.ownop)+' 百萬','var(--navy)','第一年口徑']];
+     vd=NPV>0?'ΔTCO 為正：自建比「不建（付外包費＋承受風險）」便宜——這就是 B 使能型該用的尺。注意：說服投資方的關鍵是「替代方案年風險成本」有沒有憑據（代管報價單、當機紀錄）。'
+       :'以目前假設自建沒有比較便宜。先檢查替代方案的隱藏成本是否低估（當機、資料主權、擴充受限），再檢查自建規模是否過大。';
+   }else{
+     vgood=NPV>0;
+     const IRRv=irr(f);
+     kp=[['NPV',fmt(NPV)+' 百萬',NPV>=0?'var(--green)':'var(--red)','折現率 '+P.wacc+'%'],
+         ['MIRR',M!=null?(M*100).toFixed(1)+'%':'—',M!=null&&M>r?'var(--green)':'var(--red)','再投資率＝WACC'],
+         ['IRR',IRRv!=null?(IRRv*100).toFixed(1)+'%':'—','var(--navy)','參考用'],
+         ['回收期',PB!=null?PB.toFixed(1)+' 年':'超過年期',PB!=null&&PB<=4?'var(--green)':'var(--gold)','未折現']];
+     vd=cat==='D'?(NPV>0?'節省的現值大於投資——成立。下一步：節省數字要綁「可對帳」的基線（電費單、工時紀錄），否則上了董事會守不住。'
+        :'省的不夠付投資。拉「年節省」看要省多少才翻正——那就是你跟供應商談保證節能量的底線。')
+       :(NPV>0?'NPV 為正且 MIRR 高於資金成本——值得進入送審檢查十項。'
+        :'以目前假設不划算——拉「量能利用率」找保本點，那就是你的最低業務目標。');
+   }
+   drawFlow(f); drawSensNPV(f,r,cat==='F'?(P.prob/100)*P.optv:0);
+ }else{
+   const pvA=pv(res.A,r), pvB=pv(res.B,r);
+   const diff=pvA-pvB;
+   let crossT=null,ca=0,cb=0;
+   for(let t=0;t<res.A.length;t++){ca+=res.A[t];cb+=res.B[t];if(crossT==null&&cb<=ca)crossT=t;}
+   if(cat==='C'){
+     const nameA='方案A 自辦',nameB='方案B 委外';
+     const cheap=pvA<=pvB?nameA:nameB;
+     kp=[[nameA+'總成本',fmt(pvA)+' 百萬',pvA<=pvB?'var(--green)':'var(--red)','現值，'+P.yrs+' 年'],
+         [nameB+'總成本',fmt(pvB)+' 百萬',pvB<pvA?'var(--green)':'var(--red)','現值，'+P.yrs+' 年'],
+         ['價差',fmt(Math.abs(diff))+' 百萬','var(--navy)','選便宜的省這麼多'],
+         ['不作為年代價',fmt(P.pen)+' 百萬/年','var(--red)','罰款／停業／評鑑不過']];
+     vd=`最低成本合規：選 <b>${cheap}</b>（便宜 ${fmt(Math.abs(diff))} 百萬）。記住法規強制型的紀律：比較的是「怎麼合規最便宜」，不是「要不要合規」——不作為的年代價 ${fmt(P.pen)} 百萬遠大於兩案價差。`;
+     drawCost(res.A,res.B,r,nameA,nameB,null);
+   }else{
+     const nameA='續用舊設備',nameB='換新';
+     vgood=pvB<pvA;
+     kp=[['續用 LCC',fmt(pvA)+' 百萬',pvA<=pvB?'var(--green)':'var(--red)','含故障風險，現值'],
+         ['換新 LCC',fmt(pvB)+' 百萬',pvB<pvA?'var(--green)':'var(--red)','含購置，現值'],
+         ['價差',fmt(Math.abs(pvA-pvB))+' 百萬','var(--navy)',pvB<pvA?'換新較省':'續用較省'],
+         ['成本交叉年',crossT!=null?'第 '+crossT+' 年':'年期內不交叉',crossT!=null&&crossT<=P.yrs/2?'var(--red)':'var(--gold)','累積成本追平點']];
+     vd=pvB<pvA?`換新在 ${P.yrs} 年內總成本較低${crossT!=null?`，累積成本在第 ${crossT} 年追平`:''}——愈晚換，多付的是老化維修＋故障風險。汰換維持型不問「賺不賺」，問「哪條路少花錢」。`
+       :'以目前假設續用仍較省——但把「舊設備成本年增率」拉高看看：老化是加速的，這支桿決定何時換最划算。';
+     drawCost(res.A,res.B,r,nameA,nameB,crossT);
+   }
+   document.getElementById('c2t').textContent='兩方案成本現值差 對 折現率的敏感度';
+   drawSensCost(res.A,res.B,r);
+ }
+ document.getElementById('kpis').innerHTML=kp.map(([k,v,c,m])=>
+  `<div class="kpi"><div class="k">${k}</div><div class="v" style="color:${c}">${v}</div><div class="m">${m}</div></div>`).join('');
+ const V=document.getElementById('verd');
+ V.innerHTML=vd;
+ V.style.background=vgood?'#DCEBD0':(cat==='C'?'#EEF3F9':'#FBE6E2');
+ V.style.color=vgood?'var(--green)':(cat==='C'?'var(--navy)':'var(--red)');
+}
+function drawFlow(f){
+ document.getElementById('c1t').textContent='年度與累積現金流（單位：百萬）';
+ const svg=document.getElementById('cf');const W=820,H=280,L=46,B=32,T=12;
+ let cum=0;const cums=f.map(c=>cum+=c);
+ const all=[...f,...cums];const mx=Math.max(...all,0),mn=Math.min(...all,0);
+ const y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn||1));const bw=(W-L-16)/f.length;const y0=y(0);
+ let s=`<line x1="${L}" y1="${y0}" x2="${W-8}" y2="${y0}" stroke="#B9C2D0"/>`;
+ f.forEach((c,t)=>{const x=L+t*bw+3;
+  s+=`<rect x="${x}" y="${Math.min(y(c),y0)}" width="${bw-6}" height="${Math.abs(y(c)-y0)||1}" fill="${c<0?'#C0392B':'#2E747A'}" opacity=".82" rx="2"/>`;
+  s+=`<text x="${x+(bw-6)/2}" y="${H-B+15}" font-size="10" fill="#6B7280" text-anchor="middle">${t===0?'期初':'Y'+t}</text>`;});
+ s+='<polyline fill="none" stroke="#1F3864" stroke-width="2.5" points="'+cums.map((v,t)=>`${L+t*bw+bw/2},${y(v)}`).join(' ')+'"/>';
+ [mx,0,mn].forEach(v=>{s+=`<text x="${L-6}" y="${y(v)+4}" font-size="10" fill="#6B7280" text-anchor="end">${fmt(v)}</text>`;});
+ s+=`<text x="${W-10}" y="${T+8}" font-size="10.5" fill="#1F3864" text-anchor="end">— 累積</text>`;
+ svg.innerHTML=s;
+}
+function drawCost(A,Bc,r,na,nb,crossT){
+ document.getElementById('c1t').textContent=`累積成本比較：${na} vs ${nb}（未折現，單位：百萬）`;
+ const svg=document.getElementById('cf');const W=820,H=280,L=46,B=32,T=12;
+ let ca=0,cb=0;const CA=A.map(v=>ca+=v),CB=Bc.map(v=>cb+=v);
+ const mx=Math.max(...CA,...CB);const y=v=>T+(H-T-B)*(1-v/(mx||1));
+ const n=A.length;const x=t=>L+(W-L-16)*t/(n-1);
+ let s='';
+ [[CA,'#C0392B',na],[CB,'#2E747A',nb]].forEach(([C,col,nm],i)=>{
+  s+='<polyline fill="none" stroke="'+col+'" stroke-width="2.5" points="'+C.map((v,t)=>`${x(t)},${y(v)}`).join(' ')+'"/>';
+  s+=`<text x="${W-10}" y="${T+10+i*15}" font-size="10.5" fill="${col}" text-anchor="end">— ${nm}</text>`;});
+ for(let t=0;t<n;t++)s+=`<text x="${x(t)}" y="${H-B+15}" font-size="10" fill="#6B7280" text-anchor="middle">${t===0?'期初':'Y'+t}</text>`;
+ [mx,0].forEach(v=>{s+=`<text x="${L-6}" y="${y(v)+4}" font-size="10" fill="#6B7280" text-anchor="end">${fmt(v)}</text>`;});
+ if(crossT!=null){s+=`<line x1="${x(crossT)}" y1="${T}" x2="${x(crossT)}" y2="${H-B}" stroke="#9A6B10" stroke-dasharray="4 3"/>`;
+  s+=`<text x="${x(crossT)}" y="${T+10}" font-size="10.5" fill="#9A6B10" text-anchor="middle">交叉年</text>`;}
+ svg.innerHTML=s;
+}
+function drawSensNPV(f,rNow,optAdd){
+ document.getElementById('c2t').textContent='NPV 對折現率的敏感度（紅點＝目前折現率）';
+ const svg=document.getElementById('sv');const W=820,H=175,L=46,B=24,T=10;
+ const rs=[];for(let x=0.05;x<=0.22;x+=0.005)rs.push(x);
+ const vs=rs.map(x=>pv(f,x)+(optAdd?optAdd/Math.pow(1+x,2):0));
+ const mx=Math.max(...vs,0),mn=Math.min(...vs,0);
+ const X=x=>L+(W-L-14)*(x-0.05)/0.17;const y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn||1));
+ let s=`<line x1="${L}" y1="${y(0)}" x2="${W-8}" y2="${y(0)}" stroke="#B9C2D0"/>`;
+ s+='<polyline fill="none" stroke="#0E6E6B" stroke-width="2.5" points="'+rs.map((x,i)=>`${X(x)},${y(vs[i])}`).join(' ')+'"/>';
+ [0.06,0.10,0.14,0.18,0.22].forEach(x=>{s+=`<text x="${X(x)}" y="${H-4}" font-size="10" fill="#6B7280" text-anchor="middle">${(x*100).toFixed(0)}%</text>`;});
+ s+=`<circle cx="${X(rNow)}" cy="${y(vs[Math.round((rNow-0.05)/0.005)]??pv(f,rNow))}" r="5.5" fill="#C0392B"/>`;
+ const ci=vs.findIndex(v=>v<=0);
+ if(ci>0)s+=`<text x="${X(rs[ci])}" y="${y(0)-8}" font-size="10.5" fill="#C0392B" text-anchor="middle">損益兩平 ≈ ${(rs[ci]*100).toFixed(1)}%</text>`;
+ svg.innerHTML=s;
+}
+function drawSensCost(A,Bc,rNow){
+ const svg=document.getElementById('sv');const W=820,H=175,L=46,B=24,T=10;
+ const rs=[];for(let x=0.05;x<=0.22;x+=0.005)rs.push(x);
+ const vs=rs.map(x=>pv(A,x)-pv(Bc,x));
+ const mx=Math.max(...vs,0),mn=Math.min(...vs,0);
+ const X=x=>L+(W-L-14)*(x-0.05)/0.17;const y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn||1));
+ let s=`<line x1="${L}" y1="${y(0)}" x2="${W-8}" y2="${y(0)}" stroke="#B9C2D0"/>`;
+ s+='<polyline fill="none" stroke="#0E6E6B" stroke-width="2.5" points="'+rs.map((x,i)=>`${X(x)},${y(vs[i])}`).join(' ')+'"/>';
+ [0.06,0.10,0.14,0.18,0.22].forEach(x=>{s+=`<text x="${X(x)}" y="${H-4}" font-size="10" fill="#6B7280" text-anchor="middle">${(x*100).toFixed(0)}%</text>`;});
+ s+=`<circle cx="${X(rNow)}" cy="${y(vs[Math.round((rNow-0.05)/0.005)]??0)}" r="5.5" fill="#C0392B"/>`;
+ s+=`<text x="${W-10}" y="${T+10}" font-size="10" fill="#6B7280" text-anchor="end">正值＝方案A較貴（上方）</text>`;
+ svg.innerHTML=s;
+}
+render();
+</script>
+<script>
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode', m);
+ try{localStorage.setItem('vmh_mode', m);}catch(err){}
+ document.querySelectorAll('.i18modes a').forEach(function(a){a.classList.toggle('on', a.getAttribute('data-md')===m)});
+ return false;
+}
+(function(){try{var m=localStorage.getItem('vmh_mode')||'business';document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(function(a){a.classList.add('on')});}catch(e){}})();
+</script>
+
+<script>
+(function(){
+ document.querySelectorAll('.i18btn').forEach(function(b){
+   b.addEventListener('click', function(){ b.parentElement.classList.toggle('open'); });
+ });
+ document.addEventListener('click', function(e){
+   document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
+ });
+})();
+</script></body></html>

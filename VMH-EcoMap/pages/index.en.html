@@ -1,0 +1,155 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VMH-EcoMap｜Vietnam Hospital Ecosystem Toolkit</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, pipeline, bid economics, delivery and risk tools.">
+<style>
+:root{--navy:#152C4E;--navy2:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--green:#2F6B3D;--wine:#8A2E4A;
+--bg:#F2F6F5;--sf:#fff;--ink:#22303E;--sub:#67737F;--line:#DCE5E3;--hdrfg:#22303E}
+html[data-mode="business"]{--bg:#EEF2F6;--sf:#fff}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--green:#4ADE80;--navy:#E7ECF3;--hdrfg:#E7ECF3}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+header{background:var(--sf);padding:13px 34px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 10px rgba(16,26,45,.07);position:sticky;top:0;z-index:100}
+header .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+header b{font-size:1rem}
+header .st{font-size:.62rem;color:var(--sub);letter-spacing:2px;display:block}
+header nav{margin-left:auto;display:flex;gap:2px;font-size:.8rem;flex-wrap:wrap}
+header nav a{color:var(--ink);padding:7px 12px;border-radius:9px;text-decoration:none;white-space:nowrap}
+header nav a:hover{background:var(--bg)}
+.hero{text-align:center;padding:44px 24px 6px;max-width:840px;margin:0 auto}
+.hero .eyebrow{font-size:.66rem;letter-spacing:3px;color:var(--teal);font-weight:700}
+.hero h1{font-size:1.9rem;line-height:1.5;margin:10px 0 10px;font-weight:800;color:var(--navy)}
+.hero p{font-size:.9rem;color:var(--sub)}
+.journey{max-width:1180px;margin:4px auto 44px;padding:0 26px;position:relative}
+.path{position:absolute;left:56px;right:56px;top:96px;height:6px;border-radius:3px;
+ background:linear-gradient(90deg,#0E6E6B 0 24%,#1F3864 24% 50%,#9A6B10 50% 76%,#2F6B3D 76% 100%);opacity:.3}
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative}
+.node{text-align:center;padding-top:22px}
+.pin{width:58px;height:58px;border-radius:50% 50% 50% 6px;transform:rotate(-45deg);margin:0 auto;
+ display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(16,26,45,.22);position:relative;z-index:2}
+.pin span{transform:rotate(45deg);color:#fff;font-weight:800;font-size:1.05rem}
+.n1 .pin{background:#0E6E6B}.n2 .pin{background:#1F3864}.n3 .pin{background:#9A6B10}.n4 .pin{background:#2F6B3D}
+.node h3{margin:16px 0 2px;font-size:1.04rem;color:var(--navy)}
+.node .q{font-size:.72rem;color:var(--sub);margin-bottom:13px;line-height:1.6}
+.tlist{display:flex;flex-direction:column;gap:8px}
+.tl{background:var(--sf);border-radius:12px;padding:11px 12px;text-align:left;display:flex;gap:10px;align-items:center;
+ box-shadow:0 1px 6px rgba(16,26,45,.07);text-decoration:none;color:var(--ink);border-left:4px solid transparent;transition:transform .1s}
+.tl{cursor:pointer}
+.tl:hover{transform:translateX(3px)}
+.n1 .tl{border-left-color:#0E6E6B}.n2 .tl{border-left-color:#1F3864}
+.n3 .tl{border-left-color:#9A6B10}.n4 .tl{border-left-color:#2F6B3D}
+html[data-mode="dark"] .n2 .tl{border-left-color:#3987e5}
+.tl .ic{width:32px;height:32px;border-radius:9px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1rem;flex:none}
+.tl .tx{flex:1;min-width:0}
+.tl b{font-size:.82rem;display:block}
+.tl span{font-size:.65rem;color:var(--sub);display:block;line-height:1.45}
+.tl .mk{font-size:.62rem;flex:none;display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+.tl .mk .zh{background:var(--line);border-radius:4px;padding:1px 5px;color:var(--sub);font-weight:700}
+.tl .mk a{color:var(--teal);text-decoration:none;font-weight:700}
+.lockhint{text-align:center;font-size:.72rem;color:var(--sub);margin-top:16px}
+.startbar{max-width:1000px;margin:0 auto 40px;padding:0 26px}
+.startbar .in{background:var(--sf);border-radius:16px;box-shadow:0 2px 12px rgba(16,26,45,.08);
+ padding:18px 26px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.startbar b{font-size:.86rem;color:var(--navy)}
+.startbar a{font-size:.76rem;color:var(--teal);border:1.5px solid var(--teal);border-radius:20px;padding:6px 15px;text-decoration:none;font-weight:700}
+.startbar a:hover{background:var(--teal);color:#fff}
+.startbar a small{display:block;font-weight:400;color:var(--sub);font-size:.62rem}
+section.blk{max-width:1180px;margin:0 auto 34px;padding:0 26px}
+section.blk h2{font-size:1.12rem;color:var(--navy);border-left:5px solid var(--teal);padding-left:11px;margin-bottom:3px}
+section.blk .ss{font-size:.78rem;color:var(--sub);margin-bottom:14px;padding-left:16px}
+.dlgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.dlrow{background:var(--sf);border-radius:11px;padding:11px 14px;display:flex;gap:10px;align-items:center;box-shadow:0 1px 5px rgba(16,26,45,.06);font-size:.78rem}
+.dlrow .tx{flex:1;min-width:0}
+.dlrow b{display:block;font-size:.79rem;line-height:1.45}
+.dlrow span{color:var(--sub);font-size:.68rem}
+.dlrow .bt{background:var(--navy2);color:#fff;border-radius:7px;padding:5px 12px;font-size:.72rem;font-weight:700;text-decoration:none;flex:none}
+html[data-mode="dark"] .dlrow .bt{background:#3987e5}
+.dlrow .bt.g{background:var(--line);color:var(--ink)}
+.about{background:var(--sf);border-radius:14px;box-shadow:0 1px 6px rgba(16,26,45,.07);padding:20px 24px;font-size:.83rem;color:var(--sub);line-height:1.9}
+.about a{color:var(--teal)}
+footer{background:var(--navy2);color:#9FB3CD;text-align:center;font-size:.74rem;padding:24px;line-height:1.9}
+html[data-mode="dark"] footer{background:#0d1b2e}
+.setwrap{position:relative;margin-left:6px}
+.setbtn{background:var(--navy2);color:#fff;border:0;border-radius:9px;padding:7px 13px;font:inherit;font-size:.76rem;font-weight:700;cursor:pointer}
+html[data-mode="dark"] .setbtn{background:#3987e5}
+.setpanel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;border-radius:12px;
+ box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:215px;border:1px solid #E1E7EF;z-index:300}
+.setwrap.open .setpanel{display:block}
+.setgt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.setgt:first-child{margin-top:2px}
+.lrow{display:flex;gap:4px;flex-wrap:wrap}
+.lrow a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.lrow a.on{background:#152C4E;color:#fff}
+.modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:900px){.cols{grid-template-columns:repeat(2,1fr)}.path{display:none}}
+@media(max-width:560px){.cols{grid-template-columns:1fr}header{padding:11px 16px}header nav{width:100%;overflow-x:auto}}
+</style>
+<link rel="stylesheet" href="assets/themes.css">
+<link rel="stylesheet" href="assets/type.css"></head><body>
+<header>
+<a class="logo" href="index.en.html"><svg viewBox="0 0 32 32" width="24" height="24"><polygon points="11,2 20,10 11,18 2,10" fill="#0E6E6B"/><polygon points="21,2 30,10 21,18 12,10" fill="#9A6B10"/><polygon points="16,12 25,20 16,28 7,20" fill="#152C4E" fill-opacity=".85"/></svg>
+<div><b>VMH-EcoMap</b><span class="st">Vietnam Hospital Ecosystem Toolkit</span></div></a>
+<nav><a href="#stages">By stage</a><a href="#roles">By role</a><a href="tools/datahub.html">Data Hub</a><a href="tools/kb.html">Knowledge base</a><a href="#downloads">Downloads</a><a href="#about">About</a></nav>
+<div class="setwrap">
+ <button type="button" class="setbtn">⚙ English</button>
+ <div class="setpanel">
+  <div class="setgt">Language</div><div class="lrow"><a href="index.html" class="">中文</a><a href="index.en.html" class="on">English</a><a href="index.vi.html" class="">Tiếng Việt</a></div>
+  <div class="setgt">Theme</div><div class="modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div></div></div>
+</header>
+
+<div class="hero">
+<div class="eyebrow">CHUNGHING TECHNOLOGY × VIETNAM MODERN HOSPITAL ALLIANCE</div>
+<h1>One road — from reading the market to signing and delivering</h1>
+<p>13 decision tools laid out along the journey — every figure sourced, every method grounded in theory.</p>
+</div>
+
+<div class="journey" id="stages">
+<div class="path"></div>
+<div class="cols"><div class="node n1"><div class="pin"><span>1</span></div><h3>Read the market</h3><div class="q">What business exists,<br>who does it, where the gaps are</div><div class="tlist"><div class="tl" onclick="location.href='tools/explorer.en.html'"><div class="ic">🧭</div><div class="tx"><b>Ecosystem Explorer</b><span>85 opps × 60 caps × 58 partners</span></div><div class="mk"><a href="guides/explorer.en.html" onclick="event.stopPropagation()">Guide</a></div></div><div class="tl" onclick="location.href='tools/intel.en.html'"><div class="ic">📡</div><div class="tx"><b>Intel Station</b><span>Regulatory clock · rivals · 115-vendor directory</span></div><div class="mk"><a href="guides/intel.en.html" onclick="event.stopPropagation()">Guide</a></div></div><div class="tl" onclick="location.href='tools/gapmap.en.html'"><div class="ic">🗺️</div><div class="tx"><b>Gap Map</b><span>Supply gaps across 34 provinces</span></div><div class="mk"><a href="guides/gapmap.en.html" onclick="event.stopPropagation()">Guide</a></div></div></div></div><div class="node n2"><div class="pin"><span>2</span></div><h3>Evaluate & decide</h3><div class="q">Is it worth doing,<br>with whom, and whom to engage</div><div class="tlist"><div class="tl" onclick="location.href='tools/calculator.en.html'"><div class="ic">🧮</div><div class="tx"><b>Deal Calculator</b><span>Owner-side NPV / IRR</span></div><div class="mk"><a href="guides/calculator.en.html" onclick="event.stopPropagation()">Guide</a></div></div><div class="tl" onclick="location.href='tools/health.html'"><div class="ic">🩺</div><div class="tx"><b>Alliance Health Check</b><span>Redundancy & single points of failure</span></div><div class="mk"><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='tools/stakeholder.html'"><div class="ic">🤝</div><div class="tx"><b>Stakeholder Map</b><span>Power × support quadrants</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div></div></div><div class="node n3"><div class="pin"><span>3</span></div><h3>Pursue & sign</h3><div class="q">How far along, what to bid,<br>where the floor is</div><div class="tlist"><div class="tl" onclick="location.href='tools/pipeline.html'"><div class="ic">🔻</div><div class="tx"><b>Pipeline Funnel</b><span>Weighted pipeline & stall detection</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='tools/bidcalc.html'"><div class="ic">💰</div><div class="tx"><b>Bid Economics</b><span>Cost buildup & walk-away price</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='advanced/warboard.en.html'"><div class="ic">📋</div><div class="tx"><b>Tender War-board</b><span>Deadline countdown & readiness</span></div><div class="mk"><span>🔒</span><a href="guides/warboard.en.html" onclick="event.stopPropagation()">Guide</a></div></div></div></div><div class="node n4"><div class="pin"><span>4</span></div><h3>Deliver & collect</h3><div class="q">How it is going, is cash in,<br>where the risks are</div><div class="tlist"><div class="tl" onclick="location.href='tools/delivery.html'"><div class="ic">📈</div><div class="tx"><b>Delivery & Receivables</b><span>EVM & cash ladder</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='tools/risk.html'"><div class="ic">⚠️</div><div class="tx"><b>Risk Register & Simulation</b><span>Matrix · P10/P50/P90</span></div><div class="mk"><span>🔒</span><span class="zh">ZH</span></div></div><div class="tl" onclick="location.href='tools/kb.html'"><div class="ic">📚</div><div class="tx"><b>Methodology KB</b><span>Searchable theory index</span></div><div class="mk"><span class="zh">ZH</span></div></div></div></div></div>
+<div class="lockhint">🔒 = Advanced / partner zone — check your role with the alliance desk first</div>
+</div>
+
+<div class="startbar" id="roles"><div class="in"><b>Not sure where to start? Follow your role:</b><a href="guides/gapmap.en.html">Hospital owner<small>Gap map → Deal calculator → Owner one-pager</small></a><a href="guides/calculator.en.html">Investor<small>Six-type methodology → Regulatory clock → Market data</small></a><a href="guides/explorer.en.html">Alliance partner<small>Ecosystem explorer → Alliance health check → Sheet map</small></a><a href="guides/intel.en.html">Consultant / internal<small>Intel station → Pipeline funnel → Knowledge base</small></a></div></div>
+
+<section class="blk"><h2>One-pagers</h2><div class="ss">Single-page summaries — skim or print</div>
+<div class="dlgrid"><div class="dlrow"><div class="tx"><b>Owner one-pager</b><span>HTML</span></div><a class="bt" href="onepagers/owner.en.html">→</a></div><div class="dlrow"><div class="tx"><b>Calculator one-pager</b><span>HTML</span></div><a class="bt" href="onepagers/calculator.en.html">→</a></div><div class="dlrow"><div class="tx"><b>Sheet map</b><span>HTML</span></div><a class="bt" href="onepagers/sheetmap.en.html">→</a></div></div></section>
+
+<section class="blk" id="downloads"><h2>Download center</h2><div class="ss">Files for real work. Open Excel on desktop; documents also ship as PDF.</div>
+<div class="dlgrid"><div class="dlrow"><div class="tx"><b>Master tool (21 sheets)</b><span>XLSX</span></div><a class="bt" href="downloads/xlsx/VMH-EcoMap-1_主工具_越南醫院生態盤點_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>Master tool — partner edition</b><span>XLSX</span></div><a class="bt" href="downloads/xlsx/VMH-EcoMap-1P_夥伴版_我在這張藍圖的哪裡_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>Deal calculator</b><span>XLSX</span></div><a class="bt" href="downloads/xlsx/VMH-EcoMap-2_專案商模試算器_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>Partner proposal form</b><span>XLSX</span></div><a class="bt" href="downloads/xlsx/VMH-EcoMap-3_夥伴提案回覆表_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>User manual</b><span>DOCX＋PDF</span></div><div style="display:flex;gap:5px"><a class="bt" href="downloads/docs/VMH-EcoMap-4_使用手冊_v1.0.docx">DOCX</a><a class="bt g" href="downloads/docs/VMH-EcoMap-4_使用手冊_v1.0.pdf">PDF</a></div></div><div class="dlrow"><div class="tx"><b>Methodology & investment framework</b><span>PPTX＋PDF</span></div><div style="display:flex;gap:5px"><a class="bt" href="downloads/docs/VMH-EcoMap-7_方法論與投資決策架構_v1.0.pptx">PPTX</a><a class="bt g" href="downloads/docs/VMH-EcoMap-7_方法論與投資決策架構_v1.0.pdf">PDF</a></div></div></div></section>
+
+<section class="blk"><h2>Advanced / partner Excel</h2><div class="ss">Once filled with real data, do not re-upload to any public site — the site hosts blank templates only.</div>
+<div class="dlgrid"><div class="dlrow"><div class="tx"><b>14 Hospital dossier & qualification</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-14_醫院作戰檔案與資格審查_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>15 Tender radar & document vault</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-15_標案雷達與資格文件庫_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>20 Pipeline funnel</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-20_商機推進漏斗_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>21 Bid economics</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-21_投標經濟性試算器_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>22 Alliance health check</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-22_聯盟體檢儀表板_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>23 Stakeholder map (★ never online once filled)</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-23_利害關係人地圖_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>24 Delivery & receivables</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-24_交付與收款儀表板_v1.0.xlsx">Download</a></div><div class="dlrow"><div class="tx"><b>25 Risk register & simulation</b><span>XLSX・🔒</span></div><a class="bt" href="advanced/VMH-EcoMap-25_風險登錄與情境模擬_v1.0.xlsx">Download</a></div></div></section>
+
+<section class="blk" id="about"><h2>About</h2><div class="ss"></div>
+<div class="about">Every figure on this site carries a source and verification date; preset cases are market-rate estimates, not quotes. Intelligence has a half-life — judge freshness by the verification date. Methodology lives in the Knowledge base; each tool has a 📚 drawer for its own methods.<br><a href="assets/sitemap.en.html">Site map →</a></div></section>
+
+<footer>VMH-EcoMap　Vietnam Hospital Ecosystem Toolkit　v2.0　2026-08<br>Chunghing Technology × Vietnam Modern Hospital Alliance</footer>
+
+<script>
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode',m);
+ try{localStorage.setItem('vmh_mode',m);}catch(err){}
+ document.querySelectorAll('.modes a').forEach(a=>a.classList.toggle('on',a.getAttribute('data-md')===m));
+ return false;
+}
+(function(){
+ document.querySelectorAll('.setbtn').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
+ document.addEventListener('click',e=>{document.querySelectorAll('.setwrap.open').forEach(w=>{if(!w.contains(e.target))w.classList.remove('open');});});
+ try{const m=localStorage.getItem('vmh_mode')||'business';
+   document.querySelectorAll('.modes a[data-md="'+m+'"]').forEach(a=>a.classList.add('on'));}catch(e){}
+})();
+</script>
+</body></html>

@@ -1,0 +1,1604 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trung tâm Tình báo Y tế Việt Nam | VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#FFFFFF;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff}
+html[data-mode="light"]{--hdrbg:#F3F6FA;--hdrfg:#1F3864}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--red:#F87171;--green:#4ADE80;--hdrbg:#0B1626;--hdrfg:#fff}
+
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+header{position:sticky;top:0;z-index:50;background:var(--hdrbg);color:var(--hdrfg);box-shadow:0 2px 10px rgba(16,26,45,.18)}
+.hw{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hw b{font-size:1.05rem}
+.hw nav{display:flex;gap:4px;margin-left:auto}
+.hw nav a{color:#C7D2E4;text-decoration:none;padding:6px 12px;border-radius:8px;font-size:.9rem}
+.hw nav a:hover{background:rgba(255,255,255,.12);color:#fff}
+.asof{font-size:.76rem;color:#9FB0CC}
+main{max-width:1180px;margin:0 auto;padding:26px 20px 70px}
+h1{font-size:1.5rem;color:var(--navy);margin:26px 0 4px}
+.sub{color:var(--sub);font-size:.9rem;margin-bottom:16px}
+.grid{display:grid;gap:12px}
+.g3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.g4{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.card{background:var(--sf);border-radius:12px;box-shadow:0 1px 4px rgba(16,26,45,.08);padding:16px 18px}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700}
+.b-red{background:#FBE6E2;color:var(--red)}.b-amb{background:#FCF1DC;color:#B77A10}
+.b-grn{background:#DCEBD0;color:var(--green)}.b-gry{background:#EDEFF3;color:#55607A}
+.b-nav{background:#DCE6F4;color:var(--navy)}
+.lay{display:inline-block;padding:1px 7px;border-radius:6px;font-size:.68rem;font-weight:700;color:#fff}
+.reg{display:grid;grid-template-columns:120px 1fr 210px;gap:16px;background:var(--sf);border-radius:12px;
+ box-shadow:0 1px 4px rgba(16,26,45,.08);padding:15px 18px;margin-bottom:10px;align-items:start}
+.reg .dd{font-weight:800;font-size:1.02rem;color:var(--navy)}
+.reg .cd{font-size:.78rem;margin-top:4px;font-weight:700}
+.reg h3{font-size:.98rem;color:var(--ink);margin-bottom:3px}
+.reg .doc{font-size:.74rem;color:var(--sub);font-family:Consolas,monospace}
+.reg p{font-size:.85rem;color:#3C4552;margin-top:5px}
+.reg .act{font-size:.8rem;background:#F2F8F6;border-left:3px solid var(--teal);padding:8px 10px;border-radius:0 8px 8px 0}
+.reg .act b{color:var(--teal);font-size:.74rem;display:block;margin-bottom:2px}
+.pl h3{font-size:1rem;color:var(--navy)}
+.pl .pos{font-size:.8rem;color:var(--sub);margin:2px 0 8px}
+.mv{font-size:.82rem;padding:5px 0;border-top:1px dashed var(--line);display:flex;gap:8px}
+.mv .d{color:var(--sub);font-size:.74rem;white-space:nowrap;padding-top:2px}
+.mean{margin-top:9px;font-size:.8rem;background:#FDF8EC;border-left:3px solid var(--gold);padding:7px 10px;border-radius:0 8px 8px 0;color:#5C4708}
+.stat{background:var(--sf);border-radius:12px;box-shadow:0 1px 4px rgba(16,26,45,.08);padding:14px 16px}
+.stat .v{font-size:1.7rem;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.stat .k{font-size:.85rem;font-weight:700;margin-top:1px}
+.stat .n{font-size:.76rem;color:var(--sub);margin-top:4px;line-height:1.5}
+.stat .s{font-size:.68rem;color:#8A93A3;margin-top:6px}
+.note{background:#EEF3F9;border-radius:12px;padding:14px 18px;font-size:.85rem;color:#26456E;margin:14px 0}
+footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:.75rem;color:var(--sub)}
+.fresh{font-size:.68rem;margin-left:6px}
+.hbtn{background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer}
+body.edit [data-e]{outline:1.5px dashed #B77A10;outline-offset:2px;border-radius:4px;min-width:16px;display:inline-block;cursor:text;background:#FFFDF4}
+body.edit .dd[data-e]{display:block}
+body.edit .lay [data-e]{color:#333}
+body.edit [data-e]:focus{outline:2px solid var(--gold);background:#fff}
+.delx{display:none;float:right;background:#FBE6E2;color:var(--red);border:0;border-radius:7px;
+ padding:2px 9px;font-size:.72rem;font-weight:700;cursor:pointer;margin-left:8px}
+.addb{display:none;background:#EDF3EC;color:var(--green);border:1.5px dashed var(--green);border-radius:10px;
+ padding:9px 18px;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer;margin:4px 0 14px;width:100%}
+body.edit .delx,body.edit .addb{display:block}
+.editbar{display:none;position:sticky;bottom:0;z-index:60;background:#3D3416;color:#FCE9B8;
+ padding:10px 20px;font-size:.82rem;text-align:center}
+body.edit .editbar{display:block}
+.pl h3 .nm{cursor:pointer;border-bottom:1.5px dashed #9FB0CC}
+.pl h3 .nm:hover{color:var(--teal);border-bottom-color:var(--teal)}
+.hint{font-size:.68rem;color:#8A93A3;font-weight:400;margin-left:6px}
+.ovl{display:none;position:fixed;inset:0;background:rgba(16,26,45,.55);z-index:100;padding:30px 16px;overflow:auto}
+.ovl.on{display:block}
+.dlg{max-width:780px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden}
+.dlg .top{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:start;gap:12px}
+.dlg .top h2{font-size:1.15rem;flex:1}
+.dlg .top .x{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:8px;
+ padding:4px 12px;font-size:1rem;cursor:pointer}
+.dlg .bd{padding:18px 22px 24px}
+.dlg .prof{font-size:.88rem;background:#EEF3F9;border-radius:10px;padding:11px 14px;color:#26456E;margin-bottom:14px}
+.dlg h4{font-size:.92rem;color:var(--navy);margin:14px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--line)}
+.pj{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:.85rem}
+.pj .y{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;font-size:.8rem}
+.pj .s{font-size:.68rem;color:#8A93A3;margin-top:3px}
+.dlg .mean2{margin-top:14px;font-size:.84rem;background:#FDF8EC;border-left:3px solid var(--gold);padding:9px 12px;border-radius:0 8px 8px 0;color:#5C4708}
+.rgrp{margin-bottom:20px}
+.rgrp .rh{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.rgrp .rh h3{font-size:1rem;color:var(--navy)}
+.rlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 14px}
+.ritem{font-size:.82rem;padding:6px 0;border-bottom:1px dashed var(--line);display:flex;flex-direction:column}
+.ritem b{font-weight:700}
+.ritem b a{color:var(--teal);text-decoration:none;border-bottom:1px dashed var(--teal)}
+.ritem .rn{color:var(--sub);font-size:.74rem;margin-top:1px}
+@media(max-width:760px){.reg{grid-template-columns:1fr}.hw nav{width:100%;margin-left:0;overflow-x:auto}}
+</style><style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18btn:hover{background:#1F3864}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18home:hover{background:#E7EEF6}
+.i18row{display:flex;gap:4px;flex-wrap:wrap}
+.i18row a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.i18row a.on{background:#152C4E;color:#fff}
+.i18row a:hover:not(.on){background:#E1E7EF}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
+
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head><body><div class="i18nsw">
+ <button type="button" class="i18btn">⚙ VI</button>
+ <div class="i18panel">
+   <a href="../index.vi.html" class="i18home">🏠 Về trang chủ</a>
+   <div class="i18gt">Ngôn ngữ</div>
+   <div class="i18row"><a href="intel.html">中文</a><a href="intel.en.html">EN</a><a href="intel.vi.html" class="on">VI</a></div>
+   <div class="i18gt">Giao diện</div>
+   <div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div>
+ </div>
+</div>
+<header><div class="hw"><svg class="brandmark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" style="flex:none;margin-right:2px;vertical-align:-5px"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg><b>Trung tâm Tình báo Y tế Việt Nam</b>
+<span class="asof">Ngày xác minh dữ liệu <span id="asof"></span>・<span id="freshNote"></span></span>
+<nav><a href="#regs">Đồng hồ pháp lý</a><a href="#players">Động thái đối thủ cạnh tranh</a><a href="#roster">Danh mục đầy đủ</a><a href="#stats">Dữ liệu thị trường</a><a href="#how">Cách cập nhật</a></nav>
+<button id="upbtn" class="hbtn" onclick="document.getElementById('upf').click()">⟳ Tải dữ liệu cập nhật</button>
+<button id="edbtn" class="hbtn" onclick="toggleEdit()">✎ Chỉnh sửa dữ liệu</button>
+<button class="hbtn" onclick="exportData()">⬇ Xuất tệp dữ liệu</button>
+<input id="upf" type="file" accept=".json" style="display:none" onchange="loadUpdate(this.files[0])">
+</div></header>
+<main>
+<div class="note">Trang này trả lời ba câu hỏi:<b>Khi nào cần hành động</b>(đồng hồ pháp lý),<b>ai đang hành động</b>(động thái đối thủ cạnh tranh),<b>thị trường lớn đến đâu và còn thiếu những gì</b>(bảng dữ liệu thị trường).
+Mỗi mục đều kèm nguồn và ngày xác minh; dữ liệu chưa cập nhật quá 120 ngày sẽ được gắn nhãn “Cần cập nhật”. Dữ liệu được duy trì theo lịch tình báo hàng tháng; dùng các nút ở góc trên bên phải để tải tệp cập nhật, hoặc chỉnh sửa trực tiếp trên trang rồi xuất ra.</div>
+
+<h1 id="regs">Đồng hồ pháp lý</h1>
+<p class="sub">Chỉ những quy định đã ban hành và có ngày hiệu lực mới được liệt kê ở đây — đây không phải dự báo, mà là lịch. Sắp xếp theo số ngày còn lại, các mục đã có hiệu lực nằm ở cuối.</p>
+<div id="regList"></div>
+
+<h1 id="players">Động thái đối thủ cạnh tranh</h1>
+<p class="sub">Ai đang hành động trong thị trường y tế Việt Nam, họ đang làm gì, và điều đó có ý nghĩa gì với chúng ta.<b>Nhấp vào tên công ty</b>để mở rộng hồ sơ công ty và các dự án đã/đang thực hiện (kèm nguồn).</p>
+<div class="grid g3" id="plList"></div>
+
+<h1 id="roster">Danh mục nhà cung cấp đầy đủ</h1>
+<p class="sub">Lấy mảng kinh doanh cốt lõi của Chunjing Technology (trung tâm dữ liệu / UPS / IDC) làm trục chính, thu thập càng nhiều nhà cung cấp liên quan trong thị trường Việt Nam càng tốt — sắp xếp từ trong ra ngoài theo thứ tự “hạ tầng trung tâm dữ liệu → cơ điện/tòa nhà → IT/AI/thiết bị/nhà đầu tư phía bệnh viện.”
+<b>Hiện chỉ liệt kê tên và định vị một dòng, chưa xác minh chuyên sâu từng nhà cung cấp</b>; những tên có gạch chân màu xanh đã có thẻ chi tiết ở trên có thể nhấp vào — với các mục còn lại, chỉ cần cho tôi biết bạn muốn xem chi tiết và xác minh những nhà cung cấp nào.</p>
+<div id="rosterList"></div>
+
+<h1 id="stats">Bảng dữ liệu thị trường</h1>
+<p class="sub">Khi bị hỏi “căn cứ vào đâu”, câu trả lời nằm ở dòng nguồn trên mỗi thẻ.</p>
+<div class="grid g4" id="stList"></div>
+
+<h1 id="how">Cách cập nhật</h1>
+<div class="card" style="font-size:.88rem;line-height:1.8">
+<b>Tệp dữ liệu đến từ đâu:</b>Toàn bộ nội dung trang này đã được nhúng sẵn trong tệp HTML này, nên chỉ cần một tệp duy nhất là có thể mở ngoại tuyến. intel_data.json là “gói cập nhật” của cùng bộ dữ liệu này, được lưu trong thư mục Tool Scripts/.<br>
+<b>Tự động (không cần thao tác gì):</b>“Lịch tình báo hàng tháng” tự động chạy trên đám mây vào ngày 1 mỗi tháng: xác minh lại từng mục trên mạng (thay đổi tiến độ pháp lý, động thái mới của nhà cung cấp, cập nhật dữ liệu),
+sau đó ghi trực tiếp phiên bản HTML mới và intel_data.json trở lại thư mục 01_Analysis Tools/ — lần mở tệp tiếp theo đã là bản mới. Nếu lúc đó máy tính không trực tuyến, tệp cập nhật sẽ được gửi vào cuộc trò chuyện không gian làm việc;
+chỉ cần lưu lại vào thư mục để ghi đè tệp cũ.<br>
+<b>Vì sao trang không có nút “xác minh lại một chạm”:</b>Việc xác minh lại đòi hỏi tìm kiếm trên mạng và đánh giá nguồn, vượt quá khả năng của một tệp HTML đơn lẻ trong trình duyệt (trang này không có máy chủ, không kết nối mạng);
+nên việc “tạo dữ liệu mới” do lịch trên đám mây đảm nhiệm, còn trang chỉ chịu trách nhiệm “hiển thị, tải, chỉnh sửa, xuất dữ liệu”.<br>
+<b>Tải thủ công:</b>Nút “⟳ Tải dữ liệu cập nhật” ở góc trên bên phải có thể tải tệp intel_data.json mới bất cứ lúc nào, toàn trang sẽ vẽ lại ngay lập tức; thao tác chỉ diễn ra trên máy, không tải lên đâu cả.<br>
+<b>Chỉnh sửa trong trang:</b>Không cần chờ lịch, cũng không cần sửa JSON — nhấn “✎ Chỉnh sửa dữ liệu” ở góc trên bên phải là có thể sửa trực tiếp bất kỳ trường nào, thêm hoặc xóa mục ngay trên trang.
+Sau khi sửa xong, nhấn “⬇ Xuất tệp dữ liệu” để tải về một tệp intel_data.json mới; đặt lại vào thư mục Tool Scripts/ để ghi đè tệp cũ, sau này ai tải cũng sẽ nhận được phiên bản bạn đã chỉnh sửa.<br>
+<b>Nguyên tắc trung thực:</b>Mục không tìm được ghi “Không tìm được”, giá trị ước tính ghi “Ước tính” — không bịa số liệu; mỗi mục đều kèm nguồn và ngày xác minh.</div>
+</main>
+<div class="editbar">Chế độ chỉnh sửa: mọi văn bản trong khung nét đứt đều có thể nhấp để sửa trực tiếp; “✕ Xóa” để xóa mục đó, “+ Thêm” để thêm một mục mới. Sau khi sửa xong, nhấn “✓ Hoàn tất chỉnh sửa” ở góc trên bên phải, rồi nhấn “⬇ Xuất tệp dữ liệu” để lưu thành intel_data.json mới.</div>
+<div class="ovl" id="ovl" onclick="closePl()"></div>
+<footer>Trung tâm Tình báo Y tế Việt Nam VMH-EcoMap | Chunjing Technology × Liên minh Bệnh viện Hiện đại Việt Nam | Mọi kết luận đều tính đến ngày xác minh — tình báo có chu kỳ bán rã.</footer>
+<script>
+let D={
+ "asof": "2026-08-15",
+ "regs": [
+  {
+   "date": "2027-02-01",
+   "name": "Quy chuẩn hiệu quả năng lượng công trình mới có hiệu lực (bệnh viện ≥2.500 m² thuộc diện quản lý, bao gồm cấu phần giám sát hiệu quả năng lượng)",
+   "doc": "QCVN 04-3:2026/BXD（Thông tư 61/2026/TT-BXD）",
+   "layer": "L1",
+   "what": "Thay thế QCVN 09:2017. Giấy phép thiết kế cho bệnh viện xây mới và cải tạo sẽ được kiểm tra hiệu quả năng lượng công trình; giám sát hiệu quả năng lượng là một trong năm cấu phần quản lý — lần đầu tiên bệnh viện thuộc diện quy chuẩn tiết kiệm năng lượng công trình bắt buộc.",
+   "opps": "OPP-26 AIoT khuôn viên thông minh, OPP-12 ESCO bệnh viện xanh",
+   "act": "Kiểm tra toàn văn quy chuẩn để xác nhận mức độ ràng buộc của điều khoản “giám sát hiệu quả năng lượng”; chuẩn bị sẵn luận cứ tuân thủ pháp lý cho đề xuất BMS, nhắm vào các dự án xây mới nộp hồ sơ trước 2027.",
+   "src": "vietq.vn / baoxaydung.vn (đưa tin lại, cần đối chiếu toàn văn)"
+  },
+  {
+   "date": "2027-01-01",
+   "name": "Kỳ thi đánh giá năng lực hành nghề bác sĩ quốc gia có hiệu lực",
+   "doc": "Law 15/2023/QH15",
+   "layer": "L6",
+   "what": "Bác sĩ phải vượt qua kỳ thi quốc gia, gia hạn giấy phép hành nghề 5 năm/lần kèm đào tạo liên tục, và sẽ dần mở rộng sang điều dưỡng và hộ sinh. Thời kỳ giấy phép hành nghề trọn đời đã kết thúc.",
+   "opps": "OPP-62 đào tạo nhân lực lâm sàng và trung tâm mô phỏng",
+   "act": "Đào tạo trước kỳ thi, ngân hàng câu hỏi, mô phỏng OSCE là chuỗi ngành mới; cửa ngõ kết nối với nguồn lực đào tạo y khoa Đài Loan đang mở ra.",
+   "src": "CLEAR（2025-06）"
+  },
+  {
+   "date": "2026-12-31",
+   "name": "Hạn chót cho cơ sở y tế tuyến cơ sở hoàn thành bệnh án điện tử",
+   "doc": "Circular 13/2025/TT-BYT",
+   "layer": "L4",
+   "what": "Nhu cầu mở rộng từ 1.600 bệnh viện lên hàng chục nghìn cơ sở tuyến cơ sở. Tỷ lệ hoàn thành thực tế phía bệnh viện tính đến hạn 2025-09-30 là 53,6% (tính đến 2025-10) — tuyến cơ sở có khối lượng lớn hơn và ít nguồn lực hơn.",
+   "opps": "OPP-31 HIS/EMR, OPP-40 quản lý IT thuê ngoài, OPP-29 DR/BCM",
+   "act": "Tiếp cận thị trường tuyến cơ sở theo mô hình “gọn nhẹ, thuê ngoài, thuê thay vì mua”; các dự án bổ sung phía bệnh viện (PACS, cấp phát thuốc khép kín, BI) triển khai song song.",
+   "src": "thuvienphapluat／VietnamPlus（2025-10）"
+  },
+  {
+   "date": "2026-07-01",
+   "name": "Luật An ninh mạng có hiệu lực (lưu trữ dữ liệu trong nước + phân cấp hệ thống)",
+   "doc": "Law 116/2025/QH15",
+   "layer": "L2",
+   "what": "Dữ liệu người dùng phải được lưu trữ trong lãnh thổ Việt Nam, hệ thống thông tin được phân thành năm cấp quản lý. Việc y tế có được xếp vào hạ tầng thông tin trọng yếu hay không vẫn cần xác nhận.",
+   "opps": "OPP-24 IDC bệnh viện, OPP-25 điện toán đám mây chủ quyền, OPP-27 phân cấp an ninh mạng",
+   "act": "Mọi giải pháp mặc định theo kiến trúc “dữ liệu lưu trữ tại Việt Nam”; cửa sổ cơ hội cho dịch vụ tư vấn phân cấp an ninh mạng là 2026-2028.",
+   "src": "Điều khoản Law 116/2025"
+  },
+  {
+   "date": "2026-01-01",
+   "name": "Luật Bảo vệ dữ liệu cá nhân PDPL có hiệu lực",
+   "doc": "Law 91/2025/QH15 (thay thế Decree 13/2023)",
+   "layer": "G",
+   "what": "Dữ liệu sức khỏe thuộc dữ liệu cá nhân nhạy cảm; mức phạt tối đa là 5% doanh thu năm. Điều 31 quy định trực tiếp về theo dõi vị trí (RTLS chịu điều chỉnh trực tiếp); dữ liệu cá nhân nhạy cảm của từ 100.000 người trở lên cấu thành dữ liệu cốt lõi, chuyển ra nước ngoài phải có phê duyệt bằng văn bản của Bộ Công an.",
+   "opps": "OPP-28 tuân thủ dữ liệu cá nhân, CAP-024 RTLS, OPP-58 hồ dữ liệu",
+   "act": "Sản phẩm RTLS phải có sẵn chức năng tạm dừng/gỡ liên kết; nền tảng triển khai trong nước một cách nhất quán; bổ sung phụ lục xử lý dữ liệu PDPL vào hợp đồng.",
+   "src": "Tilleke & Gibbins（2025）"
+  },
+  {
+   "date": "2026-01-01",
+   "name": "Luật Công nghiệp công nghệ số có hiệu lực (luật đầu tiên của Việt Nam có chương riêng về AI)",
+   "doc": "Law on Digital Technology Industry (thông qua ngày 2025-06-14)",
+   "layer": "L5",
+   "what": "Yêu cầu tính minh bạch và trách nhiệm giải trình đối với AI, AI rủi ro cao phải được chính phủ cấp phép. Ngoài ra còn có dự thảo luật AI chuyên biệt đang được xem xét (phân cấp rủi ro, tham chiếu mô hình EU); sau khi thông qua sẽ thay thế các điều khoản AI của luật này.",
+   "opps": "OPP-59 đăng ký SaMD, toàn bộ cơ hội kinh doanh AI thuộc nhóm F",
+   "act": "Theo dõi tiến độ luật AI chuyên biệt; hoàn tất đăng ký thiết bị y tế với Bộ Y tế cho AI y tế sớm (theo lộ trình Decree 98/2021) để xây rào cản tuân thủ.",
+   "src": "DFDL／IAPP（2025-10）"
+  },
+  {
+   "date": "2025-10-01",
+   "name": "Bắt buộc kê đơn thuốc điện tử tại tất cả bệnh viện",
+   "doc": "Circular 26/2025/TT-BYT",
+   "layer": "L4",
+   "what": "Bắt buộc tại bệnh viện từ 2025-10-01, tại các cơ sở khác từ 2026-01-01. CPOE chuyển từ tự nguyện sang bắt buộc theo luật.",
+   "opps": "OPP-41 đơn thuốc điện tử, OPP-42 cấp phát thuốc khép kín, CAP-037 CPOE",
+   "act": "Cấp phát thuốc khép kín (mã vạch, đối chiếu cấp phát) là bước tiếp theo tự nhiên sau đơn thuốc điện tử — nên chiếm lĩnh sớm.",
+   "src": "thuvienphapluat"
+  },
+  {
+   "date": "2025-09-30",
+   "name": "Hạn chót toàn quốc bệnh viện hoàn thành bệnh án điện tử (đã hết hạn, tỷ lệ hoàn thành 53,6%)",
+   "doc": "Circular 13/2025/TT-BYT (thay thế 46/2018)",
+   "layer": "L4",
+   "what": "991 trong số 1.645 bệnh viện đi vào hoạt động đúng hạn. Gần một nửa số bệnh viện vẫn đang bù đắp = nhu cầu vẫn còn; nhóm đã đạt chuẩn bước vào giai đoạn đào sâu.",
+   "opps": "OPP-31、OPP-32 PACS、OPP-39 VNA",
+   "act": "Bán “gói đạt chuẩn nhanh” cho bệnh viện chưa đạt, bán “dự án bổ sung” cho bệnh viện đã đạt. Yêu cầu dự phòng EMR là căn cứ pháp lý trực tiếp cho mua sắm DR.",
+   "src": "VietnamPlus（2025-10-06）"
+  },
+  {
+   "date": "2025-07-01",
+   "name": "Chấm dứt hoàn toàn các biện pháp chuyển tiếp nhập khẩu thiết bị y tế",
+   "doc": "Giai đoạn chuyển tiếp của Decree 98/2021/ND-CP đã kết thúc",
+   "layer": "G",
+   "what": "Yêu cầu có MAH tại chỗ, ISO 13485, hồ sơ CSDT nhóm C/D. Quy trình đăng ký mất khoảng 2-3 năm.",
+   "opps": "OPP-22 đại lý đăng ký thiết bị y tế",
+   "act": "Nhu cầu dịch vụ đại lý đăng ký trở thành bắt buộc; giấy ủy quyền của nhà sản xuất gốc (MAF) là điều kiện bắt buộc khi đại lý dự thầu thiết bị.",
+   "src": "Thema-Med（2025-06）"
+  },
+  {
+   "date": "2025-07-01",
+   "name": "Sửa đổi Luật Bảo hiểm y tế có hiệu lực (bãi bỏ giới hạn chuyển tuyến theo ranh giới hành chính)",
+   "doc": "Luật Bảo hiểm y tế sửa đổi 2024",
+   "layer": "L7",
+   "what": "Ca bệnh nặng có thể lên thẳng tuyến chuyên sâu và được chi trả toàn phần. Trong ngắn hạn sẽ làm gia tăng hiệu ứng hút bệnh nhân về bệnh viện lớn, buộc phải thiết kế lại cơ chế phân luồng.",
+   "opps": "OPP-82 RCM khai báo bảo hiểm y tế, CAP-011 mạng lưới chuyển tuyến",
+   "act": "Thiết kế mạng lưới chuyển tuyến và cơ chế chuyển tuyến xuống trở thành nỗi đau chung của cả khu vực công và tư — điểm vào tự nhiên cho tư vấn.",
+   "src": "SGGP／Acclime"
+  }
+ ],
+ "players": [
+  {
+   "name": "FPT（eHospital）",
+   "cat": "Bộ ba IT nội địa hàng đầu",
+   "pos": "Dẫn đầu thị phần HIS, tốc độ triển khai là vũ khí",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "eHospital triển khai cho 70+ bệnh viện trong 6 tháng, chạy đua với làn sóng hạn chót EMR",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024",
+     "t": "Giành hợp đồng Tập đoàn Hoàn Mỹ: 100 tỷ VND, hợp đồng thuần phần mềm cho 14 bệnh viện, 8 phòng khám",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Không thể thắng L4 nếu đối đầu trực diện. Điểm vào: trung tâm dữ liệu, an ninh mạng, BMS và các mô-đun chuyên sâu cho bệnh viện tư quốc tế mà họ không làm.",
+   "profile": "Thành lập năm 1988, Tập đoàn FPT là tập đoàn IT tư nhân lớn nhất Việt Nam; công ty con FPT IS đã phát triển hệ thống thông tin bệnh viện (HIS) FPT.eHospital từ năm 2000 và là một trong những nhà cung cấp dẫn đầu thị trường tin học hóa bệnh viện tại Việt Nam, đã triển khai lũy kế cho hơn 300 bệnh viện và cơ sở y tế.",
+   "proj": [
+    {
+     "y": "2000-2015",
+     "t": "Trong 15 năm, thế hệ đầu tiên của FPT.eHospital đã được triển khai tại gần 100 bệnh viện lớn/tuyến đầu, bao gồm Bệnh viện Chợ Rẫy (Thành phố Hồ Chí Minh), Bệnh viện Bạch Mai (Hà Nội), Bệnh viện Đại học Y Dược, và Tập đoàn Y tế Hoàn Mỹ.",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức FPT (2026-08)"
+    },
+    {
+     "y": "2019",
+     "t": "FPT.eHospital 2.0+ đã được áp dụng tại 6 sở y tế tỉnh/thành và 300+ bệnh viện/cơ sở y tế (bao gồm Bệnh viện Bạch Mai, Bệnh viện Chợ Rẫy, Bệnh viện Sản Nhi Quảng Ninh), rút ngắn thời gian đăng ký khám từ 4 phút xuống 1 phút.",
+     "st": "Đang triển khai",
+     "src": "VietnamNet (2026-08)"
+    },
+    {
+     "y": "2020-2023",
+     "t": "Dự án bệnh viện thông minh Tập đoàn Y tế Hoàn Mỹ: triển khai FPT.eHospital 2.0 + FPT.EMR + FPT Hi Gio Cloud cho 14 bệnh viện và 8 phòng khám chuyên khoa, tổng giá trị hợp đồng khoảng 100 tỷ VND, thời hạn 28 tháng, hướng tới bệnh viện thông minh không giấy tờ.",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức FPT (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Triển khai bệnh án điện tử FPT.EMR cho 70+ bệnh viện trên toàn quốc trong vòng 6 tháng; Bệnh viện Đa khoa Quốc tế Hải Phòng trở thành bệnh viện đầu tiên trên cả nước được Bộ Y tế công nhận bệnh án điện tử không giấy tờ, Bệnh viện Đa khoa tỉnh Quảng Ninh quản lý 130.000+ hồ sơ bệnh án.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức FPT IS (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Viettel",
+   "cat": "Bộ ba IT nội địa hàng đầu",
+   "pos": "Nhà mạng viễn thông gốc quân đội: làm cả HIS + IDC + đám mây",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "Cùng Bệnh viện Thống Nhất xây dựng “hệ sinh thái bệnh viện thông minh” — toàn bộ danh mục là phần mềm, không có IoT/BMS/RTLS",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2025",
+     "t": "Đang mở rộng IDC (quy hoạch khuôn viên siêu quy mô 140MW)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Vừa là đối thủ vừa là nền tảng tiềm năng: đám mây và trung tâm dữ liệu của họ có thể là nơi triển khai giải pháp của chúng ta. Họ đã chiếm quyền định nghĩa “bệnh viện thông minh” — nên tránh dùng cụm từ này.",
+   "profile": "Viettel là Tập đoàn Công nghiệp – Viễn thông Quân đội Việt Nam, nhà mạng viễn thông lớn nhất cả nước; công ty con Viettel Solutions đã đảm nhận nhiều nền tảng công nghệ thông tin y tế cấp quốc gia cho Bộ Y tế, còn Viettel IDC là một trong những nhà cung cấp trung tâm dữ liệu/dịch vụ đám mây lớn nhất Việt Nam, tham gia sâu vào chuyển đổi số của hệ thống y tế công lập.",
+   "proj": [
+    {
+     "y": "2020",
+     "t": "Phát triển và triển khai nền tảng hội chẩn từ xa Telehealth cho Bộ Y tế; từ tháng 9 đến tháng 10 năm 2020 đã kết nối 1.000 điểm cơ sở và 27 bệnh viện tuyến trung ương (bao gồm khu vực miền núi, hải đảo), hoàn thành sớm hơn kế hoạch ban đầu 15 ngày.",
+     "st": "Quá khứ",
+     "src": "Báo điện tử Chính phủ baochinhphu.vn (2026-08)"
+    },
+    {
+     "y": "2021",
+     "t": "Xây dựng và vận hành nền tảng quản lý tiêm chủng vắc-xin COVID-19 quốc gia (bao gồm đăng ký tiêm chủng, Sổ sức khỏe điện tử), triển khai trên phạm vi toàn quốc để hỗ trợ chiến dịch tiêm chủng quy mô lớn.",
+     "st": "Quá khứ",
+     "src": "Báo CAND / Người Lao Động (2026-08)"
+    },
+    {
+     "y": "2010s-2026",
+     "t": "Trong hơn một thập kỷ, đã xây dựng gần 20 hệ thống quản lý y tế và phòng chống dịch cho Bộ Y tế (bao gồm hệ thống thông tin tiêm chủng quốc gia, cơ sở dữ liệu chuỗi cung ứng thuốc quốc gia), theo khung hợp tác dài hạn.",
+     "st": "Đang triển khai",
+     "src": "Báo điện tử Chính phủ baochinhphu.vn (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Theo chỉ đạo của Bộ Quốc phòng, triển khai bệnh án điện tử cho 27 bệnh viện quân đội tại 15 tỉnh/thành trong 2 tháng (hoàn thành sớm 8 ngày), tích hợp 300+ thiết bị chẩn đoán hình ảnh và 200+ thiết bị xét nghiệm, đào tạo 3.800+ nhân viên y tế, phục vụ 12.600+ bệnh nhân mỗi ngày.",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức Viettel Solutions (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "VNPT",
+   "cat": "Bộ ba IT nội địa hàng đầu",
+   "pos": "Nhà mạng nhà nước, số lượng HIS tồn tại lớn tại các bệnh viện công",
+   "moves": [
+    {
+     "d": "2025",
+     "t": "VNPT HIS gắn với đề án quốc gia Sổ sức khỏe VNeID",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Bên phòng thủ của thị trường tồn tại khu vực công. Thay vì tranh giành HIS, nên xây dựng lớp tích hợp và giá trị gia tăng trên nền hệ thống của họ.",
+   "profile": "VNPT là Tập đoàn Bưu chính Viễn thông nhà nước Việt Nam, hệ thống thông tin bệnh viện VNPT HIS lấy hệ thống y tế tuyến cơ sở và cấp tỉnh khu vực công làm thị trường chủ lực, được khoảng 7.500 cơ sở y tế sử dụng, và đã mở rộng thành hệ sinh thái số y tế gồm EMR, LIS, RIS/PACS.",
+   "proj": [
+    {
+     "y": "2015-2020",
+     "t": "Trong 5 năm, VNPT HIS đã được triển khai tại khoảng 7.500 cơ sở y tế các cấp trên toàn quốc (bao gồm cấp 1 đến cấp 4, từ trạm y tế xã đến bệnh viện lớn), kết nối với hệ thống của Bộ Y tế và các sở y tế tỉnh.",
+     "st": "Đang triển khai",
+     "src": "VNPT Media (2026-08)"
+    },
+    {
+     "y": "2023",
+     "t": "Ba bệnh viện tại tỉnh Vĩnh Phúc (Bệnh viện Hữu nghị Lạc Việt, Bệnh viện Sản Nhi tỉnh, Bệnh viện Đa khoa khu vực Phúc Yên) áp dụng bệnh án điện tử VNPT EMR, hợp đồng trị giá khoảng 9 tỷ VND — những trường hợp EMR thành công đầu tiên của Tập đoàn VNPT trên toàn quốc.",
+     "st": "Quá khứ",
+     "src": "VNPT Media (2026-08)"
+    },
+    {
+     "y": "2023-2024",
+     "t": "Dự án VNPT EMR tại Bệnh viện Nhi tỉnh Nam Định kéo dài khoảng 18 tháng, nghiệm thu vào tháng 10/2024, trở thành bệnh viện đầu tiên tại tỉnh Nam Định triển khai bệnh án điện tử và là điểm thí điểm nhân rộng cho toàn tỉnh.",
+     "st": "Quá khứ",
+     "src": "VietnamNet (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "Bệnh viện Đa khoa Bưu điện Thành phố Hồ Chí Minh triển khai hệ thống quản lý bệnh viện trên nền đám mây kết hợp ba mô-đun VNPT HIS + LIS + RIS, chuẩn bị cho bệnh án điện tử.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức Bệnh viện Đa khoa Bưu điện (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "VinBrain（Vingroup）",
+   "cat": "AI y tế",
+   "pos": "Chủ lực AI nội địa: DrAid AI X-quang ngực, FDA 510(k)",
+   "moves": [
+    {
+     "d": "2024-02",
+     "t": "Ký thỏa thuận với quỹ toàn cầu: 32 giấy phép, mục tiêu sàng lọc 1 triệu người, chi phí mỗi ca giảm còn khoảng 1 USD",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2023",
+     "t": "Tuyên bố đã triển khai tại 100+ bệnh viện; hợp tác với NVIDIA",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Kẻ phá giá AI hình ảnh nội địa. Nếu L5 muốn tham gia, hãy làm những gì họ chưa làm: AI vận hành, AI xét duyệt khai báo, văn bản lâm sàng tiếng Việt.",
+   "profile": "VinBrain là công ty khởi nghiệp AI y tế do Vingroup thành lập năm 2019; sản phẩm chủ lực DrAid là AI hình ảnh y tế (X-quang/CT/MRI, có thể phát hiện 95 loại bất thường), là sản phẩm hỗ trợ chẩn đoán AI của Đông Nam Á được FDA Hoa Kỳ chứng nhận; tháng 12/2024 được NVIDIA mua lại, NVIDIA có kế hoạch phát triển công ty này thành trung tâm thiết kế AI tại Việt Nam.",
+   "proj": [
+    {
+     "y": "2019-2024",
+     "t": "DrAid đã được triển khai lũy kế tại 182+ bệnh viện ở Việt Nam, Hoa Kỳ, Ấn Độ, Úc và các nơi khác, phục vụ khoảng 2.000 bác sĩ và 2 triệu+ bệnh nhân.",
+     "st": "Đang triển khai",
+     "src": "CafeF (2026-08)"
+    },
+    {
+     "y": "2019-2024",
+     "t": "Hợp tác với Bệnh viện Phổi Trung ương Việt Nam (nghiên cứu từ năm 2019, ký hợp tác chiến lược tháng 6/2024), đưa AI lao phổi của DrAid vào chương trình sàng lọc của Chương trình Chống lao Quốc gia (độ nhạy 94%, độ đặc hiệu 98%), giảm chi phí sàng lọc mỗi người từ 50-60 USD xuống còn khoảng 1 USD.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức Bệnh viện Phổi Trung ương (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "Trở thành đối tác duy nhất ký thỏa thuận chuyển giao công nghệ AI với Global Fund; từ tháng 4/2024 sử dụng AI lao phổi của DrAid để sàng lọc 1 triệu ca nghi lao tại Việt Nam, chiến dịch sàng lọc quy mô lớn nhất Việt Nam vào thời điểm đó.",
+     "st": "Đang triển khai",
+     "src": "CafeF (2026-08)"
+    },
+    {
+     "y": "2024",
+     "t": "Tháng 12/2024, NVIDIA công bố mua lại VinBrain (giá trị thương vụ không được tiết lộ; trước khi mua lại Vingroup nắm giữ 49,74% cổ phần); Jensen Huang cho biết sẽ phát triển công ty này thành trung tâm thiết kế hàng đầu tại Việt Nam.",
+     "st": "Quá khứ",
+     "src": "Vietnam News (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Advantech",
+   "cat": "Đối thủ cạnh tranh Đài Loan",
+   "pos": "Trọn gói giải pháp iHospital (bao gồm RTLS và iBuilding), đã thành lập pháp nhân tại Việt Nam",
+   "moves": [
+    {
+     "d": "2022-01",
+     "t": "Bệnh viện Đa khoa Thái Hòa: dự án iHospital đầu tiên của Việt Nam (cùng Intel)",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2023",
+     "t": "Giải pháp thông minh sản phụ khoa tại Bệnh viện Hồng Ngọc; hạng mục cơ điện của cùng bệnh viện do REE, doanh nghiệp nội địa, đảm nhận",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Nhà cung cấp có năng lực trùng lặp nhiều nhất. Không đối đầu trực diện: họ mạnh về thiết bị đầu cuối tại phòng bệnh, chúng ta mạnh về trung tâm dữ liệu/xương sống mạng/an ninh OT — có thể bàn về vai trò bổ trợ hoặc làm nhà cung cấp lớp hạ tầng cho họ.",
+   "profile": "Advantech, tập đoàn máy tính công nghiệp hàng đầu Đài Loan (thành lập năm 1983), thúc đẩy giải pháp bệnh viện thông minh iHospital và iBuilding thông qua pháp nhân Advantech Vietnam Technology tại Việt Nam; năm 2022 hợp tác với Intel triển khai “bệnh viện thông minh đầu tiên của Việt Nam”, định vị tại Việt Nam là nhà tích hợp hệ thống y tế thông minh chứ không phải nhà thầu cơ điện.",
+   "proj": [
+    {
+     "y": "2022",
+     "t": "Hợp tác với Intel triển khai trọn gói giải pháp iHospital tại Bệnh viện Đa khoa Thái Hòa, tỉnh Ninh Thuận (gọi số khám ngoại trú thông minh, chăm sóc tại giường, phòng mổ thông minh, phòng bệnh thông minh, khám từ xa, nhà thuốc thông minh, thẻ thông minh bệnh nhân) — dự án bệnh viện thông minh đầu tiên của Việt Nam.",
+     "st": "Quá khứ",
+     "src": "VIR / Trang web chính thức Advantech (2026-08)"
+    },
+    {
+     "y": "2021",
+     "t": "Hợp tác với Intel và Dones triển khai hệ thống phòng bệnh thông minh iWard (hệ thống trạm điều dưỡng, Patient Terminal tại giường, định vị RTLS) tại khoa sản của cơ sở Phúc Trường Minh, Bệnh viện Hồng Ngọc, Hà Nội, giá trị hợp đồng giai đoạn đầu khoảng 30.000 USD.",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức Bệnh viện Hồng Ngọc / Advantech (2026-08)"
+    },
+    {
+     "y": "2022-",
+     "t": "Trang web Việt Nam của Advantech tiếp tục quảng bá iWard, iTeleMed, iOutpatient, RTLS, trung tâm điều hành iHospital và mô-đun quản lý cơ sở vật chất bệnh viện iBuilding, lấy Hồng Ngọc và Thái Hòa làm thực tiễn tiêu biểu.",
+     "st": "Đang triển khai",
+     "src": "Trang smartcity của Advantech Việt Nam (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "REE M&E",
+   "cat": "Cơ điện nội địa",
+   "pos": "Thành lập năm 1977, 995 nhân viên, 1.286 dự án; dịch vụ bao gồm ELV và BMS",
+   "moves": [
+    {
+     "d": "2024-05",
+     "t": "Giành hợp đồng MEP giai đoạn 2 tại Hồng Ngọc Phúc Trường Minh",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Ứng viên đối tác nội địa hàng đầu: thi công cơ điện và mạng lưới hậu mãi. Cần làm rõ BMS là tự làm hay thầu phụ, và có bị ràng buộc thương hiệu hay không.",
+   "profile": "REE M&E là công ty kỹ thuật cơ điện thuộc REE Corporation (thành lập năm 1977, niêm yết tại Thành phố Hồ Chí Minh), nhiều năm liên tiếp được xếp hạng trong top mười nhà thầu cơ điện hàng đầu Việt Nam, thực tích trong lĩnh vực bệnh viện chủ yếu là tổng thầu MEP cho các bệnh viện tư nhân cao cấp.",
+   "proj": [
+    {
+     "y": "2016-2017",
+     "t": "Tổng thầu cung cấp và lắp đặt hệ thống MEP tại Bệnh viện Quốc tế Mỹ (AIH) ở Thành phố Hồ Chí Minh: 19.418 m², 1 tầng hầm + 12 tầng, 153 giường, 6 phòng mổ chuẩn Mỹ đạt JCI — bệnh viện kiểu Mỹ đầu tiên của Việt Nam.",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức REE M&E (2026-08)"
+    },
+    {
+     "y": "2024-",
+     "t": "Công trình MEP giai đoạn 2 (tòa lão khoa, khoảng 30.500 m², 2 tầng hầm + 18 tầng) tại cơ sở Phúc Trường Minh, Bệnh viện Đa khoa Hồng Ngọc, Hà Nội, trúng thầu tháng 5/2024.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức REE M&E (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Searefico E&C",
+   "cat": "Cơ điện nội địa",
+   "pos": "Kinh nghiệm MEP bệnh viện phong phú nhất (Vinmec, UMC Thành phố Hồ Chí Minh)",
+   "moves": [
+    {
+     "d": "2025-08",
+     "t": "Khởi công MEP Bệnh viện Đa khoa Hưng Hà (29.930 m²)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Ứng viên đối tác nội địa hàng đầu thứ hai. Chọn một trong hai với REE hoặc hợp tác phân vùng.",
+   "profile": "Searefico E&C thuộc Tập đoàn Searefico (tiền thân là công ty kỹ thuật lạnh thành lập năm 1977, mã HOSE: SRF), là nhà thầu cơ điện lâu năm của Việt Nam, thực tích MEP bệnh viện bao gồm Bệnh viện Đại học Y Dược (UMC), Vinmec, Hoa Lâm và các bệnh viện lớn công lẫn tư khác.",
+   "proj": [
+    {
+     "y": "2025-",
+     "t": "Tổng thầu MEP trọn gói cho tòa kỹ thuật, tòa nội trú, tòa ngoại trú và tòa hành chính của Bệnh viện Đa khoa Hưng Hà (29.930 m², 2 tầng hầm + 18 tầng) tại tỉnh Hưng Yên, khởi công tháng 8/2025.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức Searefico (2026-08)"
+    },
+    {
+     "y": "2017",
+     "t": "Gói thầu thi công giai đoạn 2 Bệnh viện Ung bướu Thành phố Hồ Chí Minh (1.000 giường, 120.000 m²), một trong năm dự án bệnh viện trọng điểm cấp trung ương.",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức Searefico (2026-08)"
+    },
+    {
+     "y": "2016",
+     "t": "Tổng thầu cơ điện MEP cho Bệnh viện Quốc tế Hoa Lâm (10 tầng, 351 giường) trong Khu Y tế Kỹ thuật cao Hoa Lâm-Shangri-La, Thành phố Hồ Chí Minh.",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức Searefico (2026-08)"
+    },
+    {
+     "y": "Trước năm 2017",
+     "t": "Công trình cơ điện tòa nhà mới của Bệnh viện Đại học Y Dược Thành phố Hồ Chí Minh (UMC).",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức Searefico (2026-08)"
+    },
+    {
+     "y": "Năm chưa xác nhận",
+     "t": "Công trình cơ điện Bệnh viện Vinmec: trang web chính thức liệt kê Vinmec cùng Hoa Lâm và UMC là các thực tích y tế hiện có (cơ sở cụ thể và năm chưa tìm được).",
+     "st": "Quá khứ",
+     "src": "Trang web chính thức Searefico (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Thomson Medical",
+   "cat": "Tập đoàn y tế nước ngoài",
+   "pos": "Tập đoàn Singapore, thương vụ mua lại y tế lớn nhất lịch sử Việt Nam",
+   "moves": [
+    {
+     "d": "2023",
+     "t": "Mua lại Bệnh viện FV với giá 381 triệu USD (16,8 lần EBITDA)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Chuẩn định giá cho làn sóng vốn ngoại đổ vào bệnh viện tư nhân; các bệnh viện tư quốc tế như FV là khách hàng đầu tiên lý tưởng cho giải pháp cao cấp của chúng ta.",
+   "profile": "Tập đoàn y tế niêm yết tại Singapore (do gia tộc Peter Lim kiểm soát), năm 2023 mua lại công ty mẹ của Bệnh viện FV tại Thành phố Hồ Chí Minh với giá tối đa 381,4 triệu USD, thương vụ mua lại y tế lớn nhất lịch sử Việt Nam, lấy FV làm bàn đạp mở rộng vào Việt Nam và Đông Nam Á.",
+   "proj": [
+    {
+     "y": "2023",
+     "t": "Công bố mua lại 100% cổ phần Far East Medical Vietnam, công ty mẹ của Bệnh viện FV, với giá tối đa 381,4 triệu USD — thương vụ y tế lớn nhất lịch sử Việt Nam.",
+     "st": "Quá khứ",
+     "src": "Forbes／Vietnam News (2026-08)"
+    },
+    {
+     "y": "2023-12",
+     "t": "Hoàn tất thương vụ mua lại, Bệnh viện FV (Quận 7, Thành phố Hồ Chí Minh, khoảng 200 giường, hơn 30 chuyên khoa, hơn 1.600 nhân viên) chính thức thuộc về Thomson Medical Group.",
+     "st": "Quá khứ",
+     "src": "Forbes / Trang web chính thức Bệnh viện FV (2026-08)"
+    },
+    {
+     "y": "2023-24",
+     "t": "Phạm vi mua lại bao gồm trung tâm khám ngoại trú tại Quận 1 và chuỗi American Chiropractic Clinic (4 phòng khám tại Việt Nam), hình thành mạng lưới bệnh viện + phòng khám tuyến cơ sở và tiếp tục vận hành.",
+     "st": "Đang triển khai",
+     "src": "Health365.sg (2026-08)"
+    },
+    {
+     "y": "2023-25",
+     "t": "Thúc đẩy mở rộng tòa nhà mới 7 tầng (Tòa H) tại Bệnh viện FV, mở rộng trung tâm ung thư (PET, CyberKnife) và bổ sung dịch vụ ngoại trú hỗ trợ sinh sản, lọc máu và tim mạch/tiết niệu/tiêu hóa.",
+     "st": "Đang triển khai",
+     "src": "Health365.sg (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Bệnh viện FV đạt chứng nhận JCI quốc tế lần thứ tư liên tiếp; báo cáo thường niên FY2025 của tập đoàn cho biết sẽ tiếp tục tăng đầu tư vào Việt Nam.",
+     "st": "Đang triển khai",
+     "src": "Báo cáo thường niên FY2025 của Thomson Medical (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Vinmec × Cleveland Clinic",
+   "cat": "Tập đoàn y tế nước ngoài",
+   "pos": "Chuỗi cao cấp nội địa + thương hiệu hàng đầu Mỹ",
+   "moves": [
+    {
+     "d": "2025-04",
+     "t": "Hợp tác phát triển Bệnh viện Đa khoa Quốc tế Cần Giờ",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024-10",
+     "t": "Khai trương Vinmec Smart City (60.000 m², 1.500 tỷ VND)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Chỉ báo về tiêu chuẩn thông minh hóa cho các dự án xây mới; mẫu hình nội địa để nhân rộng bản thiết kế sang các bệnh viện khác.",
+   "profile": "Vinmec, thuộc Vingroup, là một trong những chuỗi bệnh viện quốc tế tư nhân lớn nhất Việt Nam; từ năm 2023 hợp tác với Cleveland Clinic (Mỹ) thông qua chương trình thành viên và tư vấn chiến lược “Cleveland Clinic Connected”, là hệ thống y tế duy nhất tại Việt Nam đủ điều kiện tham gia chương trình này.",
+   "proj": [
+    {
+     "y": "2023-01",
+     "t": "Bệnh viện Quốc tế Vinmec Times City tại Hà Nội gia nhập Cleveland Clinic Connected, trở thành bệnh viện thành viên đầu tiên tại Việt Nam và Đông Nam Á.",
+     "st": "Đang triển khai",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2024-05",
+     "t": "Bệnh viện Quốc tế Vinmec Central Park tại Thành phố Hồ Chí Minh trở thành bệnh viện thành viên Cleveland Clinic Connected thứ hai tại Việt Nam.",
+     "st": "Đang triển khai",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Hợp tác với Cleveland Clinic phát triển Bệnh viện Đa khoa Quốc tế Vinmec Cần Giờ tại Vinhomes Green Paradise, Cần Giờ, Thành phố Hồ Chí Minh, với Cleveland Clinic giữ vai trò tư vấn chiến lược; khởi công tháng 8/2025.",
+     "st": "Đang triển khai",
+     "src": "Cleveland Clinic Newsroom (2026-08)"
+    },
+    {
+     "y": "2025-",
+     "t": "Cleveland Clinic cung cấp chương trình cử nhân sự sang Mỹ tham quan và trao đổi cho Vinmec Cần Giờ, dự kiến gia nhập mạng lưới Connected sau khi hoàn thành xây dựng.",
+     "st": "Đang triển khai",
+     "src": "Cleveland Clinic Newsroom / Trang web chính thức Vinmec (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "B. Braun",
+   "cat": "Hãng thiết bị nước ngoài",
+   "pos": "Bố trí thiết bị và trung tâm lọc máu",
+   "moves": [
+    {
+     "d": "—",
+     "t": "Bố trí trung tâm lọc máu tại Hà Nội (dài hạn)",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Tín hiệu tiên phong tại vùng trắng lọc máu (mới bao phủ khoảng 1/3) — chuẩn đối sánh hoặc đối tác tiềm năng nếu theo đuổi mô hình chuỗi lọc máu.",
+   "profile": "Tập đoàn thiết bị y tế Đức B. Braun đã hoạt động tại Việt Nam hơn 30 năm; khu phức hợp sản xuất y tế Thanh Oai tại Hà Nội sử dụng hơn 1.400 lao động, là một trong những nhà đầu tư trực tiếp lớn nhất từ Đức tại Việt Nam, chủ lực là sản phẩm dịch truyền và lọc máu.",
+   "proj": [
+    {
+     "y": "2014",
+     "t": "Thỏa thuận với chính quyền thành phố Hà Nội bổ sung khoảng 100 triệu USD đầu tư mở rộng sản xuất thiết bị y tế tại khu công nghiệp Thanh Oai, và lên kế hoạch xây dựng trung tâm lọc máu tại Hà Nội, nhằm giải quyết khoảng trống khi đó chỉ có một bệnh viện tại Hà Nội có thể điều trị suy thận.",
+     "st": "Quá khứ",
+     "src": "VietnamPlus (2026-08)"
+    },
+    {
+     "y": "2022",
+     "t": "Khởi công nhà máy mới sản xuất dịch lọc máu cô đặc tại khu công nghiệp Thanh Oai, Hà Nội: vốn đầu tư ban đầu 5 triệu USD, nhà xưởng khoảng 4.000 m², sản xuất hơn 2,5 triệu thùng dịch lọc máu mỗi năm cung cấp cho thị trường Việt Nam và quốc tế.",
+     "st": "Quá khứ",
+     "src": "Thông cáo báo chí chính thức của B. Braun (2026-08)"
+    },
+    {
+     "y": "1990s-",
+     "t": "Khu phức hợp sản xuất y tế tại Hà Nội (bao gồm dây chuyền thiết bị lọc máu) sử dụng hơn 1.400 nhân viên kỹ thuật, cứ điểm sản xuất và xuất khẩu quan trọng của B. Braun tại châu Á - Thái Bình Dương.",
+     "st": "Đang triển khai",
+     "src": "Thông cáo báo chí chính thức của B. Braun (2026-08)"
+    },
+    {
+     "y": "Liên tục",
+     "t": "Tiếp tục cung cấp cho các bệnh viện Việt Nam máy lọc máu dòng Dialog và các sản phẩm thận học (đã đăng ký với danh mục thiết bị y tế VIMDA của Bộ Y tế Việt Nam), hỗ trợ xây dựng khoa lọc máu tại các tỉnh.",
+     "st": "Đang triển khai",
+     "src": "VIMDA Bộ Y tế Việt Nam / Trang web chính thức B. Braun Việt Nam (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Qure.ai / Olympus / Orbis",
+   "cat": "AI y tế",
+   "pos": "Đầu cầu AI nước ngoài tại Việt Nam",
+   "moves": [
+    {
+     "d": "2022-23",
+     "t": "Olympus EndoBRAIN-EYE hoàn tất thẩm định tại Chợ Rẫy và Bệnh viện 108",
+     "asof": "2026-08-15"
+    },
+    {
+     "d": "2024",
+     "t": "Khởi động sàng lọc đáy mắt AI Cybersight của Orbis; qXR sàng lọc 570.000 người tại 9 tỉnh theo Chương trình Chống lao Quốc gia",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "Các AI nước ngoài đã được thẩm định đều theo mô hình “nhà tài trợ/chương trình chi trả” — kênh thương mại hóa vẫn còn bỏ trống, đây vừa là cơ hội vừa là cảnh báo.",
+   "profile": "Các trường hợp triển khai AI y tế của hãng quốc tế và NGO tại Việt Nam: Qure.ai dùng qXR AI X-quang ngực hỗ trợ sàng lọc chủ động lao phổi, Olympus thử nghiệm AI nội soi tại các bệnh viện lớn ở Hà Nội và Thành phố Hồ Chí Minh kèm đào tạo bác sĩ, Orbis dùng Cybersight AI thúc đẩy sàng lọc bệnh võng mạc tiểu đường tại đồng bằng sông Cửu Long.",
+   "proj": [
+    {
+     "y": "2020-2022",
+     "t": "AI X-quang ngực qXR của Qure.ai kết hợp xét nghiệm GeneXpert (chiến lược “Double X”) thực hiện sàng lọc chủ động lao phổi cho hơn 96.000 người, xác định 1.144 ca, trong đó khoảng 51% là lao tiềm ẩn không triệu chứng.",
+     "st": "Quá khứ",
+     "src": "Trang nghiên cứu chính thức của Qure.ai (2026-08)"
+    },
+    {
+     "y": "2022-2023",
+     "t": "Olympus tham gia chương trình của Bộ Nội vụ và Truyền thông Nhật Bản, thẩm định AI nội soi đại tràng (EndoBRAIN-EYE) tại Bệnh viện Chợ Rẫy (Thành phố Hồ Chí Minh) và Bệnh viện 108 (Hà Nội), với chuyên gia Nhật Bản đào tạo bác sĩ nội soi Việt Nam.",
+     "st": "Quá khứ",
+     "src": "Thông cáo báo chí chính thức của Olympus (2026-08)"
+    },
+    {
+     "y": "2025",
+     "t": "Olympus Medical Systems Việt Nam hỗ trợ chương trình “Train the Trainer”, mời chuyên gia Nhật Bản đào tạo bác sĩ Việt Nam kỹ thuật nội soi ESD điều trị ung thư giai đoạn sớm.",
+     "st": "Đang triển khai",
+     "src": "Thông cáo báo chí chính thức của Olympus (2026-08)"
+    },
+    {
+     "y": "2024-2026",
+     "t": "Chương trình 3 năm của Orbis và NIDEK: triển khai sàng lọc đáy mắt AI Cybersight tại 6 cơ sở nhãn khoa thuộc 3 tỉnh, bao gồm Bệnh viện Đa khoa Cần Thơ và Bệnh viện Đa khoa Trung ương Tiền Giang, mục tiêu sàng lọc khoảng 72.000 bệnh nhân tiểu đường.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức Orbis / PR Newswire (2026-08)"
+    }
+   ]
+  },
+  {
+   "name": "Johnson Controls / Schneider / Siemens",
+   "cat": "Hãng BMS nước ngoài",
+   "pos": "Bốn tập đoàn công trình tòa nhà lớn có sự hiện diện thấp trong y tế Việt Nam",
+   "moves": [
+    {
+     "d": "2026",
+     "t": "Trang web chính thức JCI nêu rõ “đang xây dựng đội ngũ tại chỗ”; Schneider có trang sản phẩm bệnh viện nhưng chưa có tên khách hàng Việt Nam nào",
+     "asof": "2026-08-15"
+    }
+   ],
+   "mean": "★ Lớp tích hợp đang bỏ trống — hãng nước ngoài có sản phẩm nhưng không có đội ngũ tích hợp y tế tại chỗ, đây chính là điểm vào của Chunjing.",
+   "profile": "Mức độ hiện diện của ba hãng nước ngoài trong y tế Việt Nam khác nhau: Siemens, thông qua thiết bị y tế Healthineers và chẩn đoán thông minh, hoạt động tích cực nhất, đã ký hợp tác chiến lược dài hạn với nhiều bệnh viện; Johnson Controls hoạt động tại Việt Nam từ năm 1995 nhưng chưa tìm được dự án bệnh viện cụ thể nào; Schneider có mặt tại Việt Nam hơn 30 năm, quảng bá giải pháp EcoStruxure y tế, nhưng cũng chưa tìm được trường hợp triển khai tại bệnh viện Việt Nam cụ thể nào.",
+   "proj": [
+    {
+     "y": "2025-",
+     "t": "Siemens Healthineers hợp tác chiến lược với Bệnh viện Đa khoa Phương Đông tại Hà Nội: triển khai MRI MAGNETOM Lumina, CT đếm photon NAEOTOM Alpha và các thiết bị hình ảnh khác, kèm đào tạo và nghiên cứu lâm sàng.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức Siemens Healthineers Việt Nam (2026-08)"
+    },
+    {
+     "y": "2021-2029",
+     "t": "Siemens Healthineers ký hợp tác toàn diện 8 năm với Bệnh viện Đa khoa Quốc tế SIS tại Cần Thơ: robot can thiệp Corindus đầu tiên của Việt Nam, nền tảng chẩn đoán từ xa syngo, trung tâm đào tạo điều trị đột quỵ khu vực Đông Nam Á.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức Siemens Healthineers Việt Nam (2026-08)"
+    },
+    {
+     "y": "2021-2025",
+     "t": "Siemens Healthineers ký biên bản ghi nhớ với Bệnh viện Thống Nhất tại Thành phố Hồ Chí Minh, xây dựng theo giai đoạn trung tâm can thiệp đột quỵ/tim mạch và trung tâm ung bướu, kèm đào tạo quốc tế.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức Siemens Healthineers Việt Nam (2026-08)"
+    },
+    {
+     "y": "1995-",
+     "t": "Johnson Controls gia nhập Việt Nam từ năm 1995, thành lập văn phòng JCI-Hitachi Việt Nam năm 2021; các trang chính thức chưa liệt kê dự án bệnh viện cụ thể nào (chưa tìm được thực tích bệnh viện).",
+     "st": "Đang triển khai",
+     "src": "Trang Việt Nam chính thức của Johnson Controls (2026-08)"
+    },
+    {
+     "y": "1994-",
+     "t": "Schneider Electric hoạt động tại Việt Nam hơn 30 năm và bán giải pháp EcoStruxure for Healthcare, nhưng nguồn công khai chưa tìm được trường hợp triển khai tại bệnh viện Việt Nam cụ thể nào.",
+     "st": "Đang triển khai",
+     "src": "Trang web chính thức Schneider Electric Việt Nam / VnExpress (2026-08)"
+    }
+   ]
+  }
+ ],
+ "stats": [
+  {
+   "k": "Tỷ lệ hoàn thành bệnh án điện tử tại bệnh viện",
+   "v": "53.6%",
+   "unit": "",
+   "note": "991/1.645 bệnh viện (2025-10); tăng từ chỉ 8,6% cách đây 18 tháng — bằng chứng thực thi chính sách",
+   "src": "VietnamPlus",
+   "asof": "2025-10-06"
+  },
+  {
+   "k": "Tỷ lệ bao phủ bảo hiểm y tế",
+   "v": "95.2%",
+   "unit": "",
+   "note": "Đạt mục tiêu sớm 5 năm; chi trả 195,5 triệu lượt/năm",
+   "src": "VSS／vietnam.vn",
+   "asof": "2026-02-01"
+  },
+  {
+   "k": "Máy gia tốc tuyến tính",
+   "v": "82",
+   "unit": "máy",
+   "note": "0,82 máy/triệu dân (chuẩn 4-8); 43% đã cũ. Cần khoảng 400 máy để đạt chuẩn tối thiểu",
+   "src": "JCO Global Oncology",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "Tỷ lệ bao phủ lọc máu",
+   "v": "khoảng 1/3",
+   "unit": "",
+   "note": "Nhu cầu hơn 100.000 người, thực tế phục vụ khoảng 36.000 người; bảo hiểm y tế chi trả khoảng 25 USD/lần",
+   "src": "Kidney360/PMC",
+   "asof": "2025-01-01"
+  },
+  {
+   "k": "PET/CT",
+   "v": "12",
+   "unit": "máy",
+   "note": "Chỉ 3 máy cyclotron; 180.000 ca ung thư mới mỗi năm",
+   "src": "OncoDaily/GLOBOCAN",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "Số chu kỳ IVF hàng năm",
+   "v": "50.000+",
+   "unit": "chu kỳ",
+   "note": "65 trung tâm được cấp phép; đơn giá bằng 1/5 các nước phát triển",
+   "src": "Vietnam News",
+   "asof": "2025-04-23"
+  },
+  {
+   "k": "Thị trường trung tâm dữ liệu",
+   "v": "22",
+   "unit": "trăm triệu USD",
+   "note": "41 trung tâm dữ liệu / 221MW; Luật Viễn thông đã mở cửa cho vốn ngoại 100%",
+   "src": "trade.gov",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "Thị trường y tế số",
+   "v": "28.4→95.2",
+   "unit": "trăm triệu USD",
+   "note": "2025→2034，CAGR 14.4%",
+   "src": "IMARC",
+   "asof": "2025-06-01"
+  },
+  {
+   "k": "Thị trường bệnh viện thông minh",
+   "v": "0.3",
+   "unit": "trăm triệu USD",
+   "note": "Chuẩn năm 2024 — chỉ bằng 1/47 Thái Lan (1,4 tỷ USD) — khoảng cách chính là dư địa",
+   "src": "Ken Research",
+   "asof": "2026-01-01"
+  },
+  {
+   "k": "Sổ sức khỏe VNeID",
+   "v": "2,444",
+   "unit": "vạn sổ",
+   "note": "Đã lên toàn bộ 34/34 tỉnh/thành; từ 2026 có giá trị pháp lý ngang bằng bản giấy",
+   "src": "baochinhphu",
+   "asof": "2025-07-20"
+  },
+  {
+   "k": "Cơ sở đạt chứng nhận JCI",
+   "v": "9",
+   "unit": "cơ sở",
+   "note": "Khu vực công chỉ có 1 cơ sở; Bộ Y tế đã chính thức công nhận JCI, mục tiêu 15-20 cơ sở vào 2030",
+   "src": "vietnam.vn／4024/QĐ-BYT",
+   "asof": "2026-01-15"
+  },
+  {
+   "k": "Mục tiêu giường bệnh 2030",
+   "v": "35",
+   "unit": "giường/vạn dân",
+   "note": "Mục tiêu tỷ lệ giường tư nhân 15% (hiện tại 5,8%) → 25% vào năm 2050",
+   "src": "Quy hoạch tổng thể mạng lưới y tế",
+   "asof": "2024-02-27"
+  },
+  {
+   "k": "Đi khám bệnh nước ngoài",
+   "v": "khoảng 20",
+   "unit": "trăm triệu USD/năm",
+   "note": "Ước tính của Bộ Y tế (khoảng 40.000 người/năm); mục tiêu du lịch y tế 2030 là 750.000 lượt",
+   "src": "Ước tính MOH / DTiNews",
+   "asof": "2026-08-12",
+   "est": true
+  },
+  {
+   "k": "Chuẩn đầu tư thông minh hóa bệnh viện",
+   "v": "5,700-12,000",
+   "unit": "USD/giường",
+   "note": "Khoảng ước tính nội địa hóa cho BMS + RTLS + gọi điều dưỡng + nền tảng tích hợp",
+   "src": "Báo cáo nghiên cứu chuyên sâu AIoT (ước tính)",
+   "asof": "2026-08-15",
+   "est": true
+  },
+  {
+   "k": "Quá tải bệnh viện công",
+   "v": "200%+",
+   "unit": "",
+   "note": "Bệnh viện công phổ biến vận hành trên gấp đôi công suất thiết kế",
+   "src": "B-Company",
+   "asof": "2025-09-04"
+  },
+  {
+   "k": "Nhân lực y tế",
+   "v": "12.5 / 11.4",
+   "unit": "trên vạn dân",
+   "note": "Bác sĩ/điều dưỡng so với mục tiêu 2030 là 19/33 — nhân lực là nút thắt chung của mọi kế hoạch mở rộng",
+   "src": "MOH／VnExpress",
+   "asof": "2024-03-01"
+  }
+ ],
+ "roster": [
+  {
+   "cat": "Nhà cung cấp trung tâm dữ liệu / IDC",
+   "tag": "Trung tâm dữ liệu L2",
+   "items": [
+    {
+     "name": "Viettel IDC",
+     "note": "Nhà vận hành trung tâm dữ liệu lớn nhất thuộc tập đoàn viễn thông quân đội Việt Nam"
+    },
+    {
+     "name": "VNPT IDC",
+     "note": "Nhà vận hành trung tâm dữ liệu toàn quốc thuộc tập đoàn bưu chính viễn thông Việt Nam"
+    },
+    {
+     "name": "FPT Telecom（FPT Data Center）",
+     "note": "Dịch vụ trung tâm dữ liệu của một trong ba nhà mạng viễn thông lớn Việt Nam"
+    },
+    {
+     "name": "CMC Telecom（CMC Data Center）",
+     "note": "Công ty con trung tâm dữ liệu thuộc tập đoàn CNTT-TT Việt Nam"
+    },
+    {
+     "name": "VNG Cloud",
+     "note": "Mảng đám mây và trung tâm dữ liệu của gã khổng lồ công nghệ Việt Nam VNG"
+    },
+    {
+     "name": "NTT Global Data Centers Vietnam",
+     "note": "Thương hiệu trung tâm dữ liệu quốc tế do NTT Nhật Bản đầu tư tại Việt Nam"
+    },
+    {
+     "name": "One Mount Data Center",
+     "note": "Nhà phát triển trung tâm dữ liệu quy mô lớn mới nổi thuộc tập đoàn nội địa Việt Nam"
+    },
+    {
+     "name": "Gaw NP Capital",
+     "note": "Dự án phát triển trung tâm dữ liệu tại Việt Nam do quỹ đầu tư tư nhân nước ngoài dẫn dắt"
+    },
+    {
+     "name": "ST Telemedia Global Data Centres（STT GDC）",
+     "note": "Nhà phát triển trung tâm dữ liệu Singapore gia nhập thị trường Việt Nam"
+    },
+    {
+     "name": "Saigontel",
+     "note": "Tập đoàn bất động sản nội địa Việt Nam mở rộng sang phát triển trung tâm dữ liệu"
+    },
+    {
+     "name": "QTSC Data Center",
+     "note": "Cơ sở trung tâm dữ liệu chính thức của Công viên Phần mềm Sài Gòn"
+    },
+    {
+     "name": "VNTT",
+     "note": "Nhà cung cấp trung tâm dữ liệu hạ tầng viễn thông nội địa Việt Nam"
+    },
+    {
+     "name": "DTS（DTS Communication Technologies）",
+     "note": "Nhà cung cấp dịch vụ trung tâm dữ liệu và công nghệ truyền thông nội địa Việt Nam"
+    },
+    {
+     "name": "Hoan Cau Smart Data Center",
+     "note": "Nhà vận hành trung tâm dữ liệu thông minh nội địa Việt Nam"
+    },
+    {
+     "name": "Worldwide DC Solution",
+     "note": "Vốn Singapore đầu tư xây dựng trung tâm dữ liệu tại Việt Nam"
+    },
+    {
+     "name": "Bizfly Cloud",
+     "note": "Startup dịch vụ đám mây và trung tâm dữ liệu nội địa Việt Nam"
+    }
+   ]
+  },
+  {
+   "cat": "UPS / bộ lưu điện",
+   "tag": "Trung tâm dữ liệu L2",
+   "items": [
+    {
+     "name": "Schneider Electric／APC Vietnam",
+     "note": "Kênh bán hàng chính thức tại Việt Nam của hãng UPS hàng đầu thế giới"
+    },
+    {
+     "name": "SLA Vietnam",
+     "note": "Nhà phân phối ủy quyền chính của APC/Schneider tại Việt Nam"
+    },
+    {
+     "name": "Eaton (đối tác Digiworld)",
+     "note": "Hãng UPS quốc tế hợp tác cùng Tập đoàn Digiworld của Việt Nam"
+    },
+    {
+     "name": "Vertiv",
+     "note": "Kênh phân phối đa dạng tại Việt Nam của hãng hạ tầng trọng yếu toàn cầu"
+    },
+    {
+     "name": "Elite Technology JSC",
+     "note": "Đối tác phân phối của Vertiv tại khu vực miền Nam Việt Nam"
+    },
+    {
+     "name": "Light JSC",
+     "note": "Đối tác phân phối của Vertiv tại Việt Nam"
+    },
+    {
+     "name": "Viettel Distribution",
+     "note": "Nhà phân phối sản phẩm Vertiv thuộc tập đoàn viễn thông Việt Nam"
+    },
+    {
+     "name": "Santak Vietnam",
+     "note": "Đại lý chính thức UPS Santak của Tập đoàn Delta tại Việt Nam"
+    },
+    {
+     "name": "Riello UPS Vietnam（LisaTech）",
+     "note": "Đại lý độc quyền UPS Riello (Ý) tại Việt Nam"
+    },
+    {
+     "name": "N-TEK",
+     "note": "Đại lý bộ lưu điện CyberPower tại Việt Nam"
+    },
+    {
+     "name": "Delta Electronics Vietnam",
+     "note": "Chi nhánh Delta Electronics Việt Nam cung cấp giải pháp nguồn điện"
+    },
+    {
+     "name": "ABB Vietnam",
+     "note": "Kênh bán hàng chính thức tại Việt Nam của hãng tự động hóa điện Thụy Sĩ"
+    },
+    {
+     "name": "Socomec Vietnam",
+     "note": "Đại lý và nhà tích hợp UPS công nghiệp Pháp tại Việt Nam"
+    },
+    {
+     "name": "Legrand Vietnam",
+     "note": "Dòng sản phẩm phân phối điện và UPS tại Việt Nam của hãng thiết bị điện Pháp"
+    }
+   ]
+  },
+  {
+   "cat": "Điều hòa chính xác / làm mát trung tâm dữ liệu",
+   "tag": "Trung tâm dữ liệu L2",
+   "items": [
+    {
+     "name": "Vertiv Liebert",
+     "note": "Kênh phân phối tại Việt Nam của thương hiệu điều hòa chính xác trung tâm dữ liệu hàng đầu thế giới"
+    },
+    {
+     "name": "Stulz",
+     "note": "Chuyên gia làm mát chính xác của Đức cung cấp giải pháp trung tâm dữ liệu tại Việt Nam"
+    },
+    {
+     "name": "Schneider Electric Uniflair",
+     "note": "Kênh bán hàng chính thức tại Việt Nam của thương hiệu điều hòa chính xác"
+    },
+    {
+     "name": "Voi MT",
+     "note": "Đại lý điều hòa chính xác Liebert tại Việt Nam"
+    },
+    {
+     "name": "Voi MB",
+     "note": "Đại lý làm mát trung tâm dữ liệu Liebert XDC tại Việt Nam"
+    },
+    {
+     "name": "Thai Son",
+     "note": "Đại lý điều hòa trung tâm dữ liệu Liebert CRV tại Việt Nam"
+    },
+    {
+     "name": "IDT Vietnam",
+     "note": "Đại lý điều hòa chính xác APC Uniflair tại Việt Nam"
+    },
+    {
+     "name": "DCSS",
+     "note": "Nhà cung cấp dịch vụ tích hợp hệ thống điều hòa chính xác trung tâm dữ liệu tại Việt Nam"
+    },
+    {
+     "name": "Airedale by Modine",
+     "note": "Nhà cung cấp thương hiệu quốc tế thiết bị làm mát trọng yếu của Anh"
+    },
+    {
+     "name": "Daikin Vietnam",
+     "note": "Hãng điều hòa Nhật Bản có dòng sản phẩm chuyên dụng cho trung tâm dữ liệu"
+    },
+    {
+     "name": "Mitsubishi Electric Vietnam",
+     "note": "Hãng điều hòa Nhật Bản cung cấp điều hòa chính xác cho trung tâm dữ liệu"
+    }
+   ]
+  },
+  {
+   "cat": "Tổng thầu cơ điện (M&E, có kinh nghiệm dự án bệnh viện)",
+   "tag": "L1 vật lý",
+   "items": [
+    {
+     "name": "REE M&E",
+     "note": "Tổng thầu cơ điện hàng đầu Việt Nam, 40 năm kinh nghiệm bao gồm dự án bệnh viện"
+    },
+    {
+     "name": "Searefico E&C",
+     "note": "Tổng thầu lạnh, điều hòa và cơ điện lâu năm gần 30 năm"
+    },
+    {
+     "name": "Hawee Mechanical & Electrical",
+     "note": "Tổng thầu cơ điện lớn, từng đảm nhận các dự án cấp quốc gia như đường sắt đô thị"
+    },
+    {
+     "name": "Sigma Engineering（Sigma JSC）",
+     "note": "Một trong những nhà thầu cơ điện lớn nhất cả nước, 15 năm kinh nghiệm với hơn 100 dự án"
+    },
+    {
+     "name": "Alphanam E&C",
+     "note": "Hơn 25 năm thiết kế và thi công cơ điện, bao gồm dự án thương mại và công nghiệp"
+    },
+    {
+     "name": "HVC Group",
+     "note": "Thành lập năm 2011, đối tác cơ điện lâu dài của các doanh nghiệp lớn Việt Nam"
+    },
+    {
+     "name": "TDI Group",
+     "note": "Thành lập năm 2009, nhà thầu cơ điện phục vụ khách hàng trong và ngoài nước"
+    },
+    {
+     "name": "Doan Nhat M&E",
+     "note": "Thành lập năm 2007, tổng thầu cơ điện với hơn 450 nhân viên kỹ thuật"
+    },
+    {
+     "name": "HEM（Hanoi Electrical Machinery Mfg JSC）",
+     "note": "Thành lập năm 1961, sản xuất động cơ, máy biến áp, máy phát điện và công trình cơ điện"
+    },
+    {
+     "name": "Shinryo Vietnam",
+     "note": "Gốc Nhật Bản, chuyên thiết kế và thi công hệ thống điều hòa và điện"
+    },
+    {
+     "name": "Coteccons",
+     "note": "Tổng thầu xây dựng lớn nhất Việt Nam, có năng lực thi công MEP/cơ điện"
+    },
+    {
+     "name": "Hòa Bình Corporation",
+     "note": "Tổng thầu xây dựng lớn có bộ phận công trình cơ điện nội bộ"
+    },
+    {
+     "name": "Ricons",
+     "note": "Một trong những tổng thầu xây dựng chính, đảm nhận hạng mục công trình cơ điện"
+    },
+    {
+     "name": "PC1 Group（PCC1）",
+     "note": "Tổng thầu EPC ngành điện lực, thế mạnh về công trình cơ điện truyền tải và phân phối"
+    },
+    {
+     "name": "Delta E&C（Delta Group）",
+     "note": "Tổng thầu xây dựng và EPC tổng hợp, dự án nhà xưởng đa ngành"
+    }
+   ]
+  },
+  {
+   "cat": "BMS / tự động hóa tòa nhà",
+   "tag": "Ranh giới L1/L2",
+   "items": [
+    {
+     "name": "Johnson Controls Vietnam",
+     "note": "Tập đoàn quốc tế, đã xây dựng đội ngũ tại chỗ về tự động hóa tòa nhà và hệ thống BMS"
+    },
+    {
+     "name": "Schneider Electric Vietnam",
+     "note": "Nền tảng EcoStruxure Building, nhà cung cấp BMS hàng đầu tại Việt Nam"
+    },
+    {
+     "name": "Siemens Vietnam",
+     "note": "Hệ thống Desigo, thương hiệu tự động hóa tòa nhà quốc tế có đội ngũ tại chỗ"
+    },
+    {
+     "name": "Honeywell Vietnam",
+     "note": "Thương hiệu quốc tế cung cấp giải pháp BMS và điều khiển tòa nhà"
+    },
+    {
+     "name": "AIControl Vietnam (đại lý ABB)",
+     "note": "Đại lý chính thức của ABB tại Việt Nam kiêm nhà tích hợp hệ thống BMS"
+    },
+    {
+     "name": "BMSCorp Vietnam (đại lý Delta Controls)",
+     "note": "Đại lý ủy quyền Delta Controls tại Việt Nam, phục vụ bệnh viện và văn phòng"
+    },
+    {
+     "name": "Anh Nguyen Corporation",
+     "note": "Nhà tích hợp BMS nội địa hàng đầu Việt Nam, được Daikin mua lại năm 2025"
+    },
+    {
+     "name": "Mitsubishi Electric Vietnam",
+     "note": "Cung cấp mảng BMS trong giải pháp tòa nhà"
+    },
+    {
+     "name": "Azbil Vietnam",
+     "note": "Gốc Nhật Bản, chuyên gia BMS về tự động hóa tòa nhà và công nghiệp"
+    },
+    {
+     "name": "FRA",
+     "note": "Nhà tích hợp cấp cao nhất của Schneider, tự động hóa điện kiêm công trình BMS"
+    },
+    {
+     "name": "Distech Controls (đối tác kênh tại Việt Nam)",
+     "note": "Thương hiệu điều khiển BMS mở, triển khai tại Việt Nam qua đối tác địa phương"
+    }
+   ]
+  },
+  {
+   "cat": "Hệ thống thông tin bệnh viện (HIS/EMR)",
+   "tag": "Dữ liệu L4",
+   "items": [
+    {
+     "name": "FPT.eHospital（FPT IS）",
+     "note": "Nhà cung cấp HIS tư nhân lớn nhất Việt Nam, phục vụ bệnh viện công và tư"
+    },
+    {
+     "name": "Viettel HIS",
+     "note": "Công ty con hệ thống thông tin y tế thuộc tập đoàn viễn thông Việt Nam"
+    },
+    {
+     "name": "VNPT HIS",
+     "note": "Hệ thống quản lý bệnh viện do tập đoàn bưu chính viễn thông Việt Nam phát triển"
+    },
+    {
+     "name": "Vietsens",
+     "note": "Nhà phát triển ứng dụng bệnh án điện tử (EMR) nội địa"
+    },
+    {
+     "name": "ISOFT",
+     "note": "Hãng HIS nội địa chuyên về quản lý theo khoa/phòng ban"
+    },
+    {
+     "name": "HSOFT",
+     "note": "Nhắm vào thị trường phòng khám tư nhân và bệnh viện quy mô nhỏ, vừa"
+    },
+    {
+     "name": "Medisoft",
+     "note": "Hãng HIS do bác sĩ và kỹ sư đồng sáng lập"
+    },
+    {
+     "name": "EvoMed",
+     "note": "Giải pháp quản lý bệnh viện đa chuyên khoa tích hợp"
+    },
+    {
+     "name": "NANO",
+     "note": "HIS nội địa tích hợp chức năng hành chính và lâm sàng"
+    },
+    {
+     "name": "TCSOFT",
+     "note": "Nhà cung cấp phần mềm tối ưu hóa toàn bộ quy trình vận hành bệnh viện"
+    },
+    {
+     "name": "Synodus",
+     "note": "Nhà phát triển HIS/EMR theo yêu cầu, phục vụ bệnh viện nhiều nước Đông Nam Á"
+    }
+   ]
+  },
+  {
+   "cat": "AI y tế",
+   "tag": "Thông minh L5",
+   "items": [
+    {
+     "name": "VinBrain",
+     "note": "AI hình ảnh y tế của Vingroup, nền tảng DrAid"
+    },
+    {
+     "name": "Gene Solutions",
+     "note": "Startup xét nghiệm gen và y học chính xác hàng đầu Việt Nam"
+    },
+    {
+     "name": "Genetica",
+     "note": "Startup xét nghiệm gen và y học cá nhân hóa"
+    },
+    {
+     "name": "Metamed",
+     "note": "Nền tảng chẩn đoán hình ảnh hỗ trợ AI và dự đoán rủi ro bệnh nhân"
+    },
+    {
+     "name": "Mio Health",
+     "note": "Hệ sinh thái AI chăm sóc phòng ngừa di động và quản lý bệnh mạn tính"
+    },
+    {
+     "name": "BlueOC Tech",
+     "note": "Nền tảng quản lý bệnh viện trên đám mây ứng dụng AI"
+    },
+    {
+     "name": "TMA AI Center",
+     "note": "Thuộc TMA Solutions, chuyên phân tích hình ảnh y tế"
+    },
+    {
+     "name": "eDoctor",
+     "note": "Ứng dụng khám từ xa và quản lý hồ sơ sức khỏe cá nhân"
+    },
+    {
+     "name": "Med247",
+     "note": "Nền tảng bác sĩ gia đình và phòng khám thông minh theo mô hình O2O"
+    },
+    {
+     "name": "VAIS（Vietnam AI Solutions）",
+     "note": "Startup nhận dạng giọng nói/NLP tiếng Việt, có ứng dụng trong y tế"
+    },
+    {
+     "name": "CMC Corporation",
+     "note": "Tập đoàn công nghệ lớn mở rộng sang phần mềm bệnh viện và bảo mật dữ liệu"
+    },
+    {
+     "name": "Qure.ai",
+     "note": "AI sàng lọc lao phổi của Ấn Độ, đối tác trong chương trình chống lao Việt Nam"
+    },
+    {
+     "name": "Olympus",
+     "note": "AI nội soi Nhật Bản được thử nghiệm và thẩm định tại bệnh viện Việt Nam"
+    },
+    {
+     "name": "Orbis",
+     "note": "NGO quốc tế, nền tảng sàng lọc nhãn khoa AI Cybersight"
+    }
+   ]
+  },
+  {
+   "cat": "Hãng thiết bị y tế nước ngoài",
+   "tag": "Thiết bị L3",
+   "items": [
+    {
+     "name": "B. Braun Vietnam",
+     "note": "Tập đoàn thiết bị y tế Đức có cơ sở sản xuất lớn tại Việt Nam"
+    },
+    {
+     "name": "GE HealthCare Vietnam",
+     "note": "Đại lý và trung tâm dịch vụ thiết bị chẩn đoán hình ảnh Mỹ"
+    },
+    {
+     "name": "Philips Healthcare Vietnam",
+     "note": "Đại lý thiết bị hình ảnh y tế và theo dõi bệnh nhân của Hà Lan"
+    },
+    {
+     "name": "Siemens Healthineers Vietnam",
+     "note": "Đại lý thiết bị chẩn đoán hình ảnh và xét nghiệm của Đức"
+    },
+    {
+     "name": "Fujifilm Healthcare Vietnam",
+     "note": "Đại lý thiết bị nội soi và hình ảnh y tế của Nhật Bản"
+    },
+    {
+     "name": "Medtronic Vietnam",
+     "note": "Đại lý thiết bị tim mạch và phẫu thuật của Mỹ"
+    },
+    {
+     "name": "Terumo Vietnam Medical Equipment",
+     "note": "Nhà sản xuất kiêm đại lý ống thông và vật tư truyền dịch của Nhật Bản"
+    },
+    {
+     "name": "Getz Healthcare Vietnam",
+     "note": "Nhà phân phối khu vực về thiết bị y tế và vật tư tiêu hao"
+    },
+    {
+     "name": "Mindray Vietnam",
+     "note": "Đại lý thiết bị hình ảnh và theo dõi y tế của Trung Quốc"
+    },
+    {
+     "name": "TNT Medical",
+     "note": "Nhà phân phối thiết bị y tế nội địa quy mô lớn"
+    },
+    {
+     "name": "Medvitek",
+     "note": "Nhà phân phối, đại lý thiết bị y tế nội địa"
+    }
+   ]
+  },
+  {
+   "cat": "Tập đoàn đầu tư bệnh viện tư nhân/nước ngoài",
+   "tag": "Vận hành L6",
+   "items": [
+    {
+     "name": "Vinmec（Vingroup／VMC Holding）",
+     "note": "Tập đoàn bệnh viện tư nhân nội địa lớn nhất Việt Nam"
+    },
+    {
+     "name": "Thomson Medical Group（FV Hospital）",
+     "note": "Tập đoàn Singapore mua lại Bệnh viện FV của Việt Nam"
+    },
+    {
+     "name": "Hoan My Medical Corporation",
+     "note": "Chuỗi bệnh viện tư nhân toàn quốc tại Việt Nam"
+    },
+    {
+     "name": "Tam Anh Hospital",
+     "note": "Tập đoàn bệnh viện tư nhân cao cấp đang mở rộng nhanh tại Việt Nam"
+    },
+    {
+     "name": "Xuyen A Hospital",
+     "note": "Tập đoàn bệnh viện tư nhân được Warburg Pincus đầu tư"
+    },
+    {
+     "name": "Thu Cuc International Hospital",
+     "note": "Chuỗi bệnh viện tư nhân được VinaCapital góp vốn"
+    },
+    {
+     "name": "Hong Ngoc Hospital",
+     "note": "Chuỗi bệnh viện tư nhân khởi nguồn từ Hà Nội"
+    },
+    {
+     "name": "Hanh Phuc Hospital",
+     "note": "Bệnh viện tư nhân chuyên về sản nhi và thụ tinh ống nghiệm"
+    },
+    {
+     "name": "Phuong Dong Hospital",
+     "note": "Mô hình vận hành tổ hợp y tế theo hướng chuyên khoa"
+    },
+    {
+     "name": "Raffles Medical Group（AIH）",
+     "note": "Tập đoàn Singapore nắm quyền kiểm soát Bệnh viện Quốc tế Mỹ"
+    },
+    {
+     "name": "Columbia Asia Vietnam",
+     "note": "Tập đoàn bệnh viện Malaysia thành lập chi nhánh tại Việt Nam"
+    },
+    {
+     "name": "GIC",
+     "note": "Quỹ đầu tư quốc gia Singapore đầu tư vào công ty mẹ của Vinmec"
+    }
+   ]
+  }
+ ]
+};
+function loadUpdate(f){
+  if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{try{
+    const nd=JSON.parse(rd.result);
+    if(!nd.regs||!nd.players||!nd.stats){alert('Sai định dạng: intel_data.json cần có regs / players / stats');return;}
+    D=nd; renderAll();
+    document.getElementById('upbtn').textContent='✓ Đã tải '+ (D.asof||'Cập nhật dữ liệu');
+  }catch(e){alert('Tải thất bại:'+e.message);}};
+  rd.readAsText(f,'utf-8');
+}
+const LAYC={L1:'8C6D46',L2:'2C5F8A',L3:'7A4E8A',L4:'2E7D64',L5:'B0632E',L6:'4E6E52',L7:'8A2E4A',G:'555F6E'};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=new Date(); today.setHours(0,0,0,0);
+const days=d=>Math.round((new Date(d)-today)/864e5);
+const age=d=>Math.round((today-new Date(d))/864e5);
+function renderAll(){
+document.getElementById('asof').textContent=D.asof;
+const staleN=[...D.stats,...D.players.flatMap(p=>p.moves)].filter(x=>age(x.asof||x.d||D.asof)>120).length;
+document.getElementById('freshNote').textContent=age(D.asof)>120?'⚠ Dữ liệu tổng thể đã quá 120 ngày, nên cập nhật':'Dữ liệu vẫn trong thời hạn tươi mới';
+const fresh=a=>age(a)>120?`<span class="badge b-amb fresh">Cần cập nhật</span>`:'';
+
+/* Đồng hồ pháp lý (sắp xếp theo hạn nhưng giữ chỉ số gốc để chỉnh sửa ghi đúng mục) */
+const order=[...D.regs.keys()].sort((a,b)=>{
+  const da=days(D.regs[a].date),db=days(D.regs[b].date);
+  const ka=da<0?1e6+da:da, kb=db<0?1e6+db:db;   // Mục chưa có hiệu lực xếp trước (gần nhất trước), mục đã có hiệu lực chìm xuống dưới
+  return ka-kb;});
+document.getElementById('regList').innerHTML=order.map(i=>{
+  const r=D.regs[i], n=days(r.date);
+  const cd=n>0?`<span class="cd" style="color:${n<120?'var(--red)':'var(--gold)'}">Còn ${n} ngày có hiệu lực</span>`
+             :`<span class="cd" style="color:var(--green)">Đã có hiệu lực ${-n} ngày</span>`;
+  return `<div class="reg"><div>
+     <button class="delx" onclick="delItem('regs',${i})">✕ Xóa</button>
+     <div class="dd" data-e="regs.${i}.date">${esc(r.date)}</div>${cd}
+     <div style="margin-top:6px"><span class="lay" style="background:#${LAYC[r.layer]||'555F6E'}"><span data-e="regs.${i}.layer">${esc(r.layer)}</span> lớp</span></div></div>
+   <div><h3 data-e="regs.${i}.name">${esc(r.name)}</h3><div class="doc" data-e="regs.${i}.doc">${esc(r.doc)}</div><p data-e="regs.${i}.what">${esc(r.what)}</p>
+     <p style="font-size:.76rem;color:var(--sub)">Cơ hội kinh doanh liên quan:<span data-e="regs.${i}.opps">${esc(r.opps||'')}</span></p></div>
+   <div class="act"><b>Chúng ta nên làm gì</b><span data-e="regs.${i}.act">${esc(r.act)}</span>
+     <div style="margin-top:6px;font-size:.68rem;color:#8A93A3">Nguồn:<span data-e="regs.${i}.src">${esc(r.src)}</span></div></div>
+  </div>`;}).join('')+`<button class="addb" onclick="addItem('regs')">+ Thêm một quy định</button>`;
+
+/* Đối thủ cạnh tranh */
+document.getElementById('plList').innerHTML=D.players.map((p,i)=>`
+ <div class="card pl"><button class="delx" onclick="delItem('players',${i})">✕ Xóa</button>
+  <span class="badge b-nav" data-e="players.${i}.cat">${esc(p.cat)}</span>
+  <h3 style="margin-top:6px"><span class="nm" onclick="openPl(${i})" title="Nhấp để xem hồ sơ công ty và dự án đã thực hiện"><span data-e="players.${i}.name">${esc(p.name)}</span></span>${(p.proj&&p.proj.length)?`<span class="hint">▸ Dự án đã thực hiện ${p.proj.length} mục</span>`:''}</h3>
+  <div class="pos" data-e="players.${i}.pos">${esc(p.pos)}</div>
+  ${p.moves.map((m,j)=>`<div class="mv"><span class="d" data-e="players.${i}.moves.${j}.d">${esc(m.d)}</span><span><span data-e="players.${i}.moves.${j}.t">${esc(m.t)}</span>${fresh(m.asof||m.d+'-01')}</span></div>`).join('')}
+  <button class="addb" style="padding:5px 12px;font-size:.74rem" onclick="addMove(${i})">+ Thêm động thái</button>
+  <div class="mean">Đối với chúng ta:<span data-e="players.${i}.mean">${esc(p.mean)}</span></div></div>`).join('')
+ +`<button class="addb" onclick="addItem('players')">+ Thêm nhà cung cấp</button>`;
+
+/* Danh mục nhà cung cấp đầy đủ */
+const RKEY=[['FPT',0],['Viettel',1],['VNPT',2],['VinBrain',3],['Advantech',4],['REE',5],
+ ['Searefico',6],['Thomson Medical',7],['Vinmec',8],['B. Braun',9],['Qure.ai',10],['Olympus',10],
+ ['Orbis',10],['Johnson Controls',11],['Schneider',11],['Siemens',11]];
+function rlink(name){
+  for(const [kw,idx] of RKEY) if(name.indexOf(kw)>-1)
+    return `<b><a href="#players" onclick="setTimeout(()=>openPl(${idx}),50)">${esc(name)}</a></b>`;
+  return `<b>${esc(name)}</b>`;
+}
+document.getElementById('rosterList').innerHTML=(D.roster||[]).map(sec=>`
+ <div class="rgrp"><div class="rh"><h3>${esc(sec.cat)}</h3><span class="badge b-gry">${esc(sec.tag)}</span>
+  <span style="font-size:.72rem;color:var(--sub)">Tổng cộng ${sec.items.length} cơ sở</span></div>
+  <div class="rlist">${sec.items.map(it=>`<div class="ritem">${rlink(it.name)}<span class="rn">${esc(it.note)}</span></div>`).join('')}</div>
+ </div>`).join('');
+
+/* Dữ liệu */
+document.getElementById('stList').innerHTML=D.stats.map((s,i)=>`
+ <div class="stat"><button class="delx" onclick="delItem('stats',${i})">✕ Xóa</button>
+  <div class="v"><span data-e="stats.${i}.v">${esc(s.v)}</span><span style="font-size:.85rem;font-weight:600;color:var(--sub)"> <span data-e="stats.${i}.unit">${esc(s.unit||'')}</span></span></div>
+  <div class="k"><span data-e="stats.${i}.k">${esc(s.k)}</span> ${s.est?'<span class="badge b-gry">Ước tính</span>':''}${fresh(s.asof)}</div>
+  <div class="n" data-e="stats.${i}.note">${esc(s.note)}</div>
+  <div class="s"><span data-e="stats.${i}.src">${esc(s.src)}</span>・Xác minh <span data-e="stats.${i}.asof">${esc(s.asof)}</span></div></div>`).join('')
+ +`<button class="addb" onclick="addItem('stats')">+ Thêm dữ liệu</button>`;
+applyEditState();
+}
+
+/* ── Chỉnh sửa và xuất dữ liệu trong trang: trang này có thể tự tạo intel_data.json ── */
+let EDIT=false;
+function applyEditState(){
+  document.body.classList.toggle('edit',EDIT);
+  document.querySelectorAll('[data-e]').forEach(el=>el.contentEditable=EDIT);
+  document.getElementById('edbtn').textContent=EDIT?'✓ Hoàn tất chỉnh sửa':'✎ Chỉnh sửa dữ liệu';
+}
+function harvest(){   // Ghi các chỉnh sửa trên màn hình trở lại D
+  document.querySelectorAll('[data-e]').forEach(el=>{
+    const p=el.dataset.e.split('.'); let o=D;
+    for(let k=0;k<p.length-1;k++)o=o[isNaN(p[k])?p[k]:+p[k]];
+    o[p[p.length-1]]=el.textContent.trim();
+  });
+}
+function toggleEdit(){
+  if(EDIT){harvest();EDIT=false;renderAll();}
+  else{EDIT=true;applyEditState();}
+}
+function delItem(key,i){if(!confirm('Xác nhận xóa mục này?'))return;harvest();D[key].splice(i,1);renderAll();}
+function addItem(key){
+  harvest();
+  if(key==='regs')D.regs.push({date:'2026-12-31',name:'(tên quy định mới)',doc:'(số hiệu văn bản)',layer:'G',what:'(một câu: quy định điều gì)',opps:'',act:'(chúng ta nên làm gì)',src:'(nguồn)'});
+  if(key==='players')D.players.push({name:'(tên nhà cung cấp)',cat:'(loại)',pos:'(định vị một câu)',moves:[{d:'2026-08',t:'(động thái)'}],mean:'(ý nghĩa đối với chúng ta)'});
+  if(key==='stats')D.stats.push({k:'(tên chỉ số)',v:'0',unit:'',note:'(con số này nói lên điều gì)',src:'(nguồn)',asof:D.asof});
+  renderAll();
+}
+function addMove(i){harvest();D.players[i].moves.push({d:'2026-08',t:'(động thái mới)'});renderAll();}
+
+/* ── Cửa sổ chi tiết công ty: hồ sơ + dự án đã/đang thực hiện ── */
+function openPl(i){
+  if(EDIT)return;               // Ở chế độ chỉnh sửa, nhấp vào tên là để sửa chữ, không mở cửa sổ
+  const p=D.players[i];
+  const grp=st=>((p.proj||[]).filter(x=>x.st===st).map(x=>`
+    <div class="pj"><div class="y">${esc(x.y)}</div>
+     <div>${esc(x.t)}<div class="s">Nguồn: ${esc(x.src)}</div></div></div>`).join('')||'<p style="font-size:.8rem;color:var(--sub);padding:6px 0">Không tìm được thực tích dự án công khai.</p>');
+  document.getElementById('ovl').innerHTML=`<div class="dlg" onclick="event.stopPropagation()">
+   <div class="top"><h2>${esc(p.name)}<span class="badge b-nav" style="margin-left:10px;vertical-align:3px">${esc(p.cat)}</span></h2>
+    <button class="x" onclick="closePl()">✕</button></div>
+   <div class="bd">
+    ${p.profile?`<div class="prof">${esc(p.profile)}</div>`:''}
+    <h4>Đang thực hiện/hiện tại</h4>${grp('Đang triển khai')}
+    <h4>Thực tích trước đây</h4>${grp('Quá khứ')}
+    ${p.moves&&p.moves.length?`<h4>Động thái gần đây</h4>${p.moves.map(m=>`<div class="pj"><div class="y">${esc(m.d)}</div><div>${esc(m.t)}</div></div>`).join('')}`:''}
+    <div class="mean2">Ý nghĩa đối với chúng ta: ${esc(p.mean)}</div>
+   </div></div>`;
+  document.getElementById('ovl').classList.add('on');
+}
+function closePl(){document.getElementById('ovl').classList.remove('on');}
+function exportData(){
+  if(EDIT)harvest();
+  const blob=new Blob([JSON.stringify(D,null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='intel_data.json';a.click();URL.revokeObjectURL(a.href);
+}
+renderAll();
+</script>
+<script>
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode', m);
+ try{localStorage.setItem('vmh_mode', m);}catch(err){}
+ document.querySelectorAll('.i18modes a').forEach(function(a){a.classList.toggle('on', a.getAttribute('data-md')===m)});
+ return false;
+}
+(function(){try{var m=localStorage.getItem('vmh_mode')||'business';document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(function(a){a.classList.add('on')});}catch(e){}})();
+</script>
+
+<script>
+(function(){
+ document.querySelectorAll('.i18btn').forEach(function(b){
+   b.addEventListener('click', function(){ b.parentElement.classList.toggle('open'); });
+ });
+ document.addEventListener('click', function(e){
+   document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
+ });
+})();
+</script></body></html>

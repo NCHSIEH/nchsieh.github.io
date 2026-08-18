@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>資料中心｜VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff;
+--s1:#2a78d6;--s1l:#86b6ef;--s2:#eb6834;--s3:#1baf7a;--ok:#0ca30c;--warn:#fab219;--serious:#ec835a;--crit:#d03b3b;--axis:#c3c2b7}
+html[data-mode="light"]{--hdrbg:#F3F6FA;--hdrfg:#1F3864}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--red:#F87171;--green:#4ADE80;--hdrbg:#0B1626;--hdrfg:#fff;
+--s1:#3987e5;--s1l:#1c5cab;--s2:#d95926;--s3:#199e70;--crit:#e66767;--axis:#383835}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:var(--hdrbg);color:var(--hdrfg);padding:13px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header b{font-size:1.05rem}
+header .n{font-size:.78rem;opacity:.75}
+.hbtn{background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer}
+main{max-width:1240px;margin:0 auto;padding:22px 20px 60px}
+h2{font-size:1.05rem;margin:26px 0 4px}
+.sub{font-size:.82rem;color:var(--sub);margin-bottom:12px}
+.card{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:18px 20px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
+.kpi{background:var(--sf);border-radius:12px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:15px 17px}
+.kpi .k{font-size:.76rem;color:var(--sub);font-weight:700}
+.kpi .v{font-size:1.7rem;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .n{font-size:.71rem;color:var(--sub);margin-top:3px;line-height:1.45}
+.lg{display:flex;gap:15px;flex-wrap:wrap;font-size:.75rem;color:var(--sub);margin-bottom:10px}
+.lg span{display:flex;align-items:center;gap:5px}
+.lg i{width:11px;height:11px;border-radius:3px;display:block}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{background:var(--line);font-size:.71rem;letter-spacing:.4px;padding:7px 9px;text-align:left;white-space:nowrap}
+td{padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;display:inline-block}
+.p-ok{background:rgba(12,163,12,.14);color:var(--ok)}
+.p-warn{background:rgba(250,178,25,.18);color:#8a6100}
+.p-serious{background:rgba(236,131,90,.18);color:#a54a26}
+.p-crit{background:rgba(208,59,59,.14);color:var(--crit)}
+html[data-mode="dark"] .p-warn{color:var(--warn)}
+html[data-mode="dark"] .p-serious{color:var(--serious)}
+.tipbox{position:fixed;pointer-events:none;background:var(--sf);color:var(--ink);border:1px solid var(--line);
+ border-radius:9px;padding:8px 11px;font-size:.76rem;box-shadow:0 8px 24px rgba(10,20,40,.25);z-index:999;display:none;max-width:270px}
+.note{background:rgba(31,56,100,.06);border-left:3px solid var(--navy);border-radius:0 8px 8px 0;
+ padding:10px 13px;font-size:.79rem;margin-top:12px}
+.ib{display:inline-flex;width:15px;height:15px;border-radius:50%;background:var(--line);color:var(--sub);
+ font-size:.68rem;align-items:center;justify-content:center;cursor:help;font-weight:700;vertical-align:1px}
+/* 方法論抽屜 */
+details.meth{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);margin-bottom:14px}
+details.meth summary{padding:13px 20px;font-weight:700;font-size:.9rem;cursor:pointer;color:var(--teal)}
+details.meth .mb{padding:0 20px 16px;font-size:.82rem;line-height:1.75}
+details.meth .mb h4{font-size:.82rem;margin:10px 0 3px;color:var(--navy)}
+html[data-mode="dark"] details.meth .mb h4{color:var(--s1)}
+details.meth .mb a{color:var(--teal)}
+/* 導覽 overlay */
+.tour{position:fixed;inset:0;background:rgba(10,20,40,.55);z-index:2000;display:none;align-items:center;justify-content:center}
+.tour.show{display:flex}
+.tourbox{background:var(--sf);color:var(--ink);border-radius:15px;max-width:430px;width:92%;padding:24px 26px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.tourbox .st{font-size:.7rem;font-weight:800;letter-spacing:1.5px;color:var(--teal)}
+.tourbox h3{font-size:1.05rem;margin:5px 0 8px}
+.tourbox p{font-size:.85rem;color:var(--sub);line-height:1.7}
+.tourbox .tf{display:flex;gap:8px;margin-top:16px;align-items:center}
+.tourbox .btn{background:var(--navy);color:#fff;border:0;border-radius:8px;padding:8px 18px;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer}
+html[data-mode="dark"] .tourbox .btn{background:var(--s1)}
+.tourbox .skip{background:none;border:0;color:var(--sub);font:inherit;font-size:.78rem;cursor:pointer;margin-left:auto}
+.i18nsw{position:fixed;right:14px;top:14px;z-index:1500;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}main{padding:16px 12px 50px}}
+
+.hint{background:rgba(31,56,100,.06);border-left:4px solid var(--navy);border-radius:0 10px 10px 0;
+ padding:13px 17px;font-size:.83rem;margin-bottom:18px;line-height:1.8}
+.hint b{color:var(--navy)}
+html[data-mode="dark"] .hint b{color:var(--s1)}
+.row{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);
+ padding:15px 18px;margin-bottom:11px;display:grid;grid-template-columns:52px 1fr 220px 150px;gap:14px;align-items:center}
+.row .no{width:44px;height:44px;border-radius:11px;background:var(--line);display:flex;align-items:center;
+ justify-content:center;font-weight:800;font-size:1rem;color:var(--navy)}
+html[data-mode="dark"] .row .no{color:var(--ink)}
+.row.on .no{background:var(--s3);color:#fff}
+.row .nm b{font-size:.92rem;display:block}
+.row .nm .fl{font-size:.74rem;color:var(--sub);margin-top:2px;font-family:ui-monospace,monospace;word-break:break-all}
+.row .nm .us{font-size:.71rem;color:var(--sub);margin-top:3px}
+.row .nm .us i{font-style:normal;background:var(--line);border-radius:4px;padding:1px 7px;margin-right:4px;display:inline-block}
+.row .st{font-size:.78rem}
+.row .st .none{color:var(--sub)}
+.row .st .ok b{color:var(--s3);display:block;font-size:.8rem}
+.row .st small{color:var(--sub);font-size:.71rem;display:block;line-height:1.5}
+.row .ac{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.btn{background:var(--navy);color:#fff;border:0;border-radius:8px;padding:7px 14px;font:inherit;
+ font-size:.77rem;font-weight:700;cursor:pointer;white-space:nowrap}
+html[data-mode="dark"] .btn{background:var(--s1)}
+.btn.g{background:var(--line);color:var(--ink)}
+.btn.d{background:transparent;color:var(--crit);border:1px solid var(--crit)}
+.sens{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(208,59,59,.12);color:var(--crit);margin-left:6px}
+.top{background:rgba(208,59,59,.16)}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.stale{color:var(--warn);font-weight:700}
+@media(max-width:900px){.row{grid-template-columns:44px 1fr;gap:10px}.row .st,.row .ac{grid-column:2}}
+
+.bindbox{margin:0 0 16px}
+.bindcard{border-radius:13px;padding:15px 17px;border:1px solid var(--line,#DCE5E3);background:var(--sf,#fff);
+  display:flex;align-items:flex-start;gap:13px;flex-wrap:wrap}
+.bindcard.on{border-color:#1baf7a;background:linear-gradient(0deg,rgba(27,175,122,.05),rgba(27,175,122,.05))}
+.bindcard.warn{border-color:#d98324;background:linear-gradient(0deg,rgba(217,131,36,.06),rgba(217,131,36,.06))}
+.bindcard .bi{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:1.05rem;background:#EEF3F8;flex:none}
+.bindcard.on .bi{background:#dff3ea}.bindcard.warn .bi{background:#fbeedd}
+.bindcard .bt{flex:1;min-width:230px}
+.bindcard .bt b{display:block;font-size:.9rem;line-height:1.6}
+.bindcard .bt span{display:block;font-size:.78rem;color:var(--sub,#67737F);line-height:1.75;margin-top:2px}
+.bindcard .ba{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.syncnote{font-size:.78rem;margin-top:9px;line-height:1.75;padding-left:47px;color:var(--sub,#67737F)}
+.syncnote b.up{color:#1baf7a}
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head>
+<body>
+<div class="i18nsw"><button type="button" class="i18btn">⚙ 設定</button>
+ <div class="i18panel"><a href="../index.html" class="i18home">🏠 回首頁</a>
+  <div class="i18gt">外觀</div><div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div></div></div>
+<header>
+<svg viewBox="0 0 32 32" width="22" height="22" style="flex:none"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg>
+<b>資料中心</b><span class="n">所有工具的資料都在這裡匯入一次，之後各工具自動讀取</span>
+<button class="hbtn" style="background:transparent;color:inherit;border:1px solid rgba(255,255,255,.3)" onclick="openTour()">❓ 導覽</button>
+</header>
+<main>
+
+<div class="hint">
+<b>怎麼運作：</b>在這裡匯入一次，各工具開啟時就自動帶入，不必再逐一選檔。<br>
+<b>資料存在哪：</b>只存在<b>您這台電腦的瀏覽器裡</b>，不會上傳到任何伺服器——所以填了真實客戶、成本、人名的檔案放心匯入。<br>
+<b>換電腦或清瀏覽器資料就會消失</b>，Excel 檔案本身才是正本，請留在公司內部保存。<br>
+<b>想省掉每次手動匯入：</b>用下方「選擇資料夾」綁定一次「VMH-EcoMap_資料主檔」，之後每次開網站會自動比對檔案有沒有變新，有就自動更新（限 Chrome／Edge）。
+</div>
+
+<div class="bindbox" id="bindbox"></div>
+
+<div class="bar">
+ <button class="btn g" onclick="refresh()">↻ 重新整理狀態</button>
+ <button class="btn d" onclick="clearAll()">清除全部本機資料</button>
+ <span class="sub" style="margin:0" id="summary"></span>
+</div>
+
+<div id="list"></div>
+
+<details class="meth"><summary>📚 為什麼這樣設計（資料架構說明）</summary><div class="mb">
+<h4>Excel 是正本，網站是檢視層</h4>
+所有計算邏輯與公式都在 Excel 裡，Excel 可以完全獨立使用——不開網站也能算。網站工具做的是把 Excel 的數字換成互動圖表，讓不熟 Excel 的人也看得懂、讓會議上可以即時拉動參數。
+<h4>三層資料優先序</h4>
+① <b>資料中心匯入</b>（您的真實資料，只在本機）→ ② <b>站上發布版</b>（空白範本或示範資料，全體可見）→ ③ <b>工具內建範例</b>（連網路都不用）。<br>
+有匯入就用您的，沒有就退回示範資料，工具永遠打得開、不會出現空白畫面。
+<h4>為什麼真實資料不放到網站上</h4>
+這個網站是公開的，任何人知道網址就能下載 <code>pages/</code> 裡的檔案。所以站上只放空白範本；真實資料走「本機匯入」這條路，兼顧方便與保密。
+<h4>將來要團隊共用怎麼辦</h4>
+本機儲存的限制是「只有您這台電腦看得到」。當聯盟需要多人共看同一份即時資料時，下一步是把資料放進 Firebase 的雲端資料庫（Firestore）並加上登入控管——那時才是真正的伺服器端保護。現階段團隊小，本機方案成本為零且足夠。
+</div></details>
+</main>
+<div class="tipbox" id="tip"></div>
+<div class="tour" id="tour"><div class="tourbox"><div class="st"></div><h3></h3><p></p>
+<div class="tf"><button class="btn" onclick="tourNext()">下一步</button><button class="skip" onclick="closeTour()">跳過</button></div></div></div>
+
+<input id="picker" type="file" style="display:none">
+
+<script src="../assets/xlsx.min.js"></script>
+<script src="../assets/vmhdata.js"></script>
+<script>
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode',m);
+ try{localStorage.setItem('vmh_mode',m);}catch(err){}
+ document.querySelectorAll('.i18modes a').forEach(a=>a.classList.toggle('on',a.getAttribute('data-md')===m));
+ return false;
+}
+(function(){
+ document.querySelectorAll('.i18btn').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
+ document.addEventListener('click',e=>{document.querySelectorAll('.i18nsw.open').forEach(w=>{if(!w.contains(e.target))w.classList.remove('open');});});
+ try{const m=localStorage.getItem('vmh_mode')||'business';
+   document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(a=>a.classList.add('on'));}catch(e){}
+})();
+function bindTip(sel){
+  const tip=document.getElementById('tip');
+  document.querySelectorAll(sel+' [data-t]').forEach(el=>{
+    el.addEventListener('mousemove',e=>{tip.textContent=el.getAttribute('data-t');
+      tip.style.display='block';tip.style.left=Math.min(e.clientX+14,innerWidth-290)+'px';tip.style.top=(e.clientY+14)+'px';});
+    el.addEventListener('mouseleave',()=>tip.style.display='none');
+  });
+}
+/* L1 首次導覽 */
+function initTour(key,steps){
+  const seen=(()=>{try{return localStorage.getItem('vmh_tour_'+key)}catch(e){return '1'}})();
+  const el=document.getElementById('tour');
+  let i=0;
+  function draw(){
+    el.querySelector('.st').textContent='導覽 '+(i+1)+' / '+steps.length;
+    el.querySelector('h3').textContent=steps[i][0];
+    el.querySelector('p').textContent=steps[i][1];
+    el.querySelector('.btn').textContent=i===steps.length-1?'開始使用':'下一步';
+  }
+  window.tourNext=()=>{ if(i<steps.length-1){i++;draw();} else closeTour(); };
+  window.closeTour=()=>{el.classList.remove('show');try{localStorage.setItem('vmh_tour_'+key,'1')}catch(e){}};
+  window.openTour=()=>{i=0;draw();el.classList.add('show');};
+  if(!seen){openTour();}
+}
+/* 資料主檔自動讀取：站上發布 → 內建範例（fallback）→ 手動讀檔（優先） */
+function autoloadXlsx(relPath,onWB){
+  if(location.protocol==='file:')return;   // 本機直接開檔時不嘗試
+  fetch(relPath).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer();})
+   .then(b=>{const wb=XLSX.read(new Uint8Array(b),{type:'array'});onWB(wb,'資料主檔（站上發布版）');})
+   .catch(()=>{});
+}
+
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+let CUR=null;
+
+function rowHtml(src,meta){
+  const on=!!meta;
+  const days=VMHData.daysAgo(meta&&meta.at);
+  const stale=days!=null&&days>30;
+  return `<div class="row ${on?'on':''}">
+    <div class="no">${esc(src.no)}</div>
+    <div class="nm"><b>${esc(src.name)}${src.sens?`<span class="sens ${src.top?'top':''}">${src.top?'★★ 最機敏':'機敏'}</span>`:''}</b>
+      <div class="fl">請匯入：${esc(src.file)}</div>
+      <div class="us">${src.used.map(u=>`<i>${esc(u)}</i>`).join('')}${esc(src.note)}</div></div>
+    <div class="st">${on
+      ? `<span class="ok"><b>✓ 已匯入</b><small>${esc(meta.name)}<br>${VMHData.fmtTime(meta.at)}・${VMHData.fmtSize(meta.size)}
+         ${stale?`<span class="stale">・已 ${days} 天未更新</span>`:''}</small></span>`
+      : `<span class="none">尚未匯入<br><small>工具目前顯示示範資料</small></span>`}</div>
+    <div class="ac"><button class="btn" onclick="pick('${src.key}')">${on?'重新匯入':'匯入'}</button>
+      ${on?`<button class="btn d" onclick="drop('${src.key}')">清除</button>`:''}</div>
+  </div>`;
+}
+
+function refresh(){
+  VMHData.listMeta().then(rows=>{
+    document.getElementById('list').innerHTML=rows.map(r=>rowHtml(r.src,r.meta)).join('');
+    const n=rows.filter(r=>r.meta).length;
+    document.getElementById('summary').textContent=`已匯入 ${n} / ${rows.length} 項`;
+  }).catch(e=>{
+    document.getElementById('list').innerHTML=
+      `<div class="row"><div class="nm"><b>無法使用本機儲存</b><div class="us">${esc(e.message)}
+       ——若您是用檔案總管直接開啟本檔（file://），請改從正式網址開啟。</div></div></div>`;
+  });
+}
+
+/* ══ 資料夾綁定：指定一次，之後開頁自動比對更新 ══════════════════ */
+function bindHtml(state, folderName, note){
+  const S={
+    unsupported:['warn','⚠','這個瀏覽器不支援資料夾自動比對',
+      '請改用 Chrome 或 Edge 開啟本站即可啟用。其他瀏覽器仍可照舊手動匯入，功能不受影響。',''],
+    unbound:['','📁','還沒綁定資料主檔資料夾',
+      '指定一次「VMH-EcoMap_資料主檔」資料夾，之後每次開啟網站就會自動比對檔案有沒有變新，有就自動更新，不必再逐一匯入。檔案只會被讀取，不會被修改，也不會離開這台電腦。',
+      '<button class="btn g" onclick="doBind()">選擇資料夾</button>'],
+    granted:['on','✓','已綁定：'+folderName,
+      '每次開啟網站會自動比對並更新。',
+      '<button class="btn" onclick="doSync()">立即比對</button><button class="btn d" onclick="doUnbind()">解除綁定</button>'],
+    prompt:['warn','🔒','已綁定：'+folderName+'（本次需重新授權）',
+      '瀏覽器規定重新授權必須由您點一下，這是安全機制。按下後就會自動比對更新。',
+      '<button class="btn g" onclick="doSync()">授權並比對</button><button class="btn d" onclick="doUnbind()">解除綁定</button>'],
+    denied:['warn','✕','資料夾授權遭拒',
+      '請按「解除綁定」後重新選擇資料夾，或在網址列左側的鎖頭圖示中恢復檔案存取權限。','<button class="btn d" onclick="doUnbind()">解除綁定</button>']
+  };
+  const [cls,icon,title,desc,btns]=S[state]||S.unbound;
+  return `<div class="bindcard ${cls}"><div class="bi">${icon}</div>
+    <div class="bt"><b>${title}</b><span>${desc}</span></div>
+    <div class="ba">${btns}</div></div>${note?`<div class="syncnote">${note}</div>`:''}`;
+}
+
+let LASTNOTE='';
+function paintBind(note){
+  if(note!=null) LASTNOTE=note;
+  const box=document.getElementById('bindbox');
+  if(!VMHData.fsSupported()){ box.innerHTML=bindHtml('unsupported','',''); return Promise.resolve('unsupported'); }
+  return Promise.all([VMHData.folderPermission(), VMHData.getFolder()]).then(([perm,rec])=>{
+    box.innerHTML=bindHtml(perm==='none'?'unbound':perm, rec?rec.name:'', LASTNOTE);
+    return perm;
+  });
+}
+
+function syncNote(r){
+  if(!r||!r.ok) return '';
+  const t=new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+  if(r.updated.length) return `${t} 比對完成：<b class="up">更新了 ${r.updated.length} 項</b>`+
+    `（${r.updated.map(u=>esc(u.no+' '+u.name)).join('、')}）`+
+    (r.missing.length?`；資料夾中找不到 ${r.missing.length} 項（${r.missing.map(m=>esc(m.no)).join('、')}）`:'');
+  return `${t} 比對完成：全部都是最新版，沒有需要更新的檔案`+
+    (r.missing.length?`；資料夾中找不到 ${r.missing.length} 項（${r.missing.map(m=>esc(m.no)).join('、')}）`:'');
+}
+
+function doBind(){
+  VMHData.bindFolder()
+    .then(()=>doSync())
+    .catch(e=>{ if(e && e.name==='AbortError') return; alert('無法綁定資料夾：'+(e.message||e)); });
+}
+function doUnbind(){
+  if(!confirm('解除綁定後就不會再自動比對，已匯入的資料仍保留。要解除嗎？')) return;
+  VMHData.unbindFolder().then(()=>paintBind(''));
+}
+function doSync(){
+  const box=document.getElementById('bindbox');
+  box.innerHTML=`<div class="bindcard"><div class="bi">⏳</div><div class="bt"><b>比對中…</b>
+    <span>正在讀取資料夾並比對每個檔案的修改時間。</span></div></div>`;
+  VMHData.syncFolder(false).then(r=>{
+    if(!r.ok && r.reason==='denied'){ return paintBind('授權未通過，這次沒有比對。'); }
+    if(!r.ok){ return paintBind('比對未完成：'+(r.message||r.reason)); }
+    refresh();
+    return paintBind(syncNote(r));
+  });
+}
+
+function pick(key){
+  CUR=key;
+  const src=VMHData.get(key);
+  const p=document.getElementById('picker');
+  p.accept = src.kind==='json' ? '.json' : '.xlsx';
+  p.value=''; p.click();
+}
+document.getElementById('picker').addEventListener('change',function(){
+  const f=this.files[0]; if(!f||!CUR)return;
+  const src=VMHData.get(CUR);
+  const okExt = src.kind==='json' ? /\.json$/i.test(f.name) : /\.xlsx$/i.test(f.name);
+  if(!okExt){ alert('檔案格式不符。這一項需要 '+(src.kind==='json'?'.json':'.xlsx')+' 檔：\n'+src.file); return; }
+  VMHData.save(CUR,f).then(()=>{ refresh(); }).catch(e=>alert('匯入失敗：'+e.message));
+});
+function drop(key){
+  if(!confirm('確定清除這項的本機資料？工具會退回顯示示範資料。'))return;
+  VMHData.clear(key).then(refresh);
+}
+function clearAll(){
+  if(!confirm('確定清除全部本機匯入的資料？\n（Excel 正本不受影響，只是這台電腦上的暫存被清掉）'))return;
+  VMHData.clearAll().then(refresh);
+}
+initTour('datahub',[
+ ['一次匯入，全站通用','以前每個工具都要各自選檔——現在在這裡匯入一次，各工具開啟時自動帶入。'],
+ ['每一列都告訴您要匯哪個檔','灰色等寬字那行就是檔名。找不到檔案的話，首頁「下載中心」與「進階／夥伴專區」都可以下載空白範本。'],
+ ['資料只存在您這台電腦','不會上傳到任何伺服器，所以填了真實客戶、成本、人名的檔案可以放心匯入。'],
+ ['Excel 才是正本','清瀏覽器資料或換電腦，這裡的暫存就沒了。Excel 檔案請留在公司內部保存。'],
+]);
+// 開頁流程：先靜默比對資料夾（已授權才會動），再畫出清單
+VMHData.autoSync().then(r=>{
+  refresh();
+  paintBind(r && r.ok ? syncNote(r) : '');
+}).catch(()=>{ refresh(); paintBind(''); });
+</script>
+</body></html>

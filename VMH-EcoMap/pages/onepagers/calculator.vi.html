@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+
+<title>Máy tính mô hình kinh doanh dự án VMH-EcoMap-2 — Hướng dẫn nhanh</title>
+<style>
+  :root{
+    --navy:#1F3864; --midblue:#2F5597; --teal:#2E747A; --green:#548235;
+    --gold:#BF8F00; --purple:#7030A0; --red:#B03A2E;
+    --ink:#16202E; --muted:#5C6675; --line:#DDE3EC;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#EEF1F6; color:var(--ink);
+       font-family:"Microsoft JhengHei","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;}
+  .page{width:1760px; margin:0 auto; padding:30px 26px 40px; background:#fff;}
+
+  .hd{display:flex; align-items:flex-end; gap:24px; border-bottom:4px solid var(--navy); padding-bottom:14px;}
+  .hd h1{font-size:37px; margin:0; color:var(--navy); letter-spacing:1px; line-height:1.16; flex:0 0 auto; white-space:nowrap;}
+  .hd .sub{font-size:14.5px; color:var(--muted); line-height:1.62; padding-bottom:4px;}
+  .hd .sub b{color:var(--navy);}
+  .ver{background:var(--green); color:#fff; font-size:12.5px; font-weight:800; padding:3px 10px; border-radius:20px; vertical-align:5px;}
+
+  .key{margin:22px 0 8px; border:3px solid var(--gold); border-radius:14px; background:#FFFBF0; padding:16px 22px;}
+  .key .t{font-size:23px; font-weight:800; color:#8A6800; margin-bottom:7px;}
+  .key .d{font-size:14.5px; line-height:1.75; color:#3A3320;}
+  .key .d b{color:#8A6800;}
+  .key .cite{display:inline-block; margin-top:8px; font-size:12.5px; color:#7A6A40; background:#F5EBD5;
+              padding:6px 12px; border-radius:8px; line-height:1.6;}
+
+  .cats{display:grid; grid-template-columns:repeat(6,1fr); gap:11px; margin:20px 0 4px;}
+  .cat{border:2px solid var(--line); border-radius:11px; overflow:hidden; background:#fff; display:flex; flex-direction:column;}
+  .cat .h{padding:8px 11px; color:#fff; font-size:14.5px; font-weight:800; line-height:1.25;}
+  .cat .b{padding:9px 11px 11px; flex:1;}
+  .cat .lb{font-size:10.5px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:2px;}
+  .cat .m{font-size:13.5px; font-weight:800; color:var(--teal); margin-bottom:7px; line-height:1.35;}
+  .cat .e{font-size:11.8px; line-height:1.55; color:#4A5462;}
+  .c1 .h{background:var(--green);} .c2 .h{background:var(--teal);} .c3 .h{background:var(--red);}
+  .c4 .h{background:var(--midblue);} .c5 .h{background:#7A8592;} .c6 .h{background:var(--purple);}
+  .cat.on{border-color:var(--teal); border-width:3px; box-shadow:0 3px 14px rgba(46,116,122,.25);}
+
+  .flowhd{font-size:21px; font-weight:800; color:var(--navy); margin:26px 0 3px;}
+  .flowsub{font-size:13.5px; color:var(--muted); margin:0 0 14px;}
+  .flow{display:grid; grid-template-columns:repeat(5, 1fr); gap:13px; position:relative;}
+  .step{border:2px solid var(--line); border-radius:14px; background:#fff; overflow:hidden;
+        box-shadow:0 2px 10px rgba(31,56,100,.07); display:flex; flex-direction:column;}
+  .step .top{padding:11px 13px 9px; color:#fff;}
+  .step .num{font-size:12px; font-weight:800; letter-spacing:2px; opacity:.85;}
+  .step .q{font-size:18px; font-weight:800; line-height:1.28; margin-top:3px;}
+  .step .pg{font-size:12px; font-weight:700; margin-top:6px; background:rgba(255,255,255,.22);
+            display:inline-block; padding:3px 9px; border-radius:20px;}
+  .step .body{padding:11px 13px 5px; flex:1;}
+  .step .lb{font-size:11px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:3px;}
+  .step ul{margin:0 0 9px; padding-left:16px;}
+  .step li{font-size:12.4px; line-height:1.55; margin-bottom:3px;}
+  .step .now{margin:0 13px 12px; border-radius:9px; padding:8px 10px; background:#F5F7FA; border:1px solid var(--line);}
+  .step .now .t{font-size:10.5px; font-weight:800; letter-spacing:1px; color:var(--muted);}
+  .step .now .v{font-size:12.3px; line-height:1.5; margin-top:3px;}
+  .step .now .v b{font-size:14.5px;}
+  .s1 .top{background:var(--purple);} .s1 .now .v b{color:var(--purple);}
+  .s2 .top{background:var(--navy);}   .s2 .now .v b{color:var(--navy);}
+  .s3 .top{background:var(--midblue);}.s3 .now .v b{color:var(--midblue);}
+  .s4 .top{background:var(--teal);}   .s4 .now .v b{color:var(--teal);}
+  .s5 .top{background:var(--green);}  .s5 .now .v b{color:#3F6427;}
+  .arrow{position:absolute; top:72px; font-size:25px; color:#B9C4D4; font-weight:800;}
+
+  .cmphd{font-size:21px; font-weight:800; color:var(--navy); margin:28px 0 3px;}
+  .cmpsub{font-size:13.5px; color:var(--muted); margin:0 0 13px;}
+  table.cmp{width:100%; border-collapse:collapse; font-size:13px;}
+  table.cmp th,table.cmp td{border:1px solid var(--line); padding:8px 10px; text-align:center; vertical-align:middle;}
+  table.cmp th{background:var(--navy); color:#fff; font-size:13.5px; font-weight:800;}
+  table.cmp td.rowh{background:#F3F5F7; color:var(--navy); text-align:left; font-weight:700; width:180px;}
+  table.cmp td.num{font-weight:700; font-size:15px;}
+  table.cmp tr.hi td{background:#F7FAFC;}
+  table.cmp tr.key td{background:#F2F8EC;}
+  .pos{color:#3F6427;} .neg{color:var(--red);} .na{color:#98A2B0; font-size:12px;}
+  .vpill{display:inline-block; padding:4px 11px; border-radius:20px; font-weight:800; font-size:13px; color:#fff;}
+  .pg-ok{background:var(--green);} .pg-mid{background:var(--gold);} .pg-op{background:var(--purple);}
+  .lead{font-size:12.2px; line-height:1.58; text-align:left; color:#37414F;}
+  .lead b{color:var(--navy);}
+  .catchip{display:inline-block; font-size:11.5px; font-weight:800; color:#fff; padding:2px 9px; border-radius:12px;}
+
+  .tips{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:22px;}
+  .tip{border-radius:12px; padding:12px 15px; border-left:6px solid; background:#F7F9FC;}
+  .tip .h{font-size:14.5px; font-weight:800; margin-bottom:4px;}
+  .tip .d{font-size:12.3px; line-height:1.6; color:#37414F;}
+  .t1{border-color:var(--gold);} .t1 .h{color:#8A6800;}
+  .t2{border-color:var(--red);}  .t2 .h{color:var(--red);}
+  .t3{border-color:var(--teal);} .t3 .h{color:var(--teal);}
+  .t4{border-color:var(--purple);} .t4 .h{color:var(--purple);}
+
+  .newbar{display:grid; grid-template-columns:repeat(7,1fr); gap:11px; margin-top:22px;}
+  .nb{border:2px dashed #C3CCD8; border-radius:11px; padding:10px 13px; background:#FAFBFD;}
+  .nb .h{font-size:13px; font-weight:800; color:var(--navy); margin-bottom:3px;}
+  .nb .d{font-size:11.5px; line-height:1.55; color:#4A5462;}
+
+  .foot{margin-top:20px; padding-top:12px; border-top:1px solid var(--line);
+        font-size:11.8px; color:var(--muted); line-height:1.72;}
+  .foot b{color:var(--navy);}
+</style>
+<style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18btn:hover{background:#1F3864}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18home:hover{background:#E7EEF6}
+.i18row{display:flex;gap:4px;flex-wrap:wrap}
+.i18row a{color:#232B37;background:#F4F8FB;text-decoration:none;padding:5px 9px;border-radius:7px;font-size:.74rem;font-weight:700}
+.i18row a.on{background:#152C4E;color:#fff}
+.i18row a:hover:not(.on){background:#E1E7EF}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}.i18panel{right:0}}
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head>
+<body><div class="i18nsw">
+ <button type="button" class="i18btn">⚙ VI</button>
+ <div class="i18panel">
+   <a href="../index.vi.html" class="i18home">🏠 Về trang chủ</a>
+   <div class="i18gt">Ngôn ngữ</div>
+   <div class="i18row"><a href="calculator.html">中文</a><a href="calculator.en.html">EN</a><a href="calculator.vi.html" class="on">VI</a></div>
+   
+ </div>
+</div>
+<div class="page">
+
+  <div class="hd">
+    <h1>Dự án này có thực sự sinh lời hay không?<br>Hỏi trước: nên dùng thước đo nào?</h1>
+    <div class="sub">
+      <b>Máy tính mô hình kinh doanh dự án VMH-EcoMap-2 <span class="ver">v1.0</span></b>| Bộ công cụ chính trả lời câu hỏi “có làm hay không, ai làm, khi nào làm” — tệp này chỉ trả lời một câu hỏi duy nhất:<b>liệu dự án cụ thể này có đáng để thực hiện hay không.</b><br>
+      <b>Thiết kế cốt lõi</b>: không dùng cùng một chuẩn NPV để đo mọi dự án. Trước tiên chọn “loại hình đầu tư” trên trang tính 01, trang 10 tóm tắt quyết định sẽ tự động áp dụng quy tắc diễn giải tương ứng.<br>
+      Tư vấn viên điền bốn trang chi phí và doanh thu, hệ thống tính toán sáu trang,<b>chủ đầu tư chỉ cần xem trang cuối (10 tóm tắt quyết định). Mỗi tiểu dự án một tệp riêng.</b>
+    </div>
+  </div>
+
+  <div class="key">
+    <div class="t">Vì sao phải phân loại? Vì dùng sai thước đo có thể bác bỏ chính khoản đầu tư cần thực hiện nhất</div>
+    <div class="d">
+      Đem hạ tầng như “phòng máy chủ,” “mạng lưới,” “nền tảng dữ liệu” — loại<b>hạ tầng</b> này ra so sánh với “trung tâm chẩn đoán hình ảnh CT” bằng cùng một chuẩn NPV, kết luận chắc chắn sẽ là hạ tầng không đáng đầu tư —
+      vì<b>lợi ích của nó thuộc về các dự án khác được xây dựng trên nền đó, trong khi toàn bộ chi phí lại dồn hết vào chính nó</b>. Đây không phải vì dự án không tốt, mà vì dùng sai thước đo.
+      Câu hỏi đúng không phải là “nó kiếm được bao nhiêu,” mà là<b>“nếu không tự xây, mười năm tới sẽ phải chi thêm bao nhiêu.”</b>。
+      <div class="cite">
+        <b>Bằng chứng thực nghiệm từ MIT Sloan (Weill &amp; Aral):</b>hạ tầng là hạng mục chiếm tỷ trọng cao nhất trong chi tiêu IT của doanh nghiệp (trung bình 46%),
+        và cũng là hạng mục được nêu rõ là “khó biện minh chi phí trước nhất (most difficult to cost-justify in advance).”
+        Cùng nghiên cứu này còn cho thấy:<b>★ Các doanh nghiệp có hiệu suất hàng đầu dành 55% chi tiêu IT cho hạ tầng, trong khi nhóm hiệu suất thấp chỉ dành 37%.</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="cats">
+    <div class="cat c1"><div class="h">A Tạo doanh thu</div><div class="b">
+      <div class="lb">Dùng chỉ số nào</div><div class="m">NPV／MIRR／PI</div>
+      <div class="e">Có thể tự thu phí trực tiếp từ bên chi trả bên ngoài.<br><b>Ví dụ: Trung tâm chẩn đoán hình ảnh CT</b>— có mã thanh toán, làm một việc thu một việc.</div></div></div>
+    <div class="cat c2 on"><div class="h">B Hỗ trợ vận hành ★</div><div class="b">
+      <div class="lb">Dùng chỉ số nào</div><div class="m">Giá trị hiện tại ΔTCO<br>Chi phí dịch vụ trên mỗi đơn vị</div>
+      <div class="e">Không thu phí trực tiếp, nhưng giúp các dự án khác có thể triển khai.<br><b>Ví dụ: Phòng máy chủ IDC, mạng lưới khuôn viên bệnh viện, nền tảng dữ liệu.</b></div></div></div>
+    <div class="cat c3"><div class="h">C Bắt buộc theo quy định</div><div class="b">
+      <div class="lb">Dùng chỉ số nào</div><div class="m">Chi phí tuân thủ tối thiểu<br>Cái giá của việc không thực hiện</div>
+      <div class="e">Không làm thì không thể vận hành — không cần tính có đáng hay không.<br><b>Ví dụ: Nghiệm thu phân cấp EMR, tuân thủ PDPL.</b></div></div></div>
+    <div class="cat c4"><div class="h">D Giảm chi phí</div><div class="b">
+      <div class="lb">Dùng chỉ số nào</div><div class="m">NPV tiết kiệm chi phí</div>
+      <div class="e">Lợi ích = chi phí được tránh.<br><b>Ví dụ: Số hóa phim để tiết kiệm chi phí phim, tối ưu hóa năng lượng.</b></div></div></div>
+    <div class="cat c5"><div class="h">E Thay thế và duy trì</div><div class="b">
+      <div class="lb">Dùng chỉ số nào</div><div class="m">Chi phí vòng đời<br>Rủi ro ngừng hoạt động</div>
+      <div class="e">Chi tiêu cần thiết để duy trì vận hành không gián đoạn.<br><b>Ví dụ: Ắc quy UPS, bóng X-quang, thay thế máy chủ.</b></div></div></div>
+    <div class="cat c6"><div class="h">F Định vị chiến lược</div><div class="b">
+      <div class="lb">Dùng chỉ số nào</div><div class="m">Các cổng theo giai đoạn<br>Giá trị quyền chọn</div>
+      <div class="e">Nhằm đạt được cơ hội tương lai và các trường hợp tham chiếu.<br><b>Ví dụ: HIS cho bệnh viện đầu tàu đầu tiên.</b></div></div></div>
+  </div>
+
+  <p class="flowhd">Luồng thao tác máy tính: năm bước, mỗi bước một câu hỏi</p>
+  <p class="flowsub">Các “ví dụ” bên dưới lấy từ số liệu thực tế được tính ra từ ba trường hợp mô phỏng trong lần này. ★ Toàn bộ số tiền trong tệp mặc định là NTD; trang tính 01 có thể chuyển sang USD hoặc VND chỉ bằng một cú nhấp.</p>
+
+  <div class="flow">
+    <div class="arrow" style="left:calc(20% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(40% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(60% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(80% - 15px);">▶</div>
+
+    <div class="step s1">
+      <div class="top">
+        <div class="num">STEP 1</div>
+        <div class="q">Đây là loại hình đầu tư nào?<br>Nên đánh giá theo chuẩn nào?</div>
+        <div class="pg">01 Thiết lập dự án + 01B Trình hướng dẫn phân loại</div>
+      </div>
+      <div class="body">
+        <div class="lb">Ô quan trọng nhất</div>
+        <ul>
+          <li><b>★ Loại hình đầu tư</b>　Chọn sai sẽ dùng sai thước đo<br><span style="color:#8A6800;font-weight:700;">Không chắc nên chọn loại nào? Vào 01B trả lời bốn câu hỏi</span></li>
+          <li><b>Loại tiền tệ</b>　Tiền tệ nhập liệu / tiền tệ hiển thị / đơn vị hiển thị</li>
+          <li><b>Thuế</b>　Thuế suất ưu đãi, số năm miễn thuế, khấu trừ lỗ</li>
+          <li><b>Vốn lưu động</b>　Tách riêng số ngày phải thu bảo hiểm y tế và tự chi trả</li>
+        </ul>
+        <div class="lb">Vì sao quan trọng</div>
+        <ul><li>Thuế thu nhập cho y tế xã hội hóa tại Việt Nam là<b>10% trong suốt thời gian dự án</b>+ miễn thuế 4 năm, không phải 20%</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">01B Trình hướng dẫn phân loại</div>
+        <div class="v">Bốn câu hỏi → đề xuất một loại + lý do + bước tiếp theo<br>Và đối chiếu với lựa chọn ở 01<b>tự động so khớp</b>(✓ khớp / ⚠ không khớp)</div>
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="top">
+        <div class="num">STEP 2</div>
+        <div class="q">Tổng cộng cần đầu tư<br>bao nhiêu tiền?</div>
+        <div class="pg">02 Chi phí đầu tư CAPEX</div>
+      </div>
+      <div class="body">
+        <div class="lb">Chi tiết cấp BOQ (số lượng × đơn giá)</div>
+        <ul>
+          <li>Dùng tên gọi chính thức trong ngành kỹ thuật, có thể đối chiếu từng hạng mục trực tiếp với báo giá của nhà cung cấp</li>
+          <li><b>Nhập khẩu / trong nước</b>　Thuế nhập khẩu và VAT tính riêng</li>
+          <li><b>Loại khấu hao và thời gian sử dụng</b>　Theo Thông tư 45/2013</li>
+          <li><b>Năm thay thế</b>　Ắc quy UPS, bóng X-quang, máy chủ</li>
+        </ul>
+        <div class="lb">★ Hạng mục thường bị đánh giá thấp nhất tại Việt Nam</div>
+        <ul><li>Dịch vụ y tế<b>Miễn VAT ⇒ VAT đầu vào không được khấu trừ</b>, phải vốn hóa toàn bộ</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Ví dụ: Trường hợp CT</div>
+        <div class="v">43 hạng mục | thuế phí không được khấu trừ chiếm <b>7.7%</b><br>(dưới 4% là tính sai)</div>
+      </div>
+    </div>
+
+    <div class="step s3">
+      <div class="top">
+        <div class="num">STEP 3</div>
+        <div class="q">Mỗi năm chi bao nhiêu?<br>Tiền đến từ đâu?</div>
+        <div class="pg">03 OPEX + 04 Doanh thu</div>
+      </div>
+      <div class="body">
+        <div class="lb">Các trường quan trọng trong 03</div>
+        <ul>
+          <li><b>Tính chất chi phí</b>　“Biến đổi” tăng giảm theo quy mô dịch vụ, “cố định” không đổi — điền sai sẽ làm sai lệch giai đoạn khởi động</li>
+          <li><b>Tỷ lệ tăng trưởng hằng năm</b>　Lương thì đừng điền 0</li>
+        </ul>
+        <div class="lb">Các trường quan trọng trong 04</div>
+        <ul><li>Giá bảo hiểm y tế và giá tự chi trả<b>điền riêng</b>, vì tốc độ thu tiền khác nhau</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Ví dụ: Khoảng cách ngày càng lớn trong trường hợp CT</div>
+        <div class="v">Đơn giá tăng hằng năm <b>1.5%</b>　so với chi phí nhân lực tăng hằng năm <b>8%</b><br>sau mười năm sẽ ăn mòn một phần lớn lợi nhuận</div>
+      </div>
+    </div>
+
+    <div class="step s4">
+      <div class="top">
+        <div class="num">STEP 4</div>
+        <div class="q">Hệ thống tính toán những gì?<br>(không cần thao tác thủ công)</div>
+        <div class="pg">05 Khấu hao  06 Dòng tiền  07 WACC</div>
+      </div>
+      <div class="body">
+        <div class="lb">Suy diễn theo chuẩn ngành</div>
+        <ul>
+          <li>Doanh thu → EBITDA → khấu hao → EBIT → thuế →<b>NOPAT</b></li>
+          <li>+ khấu hao − chi phí vốn − vốn lưu động =<b>FCFF</b></li>
+          <li>Thuế bao gồm<b>quy tắc tính thời điểm bắt đầu miễn thuế</b>và khấu trừ lỗ 5 năm</li>
+        </ul>
+        <div class="lb">Tỷ lệ chiết khấu không còn được điền tùy tiện</div>
+        <ul><li>07 tính bằng CAPM: trái phiếu chính phủ Việt Nam + β × ERP thị trường trưởng thành +<b>phần bù rủi ro quốc gia</b></li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Ví dụ: WACC của ba trường hợp</div>
+        <div class="v">CT <b>11.5%</b>｜IDC <b>10.8%</b>｜HIS <b>12.0%</b><br>CRP Việt Nam 3.90% (Damodaran)</div>
+      </div>
+    </div>
+
+    <div class="step s5">
+      <div class="top">
+        <div class="num">STEP 5</div>
+        <div class="q">Kết luận là gì?<br>Điểm nào dễ tổn thương nhất?</div>
+        <div class="pg">08 Độ nhạy  09 Hỗ trợ vận hành  10 Tóm tắt quyết định</div>
+      </div>
+      <div class="body">
+        <div class="lb">Phân công giữa ba trang</div>
+        <ul>
+          <li><b>08</b>　Ba kịch bản +<b>biểu đồ tornado</b>(biến số nào quan trọng nhất) + điểm hòa vốn</li>
+          <li><b>09</b>　★ Chỉ loại hỗ trợ vận hành mới cần điền: TCO tự xây so với thuê ngoài</li>
+          <li><b>10</b>　Kết luận trên một trang,<b>quy tắc diễn giải tự động chuyển đổi theo loại hình</b></li>
+        </ul>
+        <div class="lb">Chủ đầu tư chỉ cần xem</div>
+        <ul><li>sáu con số trên trang 10 và câu diễn giải tự động đó</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Chỉ số lợi nhuận chính dùng MIRR</div>
+        <div class="v">vì mô hình bao gồm<b>khoản đầu tư thay thế giữa kỳ</b>, nên dòng tiền luân phiên giữa dương và âm<br>IRR có thể có nhiều nghiệm, trong khi MIRR chỉ có một</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="cmphd">Ba trường hợp mô phỏng: cùng một mô hình, ba loại hình, ba câu trả lời khác nhau</p>
+  <p class="cmpsub">Đơn vị số tiền = nghìn NTD. Mỗi con số đều khớp với dữ liệu công khai của Việt Nam giai đoạn 2025–2026 (tỷ lệ bảo hiểm y tế, giá điện, tiền lương, giá thị trường colocation, luật thuế), được liệt kê từng mục trên trang tính 11 nguồn giả định trong mỗi tệp.</p>
+
+  <table class="cmp">
+    <tr>
+      <th style="width:180px;">Hạng mục</th>
+      <th>Bệnh viện A — Trung tâm chẩn đoán hình ảnh CT<br><span style="font-weight:400;font-size:12px;">128 lát cắt / CAP-028</span></th>
+      <th>Bệnh viện A — Phòng máy chủ IDC<br><span style="font-weight:400;font-size:12px;">24 tủ rack / CAP-020</span></th>
+      <th>Bệnh viện B — HIS/EMR<br><span style="font-weight:400;font-size:12px;">500 giường, thuê thay vì mua / CAP-033</span></th>
+    </tr>
+    <tr>
+      <td class="rowh">Loại hình đầu tư</td>
+      <td><span class="catchip" style="background:#548235;">A Tạo doanh thu</span></td>
+      <td><span class="catchip" style="background:#2E747A;">B Hỗ trợ vận hành ★</span></td>
+      <td><span class="catchip" style="background:#7030A0;">F Định vị chiến lược</span></td>
+    </tr>
+    <tr><td class="rowh">Thước đo nên dùng</td>
+      <td class="lead">NPV／MIRR／PI</td>
+      <td class="lead"><b>Giá trị hiện tại ΔTCO</b>, chi phí dịch vụ trên mỗi đơn vị, số dự án được hỗ trợ</td>
+      <td class="lead">Cổng theo giai đoạn, giá trị quyền chọn</td></tr>
+    <tr><td class="rowh">Tỷ lệ chiết khấu WACC</td><td>11.5%</td><td>10.8%</td><td>12.0%</td></tr>
+    <tr><td class="rowh">Tổng vốn đầu tư CAPEX</td><td class="num">43,334</td><td class="num">43,642</td><td class="num">41,020</td></tr>
+    <tr class="hi"><td class="rowh">NPV giá trị hiện tại ròng</td>
+      <td class="num pos">+13,050</td>
+      <td class="num neg">−102,691 <span class="na">(không áp dụng)</span></td>
+      <td class="num neg">−25,766</td></tr>
+    <tr class="hi"><td class="rowh">MIRR</td><td class="num pos">13.1%</td><td class="na">Không áp dụng</td><td class="num neg">0.9%</td></tr>
+    <tr class="hi"><td class="rowh">PI chỉ số khả năng sinh lời</td><td class="num pos">1.30</td><td class="na">Không áp dụng</td><td class="num neg">0.37</td></tr>
+    <tr class="hi"><td class="rowh">Thời gian hoàn vốn chiết khấu</td><td class="num">7.8 năm</td><td class="na">Không áp dụng</td><td class="num neg">Chưa hoàn vốn</td></tr>
+    <tr class="key"><td class="rowh">★ ΔTCO (thuê ngoài − tự xây)</td>
+      <td class="na">—</td>
+      <td class="num pos" style="font-size:18px;">+14,388</td>
+      <td class="na">—</td></tr>
+    <tr class="key"><td class="rowh">Thời gian hoàn vốn ΔTCO / số dự án được hỗ trợ</td>
+      <td class="na">—</td>
+      <td class="num pos">4.0 năm / 7</td>
+      <td class="na">—</td></tr>
+    <tr class="key"><td class="rowh">Chi phí đơn vị tự xây so với giá thị trường</td>
+      <td class="na">—</td>
+      <td class="num pos">59% (36 nghìn/tủ rack/tháng so với giá thị trường 61 nghìn)</td>
+      <td class="na">—</td></tr>
+    <tr>
+      <td class="rowh">Diễn giải tự động</td>
+      <td><span class="vpill pg-mid">△ Khả thi nhưng chậm</span></td>
+      <td><span class="vpill pg-ok">○ Khuyến nghị tự xây</span></td>
+      <td><span class="vpill pg-op">Các cổng theo giai đoạn</span></td>
+    </tr>
+    <tr>
+      <td class="rowh">Vì sao có kết quả này</td>
+      <td class="lead"><b>Vì có mã thanh toán.</b>Chẩn đoán hình ảnh có mức phí bảo hiểm y tế (Thông tư 22/2023/TT-BYT) + thị trường tự chi trả,
+        nên “làm một việc thu một việc” là khả thi — đây là một trong số<b>ít trường hợp trong quá trình số hóa y tế của Việt Nam có thể tính toán độc lập được</b>. NPV dương, MIRR cao hơn WACC, PI là 1.30,
+        chỉ là thời gian hoàn vốn 7.8 năm hơi dài, cần xác nhận thời hạn hợp đồng có bao phủ đủ hay không.</td>
+      <td class="lead"><b>Vì đã đặt đúng câu hỏi.</b>Nếu tính phòng máy chủ như một “hoạt động kinh doanh cho thuê,” kết luận chắc chắn sẽ là âm.
+        Thay vào đó, hãy hỏi “nếu không tự xây thì mười năm phải trả cho FPT/Viettel bao nhiêu” —<b>TCO tự xây 10 năm là 104,212, thuê ngoài 118,600, chênh lệch +14,388</b>，
+        Chi phí xây dựng tự hoàn lại trong 4 năm, đồng thời hỗ trợ 7 dự án.</td>
+      <td class="lead"><b>Vì phía doanh thu bị khóa chặt bởi cấu trúc quy định.</b>Giá dịch vụ y tế của Việt Nam đến nay chỉ bao gồm nhân công và chi phí trực tiếp,<b>chưa bao gồm IT</b>；
+        và trường hợp thanh toán đầu tiên đưa IT vào (313/QĐ-BYT) có mức giá công bố vẫn<b>thấp hơn 5.9%</b>. Nhu cầu bị quy định thúc ép phát sinh, nhưng nguồn chi trả vẫn chưa được thiết lập.</td>
+    </tr>
+    <tr>
+      <td class="rowh">Vậy phải làm sao</td>
+      <td class="lead">Thêm vào hợp đồng<b>khối lượng xét nghiệm tối thiểu bảo đảm</b>; đồng thời đàm phán về cơ cấu khách hàng chứ không chỉ về khối lượng —<b>tỷ lệ tự chi trả</b>có tác động đến lợi nhuận lớn hơn khối lượng dịch vụ.
+        Đồng thời xác nhận tư cách hưởng thuế suất 10% y tế xã hội hóa (kịch bản thận trọng ở 08 đã kiểm nghiệm kết quả khi quay về mức 20%).</td>
+      <td class="lead">Theo dõi ba biến số có thể đảo ngược kết luận:<b>①</b> phân loại giá điện (bậc thương mại theo Thông tư 60/2025 sẽ làm chi phí điện tăng 45–55%, cần xác nhận với EVN);
+        <b>②</b> liệu nhân sự có thể trực chung với bộ phận IT của bệnh viện hay không (3 FTE so với 8–9 FTE độc lập);<b>③</b> báo giá thuê ngoài thực tế.</td>
+      <td class="lead"><b>Không nên phê duyệt toàn bộ số tiền một lần.</b>Chia thành ba giai đoạn với các cổng kiểm soát: triển khai ngoại trú + cấp phép trường hợp sử dụng → triển khai xét nghiệm nội trú + đàm phán với bệnh viện thứ 2 → không giấy tờ toàn viện + ký hợp đồng với bệnh viện thứ 2.
+        Chi phí triển khai một lần khoảng <b>10,530</b>, có thể được san sẻ giảm hơn 60% cho bệnh viện thứ 2 và thứ 3.</td>
+    </tr>
+  </table>
+
+  <div class="tips">
+    <div class="tip t2">
+      <div class="h">NPV âm ≠ dự án này không thể thực hiện</div>
+      <div class="d">Nó chỉ có nghĩa là “<b>với bộ điều kiện hiện tại, tính riêng lẻ trường hợp này,</b>thì không thu hồi được.” Trước tiên hãy xác nhận<b>loại hình đầu tư đã được chọn đúng hay chưa</b>——
+        Đối với ba loại hạ tầng, bắt buộc theo quy định, và thay thế và duy trì, NPV âm là chuyện bình thường, không phải là lý do để bác bỏ.</div>
+    </div>
+    <div class="tip t3">
+      <div class="h">Ba điều kiện đạt cho loại hỗ trợ vận hành</div>
+      <div class="d"><b>①</b> ① Giá trị hiện tại ΔTCO &gt; 0 (tự xây rẻ hơn thuê ngoài);<b>②</b> ② chi phí dịch vụ trên mỗi đơn vị thấp hơn giá mua ngoài thị trường;
+        <b>③ số dự án được hỗ trợ ≥ 2</b>— một “nền tảng” chỉ phục vụ một dự án duy nhất về bản chất là chi phí của dự án đó, không phải là nền tảng.</div>
+    </div>
+    <div class="tip t1">
+      <div class="h">Một tiểu dự án, một tệp</div>
+      <div class="d">Không nên dùng một tệp cho mỗi bệnh viện. Cùng là Bệnh viện A, trường hợp CT và trường hợp phòng máy chủ<b>nên mở riêng mỗi trường hợp một tệp</b>— loại hình khác nhau, thước đo khác nhau, trộn chung sẽ không thể tính được ai đang lãi, ai đang lỗ.
+        Cách đặt tên theo <b>VMH-EcoMap-2_MoHinhKinhDoanh_BenhVien-HangMuc_v1.0</b>。</div>
+    </div>
+    <div class="tip t4">
+      <div class="h">Ô quan trọng nhất cần được thống nhất trước khi trình quyết định đầu tư</div>
+      <div class="d">không phải bất kỳ khoản chi phí nào, mà là<b>tỷ lệ chiết khấu</b>. Cùng một mô hình nhưng dùng 10% và 13% sẽ cho ra kết luận trái ngược nhau.
+        Trang tính 07 đã tính sẵn bằng CAPM (bao gồm phần bù rủi ro quốc gia Việt Nam 3.90%), nhưng<b>vẫn phải được xác nhận bằng văn bản với bên đầu tư</b>。</div>
+    </div>
+  </div>
+
+  <div class="newbar">
+    <div class="nb"><div class="h">01B Trình hướng dẫn phân loại</div><div class="d">Trả lời bốn câu hỏi (tiền có đến từ bên ngoài không / không làm thì sao / hỗ trợ bao nhiêu dự án / không làm thì có ngưng trệ không) để nhận được loại hình đề xuất, kèm lý do, các bước tiếp theo, và đối chiếu với lựa chọn ở 01. Bao gồm bốn điểm thường gây vướng mắc nhất.</div></div>
+    <div class="nb"><div class="h">Chuyển đổi ba loại tiền tệ chỉ bằng một cú nhấp</div><div class="d">Mặc định nhập liệu bằng NTD. Thay đổi “tiền tệ hiển thị” ở 01 sẽ tự động chuyển đổi toàn bộ tệp sang USD hoặc VND; cũng có thể chuyển đơn vị hiển thị (đơn vị / nghìn / triệu) để tránh số VND quá dài.</div></div>
+    <div class="nb"><div class="h">Chi tiết chi phí cấp BOQ</div><div class="d">02 và 03 dùng tên hạng mục chính thức trong ngành kỹ thuật và cấu trúc “số lượng × đơn giá”, phân biệt nhập khẩu / trong nước, tích hợp sẵn thuế nhập khẩu và<b>VAT đầu vào không được khấu trừ</b>。</div></div>
+    <div class="nb"><div class="h">Khấu hao và ưu đãi thuế Việt Nam</div><div class="d">Khấu hao theo thời gian sử dụng theo quy định của Thông tư 45/2013; thuế suất không cố định — 10% cho y tế xã hội hóa + miễn thuế 4 năm, và thời điểm bắt đầu miễn thuế áp dụng quy tắc pháp định “năm có lãi đầu tiên hoặc năm doanh thu thứ 4, tùy điều kiện nào đến trước.”</div></div>
+    <div class="nb"><div class="h">Vốn lưu động</div><div class="d">Số ngày phải thu bảo hiểm y tế và tự chi trả được thiết lập riêng biệt. Quyết toán bảo hiểm y tế của Việt Nam thường có tình trạng treo do vượt định mức (năm 2025 các bệnh viện tại TP. Hồ Chí Minh bị treo gần 2.500 tỷ VND), nên không thể áp dụng giả định chung.</div></div>
+    <div class="nb"><div class="h">WACC và FCFF</div><div class="d">Tỷ lệ chiết khấu được tính bằng CAPM: trái phiếu chính phủ Việt Nam kỳ hạn 10 năm 4.54% + β × ERP thị trường trưởng thành 4.23% + phần bù rủi ro quốc gia Việt Nam 3.90% (Damodaran 2026). Dòng tiền sử dụng FCFF không đòn bẩy.</div></div>
+    <div class="nb"><div class="h">MIRR, PI, ROIC, biểu đồ tornado</div><div class="d">Vì mô hình bao gồm khoản đầu tư thay thế giữa kỳ, IRR có thể có nhiều nghiệm, nên dùng MIRR làm chỉ số chính. Ngoài ra còn có PI (để xếp hạng nhiều trường hợp), ROIC (so sánh với WACC), và biểu đồ tornado (để xác định biến số quan trọng nhất).</div></div>
+  </div>
+
+  <p class="foot">
+    <b>Ghi nhớ tệp này bằng một câu:</b>Trước tiên chọn đúng loại hình (01; nếu không chắc thì dùng trình hướng dẫn 01B), tư vấn viên điền ba trang chi phí và doanh thu (02–04), hệ thống tính toán sáu trang (05–09), và chủ đầu tư xem một trang (10).<br>
+    <b>Khi nào nên mở một tệp mới:</b>Khi phán đoán kinh doanh cho một hạng mục trong bộ công cụ chính trở thành “tiến hành ngay (Go),” hoặc khi chuẩn bị bước vào giai đoạn quyết định đầu tư WP-09, hãy mở một tệp máy tính cho hạng mục đó.<br>
+    <b>Nhất định phải hoàn thành trước khi trình quyết định đầu tư:</b>Mười mục kiểm tra ở cuối trang tính 10 — báo giá chính thức, thuế nhập khẩu và VAT đầu vào, tư cách hưởng ưu đãi thuế,<b>tỷ lệ chiết khấu được thống nhất bằng văn bản</b>, lộ trình pháp lý, OPEX tại chỗ, đối chiếu đơn giá, số ngày phải thu bảo hiểm y tế, đã có điều khoản hợp đồng tương ứng cho biến số xếp hạng cao nhất trong biểu đồ tornado, và thẩm định độc lập bởi đơn vị khác.<br>
+    <b>Tuyên bố quan trọng:</b>Số tiền trong ba trường hợp mô phỏng là<b>giá trị minh họa dùng cho lập kế hoạch</b>, nguồn được liệt kê từng mục trên trang tính 11 trong mỗi tệp; trước khi đánh giá chính thức, mỗi con số đều phải được thay thế bằng báo giá của nhà cung cấp hoặc ước tính kỹ thuật tại chỗ.
+    Việc xác định tư cách hưởng thuế suất 10% y tế xã hội hóa phải được tư vấn thuế địa phương tại Việt Nam xác nhận bằng văn bản theo từng trường hợp cụ thể.
+  </p>
+</div>
+
+<script>
+(function(){
+  function fit(){
+    var page=document.querySelector('.page'); if(!page) return;
+    var natW=page.scrollWidth||page.offsetWidth, natH=page.scrollHeight||page.offsetHeight;
+    var vw=window.innerWidth;
+    if(vw<natW){
+      var scale=vw/natW;
+      page.style.transform='scale('+scale+')';
+      page.style.transformOrigin='top left';
+      document.body.style.height=(natH*scale)+'px';
+      document.body.style.overflowX='hidden';
+    }else{
+      page.style.transform='none';
+      document.body.style.height='auto';
+    }
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  fit();
+})();
+</script>
+
+<script>
+(function(){
+ document.querySelectorAll('.i18btn').forEach(function(b){
+   b.addEventListener('click', function(){ b.parentElement.classList.toggle('open'); });
+ });
+ document.addEventListener('click', function(e){
+   document.querySelectorAll('.i18nsw.open').forEach(function(w){ if(!w.contains(e.target)) w.classList.remove('open'); });
+ });
+})();
+</script></body>
+</html>

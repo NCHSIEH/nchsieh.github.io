@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<script>try{var _m=localStorage.getItem('vmh_mode')||'business';document.documentElement.setAttribute('data-mode',_m);}catch(e){document.documentElement.setAttribute('data-mode','business');}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152C4E%22/%3E%3Cpolygon%20points%3D%2212%2C5%2019%2C11%2012%2C17%205%2C11%22%20fill%3D%22%232DD4BF%22/%3E%3Cpolygon%20points%3D%2220%2C5%2027%2C11%2020%2C17%2013%2C11%22%20fill%3D%22%23F2B84B%22/%3E%3Cpolygon%20points%3D%2216%2C13%2023%2C19%2016%2C25%209%2C19%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.95%22/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>方法論知識庫｜VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA;--hdrbg:var(--navy);--hdrfg:#fff;
+--s1:#2a78d6;--s1l:#86b6ef;--s2:#eb6834;--s3:#1baf7a;--ok:#0ca30c;--warn:#fab219;--serious:#ec835a;--crit:#d03b3b;--axis:#c3c2b7}
+html[data-mode="light"]{--hdrbg:#F3F6FA;--hdrfg:#1F3864}
+html[data-mode="dark"]{--bg:#0B1626;--sf:#132238;--ink:#E7ECF3;--sub:#93A5BF;--line:#22334A;
+--teal:#2DD4BF;--gold:#F2B84B;--red:#F87171;--green:#4ADE80;--hdrbg:#0B1626;--hdrfg:#fff;
+--s1:#3987e5;--s1l:#1c5cab;--s2:#d95926;--s3:#199e70;--crit:#e66767;--axis:#383835}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:var(--hdrbg);color:var(--hdrfg);padding:13px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header b{font-size:1.05rem}
+header .n{font-size:.78rem;opacity:.75}
+.hbtn{background:#fff;color:#1F3864;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer}
+main{max-width:1240px;margin:0 auto;padding:22px 20px 60px}
+h2{font-size:1.05rem;margin:26px 0 4px}
+.sub{font-size:.82rem;color:var(--sub);margin-bottom:12px}
+.card{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:18px 20px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
+.kpi{background:var(--sf);border-radius:12px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:15px 17px}
+.kpi .k{font-size:.76rem;color:var(--sub);font-weight:700}
+.kpi .v{font-size:1.7rem;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .n{font-size:.71rem;color:var(--sub);margin-top:3px;line-height:1.45}
+.lg{display:flex;gap:15px;flex-wrap:wrap;font-size:.75rem;color:var(--sub);margin-bottom:10px}
+.lg span{display:flex;align-items:center;gap:5px}
+.lg i{width:11px;height:11px;border-radius:3px;display:block}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{background:var(--line);font-size:.71rem;letter-spacing:.4px;padding:7px 9px;text-align:left;white-space:nowrap}
+td{padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;display:inline-block}
+.p-ok{background:rgba(12,163,12,.14);color:var(--ok)}
+.p-warn{background:rgba(250,178,25,.18);color:#8a6100}
+.p-serious{background:rgba(236,131,90,.18);color:#a54a26}
+.p-crit{background:rgba(208,59,59,.14);color:var(--crit)}
+html[data-mode="dark"] .p-warn{color:var(--warn)}
+html[data-mode="dark"] .p-serious{color:var(--serious)}
+.tipbox{position:fixed;pointer-events:none;background:var(--sf);color:var(--ink);border:1px solid var(--line);
+ border-radius:9px;padding:8px 11px;font-size:.76rem;box-shadow:0 8px 24px rgba(10,20,40,.25);z-index:999;display:none;max-width:270px}
+.note{background:rgba(31,56,100,.06);border-left:3px solid var(--navy);border-radius:0 8px 8px 0;
+ padding:10px 13px;font-size:.79rem;margin-top:12px}
+.ib{display:inline-flex;width:15px;height:15px;border-radius:50%;background:var(--line);color:var(--sub);
+ font-size:.68rem;align-items:center;justify-content:center;cursor:help;font-weight:700;vertical-align:1px}
+/* 方法論抽屜 */
+details.meth{background:var(--sf);border-radius:13px;box-shadow:0 1px 5px rgba(16,26,45,.08);margin-bottom:14px}
+details.meth summary{padding:13px 20px;font-weight:700;font-size:.9rem;cursor:pointer;color:var(--teal)}
+details.meth .mb{padding:0 20px 16px;font-size:.82rem;line-height:1.75}
+details.meth .mb h4{font-size:.82rem;margin:10px 0 3px;color:var(--navy)}
+html[data-mode="dark"] details.meth .mb h4{color:var(--s1)}
+details.meth .mb a{color:var(--teal)}
+/* 導覽 overlay */
+.tour{position:fixed;inset:0;background:rgba(10,20,40,.55);z-index:2000;display:none;align-items:center;justify-content:center}
+.tour.show{display:flex}
+.tourbox{background:var(--sf);color:var(--ink);border-radius:15px;max-width:430px;width:92%;padding:24px 26px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.tourbox .st{font-size:.7rem;font-weight:800;letter-spacing:1.5px;color:var(--teal)}
+.tourbox h3{font-size:1.05rem;margin:5px 0 8px}
+.tourbox p{font-size:.85rem;color:var(--sub);line-height:1.7}
+.tourbox .tf{display:flex;gap:8px;margin-top:16px;align-items:center}
+.tourbox .btn{background:var(--navy);color:#fff;border:0;border-radius:8px;padding:8px 18px;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer}
+html[data-mode="dark"] .tourbox .btn{background:var(--s1)}
+.tourbox .skip{background:none;border:0;color:var(--sub);font:inherit;font-size:.78rem;cursor:pointer;margin-left:auto}
+.i18nsw{position:fixed;right:14px;top:14px;z-index:1500;font-family:system-ui,sans-serif}
+.i18btn{background:rgba(21,44,78,.94);color:#fff;border:0;border-radius:10px;padding:7px 13px;
+ font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.i18panel{display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:#232B37;
+ border-radius:12px;box-shadow:0 8px 30px rgba(10,20,40,.28);padding:12px;width:212px;border:1px solid #E1E7EF}
+.i18nsw.open .i18panel{display:block}
+.i18gt{font-size:.64rem;font-weight:800;letter-spacing:1px;color:#6B7480;margin:9px 2px 6px}
+.i18gt:first-child{margin-top:2px}
+.i18home{display:block;font-size:.82rem;font-weight:700;color:#152C4E;text-decoration:none;
+ padding:7px 9px;border-radius:7px;background:#F4F8FB;margin-bottom:2px}
+.i18modes a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;font-size:.78rem;
+ color:#232B37;text-decoration:none;border:1px solid #E1E7EF;margin-bottom:3px}
+.i18modes a i{width:12px;height:12px;border-radius:50%;display:block;flex:none;border:1px solid rgba(0,0,0,.12)}
+.i18modes a.on{border-color:#152C4E;background:#F4F8FB;font-weight:700}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}main{padding:16px 12px 50px}}
+
+.search{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.search input{flex:1;min-width:230px;padding:11px 16px;border:1.5px solid var(--line);border-radius:11px;
+ font:inherit;font-size:.92rem;background:var(--sf);color:var(--ink)}
+.search input:focus{outline:2px solid var(--s1);border-color:var(--s1)}
+.catbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.chip{background:var(--sf);border:1px solid var(--line);border-radius:8px;padding:5px 12px;font-size:.76rem;cursor:pointer;font-weight:700}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+html[data-mode="dark"] .chip.on{background:var(--s1)}
+.entry{background:var(--sf);border-radius:12px;box-shadow:0 1px 5px rgba(16,26,45,.08);padding:16px 20px;margin-bottom:11px}
+.entry h3{font-size:.98rem;display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.entry h3 .cat{font-size:.66rem;font-weight:700;color:var(--teal);background:rgba(14,110,107,.1);padding:2px 8px;border-radius:5px}
+.entry .one{font-size:.85rem;font-weight:700;color:var(--ink);margin:5px 0 3px}
+.entry .d{font-size:.8rem;color:var(--sub);line-height:1.7}
+.entry .meta{font-size:.72rem;color:var(--sub);margin-top:8px;padding-top:7px;border-top:1px dashed var(--line)}
+.entry .meta b{color:var(--teal)}
+.entry code{background:rgba(31,56,100,.07);padding:2px 7px;border-radius:5px;font-size:.76rem}
+html[data-mode="dark"] .entry code{background:rgba(255,255,255,.08)}
+.count{font-size:.78rem;color:var(--sub)}
+mark{background:rgba(242,184,75,.45);color:inherit;border-radius:2px}
+</style>
+<link rel="stylesheet" href="../assets/themes.css">
+<link rel="stylesheet" href="../assets/type.css"></head>
+<body>
+<div class="i18nsw"><button type="button" class="i18btn">⚙ 設定</button>
+ <div class="i18panel"><a href="../index.html" class="i18home">🏠 回首頁</a>
+   <a href="datahub.html" class="i18home">🗄️ 資料中心</a>
+  <div class="i18gt">外觀</div><div class="i18modes">
+    <a href="#" data-md="business" onclick="return setMode(event,'business')"><i style="background:linear-gradient(135deg,#152C4E,#2A5470)"></i>深藍商務</a>
+    <a href="#" data-md="light" onclick="return setMode(event,'light')"><i style="background:#fff;border:1px solid #B9C6D6"></i>淺色簡潔</a>
+    <a href="#" data-md="dark" onclick="return setMode(event,'dark')"><i style="background:#0B1626"></i>深色模式</a>
+    <a href="#" data-md="forest" onclick="return setMode(event,'forest')"><i style="background:linear-gradient(135deg,#14453A,#0F766E)"></i>森林墨綠</a>
+    <a href="#" data-md="sand" onclick="return setMode(event,'sand')"><i style="background:#FAF8F4;border:1px solid #D9CFBE"></i>暖砂米白</a>
+    <a href="#" data-md="obsidian" onclick="return setMode(event,'obsidian')"><i style="background:linear-gradient(135deg,#080F1A,#2DD4BF)"></i>曜石青</a>
+   </div></div></div>
+<header>
+<svg viewBox="0 0 32 32" width="22" height="22" style="flex:none"><polygon points="11,2 20,10 11,18 2,10" fill="#2DD4BF"/><polygon points="21,2 30,10 21,18 12,10" fill="#F2B84B"/><polygon points="16,12 25,20 16,28 7,20" fill="#fff" fill-opacity=".95"/></svg>
+<b>方法論知識庫</b><span class="n">全站工具的學理依據、公式與出處——客戶問「這個數字怎麼來的」，答案都在這裡</span>
+</header>
+<main>
+<div class="search">
+ <input id="q" type="search" placeholder="搜尋：走人價、EVM、蒙地卡羅、Mendelow…（支援詞條、白話、工具名）" autocomplete="off">
+ <span class="count" id="cnt"></span>
+</div>
+<div class="catbar" id="cats"></div>
+<div id="list"></div>
+<div class="note">每個線上工具頁面都有「📚 學理依據」抽屜放該工具用到的方法；這裡是全站總索引。引用出處為方法的原始文獻或標準，數字與案例則以各工具內的資料出處為準。</div>
+</main>
+
+<script>
+const E=[{"id":"npv","t":"NPV 淨現值","c":"財務評估","one":"未來的錢折算成今天的錢後，加總減掉投資額——大於零才值得做。","d":"把專案每年的現金流用折現率換算回今天的價值再加總。折現率反映資金成本與風險：同樣賺 100 萬，三年後才拿到的價值低於今天拿到。","f":"NPV = Σ CFt ÷ (1+r)^t − 期初投資","tools":"2 商模試算器","src":"公司理財標準教材（Brealey, Myers & Allen）"},{"id":"irr","t":"IRR 內部報酬率","c":"財務評估","one":"讓 NPV 恰好等於零的那個報酬率——跟資金成本比大小。","d":"IRR 高於資金成本（WACC）代表專案報酬蓋得過資金的代價。注意現金流有正負交錯時 IRR 可能有多解，此時以 NPV 為準。","f":"求 r 使 Σ CFt ÷ (1+r)^t = 0","tools":"2 商模試算器","src":"公司理財標準教材"},{"id":"mirr","t":"MIRR 修正內部報酬率","c":"財務評估","one":"修掉 IRR「假設賺到的錢還能用同樣高報酬再投資」的樂觀假設。","d":"把期中現金流用「再投資率」（通常設為 WACC）滾存到期末再算報酬率，比 IRR 保守也更接近現實。","f":"MIRR = (期末正現金流終值 ÷ 期初負現金流現值)^(1/n) − 1","tools":"2 商模試算器","src":"公司理財標準教材"},{"id":"wacc","t":"WACC 加權平均資金成本","c":"財務評估","one":"借錢與股東的錢混在一起，平均要付出的代價——折現率的基礎。","d":"自有資金要求的報酬與借款利率按資本結構加權。專案風險高於公司平均時應再上調。","f":"WACC = E/V×Re + D/V×Rd×(1−稅率)","tools":"2 商模試算器・21 投標試算器","src":"公司理財標準教材"},{"id":"tco","t":"TCO 總持有成本","c":"財務評估","one":"不只買價——含安裝、維運、能耗、汰換的整個生命週期成本。","d":"比較「自建 vs 委外」或兩個方案時，用 TCO 而非採購價，才不會被低價高維運的方案騙到。ΔTCO（省下的總成本）是使能型投資的正確量尺。","f":"TCO = 取得成本 + Σ 營運成本折現 + 處置成本","tools":"2 商模試算器","src":"Gartner 提出之 IT 管理概念，現為通用實務"},{"id":"payback","t":"回收年限","c":"財務評估","one":"幾年把本金賺回來。直觀但忽略之後的現金流，只當輔助指標。","d":"適合跟業主溝通（直觀），但它不看回收期之後的價值、也不折現，決策仍應以 NPV 為主。","f":"累計現金流轉正的年數","tools":"2 商模試算器","src":"公司理財標準教材"},{"id":"walkaway","t":"走人價（保留價格）","c":"談判與定價","one":"低於這個價就退出，不是「再想想」——議價前先寫在紙上。","d":"談判理論的保留價格（reservation price）：你能接受的最差條件。搭配 BATNA（談不成的最佳替代方案）使用。本站 21 號的走人價公式已考慮分潤與保固準備隨報價等比變動。","f":"走人價 = (直接成本+風險準備) ÷ (1−分潤率−保固率−最低毛利率)","tools":"21 投標試算器","src":"Fisher & Ury《Getting to Yes》談判理論"},{"id":"batna","t":"BATNA 最佳替代方案","c":"談判與定價","one":"這一案談不成，你手上最好的替代選項——它決定你的底氣。","d":"BATNA 越強走人價越硬。管線裡有其他案子（20 號漏斗健康）時，單一案的議價底氣自然提高——這是工具之間的隱形連動。","f":"—","tools":"21 投標試算器・20 漏斗","src":"Fisher & Ury《Getting to Yes》"},{"id":"costbuildup","t":"成本堆疊","c":"談判與定價","one":"把每一筆要花的錢逐項疊出來，寧可多列不要漏列。","d":"投標估價的基本功。最常被低估的三項：進口關稅（HS Code 級距差異大）、在地化要求（湊不到直接失格）、保固準備（建議合約額 2–4%）。","f":"直接成本 = 設備+物流關稅+工程+管理+保固+合規+財務成本","tools":"21 投標試算器","src":"工程估價實務"},{"id":"fundinggap","t":"資金缺口","c":"談判與定價","one":"收款前要先墊多少錢——很多案子是被現金流拖垮，不是毛利。","d":"把收款里程碑與支出時程排在同一條時間軸上，累計現金流的最低點就是最大資金缺口。投標前要跟財務確認這筆錢調得動。","f":"最大資金缺口 = −min(累計淨現金流)","tools":"21 投標試算器・24 交付儀表板","src":"專案財務管理實務"},{"id":"pipeline","t":"加權管線值","c":"銷售管理","one":"案值×階段機率的加總——合理預期，不是願望清單。","d":"sales pipeline management 的核心指標。前提是階段機率要用自己的實際轉換率校正（見月度快照），前三個月不準是正常的。","f":"加權管線值 = Σ 案值i × 階段機率i","tools":"20 商機推進漏斗","src":"銷售管理實務（pipeline management）"},{"id":"stall","t":"停滯偵測","c":"銷售管理","one":"超過警戒天數沒更新的案子自動轉紅——停滯是最誠實的警訊。","d":"規則：沒有實際進展就不改「上次更新日」，讓停滯自己現形。每階段有自己的警戒天數，超過就該問「卡在哪、誰能解」。","f":"停滯天數 = 今天 − 上次更新日","tools":"20 商機推進漏斗","src":"CRM 管理實務"},{"id":"bayes","t":"階段機率校正（貝氏思維）","c":"銷售管理","one":"用實際轉換率逐月修正預設機率——愈用愈準。","d":"預設機率只是先驗（起步值）；每月快照記下各階段實際轉換，累積半年後用實際值取代預設值。這是貝氏更新的實務化：新證據修正舊信念。","f":"新機率 ≈ 歷史轉換率（樣本夠時）","tools":"20 漏斗・月度快照","src":"貝氏統計概念之實務應用"},{"id":"redundancy","t":"冗餘度與單點失效","c":"聯盟管理","one":"一項能力只有一家能做＝單點失效；它倒了你就斷供。","d":"供應鏈風險管理的 N+1 原則：關鍵環節至少一個備援。本站 22 號用「有效冗餘分」把夥伴狀態加權（名單上有人≠靠得住）。","f":"有效冗餘分 = Σ 候選夥伴狀態權重","tools":"22 聯盟體檢","src":"供應鏈風險管理；SPOF 概念"},{"id":"rdt","t":"資源依賴理論","c":"聯盟管理","one":"組織的風險來自「依賴誰、依賴多深」的結構。","d":"Pfeffer & Salancik（1978）：對外部資源的依賴決定權力關係與脆弱性。管理動作：降低對單一夥伴的依賴、提高對方對我們的依賴。","f":"—","tools":"22 聯盟體檢","src":"Pfeffer & Salancik, The External Control of Organizations (1978)"},{"id":"hhi","t":"HHI 集中度","c":"聯盟管理","one":"衡量「雞蛋放在幾個籃子」的指標，越高越集中越危險。","d":"原用於衡量市場集中度（反托拉斯審查標準），借來衡量能力對夥伴的集中程度：單一夥伴承擔占比的平方和。","f":"HHI = Σ (夥伴承擔占比)²","tools":"22 聯盟體檢","src":"產業經濟學（Herfindahl-Hirschman Index）"},{"id":"mendelow","t":"Mendelow 權力-利益矩陣","c":"關係管理","one":"用「影響力×立場」把人分四群，各給不同經營策略。","d":"高影響×反對＝重點經營；高影響×支持＝守住；低影響×支持＝借力；其餘保持知情。評分紀律：影響力看職位與否決權，支持度只看行為證據。","f":"—","tools":"23 利害關係人地圖","src":"Mendelow, A. (1991)；PMBOK 利害關係人管理"},{"id":"stakeholder","t":"Freeman 利害關係人理論","c":"關係管理","one":"成敗取決於所有「能影響你或被你影響」的人，不只客戶。","d":"Freeman（1984）：把股東以外的群體（主管機關、員工、社區、媒體）納入策略視野。公立醫院場景中，衛生廳與省人委會常比院方更關鍵。","f":"—","tools":"23 利害關係人地圖","src":"Freeman, Strategic Management: A Stakeholder Approach (1984)"},{"id":"kam","t":"關鍵客戶管理（KAM）","c":"關係管理","one":"關係是資產：要有對口、有節奏、有紀錄，不靠某個人的交情。","d":"關係階梯：從交易關係走向夥伴關係需要多層對口（高層對高層、技術對技術）。90 天沒互動的關鍵人＝正在流失的資產。","f":"關鍵人覆蓋率 = 有對口的關鍵人 ÷ 全部關鍵人","tools":"23 利害關係人地圖","src":"Key Account Management 實務"},{"id":"evm","t":"EVM 實獲值管理","c":"專案執行","one":"把「做了多少活」和「花了多少錢」換算到同一把尺（錢）上比。","d":"源自美國國防部，現為 PMBOK／ANSI EIA-748 標準。單看進度%或單看花費都會騙人；EV 對 PV 看進度、EV 對 AC 看成本效率。","f":"SPI=EV÷PV；CPI=EV÷AC","tools":"24 交付儀表板","src":"PMBOK；ANSI EIA-748"},{"id":"eac","t":"EAC 預測完工成本","c":"專案執行","one":"照目前的花錢效率做完全案會花多少——最早的超支警報。","d":"比「等發現預算不夠」平均早數月。EAC 高於 BAC 時，當下就要處理：追工效、砍範疇、或找業主談變更。","f":"EAC = BAC ÷ CPI","tools":"24 交付儀表板","src":"PMBOK"},{"id":"mta","t":"里程碑趨勢分析","c":"專案執行","one":"里程碑一再往後移的「趨勢」比單次延誤更有預測力。","d":"每次回報把各里程碑的預計完成日畫在時間軸上：持續下滑的線代表系統性問題（資源不足、依賴卡住），不是單一意外。","f":"—","tools":"24 交付儀表板","src":"Milestone Trend Analysis，德國專案管理常用工具"},{"id":"aging","t":"應收帳齡","c":"專案執行","one":"逾期的錢按 30/60/90 天分桶——超過 60 天要當案子專人追。","d":"越南公立醫院付款慢是常態，帳齡管理是保命工具。逾期款項要有負責人與升級路徑（催收→高層對口→暫停服務條款）。","f":"帳齡 = 今天 − 付款到期日","tools":"24 交付儀表板","src":"財務管理實務"},{"id":"iso31000","t":"ISO 31000 風險管理","c":"風險管理","one":"辨識→分析→評價→處理→監控的循環，每條風險有人負責。","d":"國際風險管理框架。四種處理策略：規避（不做了）、減輕（降機率或衝擊）、移轉（保險、合約條款）、承受（知情地接受）。","f":"—","tools":"25 風險登錄","src":"ISO 31000:2018"},{"id":"riskmatrix","t":"機率-衝擊矩陣","c":"風險管理","one":"5×5 打分定位每條風險，右上角的本週就要動作。","d":"評分要有錨定表（什麼叫衝擊 5 分）避免各人標準不一。分數用來排序；決策看分布（見蒙地卡羅）。","f":"風險分數 = 機率(1-5) × 衝擊(1-5)","tools":"25 風險登錄","src":"PMBOK 定性風險分析"},{"id":"montecarlo","t":"蒙地卡羅模擬","c":"風險管理","one":"抽一萬次「如果風險發生」的情境，看毛利的分布而非單點。","d":"每條風險寫成三點估計（最樂觀/最可能/最悲觀）的三角分布，依機率抽樣疊加。判讀：P10（最差一成情境）跌破零＝這案沒有容錯空間。","f":"毛利分布 = 基準毛利 − Σ 風險抽樣損失","tools":"25 風險登錄・21 情境比較","src":"作業研究標準方法；能源與工程業 P10/P50/P90 慣例"},{"id":"p10","t":"P10／P50／P90","c":"風險管理","one":"「只有 10%／50%／90% 的情境比這更差」的三個刻度。","d":"源自石油儲量評估的行業慣例。P50 是中位數（比平均值更抗極端值）；P10 與 P90 的距離就是不確定性的大小。","f":"Pxx = 分布的第 xx 百分位","tools":"25 風險登錄","src":"SPE 石油工程師學會慣例，現為跨行業標準"},{"id":"triangular","t":"三角分布／三點估計","c":"風險管理","one":"不知道精確分布時，用「最樂觀、最可能、最悲觀」三個點近似。","d":"對專家訪談友善（人容易給三個點，很難給機率分布），是 PERT 與蒙地卡羅的常用輸入。","f":"以 (a, m, b) 三點定義的三角形機率密度","tools":"25 風險登錄","src":"PERT／作業研究"},{"id":"gapanalysis","t":"市場缺口分析","c":"市場分析","one":"供給對不上需求的地方就是機會——缺口地圖逐省找。","d":"比較各省市的醫療需求指標與現有供給，缺口大且政策支持的省份優先。34 省市為 2025 行政區合併後的架構。","f":"—","tools":"11 缺口地圖","src":"市場進入策略實務"},{"id":"halflife","t":"情報半衰期","c":"市場分析","one":"情報會過期——每筆資料附查證日，過期就變色提醒。","d":"法規、人事、競合動態的有效期各不相同。本站規範：所有事實類資料附出處與查證日，超過保鮮期的資料不應拿來做決策。","f":"—","tools":"18 情報站・全站","src":"競爭情報（CI）實務"},{"id":"localcontent","t":"在地化要求","c":"市場分析","one":"標書規定的在地供應比例，湊不到會直接失格——不是扣分。","d":"越南公立醫院標案常見。投標前必查：以「金額」還是「工項」計算、在地組裝是否計入。補救順序：工程拆包在地化→服務在地化→在地組裝→換品牌（最後）。","f":"在地化比例 = 在地採購金額 ÷ 直接成本","tools":"21 投標試算器・15 標案雷達","src":"越南政府採購法規實務"}];
+function setMode(e,m){
+ if(e)e.preventDefault();
+ document.documentElement.setAttribute('data-mode',m);
+ try{localStorage.setItem('vmh_mode',m);}catch(err){}
+ document.querySelectorAll('.i18modes a').forEach(a=>a.classList.toggle('on',a.getAttribute('data-md')===m));
+ return false;
+}
+(function(){
+ document.querySelectorAll('.i18btn').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
+ document.addEventListener('click',e=>{document.querySelectorAll('.i18nsw.open').forEach(w=>{if(!w.contains(e.target))w.classList.remove('open');});});
+ try{const m=localStorage.getItem('vmh_mode')||'business';
+   document.querySelectorAll('.i18modes a[data-md="'+m+'"]').forEach(a=>a.classList.add('on'));}catch(e){}
+})();
+function bindTip(sel){
+  const tip=document.getElementById('tip');
+  document.querySelectorAll(sel+' [data-t]').forEach(el=>{
+    el.addEventListener('mousemove',e=>{tip.textContent=el.getAttribute('data-t');
+      tip.style.display='block';tip.style.left=Math.min(e.clientX+14,innerWidth-290)+'px';tip.style.top=(e.clientY+14)+'px';});
+    el.addEventListener('mouseleave',()=>tip.style.display='none');
+  });
+}
+/* L1 首次導覽 */
+function initTour(key,steps){
+  const seen=(()=>{try{return localStorage.getItem('vmh_tour_'+key)}catch(e){return '1'}})();
+  const el=document.getElementById('tour');
+  let i=0;
+  function draw(){
+    el.querySelector('.st').textContent='導覽 '+(i+1)+' / '+steps.length;
+    el.querySelector('h3').textContent=steps[i][0];
+    el.querySelector('p').textContent=steps[i][1];
+    el.querySelector('.btn').textContent=i===steps.length-1?'開始使用':'下一步';
+  }
+  window.tourNext=()=>{ if(i<steps.length-1){i++;draw();} else closeTour(); };
+  window.closeTour=()=>{el.classList.remove('show');try{localStorage.setItem('vmh_tour_'+key,'1')}catch(e){}};
+  window.openTour=()=>{i=0;draw();el.classList.add('show');};
+  if(!seen){openTour();}
+}
+/* 資料主檔自動讀取：站上發布 → 內建範例（fallback）→ 手動讀檔（優先） */
+function autoloadXlsx(relPath,onWB){
+  if(location.protocol==='file:')return;   // 本機直接開檔時不嘗試
+  fetch(relPath).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer();})
+   .then(b=>{const wb=XLSX.read(new Uint8Array(b),{type:'array'});onWB(wb,'資料主檔（站上發布版）');})
+   .catch(()=>{});
+}
+
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+let Q='',CAT='all';
+function hl(s){
+  if(!Q)return esc(s);
+  const i=s.toLowerCase().indexOf(Q.toLowerCase());
+  if(i<0)return esc(s);
+  return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+Q.length))+'</mark>'+esc(s.slice(i+Q.length));
+}
+function cats(){
+  const cs=['all',...new Set(E.map(e=>e.c))];
+  document.getElementById('cats').innerHTML=cs.map(c=>
+   `<span class="chip ${CAT===c?'on':''}" onclick="CAT='${c}';render()">${c==='all'?'全部':c}</span>`).join('');
+}
+function render(){
+  cats();
+  const q=Q.toLowerCase();
+  const L=E.filter(e=>(CAT==='all'||e.c===CAT)&&(!q||[e.t,e.one,e.d,e.tools,e.src,e.c].join(' ').toLowerCase().includes(q)));
+  document.getElementById('cnt').textContent=L.length+' / '+E.length+' 條';
+  document.getElementById('list').innerHTML=L.map(e=>
+   `<div class="entry" id="${e.id}">
+     <h3>${hl(e.t)}<span class="cat">${esc(e.c)}</span></h3>
+     <div class="one">${hl(e.one)}</div>
+     <div class="d">${hl(e.d)}</div>
+     ${e.f&&e.f!=='—'?`<div class="d" style="margin-top:5px"><code>${esc(e.f)}</code></div>`:''}
+     <div class="meta">用在：<b>${hl(e.tools)}</b>　｜　出處：${hl(e.src)}</div>
+    </div>`).join('')||'<div class="entry">沒有符合的條目——換個關鍵字試試。</div>';
+}
+document.getElementById('q').addEventListener('input',e=>{Q=e.target.value.trim();render();});
+render();
+if(location.hash){const el=document.getElementById(location.hash.slice(1));if(el){el.scrollIntoView();el.style.outline='2px solid var(--s1)';}}
+</script>
+</body></html>
