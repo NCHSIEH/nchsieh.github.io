@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>VMH-EcoMap-2 專案商模試算器 懶人包</title>
+<style>
+  :root{
+    --navy:#1F3864; --midblue:#2F5597; --teal:#2E747A; --green:#548235;
+    --gold:#BF8F00; --purple:#7030A0; --red:#B03A2E;
+    --ink:#16202E; --muted:#5C6675; --line:#DDE3EC;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#EEF1F6; color:var(--ink);
+       font-family:"Microsoft JhengHei","微軟正黑體","Noto Sans TC",system-ui,sans-serif;}
+  .page{width:1760px; margin:0 auto; padding:30px 26px 40px; background:#fff;}
+
+  .hd{display:flex; align-items:flex-end; gap:24px; border-bottom:4px solid var(--navy); padding-bottom:14px;}
+  .hd h1{font-size:37px; margin:0; color:var(--navy); letter-spacing:1px; line-height:1.16; flex:0 0 auto; white-space:nowrap;}
+  .hd .sub{font-size:14.5px; color:var(--muted); line-height:1.62; padding-bottom:4px;}
+  .hd .sub b{color:var(--navy);}
+  .ver{background:var(--green); color:#fff; font-size:12.5px; font-weight:800; padding:3px 10px; border-radius:20px; vertical-align:5px;}
+
+  .key{margin:22px 0 8px; border:3px solid var(--gold); border-radius:14px; background:#FFFBF0; padding:16px 22px;}
+  .key .t{font-size:23px; font-weight:800; color:#8A6800; margin-bottom:7px;}
+  .key .d{font-size:14.5px; line-height:1.75; color:#3A3320;}
+  .key .d b{color:#8A6800;}
+  .key .cite{display:inline-block; margin-top:8px; font-size:12.5px; color:#7A6A40; background:#F5EBD5;
+              padding:6px 12px; border-radius:8px; line-height:1.6;}
+
+  .cats{display:grid; grid-template-columns:repeat(6,1fr); gap:11px; margin:20px 0 4px;}
+  .cat{border:2px solid var(--line); border-radius:11px; overflow:hidden; background:#fff; display:flex; flex-direction:column;}
+  .cat .h{padding:8px 11px; color:#fff; font-size:14.5px; font-weight:800; line-height:1.25;}
+  .cat .b{padding:9px 11px 11px; flex:1;}
+  .cat .lb{font-size:10.5px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:2px;}
+  .cat .m{font-size:13.5px; font-weight:800; color:var(--teal); margin-bottom:7px; line-height:1.35;}
+  .cat .e{font-size:11.8px; line-height:1.55; color:#4A5462;}
+  .c1 .h{background:var(--green);} .c2 .h{background:var(--teal);} .c3 .h{background:var(--red);}
+  .c4 .h{background:var(--midblue);} .c5 .h{background:#7A8592;} .c6 .h{background:var(--purple);}
+  .cat.on{border-color:var(--teal); border-width:3px; box-shadow:0 3px 14px rgba(46,116,122,.25);}
+
+  .flowhd{font-size:21px; font-weight:800; color:var(--navy); margin:26px 0 3px;}
+  .flowsub{font-size:13.5px; color:var(--muted); margin:0 0 14px;}
+  .flow{display:grid; grid-template-columns:repeat(5, 1fr); gap:13px; position:relative;}
+  .step{border:2px solid var(--line); border-radius:14px; background:#fff; overflow:hidden;
+        box-shadow:0 2px 10px rgba(31,56,100,.07); display:flex; flex-direction:column;}
+  .step .top{padding:11px 13px 9px; color:#fff;}
+  .step .num{font-size:12px; font-weight:800; letter-spacing:2px; opacity:.85;}
+  .step .q{font-size:18px; font-weight:800; line-height:1.28; margin-top:3px;}
+  .step .pg{font-size:12px; font-weight:700; margin-top:6px; background:rgba(255,255,255,.22);
+            display:inline-block; padding:3px 9px; border-radius:20px;}
+  .step .body{padding:11px 13px 5px; flex:1;}
+  .step .lb{font-size:11px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:3px;}
+  .step ul{margin:0 0 9px; padding-left:16px;}
+  .step li{font-size:12.4px; line-height:1.55; margin-bottom:3px;}
+  .step .now{margin:0 13px 12px; border-radius:9px; padding:8px 10px; background:#F5F7FA; border:1px solid var(--line);}
+  .step .now .t{font-size:10.5px; font-weight:800; letter-spacing:1px; color:var(--muted);}
+  .step .now .v{font-size:12.3px; line-height:1.5; margin-top:3px;}
+  .step .now .v b{font-size:14.5px;}
+  .s1 .top{background:var(--purple);} .s1 .now .v b{color:var(--purple);}
+  .s2 .top{background:var(--navy);}   .s2 .now .v b{color:var(--navy);}
+  .s3 .top{background:var(--midblue);}.s3 .now .v b{color:var(--midblue);}
+  .s4 .top{background:var(--teal);}   .s4 .now .v b{color:var(--teal);}
+  .s5 .top{background:var(--green);}  .s5 .now .v b{color:#3F6427;}
+  .arrow{position:absolute; top:72px; font-size:25px; color:#B9C4D4; font-weight:800;}
+
+  .cmphd{font-size:21px; font-weight:800; color:var(--navy); margin:28px 0 3px;}
+  .cmpsub{font-size:13.5px; color:var(--muted); margin:0 0 13px;}
+  table.cmp{width:100%; border-collapse:collapse; font-size:13px;}
+  table.cmp th,table.cmp td{border:1px solid var(--line); padding:8px 10px; text-align:center; vertical-align:middle;}
+  table.cmp th{background:var(--navy); color:#fff; font-size:13.5px; font-weight:800;}
+  table.cmp td.rowh{background:#F3F5F7; color:var(--navy); text-align:left; font-weight:700; width:180px;}
+  table.cmp td.num{font-weight:700; font-size:15px;}
+  table.cmp tr.hi td{background:#F7FAFC;}
+  table.cmp tr.key td{background:#F2F8EC;}
+  .pos{color:#3F6427;} .neg{color:var(--red);} .na{color:#98A2B0; font-size:12px;}
+  .vpill{display:inline-block; padding:4px 11px; border-radius:20px; font-weight:800; font-size:13px; color:#fff;}
+  .pg-ok{background:var(--green);} .pg-mid{background:var(--gold);} .pg-op{background:var(--purple);}
+  .lead{font-size:12.2px; line-height:1.58; text-align:left; color:#37414F;}
+  .lead b{color:var(--navy);}
+  .catchip{display:inline-block; font-size:11.5px; font-weight:800; color:#fff; padding:2px 9px; border-radius:12px;}
+
+  .tips{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:22px;}
+  .tip{border-radius:12px; padding:12px 15px; border-left:6px solid; background:#F7F9FC;}
+  .tip .h{font-size:14.5px; font-weight:800; margin-bottom:4px;}
+  .tip .d{font-size:12.3px; line-height:1.6; color:#37414F;}
+  .t1{border-color:var(--gold);} .t1 .h{color:#8A6800;}
+  .t2{border-color:var(--red);}  .t2 .h{color:var(--red);}
+  .t3{border-color:var(--teal);} .t3 .h{color:var(--teal);}
+  .t4{border-color:var(--purple);} .t4 .h{color:var(--purple);}
+
+  .newbar{display:grid; grid-template-columns:repeat(7,1fr); gap:11px; margin-top:22px;}
+  .nb{border:2px dashed #C3CCD8; border-radius:11px; padding:10px 13px; background:#FAFBFD;}
+  .nb .h{font-size:13px; font-weight:800; color:var(--navy); margin-bottom:3px;}
+  .nb .d{font-size:11.5px; line-height:1.55; color:#4A5462;}
+
+  .foot{margin-top:20px; padding-top:12px; border-top:1px solid var(--line);
+        font-size:11.8px; color:var(--muted); line-height:1.72;}
+  .foot b{color:var(--navy);}
+</style>
+<style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head>
+<body><div class="i18nsw"><a href="calculator.html" class="on">中文</a><a href="calculator.en.html">EN</a><a href="calculator.vi.html">VI</a></div>
+<div class="page">
+
+  <div class="hd">
+    <h1>這個案子到底賺不賺錢？<br>先問：該用哪一把尺量</h1>
+    <div class="sub">
+      <b>VMH-EcoMap-2 專案商模試算器 <span class="ver">v1.0</span></b>｜主工具回答「做不做、誰做、何時做」，本檔只回答一件事：<b>這一個案子划不划算。</b><br>
+      <b>核心設計</b>：不用同一套 NPV 標準量所有案子。先在 01 分頁選「投資類別」，10 決策摘要就會套用對應的判讀規則。<br>
+      顧問填四頁成本與收入，系統算六頁，<b>業主只看最後一頁（10 決策摘要）。一個子專案一份檔案。</b>
+    </div>
+  </div>
+
+  <div class="key">
+    <div class="t">為什麼要分類別？因為用錯尺，會把最該做的投資否決掉</div>
+    <div class="d">
+      把「機房」「網路」「資料平台」這種<b>基礎建設</b>，拿去跟「CT 影像中心」用同一套 NPV 標準比較，結論一定是基礎建設不值得投——
+      因為<b>它的效益歸屬於建在它上面的其他專案，成本卻全部留在自己身上</b>。這不是案子不好，是尺用錯了。
+      正確的問法不是「它賺多少」，而是<b>「不自建的話，這十年要多花多少錢」</b>。
+      <div class="cite">
+        <b>MIT Sloan（Weill &amp; Aral）實證：</b>基礎建設是企業 IT 支出佔比最高的一類（平均 46%），
+        也是明文指出「事前最難做成本正當化（most difficult to cost-justify in advance）」的一類。
+        同一份研究還顯示：<b>★ 績效前段班公司把 55% 的 IT 支出放在基礎建設，後段班只有 37%。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="cats">
+    <div class="cat c1"><div class="h">A 營收型</div><div class="b">
+      <div class="lb">用什麼指標</div><div class="m">NPV／MIRR／PI</div>
+      <div class="e">自己就能向外部付款者收費。<br><b>例：CT 影像中心</b>——有給付碼、做一件收一件。</div></div></div>
+    <div class="cat c2 on"><div class="h">B 使能型 ★</div><div class="b">
+      <div class="lb">用什麼指標</div><div class="m">ΔTCO 現值<br>單位服務成本</div>
+      <div class="e">不直接收費，但讓別的專案得以成立。<br><b>例：IDC 機房、院區網路、資料平台。</b></div></div></div>
+    <div class="cat c3"><div class="h">C 法規強制型</div><div class="b">
+      <div class="lb">用什麼指標</div><div class="m">最低合規成本<br>不做的代價</div>
+      <div class="e">不做就不能營業，不必算划不划算。<br><b>例：EMR 分級驗收、PDPL 合規。</b></div></div></div>
+    <div class="cat c4"><div class="h">D 降本型</div><div class="b">
+      <div class="lb">用什麼指標</div><div class="m">成本節省 NPV</div>
+      <div class="e">效益＝被避免掉的成本。<br><b>例：無片化省底片、能源優化。</b></div></div></div>
+    <div class="cat c5"><div class="h">E 汰換維持型</div><div class="b">
+      <div class="lb">用什麼指標</div><div class="m">生命週期成本<br>停機風險</div>
+      <div class="e">維持營運不中斷的必要支出。<br><b>例：UPS 電池、球管、伺服器汰換。</b></div></div></div>
+    <div class="cat c6"><div class="h">F 策略布局型</div><div class="b">
+      <div class="lb">用什麼指標</div><div class="m">分階段關卡<br>選擇權價值</div>
+      <div class="e">為了取得未來機會與參考案例。<br><b>例：第一家旗艦醫院 HIS。</b></div></div></div>
+  </div>
+
+  <p class="flowhd">試算器動線：五步，一步一個問題</p>
+  <p class="flowsub">下方「範例」取自本次三個模擬案實際算出來的數字。★ 全檔金額預設新台幣，01 分頁可一鍵切換 USD 或越南盾。</p>
+
+  <div class="flow">
+    <div class="arrow" style="left:calc(20% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(40% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(60% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(80% - 15px);">▶</div>
+
+    <div class="step s1">
+      <div class="top">
+        <div class="num">STEP 1</div>
+        <div class="q">這是哪一種投資？<br>用什麼標準評？</div>
+        <div class="pg">01 專案設定 ＋ 01B 判斷精靈</div>
+      </div>
+      <div class="body">
+        <div class="lb">最重要的一格</div>
+        <ul>
+          <li><b>★ 投資類別</b>　選錯就會用錯尺<br><span style="color:#8A6800;font-weight:700;">不確定選哪一類？到 01B 回答四題</span></li>
+          <li><b>幣別</b>　輸入幣別／顯示幣別／顯示單位</li>
+          <li><b>稅務</b>　優惠稅率、免稅年、虧損扣抵</li>
+          <li><b>營運資金</b>　健保與自費應收天數分開</li>
+        </ul>
+        <div class="lb">為什麼重要</div>
+        <ul><li>越南社會化醫療的所得稅是<b>整個專案期 10%</b>＋免稅 4 年，不是 20%</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">01B 判斷精靈</div>
+        <div class="v">四題 → 推薦一類＋理由＋下一步<br>並與 01 的選擇<b>自動比對</b>（✓ 一致／⚠ 不一致）</div>
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="top">
+        <div class="num">STEP 2</div>
+        <div class="q">總共要投<br>多少錢？</div>
+        <div class="pg">02 投資成本 CAPEX</div>
+      </div>
+      <div class="body">
+        <div class="lb">BOQ 級明細（數量×單價）</div>
+        <ul>
+          <li>用工程界正式名稱，可直接跟廠商逐項對報價</li>
+          <li><b>進口／在地</b>　關稅與 VAT 分開算</li>
+          <li><b>折舊類別與年限</b>　依 Circular 45/2013</li>
+          <li><b>置換年</b>　UPS 電池、球管、伺服器</li>
+        </ul>
+        <div class="lb">★ 越南最常被低估的一項</div>
+        <ul><li>醫療服務<b>免 VAT ⇒ 進項不可扣抵</b>，必須全額資本化</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">範例：CT 案</div>
+        <div class="v">43 個分項｜不可扣抵稅費佔 <b>7.7%</b><br>（低於 4% 就是算錯了）</div>
+      </div>
+    </div>
+
+    <div class="step s3">
+      <div class="top">
+        <div class="num">STEP 3</div>
+        <div class="q">每年花多少？<br>錢從哪來？</div>
+        <div class="pg">03 OPEX ＋ 04 收入</div>
+      </div>
+      <div class="body">
+        <div class="lb">03 的關鍵欄位</div>
+        <ul>
+          <li><b>成本性質</b>　「變動」隨服務量爬坡縮放，「固定」不動——填錯會讓開辦期失真</li>
+          <li><b>年成長率</b>　薪資別填 0</li>
+        </ul>
+        <div class="lb">04 的關鍵欄位</div>
+        <ul><li>健保價與自費價<b>分開填</b>，收現速度不同</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">範例：CT 案的剪刀差</div>
+        <div class="v">單價年漲 <b>1.5%</b>　vs　人力年漲 <b>8%</b><br>十年下來吃掉一大塊利潤</div>
+      </div>
+    </div>
+
+    <div class="step s4">
+      <div class="top">
+        <div class="num">STEP 4</div>
+        <div class="q">系統算什麼？<br>（不用動手）</div>
+        <div class="pg">05 折舊　06 現金流　07 WACC</div>
+      </div>
+      <div class="body">
+        <div class="lb">業界標準推導</div>
+        <ul>
+          <li>營收→EBITDA→折舊→EBIT→稅→<b>NOPAT</b></li>
+          <li>＋折舊 −資本支出 −營運資金＝<b>FCFF</b></li>
+          <li>稅含<b>免稅期起算規則</b>與 5 年虧損扣抵</li>
+        </ul>
+        <div class="lb">折現率不再隨手填</div>
+        <ul><li>07 用 CAPM 推算：越南公債＋β×成熟 ERP＋<b>國家風險溢酬</b></li></ul>
+      </div>
+      <div class="now">
+        <div class="t">範例：三案的 WACC</div>
+        <div class="v">CT <b>11.5%</b>｜IDC <b>10.8%</b>｜HIS <b>12.0%</b><br>越南 CRP 3.90%（Damodaran）</div>
+      </div>
+    </div>
+
+    <div class="step s5">
+      <div class="top">
+        <div class="num">STEP 5</div>
+        <div class="q">結論是什麼？<br>哪裡最脆弱？</div>
+        <div class="pg">08 敏感度　09 使能型　10 決策摘要</div>
+      </div>
+      <div class="body">
+        <div class="lb">三頁分工</div>
+        <ul>
+          <li><b>08</b>　三情境＋<b>龍捲風圖</b>（哪個變數最致命）＋損益兩平</li>
+          <li><b>09</b>　★ 只有使能型要填：自建 vs 外租 TCO</li>
+          <li><b>10</b>　一頁結論，<b>判讀規則依類別自動切換</b></li>
+        </ul>
+        <div class="lb">業主只需要看</div>
+        <ul><li>10 的六個數字與那一句自動判讀</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">主要報酬指標用 MIRR</div>
+        <div class="v">因為模型含<b>中途置換投資</b>，現金流正負交替<br>IRR 可能有多重解，MIRR 只有一個</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="cmphd">三個模擬案：同一個模型、三種類別、三種答案</p>
+  <p class="cmpsub">金額單位＝千元新台幣。每一筆數字都對得上越南 2025–2026 的公開資料（健保費率、電價、薪資、代管行情、稅法），逐筆列在各檔 11 假設來源分頁。</p>
+
+  <table class="cmp">
+    <tr>
+      <th style="width:180px;">項目</th>
+      <th>A醫院 — CT 影像中心<br><span style="font-weight:400;font-size:12px;">128 排／CAP-028</span></th>
+      <th>A醫院 — IDC 機房<br><span style="font-weight:400;font-size:12px;">24 機櫃／CAP-020</span></th>
+      <th>B醫院 — HIS／EMR<br><span style="font-weight:400;font-size:12px;">500 床 以租代購／CAP-033</span></th>
+    </tr>
+    <tr>
+      <td class="rowh">投資類別</td>
+      <td><span class="catchip" style="background:#548235;">A 營收型</span></td>
+      <td><span class="catchip" style="background:#2E747A;">B 使能型 ★</span></td>
+      <td><span class="catchip" style="background:#7030A0;">F 策略布局型</span></td>
+    </tr>
+    <tr><td class="rowh">該用的尺</td>
+      <td class="lead">NPV／MIRR／PI</td>
+      <td class="lead"><b>ΔTCO 現值</b>、單位服務成本、承載專案數</td>
+      <td class="lead">分階段關卡、選擇權價值</td></tr>
+    <tr><td class="rowh">折現率 WACC</td><td>11.5%</td><td>10.8%</td><td>12.0%</td></tr>
+    <tr><td class="rowh">投資總額 CAPEX</td><td class="num">43,334</td><td class="num">43,642</td><td class="num">41,020</td></tr>
+    <tr class="hi"><td class="rowh">NPV 淨現值</td>
+      <td class="num pos">+13,050</td>
+      <td class="num neg">−102,691 <span class="na">（不適用）</span></td>
+      <td class="num neg">−25,766</td></tr>
+    <tr class="hi"><td class="rowh">MIRR</td><td class="num pos">13.1%</td><td class="na">不適用</td><td class="num neg">0.9%</td></tr>
+    <tr class="hi"><td class="rowh">PI 獲利指數</td><td class="num pos">1.30</td><td class="na">不適用</td><td class="num neg">0.37</td></tr>
+    <tr class="hi"><td class="rowh">折現回收期</td><td class="num">7.8 年</td><td class="na">不適用</td><td class="num neg">未回收</td></tr>
+    <tr class="key"><td class="rowh">★ ΔTCO（外租−自建）</td>
+      <td class="na">—</td>
+      <td class="num pos" style="font-size:18px;">+14,388</td>
+      <td class="na">—</td></tr>
+    <tr class="key"><td class="rowh">ΔTCO 回收期／承載專案數</td>
+      <td class="na">—</td>
+      <td class="num pos">4.0 年　／　7 個</td>
+      <td class="na">—</td></tr>
+    <tr class="key"><td class="rowh">自建單位成本 vs 市價</td>
+      <td class="na">—</td>
+      <td class="num pos">59%（每櫃每月 36 千 vs 市價 61 千）</td>
+      <td class="na">—</td></tr>
+    <tr>
+      <td class="rowh">自動判讀</td>
+      <td><span class="vpill pg-mid">△ 可行但偏慢</span></td>
+      <td><span class="vpill pg-ok">○ 建議自建</span></td>
+      <td><span class="vpill pg-op">分階段關卡</span></td>
+    </tr>
+    <tr>
+      <td class="rowh">為什麼是這個答案</td>
+      <td class="lead"><b>因為有給付碼。</b>影像檢查有健保費率（Circular 22/2023/TT-BYT）＋自費市場，
+        「做一件收一件」成立——越南醫療數位化裡<b>少數能單獨算得出帳</b>的題目。NPV 正、MIRR 高於 WACC、PI 1.30，
+        只是回收期 7.8 年偏長，須確認合約年限涵蓋。</td>
+      <td class="lead"><b>因為問對了問題。</b>把機房當「收租金的生意」算，結論必然是負的。
+        改問「不自建的話十年要付 FPT／Viettel 多少錢」——<b>自建十年 TCO 104,212、外租 118,600，差額 +14,388</b>，
+        建置費 4 年就把自己付掉，且承載 7 個專案。</td>
+      <td class="lead"><b>因為收入端被法規結構鎖死。</b>越南醫療服務價格至今只含人工與直接成本、<b>未含 IT</b>；
+        第一個納入 IT 的給付案例（313/QĐ-BYT）公告價還<b>低 5.9%</b>。需求被法規逼出來，付款來源卻還沒建立。</td>
+    </tr>
+    <tr>
+      <td class="rowh">那要怎麼辦</td>
+      <td class="lead">合約加<b>保底檢查量</b>；同時談客層而不只談量——<b>自費比例</b>對獲利的影響大於服務量。
+        並確認社會化醫療 10% 稅率資格（08 保守情境已測過改回 20% 的結果）。</td>
+      <td class="lead">盯住三個會翻轉結論的變數：<b>①</b> 電價歸類（Circular 60/2025 商業級距會讓電費升 45–55%，須向 EVN 確認）；
+        <b>②</b> 人力能否與院內 IT 共用值班（3 FTE vs 獨立 8–9 FTE）；<b>③</b> 外租實際報價。</td>
+      <td class="lead"><b>不要一次核定全額。</b>拆三期設關卡：門診上線＋案例授權 → 住院檢驗上線＋第 2 家議約 → 全院無紙化＋第 2 家簽約。
+        一次性導入成本約 <b>10,530</b>，第 2、3 家可攤薄六成以上。</td>
+    </tr>
+  </table>
+
+  <div class="tips">
+    <div class="tip t2">
+      <div class="h">NPV 為負 ≠ 這案子不能做</div>
+      <div class="d">它只是說「<b>用目前這組條件、單獨算這一案</b>，收不回來」。先確認<b>投資類別選對了沒有</b>——
+        基礎建設、法規強制、汰換維持這三類，NPV 為負是常態，不構成否決理由。</div>
+    </div>
+    <div class="tip t3">
+      <div class="h">使能型的三個通過條件</div>
+      <div class="d"><b>①</b> ΔTCO 現值 &gt; 0（自建比外租便宜）；<b>②</b> 單位服務成本低於市場外購價；
+        <b>③ 承載專案數 ≥ 2</b>——只服務單一專案的「平台」，本質上是那個專案的成本，不是平台。</div>
+    </div>
+    <div class="tip t1">
+      <div class="h">一個子專案，一份檔案</div>
+      <div class="d">不要一家醫院一份。同一家 A 醫院的 CT 案與機房案<b>各開一份</b>——類別不同、尺不同，混在一起就算不出誰在賺、誰在賠。
+        命名沿用 <b>VMH-EcoMap-2_專案商模_醫院-標的_v1.0</b>。</div>
+    </div>
+    <div class="tip t4">
+      <div class="h">送投資決策前最該談定的一格</div>
+      <div class="d">不是任何一筆成本，是<b>折現率</b>。同一份模型用 10% 和 13% 會得到相反的結論。
+        07 分頁已用 CAPM 推算好（含越南國家風險溢酬 3.90%），但<b>必須與投資方書面確認</b>。</div>
+    </div>
+  </div>
+
+  <div class="newbar">
+    <div class="nb"><div class="h">01B 類別判斷精靈</div><div class="d">回答四題（錢從外部進來嗎／不做會怎樣／承載幾個專案／不做會不會停擺）就推薦類別，並說明理由、列出下一步、與 01 的選擇比對。內含四個最常卡住的地方。</div></div>
+    <div class="nb"><div class="h">三幣別一鍵切換</div><div class="d">預設輸入新台幣。改 01 的「顯示幣別」，全檔自動換算成 USD 或越南盾；另可切顯示單位（元／千／百萬），避免越南盾位數過長。</div></div>
+    <div class="nb"><div class="h">BOQ 級成本明細</div><div class="d">02、03 用工程界正式分項名稱與「數量×單價」結構，區分進口／在地，內建關稅與<b>不可扣抵的進項 VAT</b>。</div></div>
+    <div class="nb"><div class="h">折舊與越南稅務優惠</div><div class="d">折舊依 Circular 45/2013 法定年限；稅率不寫死——社會化醫療 10%＋免稅 4 年，且免稅期採「首次獲利年 vs 營收第 4 年孰早」的法定起算規則。</div></div>
+    <div class="nb"><div class="h">營運資金</div><div class="d">健保與自費應收天數分開設定。越南健保結算常有超支懸置（2025 年胡志明市各院被懸置近 2,500 十億越盾），不能套一般假設。</div></div>
+    <div class="nb"><div class="h">WACC 與 FCFF</div><div class="d">折現率用 CAPM 推算：越南 10 年期公債 4.54%＋β×成熟市場 ERP 4.23%＋越南國家風險溢酬 3.90%（Damodaran 2026）。現金流用無槓桿 FCFF。</div></div>
+    <div class="nb"><div class="h">MIRR、PI、ROIC、龍捲風</div><div class="d">因模型含中途置換投資，IRR 可能多重解，以 MIRR 為主。另有 PI（多案排序）、ROIC（對比 WACC）、龍捲風圖（找最致命的變數）。</div></div>
+  </div>
+
+  <p class="foot">
+    <b>一句話記住這個檔案：</b>先選對類別（01，不確定就用 01B 精靈），顧問填三頁成本收入（02–04），系統算六頁（05–09），業主看一頁（10）。<br>
+    <b>什麼時候該開一份：</b>當主工具某一項的商業判斷變成「立即推進 Go」、或準備進 WP-09 投資決策時，就為那一項開一份試算器。<br>
+    <b>送投資決策前務必做完：</b>10 分頁最下方的十項檢查——正式報價、關稅與進項 VAT、稅務優惠資格、<b>折現率書面談定</b>、法規路徑、在地 OPEX、單價核對、健保應收天數、龍捲風排序第一的變數已有對應合約條款、獨立單位複核。<br>
+    <b>重要聲明：</b>三個模擬案的金額為<b>規劃用示意值</b>，來源逐筆列在各檔 11 分頁；正式評估前每一筆都須以廠商報價或在地工程估算取代。
+    社會化醫療 10% 稅率的資格認定，須由越南在地稅務顧問就個案出具書面確認。
+  </p>
+</div>
+</body>
+</html>

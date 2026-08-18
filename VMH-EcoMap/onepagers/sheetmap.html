@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>VMH-EcoMap 分頁關聯圖</title>
+<style>
+  :root{
+    --navy:#1F3864; --midblue:#2F5597; --teal:#2E747A; --green:#548235;
+    --gold:#BF8F00; --purple:#7030A0; --red:#953735;
+    --ink:#1a1a1a; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#F4F6F9; color:var(--ink);
+       font-family:"Microsoft JhengHei","微軟正黑體","Noto Sans TC",system-ui,-apple-system,sans-serif;}
+  .page{width:1700px; margin:0 auto; padding:26px 18px 36px;}
+  h1{font-size:26px; margin:0 0 6px; color:var(--navy); letter-spacing:.5px;}
+  .sub{font-size:13.5px; color:var(--muted); margin:0 0 20px; line-height:1.75;}
+  .sub b{color:var(--navy);}
+  .canvas{position:relative; width:1700px; height:1010px;
+          background:#fff; border:1px solid #DDE3EC; border-radius:14px;
+          box-shadow:0 2px 14px rgba(31,56,100,.07);}
+  svg.wires{position:absolute; inset:0; width:1700px; height:1010px; z-index:1;}
+  svg.labels{position:absolute; inset:0; width:1700px; height:1010px; z-index:3; pointer-events:none;}
+  .node{position:absolute; z-index:2; border-radius:9px; padding:8px 11px;
+        border:1.6px solid; background:#fff;}
+  .node .t{font-size:13.5px; font-weight:700; line-height:1.35;}
+  .node .r{font-size:10px; font-weight:700; letter-spacing:.4px; opacity:.85; margin-bottom:2px;}
+  .node .d{font-size:11px; line-height:1.55; color:#39414d; margin-top:4px;}
+  .node .d b{color:var(--navy);}
+  .src{font-size:10px; line-height:1.5; color:#6a7382; margin-top:5px;
+       border-top:1px dashed #d5dbe4; padding-top:4px;}
+  .g-master{border-color:var(--navy); background:#EDF2F9;}
+  .g-master .t,.g-master .r{color:var(--navy);}
+  .g-input{border-color:var(--teal); background:#F0F7F8;}
+  .g-input .t,.g-input .r{color:var(--teal);}
+  .g-calc{border-color:#9AA3AE; background:#F3F4F6; border-style:dashed;}
+  .g-calc .t,.g-calc .r{color:#5a626c;}
+  .g-out{border-color:var(--green); background:#F2F8EE;}
+  .g-out .t,.g-out .r{color:#3f6427;}
+  .g-manual{border-color:var(--gold); background:#FFFAEE;}
+  .g-manual .t,.g-manual .r{color:#8a6800;}
+  .g-list{border-color:var(--purple); background:#F8F2FC;}
+  .g-list .t,.g-list .r{color:var(--purple);}
+  .g-ext{border-color:var(--red); background:#FCF1F0;}
+  .g-ext .t,.g-ext .r{color:var(--red);}
+  .g-note{border-color:#B9C4D4; border-style:dashed; background:#FBFCFE;}
+  .g-note .t,.g-note .r{color:#4a5568;}
+  .chip{position:absolute; z-index:3; border:1.4px solid #E0C36A; background:#fff;
+        border-radius:7px; padding:6px 8px; font-size:10.5px; line-height:1.45; color:#4a5160;}
+  .chip b{display:block; font-size:12px; color:#8a6800; margin-bottom:2px;}
+  svg text{paint-order:stroke fill; stroke:#fff; stroke-width:4.5px; stroke-linejoin:round;
+           font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif; font-weight:700;}
+  .lb{font-size:10.5px; fill:var(--midblue);}
+  .lb2{font-size:11.5px; fill:var(--midblue);}
+  .lp{font-size:10.5px; fill:var(--purple);}
+  .lg{font-size:11px; fill:#6f665a;}
+  .band{position:absolute; z-index:0; border-radius:12px; border:1px dashed #C9D2DE;}
+  .bandlab{position:absolute; z-index:2; font-size:11px; font-weight:700;
+           letter-spacing:1px; color:#9aa4b3;}
+  .legend{margin-top:16px; display:flex; gap:22px; flex-wrap:wrap;
+          font-size:12.5px; color:#39414d; align-items:center;
+          background:#fff; border:1px solid #DDE3EC; border-radius:12px; padding:13px 18px;}
+  .legend .k{display:flex; align-items:center; gap:7px;}
+  .sw{width:26px; height:0; border-top-width:2.4px; border-top-style:solid; display:inline-block;}
+  .box{width:16px; height:12px; border-radius:3px; border:1.6px solid; display:inline-block;}
+  .foot{font-size:12.5px; color:var(--muted); margin-top:13px; line-height:1.9;}
+  .foot b{color:var(--navy);}
+</style>
+<style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head>
+<body><div class="i18nsw"><a href="sheetmap.html" class="on">中文</a><a href="sheetmap.en.html">EN</a><a href="sheetmap.vi.html">VI</a></div>
+<div class="page">
+  <h1>VMH-EcoMap 主工具｜21 分頁關聯圖</h1>
+  <p class="sub">
+    箭頭方向＝資料流向，<b>被箭頭指到的那一頁是自動算出來的，不要手動打字</b>。線上的數字是實際存在的跨分頁公式數量，直接從檔案掃出來，不是示意。<br>
+    整套 21 個分頁（含儀表板與 17 商機作戰卡），真正要動手輸入的只有三處：<b>03 能力總表</b>（能力資料）、<b>16 能力商機矩陣</b>（打✓）、<b>15 商機字典</b>（商機描述）。
+  </p>
+
+  <div class="canvas">
+    <div class="band" style="left:24px; top:136px; width:292px; height:512px; background:#FAFCFC;"></div>
+    <div class="bandlab" style="left:34px; top:142px;">其他輸入分頁</div>
+    <div class="band" style="left:386px; top:136px; width:628px; height:528px; background:#FAFBFD;"></div>
+    <div class="bandlab" style="left:396px; top:142px;">能力鏈：盤點 → 計算 → 自動清單</div>
+    <div class="band" style="left:1096px; top:136px; width:580px; height:528px; background:#FBFAFD;"></div>
+    <div class="bandlab" style="left:1106px; top:142px;">商機鏈：能力 ↔ 商機 → 商機管線</div>
+
+    <!-- ============ WIRES ============ -->
+    <svg class="wires" viewBox="0 0 1700 1010">
+      <defs>
+        <marker id="ab" markerWidth="9" markerHeight="9" refX="7.4" refY="3.2" orient="auto">
+          <path d="M0,0 L7.4,3.2 L0,6.4 z" fill="#2F5597"/></marker>
+        <marker id="ap" markerWidth="9" markerHeight="9" refX="7.4" refY="3.2" orient="auto">
+          <path d="M0,0 L7.4,3.2 L0,6.4 z" fill="#7030A0"/></marker>
+        <marker id="ag" markerWidth="9" markerHeight="9" refX="7.4" refY="3.2" orient="auto">
+          <path d="M0,0 L7.4,3.2 L0,6.4 z" fill="#8a8175"/></marker>
+      </defs>
+      <g fill="none" stroke-linejoin="round">
+        <!-- 98 下拉來源 -->
+        <path d="M70,116 H14 V608" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <path d="M14,204 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M14,296 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M14,388 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M14,480 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M14,576 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M700,116 V160" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M1600,116 H1686 V596" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <path d="M1686,228 H1650" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M1686,420 H1650" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M1686,580 H1650" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+
+        <!-- 具名範圍下拉 04→03 / 09→03 -->
+        <path d="M300,576 H388 V180 H400" stroke="#7030A0" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M300,480 H376 V196 H400" stroke="#7030A0" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+
+        <!-- 公式連動：左欄 → 中欄 -->
+        <path d="M300,204 H400" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M300,388 H400" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M300,296 H330 V412 H400" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M92,244 H26 V480 H40" stroke="#2F5597" stroke-width="2" marker-end="url(#ab)"/>
+        <path d="M400,296 H370 V568 H300" stroke="#2F5597" stroke-width="2" marker-end="url(#ab)"/>
+
+        <!-- 03 → Calc → 四張自動清單 -->
+        <path d="M700,310 V366" stroke="#2F5597" stroke-width="3.6" marker-end="url(#ab)"/>
+        <path d="M472,458 V516" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M624,458 V516" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M776,458 V516" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M928,458 V516" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M800,516 V496 H966 V458" stroke="#2F5597" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#ab)"/>
+
+        <!-- 商機鏈 -->
+        <path d="M1000,204 H1110" stroke="#2F5597" stroke-width="2.6" marker-end="url(#ab)"/>
+        <path d="M1110,272 H1000" stroke="#2F5597" stroke-width="2.6" marker-end="url(#ab)"/>
+        <path d="M1200,366 V310" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M1560,310 V366" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M1200,484 V526" stroke="#2F5597" stroke-width="2.6" marker-end="url(#ab)"/>
+        <path d="M1560,526 V484" stroke="#2F5597" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#ab)"/>
+
+        <!-- 外部檔案（人工作業） -->
+        <path d="M552,584 H330 V838 H240 V850" stroke="#8a8175" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ag)"/>
+        <path d="M150,850 V620" stroke="#8a8175" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ag)"/>
+        <path d="M1000,286 H1050 V834 H640 V850" stroke="#8a8175" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ag)"/>
+      </g>
+    </svg>
+
+    <!-- ============ NODES ============ -->
+    <div class="node g-list" style="left:40px; top:70px; width:1620px; height:46px;">
+      <div class="t" style="line-height:28px;">98 選單維護_Lists　—　所有下拉選單的唯一維護處（35 欄清單；要新增選項，就在該欄最下方接著往下填）</div>
+    </div>
+
+    <div class="node g-input" style="left:40px; top:164px; width:260px; height:80px;">
+      <div class="r">輸入</div><div class="t">02 情境權重_Scenario</div>
+      <div class="d">價值／準備度的六個權重。<b>一份檔案＝一個場域</b></div>
+    </div>
+    <div class="node g-input" style="left:40px; top:256px; width:260px; height:80px;">
+      <div class="r">輸入</div><div class="t">05 法規門檻_Gates</div>
+      <div class="d">越南法規＋國際標準、強制／參考與通過狀態</div>
+    </div>
+    <div class="node g-input" style="left:40px; top:348px; width:260px; height:80px;">
+      <div class="r">輸入</div><div class="t">08 風險清冊_Risk</div>
+      <div class="d">風險等級、因應作為與負責人</div>
+    </div>
+    <div class="node g-input" style="left:40px; top:440px; width:260px; height:80px;">
+      <div class="r">輸入</div><div class="t">09 KPI計分卡_KPI</div>
+      <div class="d">KPI 定義、基線與目標（隱藏 S 欄供 03 下拉）</div>
+    </div>
+    <div class="node g-input" style="left:40px; top:532px; width:260px; height:88px;">
+      <div class="r">輸入</div><div class="t">04 夥伴拼圖_Partners</div>
+      <div class="d">29 個夥伴角色＋七構面評分。<b>A／F／T 三欄全自動</b></div>
+    </div>
+
+    <div class="node g-master" style="left:400px; top:160px; width:600px; height:150px;">
+      <div class="r">★ 單一資料源｜全工具唯一要輸入能力資料的地方</div>
+      <div class="t">03 能力總表_Master</div>
+      <div class="d">
+        60 項能力（格式與公式預留到第 154 列）。A–G 能力定義／H–K 夥伴配置／L–M 門檻／N–W 評分決策／X–AA 執行追蹤／AB–AE 擴充追蹤。<br>
+        <b>本頁只有 3 欄是公式：Q 價值分、U 準備分、W 商業判斷</b>；另外 <b>AF 所屬商機</b>由 16 矩陣自動帶入。
+      </div>
+    </div>
+
+    <div class="node g-calc" style="left:400px; top:366px; width:600px; height:92px;">
+      <div class="r">隱藏引擎</div><div class="t">_計算_Calc（隱藏分頁，不要動）</div>
+      <div class="d">把「符合條件的列」依序編號成四組排名：缺口／夥伴視角／未確認強制法規／高風險，<br>
+      供下方四張自動清單用 MATCH＋INDEX 取回明細。</div>
+    </div>
+
+    <div class="node g-out" style="left:400px; top:516px; width:144px; height:136px;">
+      <div class="r">全自動</div><div class="t">01 總藍圖<br>Blueprint</div>
+      <div class="src">來源：_計算_Calc、03（23）、05 門檻列（8）</div>
+    </div>
+    <div class="node g-out" style="left:552px; top:516px; width:144px; height:136px;">
+      <div class="r">全自動</div><div class="t">11 缺口招募<br>GapRFI</div>
+      <div class="src">來源：_計算_Calc（300）、03（300）</div>
+    </div>
+    <div class="node g-out" style="left:704px; top:516px; width:144px; height:136px;">
+      <div class="r">全自動</div><div class="t">12 夥伴視角<br>PartnerView</div>
+      <div class="src">來源：Calc（330）、03（333）。C4 選的夥伴回饋給 Calc</div>
+    </div>
+    <div class="node g-out" style="left:856px; top:516px; width:144px; height:136px;">
+      <div class="r">全自動</div><div class="t">13 待辦看板<br>Actions</div>
+      <div class="src">來源：Calc（204）、05（89）、03（62）、08（57）</div>
+    </div>
+
+    <div class="node g-input" style="left:1110px; top:160px; width:540px; height:150px;">
+      <div class="r">輸入（只要打✓）</div>
+      <div class="t">16 能力商機矩陣_CapOppMap</div>
+      <div class="d">
+        60 能力（列，逐列鏡射 03）× 85 商機（欄，逐欄對應 15 的第 5–94 列，已預留 90 欄）。<br>
+        交叉格打「✓」＝這項能力屬於這個商機。<b>一個能力可以勾好幾個商機＝多對多。</b><br>
+        最底 5 列自動算出：CAP數／平均價值分／平均準備分／○缺口數／涵蓋領域。
+      </div>
+    </div>
+    <div class="node g-input" style="left:1110px; top:366px; width:540px; height:118px;">
+      <div class="r">輸入（商機描述）＋自動統計</div>
+      <div class="t">15 商機字典_OppLibrary</div>
+      <div class="d">
+        85 種越南醫院市場的生意，分 A–J 十族群（含 17 種 AI）。手填：名稱／在賣什麼誰付錢／越南現況／典型金額。<br>
+        自動：涵蓋領域、CAP數、平均分、○缺口數、<b>★聯盟能力對應狀態（白地商機偵測）</b>。
+      </div>
+    </div>
+    <div class="node g-out" style="left:1110px; top:526px; width:540px; height:118px;">
+      <div class="r">全自動（只填商業判斷）</div>
+      <div class="t">14 商機清單_Pipeline　←　對業主簡報就用這一頁</div>
+      <div class="d">
+        A 欄下拉選一個商機 → B–L 欄全部自動帶入；只要填 M–S 欄：本案付費方／交易模式／金額級距／成熟階段／主責／下一步／備註。
+      </div>
+    </div>
+
+    <div class="node g-note" style="left:400px; top:690px; width:600px; height:126px;">
+      <div class="r">看圖重點</div>
+      <div class="t">整套 21 個分頁，真正要動手的只有三處</div>
+      <div class="d">
+        <b>① 03 能力總表</b>——能力、夥伴配置、評分與門檻狀態。　<b>② 16 能力商機矩陣</b>——在能力 × 商機的交叉格打「✓」。　<b>③ 15 商機字典</b>——商機名稱、在賣什麼誰付錢、越南現況。<br>
+        其餘頁面裡，<b>13 頁是公式自動算</b>（01／11／12／13／14／17作戰卡／儀表板 ＋ 03 的 Q·U·W·AF ＋ Calc），<b>5 頁是人工工作區</b>（06／07／10／00／99）。
+      </div>
+    </div>
+    <div class="node g-manual" style="left:1110px; top:690px; width:540px; height:126px;">
+      <div class="r">手動維護　—　掃描結果：這幾頁沒有任何跨分頁公式，不會被其他頁改動</div>
+    </div>
+    <div class="chip" style="left:1122px; top:718px; width:168px; height:38px;"><b>06 行動路線</b>工作包、里程碑與甘特</div>
+    <div class="chip" style="left:1300px; top:718px; width:168px; height:38px;"><b>07 整案量級</b>整案量級與交易模式比較</div>
+    <div class="chip" style="left:1478px; top:718px; width:160px; height:38px;"><b>10 決策紀錄</b>決策日誌與版本紀錄</div>
+    <div class="chip" style="left:1122px; top:764px; width:168px; height:38px;"><b>00 使用說明</b>導覽與新功能說明</div>
+    <div class="chip" style="left:1300px; top:764px; width:168px; height:38px;"><b>99 代碼表</b>名詞定義與判讀說明</div>
+
+    <div class="node g-ext" style="left:40px; top:850px; width:390px; height:104px;">
+      <div class="r">外部檔案</div><div class="t">VMH-EcoMap-3 夥伴提案回覆表</div>
+      <div class="d">寄給候選夥伴填。回收後複製 05_彙總輸出的 <b>B7:O7 → 貼到 04 的 B 欄</b>（跳過 A 欄），再複製 Q7:S7 貼到 Q 欄。</div>
+    </div>
+    <div class="node g-ext" style="left:444px; top:850px; width:390px; height:104px;">
+      <div class="r">外部檔案</div><div class="t">VMH-EcoMap-2 專案商模試算器</div>
+      <div class="d">單一子專案的 CAPEX／OPEX／NPV／IRR／回收期。<b>刻意不自動帶入</b>——資格審查階段還沒報價，任何金額都是猜的。</div>
+    </div>
+    <div class="node g-ext" style="left:848px; top:850px; width:390px; height:104px;">
+      <div class="r">外部檔案</div><div class="t">VMH-EcoMap-4 使用手冊（Word）</div>
+      <div class="d">每個分頁的定義／目的／怎麼看／怎麼填／公式邏輯／常見錯誤。不連動；打開某頁不知道要幹嘛時翻它。</div>
+    </div>
+    <div class="node g-ext" style="left:1252px; top:850px; width:398px; height:104px;">
+      <div class="r">外部檔案</div><div class="t">VMH-EcoMap-5 聯盟夥伴說明會</div>
+      <div class="d">27 頁簡報，對外招募夥伴與對政府簡報用。不連動。</div>
+    </div>
+
+    <!-- ============ LABELS (最上層，不會被卡片蓋住) ============ -->
+    <svg class="labels" viewBox="0 0 1700 1010">
+      <text class="lp" x="700" y="140" text-anchor="middle">98 供應全工具所有下拉選單（具名範圍）</text>
+      <text class="lp" x="1662" y="140" text-anchor="end">下拉</text>
+      <text class="lp" x="24" y="146">下拉</text>
+
+      <text class="lb" x="350" y="196" text-anchor="middle">權重→Q/U分數（300）</text>
+      <text class="lp" x="350" y="252" text-anchor="middle">T欄→候選夥伴下拉</text>
+      <text class="lb" x="350" y="380" text-anchor="middle">高風險排名（23）</text>
+      <text class="lb" x="352" y="406" text-anchor="middle">強制法規排名（42）</text>
+      <text class="lp" x="350" y="436" text-anchor="middle">S欄→KPI指標下拉</text>
+      <text class="lb" x="352" y="562" text-anchor="middle">各領域缺口數（10）</text>
+      <text class="lb" x="66" y="436" text-anchor="middle">權重（24）</text>
+
+      <text class="lb2" x="712" y="344">03 的 60 項能力全部資料（750 個公式）</text>
+      <text class="lb" x="812" y="490">12 的 C4 選擇 → 排名條件（150）</text>
+
+      <text class="lb" x="1055" y="194" text-anchor="middle">A/B/E 逐列鏡射</text>
+      <text class="lb" x="1055" y="292" text-anchor="middle">對應商機→AF欄</text>
+      <text class="lb" x="1212" y="342">第5–94列→欄標題</text>
+      <text class="lb" x="1548" y="342" text-anchor="end">統計列→CAP數／平均分／缺口數</text>
+      <text class="lb" x="1212" y="510">U欄→A欄下拉；B–P→B–L欄</text>
+      <text class="lb" x="1548" y="510" text-anchor="end">已列入14（回填）</text>
+
+      <text class="lg" x="168" y="734">① 把缺口清單當 RFI 發出去 →</text>
+      <text class="lg" x="168" y="692">② 回收後複製 B7:O7 貼回 04 的 B 欄</text>
+      <text class="lg" x="1042" y="828" text-anchor="end">判斷為 Go → 手動另開一份試算器</text>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <div class="k"><span class="sw" style="border-color:#2F5597;"></span>公式自動連動（括號內為實際公式數）</div>
+    <div class="k"><span class="sw" style="border-color:#7030A0; border-top-style:dashed;"></span>下拉選單來源（具名範圍）</div>
+    <div class="k"><span class="sw" style="border-color:#8a8175; border-top-style:dashed;"></span>人工作業（複製貼上／另開新檔）</div>
+    <div class="k"><span class="box" style="border-color:#1F3864; background:#EDF2F9;"></span>單一資料源</div>
+    <div class="k"><span class="box" style="border-color:#2E747A; background:#F0F7F8;"></span>要輸入的分頁</div>
+    <div class="k"><span class="box" style="border-color:#9AA3AE; background:#F3F4F6;"></span>隱藏計算引擎</div>
+    <div class="k"><span class="box" style="border-color:#548235; background:#F2F8EE;"></span>全自動輸出</div>
+    <div class="k"><span class="box" style="border-color:#BF8F00; background:#FFFAEE;"></span>手動維護、不連動</div>
+    <div class="k"><span class="box" style="border-color:#7030A0; background:#F8F2FC;"></span>選單維護</div>
+    <div class="k"><span class="box" style="border-color:#953735; background:#FCF1F0;"></span>外部檔案</div>
+  </div>
+
+  <p class="foot">
+    <b>三條讀圖規則：</b>
+    ① 有藍色箭頭指進去的分頁，一律不要手動打字——那是公式算出來的，覆寫掉就永遠不會再更新。
+    ② 紫色虛線代表「這一頁的下拉選項從哪裡來」；要多一個選項，就到箭頭起點那一頁的清單最下方加一列。
+    ③ 灰色虛線是刻意不自動化的地方：跨檔案連結會失效、也會把外部內容帶進主工具，所以改用複製貼上指定範圍。<br>
+    <b>兩個閉環值得注意：</b>「03 ↔ 16」——03 的能力鏡射進矩陣，矩陣算出的所屬商機再回填 03 的 AF 欄；「15 ↔ 14」——字典供應商機下拉，14 用了哪些再回填字典的「已列入14」欄。兩者都是不同欄位互指，不會產生循環參照。<br>
+    <b>一個容易誤會的地方：</b>06 行動路線、07 整案量級、10 決策紀錄完全沒有跨分頁公式——它們是人工維護的工作區，改 03 不會自動更新它們，也不會被 03 蓋掉。
+  </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>標案戰情板　使用說明｜VMH-EcoMap</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
+<link rel="stylesheet" href="../assets/site.css">
+</head><body>
+<header><div class="hw">
+ <a class="logo" href="../index.html"><b>VMH-EcoMap</b><span>越南醫院生態系工具站</span></a>
+ <nav><a href="../index.html#tools">線上工具</a><a href="../index.html#onepagers">一頁圖說</a><a class="on" href="../index.html#adv">進階／夥伴</a><a href="../index.html#downloads">下載中心</a><a href="../index.html#about">關於本站</a></nav>
+ <div class="langsw"><a class="lp on" data-lang="zh" href="#">中文</a><a class="lp" data-lang="en" href="#">English</a><a class="lp" data-lang="vi" href="#">Tiếng Việt</a></div>
+</div></header><main>
+<div class="crumb"><a href="../index.html">首頁</a> ／ <a href="../index.html#adv">進階／夥伴專區</a> ／ 標案戰情板</div>
+<div class="dhero"><div class="top">
+ <div class="txt"><div class="cat">進階／夥伴專區 ・ 標案管理</div>
+  <h1>標案戰情板</h1>
+  <p class="lead">標案不是盯著行事曆，是盯著「還有幾天」與「文件備齊了沒」。這個唯讀戰情板讀取您的標案雷達 Excel，自動算出截標倒數、投／不投分佈、資格文件備齊率——資料維護仍在 Excel，這裡只負責讓狀態一眼可見。</p></div>
+ <div class="img" style="background-image:url(../assets/shots/warboard.jpg)"></div></div></div>
+
+<div class="dgrid"><div>
+ <div class="card"><h3>什麼時候用它</h3><div class="scen"><div class="s"><b>場景一　週會快速掃描戰況</b>開會前載入最新 Excel，14 天內截標的標案自動標紅、排最前面，不用逐列翻找。</div><div class="s"><b>場景二　確認資格文件夠不夠</b>資格文件備齊率一目了然，快過期的文件會標紅提醒重新申請。</div></div></div>
+ <div class="card"><h3>操作三步驟</h3><ol class="steps" style="font-size:.88rem;line-height:1.9"><li><b>準備好標案雷達 Excel</b>——先在 VMH-EcoMap-15 標案雷達與資格文件庫.xlsx 裡登錄標案與文件狀態。</li><li><b>載入戰情板</b>——點「載入 15 號檔」選取該 Excel，解析全程在您的電腦裡進行，檔案不會上傳。</li><li><b>每週例行更新</b>——掃採購網 → 抄進 Excel → 重新載入戰情板，狀態就會更新。</li></ol></div>
+ <div class="card"><h3>你會看到什麼</h3>
+  <p style="font-size:.86rem">追蹤中標案數、14 天內截標數、已決定投標數、資格文件備齊率四個 KPI；標案卡片依截標日排序；資格文件清單依緊急度排序。</p>
+  <div class="warn" style="margin-top:11px"><b>資料與限制：</b>這是唯讀工具，所有資料維護回 Excel 進行，戰情板本身不儲存任何修改。</div></div>
+</div>
+<div class="side"><div class="card">
+ <a class="big" href="../advanced/warboard.html">▶ 開啟標案戰情板</a>
+ <a class="big g" href="../index.html#adv">← 回工具總覽</a>
+ <h3 style="margin-top:16px">規格</h3>
+ <div class="spec">格式：單檔 HTML<br>需要網路：否<br>搭配檔案：VMH-EcoMap-15 標案雷達與資格文件庫.xlsx<br></div>
+</div></div></div>
+</main><footer><div class="fin">
+ <div><b style="color:#C7D6EA">VMH-EcoMap</b><br>VMH-EcoMap　越南醫院生態系工具站　v1.0　2026-08<br>群晶科技 × 越南現代醫院聯盟</div>
+ <div style="text-align:right">本站數據均附出處與查證日；預載案例為市場推估值，<br>非任何特定機構之實際報價。情報有半衰期，以查證日為準。</div>
+</div></footer>
+<script>
+(function(){
+ var LANGS=['zh','en','vi'];
+ document.querySelectorAll('.langsw a[data-lang]').forEach(function(a){
+   a.addEventListener('click', function(e){
+     e.preventDefault();
+     var target=a.getAttribute('data-lang');
+     var path=location.pathname;
+     var file=path.split('/').pop();
+     var dir=path.slice(0, path.length-file.length);
+     var m=file.match(/^(.*?)(\.(en|vi))?\.html$/);
+     if(!m) return;
+     var base=m[1];
+     var newFile = target==='zh' ? base+'.html' : base+'.'+target+'.html';
+     location.href = dir + newFile + location.hash;
+   });
+ });
+})();
+</script></body></html>

@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vietnam Healthcare Intel Station Guide｜VMH-EcoMap</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
+<link rel="stylesheet" href="../assets/site.css">
+</head><body>
+<header><div class="hw">
+ <a class="logo" href="../index.en.html"><b>VMH-EcoMap</b><span>Vietnam Hospital Ecosystem Toolkit</span></a>
+ <nav><a class="on" href="../index.en.html#tools">Online Tools</a><a href="../index.en.html#onepagers">One-Pagers</a><a href="../index.en.html#adv">Advanced / Partner</a><a href="../index.en.html#downloads">Downloads</a><a href="../index.en.html#about">About</a></nav>
+ <div class="langsw"><a class="lp" data-lang="zh" href="#">中文</a><a class="lp on" data-lang="en" href="#">English</a><a class="lp" data-lang="vi" href="#">Tiếng Việt</a></div>
+</div></header><main>
+<div class="crumb"><a href="../index.en.html">Home</a> ／ <a href="../index.en.html#tools">Interactive Tools</a> ／ Vietnam Healthcare Intel Station</div>
+<div class="dhero"><div class="top">
+ <div class="txt"><div class="cat">Interactive Tool · Market Intelligence</div>
+  <h1>Vietnam Healthcare Intel Station</h1>
+  <p class="lead">The two things that sink a pitch: getting regulatory timing wrong, and being asked "what's that based on?" This page turns signed, effective-dated regulations into a countdown clock, lays out what competing vendors have actually built in Vietnam, and tags every market figure with a source and verification date — anything unverifiable is marked "not found," never invented.</p></div>
+ <div class="img" style="background-image:url(../assets/shots/intel.jpg)"></div></div></div>
+
+<div class="dgrid"><div>
+ <div class="card"><h3>When to use it</h3><div class="scen"><div class="s"><b>Scenario 1　Confirming timing before a pitch</b>The regulatory clock sorts by days remaining; red means within 120 days. "169 days until this takes effect" carries far more weight than "I heard it's coming next year."</div><div class="s"><b>Scenario 2　Getting asked about competitors</b>Click any company name to expand its profile and past/current hospital projects, each sourced. Knowing what a rival has built tells you where to position.</div><div class="s"><b>Scenario 3　Needing a citable number for a deck</b>Every market-data card carries a source and verification date you can drop straight into a footnote. Anything unrefreshed past 120 days flags itself "needs update."</div></div></div>
+ <div class="card"><h3>Three steps</h3><ol class="steps" style="font-size:.88rem;line-height:1.9"><li><b>Read the regulatory clock</b>——Not-yet-effective items sort first (soonest first); effective ones sink to the bottom. Each entry states which opportunities it touches and what we should do.</li><li><b>Check competitor activity</b>——Click a company name to open its detail panel; the "Full Vendor Directory" below covers 115 companies across 9 categories, organized around data center / UPS / IDC as the core axis.</li><li><b>Maintain the data yourself</b>——Top-right "✎ Edit Data" lets you edit, add, or delete entries directly on the page, then "⬇ Export Data" saves a new data file; "⟳ Load Update" imports an update file from someone else.</li></ol></div>
+ <div class="card"><h3>What you'll see</h3>
+  <p style="font-size:.86rem">Three sections: Regulatory Clock (countdown and response for 10 signed regulations), Competitor Activity (12 detailed cards with 48 sourced project track records), and Market Data Dashboard (16 indicators) — plus the Full Vendor Directory of 115 companies.</p>
+  <div class="warn" style="margin-top:11px"><b>Data & limitations: </b>Intelligence has a half-life. Every entry carries a verification date and auto-flags "needs update" past 120 days. The vendor directory currently lists names and positioning only — not yet individually deep-researched.</div></div>
+</div>
+<div class="side"><div class="card">
+ <a class="big" href="../tools/intel.en.html">▶ Open Vietnam Healthcare Intel Station</a>
+ <a class="big g" href="../index.en.html#tools">← Back to all tools</a>
+ <h3 style="margin-top:16px">Related Tools</h3>
+ <div class="rel"><a href="../tools/gapmap.en.html">→ Vietnam Gap Map (provincial view)</a><br><a href="../tools/calculator.en.html">→ Deal Calculator (turn opportunity into numbers)</a><br><a href="../tools/explorer.en.html">→ Ecosystem Explorer (full opportunity landscape)</a><br></div>
+ <h3 style="margin-top:16px">Specifications</h3>
+ <div class="spec">Format：Single-file HTML<br>Size：~65 KB<br>Needs internet：No<br>Refresh cadence：Automatic monthly re-verification<br>Version：v1.0 (2026-08)<br></div>
+</div></div></div>
+</main><footer><div class="fin">
+ <div><b style="color:#C7D6EA">VMH-EcoMap</b><br>VMH-EcoMap　Vietnam Hospital Ecosystem Toolkit　v1.0　2026-08<br>Chunghing Technology × Vietnam Modern Hospital Alliance</div>
+ <div style="text-align:right">All figures on this site carry a source and verification date; preset cases are market-rate<br>estimates, not actual quotes from any institution. Intelligence has a half-life — trust the verification date.</div>
+</div></footer>
+<script>
+(function(){
+ var LANGS=['zh','en','vi'];
+ document.querySelectorAll('.langsw a[data-lang]').forEach(function(a){
+   a.addEventListener('click', function(e){
+     e.preventDefault();
+     var target=a.getAttribute('data-lang');
+     var path=location.pathname;
+     var file=path.split('/').pop();
+     var dir=path.slice(0, path.length-file.length);
+     var m=file.match(/^(.*?)(\.(en|vi))?\.html$/);
+     if(!m) return;
+     var base=m[1];
+     var newFile = target==='zh' ? base+'.html' : base+'.'+target+'.html';
+     location.href = dir + newFile + location.hash;
+   });
+ });
+})();
+</script></body></html>

@@ -1,0 +1,334 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive Business Model Calculator | VMH-EcoMap</title>
+<style>
+:root{--navy:#1F3864;--teal:#0E6E6B;--gold:#9A6B10;--red:#C0392B;--green:#2F6B3D;
+--bg:#F4F6FA;--sf:#fff;--ink:#26303F;--sub:#6B7280;--line:#D9E0EA}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:var(--navy);color:#fff;padding:14px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header b{font-size:1.05rem}
+header .n{font-size:.76rem;color:#9FB0CC}
+main{max-width:1240px;margin:0 auto;padding:20px;display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start}
+.panel{background:var(--sf);border-radius:14px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:18px}
+.cats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.cats button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 4px;
+ font:inherit;font-size:.76rem;cursor:pointer;font-weight:700;color:var(--sub);line-height:1.3}
+.cats button.on{color:#fff}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.presets button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+ font:inherit;font-size:.76rem;cursor:pointer;color:var(--sub)}
+.presets button.on{background:#EEF3F9;border-color:var(--navy);color:var(--navy);font-weight:700}
+.cat{font-size:.78rem;border-left:3px solid var(--teal);background:#F2F8F6;border-radius:0 8px 8px 0;padding:8px 10px;margin:10px 0 14px}
+.sl{margin-bottom:13px}
+.sl label{display:flex;justify-content:space-between;font-size:.82rem;font-weight:700;margin-bottom:3px;align-items:center}
+.sl label span.val{color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap;margin-left:8px}
+.sl input{width:100%;accent-color:var(--teal)}
+.q{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;
+ background:#DCE6F4;color:var(--navy);font-size:.66rem;font-weight:800;margin-left:5px;cursor:help;position:relative;flex:none}
+.q .tip{display:none;position:absolute;left:50%;bottom:130%;transform:translateX(-50%);width:250px;
+ background:#26303F;color:#fff;font-size:.72rem;font-weight:400;line-height:1.55;padding:9px 11px;
+ border-radius:9px;z-index:40;text-align:left;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.q:hover .tip{display:block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--sf);border-radius:12px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:13px 15px}
+.kpi .v{font-size:1.45rem;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi .k{font-size:.76rem;color:var(--sub);font-weight:700}
+.kpi .m{font-size:.68rem;color:#8A93A3}
+.verd{border-radius:12px;padding:13px 16px;font-weight:700;margin-bottom:14px;font-size:.93rem;line-height:1.55}
+.chart{background:var(--sf);border-radius:14px;box-shadow:0 1px 5px rgba(16,26,45,.09);padding:16px}
+.chart h3{font-size:.9rem;color:var(--navy);margin-bottom:6px}
+svg text{font-family:inherit}
+.foot{grid-column:1/-1;font-size:.74rem;color:var(--sub);line-height:1.7;background:#FFF9E3;border-radius:10px;padding:10px 14px}
+@media(max-width:920px){main{grid-template-columns:1fr}}
+</style><style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head><body><div class="i18nsw"><a href="calculator.html">中文</a><a href="calculator.en.html" class="on">EN</a><a href="calculator.vi.html">VI</a></div>
+<header><b>Interactive business model calculator</b><span class="n">Six investment categories, each with its own yardstick — drag the sliders to see the conclusion update in real time. Illustrative values are for exploration only; official figures follow the VMH-EcoMap-2 Excel calculator.</span></header>
+<main>
+<div class="panel">
+  <div style="font-size:.74rem;font-weight:700;color:var(--sub);margin-bottom:5px">① Select investment category (criteria change accordingly)</div>
+  <div class="cats" id="cats"></div>
+  <div style="font-size:.74rem;font-weight:700;color:var(--sub);margin-bottom:5px">② Select a sample project</div>
+  <div class="presets" id="presets"></div>
+  <div class="cat" id="catNote"></div>
+  <div style="font-size:.74rem;font-weight:700;color:var(--sub);margin-bottom:5px">③ Drag the sliders to see how the conclusion changes (hover over ⓘ for explanations)</div>
+  <div id="sliders"></div>
+</div>
+<div>
+  <div class="kpis" id="kpis"></div>
+  <div class="verd" id="verd"></div>
+  <div class="chart"><h3 id="c1t"></h3><svg id="cf" width="100%" height="280" viewBox="0 0 820 280" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="chart" style="margin-top:14px"><h3 id="c2t"></h3><svg id="sv" width="100%" height="175" viewBox="0 0 820 175" preserveAspectRatio="xMidYMid meet"></svg></div>
+</div>
+<div class="foot">★ This is<b>an exploration tool</b>: the figures in all preset projects are illustrative values, intended to help you sense which assumption most influences the conclusion and why different categories require different yardsticks.
+For formal investment decisions, use the VMH-EcoMap-2 project business model calculator (Excel) — it includes tax, working capital, residual value, and the ten-point submission checklist.
+For the classification methodology, see pages 10-12 of the VMH-EcoMap-7 presentation.</div>
+</main>
+<script>
+/* ═══ Parameter definitions: one set per category, with hover explanations ═══ */
+const PD={
+ capex:{l:'Initial investment (CAPEX)',u:'million',mn:10,mx:400,st:1,h:'One-time build-out cost: equipment, construction, implementation, and first-year licensing. Excludes day-to-day operations.'},
+ rev:{l:'Annual revenue',u:'million/year',mn:5,mx:120,st:1,h:'Annual revenue at full capacity (health insurance reimbursement + out-of-pocket payment). Actual revenue = annual revenue × utilization rate.'},
+ opex:{l:'Annual operating cost',u:'million/year',mn:2,mx:60,st:1,h:'Labor, consumables, electricity, maintenance, annual license fees — money that must be paid every year.'},
+ g:{l:'Annual benefit growth rate',u:'%',mn:0,mx:12,st:.5,h:'The rate at which revenue or savings grow year over year (volume growth, price adjustment, increased penetration).'},
+ util:{l:'Capacity utilization rate',u:'%',mn:30,mx:100,st:1,h:'The share of designed capacity actually used. New facilities typically ramp up from 50-60%. This slider often influences the conclusion more than any cost estimate.'},
+ wacc:{l:'Discount rate (WACC)',u:'%',mn:6,mx:20,st:.1,h:'Cost of capital = the interest rate used to convert future money into today’s money. Vietnam projects include a country risk premium of 3.90% (derived via CAPM). It influences NPV more than any single cost estimate.'},
+ yrs:{l:'Evaluation period',u:'years',mn:5,mx:15,st:1,h:'The number of years over which cash flow is evaluated. Equipment-type investments typically use an economic life of 8-10 years.'},
+ ownop:{l:'Annual operating cost of self-build',u:'million/year',mn:2,mx:60,st:1,h:'The annual cost of building and maintaining it in-house: electricity, staffing shifts, maintenance contracts.'},
+ altfee:{l:'Alternative option annual fee',u:'million/year',mn:5,mx:120,st:1,h:'The money that must be paid each year if not self-built: outsourced hosting fees, rental fees. For category B (Enabling), the “revenue” is essentially this avoided cost.'},
+ down:{l:'Alternative option annual risk cost',u:'million/year',mn:0,mx:60,st:1,h:'The hidden cost of using the alternative: downtime losses, data offshoring risk, limited scalability. Often underestimated — this is exactly why the two calculation methods reach opposite conclusions.'},
+ capA:{l:'Option A one-time investment (self-operated)',u:'million',mn:5,mx:300,st:1,h:'One-time investment to build facilities that meet regulatory requirements.'},
+ opA:{l:'Option A annual operating cost',u:'million/year',mn:1,mx:50,st:1,h:'The annual maintenance and operating cost after self-operating.'},
+ feeB:{l:'Option B annual fee (outsourced)',u:'million/year',mn:2,mx:80,st:1,h:'The annual fee for outsourcing the service instead of self-building.'},
+ pen:{l:'Annual risk cost of inaction',u:'million/year',mn:0,mx:200,st:5,h:'The cost of non-compliance: fines, suspension of operations, failure to obtain a license/accreditation. The key point of category C (Regulatory-mandated) is that “not doing it is not an option” — this field simply reminds you how large the cost is.'},
+ save:{l:'Annual savings amount',u:'million/year',mn:2,mx:80,st:1,h:'The money saved each year after implementation: energy, labor hours, wastage, rent. It must be verifiable against actual bills, not just a “feeling” of savings.'},
+ addop:{l:'Additional annual maintenance and operating cost',u:'million/year',mn:0,mx:30,st:.5,h:'The new system’s own annual cost: licensing, maintenance, staffing shifts. Net savings = annual savings − this amount.'},
+ old0:{l:'Current annual cost of the old equipment',u:'million/year',mn:2,mx:60,st:1,h:'The annual maintenance plus energy consumption cost of continuing to use the old equipment.'},
+ oldg:{l:'Annual cost growth rate of the old equipment',u:'%',mn:0,mx:25,st:1,h:'The speed at which equipment ages: repairs become increasingly expensive, breakdowns become more frequent. This slider determines “when replacement is most cost-effective.”'},
+ failc:{l:'Annual failure risk of the old equipment',u:'million/year',mn:0,mx:60,st:1,h:'The expected loss from sudden failure (downtime × impact). For medical equipment, the cost of failure is often greater than the repair cost itself.'},
+ newop:{l:'Annual cost of the new equipment',u:'million/year',mn:1,mx:40,st:1,h:'The annual maintenance plus energy consumption cost after replacement (typically lower, and even lower while under warranty).'},
+ direct:{l:'Annual direct benefit',u:'million/year',mn:0,mx:60,st:1,h:'Visible, quantifiable benefits: labor, paper, filing improvements. For strategic positioning projects, the direct benefit typically does not justify the investment on its own — this is normal.'},
+ prob:{l:'Probability of unlocking success',u:'%',mn:5,mx:95,st:5,h:'The probability that the door this investment opens is actually walked through afterward (e.g., after building a data platform, AI applications actually get deployed).'},
+ optv:{l:'Value of the unlocked opportunity',u:'million',mn:0,mx:600,st:10,h:'The sum of net present values of the businesses behind that door (e.g., AI and BI after HIS, replication to a second campus). This is the true target of category F (Strategic positioning).'}};
+
+/* ═══ Six categories ═══ */
+const CATS={
+ A:{n:'A Revenue-generating',en:'NPV／MIRR',col:'#BF8F00',
+   note:'A business where you get paid for each service delivered. Criterion: NPV>0 and MIRR>cost of capital. Capacity utilization rate is the assumption most often overestimated.',
+   ps:['capex','rev','opex','g','util','wacc','yrs'],
+   presets:[
+    {n:'CT imaging center',v:{capex:95,rev:42,opex:16,g:3,util:80,wacc:11.5,yrs:10}},
+    {n:'IVF reproductive laboratory',v:{capex:70,rev:38,opex:15,g:5,util:70,wacc:11.5,yrs:10}},
+    {n:'Health check-up center',v:{capex:45,rev:26,opex:12,g:4,util:75,wacc:11.5,yrs:8}},
+    {n:'Satellite dialysis center',v:{capex:55,rev:30,opex:14,g:3,util:85,wacc:11.5,yrs:10}}]},
+ B:{n:'B Enabling',en:'ΔTCO',col:'#2E747A',
+   note:'The foundation that does not directly generate revenue but allows the systems above it to function. Criterion: total cost of ownership of self-build < vs. total cost of the alternative (including risk). Evaluating it using NPV will always get it rejected — that is the wrong yardstick.',
+   ps:['capex','ownop','altfee','down','g','wacc','yrs'],
+   presets:[
+    {n:'IDC data center',v:{capex:120,ownop:12,altfee:36,down:10,g:2,wacc:10.8,yrs:10}},
+    {n:'Campus network backbone',v:{capex:40,ownop:4,altfee:12,down:6,g:2,wacc:10.8,yrs:10}},
+    {n:'DR offsite backup',v:{capex:55,ownop:8,altfee:18,down:12,g:2,wacc:10.8,yrs:10}}]},
+ C:{n:'C Regulatory-mandated',en:'MINCOST',col:'#C0392B',
+   note:'Without it, the license cannot be obtained and accreditation cannot be passed. The criterion is not whether to do it (not doing it is not an option), but “which option achieves compliance most cheaply.”',
+   ps:['capA','opA','feeB','pen','wacc','yrs'],
+   presets:[
+    {n:'Medical wastewater treatment (QCVN 28)',v:{capA:60,opA:6,feeB:22,pen:60,wacc:11,yrs:10}},
+    {n:'Cybersecurity classification and backup (Cybersecurity Law)',v:{capA:35,opA:8,feeB:20,pen:80,wacc:11,yrs:8}},
+    {n:'Personal data compliance system (PDPL)',v:{capA:15,opA:5,feeB:12,pen:120,wacc:11,yrs:5}}]},
+ D:{n:'D Cost-reduction',en:'SAVING',col:'#548235',
+   note:'Spending money in order to save money. Criterion: net present value of savings>vs. investment; the shorter the payback period, the better. Savings must be verifiable against actual bills.',
+   ps:['capex','save','addop','g','wacc','yrs'],
+   presets:[
+    {n:'BMS energy management',v:{capex:30,save:11,addop:2,g:1,wacc:10.8,yrs:10}},
+    {n:'Predictive equipment maintenance',v:{capex:18,save:8,addop:1.5,g:2,wacc:10.8,yrs:8}},
+    {n:'SPD in-hospital logistics',v:{capex:25,save:10,addop:3,g:2,wacc:10.8,yrs:8}}]},
+ E:{n:'E Replacement & Sustaining',en:'LCC',col:'#6B3FA0',
+   note:'The old equipment gets more expensive to keep running, while the new one requires a lump-sum outlay. Criterion: life cycle cost (LCC) — find the year at which the cumulative costs of “continued use” and “replacement” cross; replacing before that crossover is cost-effective.',
+   ps:['old0','oldg','failc','capex','newop','wacc','yrs'],
+   presets:[
+    {n:'UPS and power system replacement',v:{old0:9,oldg:12,failc:15,capex:45,newop:4,wacc:10.8,yrs:10}},
+    {n:'Imaging equipment replacement (10-year-old unit)',v:{old0:14,oldg:10,failc:20,capex:85,newop:8,wacc:11,yrs:8}},
+    {n:'Chiller unit replacement',v:{old0:12,oldg:8,failc:8,capex:38,newop:6,wacc:10.8,yrs:10}}]},
+ F:{n:'F Strategic positioning',en:'OPTION',col:'#1F3864',
+   note:'What is being bought is not cash flow, but an entry ticket. Criterion: direct benefit NPV + (probability of success × unlock value)>vs. investment. A negative NPV alone does not mean the project should not proceed — it means its value lies behind the door.',
+   ps:['capex','direct','opex','g','wacc','yrs','prob','optv'],
+   presets:[
+    {n:'HIS/EMR core platform',v:{capex:60,direct:14,opex:9,g:4,wacc:12,yrs:10,prob:60,optv:180}},
+    {n:'Hospital data lake and AI foundation',v:{capex:40,direct:6,opex:6,g:5,wacc:12,yrs:10,prob:50,optv:220}},
+    {n:'FHIR / national platform integration',v:{capex:15,direct:4,opex:2,g:3,wacc:12,yrs:8,prob:70,optv:60}}]}};
+
+let cat='B', pi=0, P={};
+function loadPreset(){P={...CATS[cat].presets[pi].v};}
+loadPreset();
+const fmt=x=>x.toLocaleString('zh-TW',{maximumFractionDigits:1});
+const esc=s=>String(s).replace(/</g,'&lt;');
+const pv=(f,r)=>f.reduce((a,c,t)=>a+c/Math.pow(1+r,t),0);
+function irr(f){let lo=-0.9,hi=3;const g=r=>pv(f,r);if(g(lo)*g(hi)>0)return null;
+ for(let i=0;i<80;i++){const m=(lo+hi)/2;(g(lo)*g(m)<=0)?hi=m:lo=m;}return (lo+hi)/2;}
+function mirr(f,r){const n=f.length-1;let p_=0,fv=0;
+ f.forEach((c,t)=>{if(c<0)p_+=c/Math.pow(1+r,t);else fv+=c*Math.pow(1+r,n-t);});
+ if(p_>=0||fv<=0)return null;return Math.pow(fv/-p_,1/n)-1;}
+function payback(f){let cum=0;for(let t=0;t<f.length;t++){const pr=cum;cum+=f[t];
+ if(cum>=0&&t>0)return t-1+(pr<0?-pr/f[t]:0);}return null;}
+
+/* Cash flow / cost flow by category */
+function calc(){
+ const r=P.wacc/100, Y=P.yrs;
+ if(cat==='A'){
+   const f=[-P.capex];for(let t=1;t<=Y;t++)f.push(P.rev*(P.util/100)*Math.pow(1+P.g/100,t-1)-P.opex);
+   return {f,mode:'flow'};}
+ if(cat==='B'){
+   const f=[-P.capex];for(let t=1;t<=Y;t++){
+     const alt=(P.altfee+P.down)*Math.pow(1+P.g/100,t-1);
+     f.push(alt-P.ownop);}
+   return {f,mode:'flow'};}
+ if(cat==='C'){
+   const A=[P.capA],B=[0];for(let t=1;t<=Y;t++){A.push(P.opA);B.push(P.feeB);}
+   return {A,B,mode:'cost'};}
+ if(cat==='D'){
+   const f=[-P.capex];for(let t=1;t<=Y;t++)f.push(P.save*Math.pow(1+P.g/100,t-1)-P.addop);
+   return {f,mode:'flow'};}
+ if(cat==='E'){
+   const A=[0],B=[P.capex];   // A=continue using, B=replace
+   for(let t=1;t<=Y;t++){
+     A.push((P.old0)*Math.pow(1+P.oldg/100,t-1)+P.failc);
+     B.push(P.newop);}
+   return {A,B,mode:'cost'};}
+ if(cat==='F'){
+   const f=[-P.capex];for(let t=1;t<=Y;t++)f.push(P.direct*Math.pow(1+P.g/100,t-1)-P.opex);
+   return {f,mode:'flow'};}
+}
+
+function render(){
+ const C=CATS[cat];
+ document.getElementById('cats').innerHTML=Object.entries(CATS).map(([k,c])=>
+  `<button class="${k===cat?'on':''}" style="${k===cat?'background:'+c.col+';border-color:'+c.col:''}"
+    onclick="cat='${k}';pi=0;loadPreset();render()">${c.n}<br><span style="font-size:.64rem;font-weight:400">${c.en}</span></button>`).join('');
+ document.getElementById('presets').innerHTML=C.presets.map((x,i)=>
+  `<button class="${i===pi?'on':''}" onclick="pi=${i};loadPreset();render()">${esc(x.n)}</button>`).join('');
+ const cn=document.getElementById('catNote');cn.textContent=C.note;cn.style.borderColor=C.col;
+ document.getElementById('sliders').innerHTML=C.ps.map(k=>{const d=PD[k];return `
+  <div class="sl"><label><span style="display:flex;align-items:center">${d.l}
+    <span class="q">ⓘ<span class="tip">${d.h}</span></span></span>
+    <span class="val">${fmt(P[k])} ${d.u}</span></label>
+  <input type="range" min="${d.mn}" max="${d.mx}" step="${d.st}" value="${P[k]}"
+    oninput="P['${k}']=+this.value;render()"></div>`;}).join('');
+
+ const r=P.wacc/100, res=calc();
+ let kp=[],vd='',vgood=true;
+ if(res.mode==='flow'){
+   const f=res.f, NPV=pv(f,r), M=mirr(f,r), PB=payback(f);
+   if(cat==='F'){
+     const OPT=(P.prob/100)*P.optv/Math.pow(1+r,2), TOT=NPV+OPT; vgood=TOT>0;
+     kp=[['Direct benefit NPV',fmt(NPV)+' million',NPV>=0?'var(--green)':'var(--red)','Counts only the visible portion'],
+         ['Expected option value',fmt(OPT)+' million','var(--navy)',`Success rate ${P.prob}% × unlock ${fmt(P.optv)}(discounted)`],
+         ['Total strategic value',fmt(TOT)+' million',TOT>=0?'var(--green)':'var(--red)','Direct + behind the door'],
+         ['Payback period',PB!=null?PB.toFixed(1)+' years':'—','var(--gold)','Direct benefit only']];
+     vd=TOT>0?(NPV>0?'The direct benefit is already self-sufficient; the strategic option is an additional bonus — a rare, favorable case.'
+       :'Looking only at the direct benefit, it is negative (typical for strategic positioning projects), but once the value behind the door is added, it turns positive — this is exactly why it should be approved. Communicate to the board using this framing, rather than forcing the NPV narrative.')
+       :'Even the option value cannot save it — check whether the “unlock value” genuinely exists and whether the success probability is honest. The greatest risk for strategic positioning projects is dressing up a pure loss as “strategy.”';
+   }else if(cat==='B'){
+     vgood=NPV>0;
+     kp=[['ΔTCO (savings from self-build)',fmt(NPV)+' million',NPV>=0?'var(--green)':'var(--red)','Total cost of alternative − total cost of self-build (present value)'],
+         ['MIRR',M!=null?(M*100).toFixed(1)+'%':'—',M!=null&&M>r?'var(--green)':'var(--red)','Treat avoided cost as cash flow'],
+         ['Payback period',PB!=null?PB.toFixed(1)+' years':'—',PB!=null&&PB<=5?'var(--green)':'var(--gold)','Number of years to pay for itself'],
+         ['Annual net avoided cost',fmt(P.altfee+P.down-P.ownop)+' million','var(--navy)','First-year basis']];
+     vd=NPV>0?'ΔTCO is positive: self-build is cheaper than “not building” (paying outsourcing fees and bearing the risk) — this is the yardstick that category B (Enabling) should use. Note: the key to convincing investors is whether the “alternative option annual risk cost” is backed by evidence (hosting quotes, downtime records).'
+       :'Under the current assumptions, self-build is not cheaper. First check whether the hidden costs of the alternative are underestimated (downtime, data sovereignty, limited scalability), then check whether the self-build scale is oversized.';
+   }else{
+     vgood=NPV>0;
+     const IRRv=irr(f);
+     kp=[['NPV',fmt(NPV)+' million',NPV>=0?'var(--green)':'var(--red)','Discount rate '+P.wacc+'%'],
+         ['MIRR',M!=null?(M*100).toFixed(1)+'%':'—',M!=null&&M>r?'var(--green)':'var(--red)','Reinvestment rate = WACC'],
+         ['IRR',IRRv!=null?(IRRv*100).toFixed(1)+'%':'—','var(--navy)','For reference'],
+         ['Payback period',PB!=null?PB.toFixed(1)+' years':'Exceeds the evaluation period',PB!=null&&PB<=4?'var(--green)':'var(--gold)','Undiscounted']];
+     vd=cat==='D'?(NPV>0?'The present value of savings exceeds the investment — the case holds. Next step: the savings figures must be tied to a “verifiable” baseline (electricity bills, labor-hour records), otherwise it will not survive scrutiny at the board level.'
+        :'The savings are not enough to cover the investment. Adjust “annual savings” to see how much needs to be saved to turn it positive — that is your bottom line when negotiating a guaranteed energy-saving level with the supplier.')
+       :(NPV>0?'NPV is positive and MIRR exceeds the cost of capital — worth proceeding to the ten-point submission checklist.'
+        :'Under the current assumptions, it is not worthwhile — adjust “capacity utilization rate” to find the break-even point, which becomes your minimum business target.');
+   }
+   drawFlow(f); drawSensNPV(f,r,cat==='F'?(P.prob/100)*P.optv:0);
+ }else{
+   const pvA=pv(res.A,r), pvB=pv(res.B,r);
+   const diff=pvA-pvB;
+   let crossT=null,ca=0,cb=0;
+   for(let t=0;t<res.A.length;t++){ca+=res.A[t];cb+=res.B[t];if(crossT==null&&cb<=ca)crossT=t;}
+   if(cat==='C'){
+     const nameA='Option A self-operated',nameB='Option B outsourced';
+     const cheap=pvA<=pvB?nameA:nameB;
+     kp=[[nameA+'Total cost',fmt(pvA)+' million',pvA<=pvB?'var(--green)':'var(--red)','present value,'+P.yrs+' years'],
+         [nameB+'Total cost',fmt(pvB)+' million',pvB<pvA?'var(--green)':'var(--red)','present value,'+P.yrs+' years'],
+         ['Price difference',fmt(Math.abs(diff))+' million','var(--navy)','Choosing the cheaper option saves this much'],
+         ['Annual cost of inaction',fmt(P.pen)+' million/year','var(--red)','Fines / suspension of operations / failing accreditation']];
+     vd=`Lowest-cost compliance: choose <b>${cheap}</b>(cheaper by ${fmt(Math.abs(diff))} million). Remember the discipline of category C (Regulatory-mandated): the comparison is about “how to comply most cheaply,” not “whether to comply” — the annual cost of inaction, ${fmt(P.pen)} million, far exceeds the price difference between the two options.`;
+     drawCost(res.A,res.B,r,nameA,nameB,null);
+   }else{
+     const nameA='Continue using old equipment',nameB='Replace';
+     vgood=pvB<pvA;
+     kp=[['LCC of continued use',fmt(pvA)+' million',pvA<=pvB?'var(--green)':'var(--red)','including failure risk, present value'],
+         ['LCC of replacement',fmt(pvB)+' million',pvB<pvA?'var(--green)':'var(--red)','including acquisition, present value'],
+         ['Price difference',fmt(Math.abs(pvA-pvB))+' million','var(--navy)',pvB<pvA?'Replacement is more cost-effective':'Continued use is more cost-effective'],
+         ['Cost crossover year',crossT!=null?'Year '+crossT+' years':'No crossover within the evaluation period',crossT!=null&&crossT<=P.yrs/2?'var(--red)':'var(--gold)','Cumulative cost breakeven point']];
+     vd=pvB<pvA?`Replacement, within ${P.yrs} years, has a lower total cost by ${crossT!=null?`, and cumulative costs converge in year ${crossT} years`:''} — the longer replacement is delayed, the more you pay in aging-related repairs and failure risk. Category E (Replacement & Sustaining) does not ask “does it make money,” but asks “which path costs less.”`
+       :'Under the current assumptions, continued use is still more cost-effective — but try raising the “annual cost growth rate of the old equipment”: aging accelerates over time, and this slider determines when replacement is most cost-effective.';
+     drawCost(res.A,res.B,r,nameA,nameB,crossT);
+   }
+   document.getElementById('c2t').textContent='Sensitivity of the present value cost difference between the two options to the discount rate';
+   drawSensCost(res.A,res.B,r);
+ }
+ document.getElementById('kpis').innerHTML=kp.map(([k,v,c,m])=>
+  `<div class="kpi"><div class="k">${k}</div><div class="v" style="color:${c}">${v}</div><div class="m">${m}</div></div>`).join('');
+ const V=document.getElementById('verd');
+ V.innerHTML=vd;
+ V.style.background=vgood?'#DCEBD0':(cat==='C'?'#EEF3F9':'#FBE6E2');
+ V.style.color=vgood?'var(--green)':(cat==='C'?'var(--navy)':'var(--red)');
+}
+function drawFlow(f){
+ document.getElementById('c1t').textContent='Annual and cumulative cash flow (unit: million)';
+ const svg=document.getElementById('cf');const W=820,H=280,L=46,B=32,T=12;
+ let cum=0;const cums=f.map(c=>cum+=c);
+ const all=[...f,...cums];const mx=Math.max(...all,0),mn=Math.min(...all,0);
+ const y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn||1));const bw=(W-L-16)/f.length;const y0=y(0);
+ let s=`<line x1="${L}" y1="${y0}" x2="${W-8}" y2="${y0}" stroke="#B9C2D0"/>`;
+ f.forEach((c,t)=>{const x=L+t*bw+3;
+  s+=`<rect x="${x}" y="${Math.min(y(c),y0)}" width="${bw-6}" height="${Math.abs(y(c)-y0)||1}" fill="${c<0?'#C0392B':'#2E747A'}" opacity=".82" rx="2"/>`;
+  s+=`<text x="${x+(bw-6)/2}" y="${H-B+15}" font-size="10" fill="#6B7280" text-anchor="middle">${t===0?'Initial period':'Y'+t}</text>`;});
+ s+='<polyline fill="none" stroke="#1F3864" stroke-width="2.5" points="'+cums.map((v,t)=>`${L+t*bw+bw/2},${y(v)}`).join(' ')+'"/>';
+ [mx,0,mn].forEach(v=>{s+=`<text x="${L-6}" y="${y(v)+4}" font-size="10" fill="#6B7280" text-anchor="end">${fmt(v)}</text>`;});
+ s+=`<text x="${W-10}" y="${T+8}" font-size="10.5" fill="#1F3864" text-anchor="end"> — cumulative</text>`;
+ svg.innerHTML=s;
+}
+function drawCost(A,Bc,r,na,nb,crossT){
+ document.getElementById('c1t').textContent=`Cumulative cost comparison: ${na} vs ${nb}(undiscounted, unit: million)`;
+ const svg=document.getElementById('cf');const W=820,H=280,L=46,B=32,T=12;
+ let ca=0,cb=0;const CA=A.map(v=>ca+=v),CB=Bc.map(v=>cb+=v);
+ const mx=Math.max(...CA,...CB);const y=v=>T+(H-T-B)*(1-v/(mx||1));
+ const n=A.length;const x=t=>L+(W-L-16)*t/(n-1);
+ let s='';
+ [[CA,'#C0392B',na],[CB,'#2E747A',nb]].forEach(([C,col,nm],i)=>{
+  s+='<polyline fill="none" stroke="'+col+'" stroke-width="2.5" points="'+C.map((v,t)=>`${x(t)},${y(v)}`).join(' ')+'"/>';
+  s+=`<text x="${W-10}" y="${T+10+i*15}" font-size="10.5" fill="${col}" text-anchor="end">— ${nm}</text>`;});
+ for(let t=0;t<n;t++)s+=`<text x="${x(t)}" y="${H-B+15}" font-size="10" fill="#6B7280" text-anchor="middle">${t===0?'Initial period':'Y'+t}</text>`;
+ [mx,0].forEach(v=>{s+=`<text x="${L-6}" y="${y(v)+4}" font-size="10" fill="#6B7280" text-anchor="end">${fmt(v)}</text>`;});
+ if(crossT!=null){s+=`<line x1="${x(crossT)}" y1="${T}" x2="${x(crossT)}" y2="${H-B}" stroke="#9A6B10" stroke-dasharray="4 3"/>`;
+  s+=`<text x="${x(crossT)}" y="${T+10}" font-size="10.5" fill="#9A6B10" text-anchor="middle">Crossover year</text>`;}
+ svg.innerHTML=s;
+}
+function drawSensNPV(f,rNow,optAdd){
+ document.getElementById('c2t').textContent='Sensitivity of NPV to the discount rate (red dot = current discount rate)';
+ const svg=document.getElementById('sv');const W=820,H=175,L=46,B=24,T=10;
+ const rs=[];for(let x=0.05;x<=0.22;x+=0.005)rs.push(x);
+ const vs=rs.map(x=>pv(f,x)+(optAdd?optAdd/Math.pow(1+x,2):0));
+ const mx=Math.max(...vs,0),mn=Math.min(...vs,0);
+ const X=x=>L+(W-L-14)*(x-0.05)/0.17;const y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn||1));
+ let s=`<line x1="${L}" y1="${y(0)}" x2="${W-8}" y2="${y(0)}" stroke="#B9C2D0"/>`;
+ s+='<polyline fill="none" stroke="#0E6E6B" stroke-width="2.5" points="'+rs.map((x,i)=>`${X(x)},${y(vs[i])}`).join(' ')+'"/>';
+ [0.06,0.10,0.14,0.18,0.22].forEach(x=>{s+=`<text x="${X(x)}" y="${H-4}" font-size="10" fill="#6B7280" text-anchor="middle">${(x*100).toFixed(0)}%</text>`;});
+ s+=`<circle cx="${X(rNow)}" cy="${y(vs[Math.round((rNow-0.05)/0.005)]??pv(f,rNow))}" r="5.5" fill="#C0392B"/>`;
+ const ci=vs.findIndex(v=>v<=0);
+ if(ci>0)s+=`<text x="${X(rs[ci])}" y="${y(0)-8}" font-size="10.5" fill="#C0392B" text-anchor="middle">Break-even ≈ ${(rs[ci]*100).toFixed(1)}%</text>`;
+ svg.innerHTML=s;
+}
+function drawSensCost(A,Bc,rNow){
+ const svg=document.getElementById('sv');const W=820,H=175,L=46,B=24,T=10;
+ const rs=[];for(let x=0.05;x<=0.22;x+=0.005)rs.push(x);
+ const vs=rs.map(x=>pv(A,x)-pv(Bc,x));
+ const mx=Math.max(...vs,0),mn=Math.min(...vs,0);
+ const X=x=>L+(W-L-14)*(x-0.05)/0.17;const y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn||1));
+ let s=`<line x1="${L}" y1="${y(0)}" x2="${W-8}" y2="${y(0)}" stroke="#B9C2D0"/>`;
+ s+='<polyline fill="none" stroke="#0E6E6B" stroke-width="2.5" points="'+rs.map((x,i)=>`${X(x)},${y(vs[i])}`).join(' ')+'"/>';
+ [0.06,0.10,0.14,0.18,0.22].forEach(x=>{s+=`<text x="${X(x)}" y="${H-4}" font-size="10" fill="#6B7280" text-anchor="middle">${(x*100).toFixed(0)}%</text>`;});
+ s+=`<circle cx="${X(rNow)}" cy="${y(vs[Math.round((rNow-0.05)/0.005)]??0)}" r="5.5" fill="#C0392B"/>`;
+ s+=`<text x="${W-10}" y="${T+10}" font-size="10" fill="#6B7280" text-anchor="end">Positive value = Option A is more expensive (above)</text>`;
+ svg.innerHTML=s;
+}
+render();
+</script></body></html>

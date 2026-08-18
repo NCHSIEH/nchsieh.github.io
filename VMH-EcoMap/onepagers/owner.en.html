@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>VMH-EcoMap Hospital Owner Quick Guide</title>
+<style>
+  :root{
+    --navy:#1F3864; --midblue:#2F5597; --teal:#2E747A; --green:#548235;
+    --gold:#BF8F00; --purple:#7030A0; --red:#B03A2E;
+    --ink:#16202E; --muted:#5C6675; --line:#DDE3EC;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#EEF1F6; color:var(--ink);
+       font-family:"Microsoft JhengHei","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;}
+  .page{width:1680px; margin:0 auto; padding:30px 26px 40px; background:#fff;}
+
+  .hd{display:flex; align-items:flex-end; gap:22px; border-bottom:4px solid var(--navy); padding-bottom:14px;}
+  .hd h1{font-size:38px; margin:0; color:var(--navy); letter-spacing:1px; line-height:1.15;}
+  .hd .sub{font-size:15px; color:var(--muted); line-height:1.6; padding-bottom:4px;}
+  .hd .sub b{color:var(--navy);}
+
+  /* Role division */
+  .roles{display:grid; grid-template-columns:1fr 1fr 1.35fr; gap:16px; margin:20px 0 26px;}
+  .role{border-radius:12px; padding:14px 18px; border:2px solid; position:relative;}
+  .role .tag{font-size:12px; font-weight:800; letter-spacing:2px; opacity:.9;}
+  .role .who{font-size:22px; font-weight:800; margin:3px 0 6px;}
+  .role .txt{font-size:13.5px; line-height:1.65; color:#37414F;}
+  .r1{border-color:var(--teal); background:#EFF7F8;} .r1 .tag,.r1 .who{color:var(--teal);}
+  .r2{border-color:#9AA3AE; background:#F3F5F7; border-style:dashed;} .r2 .tag,.r2 .who{color:#5A626C;}
+  .r3{border-color:var(--gold); background:#FFF8E8;} .r3 .tag,.r3 .who{color:#8A6800;}
+  .r3 .txt b{color:#8A6800;}
+
+  /* Workflow */
+  .flowhd{font-size:22px; font-weight:800; color:var(--navy); margin:0 0 4px;}
+  .flowsub{font-size:14px; color:var(--muted); margin:0 0 16px;}
+  .flow{display:grid; grid-template-columns:repeat(5, 1fr); gap:14px; position:relative;}
+  .step{border:2px solid var(--line); border-radius:14px; background:#fff; overflow:hidden;
+        box-shadow:0 2px 10px rgba(31,56,100,.07); display:flex; flex-direction:column;}
+  .step .top{padding:12px 14px 10px; color:#fff;}
+  .step .num{font-size:13px; font-weight:800; letter-spacing:2px; opacity:.85;}
+  .step .q{font-size:19px; font-weight:800; line-height:1.3; margin-top:3px;}
+  .step .pg{font-size:12.5px; font-weight:700; margin-top:7px; background:rgba(255,255,255,.22);
+            display:inline-block; padding:3px 9px; border-radius:20px;}
+  .step .body{padding:12px 14px 6px; flex:1;}
+  .step .lb{font-size:11.5px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:4px;}
+  .step ul{margin:0 0 10px; padding-left:17px;}
+  .step li{font-size:13px; line-height:1.6; margin-bottom:3px;}
+  .step .now{margin:0 14px 13px; border-radius:9px; padding:9px 11px; background:#F5F7FA; border:1px solid var(--line);}
+  .step .now .t{font-size:11px; font-weight:800; letter-spacing:1px; color:var(--muted);}
+  .step .now .v{font-size:13px; line-height:1.55; margin-top:3px;}
+  .step .now .v b{font-size:16px;}
+  .s1 .top{background:var(--purple);} .s1 .now .v b{color:var(--purple);}
+  .s2 .top{background:var(--navy);}   .s2 .now .v b{color:var(--navy);}
+  .s3 .top{background:var(--midblue);}.s3 .now .v b{color:var(--midblue);}
+  .s4 .top{background:var(--teal);}   .s4 .now .v b{color:var(--teal);}
+  .s5 .top{background:var(--green);}  .s5 .now .v b{color:#3F6427;}
+  .arrow{position:absolute; top:74px; font-size:26px; color:#B9C4D4; font-weight:800;}
+
+  /* After deciding to pursue */
+  .after{display:grid; grid-template-columns:auto 1fr 1fr; gap:16px; align-items:stretch; margin-top:24px;}
+  .afterlab{background:var(--navy); color:#fff; border-radius:12px; padding:16px 14px; width:132px;
+            display:flex; flex-direction:column; justify-content:center; text-align:center;}
+  .afterlab .a{font-size:12px; letter-spacing:2px; font-weight:800; opacity:.85;}
+  .afterlab .b{font-size:21px; font-weight:800; line-height:1.3; margin-top:5px;}
+  .acard{border:2px solid var(--line); border-radius:12px; padding:13px 16px; background:#FBFCFE;}
+  .acard .h{font-size:17px; font-weight:800; color:var(--navy);}
+  .acard .h span{font-size:12.5px; font-weight:700; color:#fff; background:var(--teal);
+                 padding:3px 9px; border-radius:20px; margin-right:8px; vertical-align:2px;}
+  .acard .d{font-size:13px; line-height:1.7; margin-top:7px; color:#37414F;}
+  .acard .d b{color:var(--navy);}
+
+  /* Reminders */
+  .tips{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:24px;}
+  .tip{border-radius:12px; padding:13px 16px; border-left:6px solid; background:#F7F9FC;}
+  .tip .h{font-size:15px; font-weight:800; margin-bottom:4px;}
+  .tip .d{font-size:12.8px; line-height:1.65; color:#37414F;}
+  .t1{border-color:var(--gold);} .t1 .h{color:#8A6800;}
+  .t2{border-color:var(--red);}  .t2 .h{color:var(--red);}
+  .t3{border-color:var(--teal);} .t3 .h{color:var(--teal);}
+
+  .foot{margin-top:20px; padding-top:12px; border-top:1px solid var(--line);
+        font-size:12px; color:var(--muted); line-height:1.7;}
+  .foot b{color:var(--navy);}
+</style>
+<style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head>
+<body><div class="i18nsw"><a href="owner.html">中文</a><a href="owner.en.html" class="on">EN</a><a href="owner.vi.html">VI</a></div>
+<div class="page">
+
+  <div class="hd">
+    <h1>Vietnam hospital business<br>Hospital owners only need these five pages</h1>
+    <div class="sub">
+      The VMH-EcoMap main tool has 21 tabs in total, but<b>hospital owners don’t need to look at all of them</b>。<br>
+      Data is maintained by the consultant, and figures are calculated automatically by the system. You just need to follow the five steps below,<b>and in ten minutes you’ll know: where the opportunities are, how much capability we have, who we’re missing, which one to do first, and whether it’s profitable.</b>
+    </div>
+  </div>
+
+  <div class="roles">
+    <div class="role r1">
+      <div class="tag">WHO MAINTAINS</div>
+      <div class="who">Consultant / PI Office</div>
+      <div class="txt">Only maintains three places: 03 Capability Master List (capabilities and partner allocation), 16 Capability-Opportunity Matrix (check marks), and 15 Opportunity Dictionary (opportunity descriptions). Everything else does not need to be touched.</div>
+    </div>
+    <div class="role r2">
+      <div class="tag">WHAT THE TOOL DOES</div>
+      <div class="who">Automatically calculated by the system</div>
+      <div class="txt">About 18,000 formulas: blue-text fields, four automatic lists, dashboard charts, and the attack priority order are all updated automatically — change one place and the whole file updates together.</div>
+    </div>
+    <div class="role r3">
+      <div class="tag">WHAT YOU LOOK AT</div>
+      <div class="who">Hospital owner / Boss</div>
+      <div class="txt"><b>Only look at five pages, following the order 1→5.</b>Each page answers just one question — no need to understand Excel, no need to touch a single cell.</div>
+    </div>
+  </div>
+
+  <p class="flowhd">Hospital owner workflow: five steps, one question per step</p>
+  <p class="flowsub">The “current answer” below is the actual figure calculated by this file right now — as soon as the data is updated, the answer will change.</p>
+
+  <div class="flow">
+    <div class="arrow" style="left:calc(20% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(40% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(60% - 16px);">▶</div>
+    <div class="arrow" style="left:calc(80% - 16px);">▶</div>
+
+    <div class="step s1">
+      <div class="top">
+        <div class="num">STEP 1</div>
+        <div class="q">Where are the opportunities?</div>
+        <div class="pg">Dashboard + 15 Opportunity Dictionary</div>
+      </div>
+      <div class="body">
+        <div class="lb">Look at these columns</div>
+        <ul>
+          <li><b>Column E</b>　What this business sells and who pays</li>
+          <li><b>Column F</b>　Current status in Vietnam (③ = almost no one is doing it)</li>
+          <li><b>Column P</b>　Typical value range</li>
+        </ul>
+        <div class="lb">What you’ll get</div>
+        <ul><li>A full picture of the businesses that can be negotiated independently in the Vietnam hospital market, and which ones are still white-space markets</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Current answer</div>
+        <div class="v"><b>85</b>  business lines | of which <b>40</b>  have almost no one doing them in Vietnam</div>
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="top">
+        <div class="num">STEP 2</div>
+        <div class="q">How much capability do we have?</div>
+        <div class="pg">03 Capability Master List</div>
+      </div>
+      <div class="body">
+        <div class="lb">Only look at three columns (the rest is maintained by the consultant)</div>
+        <ul>
+          <li><b>Column H: Puzzle status</b>　Who is working on this</li>
+          <li><b>Column W: Business judgment</b>　Go / build conditions first / …</li>
+          <li><b>Column AF: Related opportunity</b>　Which business lines this capability can sell into</li>
+        </ul>
+        <div class="lb">What you’ll get</div>
+        <ul><li>We have 60 capabilities on hand — which ones can be deployed right now</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Current answer</div>
+        <div class="v">60 capabilities | ready to advance immediately <b>19</b> items<br>Led by 群晶 <b>8</b> items</div>
+      </div>
+    </div>
+
+    <div class="step s3">
+      <div class="top">
+        <div class="num">STEP 3</div>
+        <div class="q">When can we take on<br>which projects?</div>
+        <div class="pg">01 Master Blueprint</div>
+      </div>
+      <div class="body">
+        <div class="lb">How to read this chart</div>
+        <ul>
+          <li><b>Vertical axis</b>　= what to do (ten major capability areas)</li>
+          <li><b>Horizontal axis</b>　= when to do it (G0→G6)</li>
+          <li><b>Red background</b>　= no one is working on this cell yet</li>
+          <li>Row 8 = the<b>regulatory threshold</b> for each stage — without passing it, you cannot proceed</li>
+        </ul>
+      </div>
+      <div class="now">
+        <div class="t">Current answer</div>
+        <div class="v">In negotiation <b>43</b>  items | Gaps <b>9</b> items<br>Mandatory regulations pending confirmation <b>11</b> regulations</div>
+      </div>
+    </div>
+
+    <div class="step s4">
+      <div class="top">
+        <div class="num">STEP 4</div>
+        <div class="q">Who are we still missing?</div>
+        <div class="pg">04 Partner Puzzle + 11 Gap Recruitment</div>
+      </div>
+      <div class="body">
+        <div class="lb">Look at these two things</div>
+        <ul>
+          <li>Bottom of 04　<b>Coverage matrix</b>: which area has no one</li>
+          <li>Rightmost column of 11　<b>Number of opportunities affected</b>: how many business lines this gap is blocking (≥3 turns red)</li>
+        </ul>
+        <div class="lb">What you’ll get</div>
+        <ul><li>Who to fill first, who to fill later — recruitment has a priority order, it’s not guesswork</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Current answer</div>
+        <div class="v">Of 29 partner roles,<b>9</b>  have no one yet<br>Most urgent: operating room integration (blocking <b>7</b>  business lines)</div>
+      </div>
+    </div>
+
+    <div class="step s5">
+      <div class="top">
+        <div class="num">STEP 5</div>
+        <div class="q">Which one to do first?<br>Is it profitable?</div>
+        <div class="pg">Dashboard Top 10 + 14 Opportunity List</div>
+      </div>
+      <div class="body">
+        <div class="lb">Look at these two places</div>
+        <ul>
+          <li>Dashboard<b>Attack priority Top 10</b>: value + readiness + white-space level − gaps, sorted automatically</li>
+          <li>14 Opportunity List: which stage each deal being negotiated has reached</li>
+        </ul>
+        <div class="lb">Need to run the numbers</div>
+        <ul><li>Pick a project → open <b>VMH-EcoMap-2 Calculator</b>to calculate NPV / IRR / payback period</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Current answer</div>
+        <div class="v">Suggested priority targets:<b>Home healthcare</b>, subacute rehabilitation, closed-loop medication administration<br>(all are untapped, and we have zero gaps)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="after">
+    <div class="afterlab">
+      <div class="a">DECIDED？</div>
+      <div class="b">Decided to pursue<br>afterward</div>
+    </div>
+    <div class="acard">
+      <div class="h"><span>17</span>Opportunity battle card</div>
+      <div class="d">Use the dropdown to select an opportunity — see everything on one page<b>How to pursue it</b>: which capabilities are needed, who is handling each one and who is still missing,
+        who the local competitors are, why we can win, and which regulatory thresholds are blocking us.<b>Project this page at the strategy meeting</b>, and write the conclusion back into the “Next steps” field in 14.</div>
+    </div>
+    <div class="acard">
+      <div class="h"><span>-2</span>Project business model calculator (a separate file)</div>
+      <div class="d">The main tool’s unit is “capability item,” so it cannot answer “is this CT scanner worth it.” After picking a project,<b>open a separate calculator</b>，
+        to fill in costs and revenue, and calculate NPV / IRR / payback period and sensitivity.<b>Deliberately not auto-filled</b> — any amount before a quote is received is just a guess.</div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <div class="tip t1">
+      <div class="h">Only the yellow cells need to be filled in</div>
+      <div class="d">Yellow background = can be edited;<b>Blue text = formula — once changed, it will never auto-update again</b>. The file has fail-safe protection applied (no password — the consultant can remove it).</div>
+    </div>
+    <div class="tip t2">
+      <div class="h">Red = opportunity, not bad news</div>
+      <div class="d">Red-background gaps = positions where no one is working yet, which is exactly<b>the most compelling pitch for recruiting external partners</b>; ★ white-space opportunities = the business exists in Vietnam, but we don’t yet have the capability to take it on.</div>
+    </div>
+    <div class="tip t3">
+      <div class="h">Amounts and current status are “planning assumptions”</div>
+      <div class="d">The value ranges in 15, the construction unit costs in 07, and the KPI baselines in 09 are all planning reference values.<b>Before making a formal quote or external commitment, be sure to have your local partner verify it again.</b></div>
+    </div>
+  </div>
+
+  <p class="foot">
+    <b>Remember the whole toolkit in one sentence:</b>The consultant only enters data in three places (03 Capabilities, 16 check marks, 15 Opportunity descriptions); the system calculates the remaining 18 pages automatically, and the hospital owner can make decisions just by following steps 1→5.<br>
+    <b>How the weekly meeting runs:</b>Project the dashboard and read out the six numbers → review the four lists on the 13 To-do Board (regulations / risks / gaps / opportunity actions) → switch to the 17 Battle Card for whichever opportunity is being pushed forward → record the conclusion in the 10 Decision Log.<br>
+    <b>Tabs you don’t need to look at:</b>02 / 05 / 06 / 07 / 08 / 09 / 10 / 12 / 16 / 98 / 99 are maintained by the consultant, who will proactively bring them up for discussion when needed.
+  </p>
+</div>
+</body>
+</html>

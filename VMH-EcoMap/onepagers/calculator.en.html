@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>VMH-EcoMap-2 project business model calculator — quick guide</title>
+<style>
+  :root{
+    --navy:#1F3864; --midblue:#2F5597; --teal:#2E747A; --green:#548235;
+    --gold:#BF8F00; --purple:#7030A0; --red:#B03A2E;
+    --ink:#16202E; --muted:#5C6675; --line:#DDE3EC;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#EEF1F6; color:var(--ink);
+       font-family:"Microsoft JhengHei","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;}
+  .page{width:1760px; margin:0 auto; padding:30px 26px 40px; background:#fff;}
+
+  .hd{display:flex; align-items:flex-end; gap:24px; border-bottom:4px solid var(--navy); padding-bottom:14px;}
+  .hd h1{font-size:37px; margin:0; color:var(--navy); letter-spacing:1px; line-height:1.16; flex:0 0 auto; white-space:nowrap;}
+  .hd .sub{font-size:14.5px; color:var(--muted); line-height:1.62; padding-bottom:4px;}
+  .hd .sub b{color:var(--navy);}
+  .ver{background:var(--green); color:#fff; font-size:12.5px; font-weight:800; padding:3px 10px; border-radius:20px; vertical-align:5px;}
+
+  .key{margin:22px 0 8px; border:3px solid var(--gold); border-radius:14px; background:#FFFBF0; padding:16px 22px;}
+  .key .t{font-size:23px; font-weight:800; color:#8A6800; margin-bottom:7px;}
+  .key .d{font-size:14.5px; line-height:1.75; color:#3A3320;}
+  .key .d b{color:#8A6800;}
+  .key .cite{display:inline-block; margin-top:8px; font-size:12.5px; color:#7A6A40; background:#F5EBD5;
+              padding:6px 12px; border-radius:8px; line-height:1.6;}
+
+  .cats{display:grid; grid-template-columns:repeat(6,1fr); gap:11px; margin:20px 0 4px;}
+  .cat{border:2px solid var(--line); border-radius:11px; overflow:hidden; background:#fff; display:flex; flex-direction:column;}
+  .cat .h{padding:8px 11px; color:#fff; font-size:14.5px; font-weight:800; line-height:1.25;}
+  .cat .b{padding:9px 11px 11px; flex:1;}
+  .cat .lb{font-size:10.5px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:2px;}
+  .cat .m{font-size:13.5px; font-weight:800; color:var(--teal); margin-bottom:7px; line-height:1.35;}
+  .cat .e{font-size:11.8px; line-height:1.55; color:#4A5462;}
+  .c1 .h{background:var(--green);} .c2 .h{background:var(--teal);} .c3 .h{background:var(--red);}
+  .c4 .h{background:var(--midblue);} .c5 .h{background:#7A8592;} .c6 .h{background:var(--purple);}
+  .cat.on{border-color:var(--teal); border-width:3px; box-shadow:0 3px 14px rgba(46,116,122,.25);}
+
+  .flowhd{font-size:21px; font-weight:800; color:var(--navy); margin:26px 0 3px;}
+  .flowsub{font-size:13.5px; color:var(--muted); margin:0 0 14px;}
+  .flow{display:grid; grid-template-columns:repeat(5, 1fr); gap:13px; position:relative;}
+  .step{border:2px solid var(--line); border-radius:14px; background:#fff; overflow:hidden;
+        box-shadow:0 2px 10px rgba(31,56,100,.07); display:flex; flex-direction:column;}
+  .step .top{padding:11px 13px 9px; color:#fff;}
+  .step .num{font-size:12px; font-weight:800; letter-spacing:2px; opacity:.85;}
+  .step .q{font-size:18px; font-weight:800; line-height:1.28; margin-top:3px;}
+  .step .pg{font-size:12px; font-weight:700; margin-top:6px; background:rgba(255,255,255,.22);
+            display:inline-block; padding:3px 9px; border-radius:20px;}
+  .step .body{padding:11px 13px 5px; flex:1;}
+  .step .lb{font-size:11px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:3px;}
+  .step ul{margin:0 0 9px; padding-left:16px;}
+  .step li{font-size:12.4px; line-height:1.55; margin-bottom:3px;}
+  .step .now{margin:0 13px 12px; border-radius:9px; padding:8px 10px; background:#F5F7FA; border:1px solid var(--line);}
+  .step .now .t{font-size:10.5px; font-weight:800; letter-spacing:1px; color:var(--muted);}
+  .step .now .v{font-size:12.3px; line-height:1.5; margin-top:3px;}
+  .step .now .v b{font-size:14.5px;}
+  .s1 .top{background:var(--purple);} .s1 .now .v b{color:var(--purple);}
+  .s2 .top{background:var(--navy);}   .s2 .now .v b{color:var(--navy);}
+  .s3 .top{background:var(--midblue);}.s3 .now .v b{color:var(--midblue);}
+  .s4 .top{background:var(--teal);}   .s4 .now .v b{color:var(--teal);}
+  .s5 .top{background:var(--green);}  .s5 .now .v b{color:#3F6427;}
+  .arrow{position:absolute; top:72px; font-size:25px; color:#B9C4D4; font-weight:800;}
+
+  .cmphd{font-size:21px; font-weight:800; color:var(--navy); margin:28px 0 3px;}
+  .cmpsub{font-size:13.5px; color:var(--muted); margin:0 0 13px;}
+  table.cmp{width:100%; border-collapse:collapse; font-size:13px;}
+  table.cmp th,table.cmp td{border:1px solid var(--line); padding:8px 10px; text-align:center; vertical-align:middle;}
+  table.cmp th{background:var(--navy); color:#fff; font-size:13.5px; font-weight:800;}
+  table.cmp td.rowh{background:#F3F5F7; color:var(--navy); text-align:left; font-weight:700; width:180px;}
+  table.cmp td.num{font-weight:700; font-size:15px;}
+  table.cmp tr.hi td{background:#F7FAFC;}
+  table.cmp tr.key td{background:#F2F8EC;}
+  .pos{color:#3F6427;} .neg{color:var(--red);} .na{color:#98A2B0; font-size:12px;}
+  .vpill{display:inline-block; padding:4px 11px; border-radius:20px; font-weight:800; font-size:13px; color:#fff;}
+  .pg-ok{background:var(--green);} .pg-mid{background:var(--gold);} .pg-op{background:var(--purple);}
+  .lead{font-size:12.2px; line-height:1.58; text-align:left; color:#37414F;}
+  .lead b{color:var(--navy);}
+  .catchip{display:inline-block; font-size:11.5px; font-weight:800; color:#fff; padding:2px 9px; border-radius:12px;}
+
+  .tips{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:22px;}
+  .tip{border-radius:12px; padding:12px 15px; border-left:6px solid; background:#F7F9FC;}
+  .tip .h{font-size:14.5px; font-weight:800; margin-bottom:4px;}
+  .tip .d{font-size:12.3px; line-height:1.6; color:#37414F;}
+  .t1{border-color:var(--gold);} .t1 .h{color:#8A6800;}
+  .t2{border-color:var(--red);}  .t2 .h{color:var(--red);}
+  .t3{border-color:var(--teal);} .t3 .h{color:var(--teal);}
+  .t4{border-color:var(--purple);} .t4 .h{color:var(--purple);}
+
+  .newbar{display:grid; grid-template-columns:repeat(7,1fr); gap:11px; margin-top:22px;}
+  .nb{border:2px dashed #C3CCD8; border-radius:11px; padding:10px 13px; background:#FAFBFD;}
+  .nb .h{font-size:13px; font-weight:800; color:var(--navy); margin-bottom:3px;}
+  .nb .d{font-size:11.5px; line-height:1.55; color:#4A5462;}
+
+  .foot{margin-top:20px; padding-top:12px; border-top:1px solid var(--line);
+        font-size:11.8px; color:var(--muted); line-height:1.72;}
+  .foot b{color:var(--navy);}
+</style>
+<style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head>
+<body><div class="i18nsw"><a href="calculator.html">中文</a><a href="calculator.en.html" class="on">EN</a><a href="calculator.vi.html">VI</a></div>
+<div class="page">
+
+  <div class="hd">
+    <h1>Is this project actually profitable?<br>Ask first: which yardstick should be used?</h1>
+    <div class="sub">
+      <b>VMH-EcoMap-2 project business model calculator <span class="ver">v1.0</span></b>| The master toolkit answers “whether to do it, who does it, when to do it” — this file answers only one question:<b>whether this particular project is worthwhile.</b><br>
+      <b>Core design</b>: do not measure every project against the same NPV standard. First select the “investment category” on the 01 worksheet tab, and the 10 decision summary will automatically apply the corresponding interpretation rules.<br>
+      The consultant fills in four pages of costs and revenue, the system calculates six pages,<b>and the owner only needs to look at the last page (10 decision summary). One file per sub-project.</b>
+    </div>
+  </div>
+
+  <div class="key">
+    <div class="t">Why categorize? Because using the wrong yardstick can reject the investment that most needs to be made</div>
+    <div class="d">
+      Take infrastructure such as “server rooms,” “networks,” and “data platforms” — this kind of<b>infrastructure</b>, compare it to a “CT imaging center” using the same NPV standard, and the conclusion will always be that infrastructure is not worth investing in —
+      because<b>its benefits accrue to the other projects built on top of it, while all the costs remain with it alone</b>. This is not because the project is bad — it is because the wrong yardstick was used.
+      The right question is not “how much does it earn,” but<b>“how much more would it cost over the next ten years if we don’t build it ourselves.”</b>。
+      <div class="cite">
+        <b>MIT Sloan (Weill &amp; Aral) empirical evidence:</b>infrastructure is the category with the highest share of enterprise IT spending (46% on average),
+        and it is explicitly identified as the category that is “most difficult to cost-justify in advance.”
+        The same study also shows:<b>★ Top-performing companies allocate 55% of IT spending to infrastructure, while bottom-performing companies allocate only 37%.</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="cats">
+    <div class="cat c1"><div class="h">A Revenue-generating</div><div class="b">
+      <div class="lb">Which metric to use</div><div class="m">NPV／MIRR／PI</div>
+      <div class="e">Can charge external payers directly on its own.<br><b>Example: CT imaging center</b>— has a reimbursement code, billed per procedure performed.</div></div></div>
+    <div class="cat c2 on"><div class="h">B Enabling ★</div><div class="b">
+      <div class="lb">Which metric to use</div><div class="m">ΔTCO present value<br>Unit service cost</div>
+      <div class="e">Does not charge directly, but enables other projects to exist.<br><b>Example: IDC server room, hospital campus network, data platform.</b></div></div></div>
+    <div class="cat c3"><div class="h">C Regulatory-mandated</div><div class="b">
+      <div class="lb">Which metric to use</div><div class="m">Minimum compliance cost<br>Cost of not doing it</div>
+      <div class="e">Without it, operations cannot continue — no need to calculate whether it is worthwhile.<br><b>Example: EMR grading acceptance, PDPL compliance.</b></div></div></div>
+    <div class="cat c4"><div class="h">D Cost-reduction</div><div class="b">
+      <div class="lb">Which metric to use</div><div class="m">Cost-saving NPV</div>
+      <div class="e">Benefit = cost avoided.<br><b>Example: filmless imaging to save film costs, energy optimization.</b></div></div></div>
+    <div class="cat c5"><div class="h">E Replacement & Sustaining</div><div class="b">
+      <div class="lb">Which metric to use</div><div class="m">Life-cycle cost<br>Downtime risk</div>
+      <div class="e">Necessary spending to keep operations running without interruption.<br><b>Example: UPS batteries, X-ray tubes, server replacement.</b></div></div></div>
+    <div class="cat c6"><div class="h">F Strategic positioning</div><div class="b">
+      <div class="lb">Which metric to use</div><div class="m">Staged gates<br>Option value</div>
+      <div class="e">To secure future opportunities and reference cases.<br><b>Example: HIS for the first flagship hospital.</b></div></div></div>
+  </div>
+
+  <p class="flowhd">Calculator workflow: five steps, one question per step</p>
+  <p class="flowsub">The “examples” below are actual figures calculated from the three simulated cases in this exercise. ★ All amounts in this file default to NTD; the 01 worksheet tab can switch to USD or VND with one click.</p>
+
+  <div class="flow">
+    <div class="arrow" style="left:calc(20% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(40% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(60% - 15px);">▶</div>
+    <div class="arrow" style="left:calc(80% - 15px);">▶</div>
+
+    <div class="step s1">
+      <div class="top">
+        <div class="num">STEP 1</div>
+        <div class="q">What type of investment is this?<br>Which standard should be used to evaluate it?</div>
+        <div class="pg">01 Project settings + 01B Decision wizard</div>
+      </div>
+      <div class="body">
+        <div class="lb">The single most important cell</div>
+        <ul>
+          <li><b>★ Investment category</b>　Selecting the wrong one means using the wrong yardstick<br><span style="color:#8A6800;font-weight:700;">Not sure which category to choose? Go to 01B and answer four questions</span></li>
+          <li><b>Currency</b>　Input currency / display currency / display unit</li>
+          <li><b>Taxation</b>　Preferential tax rate, tax holiday years, loss carryforward</li>
+          <li><b>Working capital</b>　Health-insurance and self-pay receivable days separated</li>
+        </ul>
+        <div class="lb">Why it matters</div>
+        <ul><li>The income tax for socialized healthcare in Vietnam is<b>10% for the entire project period</b>+ 4-year tax holiday, not 20%</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">01B Decision wizard</div>
+        <div class="v">Four questions → recommends a category + rationale + next steps<br>And against the selection made in 01,<b>automatically cross-checks</b>(✓ consistent / ⚠ inconsistent)</div>
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="top">
+        <div class="num">STEP 2</div>
+        <div class="q">How much in total<br>needs to be invested?</div>
+        <div class="pg">02 Investment cost CAPEX</div>
+      </div>
+      <div class="body">
+        <div class="lb">BOQ-level breakdown (quantity × unit price)</div>
+        <ul>
+          <li>Uses formal engineering-industry item names, so quotes can be checked line by line directly against vendors</li>
+          <li><b>Imported / local</b>　Import duty and VAT calculated separately</li>
+          <li><b>Depreciation category and useful life</b>　Per Circular 45/2013</li>
+          <li><b>Replacement year</b>　UPS batteries, X-ray tubes, servers</li>
+        </ul>
+        <div class="lb">★ The item most commonly underestimated in Vietnam</div>
+        <ul><li>Medical services<b>VAT-exempt ⇒ input VAT non-deductible</b>, must be fully capitalized</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Example: CT case</div>
+        <div class="v">43 line items | non-deductible taxes and fees account for <b>7.7%</b><br>(below 4% indicates a calculation error)</div>
+      </div>
+    </div>
+
+    <div class="step s3">
+      <div class="top">
+        <div class="num">STEP 3</div>
+        <div class="q">How much is spent each year?<br>Where does the money come from?</div>
+        <div class="pg">03 OPEX + 04 Revenue</div>
+      </div>
+      <div class="body">
+        <div class="lb">Key fields in 03</div>
+        <ul>
+          <li><b>Cost nature</b>　“Variable” scales with service volume ramp-up, “fixed” does not change — entering this incorrectly will distort the ramp-up period</li>
+          <li><b>Annual growth rate</b>　Do not leave salary growth at 0</li>
+        </ul>
+        <div class="lb">Key fields in 04</div>
+        <ul><li>Health-insurance price and self-pay price<b>entered separately</b>, as cash collection speeds differ</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Example: the widening gap in the CT case</div>
+        <div class="v">Unit price annual increase <b>1.5%</b>　vs labor cost annual increase <b>8%</b><br>erodes a large share of profit over ten years</div>
+      </div>
+    </div>
+
+    <div class="step s4">
+      <div class="top">
+        <div class="num">STEP 4</div>
+        <div class="q">What does the system calculate?<br>(no manual input needed)</div>
+        <div class="pg">05 Depreciation  06 Cash flow  07 WACC</div>
+      </div>
+      <div class="body">
+        <div class="lb">Industry-standard derivation</div>
+        <ul>
+          <li>Revenue → EBITDA → depreciation → EBIT → tax →<b>NOPAT</b></li>
+          <li>+ depreciation − capital expenditure − working capital =<b>FCFF</b></li>
+          <li>Tax incorporates<b>the tax-holiday start-date rule</b>and 5-year loss carryforward</li>
+        </ul>
+        <div class="lb">The discount rate is no longer entered arbitrarily</div>
+        <ul><li>07 derives it using CAPM: Vietnam government bond + β × mature-market ERP +<b>country risk premium</b></li></ul>
+      </div>
+      <div class="now">
+        <div class="t">Example: WACC of the three cases</div>
+        <div class="v">CT <b>11.5%</b>｜IDC <b>10.8%</b>｜HIS <b>12.0%</b><br>Vietnam CRP 3.90% (Damodaran)</div>
+      </div>
+    </div>
+
+    <div class="step s5">
+      <div class="top">
+        <div class="num">STEP 5</div>
+        <div class="q">What is the conclusion?<br>Where is it most vulnerable?</div>
+        <div class="pg">08 Sensitivity  09 Enabling  10 Decision summary</div>
+      </div>
+      <div class="body">
+        <div class="lb">Division of labor across three pages</div>
+        <ul>
+          <li><b>08</b>　Three scenarios +<b>tornado chart</b>(which variable is most critical) + break-even</li>
+          <li><b>09</b>　★ Only enabling-type projects need to fill this in: build vs. lease TCO</li>
+          <li><b>10</b>　One-page conclusion,<b>interpretation rules switch automatically by category</b></li>
+        </ul>
+        <div class="lb">The owner only needs to look at</div>
+        <ul><li>the six figures on 10 and that one automatic interpretation sentence</li></ul>
+      </div>
+      <div class="now">
+        <div class="t">The primary return metric is MIRR</div>
+        <div class="v">because the model includes<b>mid-project replacement investment</b>, so cash flow alternates between positive and negative<br>IRR may have multiple solutions, whereas MIRR has only one</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="cmphd">Three simulated cases: the same model, three categories, three different answers</p>
+  <p class="cmpsub">Amounts are in thousand NTD. Every figure is consistent with publicly available Vietnam 2025–2026 data (health-insurance rates, electricity prices, wages, colocation market rates, tax law), listed item by item on the 11 assumption-sources worksheet tab in each file.</p>
+
+  <table class="cmp">
+    <tr>
+      <th style="width:180px;">Item</th>
+      <th>Hospital A — CT imaging center<br><span style="font-weight:400;font-size:12px;">128-slice / CAP-028</span></th>
+      <th>Hospital A — IDC server room<br><span style="font-weight:400;font-size:12px;">24 racks / CAP-020</span></th>
+      <th>Hospital B — HIS/EMR<br><span style="font-weight:400;font-size:12px;">500 beds, lease instead of purchase / CAP-033</span></th>
+    </tr>
+    <tr>
+      <td class="rowh">Investment category</td>
+      <td><span class="catchip" style="background:#548235;">A Revenue-generating</span></td>
+      <td><span class="catchip" style="background:#2E747A;">B Enabling ★</span></td>
+      <td><span class="catchip" style="background:#7030A0;">F Strategic positioning</span></td>
+    </tr>
+    <tr><td class="rowh">Yardstick to use</td>
+      <td class="lead">NPV／MIRR／PI</td>
+      <td class="lead"><b>ΔTCO present value</b>, unit service cost, number of projects supported</td>
+      <td class="lead">Staged gates, option value</td></tr>
+    <tr><td class="rowh">Discount rate WACC</td><td>11.5%</td><td>10.8%</td><td>12.0%</td></tr>
+    <tr><td class="rowh">Total investment CAPEX</td><td class="num">43,334</td><td class="num">43,642</td><td class="num">41,020</td></tr>
+    <tr class="hi"><td class="rowh">NPV net present value</td>
+      <td class="num pos">+13,050</td>
+      <td class="num neg">−102,691 <span class="na">(not applicable)</span></td>
+      <td class="num neg">−25,766</td></tr>
+    <tr class="hi"><td class="rowh">MIRR</td><td class="num pos">13.1%</td><td class="na">Not applicable</td><td class="num neg">0.9%</td></tr>
+    <tr class="hi"><td class="rowh">PI profitability index</td><td class="num pos">1.30</td><td class="na">Not applicable</td><td class="num neg">0.37</td></tr>
+    <tr class="hi"><td class="rowh">Discounted payback period</td><td class="num">7.8 years</td><td class="na">Not applicable</td><td class="num neg">Not recovered</td></tr>
+    <tr class="key"><td class="rowh">★ ΔTCO (lease − build)</td>
+      <td class="na">—</td>
+      <td class="num pos" style="font-size:18px;">+14,388</td>
+      <td class="na">—</td></tr>
+    <tr class="key"><td class="rowh">ΔTCO payback period / number of projects supported</td>
+      <td class="na">—</td>
+      <td class="num pos">4.0 years / 7</td>
+      <td class="na">—</td></tr>
+    <tr class="key"><td class="rowh">Self-build unit cost vs. market price</td>
+      <td class="na">—</td>
+      <td class="num pos">59% (36 thousand per rack per month vs. market price 61 thousand)</td>
+      <td class="na">—</td></tr>
+    <tr>
+      <td class="rowh">Automatic interpretation</td>
+      <td><span class="vpill pg-mid">△ Feasible but slow</span></td>
+      <td><span class="vpill pg-ok">○ Recommend self-build</span></td>
+      <td><span class="vpill pg-op">Staged gates</span></td>
+    </tr>
+    <tr>
+      <td class="rowh">Why this answer</td>
+      <td class="lead"><b>Because a reimbursement code exists.</b>Imaging exams have a health-insurance rate (Circular 22/2023/TT-BYT) + a self-pay market,
+        so “billed per procedure performed” holds true — one of the<b>few cases in Vietnam’s healthcare digitalization where the numbers can be worked out on a standalone basis</b>. NPV is positive, MIRR exceeds WACC, PI is 1.30,
+        though the 7.8-year payback period is somewhat long, so contract duration coverage must be confirmed.</td>
+      <td class="lead"><b>Because the right question was asked.</b>Treating the server room as a “rent-collecting business” will inevitably produce a negative conclusion.
+        Instead, ask “how much would we pay FPT/Viettel over ten years if we don’t build it ourselves” —<b>self-build 10-year TCO 104,212, lease 118,600, difference +14,388</b>，
+        The build cost pays for itself in 4 years, while supporting 7 projects.</td>
+      <td class="lead"><b>Because the revenue side is locked in by the regulatory structure.</b>Vietnam’s medical service pricing still only covers labor and direct costs,<b>not IT</b>；
+        and the first reimbursement case to include IT (313/QĐ-BYT) has a published price that is still<b>5.9% lower</b>. Demand is being forced out by regulation, but a payment source has not yet been established.</td>
+    </tr>
+    <tr>
+      <td class="rowh">So what should be done</td>
+      <td class="lead">Add a<b>guaranteed minimum exam volume</b>to the contract; also negotiate on patient mix, not just volume —<b>self-pay ratio</b>has a greater impact on profitability than service volume.
+        Also confirm eligibility for the 10% socialized-healthcare tax rate (the 08 conservative scenario has already tested the outcome of reverting to 20%).</td>
+      <td class="lead">Keep an eye on three variables that could flip the conclusion:<b>①</b> electricity tariff classification (Circular 60/2025 commercial tier would raise electricity costs by 45–55%; must confirm with EVN);
+        <b>②</b> whether staff can share on-call duty with in-house IT (3 FTE vs. 8–9 FTE standalone);<b>③</b> actual lease quotes.</td>
+      <td class="lead"><b>Do not approve the full amount at once.</b>Split into three phases with gates: outpatient go-live + case licensing → inpatient testing go-live + negotiation with the 2nd hospital → hospital-wide paperless + contract signed with the 2nd hospital.
+        The one-time implementation cost is approximately <b>10,530</b>, which can be amortized down by more than 60% for the 2nd and 3rd hospitals.</td>
+    </tr>
+  </table>
+
+  <div class="tips">
+    <div class="tip t2">
+      <div class="h">Negative NPV ≠ this project cannot be done</div>
+      <div class="d">It only says, “<b>under the current set of conditions, calculated on a standalone basis,</b>it does not pay back.” First confirm<b>whether the investment category was selected correctly</b>——
+        For the three categories infrastructure, regulatory-mandated, and replacement & sustaining, a negative NPV is the norm and does not constitute grounds for rejection.</div>
+    </div>
+    <div class="tip t3">
+      <div class="h">Three pass conditions for enabling-type projects</div>
+      <div class="d"><b>①</b> ① ΔTCO present value &gt; 0 (self-build is cheaper than leasing);<b>②</b> ② unit service cost is lower than the market outsourced price;
+        <b>③ number of projects supported ≥ 2</b>— a “platform” that serves only a single project is, in essence, that project’s cost, not a platform.</div>
+    </div>
+    <div class="tip t1">
+      <div class="h">One sub-project, one file</div>
+      <div class="d">Do not use one file per hospital. For the same Hospital A, the CT case and the server room case<b>should each have their own file</b>— different categories require different yardsticks; mixing them together makes it impossible to tell who is earning and who is losing.
+        Naming follows <b>VMH-EcoMap-2_ProjectBusinessModel_Hospital-Asset_v1.0</b>。</div>
+    </div>
+    <div class="tip t4">
+      <div class="h">The single cell that most needs to be agreed upon before submitting for investment decision</div>
+      <div class="d">is not any particular cost item, it is<b>the discount rate</b>. The same model can produce opposite conclusions when using 10% versus 13%.
+        The 07 worksheet tab has already derived it using CAPM (including Vietnam’s 3.90% country risk premium), but<b>it must still be confirmed in writing with the investor</b>。</div>
+    </div>
+  </div>
+
+  <div class="newbar">
+    <div class="nb"><div class="h">01B Category decision wizard</div><div class="d">Answer four questions (does money come in from outside / what happens if it isn’t done / how many projects does it support / will operations stall without it) to get a recommended category, along with the rationale, next steps, and a cross-check against the selection in 01. Includes the four points where users most commonly get stuck.</div></div>
+    <div class="nb"><div class="h">One-click switching between three currencies</div><div class="d">Input defaults to NTD. Changing the “display currency” in 01 automatically converts the entire file to USD or VND; the display unit (unit / thousand / million) can also be switched to avoid overly long VND figures.</div></div>
+    <div class="nb"><div class="h">BOQ-level cost breakdown</div><div class="d">02 and 03 use formal engineering-industry line-item names and a “quantity × unit price” structure, distinguishing imported from local, with built-in import duty and<b>non-deductible input VAT</b>。</div></div>
+    <div class="nb"><div class="h">Depreciation and Vietnam tax incentives</div><div class="d">Depreciation follows the statutory useful life under Circular 45/2013; the tax rate is not hardcoded — 10% for socialized healthcare + 4-year tax holiday, with the holiday start date following the statutory rule of “whichever comes first: first profitable year vs. 4th year of revenue.”</div></div>
+    <div class="nb"><div class="h">Working capital</div><div class="d">Health-insurance and self-pay receivable days are set separately. Vietnam’s health-insurance settlement often involves suspended over-spending claims (in 2025, hospitals in Ho Chi Minh City had nearly VND 2,500 billion suspended), so a generic assumption cannot be applied.</div></div>
+    <div class="nb"><div class="h">WACC and FCFF</div><div class="d">The discount rate is derived using CAPM: Vietnam 10-year government bond 4.54% + β × mature-market ERP 4.23% + Vietnam country risk premium 3.90% (Damodaran 2026). Cash flow uses unlevered FCFF.</div></div>
+    <div class="nb"><div class="h">MIRR, PI, ROIC, tornado chart</div><div class="d">Because the model includes mid-project replacement investment, IRR may have multiple solutions, so MIRR is used as the primary metric. Also included are PI (for ranking multiple cases), ROIC (compared against WACC), and a tornado chart (to identify the most critical variable).</div></div>
+  </div>
+
+  <p class="foot">
+    <b>Remember this file in one sentence:</b>First select the correct category (01; if unsure, use the 01B wizard), the consultant fills in three pages of costs and revenue (02–04), the system calculates six pages (05–09), and the owner reviews one page (10).<br>
+    <b>When to open a new file:</b>When the business judgment for an item in the master toolkit becomes “proceed immediately (Go),” or when preparing to enter the WP-09 investment decision, open a calculator file for that item.<br>
+    <b>Must be completed before submitting for investment decision:</b>The ten checks at the bottom of the 10 worksheet tab — formal quotes, import duty and input VAT, tax incentive eligibility,<b>discount rate agreed in writing</b>, regulatory pathway, local OPEX, unit price verification, health-insurance receivable days, contract clauses in place for the top-ranked variable in the tornado chart, and independent-unit review.<br>
+    <b>Important disclaimer:</b>The amounts in the three simulated cases are<b>illustrative planning values</b>, with sources listed item by item on the 11 worksheet tab in each file; before formal evaluation, every figure must be replaced with vendor quotes or local engineering estimates.
+    Eligibility for the 10% socialized-healthcare tax rate must be confirmed in writing on a case-by-case basis by a local Vietnamese tax advisor.
+  </p>
+</div>
+</body>
+</html>

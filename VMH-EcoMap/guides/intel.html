@@ -1,0 +1,56 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>越南醫療情報站　使用說明｜VMH-EcoMap</title>
+<meta name="description" content="Vietnam hospital ecosystem toolkit: opportunity mapping, deal calculator, regulatory clock, and gap map.">
+<link rel="stylesheet" href="../assets/site.css">
+</head><body>
+<header><div class="hw">
+ <a class="logo" href="../index.html"><b>VMH-EcoMap</b><span>越南醫院生態系工具站</span></a>
+ <nav><a class="on" href="../index.html#tools">線上工具</a><a href="../index.html#onepagers">一頁圖說</a><a href="../index.html#adv">進階／夥伴</a><a href="../index.html#downloads">下載中心</a><a href="../index.html#about">關於本站</a></nav>
+ <div class="langsw"><a class="lp on" data-lang="zh" href="#">中文</a><a class="lp" data-lang="en" href="#">English</a><a class="lp" data-lang="vi" href="#">Tiếng Việt</a></div>
+</div></header><main>
+<div class="crumb"><a href="../index.html">首頁</a> ／ <a href="../index.html#tools">線上互動工具</a> ／ 越南醫療情報站</div>
+<div class="dhero"><div class="top">
+ <div class="txt"><div class="cat">線上互動工具 ・ 市場情報</div>
+  <h1>越南醫療情報站</h1>
+  <p class="lead">提案前最怕兩件事：講錯法規時程，以及被問「你憑什麼這樣說」。這一頁把已簽發、有明確生效日的法規排成倒數時鐘，把主要競合廠商在越南做過什麼案子攤開，每個市場數字都掛著出處與查證日——查不到的就標「未查得」，不編數字。</p></div>
+ <div class="img" style="background-image:url(../assets/shots/intel.jpg)"></div></div></div>
+
+<div class="dgrid"><div>
+ <div class="card"><h3>什麼時候用它</h3><div class="scen"><div class="s"><b>場景一　提案前確認時機</b>法規時鐘依剩餘天數排序，紅字代表 120 天內生效。「還有 169 天生效」這種話，比「聽說明年要上路」有份量得多。</div><div class="s"><b>場景二　被問到競爭者</b>點任一公司名稱，展開它的概況與過去／目前承接的醫院專案（含出處）。知道對手做過什麼，才知道自己該切哪裡。</div><div class="s"><b>場景三　簡報需要引用數字</b>市場數據儀表每張卡都附來源與查證日，可以直接抄進簡報的註腳。超過 120 天沒更新的會自己標「待更新」。</div></div></div>
+ <div class="card"><h3>操作三步驟</h3><ol class="steps" style="font-size:.88rem;line-height:1.9"><li><b>看法規時鐘</b>——未生效的排前面（近的先），已生效的沉底。每條都寫明「牽動哪些商機」與「我們該做什麼」。</li><li><b>查競合廠商</b>——點公司名稱展開細節視窗；下方「完整廠商名冊」收錄 9 大類 115 家，以機房／UPS／IDC 為主軸排列。</li><li><b>自己維護資料</b>——右上角「✎ 編輯資料」可直接在頁面上修改、新增、刪除，再按「⬇ 匯出資料檔」存成新的資料檔；「⟳ 載入更新資料」可載入他人提供的更新檔。</li></ol></div>
+ <div class="card"><h3>你會看到什麼</h3>
+  <p style="font-size:.86rem">三個區塊：法規時鐘（10 條已簽發法規的倒數與應對）、競合廠商動態（12 家詳細卡片＋48 筆承接專案實績）、市場數據儀表（16 項指標）。加上完整廠商名冊 115 家。</p>
+  <div class="warn" style="margin-top:11px"><b>資料與限制：</b>情報有半衰期。每一筆都標了查證日，超過 120 天會自動顯示「待更新」提醒。名冊部分目前僅列名稱與定位，尚未逐家深入查證。</div></div>
+</div>
+<div class="side"><div class="card">
+ <a class="big" href="../tools/intel.html">▶ 開啟越南醫療情報站</a>
+ <a class="big g" href="../index.html#tools">← 回工具總覽</a>
+ <h3 style="margin-top:16px">相關工具</h3>
+ <div class="rel"><a href="../tools/gapmap.html">→ 越南缺口地圖（省級視角）</a><br><a href="../tools/calculator.html">→ 互動商模試算器（把機會算成錢）</a><br><a href="../tools/explorer.html">→ 生態導覽器（商機全景）</a><br></div>
+ <h3 style="margin-top:16px">規格</h3>
+ <div class="spec">格式：單檔 HTML<br>大小：約 65 KB<br>需要網路：否<br>更新頻率：每月自動重新查證<br>版本：v1.0（2026-08）<br></div>
+</div></div></div>
+</main><footer><div class="fin">
+ <div><b style="color:#C7D6EA">VMH-EcoMap</b><br>VMH-EcoMap　越南醫院生態系工具站　v1.0　2026-08<br>群晶科技 × 越南現代醫院聯盟</div>
+ <div style="text-align:right">本站數據均附出處與查證日；預載案例為市場推估值，<br>非任何特定機構之實際報價。情報有半衰期，以查證日為準。</div>
+</div></footer>
+<script>
+(function(){
+ var LANGS=['zh','en','vi'];
+ document.querySelectorAll('.langsw a[data-lang]').forEach(function(a){
+   a.addEventListener('click', function(e){
+     e.preventDefault();
+     var target=a.getAttribute('data-lang');
+     var path=location.pathname;
+     var file=path.split('/').pop();
+     var dir=path.slice(0, path.length-file.length);
+     var m=file.match(/^(.*?)(\.(en|vi))?\.html$/);
+     if(!m) return;
+     var base=m[1];
+     var newFile = target==='zh' ? base+'.html' : base+'.'+target+'.html';
+     location.href = dir + newFile + location.hash;
+   });
+ });
+})();
+</script></body></html>

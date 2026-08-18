@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>VMH-EcoMap worksheet tab relationship diagram</title>
+<style>
+  :root{
+    --navy:#1F3864; --midblue:#2F5597; --teal:#2E747A; --green:#548235;
+    --gold:#BF8F00; --purple:#7030A0; --red:#953735;
+    --ink:#1a1a1a; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#F4F6F9; color:var(--ink);
+       font-family:"Microsoft JhengHei","Microsoft JhengHei","Noto Sans TC",system-ui,-apple-system,sans-serif;}
+  .page{width:1700px; margin:0 auto; padding:26px 18px 36px;}
+  h1{font-size:26px; margin:0 0 6px; color:var(--navy); letter-spacing:.5px;}
+  .sub{font-size:13.5px; color:var(--muted); margin:0 0 20px; line-height:1.75;}
+  .sub b{color:var(--navy);}
+  .canvas{position:relative; width:1700px; height:1010px;
+          background:#fff; border:1px solid #DDE3EC; border-radius:14px;
+          box-shadow:0 2px 14px rgba(31,56,100,.07);}
+  svg.wires{position:absolute; inset:0; width:1700px; height:1010px; z-index:1;}
+  svg.labels{position:absolute; inset:0; width:1700px; height:1010px; z-index:3; pointer-events:none;}
+  .node{position:absolute; z-index:2; border-radius:9px; padding:8px 11px;
+        border:1.6px solid; background:#fff;}
+  .node .t{font-size:13.5px; font-weight:700; line-height:1.35;}
+  .node .r{font-size:10px; font-weight:700; letter-spacing:.4px; opacity:.85; margin-bottom:2px;}
+  .node .d{font-size:11px; line-height:1.55; color:#39414d; margin-top:4px;}
+  .node .d b{color:var(--navy);}
+  .src{font-size:10px; line-height:1.5; color:#6a7382; margin-top:5px;
+       border-top:1px dashed #d5dbe4; padding-top:4px;}
+  .g-master{border-color:var(--navy); background:#EDF2F9;}
+  .g-master .t,.g-master .r{color:var(--navy);}
+  .g-input{border-color:var(--teal); background:#F0F7F8;}
+  .g-input .t,.g-input .r{color:var(--teal);}
+  .g-calc{border-color:#9AA3AE; background:#F3F4F6; border-style:dashed;}
+  .g-calc .t,.g-calc .r{color:#5a626c;}
+  .g-out{border-color:var(--green); background:#F2F8EE;}
+  .g-out .t,.g-out .r{color:#3f6427;}
+  .g-manual{border-color:var(--gold); background:#FFFAEE;}
+  .g-manual .t,.g-manual .r{color:#8a6800;}
+  .g-list{border-color:var(--purple); background:#F8F2FC;}
+  .g-list .t,.g-list .r{color:var(--purple);}
+  .g-ext{border-color:var(--red); background:#FCF1F0;}
+  .g-ext .t,.g-ext .r{color:var(--red);}
+  .g-note{border-color:#B9C4D4; border-style:dashed; background:#FBFCFE;}
+  .g-note .t,.g-note .r{color:#4a5568;}
+  .chip{position:absolute; z-index:3; border:1.4px solid #E0C36A; background:#fff;
+        border-radius:7px; padding:6px 8px; font-size:10.5px; line-height:1.45; color:#4a5160;}
+  .chip b{display:block; font-size:12px; color:#8a6800; margin-bottom:2px;}
+  svg text{paint-order:stroke fill; stroke:#fff; stroke-width:4.5px; stroke-linejoin:round;
+           font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif; font-weight:700;}
+  .lb{font-size:10.5px; fill:var(--midblue);}
+  .lb2{font-size:11.5px; fill:var(--midblue);}
+  .lp{font-size:10.5px; fill:var(--purple);}
+  .lg{font-size:11px; fill:#6f665a;}
+  .band{position:absolute; z-index:0; border-radius:12px; border:1px dashed #C9D2DE;}
+  .bandlab{position:absolute; z-index:2; font-size:11px; font-weight:700;
+           letter-spacing:1px; color:#9aa4b3;}
+  .legend{margin-top:16px; display:flex; gap:22px; flex-wrap:wrap;
+          font-size:12.5px; color:#39414d; align-items:center;
+          background:#fff; border:1px solid #DDE3EC; border-radius:12px; padding:13px 18px;}
+  .legend .k{display:flex; align-items:center; gap:7px;}
+  .sw{width:26px; height:0; border-top-width:2.4px; border-top-style:solid; display:inline-block;}
+  .box{width:16px; height:12px; border-radius:3px; border:1.6px solid; display:inline-block;}
+  .foot{font-size:12.5px; color:var(--muted); margin-top:13px; line-height:1.9;}
+  .foot b{color:var(--navy);}
+</style>
+<style>
+.i18nsw{position:fixed;right:14px;top:14px;z-index:9999;background:rgba(21,44,78,.94);
+ border-radius:10px;padding:5px;display:flex;gap:3px;box-shadow:0 3px 14px rgba(0,0,0,.25);
+ font-family:system-ui,sans-serif}
+.i18nsw a{display:block;padding:5px 10px;border-radius:7px;font-size:.72rem;font-weight:700;
+ text-decoration:none;color:#B9C9E0;letter-spacing:.5px}
+.i18nsw a.on{background:#fff;color:#152C4E}
+.i18nsw a:hover:not(.on){background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:640px){.i18nsw{top:auto;bottom:14px;right:14px}}
+</style></head>
+<body><div class="i18nsw"><a href="sheetmap.html">中文</a><a href="sheetmap.en.html" class="on">EN</a><a href="sheetmap.vi.html">VI</a></div>
+<div class="page">
+  <h1>VMH-EcoMap master toolkit | 21 worksheet tab relationship diagram</h1>
+  <p class="sub">
+    Arrow direction = data flow,<b>the page an arrow points to is automatically calculated — do not type into it manually</b>. The numbers on the lines are the actual number of cross-tab formulas, scanned directly from the file — not illustrative.<br>
+    Across the full set of 21 worksheet tabs (including the dashboard and 17 business opportunity battle cards), only three places actually require manual input:<b>03 Capability master table</b>(capability data),<b>16 Capability-opportunity matrix</b>(mark ✓),<b>15 Business opportunity dictionary</b>(business opportunity descriptions).
+  </p>
+
+  <div class="canvas">
+    <div class="band" style="left:24px; top:136px; width:292px; height:512px; background:#FAFCFC;"></div>
+    <div class="bandlab" style="left:34px; top:142px;">Other input worksheet tabs</div>
+    <div class="band" style="left:386px; top:136px; width:628px; height:528px; background:#FAFBFD;"></div>
+    <div class="bandlab" style="left:396px; top:142px;">Capability chain: inventory → calculation → automatic list</div>
+    <div class="band" style="left:1096px; top:136px; width:580px; height:528px; background:#FBFAFD;"></div>
+    <div class="bandlab" style="left:1106px; top:142px;">Business opportunity chain: capability ↔ business opportunity → opportunity pipeline</div>
+
+    <!-- ============ WIRES ============ -->
+    <svg class="wires" viewBox="0 0 1700 1010">
+      <defs>
+        <marker id="ab" markerWidth="9" markerHeight="9" refX="7.4" refY="3.2" orient="auto">
+          <path d="M0,0 L7.4,3.2 L0,6.4 z" fill="#2F5597"/></marker>
+        <marker id="ap" markerWidth="9" markerHeight="9" refX="7.4" refY="3.2" orient="auto">
+          <path d="M0,0 L7.4,3.2 L0,6.4 z" fill="#7030A0"/></marker>
+        <marker id="ag" markerWidth="9" markerHeight="9" refX="7.4" refY="3.2" orient="auto">
+          <path d="M0,0 L7.4,3.2 L0,6.4 z" fill="#8a8175"/></marker>
+      </defs>
+      <g fill="none" stroke-linejoin="round">
+        <!-- 98 dropdown source -->
+        <path d="M70,116 H14 V608" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <path d="M14,204 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M14,296 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M14,388 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M14,480 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M14,576 H40" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M700,116 V160" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M1600,116 H1686 V596" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <path d="M1686,228 H1650" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M1686,420 H1650" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M1686,580 H1650" stroke="#7030A0" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+
+        <!-- named range dropdown 04→03 / 09→03 -->
+        <path d="M300,576 H388 V180 H400" stroke="#7030A0" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+        <path d="M300,480 H376 V196 H400" stroke="#7030A0" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#ap)"/>
+
+        <!-- formula linkage: left column → middle column -->
+        <path d="M300,204 H400" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M300,388 H400" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M300,296 H330 V412 H400" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M92,244 H26 V480 H40" stroke="#2F5597" stroke-width="2" marker-end="url(#ab)"/>
+        <path d="M400,296 H370 V568 H300" stroke="#2F5597" stroke-width="2" marker-end="url(#ab)"/>
+
+        <!-- 03 → Calc → four automatic lists -->
+        <path d="M700,310 V366" stroke="#2F5597" stroke-width="3.6" marker-end="url(#ab)"/>
+        <path d="M472,458 V516" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M624,458 V516" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M776,458 V516" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M928,458 V516" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M800,516 V496 H966 V458" stroke="#2F5597" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#ab)"/>
+
+        <!-- business opportunity chain -->
+        <path d="M1000,204 H1110" stroke="#2F5597" stroke-width="2.6" marker-end="url(#ab)"/>
+        <path d="M1110,272 H1000" stroke="#2F5597" stroke-width="2.6" marker-end="url(#ab)"/>
+        <path d="M1200,366 V310" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M1560,310 V366" stroke="#2F5597" stroke-width="2.2" marker-end="url(#ab)"/>
+        <path d="M1200,484 V526" stroke="#2F5597" stroke-width="2.6" marker-end="url(#ab)"/>
+        <path d="M1560,526 V484" stroke="#2F5597" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#ab)"/>
+
+        <!-- external file (manual operation) -->
+        <path d="M552,584 H330 V838 H240 V850" stroke="#8a8175" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ag)"/>
+        <path d="M150,850 V620" stroke="#8a8175" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ag)"/>
+        <path d="M1000,286 H1050 V834 H640 V850" stroke="#8a8175" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ag)"/>
+      </g>
+    </svg>
+
+    <!-- ============ NODES ============ -->
+    <div class="node g-list" style="left:40px; top:70px; width:1620px; height:46px;">
+      <div class="t" style="line-height:28px;">98 Menu maintenance_Lists — the single place to maintain all dropdown menus (35 column lists; to add an option, continue filling below the bottom of that column)</div>
+    </div>
+
+    <div class="node g-input" style="left:40px; top:164px; width:260px; height:80px;">
+      <div class="r">Input</div><div class="t">02 Scenario weights_Scenario</div>
+      <div class="d">Six weights for value/readiness.<b>One file = one setting</b></div>
+    </div>
+    <div class="node g-input" style="left:40px; top:256px; width:260px; height:80px;">
+      <div class="r">Input</div><div class="t">05 Regulatory gates_Gates</div>
+      <div class="d">Vietnam regulations + international standards, mandatory/reference status, and pass status</div>
+    </div>
+    <div class="node g-input" style="left:40px; top:348px; width:260px; height:80px;">
+      <div class="r">Input</div><div class="t">08 Risk register_Risk</div>
+      <div class="d">Risk level, mitigation actions, and owner</div>
+    </div>
+    <div class="node g-input" style="left:40px; top:440px; width:260px; height:80px;">
+      <div class="r">Input</div><div class="t">09 KPI scorecard_KPI</div>
+      <div class="d">KPI definitions, baseline, and targets (hidden column S feeds the 03 dropdown)</div>
+    </div>
+    <div class="node g-input" style="left:40px; top:532px; width:260px; height:88px;">
+      <div class="r">Input</div><div class="t">04 Partner mapping_Partners</div>
+      <div class="d">29 partner roles + scoring across seven dimensions.<b>Columns A/F/T are fully automatic</b></div>
+    </div>
+
+    <div class="node g-master" style="left:400px; top:160px; width:600px; height:150px;">
+      <div class="r">★ Single source of data | the only place in the entire toolkit where capability data is entered</div>
+      <div class="t">03 Capability master table_Master</div>
+      <div class="d">
+        60 capabilities (formatting and formulas reserved through row 154). A–G capability definitions / H–K partner allocation / L–M gates / N–W scoring decisions / X–AA execution tracking / AB–AE expansion tracking.<br>
+        <b>Only 3 columns on this page are formulas: Q value score, U readiness score, W business judgment</b>; in addition, <b>column AF (associated business opportunity)</b>is automatically populated from the 16 matrix.
+      </div>
+    </div>
+
+    <div class="node g-calc" style="left:400px; top:366px; width:600px; height:92px;">
+      <div class="r">Hidden engine</div><div class="t">_Calc (hidden worksheet tab, do not modify)</div>
+      <div class="d">Numbers “rows meeting the criteria” in sequence into four ranked groups: gaps / partner view / unconfirmed mandatory regulations / high risk,<br>
+      so the four automatic lists below can retrieve details using MATCH + INDEX.</div>
+    </div>
+
+    <div class="node g-out" style="left:400px; top:516px; width:144px; height:136px;">
+      <div class="r">Fully automatic</div><div class="t">01 Master blueprint<br>Blueprint</div>
+      <div class="src">Source: _Calc, 03 (23), 05 gate rows (8)</div>
+    </div>
+    <div class="node g-out" style="left:552px; top:516px; width:144px; height:136px;">
+      <div class="r">Fully automatic</div><div class="t">11 Gap recruitment<br>GapRFI</div>
+      <div class="src">Source: _Calc (300), 03 (300)</div>
+    </div>
+    <div class="node g-out" style="left:704px; top:516px; width:144px; height:136px;">
+      <div class="r">Fully automatic</div><div class="t">12 Partner view<br>PartnerView</div>
+      <div class="src">Source: Calc (330), 03 (333). The partner selected in C4 feeds back to Calc</div>
+    </div>
+    <div class="node g-out" style="left:856px; top:516px; width:144px; height:136px;">
+      <div class="r">Fully automatic</div><div class="t">13 To-do board<br>Actions</div>
+      <div class="src">Source: Calc (204), 05 (89), 03 (62), 08 (57)</div>
+    </div>
+
+    <div class="node g-input" style="left:1110px; top:160px; width:540px; height:150px;">
+      <div class="r">Input (just mark ✓)</div>
+      <div class="t">16 Capability-opportunity matrix_CapOppMap</div>
+      <div class="d">
+        60 capabilities (rows, mirroring 03 row by row) × 85 business opportunities (columns, corresponding to rows 5–94 in 15 column by column; 90 columns reserved).<br>
+        Marking “✓” in the intersecting cell = this capability belongs to this business opportunity.<b>One capability can be checked against multiple business opportunities = many-to-many.</b><br>
+        The bottom 5 rows automatically calculate: number of capabilities / average value score / average readiness score / number of ○ gaps / coverage areas.
+      </div>
+    </div>
+    <div class="node g-input" style="left:1110px; top:366px; width:540px; height:118px;">
+      <div class="r">Input (business opportunity descriptions) + automatic statistics</div>
+      <div class="t">15 Business opportunity dictionary_OppLibrary</div>
+      <div class="d">
+        85 types of business in the Vietnam hospital market, grouped into ten A–J categories (including 17 AI types). Manually filled: name / what is sold and who pays / Vietnam current status / typical amount.<br>
+        Automatic: coverage areas, number of capabilities, average score, number of ○ gaps,<b>★ alliance capability mapping status (white-space business opportunity detection)</b>。
+      </div>
+    </div>
+    <div class="node g-out" style="left:1110px; top:526px; width:540px; height:118px;">
+      <div class="r">Fully automatic (only business judgment is filled in)</div>
+      <div class="t">14 Business opportunity list_Pipeline ← use this page when presenting to the owner</div>
+      <div class="d">
+        Select a business opportunity from the dropdown in column A → columns B–L are all automatically populated; only columns M–S need to be filled in: payer for this case / transaction model / amount bracket / maturity stage / owner / next step / notes.
+      </div>
+    </div>
+
+    <div class="node g-note" style="left:400px; top:690px; width:600px; height:126px;">
+      <div class="r">Key points for reading the diagram</div>
+      <div class="t">Across the full set of 21 worksheet tabs, only three places actually require manual work</div>
+      <div class="d">
+        <b>① 03 Capability master table</b>— capabilities, partner allocation, scoring, and gate status.　<b>② 16 Capability-opportunity matrix</b>— mark “✓” in the intersecting cell of capability × business opportunity.　<b>③ 15 Business opportunity dictionary</b>— business opportunity name, what is sold and who pays, Vietnam current status.<br>
+        Among the remaining pages,<b>13 pages are calculated automatically by formulas</b>(01/11/12/13/14/17 battle cards/dashboard + columns Q·U·W·AF in 03 + Calc),<b>5 pages are manual work areas</b>（06／07／10／00／99）。
+      </div>
+    </div>
+    <div class="node g-manual" style="left:1110px; top:690px; width:540px; height:126px;">
+      <div class="r">Manually maintained — scan result: these pages contain no cross-tab formulas at all and will not be altered by other pages</div>
+    </div>
+    <div class="chip" style="left:1122px; top:718px; width:168px; height:38px;"><b>06 Action roadmap</b>Work packages, milestones, and Gantt chart</div>
+    <div class="chip" style="left:1300px; top:718px; width:168px; height:38px;"><b>07 Overall project scale</b>Overall project scale and transaction model comparison</div>
+    <div class="chip" style="left:1478px; top:718px; width:160px; height:38px;"><b>10 Decision log</b>Decision journal and version history</div>
+    <div class="chip" style="left:1122px; top:764px; width:168px; height:38px;"><b>00 User guide</b>Navigation and new feature descriptions</div>
+    <div class="chip" style="left:1300px; top:764px; width:168px; height:38px;"><b>99 Code table</b>Term definitions and interpretation notes</div>
+
+    <div class="node g-ext" style="left:40px; top:850px; width:390px; height:104px;">
+      <div class="r">External files</div><div class="t">VMH-EcoMap-3 Partner proposal response form</div>
+      <div class="d">Sent to candidate partners to fill out. After collection, copy from the 05_summary output <b>B7:O7 → paste into column B of 04</b>(skip column A), then copy Q7:S7 and paste into column Q.</div>
+    </div>
+    <div class="node g-ext" style="left:444px; top:850px; width:390px; height:104px;">
+      <div class="r">External files</div><div class="t">VMH-EcoMap-2 project business model calculator</div>
+      <div class="d">CAPEX/OPEX/NPV/IRR/payback period for a single sub-project.<b>Deliberately not auto-populated</b>— at the qualification review stage there is no quote yet, so any amount would just be a guess.</div>
+    </div>
+    <div class="node g-ext" style="left:848px; top:850px; width:390px; height:104px;">
+      <div class="r">External files</div><div class="t">VMH-EcoMap-4 user manual (Word)</div>
+      <div class="d">Definition/purpose/how to read/how to fill in/formula logic/common errors for each worksheet tab. Not linked; refer to it when you open a page and are not sure what to do.</div>
+    </div>
+    <div class="node g-ext" style="left:1252px; top:850px; width:398px; height:104px;">
+      <div class="r">External files</div><div class="t">VMH-EcoMap-5 alliance partner briefing</div>
+      <div class="d">27-page presentation, used for recruiting external partners and briefing government. Not linked.</div>
+    </div>
+
+    <!-- ============ LABELS (top layer, not covered by cards) ============ -->
+    <svg class="labels" viewBox="0 0 1700 1010">
+      <text class="lp" x="700" y="140" text-anchor="middle">98 supplies all dropdown menus for the entire toolkit (named ranges)</text>
+      <text class="lp" x="1662" y="140" text-anchor="end">Dropdown</text>
+      <text class="lp" x="24" y="146">Dropdown</text>
+
+      <text class="lb" x="350" y="196" text-anchor="middle">Weights → Q/U scores (300)</text>
+      <text class="lp" x="350" y="252" text-anchor="middle">Column T → candidate partner dropdown</text>
+      <text class="lb" x="350" y="380" text-anchor="middle">High-risk ranking (23)</text>
+      <text class="lb" x="352" y="406" text-anchor="middle">Mandatory regulation ranking (42)</text>
+      <text class="lp" x="350" y="436" text-anchor="middle">Column S → KPI indicator dropdown</text>
+      <text class="lb" x="352" y="562" text-anchor="middle">Number of gaps per domain (10)</text>
+      <text class="lb" x="66" y="436" text-anchor="middle">Weights (24)</text>
+
+      <text class="lb2" x="712" y="344">All data for the 60 capabilities in 03 (750 formulas)</text>
+      <text class="lb" x="812" y="490">Selection in C4 of 12 → ranking condition (150)</text>
+
+      <text class="lb" x="1055" y="194" text-anchor="middle">A/B/E mirrored row by row</text>
+      <text class="lb" x="1055" y="292" text-anchor="middle">Corresponding business opportunity → column AF</text>
+      <text class="lb" x="1212" y="342">Rows 5–94 → column headers</text>
+      <text class="lb" x="1548" y="342" text-anchor="end">Statistics row → number of capabilities / average score / number of gaps</text>
+      <text class="lb" x="1212" y="510">Column U → column A dropdown; B–P → columns B–L</text>
+      <text class="lb" x="1548" y="510" text-anchor="end">Included in 14 (fed back)</text>
+
+      <text class="lg" x="168" y="734">① Send the gap list out as an RFI →</text>
+      <text class="lg" x="168" y="692">② After collection, copy B7:O7 back into column B of 04</text>
+      <text class="lg" x="1042" y="828" text-anchor="end">Judged as Go → manually open a separate calculator file</text>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <div class="k"><span class="sw" style="border-color:#2F5597;"></span>Automatic formula linkage (number in parentheses is the actual formula count)</div>
+    <div class="k"><span class="sw" style="border-color:#7030A0; border-top-style:dashed;"></span>Dropdown menu source (named range)</div>
+    <div class="k"><span class="sw" style="border-color:#8a8175; border-top-style:dashed;"></span>Manual operation (copy-paste / open a new file)</div>
+    <div class="k"><span class="box" style="border-color:#1F3864; background:#EDF2F9;"></span>Single source of data</div>
+    <div class="k"><span class="box" style="border-color:#2E747A; background:#F0F7F8;"></span>Worksheet tabs requiring input</div>
+    <div class="k"><span class="box" style="border-color:#9AA3AE; background:#F3F4F6;"></span>Hidden calculation engine</div>
+    <div class="k"><span class="box" style="border-color:#548235; background:#F2F8EE;"></span>Fully automatic output</div>
+    <div class="k"><span class="box" style="border-color:#BF8F00; background:#FFFAEE;"></span>Manually maintained, not linked</div>
+    <div class="k"><span class="box" style="border-color:#7030A0; background:#F8F2FC;"></span>Menu maintenance</div>
+    <div class="k"><span class="box" style="border-color:#953735; background:#FCF1F0;"></span>External files</div>
+  </div>
+
+  <p class="foot">
+    <b>Three rules for reading the diagram:</b>
+    ① For any worksheet tab with a blue arrow pointing into it, never type manually — that value is calculated by a formula, and overwriting it means it will never update again.
+    ② A purple dashed line indicates “where this page’s dropdown options come from”; to add another option, go to the bottom of the list on the page where the arrow originates and add a row.
+    ③ A gray dashed line marks places deliberately not automated: cross-file links can break and can also bring external content into the master toolkit, so copy-pasting a specified range is used instead.<br>
+    <b>Two closed loops worth noting:</b>“03 ↔ 16” — the capabilities in 03 are mirrored into the matrix, and the business opportunity computed by the matrix is fed back into column AF of 03; “15 ↔ 14” — the dictionary supplies the business opportunity dropdown, and which ones are used in 14 is fed back into the “included in 14” column of the dictionary. In both cases, different columns reference each other, so no circular reference is created.<br>
+    <b>One point that is easy to misunderstand:</b>06 Action roadmap, 07 Overall project scale, and 10 Decision log contain no cross-tab formulas whatsoever — they are manually maintained work areas; changing 03 will not automatically update them, nor will they be overwritten by 03.
+  </p>
+</div>
+</body>
+</html>
