@@ -1486,7 +1486,7 @@ body.has-access .portal-cards { display: none; }
    19. 講義拖曳排序
    -------------------------------------------------------------------------- */
 
-.mat-table .col-drag { width: 54px; }
+.mat-table .col-drag { width: 74px; }
 /* 「操作」欄固定只取內容需要的寬度，不管其他欄有多擠都不能被壓縮到按鈕文字換行 */
 .mat-table th:last-child, .mat-table td:last-child { width: 1%; white-space: nowrap; }
 .mat-table .actions { flex-wrap: nowrap; }
@@ -1494,15 +1494,20 @@ body.has-access .portal-cards { display: none; }
 /* 檔案路徑是底線連接的長字串，瀏覽器預設不會在底線處斷行，
    會把整欄撐得很寬、擠壓到其他欄——改成必要時可以在任意字元處換行 */
 .mat-table td .mono { word-break: break-all; }
-.mat-table tbody tr { cursor: default; }
-.mat-table tbody tr[draggable="true"] { transition: background .12s ease, opacity .12s ease; }
-.mat-table tbody tr[draggable="true"]:hover { background: var(--surface-2); }
-.mat-table tbody tr.is-dragging {
+/* 拖曳排序不只用在講義列表，課程管理／學生名單也共用同一套邏輯與樣式 */
+.admin-table tbody tr { cursor: default; }
+.admin-table tbody tr[draggable="true"] { transition: background .12s ease, opacity .12s ease; }
+.admin-table tbody tr[draggable="true"]:hover { background: var(--surface-2); }
+.admin-table tbody tr.is-dragging {
   opacity: .35;
   background: var(--brand-tint);
 }
+/* 勾選多筆準備一起拖曳時的提示樣式 */
+.admin-table tbody tr.is-selected { background: var(--brand-tint); }
+.admin-table tbody tr.is-selected:hover { background: var(--brand-tint); }
 
 .col-drag { display: flex; align-items: center; gap: 4px; }
+.row-select-cb { cursor: pointer; accent-color: var(--brand); }
 .drag-handle {
   cursor: grab; font-size: 16px; line-height: 1; color: var(--faint);
   padding: 4px 2px; user-select: none; touch-action: none;
