@@ -218,6 +218,26 @@ export async function uploadFile(file, subdir, onProgress = () => {}) {
   };
 }
 
+/**
+ * 刪除 repo 裡的單一檔案。用於「更新講義」時清掉被取代、換了檔名的舊檔，
+ * 避免 repo 裡留下沒人參照的孤兒檔案。找不到檔案就靜默略過，不當成錯誤。
+ * @param {string} relPath 相對於 MATERIALS_ROOT 的路徑
+ */
+export async function deleteRepoFile(relPath) {
+  const repo = getRepo();
+  const info = await verifyAccess();
+  const branch = info.branch;
+  const fullPath = MATERIALS_ROOT + relPath;
+
+  const sha = await existingSha(repo, fullPath, branch);
+  if (!sha) return; // 檔案已經不存在，不用刪
+
+  await gh(`/repos/${repo}/contents/${encodeURI(fullPath)}`, {
+    method: 'DELETE',
+    body: JSON.stringify({ message: `Remove replaced course material: ${relPath}`, sha, branch })
+  });
+}
+
 /** PowerPoint 匯出 PDF 的操作指引，畫面上直接顯示 */
 export const PPTX_GUIDE = {
   title: '請先把簡報匯出成 PDF',

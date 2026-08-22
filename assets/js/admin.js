@@ -28,7 +28,7 @@ import {
   exportBackup
 } from './data.js';
 import {
-  uploadFile, isPowerPoint, humanSize, extOf, safeName,
+  uploadFile, deleteRepoFile, isPowerPoint, humanSize, extOf, safeName,
   getToken, setToken, getRepo, setRepo, hasToken, verifyAccess,
   PPTX_GUIDE, SIZE_LIMIT
 } from './upload.js';
@@ -404,13 +404,71 @@ function materialRow(m, index) {
       el('div', { class: 'mono', style: 'font-size:11.5px;color:var(--faint)', text: m.path || '' })
     ]),
     el('td', { text: m.size || '—' }),
-    el('td', {}, [el('button', {
-      class: 'btn btn-danger btn-sm btn-rect', type: 'button',
-      onclick: () => confirmThen(`移除「${m.name}」？`, () => guard(async () => {
-        await deleteMaterial(editorCourse.id, m.id); await refreshMaterials();
-      }, '#matBanner'))
-    }, '移除')])
+    el('td', {}, [el('div', { class: 'actions' }, [
+      el('button', {
+        class: 'btn btn-ghost btn-sm btn-rect', type: 'button',
+        onclick: () => triggerMaterialUpdate(m)
+      }, '更新檔案'),
+      el('button', {
+        class: 'btn btn-danger btn-sm btn-rect', type: 'button',
+        onclick: () => confirmThen(`移除「${m.name}」？`, () => guard(async () => {
+          await deleteMaterial(editorCourse.id, m.id); await refreshMaterials();
+        }, '#matBanner'))
+      }, '移除')
+    ])])
   ]);
+}
+
+/** 點「更新檔案」：現開一個一次性的隱藏檔案選擇器，選好檔案後才真正開始上傳 */
+function triggerMaterialUpdate(m) {
+  if (!hasToken()) {
+    banner('#matBanner', '尚未設定 GitHub 存取金鑰，無法上傳。請點右上角「上傳設定」完成一次性設定。', 'warn');
+    openModal('modalUpload');
+    return;
+  }
+  const input = el('input', {
+    type: 'file', hidden: true,
+    accept: '.pdf,.docx,.doc,.xlsx,.csv,.zip,.py,.ipynb,.ppt,.pptx'
+  });
+  input.addEventListener('change', () => {
+    const file = input.files[0];
+    input.remove();
+    if (file) guard(() => replaceMaterialFile(m, file), '#matBanner');
+  });
+  document.body.append(input);
+  input.click();
+}
+
+/**
+ * 用新檔取代既有講義：上傳到原本同一個單元子資料夾（維持原本的分類結構），
+ * 更新 Firestore 紀錄的檔名／路徑／大小，但保留原本的 id、單元、排序不變。
+ * 新檔名跟舊檔不同時，舊檔會變成沒人參照的孤兒檔案，這裡會嘗試順手清掉，
+ * 清不掉（例如金鑰權限不足）也不影響這次更新本身是否成功。
+ */
+async function replaceMaterialFile(m, file) {
+  if (isPowerPoint(file.name)) {
+    banner('#matBanner', '請先把簡報轉成 PDF，再選擇新檔更新。', 'warn');
+    return;
+  }
+
+  banner('#matBanner', `正在更新「${m.name}」…`, 'info');
+
+  const oldPath = m.path || '';
+  const subdir = oldPath.includes('/') ? oldPath.slice(0, oldPath.lastIndexOf('/')) : safeName(editorCourse.code || editorCourse.id);
+
+  const result = await uploadFile(file, subdir, () => {});
+  await saveMaterial(editorCourse.id, m.id, {
+    name: result.name,
+    path: result.path,
+    size: result.size
+  });
+
+  if (result.path !== oldPath && oldPath && !/^https?:\/\//.test(oldPath)) {
+    try { await deleteRepoFile(oldPath); } catch (err) { console.warn('[講義更新] 舊檔清理失敗（不影響更新結果）：', err); }
+  }
+
+  banner('#matBanner', `已更新為「${result.name}」。`, 'success');
+  await refreshMaterials();
 }
 
 /** 目前顯示中的講義清單，供拖曳排序時計算新順序 */
