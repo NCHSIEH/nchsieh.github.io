@@ -262,6 +262,7 @@ let currentCourses = [];
 function courseRow(c, index) {
   return el('tr', { draggable: 'true', 'data-id': c.id, 'data-order': String(index) }, [
     el('td', { class: 'col-drag' }, [
+      el('input', { type: 'checkbox', class: 'row-select-cb', 'aria-label': `選取「${c.titleZh || c.code}」，可多選後一起拖曳` }),
       el('span', { class: 'drag-handle', title: '拖曳調整順序', 'aria-hidden': 'true', text: '⠿' }),
       el('span', { class: 'reorder-btns' }, [
         el('button', {
@@ -325,41 +326,75 @@ async function moveCourse(id, delta) {
   await refreshCourses();
 }
 
-/** 課程列表的拖曳排序：拖曳中即時移動 DOM，放開後才寫回資料庫 */
-function initCoursesDrag() {
-  const tbody = $('#adminCourseTbody');
-  let draggingRow = null;
+/**
+ * 通用的表格拖曳排序：一次只拖一列是預設行為，但如果先勾選了多筆（`.row-select-cb`），
+ * 拖曳其中任一筆時會把「所有勾選中的列」一起搬到放開的位置，維持彼此的相對順序不變。
+ * 課程管理、講義列表、學生名單三處排序邏輯完全相同，統一用這個函式避免各寫一份、行為卻慢慢兜不起來。
+ *
+ * @param {string} tbodySelector
+ * @param {(orderedIds: string[]) => Promise<void>} persistAndSync 依目前 DOM 順序寫回資料庫，並更新對應的本地快取／提示訊息
+ * @param {string} [bannerTarget] 失敗時要顯示錯誤訊息的 banner 選擇器
+ */
+function initDragReorder(tbodySelector, persistAndSync, bannerTarget = '#adminOpBanner') {
+  const tbody = $(tbodySelector);
+  if (!tbody) return;
+
+  const selected = new Set();  // 目前勾選中的 data-id
+  let draggingIds = [];
+
+  const rowFor = id => tbody.querySelector(`tr[data-id="${CSS.escape(id)}"]`);
+
+  tbody.addEventListener('change', e => {
+    const cb = e.target.closest('.row-select-cb');
+    if (!cb) return;
+    const tr = cb.closest('tr[data-id]');
+    if (!tr) return;
+    if (cb.checked) selected.add(tr.dataset.id); else selected.delete(tr.dataset.id);
+    tr.classList.toggle('is-selected', cb.checked);
+  });
 
   tbody.addEventListener('dragstart', e => {
     const tr = e.target.closest('tr[draggable="true"]');
     if (!tr) return;
-    draggingRow = tr;
-    tr.classList.add('is-dragging');
+
+    // 拖曳的這一列本來就在勾選清單裡、且勾了不只一筆 → 整批一起搬；
+    // 否則維持原本的行為，只搬這一列（不論勾選狀態如何）。
+    draggingIds = (selected.has(tr.dataset.id) && selected.size > 1)
+      ? [...tbody.querySelectorAll('tr[data-id]')].map(r => r.dataset.id).filter(id => selected.has(id))
+      : [tr.dataset.id];
+
+    draggingIds.map(rowFor).filter(Boolean).forEach(r => r.classList.add('is-dragging'));
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', tr.dataset.id || '');
   });
 
   tbody.addEventListener('dragover', e => {
-    if (!draggingRow) return;
+    if (!draggingIds.length) return;
     e.preventDefault();
     const tr = e.target.closest('tr[draggable="true"]');
-    if (!tr || tr === draggingRow) return;
+    if (!tr || draggingIds.includes(tr.dataset.id)) return;
     const rect = tr.getBoundingClientRect();
-    const putBefore = (e.clientY - rect.top) < rect.height / 2;
-    tbody.insertBefore(draggingRow, putBefore ? tr : tr.nextSibling);
+    const anchor = (e.clientY - rect.top) < rect.height / 2 ? tr : tr.nextSibling;
+    // 依原本的相對順序逐一插到 anchor 前面：每插一筆，前面插好的都會被推到更前面，
+    // 所以最後這批列會緊貼在一起、順序跟拖曳前彼此的相對順序完全一致。
+    draggingIds.map(rowFor).filter(Boolean).forEach(r => tbody.insertBefore(r, anchor));
   });
 
   tbody.addEventListener('dragend', () => guard(async () => {
-    if (!draggingRow) return;
-    draggingRow.classList.remove('is-dragging');
-    draggingRow = null;
+    if (!draggingIds.length) return;
+    draggingIds.map(rowFor).filter(Boolean).forEach(r => r.classList.remove('is-dragging'));
+    draggingIds = [];
 
-    const ids = [...tbody.querySelectorAll('tr[draggable="true"]')].map(tr => tr.dataset.id);
+    const ids = [...tbody.querySelectorAll('tr[data-id]')].map(tr => tr.dataset.id);
     if (!ids.length) return;
-    await persistCourseOrder(ids);
-    currentCourses = ids.map(id => currentCourses.find(c => c.id === id)).filter(Boolean);
-    banner('#adminOpBanner', '課程順序已更新。', 'success');
-  }));
+    await persistAndSync(ids);
+  }, bannerTarget));
+}
+
+async function persistAndSyncCourses(ids) {
+  await persistCourseOrder(ids);
+  currentCourses = ids.map(id => currentCourses.find(c => c.id === id)).filter(Boolean);
+  banner('#adminOpBanner', '課程順序已更新。', 'success');
 }
 
 /* ---------- 講義與作業 ---------- */
@@ -386,6 +421,7 @@ async function openMaterials(course) {
 function materialRow(m, index) {
   return el('tr', { draggable: 'true', 'data-id': m.id, 'data-order': String(index) }, [
     el('td', { class: 'col-drag' }, [
+      el('input', { type: 'checkbox', class: 'row-select-cb', 'aria-label': `選取「${m.name}」，可多選後一起拖曳` }),
       el('span', { class: 'drag-handle', title: '拖曳調整順序', 'aria-hidden': 'true', text: '⠿' }),
       el('span', { class: 'reorder-btns' }, [
         el('button', {
@@ -592,42 +628,11 @@ async function moveMaterial(id, delta) {
 }
 
 /** 講義列表的拖曳排序：拖曳中即時移動 DOM，放開後才寫回資料庫 */
-function initMaterialsDrag() {
-  const tbody = $('#matTbody');
-  let draggingRow = null;
-
-  tbody.addEventListener('dragstart', e => {
-    const tr = e.target.closest('tr[draggable="true"]');
-    if (!tr) return;
-    draggingRow = tr;
-    tr.classList.add('is-dragging');
-    e.dataTransfer.effectAllowed = 'move';
-    // Firefox 需要實際設定資料才會啟動拖曳
-    e.dataTransfer.setData('text/plain', tr.dataset.id || '');
-  });
-
-  tbody.addEventListener('dragover', e => {
-    if (!draggingRow) return;
-    e.preventDefault();
-    const tr = e.target.closest('tr[draggable="true"]');
-    if (!tr || tr === draggingRow) return;
-    const rect = tr.getBoundingClientRect();
-    const putBefore = (e.clientY - rect.top) < rect.height / 2;
-    tbody.insertBefore(draggingRow, putBefore ? tr : tr.nextSibling);
-  });
-
-  tbody.addEventListener('dragend', () => guard(async () => {
-    if (!draggingRow) return;
-    draggingRow.classList.remove('is-dragging');
-    draggingRow = null;
-
-    const ids = [...tbody.querySelectorAll('tr[draggable="true"]')].map(tr => tr.dataset.id);
-    if (!ids.length) return;
-    await persistMaterialOrder(ids);
-    // 不整批重繪，避免拖曳完成的瞬間畫面閃動；只更新本地順序快取
-    currentMaterials = ids.map(id => currentMaterials.find(m => m.id === id)).filter(Boolean);
-    banner('#matBanner', '順序已更新。', 'success');
-  }, '#matBanner'));
+async function persistAndSyncMaterials(ids) {
+  await persistMaterialOrder(ids);
+  // 不整批重繪，避免拖曳完成的瞬間畫面閃動；只更新本地順序快取
+  currentMaterials = ids.map(id => currentMaterials.find(m => m.id === id)).filter(Boolean);
+  banner('#matBanner', '順序已更新。', 'success');
 }
 
 /* ==========================================================================
@@ -854,6 +859,7 @@ function studentRow(r, index) {
 
   return el('tr', { draggable: 'true', 'data-id': r.id, 'data-order': String(index) }, [
     el('td', { class: 'col-drag' }, [
+      el('input', { type: 'checkbox', class: 'row-select-cb', 'aria-label': `選取「${r.name || r.email}」，可多選後一起拖曳` }),
       el('span', { class: 'drag-handle', title: '拖曳調整順序', 'aria-hidden': 'true', text: '⠿' }),
       el('span', { class: 'reorder-btns' }, [
         el('button', {
@@ -1007,40 +1013,10 @@ async function moveStudent(id, delta) {
 }
 
 /** 學生列表的拖曳排序：拖曳中即時移動 DOM，放開後才寫回資料庫 */
-function initStudentsDrag() {
-  const tbody = $('#studentTbody');
-  let draggingRow = null;
-
-  tbody.addEventListener('dragstart', e => {
-    const tr = e.target.closest('tr[draggable="true"]');
-    if (!tr) return;
-    draggingRow = tr;
-    tr.classList.add('is-dragging');
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', tr.dataset.id || '');
-  });
-
-  tbody.addEventListener('dragover', e => {
-    if (!draggingRow) return;
-    e.preventDefault();
-    const tr = e.target.closest('tr[draggable="true"]');
-    if (!tr || tr === draggingRow) return;
-    const rect = tr.getBoundingClientRect();
-    const putBefore = (e.clientY - rect.top) < rect.height / 2;
-    tbody.insertBefore(draggingRow, putBefore ? tr : tr.nextSibling);
-  });
-
-  tbody.addEventListener('dragend', () => guard(async () => {
-    if (!draggingRow) return;
-    draggingRow.classList.remove('is-dragging');
-    draggingRow = null;
-
-    const ids = [...tbody.querySelectorAll('tr[draggable="true"]')].map(tr => tr.dataset.id);
-    if (!ids.length) return;
-    await persistStudentOrder(ids);
-    currentStudents = ids.map(id => currentStudents.find(r => r.id === id)).filter(Boolean);
-    banner('#adminOpBanner', '學生順序已更新。', 'success');
-  }));
+async function persistAndSyncStudents(ids) {
+  await persistStudentOrder(ids);
+  currentStudents = ids.map(id => currentStudents.find(r => r.id === id)).filter(Boolean);
+  banner('#adminOpBanner', '學生順序已更新。', 'success');
 }
 
 /* ---------- 課程存取權限彈窗 ---------- */
@@ -1505,8 +1481,8 @@ function mount() {
   // 上傳與排序
   initDropzone();
   initUploadSettings();
-  initMaterialsDrag();
-  initCoursesDrag();
+  initDragReorder('#matTbody', persistAndSyncMaterials, '#matBanner');
+  initDragReorder('#adminCourseTbody', persistAndSyncCourses, '#adminOpBanner');
   $('#btnDownloadAllMaterials')?.addEventListener('click', () => guard(downloadAllMaterials, '#matBanner'));
 
   // 講義（手動填寫）
@@ -1544,7 +1520,7 @@ function mount() {
   $('#btnReloadQueue').addEventListener('click', () => guard(refreshQueue));
   $('#studentFilter').addEventListener('change', () => guard(refreshRoster));
   $('#btnReloadStudents').addEventListener('click', () => guard(refreshRoster));
-  initStudentsDrag();
+  initDragReorder('#studentTbody', persistAndSyncStudents, '#adminOpBanner');
 
   // 課程存取權限彈窗
   $('#accessAll').addEventListener('change', e => setAccessListDisabled(e.target.checked));
