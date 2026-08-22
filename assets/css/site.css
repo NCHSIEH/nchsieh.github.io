@@ -1487,6 +1487,13 @@ body.has-access .portal-cards { display: none; }
    -------------------------------------------------------------------------- */
 
 .mat-table .col-drag { width: 54px; }
+/* 「操作」欄固定只取內容需要的寬度，不管其他欄有多擠都不能被壓縮到按鈕文字換行 */
+.mat-table th:last-child, .mat-table td:last-child { width: 1%; white-space: nowrap; }
+.mat-table .actions { flex-wrap: nowrap; }
+.mat-table .actions .btn { white-space: nowrap; flex: none; }
+/* 檔案路徑是底線連接的長字串，瀏覽器預設不會在底線處斷行，
+   會把整欄撐得很寬、擠壓到其他欄——改成必要時可以在任意字元處換行 */
+.mat-table td .mono { word-break: break-all; }
 .mat-table tbody tr { cursor: default; }
 .mat-table tbody tr[draggable="true"] { transition: background .12s ease, opacity .12s ease; }
 .mat-table tbody tr[draggable="true"]:hover { background: var(--surface-2); }
