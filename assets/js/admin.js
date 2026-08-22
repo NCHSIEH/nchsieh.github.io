@@ -408,7 +408,7 @@ function materialRow(m, index) {
       el('button', {
         class: 'btn btn-ghost btn-sm btn-rect', type: 'button',
         onclick: () => triggerMaterialUpdate(m)
-      }, '更新檔案'),
+      }, '更新'),
       el('button', {
         class: 'btn btn-danger btn-sm btn-rect', type: 'button',
         onclick: () => confirmThen(`移除「${m.name}」？`, () => guard(async () => {
