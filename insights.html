@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>長照 AI 導入：先釐清流程與責任，再選工具｜謝楠楨</title>
+<meta name="description" content="謝楠楨的長照科技專業判斷：從居家服務臨時缺勤與改派情境出發，說明流程診斷、人機分工、試辦指標與顧問交付內容。">
+<meta name="author" content="謝楠楨 Nan-Chen Hsieh">
+<link rel="canonical" href="https://nchsieh.github.io/insights.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:title" content="長照 AI 導入：先釐清流程與責任，再選工具">
+<meta property="og:description" content="從臨時缺勤與改派情境，了解如何把長照科技導入變成可驗證的營運改善。">
+<meta property="og:url" content="https://nchsieh.github.io/insights.html">
+<meta property="og:image" content="https://nchsieh.github.io/assets/img/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/insights.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"長照 AI 導入：先釐清流程與責任，再選工具","description":"以居家服務臨時缺勤與改派為情境的流程診斷、人機分工與試辦評估方法。","datePublished":"2026-10-11","dateModified":"2026-10-11","inLanguage":["zh-Hant","en"],"author":{"@type":"Person","name":"謝楠楨","alternateName":"Nan-Chen Hsieh","url":"https://nchsieh.github.io/"},"mainEntityOfPage":"https://nchsieh.github.io/insights.html"}
+</script>
+</head>
+<body class="lang-zh theme-academy insight-page">
+<a class="skip-link" href="#main">跳至主要內容</a>
+<header class="topbar">
+  <div class="wrap">
+    <a href="index.html" class="brand">謝楠楨 <small>Nan-Chen Hsieh</small></a>
+    <nav class="sitenav" id="siteNav" aria-label="網站導覽">
+      <a href="index.html"><span data-lang="zh">個人簡介</span><span data-lang="en">Profile</span></a>
+      <a href="insights.html" aria-current="page"><span data-lang="zh">專業判斷</span><span data-lang="en">Insights</span></a>
+      <a href="courses.html"><span data-lang="zh">授課課程</span><span data-lang="en">Courses</span></a>
+    </nav>
+    <div class="nav-controls">
+      <button class="navtoggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="開啟選單">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="langtoggle" role="group" aria-label="切換語言 / Switch language">
+        <button type="button" class="seg" data-set-lang="zh" aria-pressed="true">中文</button>
+        <button type="button" class="seg" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+<main id="main" class="insight-main">
+<article>
+  <header class="insight-header">
+    <p class="insight-kicker"><span data-lang="zh">自主研發案例 · 長照科技與營運</span><span data-lang="en">Independent R&amp;D · Care technology &amp; operations</span></p>
+    <h1><span data-lang="zh">長照 AI 導入：<br>先釐清流程與責任，再選工具</span><span data-lang="en">AI in long-term care:<br>Define workflows and responsibilities before choosing tools</span></h1>
+    <p class="insight-deck"><span data-lang="zh">從臨時缺勤與改派情境，看見可以驗證的改善機會。</span><span data-lang="en">Start with absence and reassignment workflows to identify improvements you can verify.</span></p>
+    <p class="insight-byline"><span data-lang="zh">謝楠楨｜國立臺北護理健康大學 健康科技學院講座教授</span><span data-lang="en">Nan-Chen Hsieh · Chair Professor, College of Health Technology, NTUNHS</span><br><time datetime="2026-10-11">2026.10.11</time></p>
+  </header>
+
+  <aside class="insight-note">
+    <p data-lang="zh">本文整理本人自主研發的長照服務 AI Agent 流程與顧問方法規劃，屬於個人 IP。以下以示意情境說明設計與專業判斷；目前尚未與廠商正式合作或完成商業交付。</p>
+    <p data-lang="en">This article presents my independent long-term care AI Agent workflow and advisory methodology, developed as personal intellectual property. The scenario is illustrative; these projects have not yet involved formal vendor collaboration or commercial delivery.</p>
+  </aside>
+
+  <section class="insight-section">
+    <h2><span data-lang="zh">自主研發：把單一工具放回完整服務流程</span><span data-lang="en">Independent R&amp;D: place each tool within the full service workflow</span></h2>
+    <p data-lang="zh">我的長照服務 AI Agent 規劃涵蓋七個階段，從進案資料到需求改變後的重新評估，形成可追蹤的服務循環。每一階段分別標示 AI 輔助、規則檢核、核心系統及人員決策，避免只列出工具功能，卻沒有說明交接責任。</p>
+    <p data-lang="en">My long-term care AI Agent design spans seven stages, from intake to reassessment when needs change, forming a traceable service cycle. Each stage distinguishes AI support, rule checks, core systems and human decisions so handover responsibilities are explicit.</p>
+    <ol class="insight-flow">
+      <li><span data-lang="zh">進案與資料蒐集</span><span data-lang="en">Intake &amp; data collection</span></li>
+      <li><span data-lang="zh">需求初篩與正式評估</span><span data-lang="en">Screening &amp; formal assessment</span></li>
+      <li><span data-lang="zh">照顧計畫形成</span><span data-lang="en">Care plan formation</span></li>
+      <li><span data-lang="zh">資源媒合與排班</span><span data-lang="en">Resource matching &amp; scheduling</span></li>
+      <li><span data-lang="zh">服務執行與紀錄</span><span data-lang="en">Service delivery &amp; records</span></li>
+      <li><span data-lang="zh">持續監測、品質與核銷</span><span data-lang="en">Monitoring, quality &amp; reconciliation</span></li>
+      <li><span data-lang="zh">需求改變與再評估</span><span data-lang="en">Changed needs &amp; reassessment</span></li>
+    </ol>
+    <p data-lang="zh">這份規劃展現的核心能力，是把照護情境轉為流程、資料、規則、責任與驗收要求。下面以「臨時缺勤與改派」說明如何將整體架構落到具體工作。</p>
+    <p data-lang="en">The core capability demonstrated is translating care scenarios into workflows, data, rules, responsibilities and acceptance requirements. The absence and reassignment example below shows how the architecture becomes concrete work.</p>
+  </section>
+
+  <section class="insight-section">
+    <h2><span data-lang="zh">一個值得先處理的情境</span><span data-lang="en">A useful starting scenario</span></h2>
+    <p data-lang="zh">照服員臨時缺勤，督導在通訊軟體中反覆找人、確認資格與時段，再通知家屬。原任務是否保留、誰決定替代人選、通知是否完成，若沒有一致紀錄，後續就難以追蹤服務中斷原因，也難以判斷新工具是否有效。</p>
+    <p data-lang="en">A care worker is unexpectedly absent. A supervisor searches messaging threads for a replacement, checks qualifications and availability, then contacts the family. Without consistent records of the original task, assignment decision and notification, it is difficult to trace service interruptions or evaluate a new tool.</p>
+    <blockquote>
+      <p data-lang="zh">我的判斷：先建立可追蹤的服務流程，才有條件評估 AI 能改善哪一段。</p>
+      <p data-lang="en">My judgment: establish a traceable service workflow before assessing where AI can help.</p>
+    </blockquote>
+    <p data-lang="zh">第一步是把現場問題整理成具體事件、責任與資料需求。若問題來自規則不明或資料缺漏，先修正流程往往比直接採購完整系統更容易驗證。</p>
+    <p data-lang="en">Begin by defining events, responsibilities and data needs. When rules are unclear or records incomplete, a focused workflow change may be easier to validate than purchasing a complete system.</p>
+  </section>
+
+  <section class="insight-section">
+    <h2><span data-lang="zh">把改派拆成三個可驗收的工作</span><span data-lang="en">Three work packages with clear acceptance criteria</span></h2>
+    <ol class="insight-steps">
+      <li>
+        <h3><span data-lang="zh">保留事件與責任</span><span data-lang="en">Preserve the event and accountability</span></h3>
+        <p data-lang="zh">保留原任務與異動原因，記錄接手者、決策時間及處理狀態。驗收時，應能重建「何時缺勤、誰接手、如何處理」。</p>
+        <p data-lang="en">Keep the original task, change reason, responsible person, decision time and status. Acceptance requires reconstructing when the absence occurred, who took ownership and what happened next.</p>
+      </li>
+      <li>
+        <h3><span data-lang="zh">先訂排序條件，再推薦候選人</span><span data-lang="en">Define ranking criteria before recommending candidates</span></h3>
+        <p data-lang="zh">先篩選必要資格與可服務時段，再比較距離、工時、服務連續性、個案偏好及風險。每次推薦應能說明理由；重要例外由具名人員確認。</p>
+        <p data-lang="en">Check required qualifications and availability first, then compare distance, workload, continuity, client preferences and risk. Recommendations should be explainable, with important exceptions confirmed by a named staff member.</p>
+      </li>
+      <li>
+        <h3><span data-lang="zh">完成通知，才關閉事件</span><span data-lang="en">Close the event after notification is completed</span></h3>
+        <p data-lang="zh">區分取消、延遲與替代服務，指定通知對象、期限及逾期處理方式。驗收應看實際通知紀錄與事件關閉情形。</p>
+        <p data-lang="en">Distinguish cancellation, delay and replacement. Specify recipients, deadlines and escalation rules. Verify notification records and how events were closed.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="insight-section">
+    <h2><span data-lang="zh">AI 與人員的分工要寫清楚</span><span data-lang="en">Make human and AI responsibilities explicit</span></h2>
+    <div class="insight-split">
+      <div class="insight-box">
+        <h3><span data-lang="zh">可評估由 AI 協助</span><span data-lang="en">Potential AI support</span></h3>
+        <p data-lang="zh">整理紀錄、產生待辦與候選方案、草擬通知、提醒未結事件。能否採用，仍須檢查資料品質、存取權限與實際試辦表現。</p>
+        <p data-lang="en">Organize records, produce task lists and candidate options, draft notifications and flag open events. Suitability depends on data quality, access controls and pilot performance.</p>
+      </div>
+      <div class="insight-box">
+        <h3><span data-lang="zh">由具名人員負責</span><span data-lang="en">Named staff remain accountable</span></h3>
+        <p data-lang="zh">確認候選人適任性、重大例外處理、正式照護計畫核定與最終服務安排。人員需能覆核、修正建議，必要時回到原有流程。</p>
+        <p data-lang="en">Confirm suitability, handle major exceptions, approve formal care plans and make final service arrangements. Staff need a way to review and revise suggestions, and return to the existing workflow when necessary.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="insight-section">
+    <h2><span data-lang="zh">如何判斷試辦值得擴大？</span><span data-lang="en">How should a pilot earn expansion?</span></h2>
+    <p data-lang="zh">先在範圍明確的服務區建立基線，再用相同定義比較試辦前後。至少同時觀察效率、服務品質與人員負荷，避免將工作轉移給前線卻誤認為改善。</p>
+    <p data-lang="en">Establish a baseline in a defined service area and compare results using consistent definitions. Examine efficiency, service quality and staff workload together, so work shifted to frontline staff is not mistaken for improvement.</p>
+    <dl class="insight-metrics">
+      <div><dt><span data-lang="zh">效率</span><span data-lang="en">Efficiency</span></dt><dd><span data-lang="zh">改派處理時間、逾期事件、重複處理次數。</span><span data-lang="en">Reassignment time, overdue events and repeated handling.</span></dd></div>
+      <div><dt><span data-lang="zh">服務品質</span><span data-lang="en">Service quality</span></dt><dd><span data-lang="zh">未完成服務、通知完成情形、固定服務者比例。</span><span data-lang="en">Uncompleted visits, notification completion and continuity of care workers.</span></dd></div>
+      <div><dt><span data-lang="zh">人員負荷</span><span data-lang="en">Staff workload</span></dt><dd><span data-lang="zh">照服員加班、督導補登紀錄時間、前線使用回饋。</span><span data-lang="en">Care worker overtime, supervisor documentation time and frontline feedback.</span></dd></div>
+    </dl>
+    <p data-lang="zh">前後差異還要檢查服務量、人員配置、同期制度變更及資料缺漏。證據不足時，先補足資料或調整試辦；成效、使用情形與責任機制均有支持時，再討論擴大。不能把示意數字當成成果承諾。</p>
+    <p data-lang="en">Also examine service volume, staffing, concurrent changes and missing data. Fill evidence gaps or adjust the pilot first; discuss expansion once results, adoption and accountability support it. Illustrative figures are not outcome commitments.</p>
+  </section>
+
+  <section class="insight-section">
+    <h2><span data-lang="zh">顧問合作可以交付什麼？</span><span data-lang="en">What can an advisory engagement deliver?</span></h2>
+    <ul class="insight-deliverables">
+      <li><span data-lang="zh">現況流程圖、責任分工與主要斷點清單。</span><span data-lang="en">Current workflow, responsibility map and key gaps.</span></li>
+      <li><span data-lang="zh">資料需求、品質問題與候選方案比較。</span><span data-lang="en">Data requirements, quality issues and comparison of options.</span></li>
+      <li><span data-lang="zh">AI 概念驗證或流程改善試辦計畫，含人工覆核與回退方式。</span><span data-lang="en">AI proof-of-concept or workflow pilot plan, including human review and fallback.</span></li>
+      <li><span data-lang="zh">驗收指標、前後比較架構、團隊培訓及擴大條件建議。</span><span data-lang="en">Acceptance criteria, evaluation framework, team training and expansion recommendations.</span></li>
+    </ul>
+    <p data-lang="zh">實際交付範圍依機構問題、可取得資料及委託內容議定。這些方法也可用於技術提案審查與系統需求釐清。</p>
+    <p data-lang="en">Scope depends on the institution's needs, available data and agreed engagement. These methods also support technical proposal review and system requirements definition.</p>
+  </section>
+
+  <aside class="insight-usr">
+    <h2><span data-lang="zh">USR：讓知識落實於照護現場</span><span data-lang="en">USR: translating knowledge into care practice</span></h2>
+    <p data-lang="zh">秉持大學社會責任（USR）精神，重視知識分享、人才培育與在地合作。科技導入應讓前線人員理解方法、能持續運用，並以照護品質與人的需求作為檢視方向。</p>
+    <p data-lang="en">Guided by University Social Responsibility (USR), I value knowledge sharing, talent development and local partnerships. Technology adoption should help frontline teams understand and sustain the approach, with care quality and people's needs guiding evaluation.</p>
+  </aside>
+
+  <section class="insight-contact">
+    <h2><span data-lang="zh">你的團隊正面臨類似問題？</span><span data-lang="en">Is your team facing a similar challenge?</span></h2>
+    <p data-lang="zh">歡迎簡述機構背景、目前問題、希望取得的成果與預計時程，討論單次諮詢、方案審查、試辦評估或團隊培訓。</p>
+    <p data-lang="en">Share your organization, current challenge, desired outcome and timeline to discuss a consultation, proposal review, pilot assessment or team training.</p>
+    <div class="insight-actions">
+      <a class="btn btn-primary" href="https://www.linkedin.com/in/nanchenhsieh/" target="_blank" rel="noopener"><span data-lang="zh">透過 LinkedIn 聯繫</span><span data-lang="en">Connect on LinkedIn</span></a>
+      <a class="btn btn-ghost" href="mailto:nchsieh@ntunhs.edu.tw?subject=%E9%95%B7%E7%85%A7%E7%A7%91%E6%8A%80%E9%A1%A7%E5%95%8F%E8%AB%AE%E8%A9%A2"><span data-lang="zh">Email 諮詢</span><span data-lang="en">Email inquiry</span></a>
+    </div>
+  </section>
+</article>
+</main>
+<footer><div class="wrap"><span>© 2026　謝楠楨 Nan-Chen Hsieh</span><a href="index.html"><span data-lang="zh">返回個人網站</span><span data-lang="en">Back to profile</span></a></div></footer>
+<script type="module">
+import { initUI } from './assets/js/ui.js';
+initUI({ applySiteDefault: true });
+</script>
+</body>
+</html>
+
