@@ -29,7 +29,7 @@ export const THEMES = [
 export const DEFAULT_THEME = 'theme-academy';
 
 /**
- * 5 款版型樣板。同一份 HTML，由 CSS 呈現五種版面。
+ * 10 款版型樣板。同一份 HTML，由 CSS 呈現十種版面。
  * thumb / bars 只用來畫切換器上的骨架縮圖。
  */
 export const LAYOUTS = [
@@ -37,7 +37,12 @@ export const LAYOUTS = [
   { id: 'layout-sidebar',  name: '側邊欄',   note: '左側固定個人資訊，右側捲動內容', thumb: 't-sidebar',  bars: 2 },
   { id: 'layout-timeline', name: '時間軸',   note: '職涯以垂直時間軸串連',           thumb: 't-timeline', bars: 5 },
   { id: 'layout-cover',    name: '雜誌封面', note: '大尺度封面，視覺最強',           thumb: 't-cover',    bars: 4 },
-  { id: 'layout-minimal',  name: '極簡置中', note: '單欄置中，留白最多、最安靜',     thumb: 't-minimal',  bars: 3 }
+  { id: 'layout-minimal',  name: '極簡置中', note: '單欄置中，留白最多、最安靜',     thumb: 't-minimal',  bars: 3 },
+  { id: 'layout-bento',     name: '模組卡片', note: '模組化個人資訊搭配雙欄經歷卡片', thumb: 't-bento',     bars: 4 },
+  { id: 'layout-editorial', name: '編輯專欄', note: '大字標題、細線分隔與寬幅閱讀版面', thumb: 't-editorial', bars: 4 },
+  { id: 'layout-spotlight', name: '聚光舞台', note: '光暈主視覺與圓形肖像，聚焦研究特色', thumb: 't-spotlight', bars: 3 },
+  { id: 'layout-journal',   name: '學術手札', note: '紙本手札風格，個人簡介與履歷並列', thumb: 't-journal',   bars: 4 },
+  { id: 'layout-passport',  name: '名片履歷', note: '橫向個人名片搭配分欄職涯紀錄', thumb: 't-passport',  bars: 4 }
 ];
 
 /** 想更換全站預設版型，改這裡 */
