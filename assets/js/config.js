@@ -16,14 +16,19 @@ export const firebaseConfig = {
   appId:             "1:928315004665:web:f58b30b237f836d7c87428"
 };
 
-/** 6 款主題 */
+/** 11 款主題 */
 export const THEMES = [
   { id: 'theme-academy',    name: '學院藍',     note: '預設・沉穩學術',   sw: ['#1f3a5f', '#9c7538', '#f7f4ed'] },
   { id: 'theme-oxford',     name: '牛津墨',     note: '高對比・銳利',     sw: ['#10192b', '#b4530f', '#f6f7f9'] },
   { id: 'theme-clinic',     name: '智慧醫療',   note: '綠松・領域呼應',   sw: ['#0b4f45', '#0e7490', '#f2f8f6'] },
   { id: 'theme-terracotta', name: '陶土橙',     note: '溫暖・手作質感',   sw: ['#9a4a2c', '#3f6d5c', '#f8f2ea'] },
   { id: 'theme-indigo',     name: '靛藍蒼穹',   note: '現代・科技感',     sw: ['#3730a3', '#d97706', '#f4f3fb'] },
-  { id: 'theme-night',      name: '深夜',       note: '深色模式',         sw: ['#0d1420', '#7aa7d9', '#d4a960'] }
+  { id: 'theme-night',      name: '深夜',       note: '深色模式',         sw: ['#0d1420', '#7aa7d9', '#d4a960'] },
+  { id: 'theme-forest', name: '森林綠', note: '森林綠與麥穗金，沉靜自然', sw: ['#254c3a', '#80602f', '#f3f6ef'] },
+  { id: 'theme-burgundy', name: '酒紅金', note: '酒紅與古典金，典雅穩重', sw: ['#6f263d', '#866020', '#faf3f2'] },
+  { id: 'theme-ocean', name: '海洋青', note: '深海青與沙灘金，清晰明亮', sw: ['#145e73', '#73552b', '#f0f7f8'] },
+  { id: 'theme-graphite', name: '石墨灰', note: '石墨與銀灰，俐落專業', sw: ['#374151', '#5f636b', '#f5f6f7'] },
+  { id: 'theme-rose', name: '玫瑰紫', note: '玫瑰紫與暖銅，柔和有層次', sw: ['#743b6f', '#835323', '#faf3f9'] }
 ];
 
 export const DEFAULT_THEME = 'theme-academy';
