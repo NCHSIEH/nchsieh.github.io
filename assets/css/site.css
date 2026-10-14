@@ -1925,3 +1925,131 @@ body.theme-rose {
   --hero-dim: #ddbed8;
   color-scheme: light;
 }
+
+/* Compact profile introductions across all ten layouts. */
+@media screen {
+  .profile-panel .eyebrow { margin-bottom: 10px; }
+  .profile-panel .hname { font-size: clamp(32px, 4.2vw, 44px); }
+  .profile-panel .hname .romanized { font-size: clamp(18px, 2vw, 23px); margin-top: 6px; }
+  .profile-panel .hrole { margin-top: 10px; }
+  .profile-panel .hbio { margin-top: 8px; font-size: 14px; line-height: 1.7; }
+  .profile-panel .tags { gap: 6px; margin-top: 14px; }
+  .profile-panel .tags > span { font-size: 12px; padding: 5px 12px; }
+  .profile-panel .tags > span > span {
+    padding: 0; border: 0; background: transparent; color: inherit; font-size: inherit; border-radius: 0;
+  }
+  .profile-panel .hcontact { gap: 8px 24px; margin-top: 18px; padding-top: 14px; font-size: 13px; }
+  .profile-panel .hero-actions { gap: 8px; margin-top: 14px; }
+  .profile-panel .scholar-links { margin-top: 10px; }
+
+  .layout-table .profile-panel, .layout-timeline .profile-panel { padding: 34px 28px 30px; }
+  .layout-table .portrait-wrap, .layout-timeline .portrait-wrap { margin: 0 0 14px 28px; }
+  .layout-table .portrait, .layout-table .portrait-fallback,
+  .layout-timeline .portrait, .layout-timeline .portrait-fallback { width: 124px; height: 154px; font-size: 54px; }
+
+  .layout-sidebar .profile-panel { height: auto; max-height: calc(100vh - 57px); padding: 24px 22px; }
+  .layout-sidebar .portrait-wrap { float: right; margin: 0 0 12px 14px; }
+  .layout-sidebar .portrait, .layout-sidebar .portrait-fallback { width: 88px; height: 110px; font-size: 34px; }
+  .layout-sidebar .hname { font-size: 30px; }
+  .layout-sidebar .hname .romanized { font-size: 17px; }
+  .layout-sidebar .eyebrow { font-size: 10.5px; letter-spacing: .12em; }
+  .layout-sidebar .hbio { clear: both; font-size: 13px; line-height: 1.65; }
+  .layout-sidebar .tags > span { font-size: 11px; padding: 3px 9px; }
+  .layout-sidebar .hcontact { font-size: 12px; gap: 6px; margin-top: 14px; padding-top: 12px; }
+
+  .layout-cover .profile-panel { min-height: 0; padding: 40px 28px 34px; }
+  .layout-cover .panel-inner { column-gap: 40px; row-gap: 10px; }
+  .layout-cover .portrait-wrap { grid-row: 1 / span 8; }
+  .layout-cover .portrait, .layout-cover .portrait-fallback { width: 200px; height: 250px; font-size: 82px; }
+  .layout-cover .eyebrow { margin: 0; letter-spacing: .22em; }
+  .layout-cover .hname { font-size: clamp(36px, 5.2vw, 60px); }
+  .layout-cover .hname .romanized { font-size: 15px; letter-spacing: .2em; margin-top: 8px; }
+  .layout-cover .hrole { margin-top: 0; padding-top: 10px; }
+  .layout-cover .hbio, .layout-cover .tags, .layout-cover .hcontact,
+  .layout-cover .hero-actions, .layout-cover .scholar-links { margin-top: 0; }
+
+  .layout-minimal .profile-panel { padding: 42px 28px 32px; }
+  .layout-minimal .portrait-wrap { width: 112px; margin-bottom: 18px; }
+  .layout-minimal .portrait, .layout-minimal .portrait-fallback { width: 112px; height: 112px; font-size: 42px; }
+
+  .layout-bento .profile-panel { margin-top: 20px; }
+  .layout-bento .panel-inner { grid-template-columns: 150px minmax(0, 1fr); padding: 24px; gap: 8px 24px; border-radius: 20px; }
+  .layout-bento .portrait, .layout-bento .portrait-fallback { height: 190px; font-size: 54px; }
+  .layout-bento .eyebrow, .layout-bento .hrole, .layout-bento .hbio,
+  .layout-bento .tags, .layout-bento .hero-actions, .layout-bento .scholar-links { margin: 0; }
+  .layout-bento .hname { font-size: 38px; }
+  .layout-bento .hcontact { margin-top: 4px; }
+
+  .layout-editorial .profile-panel { padding: 36px 28px 26px; }
+  .layout-editorial .panel-inner { padding-top: 20px; }
+  .layout-editorial .portrait-wrap { margin: 0 0 18px 32px; }
+  .layout-editorial .portrait, .layout-editorial .portrait-fallback { width: 132px; height: 164px; font-size: 52px; }
+  .layout-editorial .hname { font-size: clamp(36px, 4.8vw, 58px); }
+
+  .layout-spotlight .profile-panel { padding: 42px 28px 36px; border-bottom-width: 4px; }
+  .layout-spotlight .panel-inner { grid-template-columns: 180px minmax(0, 1fr); gap: 8px 40px; }
+  .layout-spotlight .portrait, .layout-spotlight .portrait-fallback { width: 180px; height: 180px; font-size: 64px; }
+  .layout-spotlight .hname { font-size: clamp(36px, 4.4vw, 52px); }
+  .layout-spotlight .eyebrow, .layout-spotlight .hrole, .layout-spotlight .hbio,
+  .layout-spotlight .tags, .layout-spotlight .hero-actions, .layout-spotlight .scholar-links { margin: 0; }
+  .layout-spotlight .hcontact { margin-top: 4px; }
+
+  .layout-journal .page { margin-top: 26px; }
+  .layout-journal .profile-panel { padding: 22px; }
+  .layout-journal .portrait-wrap { margin-bottom: 18px; }
+  .layout-journal .portrait, .layout-journal .portrait-fallback { height: 190px; font-size: 60px; }
+  .layout-journal .hname { font-size: 32px; }
+  .layout-journal .hname .romanized { font-size: 17px; }
+  .layout-journal .hbio { font-size: 13px; line-height: 1.8; }
+  .layout-journal .tags > span { padding: 2px 0; }
+  .layout-journal .hcontact { font-size: 12px; gap: 8px; }
+
+  .layout-passport .profile-panel { margin-top: 24px; }
+  .layout-passport .panel-inner { grid-template-columns: 120px minmax(0, 1fr); padding: 24px; gap: 8px 24px; }
+  .layout-passport .portrait, .layout-passport .portrait-fallback { width: 120px; height: 144px; font-size: 48px; }
+  .layout-passport .hname { font-size: 36px; }
+  .layout-passport .eyebrow, .layout-passport .hrole, .layout-passport .hbio,
+  .layout-passport .hero-actions, .layout-passport .scholar-links { margin: 0; }
+  .layout-passport .tags, .layout-passport .hcontact { margin-top: 8px; }
+}
+
+@media screen and (max-width: 820px) {
+  .layout-sidebar .page { grid-template-columns: minmax(0, 1fr); }
+  .page > main, .page .block { min-width: 0; }
+  .page .cols { grid-template-columns: minmax(0, 1fr); }
+  .page .skh { flex-wrap: wrap; }
+  .page .skh h2 { white-space: normal; min-width: 0; }
+  .profile-panel .hname { font-size: 32px; }
+  .profile-panel .hname .romanized { font-size: 18px; }
+  .profile-panel .hcontact { flex-direction: column; gap: 8px; overflow-wrap: anywhere; }
+  .layout-table .profile-panel, .layout-timeline .profile-panel { padding: 26px 20px 24px; }
+  .layout-table .portrait-wrap, .layout-timeline .portrait-wrap { margin-left: 16px; }
+  .layout-table .portrait, .layout-table .portrait-fallback,
+  .layout-timeline .portrait, .layout-timeline .portrait-fallback { width: 86px; height: 108px; font-size: 34px; }
+  .layout-sidebar .profile-panel { max-height: none; padding: 24px 20px; }
+  .layout-sidebar .portrait-wrap { float: none; margin: 0 0 14px; }
+  .layout-sidebar .portrait, .layout-sidebar .portrait-fallback { width: 100%; height: 140px; font-size: 48px; }
+  .layout-cover .profile-panel { padding: 28px 20px 24px; }
+  .layout-cover .panel-inner { grid-template-columns: 1fr; gap: 12px; }
+  .layout-cover .portrait-wrap { grid-row: auto; }
+  .layout-cover .portrait, .layout-cover .portrait-fallback { width: 104px; height: 130px; font-size: 40px; }
+  .layout-cover .hrole { padding-top: 8px; }
+  .layout-minimal .profile-panel { padding: 28px 20px 24px; }
+  .layout-minimal .portrait-wrap { width: 90px; margin-bottom: 14px; }
+  .layout-minimal .portrait, .layout-minimal .portrait-fallback { width: 90px; height: 90px; font-size: 34px; }
+  .layout-bento .profile-panel, .layout-passport .profile-panel { margin-top: 16px; }
+  .layout-bento .panel-inner, .layout-passport .panel-inner { grid-template-columns: 1fr; padding: 20px; gap: 10px; }
+  .layout-bento .portrait, .layout-bento .portrait-fallback,
+  .layout-passport .portrait, .layout-passport .portrait-fallback { width: 86px; height: 104px; font-size: 34px; }
+  .layout-editorial .profile-panel { padding: 26px 18px 22px; }
+  .layout-editorial .portrait-wrap { margin: 0 0 14px 16px; }
+  .layout-editorial .portrait, .layout-editorial .portrait-fallback { width: 80px; height: 100px; font-size: 30px; }
+  .layout-spotlight .profile-panel { padding: 28px 24px; }
+  .layout-spotlight .panel-inner { grid-template-columns: 1fr; gap: 12px; }
+  .layout-spotlight .portrait-wrap { margin-bottom: 8px; }
+  .layout-spotlight .portrait, .layout-spotlight .portrait-fallback { width: 112px; height: 112px; font-size: 42px; }
+  .layout-journal .page { margin-top: 18px; }
+  .layout-journal .profile-panel { padding: 20px; }
+  .layout-journal .portrait-wrap { margin: 0 0 14px 16px; }
+  .layout-journal .portrait, .layout-journal .portrait-fallback { width: 80px; height: 100px; font-size: 30px; }
+}
