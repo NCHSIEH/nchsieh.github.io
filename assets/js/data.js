@@ -333,11 +333,11 @@ export async function deleteMaterial(courseId, id) {
   await deleteDoc(doc(db, 'courses', courseId, 'materials', id));
 }
 
-/** 管理端將依前台順序排列的前 5 份名稱公開；絕不複製 path、網址或其他講義欄位。 */
+/** 管理端將依前台順序排列的全部名稱公開；絕不複製 path、網址或其他講義欄位。 */
 export async function syncMaterialPreview(courseId, materials) {
   const title = value => typeof value === 'string' && !['null', 'undefined'].includes(value)
     ? value.trim() : '';
-  const materialPreview = materials.slice(0, 5)
+  const materialPreview = materials
     .map(m => title(m.unit) || title(m.name) || '未命名講義');
   const ref = doc(db, 'courses', courseId);
   const course = await getDoc(ref);

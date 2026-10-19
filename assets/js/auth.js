@@ -30,7 +30,7 @@ const STATUS_TEXT = {
   pending:   { cls: 'pending',  label: '審核中' },
   rejected:  { cls: 'rejected', label: '申請未通過' },
   suspended: { cls: 'rejected', label: '存取已暫停' },
-  guest:     { cls: 'guest',    label: '訪客・可預覽課程大綱與前 5 份講義名稱' }
+  guest:     { cls: 'guest',    label: '訪客・可預覽課程大綱與全部講義名稱' }
 };
 
 // Email 是否驗證不再是存取門檻（驗證信常被學校信箱擋掉），

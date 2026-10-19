@@ -73,7 +73,7 @@ for (const summary of ['', '短摘要', '長'.repeat(150)]) {
     button.click();
     assert.equal(preview.hidden, false);
     assert.equal(button.attributes['aria-expanded'], 'true');
-    assert.deepEqual(descendants(preview, byClass('file-name')).map(n => n.textContent), titles.slice(0, 5));
+    assert.deepEqual(descendants(preview, byClass('file-name')).map(n => n.textContent), titles);
     assert.equal(descendants(card, n => n.tagName === 'a').length, 0);
     assert.equal(detailCalls(), 0, 'guest must not request protected material records');
     button.click();
@@ -101,8 +101,8 @@ test('approved users retain material links; denied users receive none', async ()
   }
 });
 
-test('public synchronization publishes only five names, follows current order, and handles deletion', async () => {
-  let stored = {};
+test('public synchronization expands old five-name previews to all names, follows order, and handles deletion', async () => {
+  let stored = { materialPreview: ['檔案 0', '單元 1', '單元 2', '單元 3', '單元 4'] };
   const writes = [];
   const context = vm.createContext({
     db: {}, doc: () => 'course',
@@ -119,7 +119,7 @@ test('public synchronization publishes only five names, follows current order, a
   }));
   materials[0].unit = 'null';
   await context.syncMaterialPreview('course', materials);
-  assert.deepEqual(stored, { materialPreview: ['檔案 0', '單元 1', '單元 2', '單元 3', '單元 4'] });
+  assert.deepEqual(stored, { materialPreview: ['檔案 0', '單元 1', '單元 2', '單元 3', '單元 4', '單元 5', '單元 6'] });
   await context.syncMaterialPreview('course', materials);
   assert.equal(writes.length, 1, 'unchanged preview does not cause another write');
   await context.syncMaterialPreview('course', materials.slice().reverse());

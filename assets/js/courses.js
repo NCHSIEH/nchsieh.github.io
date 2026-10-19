@@ -1,6 +1,6 @@
 /* ==========================================================================
    課程專區前台
-   課程大綱與前 5 份講義名稱公開；講義連結與作業依 Security Rules 控管
+   課程大綱與全部講義名稱公開；講義連結與作業依 Security Rules 控管
    ========================================================================== */
 
 import { $, el, esc, openModal, closeModal, dueState, fmtDateTime, cleanText } from './ui.js';
@@ -80,10 +80,10 @@ function buildSummaryBlock(text, onToggle = null) {
 /** 公開預覽只有名稱，刻意不使用會建立下載連結的 buildFlatFileList。 */
 function buildMaterialsPreview(course) {
   const titles = Array.isArray(course.materialPreview)
-    ? course.materialPreview.slice(0, 5).filter(title => typeof title === 'string' && cleanText(title))
+    ? course.materialPreview.filter(title => typeof title === 'string' && cleanText(title))
     : [];
   const preview = el('div', { class: 'dir-tree materials-preview' }, [
-    el('div', { class: 'dir-header', text: '課程講義預覽（最多 5 份）' }),
+    el('div', { class: 'dir-header', text: '課程講義名稱（全部）' }),
     titles.length
       ? el('ul', { class: 'file-list' }, titles.map(title =>
           el('li', { class: 'file-item' }, [el('span', { class: 'file-name', text: title })])))
