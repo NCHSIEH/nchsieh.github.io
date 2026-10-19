@@ -20,7 +20,7 @@ import {
   resolveIdentity, isAdminEmail, resendVerification, refreshUser, changePassword,
   listStudents, decideStudent, removeStudent, deleteAuthAccount, saveStudentOrder, setStudentAccess,
   listCourses, saveCourse, deleteCourse, loadCourseDetail,
-  saveMaterial, deleteMaterial, saveAssignment, deleteAssignment,
+  saveMaterial, deleteMaterial, syncMaterialPreview, saveAssignment, deleteAssignment,
   listAnnouncements, publishAnnouncement, deleteAnnouncement, markAnnouncementReminderSent,
   studentMatchesAnnouncement, courseAllowedForStudent,
   getSiteSettings, saveSiteSettings,
@@ -308,6 +308,11 @@ async function refreshCourses() {
   if (!courses.length) { tbody.replaceChildren(emptyRow(5, '尚未建立任何課程。')); return; }
 
   tbody.replaceChildren(...courses.map((c, i) => courseRow(c, i)));
+  // 登入管理端時也替既有課程補齊公開名稱，無須逐門重新儲存講義。
+  for (const course of courses) {
+    const detail = await loadCourseDetail(course.id);
+    if (detail.allowed) await syncMaterialPreview(course.id, detail.materials);
+  }
 }
 
 /** 依 id 陣列的先後順序，把新的 order 值寫回 Firestore */
@@ -519,6 +524,7 @@ function nextMaterialOrder() {
 
 async function refreshMaterials() {
   const detail = await loadCourseDetail(editorCourse.id);
+  if (detail.allowed) await syncMaterialPreview(editorCourse.id, detail.materials);
   currentMaterials = detail.materials;
 
   // 「手動加入」表單的排序欄位預設值同步成「目前最後面」，
@@ -632,6 +638,7 @@ async function persistAndSyncMaterials(ids) {
   await persistMaterialOrder(ids);
   // 不整批重繪，避免拖曳完成的瞬間畫面閃動；只更新本地順序快取
   currentMaterials = ids.map(id => currentMaterials.find(m => m.id === id)).filter(Boolean);
+  await syncMaterialPreview(editorCourse.id, currentMaterials);
   banner('#matBanner', '順序已更新。', 'success');
 }
 

@@ -1,6 +1,6 @@
 /* ==========================================================================
    課程專區前台
-   課程大綱公開；講義與作業只有通過審核的學生讀得到（由 Security Rules 決定）
+   課程大綱與前 5 份講義名稱公開；講義連結與作業依 Security Rules 控管
    ========================================================================== */
 
 import { $, el, esc, openModal, closeModal, dueState, fmtDateTime, cleanText } from './ui.js';
@@ -54,23 +54,44 @@ function levelLabel(level) {
  * 課程摘要過長時（超過一個門檻字數）以 3 行截斷＋「顯示更多」按鈕呈現，
  * 避免單一課程摘要把整張卡片拉得比其他卡片高出一大截。
  */
-function buildSummaryBlock(text) {
+function buildSummaryBlock(text, onToggle = null) {
   const clean = cleanText(text);
-  if (!clean) return null;
+  if (!clean && !onToggle) return null;
 
   const isLong = clean.length > 130;
   const p = el('p', { class: `course-summary${isLong ? ' clamped' : ''}`, text: clean });
-  if (!isLong) return p;
+  if (!isLong && !onToggle) return p;
 
+  let expanded = false;
   const btn = el('button', {
-    class: 'summary-toggle', type: 'button',
+    class: 'summary-toggle', type: 'button', 'aria-expanded': 'false',
     onclick: () => {
-      const stillClamped = p.classList.toggle('clamped');
-      btn.textContent = stillClamped ? '顯示更多' : '收合摘要';
+      expanded = !expanded;
+      p.classList.toggle('clamped', isLong && !expanded);
+      btn.textContent = expanded ? (onToggle ? '收合' : '收合摘要') : '顯示更多';
+      btn.setAttribute('aria-expanded', String(expanded));
+      onToggle?.(expanded);
     }
   }, '顯示更多');
 
-  return el('div', { class: 'summary-wrap' }, [p, btn]);
+  return el('div', { class: 'summary-wrap' }, [clean ? p : null, btn]);
+}
+
+/** 公開預覽只有名稱，刻意不使用會建立下載連結的 buildFlatFileList。 */
+function buildMaterialsPreview(course) {
+  const titles = Array.isArray(course.materialPreview)
+    ? course.materialPreview.slice(0, 5).filter(title => typeof title === 'string' && cleanText(title))
+    : [];
+  const preview = el('div', { class: 'dir-tree materials-preview' }, [
+    el('div', { class: 'dir-header', text: '課程講義預覽（最多 5 份）' }),
+    titles.length
+      ? el('ul', { class: 'file-list' }, titles.map(title =>
+          el('li', { class: 'file-item' }, [el('span', { class: 'file-name', text: title })])))
+      : el('p', { text: Array.isArray(course.materialPreview) ? '本課程尚未上傳講義。' : '講義名稱預覽尚未更新。' }),
+    el('p', { class: 'materials-preview-note', text: '僅供預覽名稱；下載講義須登入並通過修課審核。' })
+  ]);
+  preview.hidden = true;
+  return preview;
 }
 
 /**
@@ -188,6 +209,7 @@ function buildMaterialsBlock(course, materials) {
 function buildCard(c) {
   const card = el('article', { class: 'course-card' });
   const grow = el('div', { class: 'grow' });
+  const preview = !identity.user ? buildMaterialsPreview(c) : null;
 
   // 注意：Element.append() 遇到 null／undefined 不會略過，會把它字面轉成
   // 文字節點 "null"／"undefined" 塞進畫面裡——這正是課程摘要曾經顯示「null」的真正原因，
@@ -201,12 +223,13 @@ function buildCard(c) {
     el('div', { class: 'course-code mono', text: c.code || '' }),
     el('h3', { class: 'course-title', text: cleanText(c.titleZh) || '(未命名課程)' }),
     cleanText(c.titleEn) ? el('div', { style: 'font-family:var(--font-latin);font-size:14px;color:var(--faint);margin:-6px 0 10px', text: cleanText(c.titleEn) }) : null,
-    buildSummaryBlock(c.summaryZh)
+    buildSummaryBlock(c.summaryZh, preview ? expanded => { preview.hidden = !expanded; } : null)
   ].filter(Boolean));
 
   if (c.tags?.length) {
     grow.append(el('div', { class: 'course-tags' }, c.tags.map(t => el('span', { text: t }))));
   }
+  if (preview) grow.append(preview);
 
   const slot = el('div', { class: 'detail-slot' });
   grow.append(slot);
@@ -219,7 +242,10 @@ function buildCard(c) {
 async function renderDetail(course, slot) {
   slot.replaceChildren(el('div', { class: 'skeleton', style: 'height:56px;margin-top:14px' }));
 
-  let detail = detailCache.get(course.id);
+  // 訪客只使用公開課程上的名稱預覽，不請求受保護的講義與作業。
+  let detail = !identity.user
+    ? { allowed: false, materials: [], assignments: [] }
+    : detailCache.get(course.id);
   if (!detail) {
     try {
       detail = await loadCourseDetail(course.id);

@@ -333,6 +333,20 @@ export async function deleteMaterial(courseId, id) {
   await deleteDoc(doc(db, 'courses', courseId, 'materials', id));
 }
 
+/** 管理端將依前台順序排列的前 5 份名稱公開；絕不複製 path、網址或其他講義欄位。 */
+export async function syncMaterialPreview(courseId, materials) {
+  const title = value => typeof value === 'string' && !['null', 'undefined'].includes(value)
+    ? value.trim() : '';
+  const materialPreview = materials.slice(0, 5)
+    .map(m => title(m.unit) || title(m.name) || '未命名講義');
+  const ref = doc(db, 'courses', courseId);
+  const course = await getDoc(ref);
+  if (!course.exists()) return;
+  if (JSON.stringify(course.data().materialPreview) !== JSON.stringify(materialPreview)) {
+    await updateDoc(ref, { materialPreview });
+  }
+}
+
 export async function saveAssignment(courseId, id, data) {
   if (id) { await updateDoc(doc(db, 'courses', courseId, 'assignments', id), data); return id; }
   const ref = await addDoc(collection(db, 'courses', courseId, 'assignments'), data);
