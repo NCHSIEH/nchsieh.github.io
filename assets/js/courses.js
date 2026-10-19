@@ -80,9 +80,18 @@ function buildSummaryBlock(text) {
  * 不依單元分組成手風琴——實際資料常常每份講義的單元都不一樣，
  * 分組後等於一份一個摺疊區塊，反而比不分組還要長。
  */
-function buildFlatFileList(files) {
+function buildFlatFileList(files, all = files) {
+  // 同一單元名稱若對應多個檔案（例如講義＋練習資料＋測例），只顯示單元名稱會看起來一模一樣；
+  // 這時非 PDF 的附件改在單元名稱後補上檔名，學生才分得出來。
+  const baseLabel = f => cleanText(f.unit) || cleanText(f.name) || f.path;
+  const counts = {};
+  all.forEach(f => { const k = baseLabel(f); counts[k] = (counts[k] || 0) + 1; });
   return el('ul', { class: 'file-list' }, files.map(f => {
-    const label = cleanText(f.unit) || cleanText(f.name) || f.path;
+    let label = baseLabel(f);
+    const fname = cleanText(f.name) || String(f.path || '').split('/').pop();
+    if (counts[label] > 1 && fname && fname !== label && !/\.pdf$/i.test(fname)) {
+      label = `${label}｜${fname}`;
+    }
     return el('li', { class: 'file-item' }, [
       el('a', {
         class: 'file-name',
@@ -152,10 +161,10 @@ function buildMaterialsBlock(course, materials) {
     const rest = materials.slice(VISIBLE);
     const tree = el('div', { class: 'dir-tree' }, [
       el('div', { class: 'dir-header', text: `課程講義（${count} 份）` }),
-      buildFlatFileList(head)
+      buildFlatFileList(head, materials)
     ]);
     if (rest.length) {
-      const restList = buildFlatFileList(rest);
+      const restList = buildFlatFileList(rest, materials);
       restList.hidden = true;
       const btn = el('button', {
         class: 'summary-toggle', type: 'button', style: 'margin-top:6px',
