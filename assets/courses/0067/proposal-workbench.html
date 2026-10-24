@@ -340,7 +340,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
     ['irb_contact', '計畫聯絡人及聯絡方式', '參與者有疑問時找誰。', 1, false], ['irb_inst', '執行機構與研究場域', '', 1, false], ['irb_fund', '經費來源', '無外部經費也要寫明。', 1, false], ['irb_period', '預定執行期間', '', 1, false],
     ['irb_review', '建議審查類型及理由', '一般審查／簡易審查／免除審查；理由是什麼，以送審機構判定為準。', 3, false], ['irb_n', '研究對象與預計人數', '', 2, false],
     ['irb_recruit', '招募方式', '由誰、在哪裡、如何邀請；如何避免主管或師生關係造成壓力。', 2, false], ['irb_vuln', '是否納入易受傷害族群', '未成年人、孕婦、無法自行同意者、受雇者或學生等，以及保護措施。', 2, false],
-    ['irb_task', '參與者需要做什麼', '用參與者看得懂的話：做什麼、幾次、多久、在哪裡、是否錄音。', 3, false], ['irb_waive', '是否申請免除知情同意（或免除書面同意）', '是／否／部分；若申請，寫明理由與法規條件（人體研究法第 15 條）。開頭寫「是」時，匯出會以「免除知情同意申請說明」取代同意書。', 2, false], ['irb_withdraw', '撤回同意之方式', '可隨時撤回、怎麼撤回、撤回後資料如何處理。', 2, false],
+    ['irb_task', '參與者需要做什麼', '用參與者看得懂的話：做什麼、幾次、多久、在哪裡、是否錄音。', 3, false], ['irb_waive', '是否申請免除知情同意（或免除書面同意）', '是／否／部分；若申請，寫明理由與法規條件（人體研究法第 12 條第 2 項但書）。開頭寫「是」時，匯出會以「免除知情同意申請說明」取代同意書。', 2, false], ['irb_withdraw', '撤回同意之方式', '可隨時撤回、怎麼撤回、撤回後資料如何處理。', 2, false],
     ['irb_benefit', '對參與者之利益或補助', '沒有直接利益也要寫明；補助金額與方式。', 2, false], ['irb_harm', '可預見之風險與損害救濟', '不適時怎麼處理、申訴管道。', 2, false],
     ['irb_material', '研究材料（資料）保存期限及運用規劃', '保存多久、期滿如何銷毀、不作計畫外用途（人體研究法第 19 條）。', 3, false], ['irb_commercial', '可能衍生之商業利益及其應用之約定', '', 2, false],
     ['irb_ad', '招募說明或文宣（草稿）', '張貼或發放的邀請文字。', 3, false]];
@@ -897,7 +897,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       [{ h: 2, t: '五、利益衝突與 AI 使用' }], para('m7_coi'));
     var wv = v('irb_waive'), fullWaive = /^是/.test(wv) && !/書面/.test(wv.slice(0, 16)), onlineOK = /^是/.test(wv) && /書面/.test(wv.slice(0, 16)), partial = /^部分/.test(wv);
     var consent = fullWaive ? cat([{ pb: true }, { h: 1, t: '四、免除知情同意申請說明' },
-        { note: '依《人體研究法》第 15 條，研究使用之資料已無法辨識個人、對研究對象權益影響極小，且不免除同意將無法進行時，得經審查會核准免除取得同意。以下內容取自 M7 與 IRB 補充資料，請依送審機構之免除同意申請表填寫。' },
+        { note: '依《人體研究法》第 12 條第 2 項但書，屬主管機關公告得免取得同意之研究案件範圍者（如使用已去識別而無法辨識個人之資料），得免取得研究對象同意；是否符合，由審查會認定。以下內容取自 M7 與 IRB 補充資料，請依送審機構之免除同意申請表填寫。' },
         { h: 2, t: '（一）申請免除之理由' }], para('irb_waive'), [{ h: 2, t: '（二）知情同意之處理' }], para('m7_consent'),
         [{ h: 2, t: '（三）研究對象之權益保護' }], para('m7_deid'), [{ p: '研究材料保存期限及運用規劃：' + val('irb_material'), ind: true }],
         [{ pb: true }, { h: 1, t: '五、計畫主持人聲明書' }]) :
@@ -1084,7 +1084,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       irb_harm: '本研究屬最小風險。若參與者在觀察或訪談中感到不適，可隨時暫停或退出；如對研究有疑問或爭議，可聯絡研究聯絡人或〔送審機構 IRB 名稱與電話〕。',
       irb_material: '研究材料為觀察紀錄、問卷、去識別化之交班紀錄與訪談錄音。去識別化資料保存至研究結束後 3 年，期滿以不可回復方式刪除；訪談錄音於逐字稿核對完成後刪除；資料不作本計畫以外之用途，如需另作他用將重新送審並取得同意。',
       irb_commercial: '本研究不涉及商業利益；研究者與 AI 摘要工具廠商無財務關係，研究結果不提供廠商作商業用途。',
-      irb_ad: '【研究參與邀請】本研究想了解長照機構導入 AI 交班摘要工具後，交班時間與紀錄品質的變化。若您是負責交班的護理師或資深照服員，誠摯邀請您參加說明會（時間地點〔　〕）。參與與否由您自行決定，不會影響您的考核與工作。聯絡人：〔研究生姓名〕〔電話／電子郵件〕。'
+      irb_waive: '部分：工作人員簽署書面同意書；交班紀錄涉及住民資料之部分，於機構內去識別化後使用，依《人體研究法》第 12 條第 2 項但書申請免除住民同意，以審查會認定為準。', irb_ad: '【研究參與邀請】本研究想了解長照機構導入 AI 交班摘要工具後，交班時間與紀錄品質的變化。若您是負責交班的護理師或資深照服員，誠摯邀請您參加說明會（時間地點〔　〕）。參與與否由您自行決定，不會影響您的考核與工作。聯絡人：〔研究生姓名〕〔電話／電子郵件〕。'
     };
     for (var k in F) s.f[k] = F[k];
     s.objs = [
@@ -1163,7 +1163,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m5_flow: '一、第 1–2 月：IRB 送審；核准後由機構協助張貼招募說明，有意願者主動聯絡研究者。\n二、第 3–7 月：於機構內安靜空間進行訪談，每次 45–60 分鐘，簽署同意書後全程錄音並撰寫田野筆記。\n三、訪談後 1 週內完成逐字稿，以代號取代姓名與可識別資訊。\n四、第 4–9 月：邊蒐集邊分析，依分析結果調整後續訪談追問。\n五、第 9 月：將初步主題回饋 3–4 位受訪者進行成員檢核。',
       m5_innov: '以質性描述呈現照護人員對 AI 摘要的信任判斷歷程，並以成員檢核確保結果貼近現場，研究成果可直接轉化為機構之核對流程與訓練內容。',
       m6_common: '質性研究不做統計檢定。逐字稿以 ATLAS.ti〔版本〕管理；分析過程保留編碼簿、分析備忘錄與決策紀錄，作為稽核軌跡。',
-      m6_qual: '依 Braun 與 Clarke（2006）主題分析六步驟：熟悉資料、產生初始編碼、尋找主題、檢視主題、定義與命名主題、撰寫報告。前 4 份逐字稿由兩位研究者獨立編碼，比對差異並以協商共識處理，據以建立編碼簿；其餘逐字稿由主要研究者編碼，第二位研究者抽檢。',
+      m6_qual: '依 Braun 與 Clarke（2006）主題分析六步驟：熟悉資料、產生初始編碼、尋找主題、檢視主題、定義與命名主題、撰寫報告。前 4 份逐字稿由兩位研究者獨立編碼，比對差異並以協商共識處理，據以建立編碼簿；其餘逐字稿由主要研究者編碼，第二位研究者抽檢。可信度依 Lincoln 與 Guba（1985）之可信性、可轉移性、可靠性與可確認性四準則規劃（成員檢核、厚實描述、稽核軌跡、反思日誌），結果依 COREQ 32 項報告（Tong et al., 2007）。',
       m7_irb: '本研究將送〔大學或合作機構〕人體研究倫理審查委員會審查，於第 1 月送審，核准後才開始招募。',
       m7_consent: '受訪者於訪談前簽署書面同意書，內容包含錄音同意；受訪者可拒絕錄音而改以筆記記錄。',
       m7_risk: '本研究屬最小風險，但談及工作失誤可能令受訪者不安；訪談中可隨時暫停、跳過問題或退出。受訪內容不會提供給機構主管，受訪與否不影響考核。',
@@ -1198,7 +1198,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       irb_harm: '本研究屬最小風險。若談及工作經驗使您不安，可隨時暫停或退出；如對研究有疑問或爭議，可聯絡研究者或〔送審機構 IRB 名稱與電話〕。',
       irb_material: '研究材料為訪談錄音、逐字稿與田野筆記。錄音於逐字稿核對完成後刪除；去識別化逐字稿保存至研究結束後 3 年，期滿以不可回復方式刪除；不作本計畫以外之用途。',
       irb_commercial: '本研究不涉及商業利益；研究者與 AI 摘要工具廠商無財務關係。',
-      irb_ad: '【邀請您分享使用經驗】想了解您在使用 AI 交班摘要時，怎麼判斷內容可不可信、遇到問題怎麼處理。訪談約 45–60 分鐘，時間地點依您方便，內容保密，不會提供給主管。有意願請聯絡〔研究生姓名〕〔電話／電子郵件〕。'
+      irb_waive: '否。所有受訪者簽署書面同意書。', irb_ad: '【邀請您分享使用經驗】想了解您在使用 AI 交班摘要時，怎麼判斷內容可不可信、遇到問題怎麼處理。訪談約 45–60 分鐘，時間地點依您方便，內容保密，不會提供給主管。有意願請聯絡〔研究生姓名〕〔電話／電子郵件〕。'
     });
     s.objs = [
       { verb: '探討', text: '探討照護人員如何判斷 AI 交班摘要何者可信、何者需回頭查證', hyp: '', analysis: '主題分析（Braun & Clarke 六步驟），歸納判斷歷程之主題', crit: '以 Lincoln 與 Guba 四準則檢核嚴謹度；依 COREQ 報告', sens: '成員檢核、雙人獨立編碼前 4 份逐字稿', exp: '預期呈現照護人員判斷摘要可信度所依據的線索（例如內容是否與自己記憶相符、是否涉及高風險項目），以及「直接採用—部分查證—全部查證」的不同做法。' },
@@ -1297,7 +1297,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       irb_harm: '本研究屬最小風險；若操作 App 感到疲累或困擾可隨時停止。App 不提供用藥建議，若有用藥問題請洽原藥師或醫師；對研究有疑問或爭議，可聯絡研究者或〔送審機構 IRB 名稱與電話〕。',
       irb_material: '研究材料為訪談錄音、操作測試紀錄、問卷與 App 使用日誌。錄音於逐字稿核對完成後刪除；去識別化資料保存至研究結束後 3 年，期滿以不可回復方式刪除；不作本計畫以外之用途。',
       irb_commercial: '本 App 為研究用雛型，不作商業販售；如日後有商業化可能，將另行送審並取得同意。',
-      irb_ad: '【長輩吃藥小幫手 App 試用邀請】想請每天要吃好幾種藥的長輩，幫忙試用並給我們意見，讓 App 更好用。參加者需要聊聊吃藥習慣、試用 App 兩週。有興趣請洽藥局藥師或〔研究生姓名〕〔電話〕。'
+      irb_waive: '否。長者與照顧者均簽署書面同意書。', irb_ad: '【長輩吃藥小幫手 App 試用邀請】想請每天要吃好幾種藥的長輩，幫忙試用並給我們意見，讓 App 更好用。參加者需要聊聊吃藥習慣、試用 App 兩週。有興趣請洽藥局藥師或〔研究生姓名〕〔電話〕。'
     });
     s.objs = [
       { verb: '探討', text: '探討居家多重用藥長者與照顧者對用藥提醒工具之需求', hyp: '', analysis: '需求訪談之主題分析，整理需求清單並以 MoSCoW 排序', crit: '需求清單經 2 位長者確認', sens: '', exp: '預期歸納出提醒方式（聲音、震動、大字）、補記漏服、照顧者通知等需求，作為設計依據。' },
@@ -1386,7 +1386,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m5_innov: '以時間切分驗證模擬上線情境，並同時報告鑑別力、校準度、決策曲線與分組公平性，使模型表現可直接供急診判斷是否值得進一步開發提醒系統。',
       m6_common: '顯著水準 α = .05（雙尾）。缺值以多重插補（在訓練資料內建立插補模型後套用至測試資料）；連續變項標準化參數只由訓練資料計算。AUC 以 DeLong 法計算 95% CI 並比較模型；校準以校準斜率、截距與校準圖呈現。分析以 Python（版本寫明）執行。',
       m7_irb: '本研究將送本院人體研究倫理審查委員會審查，於第 1 月送審，預計申請簡易審查並申請免除知情同意；核准後才申請資料。',
-      m7_consent: '本研究使用既有醫療紀錄之去識別化資料，回溯性分析，對病人權益影響極小且無法逐一取得同意，將依《人體研究法》第 15 條申請免除知情同意，以審查會核准為準。',
+      m7_consent: '本研究使用既有醫療紀錄之去識別化資料，回溯性分析，對病人權益影響極小且無法逐一取得同意，將依《人體研究法》第 12 條第 2 項但書（屬主管機關公告得免取得同意之研究案件範圍）申請免除知情同意，以審查會認定為準。',
       m7_risk: '本研究不接觸病人，主要風險為資料外洩；以去識別化、院內分析環境與權限管控降低風險。',
       m7_deid: '資訊室提供去識別化資料，以研究編號取代病歷號，對照表由資訊室保管、研究者不持有。資料只在院內分析環境處理，結果經檢查無小格數後才帶出；資料保存至研究結束後 3 年後刪除。',
       m7_coi: '研究者與任何廠商無財務關係。生成式 AI 僅用於程式除錯，不輸入任何病人資料。',
@@ -1394,7 +1394,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m9_acad: '提供以臺灣急診資料、時間切分驗證之惡化預測模型證據，並示範依 TRIPOD+AI 完整報告。',
       m9_prac: '若模型表現優於檢傷，可作為急診建置惡化提醒系統的依據（可接續 A 型系統開發）；若不優於檢傷，也能避免投入無效系統。',
       m9_limd: '單一醫學中心資料，未做外部驗證，推論至其他醫院需保守；回溯性資料受紀錄品質影響。',
-      m9_lime: '加護病房床位不足時，部分病人雖需要但未能轉入，可能低估事件；將以「轉入或死亡」做敏感度分析。',
+      m9_lime: '加護病房床位不足時，部分病人雖需要但未能轉入，可能低估事件；將以「轉入或死亡」做敏感度分析。2020–2022 年 COVID-19 疫情期間急診量與病人組成改變，將比較排除疫情年份後之模型表現。',
       m9_train: '參與之碩士生將習得臨床資料前處理、預測模型開發、時間切分驗證與 TRIPOD+AI 報告（教學示意）。',
       m9_output: '預計投稿期刊論文 1 篇、研討會論文 1 篇，並公開分析程式碼（教學示意）。',
       m9_nation: '回應急診壅塞與病人安全之需求，提供急診資料加值運用與惡化預警的實證基礎。',
@@ -1411,7 +1411,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       irb_task: '不適用：病人不需要做任何事；研究只分析已存在的急診紀錄。', irb_withdraw: '不適用個別撤回；若病人事前已表達不同意其資料用於研究，將依本院規定排除。',
       irb_benefit: '病人無直接利益；研究結果可能改善未來急診惡化預警。', irb_harm: '主要風險為資料外洩；如發生資料安全事件，將依本院資安通報程序處理並通報審查會。',
       irb_material: '研究材料為去識別化之急診資料，僅於院內分析環境保存；研究結束後 3 年以不可回復方式刪除，不作本計畫以外之用途。',
-      irb_waive: '是。本研究為回溯性病歷資料研究，資料已去識別化，對病人權益影響極小，且研究涉及數十萬筆紀錄、無法逐一取得同意；依《人體研究法》第 15 條申請免除知情同意，以審查會核准為準。',
+      irb_waive: '是。本研究為回溯性病歷資料研究，資料已去識別化，對病人權益影響極小，且研究涉及數十萬筆紀錄、無法逐一取得同意；依《人體研究法》第 12 條第 2 項但書（屬主管機關公告得免取得同意之研究案件範圍）申請免除知情同意，以審查會認定為準。',
       irb_ad: '不適用：本研究不招募參與者。'
     };
     Object.assign(F, irbPeople('資料前處理、建模與驗證'));
@@ -1438,7 +1438,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
   function caseC() {
     var F = {
       s1_1: '大學新生適應期憂鬱與焦慮症狀常見，諮商資源有限，多數學生不會主動求助。',
-      s1_2: '北部某大學兩個學院之大一新生（各約 80 人）。',
+      s1_2: '北部某大學兩個學院之大一新生（各約 104 人）。',
       s1_3: 'AI 情緒日記 App：每日記錄情緒並獲得 AI 回饋與自助練習建議，為期 8 週。',
       s1_4: '憂鬱症狀 PHQ-9（主要）；焦慮症狀 GAD-7（次要）。',
       s1_5: '使用 AI 情緒日記 8 週後，新生的憂鬱症狀是否比對照組改善更多？',
@@ -1467,7 +1467,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m5_reject: '不採個別隨機分派，因同一學院學生常同班上課，介入內容容易擴散至對照組；不採單組前後測，因新生適應期症狀可能自然變化，無法排除時間效應。',
       m5_site: '研究場域為北部某大學，學務處與兩學院已同意協助招募（附錄二）。研究對象為兩學院 115 學年度大一新生。',
       m5_incl: '納入條件：115 學年度大一新生、年滿 18 歲、具智慧型手機。排除條件：前測 PHQ-9 第 9 題作答 1 分以上或總分 20 分以上者（立即轉介諮商中心，不納入分析）；目前正接受精神科治療者。',
-      m5_sample: '以 ANCOVA 之兩組比較近似估算：效果量 d = 0.5（參考 Fitzpatrick et al., 2017 之中效果）、α = .05 雙尾、檢定力 .80，每組需 64 人；預估流失 20%，每組招募 80 人（以 G*Power 3.1 核對；Faul et al., 2007）。',
+      m5_sample: '以兩組比較估算（ANCOVA 調整前測可再提高檢定力，此為保守估計）：效果量 d = 0.44（Fitzpatrick 等人［2017］報告之組間效果量）、α = .05 雙尾、檢定力 .80，每組需 83 人；預估流失 20%，每組招募 104 人，共 208 人（以 G*Power 3.1 核對；Faul et al., 2007）。',
       m5_tool: '一、PHQ-9 中文版 9 題，0–3 分計分（Kroenke et al., 2001）。\n二、GAD-7 中文版 7 題，0–3 分計分（Spitzer et al., 2006）。\n三、基本資料：性別、是否住宿、過去求助經驗。\n四、App 後台紀錄：使用天數、日記則數、練習完成次數。\n五、不良事件紀錄表：使用期間情緒惡化或求助紀錄。',
       m5_flow: '一、第 1–2 月：IRB 送審；核准後於新生說明會說明研究，有意願者簽署同意書。\n二、第 3 月：兩組線上前測；介入組安裝 App 並完成 10 分鐘操作說明。\n三、第 3–5 月：介入組使用 8 週，對照組接受常規服務；每週由後台檢查使用情形。\n四、第 5 月：兩組後測；第 6 月追蹤測量。\n五、對照組於研究結束後可免費使用 App。資料以研究編號連結三次測量。',
       m5_innov: '以學院為單位分派降低擴散，並結合後台使用紀錄分析劑量反應，同時建立高分轉介與不良事件監測流程。',
@@ -1477,10 +1477,10 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m7_risk: '屬最小風險；可能因填寫量表回想負面情緒。PHQ-9 第 9 題有作答者，由諮商中心心理師 24 小時內聯繫；App 內設求助專線按鈕。可隨時退出。',
       m7_deid: '問卷以研究編號儲存，對照表由研究生加密保管；App 後台只匯出研究編號與使用次數，不匯出日記內容。資料保存至研究結束後 3 年後刪除。',
       m7_coi: '研究者與 App 廠商無財務關係，廠商不參與資料分析與結果解讀。生成式 AI 僅用於英文潤稿，不輸入參與者資料。',
-      m8_feas: '場域：學務處與兩學院已同意（附錄二）。樣本：兩學院新生各約 300 人，招募 80 人可行。轉介：諮商中心已同意高分轉介流程。時間：介入與追蹤共 3 個月，保留兩個月緩衝。',
+      m8_feas: '場域：學務處與兩學院已同意（附錄二）。樣本：兩學院新生各約 300 人，每院招募 104 人可行。轉介：諮商中心已同意高分轉介流程。時間：介入與追蹤共 3 個月，保留兩個月緩衝。',
       m9_acad: '提供國內大學新生使用 AI 情緒日記之同期對照成效證據，補足國外短期研究之不足。',
       m9_prac: '供學務處決定是否全面推廣，並依使用紀錄提出建議的使用頻率與推廣方式。',
-      m9_limd: '非隨機分派，兩學院學生特質可能不同，雖以共變項調整仍無法排除未測量干擾；單一學校，推論需保守。',
+      m9_limd: '非隨機分派，兩學院學生特質可能不同，雖以共變項調整仍無法排除未測量干擾；以學院為分派單位只有兩個群集，無法估計群集內相關，學院效應與介入效應無法完全分離，結果需保守解讀；單一學校，推論需保守。',
       m9_lime: '學生使用 App 的遵從度可能逐週下降；將以使用天數做劑量反應分析，並於後測詢問停用原因。',
       m9_train: '參與之碩士生將習得準實驗設計、量表施測、混合模型分析與心理衛生研究倫理（教學示意）。',
       m9_output: '預計投稿期刊論文 1 篇、研討會論文 1 篇（教學示意）。',
@@ -1489,11 +1489,11 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m10_title: 'AI 情緒日記對大學新生憂鬱與焦慮症狀之成效：準實驗研究',
       m10_title_en: 'Effects of an AI-Assisted Mood Diary on Depressive and Anxiety Symptoms among First-Year University Students: A Quasi-Experimental Study',
       m10_kw: '大學新生、憂鬱、焦慮、人工智慧、數位心理健康',
-      m10_abs: '大學新生適應期憂鬱與焦慮症狀常見，但多數學生不會主動求助。本研究旨在檢驗 AI 情緒日記 App 對大學新生憂鬱與焦慮症狀之成效。本研究採兩組前後測準實驗設計，以北部某大學兩學院大一新生為對象，介入組使用 AI 情緒日記 8 週，對照組接受常規服務，每組預計 80 人，於前測、後測與 1 個月追蹤測量 PHQ-9 與 GAD-7，以 ANCOVA 與線性混合模型分析。預期介入組憂鬱症狀改善大於對照組，可作為學務處推廣校園數位心理支持工具之依據。',
+      m10_abs: '大學新生適應期憂鬱與焦慮症狀常見，但多數學生不會主動求助。本研究旨在檢驗 AI 情緒日記 App 對大學新生憂鬱與焦慮症狀之成效。本研究採兩組前後測準實驗設計，以北部某大學兩學院大一新生為對象，介入組使用 AI 情緒日記 8 週，對照組接受常規服務，每組預計 104 人，於前測、後測與 1 個月追蹤測量 PHQ-9 與 GAD-7，以 ANCOVA 與線性混合模型分析。預期介入組憂鬱症狀改善大於對照組，可作為學務處推廣校園數位心理支持工具之依據。',
       m10_refs: 'Auerbach, R. P., Mortier, P., Bruffaerts, R., Alonso, J., Benjet, C., Cuijpers, P., et al. (2018). WHO World Mental Health Surveys International College Student Project: Prevalence and distribution of mental disorders. Journal of Abnormal Psychology, 127(7), 623–638.\nDes Jarlais, D. C., Lyles, C., Crepaz, N., & the TREND Group. (2004). Improving the reporting quality of nonrandomized evaluations of behavioral and public health interventions: The TREND statement. American Journal of Public Health, 94(3), 361–366.\nFaul, F., Erdfelder, E., Lang, A.-G., & Buchner, A. (2007). G*Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences. Behavior Research Methods, 39(2), 175–191.\nFitzpatrick, K. K., Darcy, A., & Vierhile, M. (2017). Delivering cognitive behavior therapy to young adults with symptoms of depression and anxiety using a fully automated conversational agent (Woebot): A randomized controlled trial. JMIR Mental Health, 4(2), e19.\nHoffmann, T. C., Glasziou, P. P., Boutron, I., Milne, R., Perera, R., Moher, D., et al. (2014). Better reporting of interventions: Template for intervention description and replication (TIDieR) checklist and guide. BMJ, 348, g1687.\nKroenke, K., Spitzer, R. L., & Williams, J. B. W. (2001). The PHQ-9: Validity of a brief depression severity measure. Journal of General Internal Medicine, 16(9), 606–613.\nSpitzer, R. L., Kroenke, K., Williams, J. B. W., & Löwe, B. (2006). A brief measure for assessing generalized anxiety disorder: The GAD-7. Archives of Internal Medicine, 166(10), 1092–1097.\nVickers, A. J., & Altman, D. G. (2001). Analysing controlled trials with baseline and follow up measurements. BMJ, 323(7321), 1123–1124.',
       irb_inst: '〔大學名稱〕〔系所〕；研究場域：〔大學名稱〕甲、乙兩學院', irb_period: '2026 年 9 月至 2027 年 8 月（自 IRB 核准日起執行）',
       irb_review: '建議簡易審查：以問卷與 App 使用紀錄蒐集資料，屬最小風險；已訂定高分轉介流程。是否符合簡易審查範圍，以送審機構之判定為準。',
-      irb_n: '大一新生 160 人（介入組、對照組各 80 人）。',
+      irb_n: '大一新生 208 人（介入組、對照組各 104 人）。',
       irb_recruit: '由研究生於新生說明會說明研究並發放邀請說明，有意願者自行掃描報名；授課教師與導師不參與招募與同意過程，參與與否不影響成績。',
       irb_vuln: '參與者為學生，屬可能受師生關係影響之族群：招募與同意由非授課之研究生進行，教師不知悉誰參與；未滿 18 歲者不納入。',
       irb_task: '填 3 次線上問卷（開始、8 週後、12 週後），每次約 10 分鐘。介入組：每天用 App 寫幾句心情日記，約 5 分鐘，持續 8 週。對照組：照常生活，研究結束後可免費使用 App。',
@@ -1517,9 +1517,9 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       bias: [Bi('選擇偏差（非隨機分派）', '兩學院學生特質可能不同', '比較基線 SMD；以前測與背景變項為共變項'), Bi('擴散效應', '對照組學生可能從介入組同學得知或下載 App', '以學院為單位分派；後測詢問對照組是否使用類似工具'),
         Bi('流失偏差', '症狀較重或較輕者較易流失', '意圖治療分析；比較流失者與完成者基線'), Bi('社會期許偏差', '學生可能回答較正向', '問卷匿名化（研究編號）；由非授課人員施測')],
       gantt: Gt(12, [['IRB 送審與核准', 1, 2], ['說明會與招募', 3, 3], ['前測', 3, 3], ['介入 8 週', 3, 5], ['後測與追蹤', 5, 6], ['資料分析', 7, 8], ['論文撰寫', 8, 10], ['緩衝（招募延長、補測）', 10, 11], ['論文口試', 12, 12]]),
-      risks: [Rk('招募不足', '說明會後報名少於 60 人／組', 'M3', '增加班級宣導與第二場說明會；延長招募 2 週'), Rk('使用遵從度低', '第 2 週平均使用天數低於 3 天／週', 'M3', '每週推播提醒；後台提醒研究生追蹤'), Rk('高風險個案', 'PHQ-9 第 9 題有作答', '每次測量', '24 小時內由心理師聯繫，依校園危機流程處理')],
-      kpi: [Kp('PHQ-9 調整後組間差（成果指標）', 'ANCOVA 調整後平均差，第 8 週計算', '前測平均（第 3 月取得）', '介入組較對照組低；具體目標依前測結果訂定'), Kp('完成後測人數（產出指標）', '兩組完成第 8 週後測人數', '0', '每組 64 人以上')],
-      ss: { kind: 'two', eff: 0.5, alpha: 0.05, tails: 2, power: 0.8, drop: 20, moe: 0.05, basis: '參考 Fitzpatrick et al.（2017）之中效果' }
+      risks: [Rk('招募不足', '說明會後報名少於 90 人／組', 'M3', '增加班級宣導與第二場說明會；延長招募 2 週'), Rk('使用遵從度低', '第 2 週平均使用天數低於 3 天／週', 'M3', '每週推播提醒；後台提醒研究生追蹤'), Rk('高風險個案', 'PHQ-9 第 9 題有作答', '每次測量', '24 小時內由心理師聯繫，依校園危機流程處理')],
+      kpi: [Kp('PHQ-9 調整後組間差（成果指標）', 'ANCOVA 調整後平均差，第 8 週計算', '前測平均（第 3 月取得）', '介入組較對照組低；具體目標依前測結果訂定'), Kp('完成後測人數（產出指標）', '兩組完成第 8 週後測人數', '0', '每組 83 人以上')],
+      ss: { kind: 'two', eff: 0.44, alpha: 0.05, tails: 2, power: 0.8, drop: 20, moe: 0.05, basis: 'Fitzpatrick et al.（2017）報告之組間效果量' }
     });
   }
 
@@ -1557,8 +1557,8 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m5_site: '研究對象為衛福部公開之住宿式長照機構名冊所列機構，由機構主管填答；名冊為公開資料，研究者已下載並整理聯絡方式（附錄二）。',
       m5_incl: '納入條件：名冊中調查期間仍營運之住宿式長照機構。排除條件：調查期間停業或歇業者；同一法人多家機構者，每家機構各自填答。',
       m5_sample: '依信心水準 95%、可容許誤差 ±0.05、預期比例 p = 0.5 估算，需 385 家；若母群約 1,100 家（教學示意，以實際名冊為準），經有限母群校正需約 286 家。名冊全數邀請，預期回收率 30% 以上。',
-      m5_tool: '一、機構基本資料：床數、權屬、地區、資訊人員、補助經驗（8 題）。\n二、智慧照護設備導入清單：8 類設備，每類勾選「使用中／曾用已停用／未曾使用」。\n三、主管態度量表：改編自 TAM 有用性與易用性（Davis, 1989），6 題 7 點量尺，經 5 位專家內容效度檢驗，以 I-CVI ≥ .78、S-CVI/Ave ≥ .90 為標準（Polit & Beck, 2006）。\n四、導入障礙開放題 1 題。',
-      m5_flow: '一、第 1–2 月：問卷初稿、5 位專家內容效度；IRB 送審。\n二、第 3 月：預試 30 家機構，計算 Cronbach\'s α 並修正題意。\n三、第 4–6 月：正式施測，以電子郵件與公文寄送線上問卷，依調整式設計法於第 1、2、4 週提醒，第 5 週電話提醒未回覆者（Dillman et al., 2014）。\n四、問卷不收集填答者姓名；機構代碼僅用於避免重複填答，分析前刪除。',
+      m5_tool: '一、機構基本資料：床數、權屬、地區、資訊人員、補助經驗（8 題）。\n二、智慧照護設備導入清單：8 類設備，每類勾選「使用中／曾用已停用／未曾使用」。\n三、主管態度量表：改編自 TAM 有用性與易用性（Davis, 1989），6 題 7 點量尺，經 6 位專家內容效度檢驗，以 I-CVI ≥ .78、S-CVI/Ave ≥ .90 為標準（Polit & Beck, 2006；專家 5 位以下時 I-CVI 須為 1.00）。\n四、導入障礙開放題 1 題。',
+      m5_flow: '一、第 1–2 月：問卷初稿、6 位專家內容效度；IRB 送審。\n二、第 3 月：預試 30 家機構，計算 Cronbach\'s α 並修正題意。\n三、第 4–6 月：正式施測，以電子郵件與公文寄送線上問卷，依調整式設計法於第 1、2、4 週提醒，第 5 週電話提醒未回覆者（Dillman et al., 2014）。\n四、問卷不收集填答者姓名；機構代碼僅用於避免重複填答，分析前刪除。',
       m5_innov: '以公開名冊全數邀請並採多次提醒提高代表性，同時以權重校正回收樣本與母群在地區與權屬上的差異。',
       m6_common: '顯著水準 α = .05（雙尾）。導入比例報 95% CI，並依名冊之地區與權屬計算事後分層權重。相關因素以多元邏輯斯迴歸分析，報調整後 OR 與 95% CI；導入類數以卜瓦松或負二項迴歸分析。比較回收與未回收機構之地區、權屬與規模，評估無回應偏差。分析以 R（版本寫明）執行。',
       m6_qual: '導入障礙開放題以內容分析歸類，計算各類出現次數。',
@@ -1716,7 +1716,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m1_new: 'Abd-Alrazaq 等人（2020）的系統性回顧與統合分析指出，聊天機器人可能改善憂鬱症狀，但納入研究少且偏誤風險高；此後大型語言模型興起，新試驗陸續發表，需要更新證據。',
       m1_time: '生成式 AI 聊天機器人近年快速普及，新的隨機試驗持續發表，證據需要更新整合，作為採用決策的依據。',
       m1_stmt: '因此，本研究擬以系統性回顧與統合分析，整合 AI 聊天機器人介入對憂鬱症狀之成效。',
-      m2_pico: 'P：有憂鬱症狀之成人或青少年｜I：AI 聊天機器人心理介入｜C：等待名單、常規照護、心理衛教資料等非聊天機器人對照｜O：憂鬱症狀（主要）、焦慮症狀與退出率（次要）｜S：隨機對照試驗',
+      m2_pico: 'P：有憂鬱症狀之成人或青少年｜I：AI 聊天機器人心理介入｜C：等待名單、常規照護、心理衛教資料等非聊天機器人對照｜O：介入結束時之憂鬱症狀｜S：隨機對照試驗',
       m2_search: '資料庫：PubMed、Embase、CINAHL、Cochrane CENTRAL、PsycINFO、華藝。\nPubMed 範例：（chatbot*[tiab] OR "conversational agent*"[tiab] OR "large language model*"[tiab] OR "Artificial Intelligence"[Mesh]）AND（"Depression"[Mesh] OR depress*[tiab]）AND（randomized controlled trial[pt] OR randomi*[tiab]）\n不限語言，2000 年以後；另檢索 ClinicalTrials.gov 與納入研究之參考文獻。完整檢索式、檢索日期與筆數見附錄一（教學示意：請以自己實際執行的檢索為準）。',
       m2_body: '一、既有回顧。Abd-Alrazaq 等人（2020）回顧聊天機器人用於心理健康之研究，憂鬱症狀之合併效果傾向改善，但證據確定性低。對本研究的意義：需納入新試驗並完整評估偏誤。\n二、代表性試驗。Fitzpatrick 等人（2017）的隨機試驗顯示，大學生使用對話機器人兩週後憂鬱症狀改善優於對照，但樣本小、追蹤短。對本研究的意義：要依追蹤時間與對照類型做次群組分析。\n三、方法學。系統性回顧依 PRISMA 2020 報告（Page et al., 2021）與 Cochrane 手冊（Higgins et al., 2023）執行；隨機試驗以 RoB 2 評估偏誤（Sterne et al., 2019），異質性以 I² 呈現（Higgins & Thompson, 2002），證據確定性以 GRADE 評等（Guyatt et al., 2008）。',
       m2_known: '既有回顧顯示聊天機器人可能改善憂鬱症狀（Abd-Alrazaq et al., 2020），但納入研究少、偏誤風險高。',
@@ -1800,7 +1800,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m1_stmt: '因此，本研究擬以全民健保資料，探討 50 歲以上成人聽力損失與日後失智症風險之關聯。',
       m2_pico: 'P：50 歲以上、index 日前無失智症之成人｜E：新診斷聽力損失｜C：依年齡、性別、index 年 1:4 配對之無聽損者｜O：新發生失智症（主要）；死亡為競爭風險',
       m2_search: 'PubMed：（"Hearing Loss"[Mesh] OR "hearing impairment"[tiab]）AND（"Dementia"[Mesh] OR dementia[tiab] OR "cognitive decline"[tiab]）AND（cohort[tiab] OR "Cohort Studies"[Mesh]）\n華藝：（聽力損失 OR 聽損）AND（失智 OR 認知）\n限制：2005 年以後、中英文；檢索日期與篩選流程見附錄一（教學示意：請以自己實際執行的檢索為準）。',
-      m2_body: '一、聽損與失智之關聯。Lin 等人（2011）追蹤美國社區長者，發現基線聽損與日後失智風險呈劑量反應關係；Livingston 等人（2020）綜整證據，將聽損列為可改變風險因子。對本研究的意義：以本土資料估計風險，並探討是否有劑量反應（以就醫次數或助聽器處方為代理）。\n二、健保資料之優勢與限制。全民健保資料涵蓋近全體國民，適合長期世代研究（Hsieh et al., 2019），但診斷碼效度與未測量干擾是主要限制。\n三、方法學。以目標試驗模擬框定研究設計（Hernán & Robins, 2016），避免不死時間偏誤（Suissa, 2008）；以傾向分數方法控制可測量干擾（Austin, 2011），以 E-value 評估未測量干擾之影響（VanderWeele & Ding, 2017）；報告依 RECORD（Benchimol et al., 2015）。',
+      m2_body: '一、聽損與失智之關聯。Lin 等人（2011）追蹤美國社區長者，發現基線聽損與日後失智風險呈劑量反應關係；Livingston 等人（2020）綜整證據，將聽損列為可改變風險因子。對本研究的意義：以本土資料估計風險，並檢視結果在不同性別與年齡層是否一致。\n二、健保資料之優勢與限制。全民健保資料涵蓋近全體國民，適合長期世代研究（Hsieh et al., 2019），但診斷碼效度與未測量干擾是主要限制。\n三、方法學。以目標試驗模擬框定研究設計（Hernán & Robins, 2016），避免不死時間偏誤（Suissa, 2008）；以傾向分數方法控制可測量干擾（Austin, 2011），以 E-value 評估未測量干擾之影響（VanderWeele & Ding, 2017）；報告依 RECORD（Benchimol et al., 2015）。',
       m2_known: '國外世代研究已顯示聽損與日後失智風險相關（Lin et al., 2011；Livingston et al., 2020）。',
       m2_unknown: '然而，以臺灣全民健保資料、控制共病與死亡競爭風險，並以目標試驗模擬框定之本土世代證據仍不足。',
       m2_worth: '此缺口使聽力篩檢與輔具政策缺乏本土效益估計依據；本研究提供本土風險估計與敏感度分析。',
@@ -1813,14 +1813,14 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m5_design: '本研究採回溯性配對世代研究（H 型：次級資料研究），以目標試驗模擬框定設計，依 RECORD 報告（Benchimol et al., 2015）。',
       m5_reject: '不採病例對照研究，因難以確立暴露早於結果之時序；不採橫斷式研究，因無法估計發生率與風險比。',
       m5_site: '資料來源為衛生福利資料科學中心之全民健保資料（含門住診、承保與死因檔），研究者將於 IRB 核准後提出申請，並於中心分析環境處理（附錄二：申請流程與預估時程）。',
-      m5_incl: '納入：2016–2018 年 50 歲以上，符合聽力損失定義者為暴露組；依年齡、性別、index 年 1:4 配對無聽損者為對照組。排除：index 日前已有失智症、帕金森氏症或腦部腫瘤診斷者；index 日前投保不滿 1 年者；index 日後 1 年內發生失智症者（主分析保留，敏感度分析排除）。',
+      m5_incl: '納入：2016–2018 年 50 歲以上，符合聽力損失定義者為暴露組；依年齡、性別、index 年 1:4 配對無聽損者為對照組。排除：index 日前已有失智症、帕金森氏症或腦部腫瘤診斷者；index 日前投保不滿 1 年者。另於敏感度分析排除 index 日後 1 年內發生失智症者（主分析保留）。',
       m5_sample: '以 Schoenfeld（1983）公式估算：HR = 1.2、α = .05 雙尾、檢定力 .80、暴露組比例 20%（1:4 配對），需約 1,476 件失智事件；預估 8 年累積發生率約 8%，需約 18,500 人。全民健保資料可提供遠高於此之樣本（教學示意：請以中心資料估計重新計算）。',
-      m5_tool: '一、代碼表：暴露、結果、排除條件與共變項之 ICD-10-CM 代碼與時間窗。\n二、Charlson 共病指數（Charlson et al., 1987）。\n三、分析軟體：SAS 9.4 或 R（依中心環境，版本寫明）。\n四、RECORD 清單逐項對照。',
+      m5_tool: '一、代碼表：暴露、結果、排除條件與共變項之 ICD-10-CM 代碼與時間窗；健保於 2016 年改用 ICD-10-CM，2016 年 index 者之回溯期（2015 年）以對應之 ICD-9-CM 代碼定義，並以官方對照表核對。\n二、Charlson 共病指數（Charlson et al., 1987）。\n三、分析軟體：SAS 9.4 或 R（依中心環境，版本寫明）。\n四、RECORD 清單逐項對照。',
       m5_flow: '一、第 1–2 月：IRB 送審並申請免除知情同意。\n二、第 2–4 月：核准後向衛生福利資料科學中心申請資料（第 2 月即送件）。\n三、第 5–6 月：於中心環境建立世代、配對與代碼定義。\n四、第 7–9 月：主要分析與敏感度分析。\n五、結果依中心規定遮蔽小格數，經審查後才帶出。',
       m5_innov: '以目標試驗模擬框定設計，並同時處理不死時間偏誤、死亡競爭風險與未測量干擾（E-value）。',
       m6_common: '顯著水準 α = .05（雙尾）。報每千人年發生率；以 Cox 比例風險模型估計調整後 HR 與 95% CI，檢查比例風險假設；以 Fine–Gray 模型處理死亡競爭風險（Fine & Gray, 1999）。以傾向分數 IPTW 為次要分析，SMD < 0.1 視為平衡。敏感度分析：排除 index 後 1 年內事件、改用較嚴格的失智定義、計算 E-value。分析以 SAS 或 R 執行。',
       m7_irb: '本研究將送〔大學〕研究倫理審查委員會審查，於第 1 月送審，預計簡易審查並申請免除知情同意；核准後才向衛生福利資料科學中心申請資料。',
-      m7_consent: '本研究使用加密去識別化之全民健保資料，無法辨識個人且無法逐一取得同意，將依《人體研究法》第 15 條申請免除知情同意，以審查會核准為準。',
+      m7_consent: '本研究使用加密去識別化之全民健保資料，無法辨識個人且無法逐一取得同意，將依《人體研究法》第 12 條第 2 項但書（屬主管機關公告得免取得同意之研究案件範圍）申請免除知情同意，以審查會認定為準。',
       m7_risk: '本研究不接觸個人，主要風險為資料外洩；資料僅於衛生福利資料科學中心環境分析，依中心規定管理。',
       m7_deid: '資料由中心加密去識別化提供，研究者無法辨識個人；只在中心環境分析，結果經中心審查並遮蔽小格數後才帶出。依中心規定期限保存與銷毀。',
       m7_coi: '研究者與任何助聽器廠商無財務關係。生成式 AI 僅用於英文潤稿，不輸入任何資料。',
@@ -1845,7 +1845,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       irb_task: '不適用：不需要任何人做任何事；研究只分析已存在的健保資料。', irb_withdraw: '不適用個別撤回：資料已加密去識別化，研究者無法辨識個人。',
       irb_benefit: '個人無直接利益；研究結果可能促進聽損照護與失智預防政策。', irb_harm: '主要風險為資料外洩；資料僅於衛生福利資料科學中心環境處理，依中心規定管理。',
       irb_material: '研究材料為中心環境中之分析資料與帶出之彙總結果；依中心規定期限保存與銷毀，不作本計畫以外之用途。',
-      irb_waive: '是。本研究使用加密去識別化之全民健保資料，無法辨識個人，且無法逐一取得同意，對個人權益影響極小；依《人體研究法》第 15 條申請免除知情同意，以審查會核准為準。',
+      irb_waive: '是。本研究使用加密去識別化之全民健保資料，無法辨識個人，且無法逐一取得同意，對個人權益影響極小；依《人體研究法》第 12 條第 2 項但書（屬主管機關公告得免取得同意之研究案件範圍）申請免除知情同意，以審查會認定為準。',
       irb_ad: '不適用：本研究不招募參與者。'
     };
     Object.assign(F, irbPeople('資料申請、世代建立與統計分析'));
@@ -1969,13 +1969,13 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       s1_9: '提供可推廣之 CPR 即時回饋訓練工具與成效證據。',
       m1_scene: '高品質 CPR 是心跳停止病人存活的關鍵，美國心臟學會指引建議按壓深度與速率須達標並盡量減少中斷（Panchal et al., 2020）。護理學生完成 CPR 課程後，按壓品質常無法持續達標。',
       m1_gap: '現行訓練由教師目測糾正，一位教師同時面對多位學生，難以即時、客觀地指出每次按壓的深度與速率問題；市售回饋假人價格高，學校數量有限。',
-      m1_new: 'Kirkbright 等人（2014）的系統性回顧與統合分析顯示，視聽回饋裝置可改善訓練中的按壓品質；以手機鏡頭與姿勢辨識提供即時回饋的方式成本較低，但需要先確認其可用性與準確度。',
+      m1_new: 'Nicolau 等人（2024）的系統性回顧與統合分析顯示，以矯正回饋裝置訓練，按壓品質整體優於無回饋訓練，但證據確定性低、優勢隨時間縮小；以手機鏡頭與姿勢辨識提供即時回饋的方式成本較低，但需要先確認其可用性與準確度。',
       m1_time: '本校正更新模擬教學設備，需要低成本且可同時讓多組學生使用的回饋工具；本研究可在採購前提供可用性與成效證據。',
       m1_stmt: '因此，本研究擬開發 AI 即時回饋 CPR 訓練系統，並以隨機對照試驗評估其對按壓品質之成效。',
       m2_pico: '第一階段｜P：護理學生與 CPR 教師｜I：AI 即時回饋系統｜O：SUS、任務完成率、回饋準確度。第二階段｜P：護理系二年級學生｜I：AI 即時回饋訓練｜C：教師指導訓練｜O：按壓深度與速率皆達標比例（主要）、中斷時間（次要）',
       m2_search: 'PubMed：（"Cardiopulmonary Resuscitation"[Mesh] OR CPR[tiab]）AND（feedback[tiab] OR "real-time"[tiab]）AND（"Students, Nursing"[Mesh] OR training[tiab] OR "Simulation Training"[Mesh]）\n華藝：（心肺復甦術 OR CPR）AND（回饋）AND（訓練 OR 學生）\n限制：2010 年以後、中英文；檢索日期與篩選流程見附錄一（教學示意：請以自己實際執行的檢索為準）。',
-      m2_body: '一、高品質 CPR 的標準。美國心臟學會 2020 年指引明定成人按壓深度至少 5 公分、速率每分鐘 100–120 次（Panchal et al., 2020）。對本研究的意義：以這兩項作為主要結果的判定標準。\n二、回饋裝置的證據。Kirkbright 等人（2014）統合隨機與非隨機試驗，顯示視聽回饋可改善訓練中的按壓深度與速率。對本研究的意義：新系統需證明至少與教師指導同樣有效，且可用性良好。\n三、開發與評估方法。第一階段依設計科學研究法（Peffers et al., 2007），以啟發式評估（Nielsen, 1993）與 SUS（Brooke, 1996）評估；第二階段依 CONSORT 2010 報告隨機試驗（Schulz et al., 2010），介入依 TIDieR 描述（Hoffmann et al., 2014）。',
-      m2_known: '既有研究已顯示回饋裝置可改善訓練中的按壓品質（Kirkbright et al., 2014），且已有明確的品質標準（Panchal et al., 2020）。',
+      m2_body: '一、高品質 CPR 的標準。美國心臟學會 2020 年指引明定成人按壓深度至少 5 公分、速率每分鐘 100–120 次（Panchal et al., 2020）。對本研究的意義：以這兩項作為主要結果的判定標準。\n二、回饋裝置的證據。Nicolau 等人（2024）統合訓練研究，發現使用矯正回饋裝置者按壓表現較佳，但多數試驗偏誤風險偏高、3 個月後優勢縮小。對本研究的意義：除訓練後立即測試，也要做保留測試，並嚴謹控制偏誤。\n三、開發與評估方法。第一階段依設計科學研究法（Peffers et al., 2007），以啟發式評估（Nielsen, 1993）與 SUS（Brooke, 1996）評估；第二階段依 CONSORT 2010 報告隨機試驗（Schulz et al., 2010），介入依 TIDieR 描述（Hoffmann et al., 2014）。',
+      m2_known: '既有研究已顯示矯正回饋裝置可改善訓練中的按壓表現（Nicolau et al., 2024），且已有明確的品質標準（Panchal et al., 2020）。',
       m2_unknown: '然而，以手機鏡頭姿勢辨識提供即時回饋的低成本系統，其可用性與相較教師指導之成效仍缺乏證據。',
       m2_worth: '此缺口使學校無法判斷是否值得採用；本研究以兩階段研究同時回答「好不好用」與「有沒有效」。',
       m2_theory: '第一階段依設計科學研究法（Peffers et al., 2007）；第二階段以回饋促進技能學習之觀點，預期即時、具體的回饋能讓學生立即修正動作，提升按壓品質。',
@@ -1988,7 +1988,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m5_reject: '不直接進行隨機試驗，因系統可用性與回饋準確度未確認前，成效結果無法解讀；第二階段不採單組前後測，因練習本身就會改善表現，需要對照組。',
       m5_site: '研究場域為北部某科技大學護理系模擬教室，系主任已同意（附錄二）。第一階段：CPR 教師 3 位、學生 5 人（每輪）；第二階段：護理系二年級學生 62 人。',
       m5_incl: '納入：護理系二年級、已完成基本救命術課程之學生。排除：已取得 CPR 指導員資格者；有手腕或背部受傷無法按壓者。第一階段參與者不參加第二階段。',
-      m5_sample: '第二階段以兩組比較估算：效果量 d = 0.8（參考 Kirkbright et al., 2014 之回饋效果）、α = .05 雙尾、檢定力 .80，每組 26 人；預估流失 15%，每組招募 31 人，共 62 人（以 G*Power 3.1 核對；Faul et al., 2007）。',
+      m5_sample: '第二階段以兩組比較估算：效果量 d = 0.8（回饋裝置研究多報告明顯優勢，Nicolau et al., 2024；惟證據確定性低）、α = .05 雙尾、檢定力 .80，每組 26 人；預估流失 15%，每組招募 31 人，共 62 人（以 G*Power 3.1 核對；Faul et al., 2007）。若改以 d = 0.6 估算需每組 45 人，屆時將擴大招募至三年級學生。',
       m5_tool: '一、回饋假人感測器：記錄按壓深度、速率與中斷時間（作為客觀結果與系統準確度比對標準）。\n二、AI 即時回饋系統：手機鏡頭姿勢辨識，聲音與畫面提示。\n三、SUS 中文版 10 題（Brooke, 1996）。\n四、啟發式評估：Nielsen 十原則，嚴重度 0–4。\n五、基本資料：性別、身高體重、過去 CPR 經驗。',
       m5_flow: '一、第 1–2 月：IRB 送審；需求訪談 3 位教師。\n二、第 2–5 月：開發雛型；第 3、5 月各一輪形成性評估，同時以回饋假人比對系統回饋準確度。\n三、第 6 月：招募第二階段學生，前測 2 分鐘按壓後以電腦亂數 1:1 分派（研究助理保管分派表）。\n四、第 6–7 月：兩組各接受 2 次、每次 30 分鐘訓練。\n五、第 7–8 月：訓練後立即測試與 4 週後保留測試；評估者不知分組。',
       m5_innov: '以低成本手機姿勢辨識取代昂貴回饋假人，並先驗證準確度與可用性再進行隨機試驗，避免把「不好用」誤判為「沒效果」。',
@@ -2011,7 +2011,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m10_title_en: 'Development and Effectiveness of an AI-Based Real-Time Feedback System for CPR Training: Design Science Research and a Randomized Controlled Trial',
       m10_kw: '心肺復甦術、即時回饋、護理教育、隨機對照試驗、可用性',
       m10_abs: '護理學生 CPR 訓練後按壓品質常不達標，教師難以即時糾正多位學生。本研究旨在開發 AI 即時回饋 CPR 訓練系統，並評估其成效。第一階段以設計科學研究法開發以手機鏡頭辨識按壓動作之系統，經兩輪形成性評估修正，並與回饋假人比對準確度；第二階段以隨機對照試驗，將護理系二年級學生 62 人分為 AI 回饋組與教師指導組，比較訓練後與 4 週後按壓深度與速率皆達標比例。預期系統可用性良好，且 AI 回饋組按壓品質優於教師指導組。',
-      m10_refs: 'Brooke, J. (1996). SUS: A quick and dirty usability scale. In P. W. Jordan et al. (Eds.), Usability evaluation in industry (pp. 189–194). Taylor & Francis.\nFaul, F., Erdfelder, E., Lang, A.-G., & Buchner, A. (2007). G*Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences. Behavior Research Methods, 39(2), 175–191.\nHoffmann, T. C., Glasziou, P. P., Boutron, I., Milne, R., Perera, R., Moher, D., et al. (2014). Better reporting of interventions: Template for intervention description and replication (TIDieR) checklist and guide. BMJ, 348, g1687.\nKirkbright, S., Finn, J., Tohira, H., Bremner, A., Jacobs, I., & Celenza, A. (2014). Audiovisual feedback device use by health care professionals during CPR: A systematic review and meta-analysis of randomised and non-randomised trials. Resuscitation, 85(4), 460–471.\nNielsen, J. (1993). Usability engineering. Academic Press.\nPanchal, A. R., Bartos, J. A., Cabañas, J. G., Donnino, M. W., Drennan, I. R., Hirsch, K. G., et al. (2020). Part 3: Adult basic and advanced life support: 2020 American Heart Association guidelines for cardiopulmonary resuscitation and emergency cardiovascular care. Circulation, 142(16_suppl_2), S366–S468.\nPeffers, K., Tuunanen, T., Rothenberger, M. A., & Chatterjee, S. (2007). A design science research methodology for information systems research. Journal of Management Information Systems, 24(3), 45–77.\nSchulz, K. F., Altman, D. G., & Moher, D. (2010). CONSORT 2010 statement: Updated guidelines for reporting parallel group randomised trials. BMJ, 340, c332.',
+      m10_refs: 'Brooke, J. (1996). SUS: A quick and dirty usability scale. In P. W. Jordan et al. (Eds.), Usability evaluation in industry (pp. 189–194). Taylor & Francis.\nFaul, F., Erdfelder, E., Lang, A.-G., & Buchner, A. (2007). G*Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences. Behavior Research Methods, 39(2), 175–191.\nHoffmann, T. C., Glasziou, P. P., Boutron, I., Milne, R., Perera, R., Moher, D., et al. (2014). Better reporting of interventions: Template for intervention description and replication (TIDieR) checklist and guide. BMJ, 348, g1687.\nNicolau, A., Jorge, I., Vieira-Marques, P., & Sa-Couto, C. (2024). Influence of training with corrective feedback devices on cardiopulmonary resuscitation skills acquisition and retention: Systematic review and meta-analysis. JMIR Medical Education, 10, e59720.\nNielsen, J. (1993). Usability engineering. Academic Press.\nPanchal, A. R., Bartos, J. A., Cabañas, J. G., Donnino, M. W., Drennan, I. R., Hirsch, K. G., et al. (2020). Part 3: Adult basic and advanced life support: 2020 American Heart Association guidelines for cardiopulmonary resuscitation and emergency cardiovascular care. Circulation, 142(16_suppl_2), S366–S468.\nPeffers, K., Tuunanen, T., Rothenberger, M. A., & Chatterjee, S. (2007). A design science research methodology for information systems research. Journal of Management Information Systems, 24(3), 45–77.\nSchulz, K. F., Altman, D. G., & Moher, D. (2010). CONSORT 2010 statement: Updated guidelines for reporting parallel group randomised trials. BMJ, 340, c332.',
       irb_inst: '〔大學名稱〕護理系模擬教室', irb_period: '2026 年 9 月至 2027 年 8 月（自 IRB 核准日起執行）',
       irb_review: '建議簡易審查：於模擬假人上進行訓練與測試，屬最小風險；是否符合，以送審機構之判定為準。',
       irb_n: '第一階段：CPR 教師 3 位、學生每輪 5 人；第二階段：護理系二年級學生 62 人（兩組各 31 人）。',
@@ -2040,7 +2040,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       gantt: Gt(12, [['IRB 送審與核准', 1, 1], ['需求訪談與設計', 2, 2], ['開發與兩輪形成性評估', 2, 5], ['招募、前測與分派', 6, 6], ['介入：兩組訓練', 6, 7], ['訓練後與 4 週保留測試', 7, 8], ['資料分析與撰寫', 8, 10], ['緩衝（開發延誤、補測）', 10, 11], ['論文口試', 12, 12]]),
       risks: [Rk('系統準確度不足', '第 5 月深度 ICC < .6', 'M5', '改為只回饋速率並在限制中說明'), Rk('招募不足', '第 6 月少於 52 人', 'M6', '擴大至三年級學生'), Rk('回饋假人故障', '測試前檢查異常', '每次測試', '備用假人；改期測試')],
       kpi: [Kp('訓練後達標比例組間差（成果指標）', 'ANCOVA 調整後平均差', '前測平均（第 6 月）', 'AI 回饋組較高'), Kp('完成保留測試人數（產出指標）', '完成 4 週測試人數', '0', '每組 26 人以上')],
-      ss: { kind: 'two', eff: 0.8, alpha: 0.05, tails: 2, power: 0.8, drop: 15, moe: 0.05, basis: '參考 Kirkbright et al.（2014）之回饋效果' }
+      ss: { kind: 'two', eff: 0.8, alpha: 0.05, tails: 2, power: 0.8, drop: 15, moe: 0.05, basis: '回饋裝置研究多報告明顯優勢（Nicolau et al., 2024），證據確定性低' }
     });
   }
 
@@ -2078,7 +2078,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m5_site: '研究場域為北部某醫學中心已上線 AI 臨床決策輔助之 12 個病房，護理部已同意（附錄二），護理師約 420 人。',
       m5_incl: '問卷納入：上線病房在職護理師、年資 3 個月以上、曾使用系統。排除：護理長與專科護理師。訪談：依問卷使用意圖高分（前 25%）與低分（後 25%）且留下聯絡方式者，各選 6–8 人。',
       m5_sample: '第一階段：PLS-SEM 依最大箭頭數 5、檢定力 .80、R² = .10、α = .05 至少需約 147 人（Hair et al., 2022）；目標有效樣本 200 人，預期回收率 60%，邀請 420 人。第二階段：高低分各 6–8 人，依飽和停止（Hennink & Kaiser, 2022）。',
-      m5_tool: '一、UTAUT 量表中文版：績效期望 4 題、努力期望 4 題、社會影響 3 題、促進條件 4 題、使用意圖 3 題，7 點量尺（Venkatesh et al., 2003）。\n二、對 AI 之信任：4 題，改編自 Lee 與 See（2004）之構念，經 5 位專家 CVI。\n三、基本資料：年資、職級、病房類型。\n四、訪談大綱：依第一階段結果擬定，如「什麼情況下您會相信或不相信系統的提示？」（附錄三）。',
+      m5_tool: '一、UTAUT 量表中文版：績效期望 4 題、努力期望 4 題、社會影響 3 題、促進條件 4 題、使用意圖 3 題，7 點量尺（Venkatesh et al., 2003）。\n二、對 AI 之信任：4 題，依 Lee 與 See（2004）之構念自編，經 6 位專家內容效度檢驗（I-CVI ≥ .78；Polit & Beck, 2006）。\n三、基本資料：年資、職級、病房類型。\n四、訪談大綱：依第一階段結果擬定，如「什麼情況下您會相信或不相信系統的提示？」（附錄三）。',
       m5_flow: '一、第 1–2 月：問卷翻譯與專家效度；IRB 送審（兩階段一併）。\n二、第 3 月：預試 30 人，計算 Cronbach\'s α。\n三、第 4–5 月：正式施測，線上匿名問卷，兩次提醒；問卷末詢問是否願意受訪（另留聯絡方式，與問卷分開儲存）。\n四、第 6 月：分析第一階段，擬訂訪談大綱並選取受訪者。\n五、第 7–8 月：個別訪談 45–60 分鐘，錄音轉逐字稿。',
       m5_innov: '以第一階段結果決定第二階段抽樣與訪談大綱，並以聯合呈現表整合量性路徑與質性主題。',
       m6_common: '顯著水準 α = .05（雙尾）。以 SmartPLS 4 進行 PLS-SEM：測量模型檢驗負荷 ≥ .70、CR ≥ .70、AVE ≥ .50、HTMT < .85（Henseler et al., 2015）；結構模型以 5,000 次 bootstrap 檢驗路徑係數。共同方法偏差以 Harman 單因子與全共線性 VIF 檢查（Podsakoff et al., 2003）。',
@@ -2088,7 +2088,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m7_risk: '屬最小風險；問卷與訪談內容不回饋給主管，避免影響考核。可隨時退出。',
       m7_deid: '問卷匿名；願受訪者之聯絡方式另表儲存，不與問卷答案連結（以研究編號對應分數高低組別）。逐字稿去識別，錄音核對後刪除；資料保存至研究結束後 3 年後刪除。',
       m7_coi: '研究者與 AI 系統廠商無財務關係。生成式 AI 僅用於英文潤稿，不輸入問卷與訪談資料。',
-      m8_feas: '場域：護理部已同意（附錄二）。樣本：上線病房護理師約 420 人。工具：UTAUT 中文版已有授權使用之文獻版本。時間：保留兩個月緩衝。',
+      m8_feas: '場域：護理部已同意（附錄二）。樣本：上線病房護理師約 420 人。工具：UTAUT 題項依原作者量表翻譯回譯（Venkatesh et al., 2003），使用前確認授權。時間：保留兩個月緩衝。',
       m9_acad: '在 UTAUT 中驗證對 AI 之信任之角色，並以質性結果解釋路徑。',
       m9_prac: '依關鍵因素提出推動策略，如針對信任不足者提供系統提示依據說明。',
       m9_limd: '橫斷式設計只能說明相關；單一醫院，推論需保守。',
@@ -2101,7 +2101,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m10_title_en: 'Nurses\' Intention to Use AI-Based Clinical Decision Support and Its Determinants: An Explanatory Sequential Mixed-Methods Study',
       m10_kw: '護理師、人工智慧、臨床決策輔助、科技接受、混合方法',
       m10_abs: '醫院導入 AI 臨床決策輔助後，護理師使用率不一，管理者不知影響因素與原因。本研究旨在找出影響護理師使用意圖之因素，並解釋其原因。第一階段以 UTAUT 加入對 AI 之信任，對北部某醫學中心 12 個病房護理師進行匿名問卷，目標有效樣本 200 人，以 PLS-SEM 分析；第二階段依使用意圖高低分各訪談 6–8 人，以主題分析解釋量性結果，並以聯合呈現表整合。預期信任與績效期望為關鍵因素，可作為護理部推動策略之依據。',
-      m10_refs: 'Braun, V., & Clarke, V. (2006). Using thematic analysis in psychology. Qualitative Research in Psychology, 3(2), 77–101.\nCreswell, J. W., & Plano Clark, V. L. (2018). Designing and conducting mixed methods research (3rd ed.). Sage.\nDavis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. MIS Quarterly, 13(3), 319–340.\nHair, J. F., Hult, G. T. M., Ringle, C. M., & Sarstedt, M. (2022). A primer on partial least squares structural equation modeling (PLS-SEM) (3rd ed.). Sage.\nHennink, M., & Kaiser, B. N. (2022). Sample sizes for saturation in qualitative research: A systematic review of empirical tests. Social Science & Medicine, 292, 114523.\nHenseler, J., Ringle, C. M., & Sarstedt, M. (2015). A new criterion for assessing discriminant validity in variance-based structural equation modeling. Journal of the Academy of Marketing Science, 43(1), 115–135.\nLee, J. D., & See, K. A. (2004). Trust in automation: Designing for appropriate reliance. Human Factors, 46(1), 50–80.\nPodsakoff, P. M., MacKenzie, S. B., Lee, J.-Y., & Podsakoff, N. P. (2003). Common method biases in behavioral research: A critical review of the literature and recommended remedies. Journal of Applied Psychology, 88(5), 879–903.\nVenkatesh, V., Morris, M. G., Davis, G. B., & Davis, F. D. (2003). User acceptance of information technology: Toward a unified view. MIS Quarterly, 27(3), 425–478.',
+      m10_refs: 'Braun, V., & Clarke, V. (2006). Using thematic analysis in psychology. Qualitative Research in Psychology, 3(2), 77–101.\nCreswell, J. W., & Plano Clark, V. L. (2018). Designing and conducting mixed methods research (3rd ed.). Sage.\nDavis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. MIS Quarterly, 13(3), 319–340.\nHair, J. F., Hult, G. T. M., Ringle, C. M., & Sarstedt, M. (2022). A primer on partial least squares structural equation modeling (PLS-SEM) (3rd ed.). Sage.\nHennink, M., & Kaiser, B. N. (2022). Sample sizes for saturation in qualitative research: A systematic review of empirical tests. Social Science & Medicine, 292, 114523.\nHenseler, J., Ringle, C. M., & Sarstedt, M. (2015). A new criterion for assessing discriminant validity in variance-based structural equation modeling. Journal of the Academy of Marketing Science, 43(1), 115–135.\nLee, J. D., & See, K. A. (2004). Trust in automation: Designing for appropriate reliance. Human Factors, 46(1), 50–80.\nPolit, D. F., & Beck, C. T. (2006). The content validity index: Are you sure you know what\'s being reported? Critique and recommendations. Research in Nursing & Health, 29(5), 489–497.\nPodsakoff, P. M., MacKenzie, S. B., Lee, J.-Y., & Podsakoff, N. P. (2003). Common method biases in behavioral research: A critical review of the literature and recommended remedies. Journal of Applied Psychology, 88(5), 879–903.\nVenkatesh, V., Morris, M. G., Davis, G. B., & Davis, F. D. (2003). User acceptance of information technology: Toward a unified view. MIS Quarterly, 27(3), 425–478.',
       irb_inst: '〔醫院名稱〕護理部（12 個已上線病房）', irb_period: '2026 年 9 月至 2027 年 8 月（自 IRB 核准日起執行）',
       irb_review: '建議簡易審查：匿名問卷與訪談，內容為工作經驗與看法，屬最小風險；是否符合，以送審機構之判定為準。',
       irb_n: '第一階段：邀請護理師 420 人，目標有效樣本 200 人；第二階段：高低分各 6–8 人，共 12–16 人。',
@@ -2150,7 +2150,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       s1_9: '產出可供醫院自評之 AI 治理檢核指標。',
       m1_scene: '醫院導入 AI 影像判讀、風險預測與病歷摘要等系統的速度很快，但導入前是否評估效能與偏誤、上線後誰負責監測、出錯時如何通報，各院做法差異很大。',
       m1_gap: '目前醫院多依單一法規或廠商文件處理，缺乏涵蓋導入前、上線中與退場的整體治理檢核指標；資訊、醫品與法務各自檢核，常有缺口。',
-      m1_new: '世界衛生組織（2021）提出健康 AI 之倫理與治理原則，美國國家標準與技術研究院（NIST, 2023）發布 AI 風險管理框架；但原則性文件難以直接作為醫院可操作的檢核指標。',
+      m1_new: '世界衛生組織（2021）提出健康 AI 之倫理與治理原則，美國國家標準與技術研究院（National Institute of Standards and Technology [NIST], 2023）發布 AI 風險管理框架；但原則性文件難以直接作為醫院可操作的檢核指標。',
       m1_time: '主管機關與醫院評鑑逐步關注 AI 應用的治理，醫院需要在評鑑要求出現前建立自評工具。',
       m1_stmt: '因此，本研究擬先以範域回顧整理 AI 醫療治理之構面與指標，再以德菲法形成醫院可用之治理檢核指標。',
       m2_pico: '第一階段 PCC｜P：醫療機構｜C：AI 系統之治理（導入、監測、退場）｜C：政策指引、框架與實證研究。第二階段｜P：跨職類專家｜I：德菲法｜O：達共識之構面與指標',
@@ -2257,13 +2257,13 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m5_reject: '不只做關聯分析，因關聯無法直接用於個別長者篩選；不直接建模，因未先確認風險因子與定義，模型可能納入不合理變項。',
       m5_site: '資料來源為衛生福利資料科學中心之全民健保資料（門住診、藥局處方、承保與死因檔），IRB 核准後申請，於中心環境分析（附錄二）。',
       m5_incl: '納入：2017–2021 年 65 歲以上，index 前投保滿 1 年者。排除：index 前 30 天內因跌倒住院者；index 時住在長照機構者（無法以健保資料確認時，以敏感度分析處理）。',
-      m5_sample: '第一階段以 Schoenfeld 公式：HR = 1.2、α = .05、檢定力 .80、暴露比例 40%，需約 1,640 件事件。第二階段依 Riley 等人（2020）：候選參數 25 個、發生率約 4%、Cox-Snell R² 0.04，至少需約 5,500 人、約 220 件事件；健保資料遠高於此（教學示意：請以實際資料重新計算）。',
+      m5_sample: '第一階段以 Schoenfeld（1983）公式：HR = 1.2、α = .05 雙尾、檢定力 .80、暴露比例 40%，需約 984 件事件。第二階段依 Riley 等人（2020）：候選參數 25 個、發生率約 4%、Cox-Snell R² 0.04，至少需約 5,500 人、約 220 件事件；健保資料遠高於此（教學示意：請以實際資料重新計算）。',
       m5_tool: '一、代碼表：多重用藥（ATC 碼）、跌倒外因碼、共病 ICD-10-CM 與時間窗。\n二、跌倒相關藥物類別：鎮靜安眠、抗精神病、降血壓、降血糖、鴉片類等。\n三、分析軟體：SAS 或 R（世代分析）、Python（scikit-learn、xgboost、shap）（依中心環境，版本寫明）。',
       m5_flow: '一、第 1–2 月：IRB 送審並申請免除知情同意。\n二、第 2–4 月：向衛生福利資料科學中心申請資料（第 2 月送件）。\n三、第 5–7 月：建立世代與代碼定義；第一階段 Cox 與競爭風險分析。\n四、第 8–10 月：第二階段以 2017–2020 年訓練、2021 年測試，建模與評估。\n五、結果依中心規定遮蔽小格數，經審查後帶出。',
       m5_innov: '以同一份全國資料完成「關聯 → 預測」兩階段，並以時間切分驗證與 SHAP 提供可解釋之篩選模型。',
       m6_common: '顯著水準 α = .05（雙尾）。第一階段：每千人年發生率；Cox 模型調整後 HR，Fine–Gray 模型處理死亡競爭風險，IPTW 為次要分析（SMD < 0.1）。第二階段：AUC（DeLong 95% CI）、校準斜率與校準圖、決策曲線；先時間切分再補值與標準化。分析以 SAS／R／Python（版本寫明）執行。',
       m7_irb: '本研究將送〔大學〕研究倫理審查委員會審查，於第 1 月送審，兩階段一併送審，預計簡易審查並申請免除知情同意。',
-      m7_consent: '本研究使用加密去識別化之全民健保資料，無法辨識個人且無法逐一取得同意，依《人體研究法》第 15 條申請免除知情同意，以審查會核准為準。',
+      m7_consent: '本研究使用加密去識別化之全民健保資料，無法辨識個人且無法逐一取得同意，依《人體研究法》第 12 條第 2 項但書（屬主管機關公告得免取得同意之研究案件範圍）申請免除知情同意，以審查會認定為準。',
       m7_risk: '不接觸個人，主要風險為資料外洩；僅於中心環境分析。',
       m7_deid: '資料由中心加密去識別化提供；只在中心環境分析，結果經審查並遮蔽小格數後帶出。依中心規定期限保存與銷毀。',
       m7_coi: '研究者與任何藥廠無財務關係。生成式 AI 僅用於程式除錯，不輸入任何資料。',
@@ -2280,7 +2280,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       m10_title_en: 'Polypharmacy and Risk of Fall-Related Hospitalization among Older Adults: A Cohort Study and Prediction Model Development Using Taiwan\'s National Health Insurance Data',
       m10_kw: '多重用藥、跌倒、長者、預測模型、全民健保資料',
       m10_abs: '長者多重用藥常見，部分藥物增加跌倒風險，但缺乏可快速辨識高風險長者之工具。本研究旨在探討多重用藥與 1 年內跌倒住院之關聯，並建立風險預測模型。第一階段以全民健保資料進行回溯性世代研究，以 Cox 與 Fine–Gray 模型估計多重用藥之調整後風險比；第二階段以同一資料之候選預測因子，訓練邏輯斯迴歸與 XGBoost，以 2021 年資料做時間切分驗證，報告 AUC、校準度與決策曲線。預期多重用藥與跌倒住院風險相關，模型可供用藥整合服務篩選高風險長者。',
-      m10_refs: 'Austin, P. C. (2011). An introduction to propensity score methods for reducing the effects of confounding in observational studies. Multivariate Behavioral Research, 46(3), 399–424.\nBenchimol, E. I., Smeeth, L., Guttmann, A., Harron, K., Moher, D., Petersen, I., et al. (2015). The REporting of studies Conducted using Observational Routinely-collected health Data (RECORD) statement. PLoS Medicine, 12(10), e1001885.\nCollins, G. S., Moons, K. G. M., Dhiman, P., Riley, R. D., Beam, A. L., Van Calster, B., et al. (2024). TRIPOD+AI statement: Updated guidance for reporting clinical prediction models that use regression or machine learning methods. BMJ, 385, e078378.\nFine, J. P., & Gray, R. J. (1999). A proportional hazards model for the subdistribution of a competing risk. Journal of the American Statistical Association, 94(446), 496–509.\nHernán, M. A., & Robins, J. M. (2016). Using big data to emulate a target trial when a randomized trial is not available. American Journal of Epidemiology, 183(8), 758–764.\nHsieh, C.-Y., Su, C.-C., Shao, S.-C., Sung, S.-F., Lin, S.-J., Kao Yang, Y.-H., & Lai, E. C.-C. (2019). Taiwan\'s National Health Insurance Research Database: Past and future. Clinical Epidemiology, 11, 349–358.\nLundberg, S. M., & Lee, S.-I. (2017). A unified approach to interpreting model predictions. Advances in Neural Information Processing Systems, 30.\nMasnoon, N., Shakib, S., Kalisch-Ellett, L., & Caughey, G. E. (2017). What is polypharmacy? A systematic review of definitions. BMC Geriatrics, 17, 230.\nRiley, R. D., Ensor, J., Snell, K. I. E., Harrell, F. E., Martin, G. P., Reitsma, J. B., et al. (2020). Calculating the sample size required for developing a clinical prediction model. BMJ, 368, m441.\nSteyerberg, E. W., & Vergouwe, Y. (2014). Towards better clinical prediction models: Seven steps for development and an ABCD for validation. European Heart Journal, 35(29), 1925–1931.',
+      m10_refs: 'Austin, P. C. (2011). An introduction to propensity score methods for reducing the effects of confounding in observational studies. Multivariate Behavioral Research, 46(3), 399–424.\nBenchimol, E. I., Smeeth, L., Guttmann, A., Harron, K., Moher, D., Petersen, I., et al. (2015). The REporting of studies Conducted using Observational Routinely-collected health Data (RECORD) statement. PLoS Medicine, 12(10), e1001885.\nCollins, G. S., Moons, K. G. M., Dhiman, P., Riley, R. D., Beam, A. L., Van Calster, B., et al. (2024). TRIPOD+AI statement: Updated guidance for reporting clinical prediction models that use regression or machine learning methods. BMJ, 385, e078378.\nFine, J. P., & Gray, R. J. (1999). A proportional hazards model for the subdistribution of a competing risk. Journal of the American Statistical Association, 94(446), 496–509.\nHernán, M. A., & Robins, J. M. (2016). Using big data to emulate a target trial when a randomized trial is not available. American Journal of Epidemiology, 183(8), 758–764.\nHsieh, C.-Y., Su, C.-C., Shao, S.-C., Sung, S.-F., Lin, S.-J., Kao Yang, Y.-H., & Lai, E. C.-C. (2019). Taiwan\'s National Health Insurance Research Database: Past and future. Clinical Epidemiology, 11, 349–358.\nLundberg, S. M., & Lee, S.-I. (2017). A unified approach to interpreting model predictions. Advances in Neural Information Processing Systems, 30.\nMasnoon, N., Shakib, S., Kalisch-Ellett, L., & Caughey, G. E. (2017). What is polypharmacy? A systematic review of definitions. BMC Geriatrics, 17, 230.\nRiley, R. D., Ensor, J., Snell, K. I. E., Harrell, F. E., Martin, G. P., Reitsma, J. B., et al. (2020). Calculating the sample size required for developing a clinical prediction model. BMJ, 368, m441.\nSchoenfeld, D. A. (1983). Sample-size formula for the proportional-hazards regression model. Biometrics, 39(2), 499–503.\nSteyerberg, E. W., & Vergouwe, Y. (2014). Towards better clinical prediction models: Seven steps for development and an ABCD for validation. European Heart Journal, 35(29), 1925–1931.',
       irb_inst: '〔大學名稱〕〔系所〕；資料來源：衛生福利資料科學中心（全民健保資料）', irb_period: '2026 年 9 月至 2027 年 8 月（自 IRB 核准日起執行）',
       irb_review: '建議簡易審查（或依送審機構認定之免除審查）：使用加密去識別化之全民健保資料，不接觸個人，屬最小風險；以審查會判定為準。',
       irb_n: '2017–2021 年 65 歲以上符合條件之長者（預估數十萬人，依中心資料；不接觸個人）。',
@@ -2288,7 +2288,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       irb_task: '不適用：不需要任何人做任何事；研究只分析已存在的健保資料。', irb_withdraw: '不適用個別撤回：資料已加密去識別化，研究者無法辨識個人。',
       irb_benefit: '個人無直接利益；研究結果可能改善長者用藥安全。', irb_harm: '主要風險為資料外洩；資料僅於中心環境處理，依中心規定管理。',
       irb_material: '研究材料為中心環境中之分析資料與帶出之彙總結果；依中心規定期限保存與銷毀，不作本計畫以外之用途。',
-      irb_waive: '是。本研究使用加密去識別化之全民健保資料，無法辨識個人，且無法逐一取得同意，對個人權益影響極小；依《人體研究法》第 15 條申請免除知情同意，以審查會核准為準。',
+      irb_waive: '是。本研究使用加密去識別化之全民健保資料，無法辨識個人，且無法逐一取得同意，對個人權益影響極小；依《人體研究法》第 12 條第 2 項但書（屬主管機關公告得免取得同意之研究案件範圍）申請免除知情同意，以審查會認定為準。',
       irb_ad: '不適用：本研究不招募參與者。'
     };
     Object.assign(F, irbPeople('資料申請、世代分析與預測模型'));
@@ -2303,7 +2303,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
         Va('共病、年齡、性別', '控制', '背景與共病負擔', 'Charlson 共病指數等', '門住診與承保檔', '比率／名目', 'index 前 1 年', '—'),
         Va('死亡', '控制', '競爭風險', '死因檔死亡日期', '死因檔', '名目', '追蹤期間', '—')],
       bias: [Bi('適應症干擾', '多重用藥者本身病況較重', '調整共病；採新使用者設計；IPTW'), Bi('不死時間偏誤', 'index 定義不一致', '暴露與對照使用相同 index 規則'),
-        Bi('資料洩漏（第二階段）', '切分前補值或標準化', '先時間切分，再只用訓練資料建立參數'), Bi('結果誤分類', '未住院之跌倒無法得知', '限制中說明；以門急診跌倒就醫做敏感度分析')],
+        Bi('資料洩漏（第二階段）', '切分前補值或標準化', '先時間切分，再只用訓練資料建立參數'), Bi('結果誤分類', '未住院之跌倒無法得知；申報資料之跌倒外因碼可能記錄不完整', '限制中說明；以跌倒相關傷害診斷（如髖部骨折）及門急診跌倒就醫做敏感度分析')],
       gantt: Gt(12, [['IRB 送審與核准', 1, 2], ['資料申請（第 2 月送件）', 2, 4], ['世代建立與第一階段分析', 5, 7], ['第二階段建模與時間切分驗證', 8, 10], ['結果審查與帶出', 10, 10], ['論文撰寫', 9, 11], ['緩衝（申請延誤、補分析）', 10, 11], ['論文口試', 12, 12]]),
       risks: [Rk('資料申請延誤', '第 4 月仍未核准', 'M4', '先以文件建立程式；使用緩衝月'), Rk('事件數不足', '跌倒住院發生率低於預期', 'M6', '延長追蹤至 2 年或納入門急診跌倒'), Rk('模型表現不佳', 'AUC 未優於基準', 'M10', '如實報告，討論藥品數之篩選價值')],
       kpi: [Kp('多重用藥調整後 HR（成果指標）', 'Cox 主要分析結果與 95% CI', '—', '第 7 月完成'), Kp('預測模型 AUC（成果指標）', '2021 年測試資料 AUC 與 95% CI', '基準模型 AUC', '高於基準')]
