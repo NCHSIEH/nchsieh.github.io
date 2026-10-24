@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>研究計畫書工作台｜研究方法論</title>
+<meta name="description" content="研究方法論課程：逐步撰寫碩士論文計畫書、國科會 CM03 或其他計畫——句型、Case Q 範例、樣本數與甘特工具、一頁地圖檢核與 Word 匯出。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231f3a5f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<style>/* 版面：深藍工具列（進度＋快查）＋左側步驟軌＋中間填寫欄＋右側說明欄；沿用 nchsieh.github.io 學院藍主題 */
+:root{
+  --brand:#1f3a5f; --brand-deep:#142943; --brand-tint:rgba(31,58,95,.07); --on-brand:#fff;
+  --accent:#9c7538; --accent-tint:rgba(156,117,56,.13);
+  --ink:#1c242e; --muted:#4d5865; --faint:#737f8b; --line:#e2ded4; --line-strong:#c9c3b5;
+  --bg:#f7f4ed; --card:#fff; --field:#fffdf8; --bad:#9b2c2c; --bad-tint:rgba(155,44,44,.07); --ok:#1f6b4a; --ok-tint:rgba(31,107,74,.10);
+  --bar-ink:#e8eef4; --bar-dim:#b3c3d3;
+  --serif:"Noto Serif TC","Noto Serif",Georgia,serif;
+  --sans:"Noto Sans TC","Noto Sans","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --brand:#7aa7d9; --brand-deep:#0a111c; --brand-tint:rgba(122,167,217,.12); --on-brand:#0b1220;
+  --accent:#d4a960; --accent-tint:rgba(212,169,96,.15);
+  --ink:#e6edf5; --muted:#a3b1c2; --faint:#7d8b9c; --line:#263243; --line-strong:#3a4859;
+  --bg:#0d1420; --card:#131c29; --field:#0f1723; --bad:#f19a9a; --bad-tint:rgba(241,154,154,.09); --ok:#7fd1a8; --ok-tint:rgba(127,209,168,.12); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --brand:#7aa7d9; --brand-deep:#0a111c; --brand-tint:rgba(122,167,217,.12); --on-brand:#0b1220;
+  --accent:#d4a960; --accent-tint:rgba(212,169,96,.15);
+  --ink:#e6edf5; --muted:#a3b1c2; --faint:#7d8b9c; --line:#263243; --line-strong:#3a4859;
+  --bg:#0d1420; --card:#131c29; --field:#0f1723; --bad:#f19a9a; --bad-tint:rgba(241,154,154,.09); --ok:#7fd1a8; --ok-tint:rgba(127,209,168,.12); color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+summary{list-style-position:inside}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.7}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--brand-deep)}
+h1,h2,h3,h4{font-family:var(--serif);margin:0;line-height:1.35;text-wrap:balance}
+a{color:var(--brand)} code{font-family:var(--mono)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:var(--ink)}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:27;background:var(--brand-deep);color:var(--bar-ink)}
+.top-in{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:10px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{font-family:var(--serif);font-weight:700;font-size:16.5px;display:flex;gap:9px;align-items:center;white-space:nowrap}
+.brand small{font-family:var(--sans);font-weight:400;color:var(--bar-dim);font-size:12.5px}
+#who{font-size:12.5px;color:var(--bar-dim);flex:1 1 200px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prog{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--bar-dim)}
+.prog i{display:block;width:120px;height:6px;border-radius:9px;background:rgba(255,255,255,.15);position:relative;overflow:hidden}
+.prog i::after{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--p,0)*100%);background:var(--accent);border-radius:9px;transition:width .3s}
+#sy{max-width:240px;font-size:13px;border-radius:8px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:var(--bar-ink);padding:5px 8px}
+#sy option{color:#1c242e;background:#fff}
+#menu{display:none;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:8px;padding:4px 12px;font-size:13px}
+
+.shell{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:236px minmax(0,1fr);gap:28px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#side-nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);align-self:start;max-height:calc(100vh - 76px);overflow:auto;padding-block:20px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:2px;counter-reset:s}
+.steps a{display:grid;grid-template-columns:18px 2.6em minmax(0,1fr);gap:6px;align-items:center;padding:6px 8px;border-radius:8px;text-decoration:none;color:var(--muted);font-size:14px}
+.steps a:hover{background:var(--brand-tint);color:var(--ink)}
+.steps a.cur{background:var(--brand);color:var(--on-brand)} .steps a.cur code{color:var(--on-brand)}
+.steps code{font-size:12px;font-weight:700;color:var(--accent)}
+.pp{width:16px;height:16px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p,0)*360deg),var(--line) 0)}
+.steps a.done .pp{background:var(--ok);position:relative} .steps a.done .pp::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:700}
+.saved{font-size:12px;color:var(--faint);margin:16px 8px 0;line-height:1.5}
+#work{min-width:0;padding-block:24px 60px}
+
+.sh{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+.sh .code{flex:none;font-family:var(--mono);font-weight:700;font-size:14px;background:var(--brand);color:var(--on-brand);border-radius:8px;padding:5px 10px;min-width:46px;text-align:center;margin-top:3px}
+.sh h2{font-size:clamp(22px,2.6vw,28px)}
+.q{margin:4px 0 0;color:var(--muted);font-size:15.5px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:24px;align-items:start}
+.form{min-width:0;display:grid;gap:16px}
+.form h3{font-size:17px;color:var(--brand);margin-top:8px}
+.side{display:grid;gap:12px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);max-height:calc(100vh - 86px);overflow:auto;padding-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
+.card h4,.card summary{font-family:var(--serif);font-size:15px;color:var(--brand);font-weight:700}
+.card summary{cursor:pointer;list-style-position:outside}
+.card.where{background:var(--accent-tint);border-color:transparent} .card.where p{margin:6px 0 0}
+.card.case{border-top:3px solid var(--accent)}
+.card dl{margin:8px 0 0} .card dt{font-weight:700;color:var(--accent);font-size:13px;margin-top:8px} .card dd{margin:2px 0 0}
+.key{color:var(--muted);font-size:13.5px;margin:10px 0 0;padding-top:8px;border-top:1px dashed var(--line-strong)}
+.must,.card.pass ul{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:2px}
+.must label,.pass label,.secs label,.opt{display:flex;gap:8px;align-items:flex-start;cursor:pointer;border-radius:7px;padding:4px 6px}
+.must label:hover,.pass label:hover,.secs label:hover{background:var(--brand-tint)}
+input[type=checkbox],input[type=radio]{accent-color:var(--brand);margin-top:5px;flex:none}
+.must input:checked+span,.pass input:checked+span,.secs input:checked+span{color:var(--faint)}
+.card.pass{background:var(--brand-tint);border-color:transparent}
+.errs{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.errs li{background:var(--bad-tint);border-radius:8px;padding:7px 10px;display:flex;flex-direction:column;font-size:13.5px}
+.errs b{color:var(--bad)}
+.slot{background:var(--accent-tint);border-bottom:1.5px dotted var(--accent);border-radius:3px;padding:0 2px}
+
+.fld label{display:flex;gap:8px;align-items:baseline;font-weight:700;color:var(--ink);font-size:15px;flex-wrap:wrap}
+.req,.only{font-style:normal;font-size:11px;font-weight:700;border-radius:5px;padding:0 6px;letter-spacing:.04em}
+.req{background:var(--accent-tint);color:var(--accent)} .only{background:var(--brand-tint);color:var(--brand)}
+.cnt{margin-left:auto;font-weight:400;font-size:12.5px;color:var(--faint);font-family:var(--mono)} .cnt.over{color:var(--bad);font-weight:700}
+.hint{margin:2px 0 6px;color:var(--muted);font-size:13.5px}
+textarea,.grid input,.grid select,.tool input,.tool select,#type2{width:100%;border:1px solid var(--line-strong);background:var(--field);border-radius:9px;padding:8px 11px;line-height:1.65;font-size:14.5px}
+textarea{resize:vertical;min-height:2.6em}
+textarea:focus,input:focus,select:focus{outline:2px solid var(--brand);outline-offset:-1px;border-color:var(--brand)}
+textarea.flash{background:var(--accent-tint);transition:background .1s}
+
+.tpls{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.tpls summary{cursor:pointer;font-weight:700;color:var(--accent);font-size:14px}
+.chips{display:grid;gap:6px;margin-top:10px}
+.chip{display:grid;grid-template-columns:8.5em minmax(0,1fr);gap:10px;text-align:left;background:var(--field);border:1px solid var(--line);border-radius:9px;padding:7px 10px;color:var(--ink);font-size:13.5px}
+.chip:hover{border-color:var(--accent)} .chip b{color:var(--brand)} .chip span{min-width:0}
+
+.grid-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.grid{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+.grid th{background:var(--brand);color:var(--on-brand);font-weight:700;text-align:left;padding:7px 10px;white-space:nowrap;font-size:13.5px}
+.grid td{border-top:1px solid var(--line);padding:6px;vertical-align:top}
+.grid td.n,.grid th.n{width:2.4em;text-align:center;color:var(--faint);font-family:var(--mono)}
+.grid td.x,.grid th.x{width:2.4em;text-align:center}
+.grid textarea,.grid input,.grid select{padding:5px 8px;font-size:14px;border-radius:7px}
+.grid input[type=number]{width:5em}
+.grid td.ro{min-width:14em;font-size:14px} .grid td.ro em{display:block;font-style:normal;color:var(--muted);font-size:13px;margin-top:4px}
+.grid td.ro em.sug{color:var(--accent)}
+.grid td.empty{text-align:center;color:var(--faint);padding:16px}
+.del{border:0;background:transparent;color:var(--faint);font-size:18px;line-height:1;padding:4px 8px;border-radius:6px} .del:hover{color:var(--bad);background:var(--bad-tint)}
+.add{justify-self:start;border:1px dashed var(--line-strong);background:transparent;color:var(--brand);border-radius:8px;padding:5px 12px;font-size:13.5px;margin-top:-6px}
+.warn ul,.warn-l{margin:0;padding:10px 14px 10px 30px;background:var(--bad-tint);border-radius:10px;color:var(--bad);font-size:13.5px}
+.warn:empty,.warn-l:empty{display:none}
+
+.tool{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.tool h4{color:var(--brand);font-size:16px;margin-bottom:8px}
+.tool.typ{border-left:4px solid var(--accent)}
+.secs{list-style:none;margin:8px 0;padding:0;display:grid;gap:2px;font-size:14px}
+.secs em{display:block;font-style:normal;color:var(--muted);font-size:13px}
+.ss-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.ss-g label,.tb label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:700}
+.ss-g label.wide{grid-column:1/-1}
+.ss-out{margin:12px 0 10px;background:var(--brand-tint);border-radius:9px;padding:10px 12px;font-size:14.5px}
+.ss-out b{font-family:var(--mono);font-size:20px;color:var(--brand)} .ss-out span{display:block;margin-top:4px;color:var(--ink)}
+.fine{font-size:12.5px;color:var(--faint);margin:8px 0 0}
+.tb{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.btn{border:1px solid var(--brand);background:var(--brand);color:var(--on-brand);border-radius:9px;padding:7px 16px;font-size:14px;font-weight:700}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--brand)} .btn.small{padding:3px 10px;font-size:13px}
+.btn.warnb{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.file{position:relative;overflow:hidden} .btn.file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.link{border:0;background:transparent;color:var(--brand);text-decoration:underline;padding:0 4px;font-size:13.5px}
+.inl{display:inline-flex;gap:8px;align-items:center;font-size:14px;font-weight:700} .inl input{width:5em}
+.fld .btn.small{margin-bottom:6px}
+
+.gc{margin-top:12px;overflow-x:auto;font-size:12.5px;--n:12}
+.gh,.gr{display:grid;grid-template-columns:11em repeat(var(--n),minmax(22px,1fr));align-items:center;min-width:520px}
+.gh span{text-align:center;color:var(--faint);font-family:var(--mono);padding:3px 0;border-bottom:1px solid var(--line)}
+.gr{border-bottom:1px solid var(--line);min-height:28px}
+.gl{grid-column:1;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.gr i{grid-row:1;height:14px;border-radius:5px;background:var(--brand);margin:0 2px}
+.gr i.buf{background:transparent;border:1.5px dashed var(--accent)}
+
+.setup{display:grid;gap:14px}
+.setup .card h3{font-size:16.5px;color:var(--brand);margin-bottom:8px}
+.opts{display:grid;gap:6px}
+.opts.pick{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{border:1px solid var(--line);background:var(--field);padding:9px 11px}
+.opt:hover{border-color:var(--brand)}
+.opt:has(input:checked){border-color:var(--brand);background:var(--brand-tint)}
+.opt span{display:flex;flex-direction:column;gap:2px;font-size:14px;color:var(--muted)}
+.opt b{color:var(--ink);font-size:14.5px}
+.opt code{font-weight:700;color:var(--accent)}
+.card.soft{background:var(--accent-tint);border-color:transparent}
+.confirm{display:inline-flex;gap:8px;align-items:center;margin-left:10px;font-size:13.5px;flex-wrap:wrap}
+
+.review{display:grid;gap:14px}
+.review .card h3{font-size:17px;color:var(--brand)}
+.map{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.map li{display:grid;grid-template-columns:10.5em minmax(0,1fr) auto;gap:10px;align-items:baseline;border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:14px}
+.map li b{color:var(--brand)} .map li.hot{border-color:var(--accent);background:var(--accent-tint)}
+.map li.empty span{color:var(--bad)}
+.issues{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.issues li{display:flex;justify-content:space-between;gap:12px;align-items:baseline;background:var(--bad-tint);border-radius:8px;padding:7px 10px;font-size:14px;flex-wrap:wrap}
+.ok{color:var(--ok);background:var(--ok-tint);border-radius:9px;padding:10px 12px}
+.ex-btns{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.preview{max-height:480px;overflow:auto;font-size:14px;margin-top:10px;font-family:var(--serif)}
+.preview h1{font-size:20px;text-align:center;margin:10px 0} .preview h2{font-size:17px;margin:16px 0 6px;color:var(--brand)} .preview h3{font-size:15px;margin:10px 0 4px}
+.preview table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:12.5px;margin:6px 0} .preview td,.preview th{border:1px solid var(--line-strong);padding:3px 6px;vertical-align:top}
+.danger{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line-strong)}
+.pn{display:flex;justify-content:space-between;gap:10px;margin-top:26px;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap}
+
+@media (max-width:1180px){ .cols{grid-template-columns:minmax(0,1fr)} .side{position:static;max-height:none;overflow:visible} }
+@media (max-width:860px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0}
+  #menu{display:inline-block}
+  #side-nav{position:fixed;inset:0 auto 0 0;width:min(290px,86vw);max-height:none;z-index:25;background:var(--card);box-shadow:0 0 40px rgba(0,0,0,.3);
+    padding:calc(env(safe-area-inset-top,0px) + 70px) 14px 24px max(14px,env(safe-area-inset-left,0px));transform:translateX(-105%);transition:transform .2s}
+  #side-nav.open{transform:none}
+  .opts.pick{grid-template-columns:minmax(0,1fr)}
+  #who{display:none}
+  .prog i{width:70px}
+}
+@media (max-width:560px){
+  .chip{grid-template-columns:minmax(0,1fr)} .map li{grid-template-columns:minmax(0,1fr) auto} .map li span{grid-column:1/-1;order:3}
+  #sy{max-width:100%;flex:1 1 100%}
+}
+@media (prefers-reduced-motion:reduce){ #side-nav,.prog i::after{transition:none} }
+
+.oneclick{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:8px;padding:5px 12px;font-size:13px;font-weight:700;white-space:nowrap}
+.cv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.cv label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:700}
+.cv input{border:1px solid var(--line-strong);background:var(--field);border-radius:9px;padding:7px 10px;font-size:14.5px}
+.irbf{display:grid;gap:12px} .irbf[open]{padding-bottom:14px}
+.exp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:10px 0}
+.exp{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--field)}
+.exp h4{color:var(--brand);font-size:15.5px} .exp p{margin:0;font-size:13.5px;color:var(--muted)} .exp .btn{align-self:flex-start;margin-top:auto}
+.preview .ctr{text-align:center} .preview .ctr.b{font-weight:700} .preview .ind{text-indent:2em} .preview .ref{padding-left:2em;text-indent:-2em}
+.preview .cap{text-align:center;font-weight:700;font-size:13px} .preview .note{color:var(--faint);font-size:13px} .preview .sign{margin-top:14px}
+.preview hr{border:0;border-top:1px dashed var(--line-strong);margin:16px 0}
+@media (max-width:700px){.exp-grid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.oneclick{order:5}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+<button id="menu" type="button" aria-expanded="false" aria-controls="side-nav">步驟</button>
+<div class="brand">研究計畫書工作台<small>研究方法論 · 6.0</small></div>
+<div id="who"></div>
+<div class="prog" id="prog"><i></i><span id="progt"></span></div>
+<button type="button" id="oneclick" class="oneclick">一鍵匯入範例</button>
+<label class="vh" for="sy">我卡在哪裡</label><select id="sy"></select>
+</div></header>
+<div class="shell"><nav id="side-nav" aria-label="撰寫步驟"><div id="stepnav"></div><p class="saved" id="saved"></p></nav><main id="work"></main></div>
+<script>window.SOP_DATA={"mods": {"m1": {"name": "問題意識與重要性", "sub": "讀者讀完第一頁，要能說出：誰、在什麼情境、遇到什麼困難、為什麼現在要研究", "q": "這個問題是什麼？誰受影響？為什麼值得現在研究？", "must": ["現象：用數據或具體情境描述「現在發生什麼事」", "對象與規模：誰受影響、影響多少人或多大範圍", "現行做法：目前怎麼處理（流程、制度、工具）", "不足：現行做法哪裡不夠，造成什麼後果", "知識缺口預告：文獻還沒回答什麼（細節留給 M2）", "時機：為什麼是現在（政策、導入時程、新技術）", "重要性：對實務、學術、政策各有什麼價值", "結尾句自然導向研究目的（M3）"], "errs": [["以技術為起點：「AI 很重要，所以本研究…」", "從場域問題起筆；AI 是解法，放在後段"], ["只寫領域，不寫問題", "寫出誰、在什麼情境、遇到什麼困難"], ["重要性只有「填補缺口」", "加上實務：誰會用結果、做什麼決定"]], "key": "M1 寫的是「為什麼要做」，不是「做什麼」；做什麼留給 M3，怎麼做留給 M5。問題陳述四元素同 6.1 第 11 張。", "where": ["第一章 1.1 背景與動機、1.2 問題陳述", "CM03 (一) 研究計畫之背景", "「計畫背景」「現況分析」"], "tpl": [["① 場域現象", "在〔場域〕中，〔對象〕每〔時間單位〕需〔做什麼事〕，〔數據或具體情境〕。這使得〔後果，如照護時間被壓縮、錯誤增加〕。"], ["② 現行做法與不足", "目前多以〔現行做法〕處理，然而〔不足之處 1〕，且〔不足之處 2〕，導致〔問題持續的後果〕。"], ["③ 新解法與缺口", "近年〔新技術或新介入〕已於〔其他場域〕顯示〔效果〕（〔引用〕），惟在〔本研究場域〕仍缺乏〔哪一種證據〕。"], ["④ 時機與重要性", "〔機構或政策〕即將〔導入、改制〕，正提供〔評估的時機〕。本研究結果可作為〔誰〕〔做什麼決定〕之依據，並〔學術貢獻〕。"], ["⑤ 導向目的", "因此，本研究擬探討〔核心問題〕（研究目的詳見〔1.3 節〕）。"]], "ex": [["① 場域現象", "住宿式長照機構之交班高度依賴自由文字紀錄，護理人員每班須花相當時間彙整前一班照護重點，文書負擔排擠直接照護時間。"], ["② 不足", "現行以人工閱讀與口頭交接為主，資訊散落於多份紀錄，資深與新進人員之彙整品質落差大。"], ["③ 缺口", "生成式 AI 摘要已見於醫院場域研究，惟長照場域缺乏「時間」與「品質」並測之量化證據（文獻見 M2）。"], ["④ 時機", "兩家合作機構將於 2026 年 11 月與 2027 年 2 月先後導入摘要工具，提供非同期比較之時機。"], ["⑤ 重要性", "結果可作為機構是否全面導入之依據，並補足長照場域之量化證據。"]], "checks": [["非本領域的人讀完，能說出「誰、什麼情境、什麼困難」？", "M1-2"], ["至少有一處數據或具體情境，且附出處？", "M1-1"], ["最後一段自然導向研究目的，而不是突然跳到 AI？", "M3-1"]], "exkey": "案例 Q 的問題是「交班太費時、品質不一」，不是「AI」；AI 摘要工具是被評估的對象。"}, "m2": {"name": "文獻回顧與研究缺口", "sub": "文獻探討不是逐篇摘要，是證明「已知什麼、未知什麼、為什麼值得回答」", "q": "這個問題，別人已經知道什麼、還不知道什麼？", "must": ["結構化問題：量性用 PICO，質性用 PICo", "至少 2 個資料庫（含 1 個中文來源），附完整檢索式", "檢索日誌：資料庫、日期、檢索式、限制、筆數", "篩選流程：辨識 → 篩選 → 全文 → 納入，數字對得起來", "綜整矩陣 8–10 篇：同一欄位橫向比較", "依主題組織段落，不依文獻逐篇排列", "缺口論述三段：已知 → 未知 → 為何值得", "核心理論或模式（架構圖的依據，接 M4）"], "errs": [["逐篇摘述，最後一句「綜上所述」", "改為主題式段落，一段比較多篇"], ["主張「國內研究較少」卻沒查中文庫", "補中文資料庫檢索與筆數"], ["引用由 AI 生成、未經查證的文獻", "每筆都要能在原期刊查到"]], "key": "檢索策略、PRISMA 與綜整矩陣的做法見 5.1；這裡只管「怎麼寫成段落」。缺口要有矩陣佐證，不能只靠感覺。", "where": ["第二章 文獻探討（末節為研究架構）", "CM03 (一) 國內外研究情況、重要文獻評述", "「文獻探討」或併入背景"], "tpl": [["章節骨架", "2.1〔核心概念或場域現況〕　2.2〔介入或技術〕之應用與證據　2.3〔結果變項〕之測量\n2.4〔理論或模式〕　2.5 研究缺口與本研究定位　2.6 研究架構（接 M4）"], ["主題段落", "關於〔主題〕，〔作者 A（年）〕與〔作者 B（年）〕皆發現〔共同結果〕；然〔作者 C（年）〕於〔不同場域或對象〕得到〔不同結果〕，差異可能來自〔設計、樣本或測量之不同〕。"], ["段落收尾", "上述研究顯示〔整理後的已知〕，惟〔尚未回答的部分〕，此即本研究〔第幾項目的〕之依據。"], ["缺口 ① 已知", "既有研究已證實〔已知 1〕與〔已知 2〕（〔引用〕）。"], ["缺口 ② 未知", "然而，〔場域、族群、結果或方法〕上仍缺乏〔哪種證據〕：〔矩陣中大家都空著的那一欄〕。"], ["缺口 ③ 為何值得", "此缺口使〔誰〕在〔做什麼決定〕時缺乏依據；本研究將以〔設計〕回答〔問題〕。"]], "ex": [["PICO", "P 長照機構負責交班之護理人員｜I AI 照護紀錄摘要工具｜C 導入前及同期未導入機構｜O 交班準備時間、紀錄完整性"], ["已知", "醫院場域之 AI 摘要研究多報告文書時間縮短；長照場域已有照護人員使用經驗之質性研究。"], ["未知", "長照場域導入後，時間與紀錄品質是否「同時」改善，缺乏並測之量化證據；多數研究亦缺同期對照。"], ["為何值得", "機構需同時知道「省多少時間」與「品質有無變差」才能決定是否全面導入。"], ["架構依據", "以社會技術模型（Sittig & Singh, 2010）說明工具、人員、流程之交互作用，接 M4 架構圖。"]], "checks": [["檢索式可以直接貼上執行，且含中文資料庫？", "M2-1"], ["段落以主題開頭，一段比較多篇？", "M2-2"], ["缺口有矩陣佐證，並指出誰會用到結果？", "M2-2"]], "exkey": "案例 Q 的缺口是「並測」與「同期對照」兩個證據缺口，而不是「沒有人做過 AI」。"}, "m3": {"name": "研究目的、問題與假設", "sub": "把缺口收斂成一個可回答的問題；每個目的都要對得到一種分析（M6）", "q": "我到底要問什麼？要證明或描述什麼？", "must": ["主要研究問題：單一語句、60 字內", "2–3 項研究目的：以可檢驗動詞開頭（描述、比較、檢驗、探討）", "每項目的對應一個研究問題（或假設）", "量性：方向性假設＋虛無假設；描述性目的不設假設", "質性：探究焦點與引導性問題，說明不設假設的理由", "名詞界定：關鍵名詞的概念型與操作型定義（接 M4）", "研究範圍：對象、場域、期間；不做什麼", "目的數量與碩論規模相稱（通常 2–3 項）"], "errs": [["一句話問三件事（現況、因素、如何改善）", "只留答得了的；其餘移到未來研究"], ["描述性目的也寫假設", "描述性目的不設假設，只寫要估計什麼"], ["質性研究寫「研究者將保持客觀中立」", "改寫前理解與反身性作法（見 E 型）"]], "key": "檢驗法：把研究問題唸給非本領域的人聽；對方能複述「要比較什麼」才算研究問題，只能複述主題名詞就還是題目。", "where": ["第一章 1.3 目的、1.4 問題與假設、1.5 名詞界定", "CM03 (一) 末段或 (二) 開頭", "「計畫目標」"], "tpl": [["主要研究問題", "〔對象〕在〔情境〕中〔接受介入或暴露〕後，〔結果〕是否〔改變方向〕？（60 字內）"], ["目的（量性）", "一、〔描述〕〔對象〕之〔變項〕現況。\n二、〔比較或檢驗〕〔介入或分組〕對〔結果〕之影響。\n三、〔探討〕〔因素〕與〔結果〕之關係。"], ["研究問題", "對應每一目的各寫一題：〔目的二〕→「〔介入〕後〔結果〕是否較〔對照〕〔方向〕？」"], ["假設", "H1：〔介入組〕之〔結果〕〔高於／低於〕〔對照組〕。\nH0：兩組〔結果〕無差異。（非劣性：差異之 95% CI 下界高於〔界限〕）"], ["目的（質性）", "探討〔對象〕在〔情境〕中如何〔經驗、判斷、因應〕〔現象〕；探究焦點：〔面向 1〕、〔面向 2〕。"], ["範圍與限制", "本研究以〔場域〕之〔對象〕為範圍，期間〔起訖〕；不包含〔不做的部分及理由〕。"]], "ex": [["主要問題", "長照機構導入 AI 照護紀錄摘要工具後，交班準備時間是否縮短、紀錄完整性是否不變差？"], ["目的一", "To determine：導入後交班準備時間之變化（A 機構前後，並與同期未導入之 B 機構比較）。"], ["目的二", "To evaluate：紀錄完整性是否非劣於導入前。"], ["目的三", "To explore：照護人員之認知負荷與對 AI 摘要之信任。"], ["假設", "H1：A 機構導入後交班準備時間較導入前縮短，且降幅大於同期之 B 機構。\nH2：完整性差異之 95% CI 下界高於 −1.0 分（非劣性界限）。"], ["範圍", "北部 2 家機構、62 人、12 個月；不含工具開發與成本效益。"]], "checks": [["每個目的都以可檢驗的動詞開頭，且對得到一個假設或問題？", "M3-2"], ["描述或探索性的目的沒有硬寫假設？", "M3-1"], ["非本領域的人能複述「要比較什麼」？", "M3-1"]], "exkey": "H2 用非劣性而不是「無差異」：檢定不顯著不等於品質沒變差，非劣性要事先訂界限（見 2.6、9.4）。"}, "m4": {"name": "研究架構與變項定義", "sub": "一張圖讓讀者看懂變項之間的關係；一張表讓別人照著能測出同樣的東西", "q": "用什麼概念去問？每個概念怎麼測？", "must": ["研究架構圖：標明自變項、依變項、中介、干擾、控制變項", "每條箭頭都有理論或文獻依據（接 M2）", "未納入的重要變項及理由", "變項定義表：名稱、角色、概念型定義、操作型定義", "測量工具或資料欄位、尺度、範圍與計分", "測量時點（前測、後測、每月）與資料來源", "信效度依據：既有工具引證據，自編工具寫建立程序", "質性：初步分析框架，註明「將依資料修正」"], "errs": [["架構圖沒標變項角色，箭頭方向不明", "每個方框標角色；箭頭由因指向果"], ["操作型定義只寫「以問卷測量」", "寫出量表名稱、題數、計分與範圍"], ["質性研究畫成自變項 → 依變項", "改為探究焦點與各面向的初步關聯"]], "key": "架構圖與變項定義表是 M6 分析計畫的輸入：表上每一列，都要在分析計畫裡找得到它的位置。", "where": ["第二章末 研究架構、第三章 3.4 研究工具", "CM03 (二) 研究方法（附架構圖）", "「實施方法」或附件"], "tpl": [["架構圖", "左側放自變項（介入、分組、時間），右側放依變項；中介放中間，干擾以虛線箭頭指向主箭頭，控制變項放下方方框。\n圖下附一句：「本架構依〔理論或模式〕（〔引用〕）建立，箭頭 〔a〕 之依據為〔文獻〕。」"], ["變項名稱與角色", "〔中英文名稱〕；角色：〔自變項／依變項／中介／干擾／控制〕"], ["概念型定義", "〔該概念在文獻上的定義〕（〔引用〕）"], ["操作型定義", "本研究以〔具體工具或資料〕代表此概念：〔題數〕題、〔計分方式〕、範圍〔最低〕–〔最高〕，分數愈高表示〔意義〕。"], ["尺度與時點", "尺度：〔名目／次序／等距／比率〕；測量時點：〔前測、後測…〕；資料來源：〔問卷、觀察、系統日誌、資料庫欄位〕"], ["信效度依據", "既有工具：原作者報告〔信效度證據〕；自編工具：〔專家內容效度、預試、重測〕（見 2.2、2.2A、4.3）"]], "ex": [["自變項", "導入狀態（前測／後測）× 機構（A 先導入／B 延後導入）"], ["主要依變項", "交班準備時間：自開始彙整至完成交班之分鐘數；第三方觀察計時；比率尺度"], ["次要依變項", "紀錄完整性：0–20 分評分表，兩位評分者獨立評分；二次確認詢問次數：每次交班之次數"], ["探索變項", "認知負荷：自編 8 題量表；對 AI 摘要之信任：4 題量表"], ["控制變項", "當班照顧住民數、職類（護理師／資深照服員）、年資"], ["自編量表依據", "專家內容效度 5 位、預試 30 人（其中 15 人兩週後重測），程序見 2.2A"]], "checks": [["架構圖上每個方框都標了角色，每條箭頭都有依據？", "M4-2"], ["每個變項都寫到「題數、計分、範圍」這麼細？", "M4-2"], ["定義表每一列，在 M6 分析計畫都找得到？", "M6-1"]], "exkey": "主要依變項只有一個（交班準備時間）；主要結果要事先寫定，避免看結果才挑。"}, "m5": {"name": "研究方法（分支點）", "sub": "第三章要同時做到「夠嚴謹」與「做得到」；八節是共通骨架，各型的特有寫法見 Part 3", "q": "怎麼做，結果才可信？別人照著做，能不能重做一次？", "must": ["3.1 研究設計：用什麼設計，並寫至少兩項不採的設計與理由", "3.2 場域與對象：可操作的納入與排除條件", "3.3 抽樣與樣本數：完整參數與計算過程（質性寫飽和判準）", "3.4 研究工具：來源、題數、計分、信效度（質性附訪談大綱）", "3.5 資料蒐集流程：依時序寫，含去識別化時點", "3.6 資料分析計畫（見 M6）", "3.7 偏差來源與因應：至少三項具名偏差", "3.8 研究倫理與資料保護（見 M7）"], "errs": [["「依 G*Power 計算，樣本數為 120 人」", "寫檢定、效果量與依據、α、檢定力、流失率"], ["方法與研究問題對不上", "逐條對照 M3 的目的，一個目的至少一種做法"], ["只寫「將注意偏差」", "具名寫出偏差與可執行的因應措施"]], "key": "八節同 @A 四階段作業 A4。寫到這裡先依主型跳到 Part 3（A–H），照該型的小節清單補足特有內容，再回到 M5-2 起的模板。", "where": ["第三章 研究方法（3.1–3.8）", "CM03 (二) 研究方法、進行步驟及執行進度", "「實施方法與步驟」"], "tpl": [["3.1 設計", "本研究採〔設計名稱〕（〔主型代號〕）。選擇此設計之理由為〔與研究問題的對應〕。"], ["不採之設計", "不採〔設計甲〕，因〔理由，如無分派權、倫理或資源限制〕；\n不採〔設計乙〕，因〔無法排除的替代解釋〕。"], ["3.2 場域", "研究場域為〔機構名稱或類型〕〔規模，如床數、人數〕，已取得〔單位〕之〔書面同意〕（附錄〔　〕）。"], ["對象與條件", "納入條件：〔可操作的條件 1〕、〔條件 2〕；\n排除條件：〔條件〕；依同一條件，他人應可篩出同一群體。"], ["量性樣本數", "以〔G*Power 3.1／R pwr〕估算：〔檢定方法〕、效果量〔數值〕（依據：〔前導研究或文獻〕；無依據時採保守中效果）、α = 〔　〕〔單／雙〕尾、檢定力〔　〕，需〔n〕人；考量流失率〔　〕%，預計收案〔N〕人。"], ["質性人數", "以〔資訊力或飽和〕為判準：連續〔　〕位受訪者未出現新主題即停止，並續訪〔　〕位確認；預估約〔　〕人（〔引用〕）。"], ["問卷調查", "依可容許誤差〔　〕、信心水準〔　〕估算；或依 SEM 參數數量估算（見 2.3、4.1、D 型）。"], ["3.4 既有工具", "採用〔量表名稱〕（〔原作者，年〕）〔中文版，譯者〕，共〔　〕題、〔　〕點計分，原研究 Cronbach's α 為〔　〕；已取得〔作者授權〕。"], ["3.4 自編工具", "依〔文獻〕初擬〔　〕題 → 專家〔　〕位內容效度（I-CVI、S-CVI）→ 預試〔　〕人 → 〔重測、項目分析〕（流程見 2.2A）。"], ["3.5 流程", "一、IRB 核准後〔第幾月〕：〔聯繫場域、說明會、取得同意〕。\n二、〔前測或基線〕：〔做什麼、誰做、在哪做、多久〕。\n三、〔介入或資料蒐集〕：〔內容、頻率、期間〕。\n四、〔後測或追蹤〕；資料於〔時點〕完成去識別化並〔儲存方式〕。"], ["資料串接", "以〔研究編號〕串接〔問卷、觀察、系統日誌〕；對照表由〔專人〕保管，與研究資料分開存放。"], ["3.7 偏差 ①", "〔偏差名稱，如選擇偏差〕：因〔原因〕可能使〔結果偏向何方〕；因應：〔具體措施〕。"], ["3.7 偏差 ②", "〔測量偏差〕：因〔原因〕；因應：〔盲性、標準化流程、評分者訓練與信度檢核〕。"], ["3.7 偏差 ③", "〔干擾或流失〕：因〔原因〕；因應：〔對照組、多變項調整、意向治療分析、流失追蹤〕。"]], "ex": [["3.1 設計", "非同期導入之準實驗；不採 RCT（導入時程由管理階層決定，無分派權）、不採單組前後測（無法排除同期政策與人力變動）、不採橫斷面（無法回答是否帶來改變）。"], ["3.2 對象", "北部 2 家住宿式長照機構（A 120 床、34 人；B 96 床、28 人）負責交班之護理師與資深照服員，共 62 人，全體普查。"], ["3.3 樣本數", "配對 t 檢定、dz = 0.5（保守中效果）、α = .05 雙尾、檢定力 .80 → 至少 34 人；A 機構 34 人全數納入（2.6）。"], ["3.4 工具", "第三方觀察計時；完整性 0–20 分評分表（雙評分者）；自編認知負荷量表（內容效度、預試與重測，見 2.2A）。"], ["3.5 流程", "M1–M2 IRB 與觀察者校準 → M2–M3 前測 → A 機構 2026 年 11 月、B 機構 2027 年 2 月導入 → M9–M11 質性訪談。"], ["3.7 偏差", "觀察者效應 → 前測期先適應；同期事件 → B 機構同期對照；評分偏差 → 評分者不知前後測。"]], "checks": [["至少寫了兩項不採的設計與具體理由？", "M5-2"], ["樣本數的參數齊全，別人可以重算一次？", "M5-3"], ["至少三項具名偏差，各有可執行的因應？", "M5-4"]], "exkey": "3.6 分析與 3.8 倫理分別在 M6、M7 寫；這裡列出的六節，加上那兩節，就是 @A A4 要求的八節。"}, "m6": {"name": "資料分析計畫", "sub": "分析要在收資料前寫定：每個目的配一種分析，連前提檢查與缺值處理都事先決定", "q": "每個研究目的，分別用什麼方法分析？", "must": ["目的—假設—變項—方法—判準 對照表（一列一個目的）", "主要分析與次要分析分開寫", "前提檢查：常態、變異數同質、獨立性等，不成立時的替代法", "缺值處理：缺多少才處理、用什麼方法", "巢套或重複測量資料的處理（混合模型或 GEE）", "顯著水準、單雙尾、多重比較校正", "敏感度分析：換一種合理假設，結論是否改變", "軟體與版本；質性寫分析步驟與編碼方式"], "errs": [["只寫「以 SPSS 進行統計分析」", "逐一目的寫出檢定方法與判準"], ["巢套資料直接跑一般迴歸", "改用混合效果模型或 GEE，至少做敏感度分析"], ["寫了沒規劃的分析，或看結果才挑", "主要分析事先寫定；探索性分析明白標示"]], "key": "檢驗法：把 M3 目的表、M4 定義表與本頁對照表三張排在一起，每一列都要接得上；接不上的就是漏寫或多寫。", "where": ["第三章 3.6 資料分析計畫", "CM03 (二) 研究方法（分析策略）", "「實施方法」或「成效評估方式」"], "tpl": [["對照表欄位", "目的｜假設｜依變項（尺度）｜自變項｜分析方法｜判準（α、CI、界限）｜補充或敏感度分析"], ["描述性目的", "以〔平均數、標準差／次數、百分比〕描述〔變項〕；〔連續變項〕另報〔中位數與四分位距〕。"], ["比較性目的", "以〔配對 t／獨立 t／ANOVA／卡方〕檢驗〔假設〕，報告效果量〔d、η²、OR〕與 95% CI；若〔前提不成立〕，改用〔Wilcoxon 等無母數法〕。"], ["關係或預測", "以〔多元迴歸／邏輯斯迴歸／SEM〕檢驗〔自變項〕對〔依變項〕之影響，控制〔共變項〕；檢查〔共線性、殘差〕。"], ["缺值與敏感度", "缺值比例〔　〕% 以下以〔完整個案〕分析；高於此以〔多重插補〕，並以〔另一方法〕做敏感度分析。"], ["質性分析", "依〔Braun & Clarke 主題分析六步驟／內容分析〕；前〔　〕份逐字稿雙人獨立編碼，歧異以協商共識處理；以〔軟體〕管理編碼。"]], "ex": [["目的一", "A 機構前後：配對 t 檢定；A 對 B 同期：差異中之差異（DiD）；敏感度：混合效果模型（交班事件巢套於人員）。"], ["目的二", "完整性差異之 95% CI 與非劣性界限 −1.0 分比較：CI 下界高於 −1.0 即判定非劣。"], ["目的三", "認知負荷、信任以描述統計呈現，並以相關與多元迴歸探索其與準備時間之關係（探索性，明白標示）。"], ["共通設定", "α = .05 雙尾；量表 Cronbach's α 於正式施測後重新計算；分析以 Python（版本寫明）執行，腳本存檔。"], ["質性後接", "案例 L：依量化結果挑兩端案例訪談，主題分析六步驟，雙人獨立編碼前 4 份逐字稿。"]], "checks": [["M3 的每個目的，在這裡都有一列？", "M6-2"], ["重複測量或巢套資料，有寫怎麼處理？", "M6-1"], ["判準事先寫定，且分得出主要與探索性分析？", "M6-2"]], "exkey": "案例 Q 交班事件是「人重複測 12 次」，所以主分析外要加混合效果模型；這正是 @A A4 最常失分第二項。"}, "m7": {"name": "研究倫理、IRB 與資料治理", "sub": "計畫書要寫清楚：送哪種審查、怎麼取得同意、資料從收集到銷毀怎麼保護", "q": "參與者的權益怎麼保障？資料怎麼存、誰能看、何時銷毀？", "must": ["審查機構與預計審查類型（依 IRB 判定）", "知情同意方式；或申請免除同意的理由與條件", "參與者風險與降低方式；退出權、不影響考核或照護", "去識別化作法與時點；對照表保管方式", "資料儲存：位置、加密、存取權限、保存年限與銷毀", "次級資料：申請管道與使用規範（如健保資料）", "利益衝突揭露；生成式 AI 工具使用與資料不外流", "預計時程：何時送審、補件緩衝（接 M8）"], "errs": [["只寫「將通過 IRB 審查」", "寫審查類型、同意方式、資料保護細節"], ["研究者是受試者的主管，卻沒處理", "改由第三人招募，並說明不影響考核"], ["把含個資的資料貼進雲端 AI 工具", "去識別後才可使用，並寫進資料管理計畫"]], "key": "法規與審查類型見 7.1，隱私與資安見 9.11；本頁只管「計畫書要寫到哪些項目」。IRB 時程通常比想像長，提早送。", "where": ["第三章 3.8、附錄同意書", "CM01 勾選人體研究；CM03 (二) 敘明", "多列為必附文件"], "tpl": [["審查", "本研究將送〔機構〕人體研究倫理審查委員會審查，預計〔審查類型〕，於核准後始收案。"], ["同意", "〔對象〕於充分說明後簽署書面同意；〔對象或資料〕因〔理由〕擬申請免除知情同意，符合〔法規條件〕。"], ["風險與權益", "本研究風險為〔最小風險之說明〕；參與者可隨時退出，不影響其〔考核、照護、權益〕；招募由〔非直屬主管之第三人〕進行。"], ["去識別化", "資料於〔時點〕以研究編號取代姓名與〔識別欄位〕；對照表由〔專人〕保管於〔位置〕，與研究資料分開。"], ["儲存與銷毀", "資料存於〔加密位置〕，僅〔研究團隊成員〕可存取；保存至〔年限〕後以〔方式〕銷毀。"], ["利益衝突與 AI", "研究者與〔廠商或單位〕〔無／有〕財務關係〔揭露內容〕；生成式 AI 僅用於〔用途〕，不輸入可識別資料。"]], "ex": [["審查", "送合作機構所屬之人體研究倫理審查委員會；M1 送審，M2 核准後才開始前測。"], ["人員同意", "護理人員與照服員簽署書面同意；招募與說明由研究團隊進行，參與與否不影響考核。"], ["住民資料", "交班紀錄含住民個資：去識別化後才離開機構，並依 7.1 評估申請免除住民同意之條件。"], ["資料保護", "研究編號串接觀察、問卷與系統日誌；對照表由專人保管；存取限研究團隊。"], ["利益衝突", "揭露研究者與摘要工具廠商之關係；工具由機構採購，研究團隊不參與開發。"]], "checks": [["同意方式（或免除同意的理由）寫清楚了？", "M7-2"], ["去識別化的時點與對照表保管方式寫了？", "M7-2"], ["IRB 送審與補件時間已排進甘特圖？", "M8-1"]], "exkey": "案例 Q 的倫理重點是「住民資料」：受試者是人員，但紀錄內容屬於住民，兩者的同意要分開處理（見 7.1、9.11）。"}, "m8": {"name": "時程、可行性與風險", "sub": "說服審查者「你做得完」：甘特圖、可行性證據，以及卡住時的備案", "q": "一年內做得完嗎？哪一步最可能卡住？備案是什麼？", "must": ["甘特圖：以月為單位，自 IRB 送審到論文口試", "標明里程碑（IRB 核准、收案完成、分析完成…）", "任務之間的相依關係（前一步沒完成，下一步不能開始）", "至少兩個月緩衝，並寫明用途", "可行性證據：資料、場域、樣本、時間四項（見 0.1）", "已取得的同意書、預試或前導結果", "風險—對策表：可能遭遇的困難及解決途徑", "與方法章的時點完全一致（接 M5 的 3.5 節）"], "errs": [["時程最後一個月就是口試", "保留至少兩個月緩衝，標明用途"], ["可行性寫「應可取得」「預計無虞」", "附查證對象、日期與答覆"], ["甘特圖與方法章時點對不上", "逐項對照 3.5 節流程"]], "key": "國科會 CM03 明文要求寫「預計可能遭遇之困難及解決途徑」；論文計畫書沒有規定，但口委幾乎一定會問（@A 八問之八）。", "where": ["第三章末或第四章 研究時程", "CM03 (二) 執行進度、困難及解決途徑", "「期程安排」「風險管理」"], "tpl": [["甘特圖列", "工作項目｜起訖月份｜負責人｜前置工作｜里程碑（★）"], ["里程碑句", "★ M〔　〕〔里程碑名稱〕：〔判定完成的具體條件，如核准函、收齊〔　〕份〕。"], ["緩衝", "M〔　〕至 M〔　〕保留緩衝，用於〔IRB 補件、回收不足時延長收案、分析修正〕。"], ["可行性證據", "〔資料／場域〕已於〔日期〕取得〔單位〕〔書面同意或回覆〕（附錄〔　〕）；預試〔　〕人顯示〔可行之處〕。"], ["風險 → 對策", "若〔困難，如回收率低於預期〕，將〔對策，如延長收案、增加提醒、增加收案場域〕；判斷時點為 M〔　〕。"], ["多年期（國科會）", "第一年：〔工作項目〕；第二年：〔工作項目〕；每年各列查核點。"]], "ex": [["時程", "M1–M2 準備（IRB、觀察者校準、量表預試）→ M2–M3 前測 → M3 起 A 機構導入與後測 → M6 起 B 機構導入 → M9–M11 質性訪談 → M11–M12 分析與寫作"], ["里程碑", "★M2 IRB 核准　★M3 前測收齊　★M4 A 機構導入完成　★M7 B 機構導入完成　★M11 資料飽和確認　★M12 初稿完成"], ["可行性", "兩機構管理階層已同意導入時程與現場觀察；觀察計時與量表已規劃預試。"], ["風險 ①", "IRB 補件延誤 → M1 即送審；A 機構導入前仍須完成前測，必要時縮短前測期並記錄。"], ["風險 ②", "B 機構導入再延後 → 對照期延長，改以中斷時間序列補充分析（8.3）。"], ["風險 ③", "問卷回收不足 → 兩次提醒並請單位主管協助發放；於 M4 檢視回收狀況。"]], "checks": [["每個里程碑都有判定完成的具體條件？", "M8-2"], ["寫了至少三項風險，各有觸發條件與對策？", "M8-2"], ["甘特圖的時點與 3.5 節流程完全一致？", "M5-4"]], "exkey": "論文版另須在口試前保留至少兩個月緩衝（@A A4）；案例 Q 的 12 個月是執行期，不含口試。"}, "m9": {"name": "預期成果與貢獻", "sub": "寫的是「預期會看到什麼、對誰有什麼用」，不是結論；每一條都要對應一個目的", "q": "如果研究順利完成，會得到什麼？對學術與實務有什麼用？", "must": ["預期結果：理論 → 假設 → 預期觀察，逐條對應目的", "結果不如預期時的意義（不顯著、方向相反）", "學術貢獻：補了哪個缺口（接 M2）", "實務貢獻：誰會用、做什麼決定", "政策或產業貢獻（如有）", "研究限制：分「設計本身」與「執行面」兩類", "具體產出：論文、研討會、系統、指標、資料集", "國科會另需：參與人員可獲之訓練、對國家發展之貢獻"], "errs": [["把預期結果寫成已證實的結論", "用「預期」「若…則…」的未來式"], ["貢獻只寫「具參考價值」", "寫出使用者、決定與使用場景"], ["限制只寫「樣本數不足」", "分設計與執行兩類，各寫影響與因應"]], "key": "預期結果的推導鏈同 6.1 第 22 張；不得預告未經規劃的分析，也不要寫出具體數字結果。", "where": ["第三章末 預期結果、研究限制", "CM03 (三) 預期完成之工作項目及成果", "「預期效益」（多要求指標與目標值）"], "tpl": [["預期結果", "依〔理論或文獻〕，預期〔介入或因素〕將使〔結果〕〔方向〕；若結果〔不顯著或相反〕，則表示〔可能的解釋〕，仍可提供〔何種資訊〕。"], ["學術貢獻", "本研究將補足〔缺口〕，提供〔場域、族群〕之〔證據類型〕。"], ["實務貢獻", "結果可供〔使用者，如機構主管〕於〔決定，如是否全面導入〕時參考，並提出〔具體產出，如導入檢核清單〕。"], ["設計限制", "本研究採〔設計〕，無法〔排除之解釋〕；結果推論範圍限於〔場域、族群〕。"], ["執行限制", "可能面臨〔流失、觀察者效應、工具版本更新〕，將以〔因應〕降低其影響。"], ["具體產出", "預計完成〔碩士論文〕，並投稿〔期刊或研討會類型〕；國科會另寫〔人員訓練〕與〔成果之質與量〕。"]], "ex": [["預期結果", "交班準備時間縮短且完整性非劣；負荷下降，但需檢驗二次確認負擔是否增加。"], ["若不如預期", "若時間未縮短，將以使用紀錄與質性訪談（案例 L）找出原因，提供導入改善方向。"], ["學術貢獻", "填補長照場域「時間＋品質」並測、且有同期對照之量化證據。"], ["實務貢獻", "機構是否全面導入之決策依據；提出導入時的教育訓練與核對流程建議。"], ["限制", "設計：非隨機、僅北部 2 家機構；執行：觀察者效應、研究期間工具版本可能更新。"]], "checks": [["每個目的都有一條對應的預期結果？", "M3-3"], ["寫了「結果不如預期」時的意義？", "M9-2"], ["限制分成設計與執行兩類？", "M9-1"]], "exkey": "案例 Q 特意預告「需檢驗二次確認負擔」：它讓後接的質性研究（案例 L）有理由存在（見 3.2）。"}, "m10": {"name": "題目、摘要與參考文獻", "sub": "最後才定稿：題目與摘要是全書的縮影，參考文獻與規範自評是可信度的證據", "q": "讀者只看題目與摘要，能不能知道你要做什麼、怎麼做？", "must": ["題目含四要素：對象、介入或變項、結果、場域（可加設計）", "題目不放「之研究」「探討」等贅字；中英文題目一致", "摘要結構：背景、目的、方法、預期結果（計畫書用未來式）", "關鍵詞 3–5 個，含 MeSH 或常用檢索詞", "參考文獻 APA 第 7 版，文內與文末完全對應", "每筆文獻都實際查證存在且引述無誤", "報告規範自評表（依主型，見 Part 3）", "AI 使用聲明與研究日誌（依課程規範）"], "errs": [["題目只有領域：「AI 在長照之應用」", "補上對象、結果與設計"], ["摘要寫成背景介紹，看不到方法", "背景一至兩句，方法占最多篇幅"], ["文末有、文內沒引用（或反之）", "送審前逐筆對照兩邊"]], "key": "題目寫法見 6.1 第 8 張；APA 格式見 6.2；報告規範見 9.9。國科會摘要另需英文版，常是審查者最先讀的一頁。", "where": ["封面、摘要、參考文獻、附錄", "CM01 計畫名稱、CM02 中英文摘要", "「計畫名稱」「計畫摘要」"], "tpl": [["題目公式", "〔介入或暴露〕對〔對象〕〔結果〕之影響：〔設計〕　／　〔對象〕〔現象〕之〔經驗或因素〕：〔取徑〕"], ["摘要 ① 背景", "〔場域問題〕，然〔缺口〕。（1–2 句）"], ["摘要 ② 目的", "本研究旨在〔目的動詞〕〔核心問題〕。"], ["摘要 ③ 方法", "本研究將採〔設計〕，於〔場域〕招募〔對象與人數〕，以〔工具〕測量〔變項〕，並以〔分析〕檢驗〔假設〕。"], ["摘要 ④ 預期", "預期〔結果〕，可作為〔誰〕〔做什麼〕之依據。"], ["規範自評", "依〔規範名稱與版本〕逐項標示本計畫書對應之頁碼；尚未適用之項目（如結果）註明「於論文完成時報告」。"]], "ex": [["題目", "AI 照護紀錄摘要工具對長照機構交班效率與紀錄品質之影響：非同期導入之準實驗研究"], ["拆解", "介入：AI 照護紀錄摘要工具｜場域：長照機構｜結果：交班效率、紀錄品質｜設計：非同期導入之準實驗"], ["摘要方法句", "本研究將於北部 2 家長照機構，以非同期導入準實驗設計，觀察 62 位護理人員導入前後之交班準備時間與紀錄完整性。"], ["關鍵詞", "長期照護、交班、生成式人工智慧、護理紀錄、準實驗設計"], ["規範自評", "非隨機介入：TREND；AI 介入另參考 DECIDE-AI（見 C 型、9.9）。"]], "checks": [["題目看得出對象、介入、結果、場域？", "M10-2"], ["摘要的方法句，別人讀了知道怎麼做？", "M10-2"], ["每筆參考文獻都查證過，文內文末對應？", "M10-1"]], "exkey": "案例 Q 的題目同 6.1 第 26 張；口試前若設計有改，題目副標要一起改。"}}, "typ": {"A": {"name": "系統開發與評估", "en": "Design Science Research", "secs": [["3.1 研究架構", "DSR 各階段與本研究對應（問題 → 需求 → 設計 → 評估）", "附階段流程圖，標出迭代"], ["3.2 需求分析", "對象、方法（訪談、觀察）、需求整理與排序", "寫人數與排序方法（如 MoSCoW）"], ["3.3 系統設計", "架構、核心功能、資料流、AI 元件的輸入輸出與出錯處理", "附架構圖與 3–5 個核心任務"], ["3.4 開發與版本", "開發工具、雛型層次、版本管理", "寫出雛型 → 可運作版本的條件"], ["3.5 形成性評估", "啟發式評估、放聲思考、問題嚴重度與迭代輪數", "寫專家與使用者人數、輪數"], ["3.6 總結性評估", "目標使用者、任務、指標（SUS、完成率、時間、錯誤）", "對象必須是真正的目標使用者"], ["3.7 分析與倫理", "敘述統計、版本比較；資安、個資、是否屬醫材", "醫材判定見 9.10"]], "tpl": [["設計句", "本研究採設計科學研究法（Hevner et al., 2004；Peffers et al., 2007），分為〔問題界定、需求分析、設計開發、評估〕〔　〕階段，其中〔設計與形成性評估〕反覆〔　〕輪。"], ["需求句", "以半結構訪談〔　〕位〔使用者角色〕與現場觀察〔　〕班次蒐集需求，經主題分析整理為需求清單，以〔MoSCoW〕排序。"], ["設計句", "系統包含〔模組 1〕、〔模組 2〕；核心任務為〔任務 1–3〕；AI 元件輸入〔　〕、輸出〔　〕，輸出不確定時〔處理方式〕。"], ["評估句", "形成性評估由〔　〕位專家依 Nielsen 十原則進行，並請〔　〕位使用者放聲思考；總結性評估招募〔　〕位〔目標使用者〕完成〔　〕項任務，記錄完成率、時間、錯誤數並施測 SUS。"], ["偏差句", "形成性與總結性評估由不同受試者擔任，避免〔學習效應〕；開發者不擔任測試主持人，以降低〔期望偏差〕。"], ["範例題目", "AI 輔助護理交班摘要系統之開發與可用性評估（0.1 範例）"]], "guides": ["描述系統：TIDieR（介入描述）", "可用性：SUS、任務完成率、NASA-TLX（9.7）"], "errs": [["只做滿意度問卷就說「有效」", "宣稱有效要接 C 型"], ["測試對象是同學", "改為目標使用者"], ["沒有迭代紀錄", "每輪附問題清單與修改"]]}, "B": {"name": "AI 模型建置", "en": "Machine Learning（CRISP-DM）", "secs": [["3.1 任務定義", "分類、預測或辨識；預測時點與預測期間", "寫清楚「在何時、用哪些資料、預測什麼」"], ["3.2 資料來源", "來源、期間、筆數、納入排除、標籤定義與品質", "附資料流程圖與筆數變化"], ["3.3 前處理與切分", "缺值、去識別、切分方式；先切分再標準化", "寫明如何防止資料洩漏"], ["3.4 特徵", "候選特徵、選擇與轉換方法", "特徵須在預測時點前可得"], ["3.5 模型與基準", "2–3 種模型，以邏輯斯迴歸為基準；調參方法", "寫交叉驗證與調參範圍"], ["3.6 驗證與指標", "內部、時間、外部驗證；AUC、敏感度、特異度、校準", "不只報準確率"], ["3.7 解釋、公平與樣本", "SHAP 等可解釋性；分群表現；樣本數依據", "樣本數參考 Riley et al. (2020)"]], "tpl": [["任務句", "本研究以〔預測時點〕可得之〔資料〕，預測〔結果〕於〔期間〕內是否發生（二元分類）。"], ["資料句", "資料取自〔來源〕〔起訖年月〕，共〔　〕筆；結果定義為〔定義〕，由〔　〕位〔專業人員〕標註，標註一致性以〔指標〕檢核。"], ["切分句", "依〔時間或機構〕切分為訓練集〔　〕%、驗證集〔　〕%、測試集〔　〕%；標準化與補值僅以訓練集參數執行，以避免資料洩漏。"], ["驗證句", "以 AUC 為主要指標，並報告敏感度、特異度、PPV、校準曲線與 Brier 分數；另以〔外部資料〕進行外部驗證，並比較〔次族群〕之表現。"], ["偏差句", "結果標註者不知預測特徵；以時間切分模擬實際部署，避免〔樂觀偏差〕；比較〔性別、年齡層〕之表現以檢查公平性。"], ["範例題目", "以急診檢傷資料預測 72 小時內轉入加護病房（0.1 範例）"]], "guides": ["報告：TRIPOD+AI（Collins et al., 2024）", "偏誤評估：PROBAST+AI；AI 介入試驗另見 C 型"], "errs": [["先標準化或補值才切分（洩漏）", "先切分，再以訓練集處理"], ["只在同一批資料內驗證", "加時間或外部驗證"], ["只報準確率", "加 AUC、校準與分群表現"]]}, "C": {"name": "介入成效研究", "en": "Quasi-experiment／RCT", "secs": [["3.1 設計", "RCT、群集、準實驗（非同期導入、前後測對照）；不採理由", "寫分派方式與無法隨機的理由"], ["3.2 對象與分組", "納入排除、招募、分組（隨機或自然分組）", "隨機：序列產生與隱匿"], ["3.3 介入與對照", "介入內容、劑量、期間、提供者；對照組接受什麼", "依 TIDieR 描述到可重做"], ["3.4 結果指標", "一個主要結果、次要結果、測量時點與方式", "主要結果事先寫定"], ["3.5 樣本數", "效果量依據、α、檢定力、流失；非劣性寫界限", "群集設計加設計效應"], ["3.6 偏差控制", "盲性、評估者不知分組、ITT、污染", "不能盲時說明替代作法"], ["3.7 分析", "前後比較、DiD、混合模型、ITT 與 per-protocol", "事先註冊或公開計畫更佳"]], "tpl": [["設計句", "本研究採〔非同期導入準實驗／隨機對照試驗〕，〔A 組〕於〔時點〕導入，〔B 組〕於〔時點〕導入，〔延後期間〕作為同期對照。"], ["介入句", "介入為〔名稱〕：由〔提供者〕於〔場所〕提供〔內容〕，每〔頻率〕、共〔期間〕；對照組接受〔常規照護或等待〕。"], ["結果句", "主要結果為〔指標〕，於〔時點〕以〔工具或方式〕測量，測量者〔不知分組〕；次要結果為〔指標〕。"], ["樣本數句", "以〔檢定〕、效果量〔　〕（依據〔　〕）、α = 〔　〕、檢定力〔　〕估算需〔　〕人，考量流失〔　〕% 共收〔　〕人；非劣性界限設為〔　〕（依據〔　〕）。"], ["偏差句", "結果評估者不知分組；以意向治療分析處理流失；記錄同期政策或人力變動，以評估〔歷史效應〕。"], ["範例題目", "糖尿病遠距監測 App 對血糖控制之成效（0.1 範例）"]], "guides": ["準實驗：TREND；隨機試驗：CONSORT 2025", "AI 介入：CONSORT-AI、DECIDE-AI；試驗計畫書：SPIRIT 2025"], "errs": [["沒有對照組就說「因介入而改善」", "加同期對照或改寫成前後描述"], ["看結果才挑主要結果", "事先寫定一個主要結果"], ["非劣性沒有界限依據", "寫出界限及其臨床理由"]]}, "D": {"name": "問卷調查", "en": "Survey（現況・因素・接受度）", "secs": [["3.1 設計", "橫斷面或縱貫；描述、相關或模型驗證（TAM、UTAUT 等）", "寫出要描述或驗證什麼"], ["3.2 母群與抽樣", "目標母群、抽樣架構、抽樣方法", "便利抽樣須說明推論限制"], ["3.3 樣本數", "可容許誤差估算；或依 SEM 參數數量", "回收率要納入計算"], ["3.4 問卷工具", "量表來源、授權、翻譯回譯、題數與計分", "自編量表走 2.2A 八關"], ["3.5 預試與信效度", "專家內容效度、預試、CFA、信度", "CVI 判準依 4.3"], ["3.6 施測", "紙本或網路、期間、提醒次數、防重複作答", "網路問卷寫平台與篩選題"], ["3.7 分析與偏差", "描述、相關、迴歸、SEM；無回應與共同方法變異", "寫偏差的檢查方法"]], "tpl": [["抽樣句", "目標母群為〔　〕，以〔分層隨機／便利〕抽樣，自〔抽樣架構〕抽取〔　〕人。"], ["樣本數句", "依可容許誤差〔　〕、信心水準 95% 估算需〔　〕人；預估回收率〔　〕%，預計發放〔　〕份。（SEM：依模型參數數量與文獻建議估算）"], ["工具句", "問卷含〔構面〕〔　〕題，採自〔原作者，年〕，經〔授權、翻譯回譯〕；〔Likert〕〔　〕點計分。"], ["信效度句", "經〔　〕位專家內容效度審查，預試〔　〕人；正式資料以 CFA 檢驗構念效度，並報告組合信度與 AVE。"], ["偏差句", "以〔提醒、匿名作答〕降低無回應偏差並比較早晚回覆者；以〔Harman 單因子檢定〕檢查共同方法變異。"], ["範例題目", "民眾使用遠距視訊門診之意圖：UTAUT2 觀點（0.1 範例）"]], "guides": ["觀察性（含橫斷面）：STROBE", "網路問卷：CHERRIES；量表發展見 2.2A"], "errs": [["把相關寫成因果", "用「關聯」「預測」措辭"], ["便利抽樣卻推論全體", "寫明推論範圍限制"], ["自編問卷沒寫信效度程序", "補內容效度與預試"]]}, "E": {"name": "質性研究", "en": "In-depth Interview／Focus Group", "secs": [["3.1 研究取徑", "質性描述、紮根理論、現象學等，及選擇理由", "寫出不採其他取徑的理由"], ["3.2 研究者角色", "背景、與場域的關係、前理解與反身性", "主管身分須說明如何處理"], ["3.3 參與者", "立意抽樣、最大變異、納入條件", "寫出變異的面向"], ["3.4 資料蒐集", "訪談或焦點團體、大綱、時長、錄音、田野筆記", "附訪談大綱全文"], ["3.5 人數與飽和", "資訊力或飽和判準、停止規則", "判準要可操作"], ["3.6 資料分析", "主題分析六步驟等；編碼方式與軟體", "雙人編碼與協商"], ["3.7 嚴謹度", "可信性、可轉移性、可靠性、可確認性", "Lincoln & Guba 四準則"]], "tpl": [["取徑句", "本研究採〔質性描述〕取徑，因研究目的在〔描述經驗或判斷〕；不採〔紮根理論〕，因目標非建構實質理論。"], ["抽樣句", "以立意抽樣招募〔對象〕，並依〔職類、年資、單位〕最大變異；連續〔　〕位未出現新主題即停止，再續訪〔　〕位確認。"], ["蒐集句", "以半結構訪談進行，每次約〔　〕分鐘，全程錄音並轉為逐字稿；前〔　〕次訪談後檢討並修訂大綱，保留修訂紀錄。"], ["分析句", "依 Braun & Clarke（2006）主題分析六步驟；前〔　〕份逐字稿由兩位研究者獨立編碼，歧異以協商共識處理。"], ["嚴謹句", "以〔成員檢核、同儕檢核、稽核軌跡、反思日誌〕分別對應可信性、可轉移性、可靠性、可確認性。"], ["範例題目", "護理師使用 AI 病歷摘要之經驗與顧慮（0.1 範例）"]], "guides": ["報告：COREQ（Tong et al., 2007）", "嚴謹度：Lincoln & Guba（1985）四準則"], "errs": [["只訪 3 人且沒寫飽和判斷", "寫可操作的飽和判準"], ["把逐字稿直接貼成結果", "整理成主題並附引述"], ["寫「研究者將保持客觀中立」", "改寫反身性作法"]]}, "F": {"name": "德菲法與指標建構", "en": "Delphi Technique", "secs": [["3.1 研究流程", "初擬指標 → 回合數 → 共識 → （選配 AHP 權重）", "附流程圖"], ["3.2 指標初擬", "文獻回顧、焦點團體或既有框架", "寫初擬題數與來源"], ["3.3 專家小組", "專家資格、領域分布、人數、邀請方式", "避免專家同質（同一單位）"], ["3.4 問卷與尺度", "重要性、可行性評分；開放意見欄", "寫評分點數"], ["3.5 共識判準", "平均數、眾數、四分位差或標準差的門檻", "門檻事先寫定"], ["3.6 回合與停止", "回合數上限、回饋方式、停止規則", "至少兩回合"], ["3.7 分析與權重", "各回合統計、意見整理；AHP 一致性檢定", "AHP 見 0.1 F 型方法表"]], "tpl": [["流程句", "本研究以修正式德菲法進行，先由〔文獻回顧或焦點團體〕初擬〔　〕構面〔　〕項指標，再進行〔　〕回合專家問卷。"], ["專家句", "邀請〔領域 1〕、〔領域 2〕專家共〔　〕位，資格為〔年資、職位或著作條件〕。"], ["判準句", "以〔重要性平均數與眾數〕及〔四分位差或標準差〕判定共識，門檻為〔　〕（依〔引用〕）；未達共識者進入下一回合。"], ["停止句", "達共識或達〔　〕回合即停止；每回合回饋各題統計與匿名意見。"], ["偏差句", "專家匿名作答、彼此不知身分，避免〔權威效應〕；各回合回饋統計與匿名意見，並報告各回合回收率。"], ["範例題目", "心理健康 App 之品質與安全評估指標（0.1 範例）"]], "guides": ["報告：CREDES（Jünger et al., 2017）", "判準可參考 3.1 原研究；方法學：Hasson et al. (2000)"], "errs": [["只做一回合就叫德菲法", "至少兩回合並附回饋"], ["專家同質性太高", "跨領域、跨單位"], ["共識門檻事後才訂", "在計畫書寫定"]]}, "G": {"name": "系統性／範域回顧", "en": "Systematic & Scoping Review", "secs": [["3.1 類型與註冊", "系統性回顧或範域回顧；PROSPERO 或 OSF 註冊", "寫註冊編號或預計時間"], ["3.2 問題與條件", "PICO 或 PCC；納入排除條件", "條件可操作"], ["3.3 資料庫與檢索", "至少三個資料庫、完整檢索式、灰色文獻", "附完整檢索式"], ["3.4 篩選", "題摘與全文雙人獨立篩選、歧異處理", "附 PRISMA 流程"], ["3.5 資料萃取", "萃取表欄位、雙人核對", "附萃取表"], ["3.6 品質評估", "RoB 2、ROBINS-I、QUADAS-2 等", "範域回顧通常不做"], ["3.7 綜整", "統合分析（模型、異質性）或敘述綜整；GRADE", "寫不合併時的處理"]], "tpl": [["類型句", "本研究為〔系統性回顧與統合分析／範域回顧〕，依 PRISMA 2020（或 PRISMA-ScR）撰寫，計畫書已〔於　註冊〕。"], ["檢索句", "檢索 PubMed、Embase、CINAHL 與〔中文資料庫〕自〔起〕至〔檢索日期〕之文獻，檢索式見附錄〔　〕。"], ["篩選句", "兩位研究者獨立篩選題摘與全文，歧異由第三位研究者裁決；以〔工具〕管理。"], ["綜整句", "以〔隨機效應模型〕合併〔效果量〕，以 I² 評估異質性，並依〔變項〕做次群組分析；證據確定性以 GRADE 評定。"], ["偏差句", "納入灰色文獻，並於納入研究數足夠時以〔漏斗圖、Egger 檢定〕檢查發表偏差；篩選一致性以 κ 報告。"], ["範例題目", "AI 聊天機器人對憂鬱症狀成效之系統性回顧（0.1 範例）"]], "guides": ["報告：PRISMA 2020；範域：PRISMA-ScR", "偏誤：RoB 2、ROBINS-I、QUADAS-2（5.2）"], "errs": [["只查一個資料庫", "至少三個並含中文來源"], ["一般文獻整理冒充系統性回顧", "照 PRISMA 各項寫"], ["單人篩選", "雙人獨立並寫一致性"]]}, "H": {"name": "次級資料研究", "en": "Secondary Data／健保資料庫", "secs": [["3.1 資料來源", "資料庫名稱、年份、申請管道與規範", "寫申請時程"], ["3.2 研究設計", "回溯性世代、病例對照、巢式病例對照", "可參考標的試驗仿真"], ["3.3 研究對象", "納入排除、index date、清除期", "附研究對象篩選流程圖"], ["3.4 暴露與結果", "ICD 碼、藥品碼、定義與驗證文獻", "附代碼表"], ["3.5 共變項", "人口學、共病指數、就醫型態", "寫取得時間窗"], ["3.6 分析", "Cox 迴歸、傾向分數、競爭風險", "寫追蹤起訖與設限"], ["3.7 偏差與敏感度", "不死時間、立即偏誤、未測干擾；E-value", "至少兩項敏感度分析"]], "tpl": [["來源句", "本研究使用〔資料庫〕〔年份〕之〔檔案〕，將向〔申請單位〕申請，並於〔指定環境〕分析。"], ["對象句", "納入〔年份〕間首次〔診斷或用藥〕之〔族群〕，以〔事件〕之日為 index date；排除〔條件〕，並設〔　〕年清除期。"], ["定義句", "暴露定義為〔代碼與條件〕；結果定義為〔代碼與條件〕（依〔驗證文獻〕）。"], ["分析句", "以 Cox 比例風險模型估計 HR 與 95% CI，調整〔共變項〕；以〔傾向分數、不同暴露定義〕做敏感度分析。"], ["偏差句", "以〔新使用者設計、對齊暴露與追蹤起點〕避免不死時間偏誤；以〔E-value、負對照〕評估未測干擾。"], ["範例題目", "成人聽力損失與失智症風險之回溯性世代研究（0.1 範例）"]], "guides": ["報告：RECORD（Benchimol et al., 2015）、STROBE", "因果推論與標的試驗仿真見 8.3、9.3"], "errs": [["不死時間偏誤", "暴露起點與追蹤起點對齊"], ["把關聯寫成因果", "措辭用「關聯」並做敏感度分析"], ["沒算申請時間", "排進甘特圖"]]}}, "pk": [["A", "我想做出一個系統／工具，並證明好用", "系統開發與評估"], ["B", "我想用資料訓練 AI 模型來預測或分類", "AI 模型建置"], ["C", "我想證明導入某介入後，結果變好", "介入成效研究"], ["D", "我想自己發問卷，了解現況或影響因素", "問卷調查"], ["E", "我想深入了解經驗、需求或「為什麼」", "質性研究"], ["F", "我想請專家形成共識，訂出指標", "德菲法與指標建構"], ["G", "我想整理某領域所有研究，看做到哪", "系統性／範域回顧"], ["H", "我想用現成資料庫找關聯或風險", "次級資料研究"]], "sy": [["題目太大，什麼都想做", "M3-1"], ["寫不出研究動機", "M1-1"], ["文獻寫成一篇一篇摘要", "M2-2"], ["說不出研究缺口在哪", "M2-1"], ["不知道該用什麼研究方法", "S2"], ["方法要寫到多細？", "M5-1"], ["樣本數不知道怎麼算、怎麼寫", "M5-3"], ["量表要自己編", "D-1"], ["質性要訪幾個人？", "E-2"], ["每個目的要用什麼分析？", "M6-1"], ["不知道 IRB 要怎麼送", "M7-1"], ["時程排不出來、怕做不完", "M8-1"], ["預期結果寫得像結論", "M9-1"], ["題目太長、抓不到重點", "M10-1"], ["要改投國科會", "F2-1"], ["要寫院內或部會計畫", "F3-1"], ["兩種方法要接在一起做", "X-MIX"], ["送出前最後檢查", "C1"]], "gr": [["① 實務問題", "長照機構交班靠自由文字紀錄，彙整費時，排擠直接照護", "M1"], ["② 對象與場域", "北部兩家住宿式長照機構，負責交班之護理師與資深照服員 62 人", "M5"], ["③ 介入或暴露", "院內部署之生成式 AI 照護紀錄摘要工具", "M4"], ["④ 主要結果", "交班準備時間（分鐘，第三方觀察計時）", "M4"], ["⑤ 研究問題", "導入後，交班準備時間是否縮短、紀錄完整性是否不變差？", "M3"], ["⑥ 主型與設計", "C 介入成效：非同期導入之準實驗；後接 E 質性（案例 L）", "S2"], ["⑦ 資料與同意", "兩機構同意導入與觀察；交班紀錄去識別後使用", "M7"], ["⑧ 時程", "12 個月：A 機構 2026 年 11 月、B 機構 2027 年 2 月導入", "M8"], ["⑨ 預期貢獻", "機構導入決策依據；填補長照場域「時間＋品質」量化證據", "M9"]], "c3": [["指出現象", "〔場域〕中，〔對象〕面臨〔問題〕：〔數據〕（〔引用〕）。"], ["指出後果", "此一情形導致〔後果〕，進而影響〔更大的結果〕。"], ["轉折到缺口", "雖然〔已知〕，但〔場域、族群、結果〕上仍缺乏〔證據類型〕。"], ["比較文獻", "〔作者 A〕與〔作者 B〕結果一致；然〔作者 C〕於〔不同條件〕下得到相反結果。"], ["說明時機", "隨著〔政策或導入〕，〔誰〕亟需〔哪種證據〕作為決策依據。"], ["提出目的", "本研究旨在〔描述／比較／檢驗／探討〕〔對象〕之〔變項關係〕。"], ["界定範圍", "本研究以〔場域〕之〔對象〕為範圍，不包含〔排除部分〕，因〔理由〕。"]], "c4": [["設計理由", "本研究採〔設計〕，因〔理由〕；不採〔設計〕，因〔理由〕。"], ["樣本數", "以〔軟體〕估算：〔檢定〕、效果量〔　〕（依據〔　〕）、α = 〔　〕、檢定力〔　〕，需〔　〕人。"], ["工具", "採〔量表〕（〔作者，年〕）共〔　〕題，原研究信度為〔　〕。"], ["分析", "以〔方法〕檢驗〔假設〕，報告〔效果量〕與 95% CI；前提不成立時改用〔替代法〕。"], ["偏差", "為降低〔偏差名稱〕，本研究將〔具體措施〕。"], ["限制", "本研究採〔設計〕，結果無法〔推論範圍〕；將以〔方法〕降低〔執行面問題〕之影響。"], ["貢獻", "結果可供〔使用者〕於〔決策情境〕參考，並補足〔缺口〕。"]], "ck": [["① 一頁地圖", "C1 十節對齊，且各模組過關三問全數通過", "C1"], ["② 規範自評", "依主型的報告規範逐項標頁碼（Part 3 第 3 頁）", "S2"], ["③ 文獻查證", "每筆參考文獻實際查到，文內文末對應", "M10-1"], ["④ 格式", "依系所或須知：字型、邊界、頁數、圖表編號", "F1-2"], ["⑤ 倫理文件", "同意書、招募文宣、工具全文、IRB 申請表齊備", "M7-1"], ["⑥ 誠信", "相似度比對；AI 使用聲明與研究日誌", "C6"], ["⑦ 指導教授", "全文交指導教授確認，留下同意送審的紀錄", "S4"]]};</script>
+<script>/* 研究計畫書工作台（2026-10-24）。資料存在本機瀏覽器 localStorage；可匯出備份 JSON、匯出 Word。 */
+(function () {
+  'use strict';
+  var DATA = window.SOP_DATA;
+  var M = DATA.mods, TYP = DATA.typ;
+  var LS = 'pw60.v1';
+  var FMT = { f1: '碩士論文計畫書', f2: '國科會專題研究計畫（CM03）', f3: '其他計畫（院內、部會、基金會…）' };
+  var VERBS = ['描述', '比較', '檢驗', '探討'];
+
+  // ---------- 狀態 ----------
+  function blank() {
+    return { meta: { fmt: 'f1', type: '', type2: '', step: 'setup', updated: '' }, f: {}, ck: {},
+      objs: [{ verb: '描述', text: '', hyp: '', analysis: '', crit: '', sens: '', exp: '' }],
+      vars: [{ name: '', role: '依變項', concept: '', oper: '', tool: '', scale: '', time: '', rel: '' }],
+      bias: [{ name: '', why: '', fix: '' }, { name: '', why: '', fix: '' }, { name: '', why: '', fix: '' }],
+      gantt: { n: 12, rows: [{ t: '文獻與計畫書', s: 1, e: 3 }, { t: 'IRB 送審與核准', s: 2, e: 3 }, { t: '資料蒐集', s: 4, e: 8 },
+        { t: '資料分析', s: 8, e: 10 }, { t: '論文撰寫', s: 9, e: 11 }, { t: '緩衝', s: 11, e: 12 }] },
+      risks: [{ r: '', trig: '', when: '', plan: '' }], kpi: [{ name: '', calc: '', base: '', goal: '' }], ss: {} };
+  }
+  var S;
+  try { S = JSON.parse(localStorage.getItem(LS)) || blank(); } catch (e) { S = blank(); }
+  var b0 = blank(); for (var k in b0) if (!(k in S)) S[k] = b0[k];
+  var saveT = null, saveOK = true;
+  function save() {
+    clearTimeout(saveT);
+    saveT = setTimeout(function () {
+      S.meta.updated = new Date().toLocaleString('zh-TW', { hour12: false });
+      try { localStorage.setItem(LS, JSON.stringify(S)); saveOK = true; } catch (e) { saveOK = false; }
+      var st = document.getElementById('saved');
+      if (st) st.textContent = saveOK ? '已存在這台電腦的瀏覽器 · ' + S.meta.updated : '無法存到瀏覽器，請用「匯出備份」保存';
+      paintNav();
+    }, 300);
+  }
+
+  // ---------- 小工具 ----------
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function slot(s) { return esc(s).replace(/〔([^〕]*)〕/g, '<span class="slot">〔$1〕</span>').replace(/\n/g, '<br>'); }
+  function v(id) { return (S.f[id] || '').trim(); }
+  function has(id) { return v(id).length > 0; }
+  function typeName(L) { return L && TYP[L] ? L + ' ' + TYP[L].name : '尚未選擇'; }
+
+  // ---------- 步驟定義 ----------
+  // f: [id, 標籤, 提示, rows, 必填, 只在某格式顯示]
+  var STEPS = [
+    { id: 'setup', code: '0', name: '開始設定', q: '你要寫哪一種計畫？主要研究類型是哪一型？' },
+    { id: 's1', code: 'S1', name: '構想一頁表', q: '九格各一句話；任何一格寫不出來，就是現在要去問、去查的地方。',
+      f: DATA.gr.map(function (g, i) { return ['s1_' + (i + 1), g[0], '例：' + g[1], 2, true]; }) },
+    { id: 'm1', code: 'M1', name: '問題意識與重要性', mod: 'm1',
+      f: [['m1_scene', '① 場域現象', '誰、在什麼情境、遇到什麼困難；要有數據或具體情境，附出處。', 4, true],
+          ['m1_gap', '② 現行做法與不足', '目前怎麼處理？哪裡不夠？造成什麼後果？', 3, true],
+          ['m1_new', '③ 新解法與缺口', '新技術或介入在別處的證據，以及本場域還缺什麼證據（引用）。', 3, true],
+          ['m1_time', '④ 時機與重要性', '為什麼是現在？結果給誰、做什麼決定？', 3, true],
+          ['m1_stmt', '⑤ 問題陳述（一句）', '收在一句話，自然導向研究目的。', 2, true]] },
+    { id: 'm2', code: 'M2', name: '文獻回顧與研究缺口', mod: 'm2',
+      f: [['m2_pico', 'PICO／PICo', 'P 對象｜I 介入或暴露｜C 比較｜O 結果（質性用 PICo）', 2, true],
+          ['m2_search', '檢索策略', '資料庫（至少 2 個，含 1 個中文來源）、完整檢索式、檢索日期、命中筆數。', 3, true],
+          ['m2_body', '文獻探討（依主題組織）', '一段比較多篇；段首寫主題或論點，不寫作者名。', 8, false],
+          ['m2_known', '缺口 ① 已知', '既有研究已證實什麼（引用）。', 2, true],
+          ['m2_unknown', '缺口 ② 未知', '場域、族群、結果或方法上還缺哪種證據——綜整矩陣裡大家都空著的那一欄。', 2, true],
+          ['m2_worth', '缺口 ③ 為何值得', '誰在做什麼決定時缺乏依據；本研究用什麼設計回答。', 2, true],
+          ['m2_theory', '理論或模式', '架構圖的依據（接 M4）。', 2, false],
+          ['m2_orig', '研究原創性（國科會必寫）', '別人沒做、或做法不同之處，附文獻支撐。', 3, true, 'f2']] },
+    { id: 'm3', code: 'M3', name: '目的、問題與假設', mod: 'm3',
+      f: [['m3_rq', '主要研究問題（單一語句、60 字內）', '〔對象〕在〔情境〕中〔接受介入或暴露〕後，〔結果〕是否〔改變方向〕？', 2, true]],
+      after: [['m3_terms', '名詞界定', '每個關鍵名詞：概念型定義（引用）＋操作型定義，與 M4 變項表一致。', 3, false],
+              ['m3_scope', '研究範圍', '對象、場域、期間；不做什麼，以及理由。', 2, true]] },
+    { id: 'm4', code: 'M4', name: '研究架構與變項', mod: 'm4',
+      f: [['m4_frame', '研究架構說明', '架構依據哪個理論或模式？每條箭頭的依據？未納入哪些變項、為什麼？（架構圖請另外畫）', 4, true]] },
+    { id: 'm5', code: 'M5', name: '研究方法（3.1–3.8）', mod: 'm5',
+      f: [['m5_design', '3.1 研究設計', '用什麼設計？為什麼它能回答研究問題？', 3, true],
+          ['m5_reject', '3.1 不採之設計（至少兩項）', '不採〔設計甲〕，因〔理由〕；不採〔設計乙〕，因〔無法排除的替代解釋〕。', 3, true],
+          ['m5_site', '3.2 場域與對象', '場域、規模、是否已取得書面同意；對象是誰。', 3, true],
+          ['m5_incl', '3.2 納入與排除條件', '條件要可操作：別人依同一條件應可篩出同一群體。', 2, true],
+          ['m5_sample', '3.3 抽樣與樣本數', '量性：檢定、效果量與依據、α、檢定力、流失率；質性：飽和判準。可用下方計算器產生句子。', 3, true],
+          ['m5_tool', '3.4 研究工具', '來源、題數、計分、信效度；自編工具寫建立程序；質性附訪談大綱。', 4, true],
+          ['m5_flow', '3.5 資料蒐集流程', '依時序：誰、在哪、做什麼、多久；去識別化時點與資料串接方式。', 4, true],
+          ['m5_innov', '方法採用原因及創新性（國科會必寫）', '為何選此方法、創新在哪裡。', 3, true, 'f2']] },
+    { id: 'm6', code: 'M6', name: '資料分析計畫', mod: 'm6',
+      f: [['m6_common', '共通設定', '顯著水準與單雙尾、前提檢查與替代法、缺值處理、巢套或重複測量的處理、軟體與版本。', 4, true],
+          ['m6_qual', '質性分析（如有）', '分析方法與步驟、編碼方式（雙人獨立編碼、協商）、軟體。', 3, false]] },
+    { id: 'm7', code: 'M7', name: '倫理、IRB 與資料治理', mod: 'm7',
+      f: [['m7_irb', '審查', '送哪個機構的 IRB、預計審查類型、何時送審。', 2, true],
+          ['m7_consent', '知情同意', '誰簽同意書；哪些資料申請免除同意、理由與法規條件。', 3, true],
+          ['m7_risk', '風險與權益', '最小風險說明、退出權；研究者若是主管，招募由第三人進行。', 2, true],
+          ['m7_deid', '去識別化與儲存', '何時去識別、對照表誰保管、存在哪裡、誰能看、保存多久、如何銷毀。', 3, true],
+          ['m7_coi', '利益衝突與生成式 AI', '與廠商的關係；AI 只用在哪些用途，不輸入可識別資料。', 2, false]] },
+    { id: 'm8', code: 'M8', name: '時程、可行性與風險', mod: 'm8',
+      f: [['m8_feas', '可行性證據', '資料、場域、樣本、時間四項：已取得的同意書、預試或查證紀錄（對象與日期）。', 3, true]] },
+    { id: 'm9', code: 'M9', name: '預期成果與貢獻', mod: 'm9',
+      f: [['m9_acad', '學術貢獻', '補足哪個缺口（接 M2）。', 2, true],
+          ['m9_prac', '實務貢獻', '誰會用、在什麼決定時用、產出什麼。', 2, true],
+          ['m9_limd', '研究限制：設計本身', '無法排除哪些解釋、推論範圍限於哪裡。', 2, true],
+          ['m9_lime', '研究限制：執行面', '流失、觀察者效應、工具版本更新…及因應。', 2, true],
+          ['m9_train', '參與人員預期可獲之訓練（國科會）', '碩博士生、助理可學到的方法與技能。', 2, true, 'f2'],
+          ['m9_output', '預期成果之質與量（國科會）', '期刊論文、研討會論文、系統、專利、技術移轉等：類型與數量。', 2, true, 'f2'],
+          ['m9_nation', '對學術、國家發展及應用之貢獻（國科會）', '對應的政策或社會需求、誰可使用。', 2, true, 'f2']] },
+    { id: 'm10', code: 'M10', name: '題目、摘要與參考文獻', mod: 'm10',
+      f: [['m10_title', '題目', '含對象、介入或變項、結果、場域（可加設計）；可用上方四格組出草稿。', 2, true],
+          ['m10_title_en', '英文題目', '與中文題目一致。', 2, false],
+          ['m10_kw', '關鍵詞', '3–5 個，含 MeSH 或常用檢索詞。', 1, true],
+          ['m10_abs', '摘要', '背景 1–2 句 → 目的 → 方法（篇幅最多）→ 預期結果。可按「從前面各步驟產生草稿」。', 7, true],
+          ['m10_refs', '參考文獻（APA 7）', '每筆都實際查到原文；文內與文末一一對應。', 6, true]] },
+    { id: 'review', code: '✓', name: '一頁地圖與匯出', q: '十節對齊、一致性檢查，然後匯出成你選的格式。' }
+  ];
+  var COVER = [['cv_school', '學校名稱', '', 1, false], ['cv_dept', '系所', '', 1, false], ['cv_student', '研究生（國科會：計畫主持人）', '', 1, false], ['cv_advisor', '指導教授', '', 1, false], ['cv_date', '日期', '例：中華民國 115 年 8 月', 1, false]];
+  var IRBF = [['irb_pi', '計畫主持人（姓名、職稱、單位、職責）', '學生研究常由指導教授擔任主持人，依送審機構規定。', 2, false], ['irb_copi', '共同／協同主持人及研究人員', '姓名與分工；是否完成研究倫理訓練。', 2, false],
+    ['irb_contact', '計畫聯絡人及聯絡方式', '參與者有疑問時找誰。', 1, false], ['irb_inst', '執行機構與研究場域', '', 1, false], ['irb_fund', '經費來源', '無外部經費也要寫明。', 1, false], ['irb_period', '預定執行期間', '', 1, false],
+    ['irb_review', '建議審查類型及理由', '一般審查／簡易審查／免除審查；理由是什麼，以送審機構判定為準。', 3, false], ['irb_n', '研究對象與預計人數', '', 2, false],
+    ['irb_recruit', '招募方式', '由誰、在哪裡、如何邀請；如何避免主管或師生關係造成壓力。', 2, false], ['irb_vuln', '是否納入易受傷害族群', '未成年人、孕婦、無法自行同意者、受雇者或學生等，以及保護措施。', 2, false],
+    ['irb_task', '參與者需要做什麼', '用參與者看得懂的話：做什麼、幾次、多久、在哪裡、是否錄音。', 3, false], ['irb_withdraw', '撤回同意之方式', '可隨時撤回、怎麼撤回、撤回後資料如何處理。', 2, false],
+    ['irb_benefit', '對參與者之利益或補助', '沒有直接利益也要寫明；補助金額與方式。', 2, false], ['irb_harm', '可預見之風險與損害救濟', '不適時怎麼處理、申訴管道。', 2, false],
+    ['irb_material', '研究材料（資料）保存期限及運用規劃', '保存多久、期滿如何銷毀、不作計畫外用途（人體研究法第 19 條）。', 3, false], ['irb_commercial', '可能衍生之商業利益及其應用之約定', '', 2, false],
+    ['irb_ad', '招募說明或文宣（草稿）', '張貼或發放的邀請文字。', 3, false]];
+  var STEP = {}; STEPS.forEach(function (s) { STEP[s.id] = s; });
+  function fieldsOf(st) { return (st.f || []).concat(st.after || []).filter(function (f) { return !f[5] || f[5] === S.meta.fmt; }); }
+
+  // ---------- 進度 ----------
+  function stepDone(st) {
+    if (st.id === 'setup') return !!S.meta.type;
+    if (st.id === 'review') return issues().length === 0;
+    var req = fieldsOf(st).filter(function (f) { return f[4]; });
+    var ok = req.every(function (f) { return has(f[0]); });
+    if (st.id === 'm3') ok = ok && S.objs.some(function (o) { return o.text.trim(); });
+    if (st.id === 'm4') ok = ok && S.vars.some(function (x) { return x.name.trim() && x.oper.trim(); });
+    if (st.id === 'm5') ok = ok && S.bias.filter(function (b) { return b.name.trim() && b.fix.trim(); }).length >= 3;
+    if (st.id === 'm6') ok = ok && S.objs.every(function (o) { return !o.text.trim() || o.analysis.trim(); });
+    if (st.id === 'm8') ok = ok && S.risks.some(function (r) { return r.r.trim() && r.plan.trim(); });
+    if (st.id === 'm9') ok = ok && S.objs.every(function (o) { return !o.text.trim() || o.exp.trim(); });
+    return ok;
+  }
+  function stepPart(st) {
+    var req = fieldsOf(st).filter(function (f) { return f[4]; });
+    if (!req.length) return 0;
+    return req.filter(function (f) { return has(f[0]); }).length / req.length;
+  }
+  function paintNav() {
+    var n = 0;
+    STEPS.forEach(function (st) {
+      var a = document.querySelector('.steps a[data-s="' + st.id + '"]'); if (!a) return;
+      var d = stepDone(st); if (d) n++;
+      a.classList.toggle('done', d); a.classList.toggle('cur', S.meta.step === st.id);
+      var p = a.querySelector('.pp'); if (p) p.style.setProperty('--p', d ? 1 : stepPart(st));
+    });
+    var bar = $('#prog'); if (bar) { bar.style.setProperty('--p', n / STEPS.length); $('#progt').textContent = n + ' / ' + STEPS.length + ' 步完成'; }
+    var hd = $('#who'); if (hd) hd.textContent = FMT[S.meta.fmt] + ' · 主型 ' + typeName(S.meta.type) + (S.meta.type2 ? ' → ' + S.meta.type2 : '');
+  }
+
+  // ---------- 欄位與表格 ----------
+  var lastField = null;
+  function fieldHTML(f) {
+    var val = S.f[f[0]] || '';
+    var lim = f[0] === 'm3_rq' ? '<span class="cnt" data-cnt="' + f[0] + '">' + val.length + ' / 60 字</span>' : '';
+    return '<div class="fld"><label for="' + f[0] + '">' + esc(f[1]) + (f[4] ? '<i class="req" title="必填">必填</i>' : '') +
+      (f[5] ? '<i class="only">' + (f[5] === 'f2' ? '國科會' : '其他計畫') + '</i>' : '') + lim + '</label>' +
+      '<p class="hint">' + slot(f[2]) + '</p><textarea id="' + f[0] + '" rows="' + f[3] + '" data-f="' + f[0] + '">' + esc(val) + '</textarea></div>';
+  }
+  function bindFields(root) {
+    $$('textarea[data-f],input[data-f]', root).forEach(function (t) {
+      t.addEventListener('focus', function () { lastField = t; });
+      t.addEventListener('input', function () {
+        S.f[t.dataset.f] = t.value; save();
+        var c = $('[data-cnt="' + t.dataset.f + '"]', root); if (c) { c.textContent = t.value.trim().length + ' / 60 字'; c.classList.toggle('over', t.value.trim().length > 60); }
+      });
+    });
+  }
+  // 可增刪列的表格：list 為 S 中的陣列；cols: [key, 標頭, 型態('t'|'a'|select陣列), 寬度提示]
+  function gridHTML(name, list, cols, opt) {
+    opt = opt || {};
+    var h = '<div class="grid-wrap"><table class="grid"><thead><tr>' + (opt.num ? '<th class="n">#</th>' : '') +
+      cols.map(function (c) { return '<th>' + esc(c[1]) + '</th>'; }).join('') + '<th class="x"><span class="vh">刪除</span></th></tr></thead><tbody>';
+    list.forEach(function (row, i) {
+      h += '<tr>' + (opt.num ? '<td class="n">' + (opt.numLabel ? opt.numLabel(i) : i + 1) + '</td>' : '');
+      cols.forEach(function (c) {
+        var id = name + '-' + i + '-' + c[0], val = row[c[0]] == null ? '' : row[c[0]];
+        if (Array.isArray(c[2])) h += '<td><select id="' + id + '" data-g="' + name + '" data-i="' + i + '" data-k="' + c[0] + '" aria-label="' + esc(c[1]) + '">' +
+          c[2].map(function (o) { return '<option' + (o === val ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + '</select></td>';
+        else if (c[2] === 'n') h += '<td><input type="number" min="1" max="60" id="' + id + '" data-g="' + name + '" data-i="' + i + '" data-k="' + c[0] + '" value="' + esc(val) + '" aria-label="' + esc(c[1]) + '"></td>';
+        else h += '<td><textarea rows="' + (c[2] === 'a' ? 2 : 1) + '" id="' + id + '" data-g="' + name + '" data-i="' + i + '" data-k="' + c[0] + '" aria-label="' + esc(c[1]) + '" placeholder="' + esc(c[3] || '') + '">' + esc(val) + '</textarea></td>';
+      });
+      h += '<td class="x"><button type="button" class="del" data-del="' + name + '" data-i="' + i + '" aria-label="刪除第 ' + (i + 1) + ' 列">×</button></td></tr>';
+    });
+    h += '</tbody></table></div>' + (opt.noAdd ? '' : '<button type="button" class="add" data-add="' + name + '">＋ 新增一列</button>');
+    return h;
+  }
+  var GRIDS = {
+    objs: function () { return S.objs; }, vars: function () { return S.vars; }, bias: function () { return S.bias; },
+    risks: function () { return S.risks; }, kpi: function () { return S.kpi; }, gantt: function () { return S.gantt.rows; }
+  };
+  var NEWROW = {
+    objs: function () { return { verb: '比較', text: '', hyp: '', analysis: '', crit: '', sens: '', exp: '' }; },
+    vars: function () { return { name: '', role: '依變項', concept: '', oper: '', tool: '', scale: '', time: '', rel: '' }; },
+    bias: function () { return { name: '', why: '', fix: '' }; }, risks: function () { return { r: '', trig: '', when: '', plan: '' }; },
+    kpi: function () { return { name: '', calc: '', base: '', goal: '' }; }, gantt: function () { return { t: '', s: 1, e: 1 }; }
+  };
+  function bindGrids(root, rerender) {
+    $$('[data-g]', root).forEach(function (el) {
+      el.addEventListener('focus', function () { if (el.tagName === 'TEXTAREA') lastField = el; });
+      var ev = el.tagName === 'SELECT' ? 'change' : 'input';
+      el.addEventListener(ev, function () {
+        var row = GRIDS[el.dataset.g]()[+el.dataset.i]; var k = el.dataset.k;
+        row[k] = el.type === 'number' ? Math.max(1, Math.min(60, parseInt(el.value || '1', 10))) : el.value; save();
+        if (el.dataset.g === 'gantt') drawGantt();
+        if (el.dataset.g === 'objs' && (k === 'verb' || k === 'text')) { var w = $('#objwarn'); if (w) w.innerHTML = objWarn(); }
+      });
+    });
+    $$('[data-add]', root).forEach(function (b) { b.addEventListener('click', function () { GRIDS[b.dataset.add]().push(NEWROW[b.dataset.add]()); save(); rerender(); }); });
+    $$('[data-del]', root).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var L = GRIDS[b.dataset.del](); if (L.length <= 1) { L[0] = NEWROW[b.dataset.del](); } else L.splice(+b.dataset.i, 1); save(); rerender();
+      });
+    });
+  }
+
+  // ---------- 右側說明 ----------
+  function sideHTML(st) {
+    if (!st.mod) return '';
+    var m = M[st.mod], fi = { f1: 0, f2: 1, f3: 2 }[S.meta.fmt];
+    var h = '<div class="card where"><h4>放在你的計畫書哪裡</h4><p><b>' + esc(FMT[S.meta.fmt]) + '：</b>' + esc(m.where[fi]) + '</p></div>';
+    h += '<details class="card" open><summary>必寫元素（自我檢查）</summary><ul class="must">' + m.must.map(function (x, i) {
+      var id = 'ck-' + st.id + '-' + i; return '<li><label><input type="checkbox" id="' + id + '" data-ck="' + id + '"' + (S.ck[id] ? ' checked' : '') + '><span>' + slot(x) + '</span></label></li>';
+    }).join('') + '</ul></details>';
+    h += '<details class="card"><summary>常見錯誤 → 怎麼修</summary><ul class="errs">' + m.errs.map(function (e) { return '<li><b>✗ ' + esc(e[0]) + '</b><span>→ ' + esc(e[1]) + '</span></li>'; }).join('') + '</ul><p class="key">' + slot(m.key) + '</p></details>';
+    h += '<details class="card case"><summary>Case Q 寫好的樣子</summary><dl>' + m.ex.map(function (e) { return '<dt>' + esc(e[0]) + '</dt><dd>' + slot(e[1]) + '</dd>'; }).join('') + '</dl><p class="key">' + slot(m.exkey) + '</p></details>';
+    h += '<div class="card pass"><h4>過關三問：三題都「是」才往下</h4><ul>' + m.checks.map(function (c, i) {
+      var id = 'pass-' + st.id + '-' + i; return '<li><label><input type="checkbox" id="' + id + '" data-ck="' + id + '"' + (S.ck[id] ? ' checked' : '') + '><span>' + slot(c[0]) + '</span></label></li>';
+    }).join('') + '</ul></div>';
+    return h;
+  }
+  function tplHTML(list, title) {
+    return '<details class="tpls"><summary>' + esc(title || '句型：點一下插入目前游標所在的欄位') + '</summary><div class="chips">' + list.map(function (t, i) {
+      return '<button type="button" class="chip" data-tpl="' + i + '" title="' + esc(t[1]) + '"><b>' + esc(t[0]) + '</b><span>' + slot(t[1]) + '</span></button>';
+    }).join('') + '</div></details>';
+  }
+  function bindTpl(root, list) {
+    $$('[data-tpl]', root).filter(function (b) { return !b.closest('#typtpl'); }).forEach(function (b) {
+      b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+      b.addEventListener('click', function () {
+        var t = lastField && document.body.contains(lastField) ? lastField : $('textarea', root);
+        if (!t) return;
+        var txt = list[+b.dataset.tpl][1], p = t.selectionStart || t.value.length;
+        t.value = t.value.slice(0, p) + (t.value && p && t.value[p - 1] !== '\n' ? '\n' : '') + txt + t.value.slice(t.selectionEnd || p);
+        t.dispatchEvent(new Event('input')); t.focus();
+        flash(t);
+      });
+    });
+  }
+  function grow(t) { t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; }
+  document.addEventListener('input', function (e) { if (e.target.tagName === 'TEXTAREA') grow(e.target); });
+  function flash(el) { el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 700); }
+
+  // ---------- 統計：樣本數 ----------
+  function qnorm(p) { // Acklam
+    var a = [-39.6968302866538, 220.946098424521, -275.928510446969, 138.357751867269, -30.6647980661472, 2.50662827745924],
+        b = [-54.4760987982241, 161.585836858041, -155.698979859887, 66.8013118877197, -13.2806815528857],
+        c = [-0.00778489400243029, -0.322396458041136, -2.40075827716184, -2.54973253934373, 4.37466414146497, 2.93816398269878],
+        d = [0.00778469570904146, 0.32246712907004, 2.445134137143, 3.75440866190742], q, r;
+    if (p < 0.02425) { q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    if (p > 1 - 0.02425) { q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    q = p - 0.5; r = q * q; return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+  var SS_KIND = {
+    paired: { name: '配對 t 檢定（同一群人前後測）', eff: '效果量 dz', def: 0.5 },
+    two: { name: '兩獨立組 t 檢定（每組人數）', eff: '效果量 d', def: 0.5 },
+    corr: { name: '相關係數 r', eff: '預期 r', def: 0.3 },
+    prop: { name: '比例估計（問卷調查盛行率）', eff: '預期比例 p', def: 0.5 }
+  };
+  function ssCalc(o) {
+    var za = qnorm(1 - o.alpha / (o.tails === 1 ? 1 : 2)), zb = qnorm(o.power), n, per = '';
+    if (o.kind === 'paired') n = Math.pow((za + zb) / o.eff, 2) + za * za / 2;
+    else if (o.kind === 'two') { n = 2 * Math.pow((za + zb) / o.eff, 2) + za * za / 4; per = '每組'; }
+    else if (o.kind === 'corr') n = Math.pow((za + zb) / (0.5 * Math.log((1 + o.eff) / (1 - o.eff))), 2) + 3;
+    else { za = qnorm(1 - o.alpha / 2); n = za * za * o.eff * (1 - o.eff) / (o.moe * o.moe); }
+    n = Math.ceil(n - 1e-9);
+    var N = Math.ceil(n / (1 - o.drop / 100) - 1e-9);
+    return { n: n, N: N, per: per };
+  }
+  function ssHTML() {
+    var o = Object.assign({ kind: 'paired', eff: 0.5, alpha: 0.05, tails: 2, power: 0.8, drop: 10, moe: 0.05, basis: '' }, S.ss);
+    S.ss = o;
+    return '<div class="tool" id="ss"><h4>樣本數計算器</h4><div class="ss-g">' +
+      '<label>檢定<select id="ss-kind">' + Object.keys(SS_KIND).map(function (k) { return '<option value="' + k + '"' + (k === o.kind ? ' selected' : '') + '>' + SS_KIND[k].name + '</option>'; }).join('') + '</select></label>' +
+      '<label><span id="ss-efl">' + SS_KIND[o.kind].eff + '</span><input id="ss-eff" type="number" step="0.01" min="0.01" max="0.99" value="' + o.eff + '"></label>' +
+      '<label class="ss-moe"' + (o.kind === 'prop' ? '' : ' hidden') + '>可容許誤差<input id="ss-moe" type="number" step="0.01" min="0.01" max="0.3" value="' + o.moe + '"></label>' +
+      '<label class="ss-t"' + (o.kind === 'prop' ? ' hidden' : '') + '>α<select id="ss-alpha"><option' + (o.alpha === 0.05 ? ' selected' : '') + '>0.05</option><option' + (o.alpha === 0.01 ? ' selected' : '') + '>0.01</option></select></label>' +
+      '<label class="ss-t"' + (o.kind === 'prop' ? ' hidden' : '') + '>尾數<select id="ss-tails"><option value="2"' + (o.tails === 2 ? ' selected' : '') + '>雙尾</option><option value="1"' + (o.tails === 1 ? ' selected' : '') + '>單尾</option></select></label>' +
+      '<label class="ss-t"' + (o.kind === 'prop' ? ' hidden' : '') + '>檢定力<select id="ss-power"><option' + (o.power === 0.8 ? ' selected' : '') + '>0.80</option><option' + (o.power === 0.9 ? ' selected' : '') + '>0.90</option></select></label>' +
+      '<label>預估流失率 %<input id="ss-drop" type="number" min="0" max="60" value="' + o.drop + '"></label>' +
+      '<label class="wide">效果量的依據<input id="ss-basis" type="text" value="' + esc(o.basis) + '" placeholder="例：前導研究、某文獻（年）；無依據時採保守中效果"></label></div>' +
+      '<p class="ss-out" id="ss-out"></p><button type="button" class="btn" id="ss-ins">把這句放進「3.3 抽樣與樣本數」</button>' +
+      '<p class="fine">以常態近似加小樣本校正估算（配對 t：dz = 0.5、α = .05 雙尾、檢定力 .80 → 34 人；兩組 t：d = 0.5 → 每組 64 人，與 G*Power 相同）。正式計畫書請以 G*Power 3.1 核對並寫出軟體設定。</p></div>';
+  }
+  function ssSentence() {
+    var o = S.ss, r = ssCalc(o), k = SS_KIND[o.kind];
+    var basis = o.basis ? '（依據：' + o.basis + '）' : '（無前導資料，採保守估計）';
+    if (o.kind === 'prop') return '依信心水準 95%、可容許誤差 ±' + o.moe + '、預期比例 p = ' + o.eff + basis + '估算，需 ' + r.n + ' 人；考量回收或流失率 ' + o.drop + '%，預計發放 ' + r.N + ' 份。';
+    return '以' + k.name.replace(/（.*）/, '') + '估算：' + k.eff.replace('預期 ', '') + ' = ' + o.eff + basis + '、α = ' + String(o.alpha).replace('0.', '.') + (o.tails === 1 ? ' 單尾' : ' 雙尾') +
+      '、檢定力 ' + String(o.power.toFixed(2)).replace('0.', '.') + '，需' + (r.per || '') + ' ' + r.n + ' 人；考量流失率 ' + o.drop + '%，預計收案' + (r.per || '') + ' ' + r.N + ' 人（以 G*Power 3.1 核對）。';
+  }
+  function bindSS(root) {
+    function upd() {
+      var o = S.ss; o.kind = $('#ss-kind').value; o.eff = parseFloat($('#ss-eff').value) || SS_KIND[o.kind].def;
+      o.alpha = parseFloat($('#ss-alpha').value); o.tails = parseInt($('#ss-tails').value, 10); o.power = parseFloat($('#ss-power').value);
+      o.drop = Math.max(0, Math.min(60, parseFloat($('#ss-drop').value) || 0)); o.moe = parseFloat($('#ss-moe').value) || 0.05; o.basis = $('#ss-basis').value;
+      $('#ss-efl').textContent = SS_KIND[o.kind].eff;
+      $$('.ss-t', root).forEach(function (x) { x.hidden = o.kind === 'prop'; }); $('.ss-moe', root).hidden = o.kind !== 'prop';
+      var bad = !(o.eff > 0) || (o.kind !== 'paired' && o.kind !== 'two' && o.eff >= 1);
+      $('#ss-out').innerHTML = bad ? '請輸入合理的效果量。' : '<b>' + ssCalc(o).n + '</b> 人' + (ssCalc(o).per ? '（每組）' : '') + '　→ 含流失 <b>' + ssCalc(o).N + '</b> 人<br><span>' + esc(ssSentence()) + '</span>';
+      save();
+    }
+    $('#ss-kind').addEventListener('change', function () { S.ss.eff = SS_KIND[this.value].def; $('#ss-eff').value = S.ss.eff; upd(); });
+    ['#ss-eff', '#ss-alpha', '#ss-tails', '#ss-power', '#ss-drop', '#ss-moe', '#ss-basis'].forEach(function (s) { $(s).addEventListener('input', upd); $(s).addEventListener('change', upd); });
+    $('#ss-ins').addEventListener('click', function () { var t = $('#m5_sample'); t.value = (t.value.trim() ? t.value.trim() + '\n' : '') + ssSentence(); t.dispatchEvent(new Event('input')); flash(t); });
+    upd();
+  }
+
+  // ---------- 甘特 ----------
+  function drawGantt() {
+    var box = $('#gchart'); if (!box) return;
+    var n = Math.max(3, Math.min(48, parseInt(S.gantt.n, 10) || 12));
+    var h = '<div class="gc" style="--n:' + n + '"><div class="gh"><span></span>' + Array.from({ length: n }, function (_, i) { return '<span>' + (i + 1) + '</span>'; }).join('') + '</div>';
+    S.gantt.rows.forEach(function (r) {
+      var s = Math.max(1, Math.min(n, r.s | 0)), e = Math.max(s, Math.min(n, r.e | 0)), buf = /緩衝/.test(r.t);
+      h += '<div class="gr"><span class="gl">' + esc(r.t || '（未命名）') + '</span><i class="' + (buf ? 'buf' : '') + '" style="grid-column:' + (s + 1) + ' / ' + (e + 2) + '"></i></div>';
+    });
+    box.innerHTML = h + '</div>';
+    var w = $('#gwarn'); if (w) w.innerHTML = ganttWarn().map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('');
+  }
+  function ganttWarn() {
+    var R = S.gantt.rows, out = [], n = S.gantt.n | 0;
+    var irb = R.filter(function (r) { return /IRB|倫理/.test(r.t); })[0], col = R.filter(function (r) { return /蒐集|收案|前測|介入|訪談/.test(r.t); });
+    if (!irb) out.push('沒有 IRB 送審的工作項目：IRB 通常比想像久，要排進時程。');
+    else col.forEach(function (c) { if ((c.s | 0) < (irb.e | 0)) out.push('「' + c.t + '」在 IRB 預計核准（第 ' + irb.e + ' 月）之前就開始，請排在核准之後。'); });
+    var buf = R.filter(function (r) { return /緩衝/.test(r.t); }).reduce(function (a, r) { return a + Math.max(0, (r.e | 0) - (r.s | 0) + 1); }, 0);
+    if (S.meta.fmt === 'f1' && buf < 2) out.push('論文版時程要保留至少兩個月緩衝，並寫明用途（目前 ' + buf + ' 個月）。');
+    R.forEach(function (r) { if ((r.e | 0) > n) out.push('「' + r.t + '」超出總月數 ' + n + '。'); });
+    return out;
+  }
+
+  // ---------- 一致性檢查 ----------
+  function objWarn() {
+    var w = [], O = S.objs.filter(function (o) { return o.text.trim(); });
+    if (O.length > 3) w.push('目的有 ' + O.length + ' 項；碩論通常 2–3 項，太多會做不完。');
+    O.forEach(function (o, i) {
+      if (o.verb === '描述' && o.hyp.trim()) w.push('目的' + (i + 1) + '是描述性目的，不需要寫假設。');
+      if (o.verb !== '描述' && o.verb !== '探討' && !o.hyp.trim()) w.push('目的' + (i + 1) + '（' + o.verb + '）要寫對應的假設（H1／H0）。');
+    });
+    return w.length ? '<ul>' + w.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
+  }
+  function issues() {
+    var I = [], O = S.objs.filter(function (o) { return o.text.trim(); });
+    function add(step, t) { I.push({ step: step, t: t }); }
+    if (!S.meta.type) add('setup', '還沒選主要研究類型（決定第三章要寫哪些小節）。');
+    if (!has('m3_rq')) add('m3', '還沒寫主要研究問題。'); else if (v('m3_rq').length > 60) add('m3', '主要研究問題超過 60 字，試著收斂成一個問題。');
+    if (!O.length) add('m3', '還沒寫研究目的。');
+    O.forEach(function (o, i) {
+      if (!o.analysis.trim()) add('m6', '目的' + (i + 1) + '「' + o.text.slice(0, 18) + '」在分析計畫裡沒有對應的分析方法。');
+      if (!o.exp.trim()) add('m9', '目的' + (i + 1) + '沒有對應的預期結果。');
+      if (o.verb !== '描述' && o.verb !== '探討' && !o.hyp.trim()) add('m3', '目的' + (i + 1) + '（' + o.verb + '）缺假設。');
+    });
+    if (O.length > 3) add('m3', '目的超過 3 項，碩論規模恐怕做不完。');
+    if (!has('m5_reject')) add('m5', '3.1 沒有寫「不採之設計」及理由（口委必問）。');
+    if (has('m5_sample') && !/[0-9０-９]/.test(v('m5_sample'))) add('m5', '3.3 樣本數沒有任何數字：要寫參數與計算結果。');
+    if (S.bias.filter(function (b) { return b.name.trim() && b.fix.trim(); }).length < 3) add('m5', '3.7 具名偏差與因應不足三項。');
+    if (!S.vars.some(function (x) { return x.name.trim() && x.oper.trim(); })) add('m4', '變項定義表沒有任何寫了操作型定義的變項。');
+    S.vars.forEach(function (x) { if (x.name.trim() && !x.oper.trim()) add('m4', '變項「' + x.name + '」缺操作型定義。'); });
+    ganttWarn().forEach(function (x) { add('m8', x); });
+    if (!S.risks.some(function (r) { return r.r.trim() && r.plan.trim(); })) add('m8', '還沒寫任何風險與對策。');
+    if (S.meta.fmt === 'f3' && !S.kpi.some(function (k) { return k.name.trim() && k.calc.trim(); })) add('m9', '其他計畫多要求績效指標：至少寫一項指標與計算方式。');
+    if (!has('m10_title')) add('m10', '還沒有題目。');
+    if (!has('m10_refs')) add('m10', '還沒有參考文獻。');
+    STEPS.forEach(function (st) {
+      if (!st.f) return; var miss = fieldsOf(st).filter(function (f) { return f[4] && !has(f[0]); });
+      if (miss.length) add(st.id, st.code + ' 還有 ' + miss.length + ' 個必填欄位空白：' + miss.map(function (f) { return f[1].replace(/（.*）/, ''); }).slice(0, 3).join('、') + (miss.length > 3 ? '…' : ''));
+    });
+    return I;
+  }
+  function onePage() {
+    var O = S.objs.filter(function (o) { return o.text.trim(); });
+    function first(t) { t = (t || '').split(/\n/)[0]; return t.length > 70 ? t.slice(0, 70) + '…' : t; }
+    return [['① Title', v('m10_title'), 'm10'], ['② Problem', v('m1_stmt') || v('s1_1'), 'm1'],
+      ['③ Objectives', O.map(function (o, i) { return (i + 1) + '. ' + (o.text.indexOf(o.verb) === 0 ? '' : o.verb + '：') + o.text.replace(/。$/, ''); }).join('；'), 'm3'],
+      ['④ RQ／Hypotheses', v('m3_rq') + (O.some(function (o) { return o.hyp; }) ? '｜' + O.filter(function (o) { return o.hyp; }).map(function (o) { return first(o.hyp); }).join('；') : ''), 'm3'],
+      ['⑤ Literature', first(v('m2_unknown')) || first(v('m2_known')), 'm2'], ['⑥ Methodology', first(v('m5_design')) + (has('m5_site') ? '｜' + first(v('m5_site')) : ''), 'm5'],
+      ['⑦ Analysis Plan', O.map(function (o, i) { return (i + 1) + '. ' + (o.analysis || '（未寫）').replace(/。$/, ''); }).join('；'), 'm6'], ['⑧ Ethics', first(v('m7_irb')), 'm7'],
+      ['⑨ Gantt', S.gantt.n + ' 個月：' + S.gantt.rows.map(function (r) { return r.t + ' M' + r.s + '–' + r.e; }).join('、'), 'm8'],
+      ['⑩ Expected Results', O.map(function (o, i) { return (i + 1) + '. ' + (o.exp || '（未寫）').replace(/。$/, ''); }).join('；'), 'm9']];
+  }
+
+  // ---------- 畫面 ----------
+  var main;
+  function go(id, noScroll) {
+    S.meta.step = id; save();
+    var st = STEP[id]; var h = '';
+    var idx = STEPS.indexOf(st);
+    h += '<header class="sh"><span class="code">' + esc(st.code) + '</span><div><h2>' + esc(st.name) + '</h2><p class="q">' + slot(st.mod ? M[st.mod].q : st.q) + '</p></div></header>';
+    if (id === 'setup') h += setupHTML();
+    else if (id === 'review') h += reviewHTML();
+    else {
+      h += '<div class="cols"><div class="form">';
+      if (st.mod) h += tplHTML(M[st.mod].tpl);
+      if (id === 'm10') h += titleBuilder();
+      h += (st.f || []).filter(function (f) { return !f[5] || f[5] === S.meta.fmt; }).map(fieldHTML).join('');
+      if (id === 'm3') h += '<h3>研究目的與假設</h3><p class="hint">一列一個目的，動詞決定第六步要用哪種分析：描述＜比較＜檢驗＜探討。描述性目的不設假設。</p>' +
+        gridHTML('objs', S.objs, [['verb', '動詞', VERBS], ['text', '研究目的', 'a', '〔比較或檢驗〕〔介入〕對〔結果〕之影響'], ['hyp', '假設（H1／H0）', 'a', 'H1：…；H0：…']], { num: true }) + '<div class="warn" id="objwarn">' + objWarn() + '</div>' +
+        (st.after || []).map(fieldHTML).join('');
+      if (id === 'm4') h += '<h3>變項定義表</h3><p class="hint">檢驗法：把表交給同學，他能不能不問你、自己測出同一個分數？</p>' +
+        gridHTML('vars', S.vars, [['name', '變項名稱', 't'], ['role', '角色', ['自變項', '依變項', '中介', '干擾', '控制', '探索']], ['oper', '操作型定義', 'a', '以〔工具〕〔題數〕題、〔計分〕、範圍〔　〕'],
+          ['tool', '工具／資料來源', 't'], ['scale', '尺度', ['', '名目', '次序', '等距', '比率']], ['time', '測量時點', 't'], ['rel', '信效度依據', 't']]);
+      if (id === 'm5') {
+        h += typePanel();
+        h += ssHTML();
+        h += '<h3>3.7 偏差來源與因應（至少三項）</h3>' + gridHTML('bias', S.bias, [['name', '偏差名稱', 't', '如：選擇偏差'], ['why', '為什麼會發生', 'a'], ['fix', '因應措施', 'a']], { num: true });
+        h += '<p class="hint">3.6 資料分析在第六步、3.8 倫理在第七步撰寫，匯出時會自動排進第三章。</p>';
+      }
+      if (id === 'm6') h += '<h3>目的 × 分析對照表</h3><p class="hint">列由第三步的研究目的自動帶入；每一列都要有分析方法與判準。</p>' + analysisGrid() + (st.after || []).map(fieldHTML).join('');
+      if (id === 'm7') h += '<details class="tpls irbf"' + (IRBF.some(function (f) { return has(f[0]); }) ? ' open' : '') + '><summary>IRB 送審補充資料（選填；最後一步匯出「IRB 送審文件」時使用）</summary><p class="hint">依《人體研究法》第 14 條，同意書須告知九項事項；下面的欄位會自動排進新案申請書與受試者同意書。</p>' + IRBF.map(fieldHTML).join('') + '</details>';
+      if (id === 'm8') h += ganttHTML() + '<h3>風險與對策（國科會稱「預計可能遭遇之困難及解決途徑」）</h3>' +
+        gridHTML('risks', S.risks, [['r', '可能遭遇的困難', 'a'], ['trig', '觸發條件', 'a'], ['when', '判斷時點', 't', 'M〔　〕'], ['plan', '對策或替代方案', 'a']]);
+      if (id === 'm9') {
+        h += '<h3>每個目的的預期結果</h3><p class="hint">理論 → 假設 → 預期觀察；也寫結果不如預期時代表什麼。不要寫出具體數字結果。</p>' + expGrid();
+        if (S.meta.fmt === 'f3') h += '<h3>績效指標（其他計畫常要求）</h3><p class="hint">目標值要有依據；還沒有基準值時寫「於前測取得後訂定」。</p>' +
+          gridHTML('kpi', S.kpi, [['name', '指標名稱', 't'], ['calc', '計算方式與資料來源', 'a'], ['base', '基準值', 't'], ['goal', '目標值與期限', 'a']]);
+      }
+      h += '</div><aside class="side">' + sideHTML(st) + '</aside></div>';
+    }
+    var prev = STEPS[idx - 1], next = STEPS[idx + 1];
+    h += '<nav class="pn">' + (prev ? '<button type="button" class="btn ghost" data-go="' + prev.id + '">← ' + esc(prev.code + ' ' + prev.name) + '</button>' : '<span></span>') +
+      (next ? '<button type="button" class="btn" data-go="' + next.id + '">' + esc(next.code + ' ' + next.name) + ' →</button>' : '') + '</nav>';
+    main.innerHTML = h;
+    bindFields(main);
+    bindGrids(main, function () { go(id, true); });
+    $$('[data-ck]', main).forEach(function (c) { c.addEventListener('change', function () { S.ck[c.dataset.ck] = c.checked; save(); }); });
+    $$('[data-go]', main).forEach(function (b) { b.addEventListener('click', function () { go(b.dataset.go); }); });
+    if (st.mod) bindTpl(main, M[st.mod].tpl);
+    if (id === 'm5') { bindSS(main); var tt = TYP[S.meta.type]; if (tt) bindTplList(main, '#typtpl', tt.tpl); }
+    if (id === 'm8') { $('#gn').addEventListener('input', function () { S.gantt.n = Math.max(3, Math.min(48, parseInt(this.value || '12', 10))); save(); drawGantt(); }); drawGantt(); }
+    if (id === 'm10') bindTitle();
+    if (id === 'setup') bindSetup();
+    if (id === 'review') bindReview();
+    paintNav();
+    $$('textarea', main).forEach(grow);
+    if (!noScroll) window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  }
+  function bindTplList(root, sel, list) {
+    var box = $(sel, root); if (!box) return;
+    $$('[data-tpl]', box).forEach(function (b) {
+      b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+      b.addEventListener('click', function (e) {
+                var t = lastField && document.body.contains(lastField) ? lastField : $('#m5_design');
+        var txt = list[+b.dataset.tpl][1], p = t.selectionStart || t.value.length;
+        t.value = t.value.slice(0, p) + (t.value && p && t.value[p - 1] !== '\n' ? '\n' : '') + txt + t.value.slice(t.selectionEnd || p);
+        t.dispatchEvent(new Event('input')); t.focus(); flash(t);
+      });
+    });
+  }
+  function typePanel() {
+    var L = S.meta.type, t = TYP[L];
+    if (!t) return '<div class="warn"><ul><li>還沒選主要研究類型。<button type="button" class="link" data-go="setup">回第 0 步選擇</button>，這裡會出現該型第三章要補的小節與句型。</li></ul></div>';
+    var h = '<div class="tool typ"><h4>' + esc(L + ' ' + t.name) + '：第三章要補的小節</h4><p class="fine">' + esc(t.en) + '。名稱可依系所習慣調整，內容一項都不能少；寫進上面對應的 3.x 欄位。</p><ul class="secs">' +
+      t.secs.map(function (s, i) { var id = 'ck-typ-' + L + '-' + i; return '<li><label><input type="checkbox" id="' + id + '" data-ck="' + id + '"' + (S.ck[id] ? ' checked' : '') + '><span><b>' + esc(s[0]) + '</b>　' + esc(s[1]) + '<em>最低要求：' + esc(s[2]) + '</em></span></label></li>'; }).join('') +
+      '</ul><div id="typtpl">' + tplHTML(t.tpl, L + ' 型段落句型與範例題目：點一下插入游標所在欄位') + '</div><p class="fine"><b>報告規範：</b>' + esc(t.guides.join('；')) + '</p>' +
+      '<ul class="errs">' + t.errs.map(function (e) { return '<li><b>✗ ' + esc(e[0]) + '</b><span>→ ' + esc(e[1]) + '</span></li>'; }).join('') + '</ul>';
+    if (S.meta.type2) h += '<p class="fine"><b>組合型研究：</b>主型之外還有「' + esc(S.meta.type2) + '」階段。第三章分「第一階段／第二階段」各寫一次八節，並寫清楚前一段的什麼產出成為後一段的輸入（抽樣名單、訪談大綱、指標初稿、系統雛型），以及兩段結果怎麼整合（見 3.2）。</p>';
+    return h + '</div>';
+  }
+  function analysisGrid() {
+    var h = '<div class="grid-wrap"><table class="grid"><thead><tr><th class="n">#</th><th>研究目的（第三步）</th><th>分析方法</th><th>判準（α、CI、界限）</th><th>補充或敏感度分析</th></tr></thead><tbody>';
+    var any = false;
+    S.objs.forEach(function (o, i) {
+      if (!o.text.trim()) return; any = true;
+      h += '<tr><td class="n">' + (i + 1) + '</td><td class="ro"><b>' + esc(o.verb) + '</b>　' + esc(o.text) + (o.hyp ? '<em>' + esc(o.hyp) + '</em>' : '') + '<em class="sug">' + esc(suggest(o.verb)) + '</em></td>' +
+        ['analysis', 'crit', 'sens'].map(function (k) { return '<td><textarea rows="2" id="objs-' + i + '-' + k + '" data-g="objs" data-i="' + i + '" data-k="' + k + '" aria-label="目的' + (i + 1) + ' ' + k + '">' + esc(o[k]) + '</textarea></td>'; }).join('') + '</tr>';
+    });
+    if (!any) h += '<tr><td colspan="5" class="empty">第三步還沒有研究目的。<button type="button" class="link" data-go="m3">去寫目的</button></td></tr>';
+    return h + '</tbody></table></div>';
+  }
+  function suggest(verb) {
+    return { '描述': '常用：平均數、標準差、次數與百分比；連續變項另報中位數與四分位距', '比較': '常用：配對 t／獨立 t／ANOVA／卡方；報效果量與 95% CI；前提不成立改無母數法',
+      '檢驗': '常用：迴歸、邏輯斯迴歸、SEM、DiD、混合效果模型；重複測量或巢套資料要處理', '探討': '常用：相關、迴歸（標示為探索性）；質性用主題分析' }[verb] || '';
+  }
+  function expGrid() {
+    var h = '<div class="grid-wrap"><table class="grid"><thead><tr><th class="n">#</th><th>研究目的</th><th>預期結果（含不如預期時的意義）</th></tr></thead><tbody>', any = false;
+    S.objs.forEach(function (o, i) {
+      if (!o.text.trim()) return; any = true;
+      h += '<tr><td class="n">' + (i + 1) + '</td><td class="ro"><b>' + esc(o.verb) + '</b>　' + esc(o.text) + '</td><td><textarea rows="3" id="objs-' + i + '-exp" data-g="objs" data-i="' + i + '" data-k="exp" aria-label="目的' + (i + 1) + ' 預期結果" placeholder="依〔理論〕，預期〔介入〕將使〔結果〕〔方向〕；若〔不顯著〕，則表示〔可能解釋〕。">' + esc(o.exp) + '</textarea></td></tr>';
+    });
+    if (!any) h += '<tr><td colspan="3" class="empty">第三步還沒有研究目的。<button type="button" class="link" data-go="m3">去寫目的</button></td></tr>';
+    return h + '</tbody></table></div>';
+  }
+  function ganttHTML() {
+    return '<h3>研究時程（甘特）</h3><p class="hint">名稱含「緩衝」的列會畫成虛線；含「IRB」的列用來檢查收案是否在核准之後。</p><label class="inl">總月數 <input id="gn" type="number" min="3" max="48" value="' + S.gantt.n + '"></label>' +
+      gridHTML('gantt', S.gantt.rows, [['t', '工作項目', 't'], ['s', '起（月）', 'n'], ['e', '迄（月）', 'n']], { num: true }) + '<div id="gchart"></div><ul class="warn-l" id="gwarn"></ul>';
+  }
+  function titleBuilder() {
+    var p = S.f;
+    return '<div class="tool"><h4>題目組裝器</h4><div class="tb">' + [['t_iv', '介入或暴露'], ['t_pop', '對象與場域'], ['t_out', '結果'], ['t_des', '設計']].map(function (x) {
+      return '<label>' + x[1] + '<input type="text" id="' + x[0] + '" data-f="' + x[0] + '" value="' + esc(p[x[0]] || '') + '"></label>';
+    }).join('') + '</div><p class="ss-out" id="tprev"></p><button type="button" class="btn" id="tuse">用這個當題目</button></div>';
+  }
+  function titleDraft() { var a = v('t_iv'), b = v('t_pop'), c = v('t_out'), d = v('t_des'); if (!a && !b && !c) return ''; return (a || '〔介入〕') + '對' + (b || '〔對象〕') + (c || '〔結果〕') + '之影響' + (d ? '：' + d : ''); }
+  function absDraft() {
+    var O = S.objs.filter(function (o) { return o.text.trim(); });
+    var bg = [v('s1_1') || first(v('m1_scene')), first(v('m2_unknown'))].filter(Boolean).join('，然而');
+    function first(t) { return (t || '').split(/\n/)[0].replace(/。$/, ''); }
+    return (bg ? bg + '。' : '') + '本研究旨在' + (O.length ? O.map(function (o) { return o.verb + o.text.replace(/^(描述|比較|檢驗|探討)/, ''); }).join('；') : '〔目的〕') + '。' +
+      '本研究將採' + (first(v('m5_design')) || '〔設計〕') + '，' + (first(v('m5_site')) || '〔場域與對象〕') + '，' + (first(v('m5_tool')) || '〔工具〕') + '，' +
+      (O.length && O[0].analysis ? '以' + O.map(function (o) { return first(o.analysis); }).join('、') + '分析' : '並以〔分析方法〕分析') + '。預期' + (O.length && O[0].exp ? first(O[0].exp) : '〔結果〕') + '，可作為' + (first(v('m9_prac')) || '〔誰做什麼決定〕') + '之依據。';
+  }
+  function bindTitle() {
+    function up() { $('#tprev').textContent = titleDraft() || '在上面四格填入要素，這裡會組出題目草稿。'; }
+    $$('.tb input').forEach(function (i) { i.addEventListener('input', up); }); up();
+    $('#tuse').addEventListener('click', function () { var d = titleDraft(); if (!d) return; var t = $('#m10_title'); t.value = d; t.dispatchEvent(new Event('input')); flash(t); });
+    var a = $('#m10_abs'); var b = document.createElement('button'); b.type = 'button'; b.className = 'btn ghost small'; b.textContent = '從前面各步驟產生摘要草稿';
+    a.parentNode.insertBefore(b, a);
+    b.addEventListener('click', function () { var d = absDraft(); a.value = a.value.trim() ? a.value.trim() + '\n\n【草稿】' + d : d; a.dispatchEvent(new Event('input')); flash(a); });
+  }
+
+  // ---------- 第 0 步 ----------
+  function setupHTML() {
+    var h = '<div class="setup"><section class="card"><h3>① 我要寫的是</h3><div class="opts">' + Object.keys(FMT).map(function (k) {
+      return '<label class="opt"><input type="radio" name="fmt" value="' + k + '"' + (S.meta.fmt === k ? ' checked' : '') + '><span><b>' + esc(FMT[k]) + '</b>' +
+        { f1: '給指導教授與口試委員；第一章緒論、第二章文獻、第三章方法。', f2: '給學門複審委員；CM03 四大項，要寫原創性、困難與解決途徑、人員訓練、成果之質與量。主持人是指導教授。', f3: '依該計畫的申請須知與評分表；多加重效益、績效指標與經費。' }[k] + '</span></label>';
+    }).join('') + '</div><p class="fine">內容只寫一次；之後換格式，只要回這裡改選再重新匯出。</p></section>';
+    h += '<section class="card"><h3>② 你的研究問題最像哪一句？（主要研究類型）</h3><div class="opts pick">' + DATA.pk.map(function (p) {
+      return '<label class="opt"><input type="radio" name="type" value="' + p[0] + '"' + (S.meta.type === p[0] ? ' checked' : '') + '><span><code>' + p[0] + '</code><b>' + esc(p[2]) + '</b>' + esc(p[1]) + '</span></label>';
+    }).join('') + '</div><p class="fine">A–H 與講義 0.1「碩論研究方法的八種類型」同一套代號；流程圖與方法表看 0.1。</p></section>';
+    h += '<section class="card"><h3>③ 主型前後還要接另一段嗎？（選填）</h3><select id="type2" aria-label="第二段研究類型"><option value="">不用，只做主型</option>' +
+      DATA.pk.map(function (p) { return '<option value="' + p[0] + ' ' + esc(p[2]) + '"' + (S.meta.type2 === p[0] + ' ' + p[2] ? ' selected' : '') + '>' + p[0] + ' ' + esc(p[2]) + '</option>'; }).join('') +
+      '</select><p class="fine">例：Case Q 主型 C 介入成效，後接 E 質性（解釋性序列設計）。碩論以兩段為宜。</p></section>';
+    h += '<section class="card"><h3>④ 封面資料（匯出 Word 時使用，可之後再填）</h3><div class="cv">' + COVER.map(function (f) { return '<label>' + esc(f[1]) + '<input type="text" id="' + f[0] + '" data-f="' + f[0] + '" value="' + esc(S.f[f[0]] || '') + '" placeholder="' + esc(f[2]) + '"></label>'; }).join('') + '</div></section>';
+    h += '<section class="card soft" id="demo"><h3>一鍵匯入範例：Case Q 完整填好的樣子</h3><p>把 Case Q（長照機構 AI 交班摘要的準實驗研究）的計畫階段內容填進 S1、M1–M10 每一個欄位與表格，含 IRB 送審資料與參考文獻，方便對照模仿。會取代目前這台電腦上的草稿，建議先到最後一步下載備份。</p><button type="button" class="btn" id="loadq">一鍵匯入 Case Q 範例</button><span class="confirm" id="loadq-c" hidden>確定要取代目前的草稿？<button type="button" class="btn small" id="loadq-y">確定載入</button><button type="button" class="btn ghost small" id="loadq-n">取消</button></span></section></div>';
+    return h;
+  }
+  function bindSetup() {
+    $$('input[name=fmt]').forEach(function (r) { r.addEventListener('change', function () { S.meta.fmt = r.value; save(); }); });
+    $$('input[name=type]').forEach(function (r) { r.addEventListener('change', function () { S.meta.type = r.value; save(); }); });
+    $('#type2').addEventListener('change', function () { S.meta.type2 = this.value; save(); });
+    $('#loadq').addEventListener('click', function () { $('#loadq-c').hidden = false; });
+    $('#loadq-n').addEventListener('click', function () { $('#loadq-c').hidden = true; });
+    $('#loadq-y').addEventListener('click', function () { S = caseQ(); save(); go('s1'); });
+  }
+
+  // ---------- 檢核與匯出 ----------
+  function reviewHTML() {
+    var I = issues();
+    var h = '<div class="review"><section class="card"><h3>十節一頁地圖（自動彙整）</h3><p class="fine">每一列取自前面各步驟；Problem → Objectives → Analysis → Expected Results 四列要一路對得上。</p><ol class="map">' +
+      onePage().map(function (r) { var hot = /Problem|Objectives|Analysis|Expected/.test(r[0]); return '<li class="' + (hot ? 'hot' : '') + (r[1] ? '' : ' empty') + '"><b>' + esc(r[0]) + '</b><span>' + (r[1] ? esc(r[1]) : '（尚未填寫）') + '</span><button type="button" class="link" data-go="' + r[2] + '">修改</button></li>'; }).join('') + '</ol></section>';
+    h += '<section class="card"><h3>一致性檢查' + (I.length ? '：還有 ' + I.length + ' 項' : '：全部通過') + '</h3>' +
+      (I.length ? '<ul class="issues">' + I.map(function (x) { return '<li><span>' + esc(x.t) + '</span><button type="button" class="link" data-go="' + x.step + '">前往 ' + esc(STEP[x.step].code) + '</button></li>'; }).join('') + '</ul>' : '<p class="ok">十節對齊、必填齊全。送出前再做下面七件事。</p>') + '</section>';
+    h += '<section class="card"><h3>送審前七件事</h3><ul class="must">' + DATA.ck.map(function (c, i) { var id = 'ck-seven-' + i; return '<li><label><input type="checkbox" id="' + id + '" data-ck="' + id + '"' + (S.ck[id] ? ' checked' : '') + '><span><b>' + esc(c[0]) + '</b>　' + esc(c[1]) + '</span></label></li>'; }).join('') + '</ul></section>';
+    h += '<section class="card export"><h3>匯出</h3>' +
+      '<div class="exp-grid">' +
+      '<div class="exp"><h4>研究計畫書（Word）</h4><p>依第 0 步選的格式「' + esc(FMT[S.meta.fmt]) + '」排版：封面、摘要、目錄、各章節、表格與頁碼；A4、邊界 2.5 公分、標楷體＋Times New Roman 12 號、1.5 倍行高。</p><button type="button" class="btn" id="exdoc">下載研究計畫書</button></div>' +
+      '<div class="exp"><h4>IRB 送審文件（Word）</h4><p>一份檔案含：送審文件檢核表、計畫中文摘要、新案申請書內容、受試者同意書（人體研究法第 14 條九項）、計畫主持人聲明、招募說明與研究工具清單。依臺大醫院研究倫理委員會新案送審文件清單整理，屬練習稿。</p><button type="button" class="btn" id="exirb">下載 IRB 送審文件</button></div>' +
+      '</div><div class="ex-btns"><button type="button" class="btn ghost" id="excopy">複製計畫書全文</button>' +
+      '<button type="button" class="btn ghost" id="exjson">下載備份（.json）</button><label class="btn ghost file">匯入備份<input type="file" id="imjson" accept=".json,application/json"></label></div>' +
+      '<p class="fine" id="exmsg">〔　〕處是還沒換掉的句型，Word 打開後請逐一檢查。目錄在 Word 中按右鍵「更新功能變數」即會出現頁碼。</p>' +
+      '<p class="fine"><b>備份檔是什麼：</b>你在第 0 步到 M10 填的所有內容（文字欄位、目的與變項等表格、甘特、風險、打勾紀錄、樣本數設定）都在這一個 .json 檔裡。草稿平常只存在這台電腦的這個瀏覽器；換電腦時，在新電腦按「匯入備份」就能接著寫。</p>' +
+      '<details class="card soft"><summary>預覽研究計畫書內容</summary><div class="preview" id="prev"></div></details>' +
+      '<details class="card soft"><summary>預覽 IRB 送審文件內容</summary><div class="preview" id="prev2"></div></details>' +
+      '<div class="danger"><button type="button" class="btn ghost small" id="clr">清空這台電腦上的草稿</button><span class="confirm" id="clr-c" hidden>清空後無法復原（除非你有備份）。<button type="button" class="btn small warnb" id="clr-y">確定清空</button><button type="button" class="btn ghost small" id="clr-n">取消</button></span></div></section></div>';
+    return h;
+  }
+  function bindReview() {
+    $('#prev').innerHTML = blocksHTML(proposalBlocks());
+    $('#prev2').innerHTML = blocksHTML(irbBlocks());
+    $('#exdoc').addEventListener('click', function () { exportDocx(proposalBlocks(), (v('m10_title') || '研究計畫書').slice(0, 28) + '_研究計畫書.docx', this); });
+    $('#exirb').addEventListener('click', function () { exportDocx(irbBlocks(), (v('m10_title') || '研究計畫').slice(0, 24) + '_IRB送審文件.docx', this); });
+    $('#excopy').addEventListener('click', function () {
+      var m = $('#exmsg'), d = $('#prev'), t = d.innerText;
+      function sel() { d.closest('details').open = true; var r = document.createRange(); r.selectNodeContents(d); var s = getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent = '已選取預覽內容，請按 Ctrl＋C（Mac：⌘＋C）複製。'; }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { m.textContent = '已複製計畫書全文，可直接貼進 Word。'; }, sel); else sel();
+    });
+    $('#exjson').addEventListener('click', function () { dl(new Blob([JSON.stringify(S, null, 1)], { type: 'application/json' }), '研究計畫書草稿備份_' + new Date().toISOString().slice(0, 10) + '.json'); });
+    $('#imjson').addEventListener('change', function () {
+      var f = this.files[0]; if (!f) return; var r = new FileReader();
+      r.onload = function () { try { var o = JSON.parse(r.result); if (!o.meta || !o.f) throw 0; S = o; var b = blank(); for (var k in b) if (!(k in S)) S[k] = b[k]; save(); go('review'); } catch (e) { $('#exmsg').textContent = '這個檔案不是本工具的備份檔，沒有匯入。'; } };
+      r.readAsText(f);
+    });
+    $('#clr').addEventListener('click', function () { $('#clr-c').hidden = false; });
+    $('#clr-n').addEventListener('click', function () { $('#clr-c').hidden = true; });
+    $('#clr-y').addEventListener('click', function () { S = blank(); save(); go('setup'); });
+  }
+  function dl(blob, name) {
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    var m = $('#exmsg'); if (m) m.textContent = '已產生「' + name + '」。若瀏覽器沒有開始下載，請改用「複製計畫書全文」。';
+  }
+
+  // ---------- 匯出內容：以「區塊」描述，預覽與 Word 共用 ----------
+  // 區塊：{h:1|2|3,t} {p:'文字', ind:true} {c:'置中文字', sz, b} {tbl:{head,rows,w}} {pb:true} {toc:true} {list:[...]} {note:'灰字'} {sign:[...]} {gap:n}
+  function para(id) { var t = v(id); return t ? t.split(/\n+/).map(function (x) { return { p: x, ind: true }; }) : [{ p: '〔' + lab(id) + '：尚未填寫〕', ind: true }]; }
+  function lab(id) { var r = ''; STEPS.forEach(function (s) { (s.f || []).concat(s.after || []).forEach(function (f) { if (f[0] === id) r = f[1]; }); }); IRBF.concat(COVER).forEach(function (f) { if (f[0] === id) r = f[1]; }); return r || id; }
+  function val(id, d) { return v(id) || '〔' + (d || lab(id)) + '〕'; }
+  function O() { return S.objs.filter(function (o) { return o.text.trim(); }); }
+  function cat() { var a = []; for (var i = 0; i < arguments.length; i++) a = a.concat(arguments[i]); return a; }
+  function T(head, rows, w) { return { tbl: { head: head, rows: rows.length ? rows : [head.map(function () { return ''; })], w: w } }; }
+  function objList() { var L = O(); return L.length ? L.map(function (o, i) { return { p: '目的' + '一二三四五六'.charAt(i) + '：' + o.text.replace(/。$/, '') + '。', ind: true }; }) : [{ p: '〔研究目的〕', ind: true }]; }
+  function hypT() { return T(['研究目的', '研究假設'], O().map(function (o) { return [o.text, o.hyp || (o.verb === '描述' || o.verb === '探討' ? '（' + o.verb + '性目的，不設方向性假設）' : '')]; }), [1, 1.4]); }
+  function varT() { return T(['變項（角色）', '概念型定義', '操作型定義', '工具／資料來源', '尺度', '測量時點', '信效度依據'], S.vars.filter(function (x) { return x.name.trim(); }).map(function (x) { return [x.name + '（' + x.role + '）', x.concept, x.oper, x.tool, x.scale, x.time, x.rel]; }), [1.3, 1.3, 1.5, 1.1, .6, .9, 1.1]); }
+  function anaT() { return T(['研究目的', '分析方法', '判準', '補充或敏感度分析'], O().map(function (o) { return [o.text, o.analysis, o.crit, o.sens]; }), [1.5, 1.6, 1.1, 1.2]); }
+  function biasT() { return T(['偏差', '為什麼會發生', '因應措施'], S.bias.filter(function (b) { return b.name.trim(); }).map(function (b) { return [b.name, b.why, b.fix]; }), [1, 1.4, 1.6]); }
+  function ganttT() { var n = S.gantt.n | 0; return T(['工作項目'].concat(Array.from({ length: n }, function (_, i) { return String(i + 1); })), S.gantt.rows.map(function (r) { return [r.t].concat(Array.from({ length: n }, function (_, i) { return i + 1 >= r.s && i + 1 <= r.e ? '■' : ''; })); }), [3].concat(Array(n).fill(.45))); }
+  function riskT() { return T(['可能遭遇的困難', '觸發條件', '判斷時點', '對策或替代方案'], S.risks.filter(function (r) { return r.r.trim(); }).map(function (r) { return [r.r, r.trig, r.when, r.plan]; }), [1.3, 1.1, .7, 1.9]); }
+  function expL() { var L = O(); return L.map(function (o, i) { return { p: '（' + (i + 1) + '）' + (o.exp || '〔預期結果〕'), ind: true }; }); }
+  function refs() { var t = v('m10_refs'); return t ? t.split(/\n+/).map(function (x) { return { ref: x }; }) : [{ p: '〔參考文獻〕' }]; }
+  function cover(kind) {
+    return [{ gap: 4 }, { c: val('cv_school', '學校') + '　' + val('cv_dept', '系所'), sz: 16, b: true }, { c: kind, sz: 18, b: true }, { gap: 2 },
+      { c: v('m10_title') || '〔題目〕', sz: 16, b: true }, { c: v('m10_title_en') || '', sz: 13 }, { gap: 4 },
+      { c: (S.meta.fmt === 'f2' ? '計畫主持人：' : '研究生：') + val('cv_student', '姓名'), sz: 14 }, { c: (S.meta.fmt === 'f2' ? '協助撰寫：' : '指導教授：') + val('cv_advisor', '姓名'), sz: 14 },
+      { c: val('cv_date', '日期'), sz: 14 }, { pb: true }];
+  }
+  function proposalBlocks() {
+    var f = S.meta.fmt, B = [];
+    if (f === 'f1') {
+      B = cat(cover('碩士論文計畫書'), [{ h: 1, t: '摘要' }], para('m10_abs'), [{ p: '關鍵詞：' + val('m10_kw') }, { pb: true }, { toc: true }, { pb: true }],
+        [{ h: 1, t: '第一章　緒論' }, { h: 2, t: '第一節　研究背景與動機' }], para('m1_scene'), para('m1_gap'), para('m1_new'), para('m1_time'),
+        [{ h: 2, t: '第二節　問題陳述' }], para('m1_stmt'), [{ h: 2, t: '第三節　研究目的' }], objList(),
+        [{ h: 2, t: '第四節　研究問題與研究假設' }, { p: '主要研究問題：' + val('m3_rq'), ind: true }, hypT(), { h: 2, t: '第五節　名詞界定' }], para('m3_terms'),
+        [{ h: 2, t: '第六節　研究範圍' }], para('m3_scope'),
+        [{ h: 1, t: '第二章　文獻探討' }], para('m2_body'), [{ h: 2, t: '研究缺口與本研究定位' }], para('m2_known'), para('m2_unknown'), para('m2_worth'),
+        [{ h: 2, t: '研究架構' }], para('m2_theory'), para('m4_frame'), [{ cap: '表 2-1　變項定義表' }, varT()],
+        [{ h: 1, t: '第三章　研究方法' }, { h: 2, t: '第一節　研究設計' }], para('m5_design'), para('m5_reject'), [{ h: 2, t: '第二節　研究場域與對象' }], para('m5_site'), para('m5_incl'),
+        [{ h: 2, t: '第三節　抽樣方法與樣本數' }], para('m5_sample'), [{ h: 2, t: '第四節　研究工具' }], para('m5_tool'), [{ h: 2, t: '第五節　資料蒐集流程' }], para('m5_flow'),
+        [{ h: 2, t: '第六節　資料分析計畫' }, { cap: '表 3-1　研究目的與分析方法對照表' }, anaT()], para('m6_common'), has('m6_qual') ? para('m6_qual') : [],
+        [{ h: 2, t: '第七節　偏差來源與因應' }, { cap: '表 3-2　偏差來源與因應' }, biasT(), { h: 2, t: '第八節　研究倫理與資料保護' }], para('m7_irb'), para('m7_consent'), para('m7_risk'), para('m7_deid'), has('m7_coi') ? para('m7_coi') : [],
+        [{ h: 1, t: '第四章　預期結果與研究時程' }, { h: 2, t: '第一節　預期結果' }], expL(), [{ h: 2, t: '第二節　預期貢獻' }], para('m9_acad'), para('m9_prac'),
+        [{ h: 2, t: '第三節　研究限制' }], para('m9_limd'), para('m9_lime'), [{ h: 2, t: '第四節　研究時程' }, { cap: '表 4-1　研究時程甘特表（月）' }, ganttT()],
+        [{ h: 2, t: '第五節　可行性與風險' }], para('m8_feas'), [{ cap: '表 4-2　風險與對策' }, riskT()], [{ pb: true }, { h: 1, t: '參考文獻' }], refs());
+    } else if (f === 'f2') {
+      B = cat(cover('國科會專題研究計畫　研究計畫內容（CM03）'), [{ h: 1, t: '研究計畫中文摘要（CM02）' }], para('m10_abs'), [{ p: '關鍵詞：' + val('m10_kw') }, { pb: true }],
+        [{ h: 1, t: '(一) 研究計畫之背景' }, { h: 2, t: '1. 所要探討或解決的問題' }], para('m1_scene'), para('m1_gap'), [{ h: 2, t: '2. 國內外有關本計畫之研究情況及重要參考文獻之評述' }], para('m1_new'), para('m2_body'), para('m2_known'), para('m2_unknown'),
+        [{ h: 2, t: '3. 研究原創性' }], para('m2_orig'), [{ h: 2, t: '4. 重要性與預期影響性' }], para('m1_time'), para('m2_worth'), [{ h: 2, t: '5. 本計畫目的' }, { p: '主要研究問題：' + val('m3_rq'), ind: true }], objList(), [hypT()],
+        [{ h: 1, t: '(二) 研究方法、進行步驟及執行進度' }, { h: 2, t: '1. 本計畫採用之研究方法與原因及其創新性' }], para('m5_innov'), para('m5_design'), para('m5_reject'), para('m4_frame'), [varT()], para('m5_site'), para('m5_incl'), para('m5_sample'), para('m5_tool'), para('m5_flow'),
+        [anaT()], para('m6_common'), has('m6_qual') ? para('m6_qual') : [], [biasT(), { h: 2, t: '2. 進行步驟及執行進度' }, ganttT(), { h: 2, t: '3. 預計可能遭遇之困難及解決途徑' }, riskT()], para('m8_feas'),
+        [{ h: 2, t: '4. 研究倫理與資料保護' }], para('m7_irb'), para('m7_consent'), para('m7_deid'),
+        [{ h: 1, t: '(三) 預期完成之工作項目及成果' }, { h: 2, t: '1. 預期完成之工作項目' }, T(['工作項目', '期程'], S.gantt.rows.map(function (r) { return [r.t, '第 ' + r.s + '–' + r.e + ' 月']; }), [3, 1]),
+         { h: 2, t: '2. 對於參與之工作人員，預期可獲之訓練' }], para('m9_train'), [{ h: 2, t: '3. 預期完成之研究成果' }], expL(), para('m9_output'),
+        [{ h: 2, t: '4. 學術研究、國家發展及其他應用方面預期之貢獻' }], para('m9_acad'), para('m9_nation'), [{ pb: true }, { h: 1, t: '參考文獻' }], refs());
+    } else {
+      B = cat(cover('計畫書'), [{ h: 1, t: '計畫摘要' }], para('m10_abs'), [{ pb: true }, { h: 1, t: '一、計畫背景' }], para('m1_scene'), para('m1_gap'), para('m1_new'), para('m1_time'),
+        [{ h: 1, t: '二、計畫目標及對象' }], objList(), para('m3_scope'), [{ h: 1, t: '三、實施方法與步驟' }], para('m5_design'), para('m5_site'), para('m5_sample'), para('m5_tool'), para('m5_flow'), [anaT()], para('m6_common'),
+        [{ h: 2, t: '倫理與資料保護' }], para('m7_irb'), para('m7_consent'), para('m7_deid'), [{ h: 1, t: '四、期程安排與查核點' }, ganttT(), { h: 1, t: '五、預期效益與績效指標' }], expL(), para('m9_prac'),
+        [T(['指標名稱', '計算方式與資料來源', '基準值', '目標值與期限'], S.kpi.filter(function (k) { return k.name.trim(); }).map(function (k) { return [k.name, k.calc, k.base, k.goal]; }), [1, 2, 1.2, 1.6]), { h: 1, t: '六、風險管理' }, riskT(),
+         { pb: true }, { h: 1, t: '參考資料' }], refs());
+    }
+    return B;
+  }
+  function irbBlocks() {
+    var ttl = v('m10_title') || '〔計畫名稱〕';
+    var chk = function (t, need) { return ['☐', t, need]; };
+    return cat([{ c: '人體研究倫理審查　新案送審文件（練習稿）', sz: 18, b: true }, { c: ttl, sz: 14, b: true },
+      { note: '本文件依臺大醫院研究倫理委員會「新案送審文件清單」與《人體研究法》第 14 條整理，供課程練習撰寫。各機構表單格式、欄位與審查流程不同，正式送審請至送審機構 IRB 網站下載最新表單，將本稿內容填入。' },
+      { h: 1, t: '一、送審文件檢核表' },
+      T(['', '文件', '是否需要'], [chk('計畫書', '必備'), chk('計畫中文摘要', '必備'), chk('計畫主持人聲明書', '必備'), chk('受試者同意書／受試者說明書', '必備（免除同意者仍需說明書）'),
+        chk('主持人及研究人員之學經歷、著作', '必備'), chk('主持人及研究人員之研究倫理相關訓練證明', '必備'), chk('顯著財務利益暨非財務關係申報', '必備'), chk('審查費繳費證明', '依機構規定'),
+        chk('簡易審查範圍評檢表', '申請簡易審查時'), chk('問卷、訪談大綱等研究工具', '有使用時'), chk('招募受試者廣告文宣', '以文宣招募時'), chk('計畫英文摘要', '有則附'),
+        chk('使用大量病歷資料進行研究申請表', '使用大數據、AI、研究資料庫或大量病歷時（依各院規定）')], [.3, 3, 2]),
+      { pb: true }, { h: 1, t: '二、計畫中文摘要' },
+      T(['項目', '內容'], [['計畫名稱', ttl], ['計畫主持人', val('irb_pi')], ['執行機構與預定期間', val('irb_inst') + '；' + val('irb_period')], ['經費來源', val('irb_fund')],
+        ['研究目的', O().map(function (o, i) { return (i + 1) + '. ' + o.text; }).join('\n') || '〔研究目的〕'], ['研究設計與方法', (v('m5_design') || '〔設計〕') + '\n' + (v('m5_flow') || '')],
+        ['研究對象與人數', val('irb_n')], ['預期結果', O().map(function (o) { return o.exp; }).filter(Boolean).join('\n') || '〔預期結果〕']], [1, 4]),
+      { pb: true }, { h: 1, t: '三、新案申請書內容' },
+      { h: 2, t: '（一）基本資料' }, T(['項目', '內容'], [['計畫名稱', ttl], ['計畫主持人（姓名、職稱、單位、職責）', val('irb_pi')], ['共同／協同主持人及研究人員', val('irb_copi')],
+        ['計畫聯絡人及聯絡方式', val('irb_contact')], ['執行機構', val('irb_inst')], ['經費來源', val('irb_fund')], ['預定執行期間', val('irb_period')]], [1.6, 4]),
+      { h: 2, t: '（二）審查類型建議及理由' }], para('irb_review'),
+      [{ h: 2, t: '（三）研究設計與方法摘要' }], para('m5_design'), para('m5_flow'),
+      [{ h: 2, t: '（四）研究對象' }, T(['項目', '內容'], [['研究對象與預計人數', val('irb_n')], ['納入與排除條件', val('m5_incl')], ['招募方式（由誰、在哪裡、如何避免壓力）', val('irb_recruit')], ['是否納入易受傷害族群', val('irb_vuln')]], [1.6, 4]),
+       { h: 2, t: '（五）知情同意' }], para('m7_consent'), [{ p: '撤回同意之方式：' + val('irb_withdraw'), ind: true }],
+      [{ h: 2, t: '（六）風險與利益評估' }], para('m7_risk'), [{ p: '對參與者之利益或補助：' + val('irb_benefit'), ind: true }, { p: '造成損害時之救濟措施：' + val('irb_harm'), ind: true }],
+      [{ h: 2, t: '（七）隱私與資料保護' }], para('m7_deid'), [{ p: '研究材料（資料）保存期限及運用規劃：' + val('irb_material'), ind: true }],
+      [{ h: 2, t: '（八）利益衝突與商業利益' }], para('m7_coi'), [{ p: '研究可能衍生之商業利益及其應用之約定：' + val('irb_commercial'), ind: true }],
+      [{ pb: true }, { h: 1, t: '四、受試者同意書' }, { c: '研究參與者同意書', sz: 15, b: true },
+       { note: '依《人體研究法》第 14 條，取得同意前應以研究對象可理解之方式告知下列九項，且不得以強制、利誘或其他不正當方式取得同意。請用參與者看得懂的白話改寫。' },
+       T(['項目', '內容'], [['計畫名稱', ttl], ['一、研究機構名稱及經費來源', val('irb_inst') + '；經費來源：' + val('irb_fund')],
+         ['二、研究目的及方法', (O().map(function (o) { return o.text; }).join('；') || '〔目的〕') + '。\n您參與的內容：' + val('irb_task', '參與者需要做什麼、多久、在哪裡')],
+         ['三、研究主持人之姓名、職稱及職責', val('irb_pi')], ['四、研究計畫聯絡人姓名及聯絡方式', val('irb_contact')], ['五、研究對象之權益及個人資料保護機制', val('m7_deid')],
+         ['六、得隨時撤回同意之權利及撤回之方式', val('irb_withdraw')], ['七、可預見之風險及造成損害時之救濟措施', (v('m7_risk') || '〔風險〕') + '\n' + val('irb_harm')],
+         ['八、研究材料之保存期限及運用規劃', val('irb_material')], ['九、研究可能衍生之商業利益及其應用之約定', val('irb_commercial')]], [1.6, 4]),
+       { p: '本人已詳細閱讀並了解上述內容，研究人員已回答我的問題，我同意參與本研究。' },
+       { sign: ['參與者簽名：＿＿＿＿＿＿＿＿＿＿　日期：＿＿＿＿年＿＿月＿＿日', '說明人簽名：＿＿＿＿＿＿＿＿＿＿　日期：＿＿＿＿年＿＿月＿＿日', '計畫主持人簽名：＿＿＿＿＿＿＿＿　日期：＿＿＿＿年＿＿月＿＿日'] },
+       { pb: true }, { h: 1, t: '五、計畫主持人聲明書' },
+       { note: '以下為常見聲明事項之練習稿；正式文字以送審機構表單為準。' },
+       { list: ['本人將依核准之計畫書執行研究，變更前先送倫理委員會審查。', '本人將依核准之同意書取得參與者同意，並保障參與者隨時撤回之權利。', '本人將依計畫保護參與者隱私與資料安全，研究結束或保存期限屆至後依規定銷毀或去連結。',
+         '本人將依規定期限通報非預期問題、嚴重不良事件與違反計畫事項，並提交期中與結案報告。', '本人已揭露與本研究相關之財務利益及非財務關係。'] },
+       { sign: ['計畫主持人簽名：＿＿＿＿＿＿＿＿　日期：＿＿＿＿年＿＿月＿＿日'] },
+       { h: 1, t: '六、招募說明與研究工具清單' }, { h: 2, t: '招募說明（草稿）' }], para('irb_ad'),
+      [{ h: 2, t: '研究工具清單' }], para('m5_tool'), [{ note: '問卷、訪談大綱、觀察紀錄表等工具全文，請另附於送審文件。' }]);
+  }
+  function blocksHTML(B) {
+    return B.map(function (b) {
+      if (b.h) return '<h' + (b.h + 1) + '>' + esc(b.t) + '</h' + (b.h + 1) + '>';
+      if (b.p != null) return '<p' + (b.ind ? ' class="ind"' : '') + '>' + slot(b.p) + '</p>';
+      if (b.ref) return '<p class="ref">' + slot(b.ref) + '</p>';
+      if (b.c != null) return b.c ? '<p class="ctr' + (b.b ? ' b' : '') + '">' + slot(b.c) + '</p>' : '';
+      if (b.cap) return '<p class="cap">' + esc(b.cap) + '</p>';
+      if (b.note) return '<p class="note">' + esc(b.note) + '</p>';
+      if (b.list) return '<ul>' + b.list.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>';
+      if (b.sign) return b.sign.map(function (x) { return '<p class="sign">' + esc(x) + '</p>'; }).join('');
+      if (b.toc) return '<p class="cap">［目錄：Word 中自動產生］</p>';
+      if (b.pb) return '<hr>';
+      if (b.tbl) return '<table><tr>' + b.tbl.head.map(function (x) { return '<th>' + esc(x) + '</th>'; }).join('') + '</tr>' + b.tbl.rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + slot(c || '') + '</td>'; }).join('') + '</tr>'; }).join('') + '</table>';
+      return '';
+    }).join('');
+  }
+  var DOCX_URL = 'https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js';
+  function loadDocx() {
+    return new Promise(function (res, rej) {
+      if (window.docx) return res(window.docx);
+      var s = document.createElement('script'); s.src = DOCX_URL; s.onload = function () { window.docx ? res(window.docx) : rej(); }; s.onerror = rej; document.head.appendChild(s);
+    });
+  }
+  function exportDocx(B, name, btn) {
+    var m = $('#exmsg'), old = btn.textContent; btn.disabled = true; btn.textContent = '產生中…';
+    loadDocx().then(function (X) {
+      var FONT = { ascii: 'Times New Roman', hAnsi: 'Times New Roman', eastAsia: '標楷體', cs: 'Times New Roman' };
+      var W = 9070, kids = [];
+      function run(t, o) { o = o || {}; return new X.TextRun({ text: t, font: FONT, size: Math.round((o.sz || 12) * 2), bold: !!o.b, color: o.c }); }
+      function P(t, o) { o = o || {}; return new X.Paragraph({ children: [run(t, o)], alignment: o.al, spacing: { line: 360, after: o.after == null ? 120 : o.after, before: o.before || 0 }, indent: o.ind ? { firstLine: 480 } : (o.hang ? { left: 480, hanging: 480 } : undefined), pageBreakBefore: !!o.pbb }); }
+      function cell(t, w, head) {
+        return new X.TableCell({ width: { size: w, type: X.WidthType.DXA }, margins: { top: 50, bottom: 50, left: 80, right: 80 },
+          shading: head ? { type: X.ShadingType.CLEAR, color: 'auto', fill: 'E3E9EE' } : undefined,
+          children: String(t || '').split('\n').map(function (x) { return new X.Paragraph({ children: [run(x, { sz: 10.5, b: head })], spacing: { line: 276, after: 0 } }); }) });
+      }
+      var bd = { style: X.BorderStyle.SINGLE, size: 4, color: '808080' };
+      B.forEach(function (b, bi) {
+        var afterPb = bi > 0 && B[bi - 1].pb;
+        if (b.h) kids.push(new X.Paragraph({ pageBreakBefore: b.h === 1 && bi > 0 && !afterPb && kids.length > 0, heading: [0, X.HeadingLevel.HEADING_1, X.HeadingLevel.HEADING_2, X.HeadingLevel.HEADING_3][b.h], children: [run(b.t, { sz: [0, 16, 14, 12][b.h], b: true })], spacing: { before: b.h === 1 ? 360 : 240, after: 160, line: 360 }, alignment: b.h === 1 ? X.AlignmentType.CENTER : undefined, keepNext: true }));
+        else if (b.p != null) kids.push(P(b.p, { ind: b.ind }));
+        else if (b.ref) kids.push(P(b.ref, { hang: true }));
+        else if (b.c != null) { if (b.c) kids.push(P(b.c, { sz: b.sz || 12, b: b.b, al: X.AlignmentType.CENTER, after: 200 })); }
+        else if (b.gap) for (var g = 0; g < b.gap; g++) kids.push(P('', {}));
+        else if (b.cap) kids.push(P(b.cap, { b: true, al: X.AlignmentType.CENTER, before: 120, after: 60, sz: 11 }));
+        else if (b.note) kids.push(P(b.note, { sz: 10.5, c: '666666' }));
+        else if (b.list) b.list.forEach(function (x, i) { kids.push(P((i + 1) + '. ' + x, { hang: true })); });
+        else if (b.sign) b.sign.forEach(function (x) { kids.push(P(x, { before: 240 })); });
+        else if (b.toc) { kids.push(P('目　錄', { sz: 16, b: true, al: X.AlignmentType.CENTER })); kids.push(new X.TableOfContents('目錄', { hyperlink: true, headingStyleRange: '1-2' })); }
+        else if (b.pb) kids.push(new X.Paragraph({ children: [new X.PageBreak()] }));
+        else if (b.tbl) {
+          var w = b.tbl.w || b.tbl.head.map(function () { return 1; }), tot = w.reduce(function (a, c) { return a + c; }, 0);
+          var cw = w.map(function (x) { return Math.floor(W * x / tot); }); cw[cw.length - 1] += W - cw.reduce(function (a, c) { return a + c; }, 0);
+          kids.push(new X.Table({ width: { size: W, type: X.WidthType.DXA }, columnWidths: cw, borders: { top: bd, bottom: bd, left: bd, right: bd, insideHorizontal: bd, insideVertical: bd },
+            rows: [new X.TableRow({ tableHeader: true, children: b.tbl.head.map(function (h, i) { return cell(h, cw[i], true); }) })].concat(b.tbl.rows.map(function (r) { return new X.TableRow({ children: r.map(function (c, i) { return cell(c, cw[i], false); }) }); })) }));
+          kids.push(P('', { after: 60 }));
+        }
+      });
+      var doc = new X.Document({
+        creator: '研究計畫書工作台', title: name, features: { updateFields: true },
+        styles: { default: { document: { run: { font: FONT, size: 24 }, paragraph: { spacing: { line: 360 } } } },
+          paragraphStyles: [1, 2, 3].map(function (l) { return { id: 'Heading' + l, name: 'Heading ' + l, basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { font: FONT, size: [0, 32, 28, 24][l], bold: true, color: '000000' }, paragraph: { outlineLevel: l - 1 } }; }) },
+        sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1418, bottom: 1418, left: 1418, right: 1418 } } },
+          footers: { default: new X.Footer({ children: [new X.Paragraph({ alignment: X.AlignmentType.CENTER, children: [new X.TextRun({ children: [X.PageNumber.CURRENT], font: FONT, size: 20 })] })] }) },
+          children: kids }]
+      });
+      return X.Packer.toBlob(doc);
+    }).then(function (blob) { dl(blob, name); }).catch(function () {
+      // 備援：無法載入 Word 元件時，改出可用 Word 開啟的 .doc
+      var html = '<html><head><meta charset="utf-8"><style>body{font-family:"標楷體","Times New Roman";font-size:12pt;line-height:1.5}h2{font-size:16pt;text-align:center}h3{font-size:14pt}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:4pt;font-size:10.5pt;vertical-align:top}.ctr{text-align:center}.ind{text-indent:2em}</style></head><body>' + blocksHTML(B) + '</body></html>';
+      dl(new Blob(['﻿' + html], { type: 'application/msword' }), name.replace(/\.docx$/, '.doc'));
+      if (m) m.textContent = '無法載入 Word 元件（可能沒有網路），已改存成相容的 .doc 檔。';
+    }).then(function () { btn.disabled = false; btn.textContent = old; });
+  }
+
+  // ---------- Case Q 範例（計畫階段，完整填寫） ----------
+  function caseQ() {
+    var s = blank(); s.meta.fmt = S.meta.fmt || 'f1'; s.meta.type = 'C'; s.meta.type2 = 'E 質性研究'; s.meta.step = 's1';
+    DATA.gr.forEach(function (g, i) { s.f['s1_' + (i + 1)] = g[1]; });
+    var F = {
+      cv_school: '〔學校名稱〕', cv_dept: '〔系所名稱〕碩士班', cv_student: '〔研究生姓名〕', cv_advisor: '〔指導教授姓名〕　博士', cv_date: '中華民國 115 年 8 月',
+      m1_scene: '住宿式長照機構之交班高度依賴自由文字紀錄。護理人員與資深照服員每一班交班前，須翻閱前一班的照護紀錄、給藥紀錄與異常事件，自行彙整成交班重點，這段彙整時間排擠了直接照護住民的時間。',
+      m1_gap: '現行做法以人工閱讀紀錄加上口頭交接為主，資訊散落於多份紀錄，彙整品質高度依賴個人經驗：資深人員能抓出重點，新進人員則容易遺漏或花更多時間。機構目前沒有可量化的指標，說明交班花了多少時間、交出去的內容是否完整。',
+      m1_new: '生成式 AI 已能從臨床文本自動產生摘要。Van Veen 等人（2024）的研究顯示，經調整之大型語言模型所產生的臨床文本摘要，經臨床讀者評估多數不劣於醫療專家所寫；但這類研究多在模擬閱讀情境下評估品質，長照場域仍缺乏在真實交班流程中同時測量「時間」與「品質」的量化證據。',
+      m1_time: '兩家合作機構已決定於 2026 年 11 月與 2027 年 2 月先後導入院內部署之 AI 照護紀錄摘要工具，導入時程的自然落差提供了非同期比較的時機；若錯過導入前測，就無法再取得導入前的基準資料。研究結果可作為機構是否全面導入、以及導入時需要哪些配套之依據。',
+      m1_stmt: '因此，本研究擬探討長照機構導入 AI 照護紀錄摘要工具後，交班準備時間是否縮短、紀錄完整性是否不變差，以及照護人員的負荷與信任如何改變。',
+      m2_pico: 'P：住宿式長照機構負責交班之護理師與資深照服員｜I：院內部署之生成式 AI 照護紀錄摘要工具｜C：導入前（同一人）及同期尚未導入之機構｜O：交班準備時間（主要）、紀錄完整性、二次確認詢問次數、認知負荷、信任',
+      m2_search: 'PubMed：（"Patient Handoff"[Mesh] OR handoff*[tiab] OR handover*[tiab] OR "shift report"[tiab]）AND（"Natural Language Processing"[Mesh] OR "large language model*"[tiab] OR "generative artificial intelligence"[tiab] OR summariz*[tiab]）AND（"Long-Term Care"[Mesh] OR "Nursing Homes"[Mesh] OR "long-term care"[tiab] OR "nursing home*"[tiab]）\n華藝線上圖書館：（交班 OR 交接班）AND（人工智慧 OR 生成式 OR 摘要）AND（長照 OR 長期照護 OR 護理之家）\n限制：2015 年以後、中英文；檢索日期、各階段筆數與 PRISMA 流程見附錄一檢索日誌（教學示意：請以自己實際執行的檢索為準）。',
+      m2_body: '一、交班與文書負擔。護理交班是維持照護連續性的關鍵環節。Riesenberg 等人（2010）系統性回顧護理交班文獻，指出交班方式多元，但以結果指標評估交班成效的研究仍有限。Moy 等人（2021）回顧醫師與護理人員電子病歷文書負擔的研究，發現文書時間的測量方式並不一致，多採自陳或系統日誌，直接觀察計時者較少。對本研究的意義：主要結果應以可重複的觀察計時取得，並同時測量交班內容的品質。\n二、生成式 AI 臨床摘要的證據。Van Veen 等人（2024）比較經調整之大型語言模型與醫療專家撰寫的臨床文本摘要，臨床讀者評估模型摘要多數情況下不劣於專家；然而，該研究評估的是摘要本身，並未在真實工作流程中測量導入後的時間與品質變化。對本研究的意義：需要在真實交班流程中評估，並把品質（完整性）當成與時間同等重要的結果，以非劣性界限檢驗「省時間之餘品質沒有變差」。\n三、場域與研究設計。本研究於 PubMed 與華藝之初步檢索（附錄一），未見在長照機構以同期對照同時測量交班時間與紀錄品質之研究（教學示意：請以自己的實際檢索結果改寫）。由於機構導入時程由管理階層決定，無法隨機分派，宜採非隨機介入設計並依 TREND（Des Jarlais et al., 2004）報告；品質之非劣性判定則參照 Piaggio 等人（2012）之建議，事先訂定界限。',
+      m2_known: '既有研究已顯示生成式 AI 能產生品質接近醫療專家的臨床摘要（Van Veen et al., 2024），且護理文書負擔是普遍且受重視的問題（Moy et al., 2021）。',
+      m2_unknown: '然而，長照場域導入 AI 摘要工具後，交班時間與紀錄品質是否「同時」改善，缺乏在真實流程中並測之量化證據；既有評估亦多缺少同期對照，難以排除同期政策與人力變動的影響。',
+      m2_worth: '此缺口使機構在決定是否全面導入時，只能依賴廠商說法或個人印象；本研究將以非同期導入之準實驗設計，同時回答「省了多少時間」與「品質有沒有變差」。',
+      m2_theory: '以社會技術模型（Sittig & Singh, 2010）為架構：AI 工具（硬體與軟體、臨床內容）、人員（職類、年資、負荷）與工作流程（交班方式）相互作用，共同決定導入成效；因此除了時間，也測量品質、負荷與信任。',
+      m2_orig: '本計畫為國內首批在長照機構真實交班流程中，以第三方觀察計時與雙人評分同時測量交班時間與紀錄品質之研究，並以非劣性界限檢驗品質、以同期未導入機構作對照，可分離導入效果與同期變動。',
+      m3_rq: '長照機構導入 AI 照護紀錄摘要工具後，交班準備時間是否縮短、紀錄完整性是否不變差？',
+      m3_terms: '交班準備時間：自護理人員開始彙整前一班紀錄起，至完成交班止之分鐘數，以第三方觀察計時取得。\n紀錄完整性：交班內容涵蓋應交代項目之程度，以 0–20 分評分表由兩位評分者獨立評分。\nAI 照護紀錄摘要工具：院內部署之生成式 AI 工具，自班別紀錄自動產生交班摘要，使用者逐項核對修改後送出。',
+      m3_scope: '研究範圍為北部兩家住宿式長照機構負責交班之護理師與資深照服員，共 62 人，執行期間 12 個月（2026 年 9 月至 2027 年 8 月）。本研究不包含工具之開發與調校，亦不進行成本效益分析，因工具由機構採購且成本資料不在研究者掌握。',
+      m4_frame: '依社會技術模型建立研究架構：自變項為導入狀態（前測／後測）與機構（A 先導入、B 延後導入）；主要依變項為交班準備時間，次要依變項為紀錄完整性與二次確認詢問次數；探索變項為認知負荷與對 AI 摘要之信任；控制變項為當班照顧住民數、職類與年資。未納入機構管理風格，因本研究僅兩家機構，無法估計其效果，於限制中說明。（架構圖見圖 2-1）',
+      m5_design: '本研究採非同期導入之準實驗設計（C 型：介入成效研究）。A 機構於 2026 年 11 月導入 AI 照護紀錄摘要工具，B 機構延後至 2027 年 2 月導入；B 機構延後期間作為 A 機構之同期對照，形成含對照組之前後測結構，可用差異中之差異（DiD）分離導入效果與同期變動。',
+      m5_reject: '不採隨機對照試驗，因導入時程由機構管理階層決定，研究者無分派權；不採單組前後測，因無法排除同期政策與人力變動之影響；不採橫斷面設計，因無法回答導入是否帶來改變。',
+      m5_site: '研究場域為北部兩家住宿式長照機構：A 機構 120 床、護理人員 34 人；B 機構 96 床、護理人員 28 人，兩機構均已同意導入時程與現場觀察（附錄二）。研究對象為兩機構負責交班之護理師與資深照服員，合計 62 人，全體普查、不抽樣。',
+      m5_incl: '納入條件：研究期間在職，且已能獨立負責交班之護理師或資深照服員。排除條件：研究期間預計離職或請長假（連續一個月以上）者。',
+      m5_sample: '以配對 t 檢定估算：效果量 dz = 0.5（無前導資料，採保守中效果）、α = .05 雙尾、檢定力 .80，需至少 34 人（以 G*Power 3.1 核對；Faul et al., 2007）；A 機構 34 人全數納入。質性階段以資料飽和為判準，預估約 12 人。',
+      m5_tool: '一、交班準備時間：由兩位受訓觀察者以碼錶計時，正式收案前以 30 次交班進行校準並計算觀察者間信度。\n二、紀錄完整性：0–20 分評分表，由兩位不知紀錄時期之評分者獨立評分，正式評分前以 20 份紀錄計算評分者間信度。\n三、二次確認詢問次數：觀察者記錄交班後接班者回頭詢問或查閱原紀錄之次數。\n四、認知負荷量表：自編 8 題，經 5 位專家（護理資訊 2、長照實務 2、健康資訊學者 1）內容效度審查，預試 30 人，其中 15 人於兩週後重測（程序見 2.2A）。\n五、AI 摘要信任量表：4 題。',
+      m5_flow: '一、第 1–2 月：IRB 送審；核准後於兩機構舉辦說明會、簽署同意書、觀察者校準與量表預試。\n二、第 2–3 月：兩機構同步前測，每人觀察 12 次交班；問卷第一波。\n三、第 3 月起：A 機構導入（2026 年 11 月），持續觀察計時，系統使用日誌每月匯出。\n四、第 6 月起：B 機構導入（2027 年 2 月），導入前作為同期對照。\n五、第 9–11 月：依量化結果挑選「時間縮短最多」與「二次確認增加最多」兩端人員進行半結構訪談（案例 L）。\n六、資料於機構內以研究編號取代姓名後才帶離機構；觀察、問卷與系統日誌以研究編號串接。',
+      m5_innov: '利用兩機構導入時程之自然落差，以非同期導入準實驗取得同期對照，使無法隨機的實務場域仍可分離導入效果與同期變動；並以第三方觀察計時與雙人評分取代自陳，提高結果的可信度。',
+      m6_common: '顯著水準 α = .05 雙尾；連續變項先檢查常態性，不符時改用 Wilcoxon 符號等級檢定。交班事件巢套於人員（每人重複測 12 次），主分析外以混合效果模型（人員為隨機截距）做敏感度分析。缺值比例低於 5% 以完整個案分析，高於 5% 以多重插補並比較結果。量表 Cronbach\'s α 於正式施測後重新計算。分析以 Python（pandas、statsmodels，版本於論文中寫明）執行，分析腳本存檔以利重現。',
+      m6_qual: '案例 L（後接質性階段）：訪談全程錄音並轉為逐字稿，依 Braun 與 Clarke（2006）主題分析六步驟分析；前 4 份逐字稿由兩位研究者獨立編碼，歧異以協商共識處理，並保留編碼簿修訂紀錄。',
+      m7_irb: '本研究將送〔大學或合作機構〕人體研究倫理審查委員會審查，於第 1 月送審，核准後才開始說明會與前測。',
+      m7_consent: '護理人員與照服員於說明後簽署書面同意。交班紀錄內容涉及住民個資，但研究對象為工作人員、紀錄於機構內去識別化後才使用，將依 7.1 評估是否符合主管機關公告得免取得同意之範圍，並向 IRB 申請免除住民同意。',
+      m7_risk: '本研究屬最小風險，觀察與問卷不涉及侵入性程序。參與者可隨時退出，參與與否不影響其考核或工作權益；招募與說明由研究團隊進行，不由直屬主管邀請。',
+      m7_deid: '交班紀錄於機構內以研究編號取代住民與人員姓名後才帶離機構；研究編號對照表由研究主持人保管，與研究資料分開存放於加密裝置，僅研究團隊可存取。去識別化資料保存至研究結束後 3 年，期滿以不可回復方式刪除；訪談錄音於逐字稿核對完成後刪除。',
+      m7_coi: '研究者與 AI 摘要工具廠商無財務關係；工具由機構採購，研究團隊不參與開發與調校。生成式 AI 僅用於檢索式發想與文字潤飾，不輸入任何可識別資料。',
+      m8_feas: '資料：系統使用日誌與交班紀錄由機構提供，已取得兩機構書面同意（附錄二）。場域：兩機構管理階層已同意導入時程與現場觀察。樣本：A 機構 34 人全數納入即達事前估算之 34 人。時間：IRB 於第 1 月送審，並保留兩個月緩衝。',
+      m9_acad: '補足長照場域導入生成式 AI 摘要工具後，交班「時間＋品質」並測、且有同期對照之量化證據。',
+      m9_prac: '研究結果可供機構主管決定是否全面導入，並提出導入時的教育訓練重點與摘要核對流程建議。',
+      m9_limd: '本研究採非隨機之準實驗設計，雖以同期對照與 DiD 降低偏誤，仍無法完全排除兩機構間未測量之差異；僅含北部兩家住宿式機構，推論至其他類型或地區之機構時需保守。',
+      m9_lime: '人員知道被計時可能暫時改變行為（觀察者效應），將以前測適應期降低；研究期間工具版本可能更新，將記錄版本變更時點並於分析時納入考量。',
+      m9_train: '參與之碩士生將習得觀察計時與評分者校準、準實驗設計之 DiD 與混合效果模型分析，以及半結構訪談與主題分析（教學示意）。',
+      m9_output: '預計投稿期刊論文 1 篇、研討會論文 1 篇，並產出長照機構導入 AI 摘要工具之流程建議一份（教學示意）。',
+      m9_nation: '回應長照人力短缺與數位轉型之政策需求，提供機構導入生成式 AI 時評估成效與品質之可行方法。',
+      t_iv: 'AI 照護紀錄摘要工具', t_pop: '長照機構', t_out: '交班效率與紀錄品質', t_des: '非同期導入之準實驗研究',
+      m10_title: 'AI 照護紀錄摘要工具對長照機構交班效率與紀錄品質之影響：非同期導入之準實驗研究',
+      m10_title_en: 'Effects of an AI-Generated Care Record Summary Tool on Handover Efficiency and Documentation Quality in Long-Term Care Facilities: A Quasi-Experimental Study with Staggered Implementation',
+      m10_kw: '長期照護、交班、生成式人工智慧、護理紀錄、準實驗設計',
+      m10_abs: '住宿式長照機構之交班高度依賴自由文字紀錄，文書負擔排擠直接照護時間，然長照場域缺乏在真實交班流程中同時測量「時間」與「品質」之量化證據。本研究旨在比較 AI 照護紀錄摘要工具導入前後之交班準備時間，檢驗紀錄完整性是否非劣於導入前，並探討照護人員之認知負荷與信任。本研究將採非同期導入之準實驗設計，於北部 2 家住宿式長照機構觀察 62 位負責交班之護理師與資深照服員，以第三方觀察計時與 0–20 分完整性評分表測量，並以配對 t 檢定、差異中之差異與非劣性界限檢驗假設；後接質性訪談以解釋量化結果。預期交班準備時間縮短且紀錄完整性非劣，可作為機構是否全面導入之依據。',
+      m10_refs: 'Braun, V., & Clarke, V. (2006). Using thematic analysis in psychology. Qualitative Research in Psychology, 3(2), 77–101.\nDes Jarlais, D. C., Lyles, C., Crepaz, N., & the TREND Group. (2004). Improving the reporting quality of nonrandomized evaluations of behavioral and public health interventions: The TREND statement. American Journal of Public Health, 94(3), 361–366.\nFaul, F., Erdfelder, E., Lang, A.-G., & Buchner, A. (2007). G*Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences. Behavior Research Methods, 39(2), 175–191.\nMoy, A. J., et al. (2021). Measurement of clinical documentation burden among physicians and nurses using electronic health records: A scoping review. Journal of the American Medical Informatics Association, 28(5), 998–1008.\nPiaggio, G., et al. (2012). Reporting of noninferiority and equivalence randomized trials: Extension of the CONSORT 2010 statement. JAMA, 308(24), 2594–2604.\nRiesenberg, L. A., Leitzsch, J., & Cunningham, J. M. (2010). Nursing handoffs: A systematic review of the literature. American Journal of Nursing, 110(4), 24–34.\nSittig, D. F., & Singh, H. (2010). A new sociotechnical model for studying health information technology in complex adaptive healthcare systems. Quality & Safety in Health Care, 19(Suppl 3), i68–i74.\nVan Veen, D., et al. (2024). Adapted large language models can outperform medical experts in clinical text summarization. Nature Medicine, 30(4), 1134–1142.',
+      irb_pi: '〔指導教授姓名〕，〔職稱〕，〔系所〕；職責：計畫督導、研究倫理與參與者保護之最終責任',
+      irb_copi: '〔研究生姓名〕（協同主持人，負責資料蒐集、分析與論文撰寫）；觀察者 2 名、評分者 2 名〔姓名〕，均完成研究倫理訓練',
+      irb_contact: '〔研究生姓名〕；電話〔　〕；電子郵件〔　〕',
+      irb_inst: '〔大學名稱〕〔系所〕；研究場域：北部兩家住宿式長照機構（以 A、B 代稱）',
+      irb_fund: '本研究無外部經費補助，所需經費由研究者自籌；AI 摘要工具由機構自行採購，與本研究經費無關。',
+      irb_period: '2026 年 9 月至 2027 年 8 月（自 IRB 核准日起執行）',
+      irb_review: '建議簡易審查：研究對象為成年工作人員，以觀察計時、問卷與訪談蒐集資料，屬最小風險；交班紀錄於機構內去識別化後使用，並申請免除住民同意。是否符合簡易審查範圍，以送審機構之判定為準。',
+      irb_n: '兩機構負責交班之護理師與資深照服員共 62 人（A 機構 34 人、B 機構 28 人）；其中約 12 人受邀參加質性訪談。',
+      irb_recruit: '由研究團隊於兩機構各舉辦一次說明會，說明後發放同意書，參與者可帶回考慮再交回；不由直屬主管邀請或收回同意書，拒絕參與不影響考核與工作安排。',
+      irb_vuln: '否。參與者為成年工作人員；因與機構有僱傭關係，招募與同意由非主管之研究人員進行，以避免不當壓力。',
+      irb_task: '同意研究期間由觀察者在交班時計時並記錄（每人前後測各 12 次）；填寫一份問卷（認知負荷 8 題、信任 4 題及基本資料）；部分人員受邀接受一次約 45–60 分鐘、全程錄音的訪談，訪談另行說明並可拒絕。',
+      irb_withdraw: '可隨時以口頭或書面告知研究聯絡人撤回同意，無須說明理由，撤回不影響任何權益；撤回後不再蒐集新資料，已蒐集之資料依參與者意願刪除或僅保留去識別化資料。',
+      irb_benefit: '參與者無直接利益，亦不提供金錢報酬；研究結果可作為改善交班流程之參考。',
+      irb_harm: '本研究屬最小風險。若參與者在觀察或訪談中感到不適，可隨時暫停或退出；如對研究有疑問或爭議，可聯絡研究聯絡人或〔送審機構 IRB 名稱與電話〕。',
+      irb_material: '研究材料為觀察紀錄、問卷、去識別化之交班紀錄與訪談錄音。去識別化資料保存至研究結束後 3 年，期滿以不可回復方式刪除；訪談錄音於逐字稿核對完成後刪除；資料不作本計畫以外之用途，如需另作他用將重新送審並取得同意。',
+      irb_commercial: '本研究不涉及商業利益；研究者與 AI 摘要工具廠商無財務關係，研究結果不提供廠商作商業用途。',
+      irb_ad: '【研究參與邀請】本研究想了解長照機構導入 AI 交班摘要工具後，交班時間與紀錄品質的變化。若您是負責交班的護理師或資深照服員，誠摯邀請您參加說明會（時間地點〔　〕）。參與與否由您自行決定，不會影響您的考核與工作。聯絡人：〔研究生姓名〕〔電話／電子郵件〕。'
+    };
+    for (var k in F) s.f[k] = F[k];
+    s.objs = [
+      { verb: '比較', text: '比較導入前後交班準備時間之變化，並與同期未導入之機構比較', hyp: 'H1：A 機構導入後交班準備時間較導入前縮短，且降幅大於同期之 B 機構。\nH0：導入前後交班準備時間無差異。', analysis: 'A 機構前後：配對 t 檢定；A 對 B 同期：差異中之差異（DiD）', crit: 'α = .05 雙尾；報告效果量 dz 與 95% CI', sens: '混合效果模型（交班事件巢套於人員）；常態不符時改用 Wilcoxon 符號等級檢定', exp: '依社會技術模型，摘要工具減少了翻閱與彙整紀錄的步驟，預期導入後交班準備時間縮短，且降幅大於同期之 B 機構；若未縮短，將以系統使用日誌與質性訪談找出原因，例如人員仍回頭核對原紀錄。' },
+      { verb: '檢驗', text: '檢驗導入後紀錄完整性是否非劣於導入前', hyp: 'H2：完整性差異（後測減前測）之 95% CI 下界高於 −1.0 分（非劣性界限）。', analysis: '計算完整性差異之 95% CI，與事先訂定之非劣性界限 −1.0 分比較', crit: 'CI 下界高於 −1.0 分即判定非劣（Piaggio et al., 2012）', sens: '以評分者平均分與單一評分者分數分別分析，比較結論是否一致', exp: '預期紀錄完整性非劣於導入前；若無法判定非劣，表示摘要可能遺漏應交代項目，需檢視遺漏類型並提出核對建議。' },
+      { verb: '探討', text: '探討照護人員之認知負荷與對 AI 摘要之信任', hyp: '', analysis: '描述統計，並以相關與多元迴歸探索負荷、信任與交班準備時間之關係（明白標示為探索性）', crit: '探索性分析，不做確認性推論', sens: '', exp: '預期導入後認知負荷下降，但若人員不信任摘要而增加二次確認，負荷可能未如預期下降；此一可能性將由後接之質性訪談（案例 L）解釋。' }];
+    s.vars = [
+      { name: '導入狀態 × 機構', role: '自變項', concept: '是否已導入 AI 摘要工具，及所屬機構之導入時程', oper: '前測／後測；A 機構先導入（2026 年 11 月）、B 機構延後導入（2027 年 2 月）', tool: '機構導入紀錄', scale: '名目', time: '—', rel: '—' },
+      { name: '交班準備時間', role: '依變項', concept: '交班者為交班所花之彙整與交接時間', oper: '自開始彙整至完成交班之分鐘數', tool: '第三方觀察計時', scale: '比率', time: '前測、後測各 12 次／人', rel: '兩位觀察者先以 30 次交班校準並計算觀察者間信度' },
+      { name: '紀錄完整性', role: '依變項', concept: '交班內容涵蓋應交代項目之程度', oper: '0–20 分評分表，兩位評分者獨立評分取平均', tool: '交班摘要稽核', scale: '等距', time: '前測、後測', rel: '評分者不知紀錄時期；以 20 份紀錄計算評分者間信度' },
+      { name: '二次確認詢問次數', role: '依變項', concept: '接班者因資訊不足而回頭確認之頻率', oper: '每次交班後回頭詢問或查閱原紀錄之次數', tool: '第三方觀察', scale: '比率', time: '前測、後測', rel: '觀察者訓練' },
+      { name: '認知負荷', role: '探索', concept: '交班工作對心智資源之需求', oper: '自編 8 題量表，Likert 5 點，加總分愈高負荷愈大', tool: '問卷', scale: '等距', time: '後測', rel: '5 位專家內容效度、預試 30 人、15 人兩週後重測' },
+      { name: '對 AI 摘要之信任', role: '探索', concept: '使用者相信摘要正確、可依賴之程度', oper: '4 題量表，Likert 5 點，加總分愈高愈信任', tool: '問卷', scale: '等距', time: '後測', rel: '正式施測後計算 Cronbach\'s α' },
+      { name: '照顧住民數、職類、年資', role: '控制', concept: '影響交班工作量與經驗之個人與班別因素', oper: '當班照顧住民數；護理師／資深照服員；服務年資（年）', tool: '排班與人事資料', scale: '比率／名目', time: '前測', rel: '—' }];
+    s.bias = [
+      { name: '觀察者效應（霍桑效應）', why: '人員知道被計時，可能暫時加快或改變交班方式', fix: '正式前測前安排適應期；觀察者固定、不介入交班' },
+      { name: '同期事件（歷史效應）', why: '研究期間的政策、人力或住民組成變動，可能與導入同時影響結果', fix: '以延後導入之 B 機構作同期對照，並以 DiD 分析；記錄研究期間重大事件' },
+      { name: '評分者偏差', why: '評分者知道紀錄屬導入前或導入後，可能影響給分', fix: '評分者不知紀錄時期；兩人獨立評分並計算評分者間信度' },
+      { name: '流失偏差', why: '研究期間有人離職或不再使用工具，留下者可能較適應工具', fix: '以系統日誌追蹤使用與流失；比較留下者與流失者之基本特性' }];
+    s.gantt = { n: 15, rows: [{ t: 'IRB 送審與核准', s: 1, e: 2 }, { t: '說明會、同意書、觀察者校準與預試', s: 2, e: 2 }, { t: '前測（兩機構）', s: 2, e: 3 }, { t: 'A 機構導入與後測', s: 3, e: 12 },
+      { t: 'B 機構導入與後測', s: 6, e: 12 }, { t: '質性訪談（案例 L）', s: 9, e: 11 }, { t: '資料分析', s: 11, e: 12 }, { t: '緩衝（IRB 補件、收案延長、論文修訂）', s: 13, e: 14 }, { t: '論文撰寫與口試', s: 13, e: 15 }] };
+    s.risks = [
+      { r: 'IRB 補件延誤', trig: '第 2 月仍未核准', when: 'M2', plan: '第 1 月即送審；前測可順延至第 3 月上旬，仍須在 A 機構導入前完成' },
+      { r: 'B 機構導入再延後', trig: '機構公告延後導入', when: 'M5', plan: '延長同期對照期，並以中斷時間序列補充分析（8.3）' },
+      { r: '問卷回收不足', trig: '第一波回收率偏低', when: 'M4', plan: '兩次提醒，並請單位安排填答時間（不由主管收回）' },
+      { r: '觀察人力不足', trig: '觀察者離職或排班衝突', when: '每月', plan: '事先培訓 1 名備援觀察者並完成校準' }];
+    s.kpi = [
+      { name: '交班準備時間（成果指標）', calc: '每次交班自開始彙整至完成交班之分鐘數，取每人 12 次之平均；第三方觀察計時，前後測各一次', base: '導入前測平均（第 3 月前測收齊時取得）', goal: '較導入前縮短，且紀錄完整性非劣；具體目標值於前測後依基準值訂定' },
+      { name: '完成前後測觀察人數（產出指標）', calc: '完成前測與後測觀察之人數；每月統計', base: '0', goal: '第 12 月前完成 62 人' }];
+    s.ss = { kind: 'paired', eff: 0.5, alpha: 0.05, tails: 2, power: 0.8, drop: 0, moe: 0.05, basis: '無前導資料，採保守中效果' };
+    DATA.mods && Object.keys(DATA.mods).forEach(function (m) { (DATA.mods[m].checks || []).forEach(function (_, i) { s.ck['pass-' + m + '-' + i] = true; }); (DATA.mods[m].must || []).forEach(function (_, i) { s.ck['ck-' + m + '-' + i] = true; }); });
+    return s;
+  }
+
+  // ---------- 起始 ----------
+  function build() {
+    var nav = '<ol class="steps">' + STEPS.map(function (st) {
+      return '<li><a href="#" data-s="' + st.id + '"><span class="pp" aria-hidden="true"></span><code>' + esc(st.code) + '</code><span class="nm">' + esc(st.name) + '</span></a></li>';
+    }).join('') + '</ol>';
+    $('#stepnav').innerHTML = nav;
+    $$('#stepnav a').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); go(a.dataset.s); closeNav(); }); });
+    main = $('#work');
+    var m = $('#menu'), sn = $('#side-nav');
+    function closeNav() { sn.classList.remove('open'); m.setAttribute('aria-expanded', 'false'); }
+    m.addEventListener('click', function () { var o = sn.classList.toggle('open'); m.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+    // 症狀快查
+    var sy = $('#sy');
+    sy.innerHTML = '<option value="">我卡在…（快速跳到解法）</option>' + DATA.sy.map(function (x) { return '<option value="' + esc(x[1]) + '">' + esc(x[0]) + '</option>'; }).join('');
+    sy.addEventListener('change', function () {
+      var c = sy.value; if (!c) return; var mm = /^M(\d+)/.exec(c), target = mm ? 'm' + mm[1] : /^[A-H]/.test(c) ? 'm5' : /^F/.test(c) ? 'review' : c === 'S2' || c === 'X-MIX' ? 'setup' : c === 'C1' ? 'review' : 'setup';
+      if (/^[A-H]-/.test(c) && !S.meta.type) S.meta.type = c[0];
+      go(target); sy.value = '';
+    });
+    $('#oneclick').addEventListener('click', function () { go('setup'); var c = $('#loadq-c'); if (c) { c.hidden = false; $('#demo').scrollIntoView({ block: 'center' }); } });
+    go(STEP[S.meta.step] ? S.meta.step : 'setup', true);
+    var st = $('#saved'); if (st) st.textContent = S.meta.updated ? '已存在這台電腦的瀏覽器 · ' + S.meta.updated : '草稿會自動存在這台電腦的瀏覽器';
+  }
+  build();
+})();
+</script>
+</body>
+</html>
