@@ -914,6 +914,11 @@ main.courses { padding-top: 34px; padding-bottom: 20px; }
   font-size: 14.5px; line-height: 1.45;
 }
 a.file-name:hover { color: var(--brand); text-decoration: underline; }
+/* 網頁型教材（線上工具）：用強調色並加「網頁」標記，與下載檔案區分 */
+a.file-name.file-web { color: var(--accent-deep, var(--accent)); }
+a.file-name.file-web::after { content: "網頁 ↗"; display: inline-block; margin-left: 8px; padding: 0 7px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; line-height: 1.7; vertical-align: 1px; color: var(--accent); background: var(--accent-tint); }
+a.file-name.file-web:hover { color: var(--accent); }
 .materials-preview .file-name { overflow-wrap: anywhere; }
 .materials-preview-note { color: var(--faint); font-size: 12px; margin-top: 10px; }
 .file-size { color: var(--faint); font-size: 11.5px; font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
