@@ -113,9 +113,11 @@ function buildFlatFileList(files, all = files) {
     if (counts[label] > 1 && fname && fname !== label && !/\.pdf$/i.test(fname)) {
       label = `${label}｜${fname}`;
     }
-    return el('li', { class: 'file-item' }, [
+    // 網頁型教材（.html 或外部網址）與下載檔案用不同顏色，學生一眼分得出「開網頁」與「下載檔案」
+    const isWeb = /^https?:\/\//.test(f.path || '') || /\.html?$/i.test(f.path || '');
+    return el('li', { class: 'file-item' + (isWeb ? ' file-item-web' : '') }, [
       el('a', {
-        class: 'file-name',
+        class: 'file-name' + (isWeb ? ' file-web' : ''),
         href: /^https?:\/\//.test(f.path) ? f.path : MATERIALS_ROOT + f.path,
         target: '_blank', rel: 'noopener'
       }, label),
