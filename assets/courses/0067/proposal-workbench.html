@@ -212,6 +212,9 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
 .preview hr{border:0;border-top:1px dashed var(--line-strong);margin:16px 0}
 @media (max-width:700px){.exp-grid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:560px){.oneclick{order:5}}
+
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.preset.on{background:var(--brand);color:var(--on-brand)}
+#demo.flash,.card.flash{outline:3px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -232,7 +235,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
   var M = DATA.mods, TYP = DATA.typ;
   var LS = 'pw60.v1';
   var FMT = { f1: '碩士論文計畫書', f2: '國科會專題研究計畫（CM03）', f3: '其他計畫（院內、部會、基金會…）' };
-  var VERBS = ['描述', '比較', '檢驗', '探討'];
+  var VERBS = ['描述', '比較', '檢驗', '探討', '開發'];
 
   // ---------- 狀態 ----------
   function blank() {
@@ -350,7 +353,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
     var req = fieldsOf(st).filter(function (f) { return f[4]; });
     var ok = req.every(function (f) { return has(f[0]); });
     if (st.id === 'm3') ok = ok && S.objs.some(function (o) { return o.text.trim(); });
-    if (st.id === 'm4') ok = ok && S.vars.some(function (x) { return x.name.trim() && x.oper.trim(); });
+    if (st.id === 'm4') ok = ok && (S.meta.type === 'E' || S.vars.some(function (x) { return x.name.trim() && x.oper.trim(); }));
     if (st.id === 'm5') ok = ok && S.bias.filter(function (b) { return b.name.trim() && b.fix.trim(); }).length >= 3;
     if (st.id === 'm6') ok = ok && S.objs.every(function (o) { return !o.text.trim() || o.analysis.trim(); });
     if (st.id === 'm8') ok = ok && S.risks.some(function (r) { return r.r.trim() && r.plan.trim(); });
@@ -570,8 +573,8 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
     var w = [], O = S.objs.filter(function (o) { return o.text.trim(); });
     if (O.length > 3) w.push('目的有 ' + O.length + ' 項；碩論通常 2–3 項，太多會做不完。');
     O.forEach(function (o, i) {
-      if (o.verb === '描述' && o.hyp.trim()) w.push('目的' + (i + 1) + '是描述性目的，不需要寫假設。');
-      if (o.verb !== '描述' && o.verb !== '探討' && !o.hyp.trim()) w.push('目的' + (i + 1) + '（' + o.verb + '）要寫對應的假設（H1／H0）。');
+      if ((o.verb === '描述' || o.verb === '開發') && o.hyp.trim()) w.push('目的' + (i + 1) + '是' + o.verb + '性目的，不需要寫假設。');
+      if ((o.verb === '比較' || o.verb === '檢驗') && !o.hyp.trim()) w.push('目的' + (i + 1) + '（' + o.verb + '）要寫對應的假設（H1／H0）。');
     });
     return w.length ? '<ul>' + w.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
   }
@@ -584,13 +587,13 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
     O.forEach(function (o, i) {
       if (!o.analysis.trim()) add('m6', '目的' + (i + 1) + '「' + o.text.slice(0, 18) + '」在分析計畫裡沒有對應的分析方法。');
       if (!o.exp.trim()) add('m9', '目的' + (i + 1) + '沒有對應的預期結果。');
-      if (o.verb !== '描述' && o.verb !== '探討' && !o.hyp.trim()) add('m3', '目的' + (i + 1) + '（' + o.verb + '）缺假設。');
+      if ((o.verb === '比較' || o.verb === '檢驗') && !o.hyp.trim()) add('m3', '目的' + (i + 1) + '（' + o.verb + '）缺假設。');
     });
     if (O.length > 3) add('m3', '目的超過 3 項，碩論規模恐怕做不完。');
     if (!has('m5_reject')) add('m5', '3.1 沒有寫「不採之設計」及理由（口委必問）。');
     if (has('m5_sample') && !/[0-9０-９]/.test(v('m5_sample'))) add('m5', '3.3 樣本數沒有任何數字：要寫參數與計算結果。');
     if (S.bias.filter(function (b) { return b.name.trim() && b.fix.trim(); }).length < 3) add('m5', '3.7 具名偏差與因應不足三項。');
-    if (!S.vars.some(function (x) { return x.name.trim() && x.oper.trim(); })) add('m4', '變項定義表沒有任何寫了操作型定義的變項。');
+    if (S.meta.type !== 'E' && !S.vars.some(function (x) { return x.name.trim() && x.oper.trim(); })) add('m4', '變項定義表沒有任何寫了操作型定義的變項。');
     S.vars.forEach(function (x) { if (x.name.trim() && !x.oper.trim()) add('m4', '變項「' + x.name + '」缺操作型定義。'); });
     ganttWarn().forEach(function (x) { add('m8', x); });
     if (!S.risks.some(function (r) { return r.r.trim() && r.plan.trim(); })) add('m8', '還沒寫任何風險與對策。');
@@ -632,7 +635,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       if (id === 'm3') h += '<h3>研究目的與假設</h3><p class="hint">一列一個目的，動詞決定第六步要用哪種分析：描述＜比較＜檢驗＜探討。描述性目的不設假設。</p>' +
         gridHTML('objs', S.objs, [['verb', '動詞', VERBS], ['text', '研究目的', 'a', '〔比較或檢驗〕〔介入〕對〔結果〕之影響'], ['hyp', '假設（H1／H0）', 'a', 'H1：…；H0：…']], { num: true }) + '<div class="warn" id="objwarn">' + objWarn() + '</div>' +
         (st.after || []).map(fieldHTML).join('');
-      if (id === 'm4') h += '<h3>變項定義表</h3><p class="hint">檢驗法：把表交給同學，他能不能不問你、自己測出同一個分數？</p>' +
+      if (id === 'm4') h += '<h3>' + (S.meta.type === 'E' ? '探究焦點表（質性可選填）' : '變項定義表') + '</h3><p class="hint">' + (S.meta.type === 'E' ? '質性研究不預設變項；可在這裡列出探究焦點與敏感概念，或只在上面寫前理解與初步分析框架。' : '檢驗法：把表交給同學，他能不能不問你、自己測出同一個分數？') + '</p>' +
         gridHTML('vars', S.vars, [['name', '變項名稱', 't'], ['role', '角色', ['自變項', '依變項', '中介', '干擾', '控制', '探索']], ['oper', '操作型定義', 'a', '以〔工具〕〔題數〕題、〔計分〕、範圍〔　〕'],
           ['tool', '工具／資料來源', 't'], ['scale', '尺度', ['', '名目', '次序', '等距', '比率']], ['time', '測量時點', 't'], ['rel', '信效度依據', 't']]);
       if (id === 'm5') {
@@ -705,7 +708,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
   }
   function suggest(verb) {
     return { '描述': '常用：平均數、標準差、次數與百分比；連續變項另報中位數與四分位距', '比較': '常用：配對 t／獨立 t／ANOVA／卡方；報效果量與 95% CI；前提不成立改無母數法',
-      '檢驗': '常用：迴歸、邏輯斯迴歸、SEM、DiD、混合效果模型；重複測量或巢套資料要處理', '探討': '常用：相關、迴歸（標示為探索性）；質性用主題分析' }[verb] || '';
+      '檢驗': '常用：迴歸、邏輯斯迴歸、SEM、DiD、混合效果模型；重複測量或巢套資料要處理', '探討': '常用：相關、迴歸（標示為探索性）；質性用主題分析', '開發': '常用：需求分析（主題分析）、啟發式評估與放聲思考問題清單、迭代修正紀錄' }[verb] || '';
   }
   function expGrid() {
     var h = '<div class="grid-wrap"><table class="grid"><thead><tr><th class="n">#</th><th>研究目的</th><th>預期結果（含不如預期時的意義）</th></tr></thead><tbody>', any = false;
@@ -757,16 +760,19 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       DATA.pk.map(function (p) { return '<option value="' + p[0] + ' ' + esc(p[2]) + '"' + (S.meta.type2 === p[0] + ' ' + p[2] ? ' selected' : '') + '>' + p[0] + ' ' + esc(p[2]) + '</option>'; }).join('') +
       '</select><p class="fine">例：Case Q 主型 C 介入成效，後接 E 質性（解釋性序列設計）。碩論以兩段為宜。</p></section>';
     h += '<section class="card"><h3>④ 封面資料（匯出 Word 時使用，可之後再填）</h3><div class="cv">' + COVER.map(function (f) { return '<label>' + esc(f[1]) + '<input type="text" id="' + f[0] + '" data-f="' + f[0] + '" value="' + esc(S.f[f[0]] || '') + '" placeholder="' + esc(f[2]) + '"></label>'; }).join('') + '</div></section>';
-    h += '<section class="card soft" id="demo"><h3>一鍵匯入範例：Case Q 完整填好的樣子</h3><p>把 Case Q（長照機構 AI 交班摘要的準實驗研究）的計畫階段內容填進 S1、M1–M10 每一個欄位與表格，含 IRB 送審資料與參考文獻，方便對照模仿。會取代目前這台電腦上的草稿，建議先到最後一步下載備份。</p><button type="button" class="btn" id="loadq">一鍵匯入 Case Q 範例</button><span class="confirm" id="loadq-c" hidden>確定要取代目前的草稿？<button type="button" class="btn small" id="loadq-y">確定載入</button><button type="button" class="btn ghost small" id="loadq-n">取消</button></span></section></div>';
+    h += '<section class="card soft" id="demo"><h3>一鍵匯入範例：完整填好的計畫書</h3><p>選一個和你最接近的範例，把 S1、M1–M10 每一個欄位與表格（含 IRB 送審資料與參考文獻）填好，方便對照模仿；匯出的 Word 也就是這份範例的計畫書。會取代目前這台電腦上的草稿，建議先到最後一步下載備份。</p><div class="presets">' +
+      Object.keys(PRESETS).map(function (k) { return '<button type="button" class="btn ghost preset" data-p="' + k + '">' + esc(PRESETS[k][0]) + '</button>'; }).join('') +
+      '</div><span class="confirm" id="loadq-c" hidden><span id="loadq-t"></span><button type="button" class="btn small" id="loadq-y">確定匯入</button><button type="button" class="btn ghost small" id="loadq-n">取消</button></span></section></div>';
     return h;
   }
   function bindSetup() {
     $$('input[name=fmt]').forEach(function (r) { r.addEventListener('change', function () { S.meta.fmt = r.value; save(); }); });
     $$('input[name=type]').forEach(function (r) { r.addEventListener('change', function () { S.meta.type = r.value; save(); }); });
     $('#type2').addEventListener('change', function () { S.meta.type2 = this.value; save(); });
-    $('#loadq').addEventListener('click', function () { $('#loadq-c').hidden = false; });
-    $('#loadq-n').addEventListener('click', function () { $('#loadq-c').hidden = true; });
-    $('#loadq-y').addEventListener('click', function () { S = caseQ(); save(); go('s1'); });
+    var pick = null;
+    $$('.preset').forEach(function (b) { b.addEventListener('click', function () { pick = b.dataset.p; $$('.preset').forEach(function (x) { x.classList.toggle('on', x === b); }); $('#loadq-t').textContent = '確定以「' + PRESETS[pick][0] + '」取代目前的草稿？'; $('#loadq-c').hidden = false; }); });
+    $('#loadq-n').addEventListener('click', function () { $('#loadq-c').hidden = true; pick = null; $$('.preset').forEach(function (x) { x.classList.remove('on'); }); });
+    $('#loadq-y').addEventListener('click', function () { if (!pick) return; S = PRESETS[pick][1](); save(); go('s1'); });
   }
 
   // ---------- 檢核與匯出 ----------
@@ -825,8 +831,8 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
   function cat() { var a = []; for (var i = 0; i < arguments.length; i++) a = a.concat(arguments[i]); return a; }
   function T(head, rows, w) { return { tbl: { head: head, rows: rows.length ? rows : [head.map(function () { return ''; })], w: w } }; }
   function objList() { var L = O(); return L.length ? L.map(function (o, i) { return { p: '目的' + '一二三四五六'.charAt(i) + '：' + o.text.replace(/。$/, '') + '。', ind: true }; }) : [{ p: '〔研究目的〕', ind: true }]; }
-  function hypT() { return T(['研究目的', '研究假設'], O().map(function (o) { return [o.text, o.hyp || (o.verb === '描述' || o.verb === '探討' ? '（' + o.verb + '性目的，不設方向性假設）' : '')]; }), [1, 1.4]); }
-  function varT() { return T(['變項（角色）', '概念型定義', '操作型定義', '工具／資料來源', '尺度', '測量時點', '信效度依據'], S.vars.filter(function (x) { return x.name.trim(); }).map(function (x) { return [x.name + '（' + x.role + '）', x.concept, x.oper, x.tool, x.scale, x.time, x.rel]; }), [1.3, 1.3, 1.5, 1.1, .6, .9, 1.1]); }
+  function hypT() { return T(['研究目的', '研究假設'], O().map(function (o) { return [o.text, o.hyp || (o.verb === '描述' || o.verb === '探討' || o.verb === '開發' ? '（' + o.verb + '性目的，不設方向性假設）' : '')]; }), [1, 1.4]); }
+  function varT() { if (!S.vars.some(function (x) { return x.name.trim(); })) return { p: '' }; return T(['變項（角色）', '概念型定義', '操作型定義', '工具／資料來源', '尺度', '測量時點', '信效度依據'], S.vars.filter(function (x) { return x.name.trim(); }).map(function (x) { return [x.name + '（' + x.role + '）', x.concept, x.oper, x.tool, x.scale, x.time, x.rel]; }), [1.3, 1.3, 1.5, 1.1, .6, .9, 1.1]); }
   function anaT() { return T(['研究目的', '分析方法', '判準', '補充或敏感度分析'], O().map(function (o) { return [o.text, o.analysis, o.crit, o.sens]; }), [1.5, 1.6, 1.1, 1.2]); }
   function biasT() { return T(['偏差', '為什麼會發生', '因應措施'], S.bias.filter(function (b) { return b.name.trim(); }).map(function (b) { return [b.name, b.why, b.fix]; }), [1, 1.4, 1.6]); }
   function ganttT() { var n = S.gantt.n | 0; return T(['工作項目'].concat(Array.from({ length: n }, function (_, i) { return String(i + 1); })), S.gantt.rows.map(function (r) { return [r.t].concat(Array.from({ length: n }, function (_, i) { return i + 1 >= r.s && i + 1 <= r.e ? '■' : ''; })); }), [3].concat(Array(n).fill(.45))); }
@@ -848,14 +854,16 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
         [{ h: 2, t: '第四節　研究問題與研究假設' }, { p: '主要研究問題：' + val('m3_rq'), ind: true }, hypT(), { h: 2, t: '第五節　名詞界定' }], para('m3_terms'),
         [{ h: 2, t: '第六節　研究範圍' }], para('m3_scope'),
         [{ h: 1, t: '第二章　文獻探討' }], para('m2_body'), [{ h: 2, t: '研究缺口與本研究定位' }], para('m2_known'), para('m2_unknown'), para('m2_worth'),
-        [{ h: 2, t: '研究架構' }], para('m2_theory'), para('m4_frame'), [{ cap: '表 2-1　變項定義表' }, varT()],
+        [{ h: 2, t: '研究架構' }], para('m2_theory'), para('m4_frame'), [{ cap: S.meta.type === 'E' ? '表 2-1　探究焦點' : '表 2-1　變項定義表' }, varT()],
         [{ h: 1, t: '第三章　研究方法' }, { h: 2, t: '第一節　研究設計' }], para('m5_design'), para('m5_reject'), [{ h: 2, t: '第二節　研究場域與對象' }], para('m5_site'), para('m5_incl'),
         [{ h: 2, t: '第三節　抽樣方法與樣本數' }], para('m5_sample'), [{ h: 2, t: '第四節　研究工具' }], para('m5_tool'), [{ h: 2, t: '第五節　資料蒐集流程' }], para('m5_flow'),
         [{ h: 2, t: '第六節　資料分析計畫' }, { cap: '表 3-1　研究目的與分析方法對照表' }, anaT()], para('m6_common'), has('m6_qual') ? para('m6_qual') : [],
         [{ h: 2, t: '第七節　偏差來源與因應' }, { cap: '表 3-2　偏差來源與因應' }, biasT(), { h: 2, t: '第八節　研究倫理與資料保護' }], para('m7_irb'), para('m7_consent'), para('m7_risk'), para('m7_deid'), has('m7_coi') ? para('m7_coi') : [],
         [{ h: 1, t: '第四章　預期結果與研究時程' }, { h: 2, t: '第一節　預期結果' }], expL(), [{ h: 2, t: '第二節　預期貢獻' }], para('m9_acad'), para('m9_prac'),
         [{ h: 2, t: '第三節　研究限制' }], para('m9_limd'), para('m9_lime'), [{ h: 2, t: '第四節　研究時程' }, { cap: '表 4-1　研究時程甘特表（月）' }, ganttT()],
-        [{ h: 2, t: '第五節　可行性與風險' }], para('m8_feas'), [{ cap: '表 4-2　風險與對策' }, riskT()], [{ pb: true }, { h: 1, t: '參考文獻' }], refs());
+        [{ h: 2, t: '第五節　可行性與風險' }], para('m8_feas'), [{ cap: '表 4-2　風險與對策' }, riskT()], [{ pb: true }, { h: 1, t: '參考文獻' }], refs(),
+        [{ pb: true }, { h: 1, t: '附錄一　文獻檢索策略' }, { h: 2, t: '一、結構化檢索問題' }], para('m2_pico'), [{ h: 2, t: '二、資料庫與檢索式' }], para('m2_search'),
+        [{ h: 1, t: '附錄二　研究構想一頁表' }, T(['項目', '內容'], DATA.gr.map(function (g, i) { return [g[0], v('s1_' + (i + 1))]; }), [1, 3.5])]);
     } else if (f === 'f2') {
       B = cat(cover('國科會專題研究計畫　研究計畫內容（CM03）'), [{ h: 1, t: '研究計畫中文摘要（CM02）' }], para('m10_abs'), [{ p: '關鍵詞：' + val('m10_kw') }, { pb: true }],
         [{ h: 1, t: '(一) 研究計畫之背景' }, { h: 2, t: '1. 所要探討或解決的問題' }], para('m1_scene'), para('m1_gap'), [{ h: 2, t: '2. 國內外有關本計畫之研究情況及重要參考文獻之評述' }], para('m1_new'), para('m2_body'), para('m2_known'), para('m2_unknown'),
@@ -865,7 +873,8 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
         [{ h: 2, t: '4. 研究倫理與資料保護' }], para('m7_irb'), para('m7_consent'), para('m7_deid'),
         [{ h: 1, t: '(三) 預期完成之工作項目及成果' }, { h: 2, t: '1. 預期完成之工作項目' }, T(['工作項目', '期程'], S.gantt.rows.map(function (r) { return [r.t, '第 ' + r.s + '–' + r.e + ' 月']; }), [3, 1]),
          { h: 2, t: '2. 對於參與之工作人員，預期可獲之訓練' }], para('m9_train'), [{ h: 2, t: '3. 預期完成之研究成果' }], expL(), para('m9_output'),
-        [{ h: 2, t: '4. 學術研究、國家發展及其他應用方面預期之貢獻' }], para('m9_acad'), para('m9_nation'), [{ pb: true }, { h: 1, t: '參考文獻' }], refs());
+        [{ h: 2, t: '4. 學術研究、國家發展及其他應用方面預期之貢獻' }], para('m9_acad'), para('m9_nation'), [{ pb: true }, { h: 1, t: '參考文獻' }], refs(),
+        [{ pb: true }, { h: 1, t: '附錄　文獻檢索策略' }], para('m2_pico'), para('m2_search'));
     } else {
       B = cat(cover('計畫書'), [{ h: 1, t: '計畫摘要' }], para('m10_abs'), [{ pb: true }, { h: 1, t: '一、計畫背景' }], para('m1_scene'), para('m1_gap'), para('m1_new'), para('m1_time'),
         [{ h: 1, t: '二、計畫目標及對象' }], objList(), para('m3_scope'), [{ h: 1, t: '三、實施方法與步驟' }], para('m5_design'), para('m5_site'), para('m5_sample'), para('m5_tool'), para('m5_flow'), [anaT()], para('m6_common'),
@@ -1093,6 +1102,215 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
     return s;
   }
 
+  // ---------- 其他兩個範例：質性（案例 L）、系統實作（A 型） ----------
+  function fill(s, F) { for (var k in F) s.f[k] = F[k]; }
+  var CV = { cv_school: '〔學校名稱〕', cv_dept: '〔系所名稱〕碩士班', cv_student: '〔研究生姓名〕', cv_advisor: '〔指導教授姓名〕　博士', cv_date: '中華民國 115 年 8 月' };
+  function allChecks(s) { Object.keys(DATA.mods).forEach(function (m) { (DATA.mods[m].checks || []).forEach(function (_, i) { s.ck['pass-' + m + '-' + i] = true; }); (DATA.mods[m].must || []).forEach(function (_, i) { s.ck['ck-' + m + '-' + i] = true; }); }); }
+
+  function caseL() {
+    var s = blank(); s.meta.fmt = S.meta.fmt || 'f1'; s.meta.type = 'E'; s.meta.type2 = ''; s.meta.step = 's1';
+    fill(s, CV);
+    fill(s, {
+      s1_1: '長照機構導入 AI 交班摘要後，照護人員要自己判斷摘要哪裡可信、哪裡要回頭查原紀錄；判斷不當可能漏交重要照護資訊。',
+      s1_2: '北部兩家已導入 AI 交班摘要之住宿式長照機構，負責交班之護理師、資深照服員與單位主管約 12 人。',
+      s1_3: '探究現象：照護人員使用 AI 交班摘要時的信任判斷與查證行為。',
+      s1_4: '判斷歷程、影響判斷的因素，以及衍生的因應策略（以主題呈現）。',
+      s1_5: '照護人員如何判斷 AI 摘要何者可信、何者需回頭查證？此判斷受哪些因素影響，又衍生哪些因應策略？',
+      s1_6: 'E 質性研究：質性描述性設計，半結構深度訪談與主題分析。',
+      s1_7: '兩機構同意受訪人員招募；訪談錄音、轉錄後去識別化。',
+      s1_8: '12 個月：IRB 送審 → 訪談 → 分析與成員檢核 → 撰寫，保留兩個月緩衝。',
+      s1_9: '提供機構設計摘要核對流程與教育訓練之依據；補足長照場域對 AI 摘要信任判斷之理解。',
+      m1_scene: '生成式 AI 交班摘要開始進入住宿式長照機構。摘要能縮短彙整紀錄的時間，但照護人員仍須在交班前後判斷：哪些摘要內容可以直接採用，哪些必須回頭查原紀錄或口頭確認。',
+      m1_gap: '機構導入時多半只提供操作訓練，沒有說明「什麼情況應該查證」；判斷完全依賴個人經驗。過度信任可能漏交重要照護資訊，過度懷疑則讓工具失去省時的意義。',
+      m1_new: '自動化信任的研究指出，使用者對自動化系統的依賴應與系統實際可靠度相稱，否則會產生誤用或棄用（Lee & See, 2004）；然而這些研究多來自航空、製造等領域，照護人員在交班情境中如何形成信任判斷，仍缺乏貼近現場的描述。',
+      m1_time: '合作機構剛完成導入，人員對摘要的使用經驗新且鮮明，正是蒐集判斷歷程的時機；結果可直接回饋給機構設計核對流程與教育訓練。',
+      m1_stmt: '因此，本研究擬探討長照機構照護人員在使用 AI 交班摘要時，如何判斷可信度、受哪些因素影響，以及發展出哪些因應策略。',
+      m2_pico: 'P：住宿式長照機構負責交班之護理師、資深照服員與單位主管｜I（Interest）：對 AI 交班摘要之信任判斷與查證行為｜Co（Context）：已導入生成式 AI 交班摘要之長照機構',
+      m2_search: 'PubMed：（"Trust"[Mesh] OR trust*[tiab] OR relian*[tiab]）AND（"Natural Language Processing"[Mesh] OR "large language model*"[tiab] OR "artificial intelligence"[tiab] OR summar*[tiab]）AND（"Nurses"[Mesh] OR nurs*[tiab] OR "care staff"[tiab]）AND（qualitative[tiab] OR interview*[tiab]）\nCINAHL 與華藝：以「信任」「人工智慧」「護理人員」「質性」對應詞檢索。\n限制：2015 年以後、中英文；檢索日期與篩選流程見附錄一（教學示意：請以自己實際執行的檢索為準）。',
+      m2_body: '一、自動化信任。Lee 與 See（2004）將自動化信任定義為使用者在不確定情境下，相信自動化系統能協助達成目標的態度，並指出信任應與系統實際可靠度相稱，否則會造成誤用（過度依賴）或棄用。對本研究的意義：照護人員何時採用、何時查證摘要，正是「信任是否相稱」的具體表現。\n二、生成式 AI 臨床摘要。Van Veen 等人（2024）的研究顯示，經調整之大型語言模型產生的臨床文本摘要，經臨床讀者評估多數不劣於專家；但研究也提醒摘要仍可能出現遺漏或錯誤。對本研究的意義：即使摘要整體品質不差，使用者仍需要判斷個別內容是否可靠，這個判斷歷程尚未被描述。\n三、研究取徑。質性描述以貼近參與者語言的方式呈現經驗，適合回答「發生了什麼、怎麼做」的實務問題（Sandelowski, 2000）。本研究初步檢索（附錄一）未見描述長照照護人員對 AI 交班摘要信任判斷之質性研究（教學示意：請以自己的實際檢索結果改寫）。',
+      m2_known: '既有研究已提出自動化信任應與系統可靠度相稱的框架（Lee & See, 2004），並顯示生成式 AI 臨床摘要的整體品質接近專家（Van Veen et al., 2024）。',
+      m2_unknown: '然而，照護人員在真實交班情境中如何判斷個別摘要內容是否可信、依據哪些線索、又如何因應，缺乏貼近現場的描述，長照場域尤其缺乏。',
+      m2_worth: '此缺口使機構在設計核對流程與教育訓練時，只能依賴推測；本研究將以質性描述取徑，呈現判斷歷程與因應策略，供機構直接採用。',
+      m2_theory: '以自動化信任概念（Lee & See, 2004）作為敏感概念，引導訪談時注意「何時相信、何時查證」，但不將其當作預設的編碼框架；分析時讓主題由資料中產生。',
+      m2_orig: '本計畫首度以質性描述取徑，呈現長照照護人員對 AI 交班摘要之信任判斷歷程與因應策略，可直接轉化為機構之核對流程與訓練內容。',
+      m3_rq: '照護人員使用 AI 交班摘要時，如何判斷何者可信、何者需回頭查證？',
+      m3_terms: '信任判斷：照護人員決定直接採用或回頭查證摘要內容的思考歷程。\n因應策略：照護人員為降低摘要可能出錯的風險所採取的作法，例如回頭查原紀錄、口頭確認、自行補寫。\nAI 交班摘要：院內部署之生成式 AI 工具自班別紀錄自動產生的交班摘要。',
+      m3_scope: '研究範圍為北部兩家已導入 AI 交班摘要之住宿式長照機構的照護人員，資料蒐集期間約 5 個月；本研究不評估摘要的正確率或省時效果（另由量性研究處理），只描述使用者的經驗與判斷。',
+      m4_frame: '質性研究不預設變項關係。本研究以「信任判斷歷程」「影響判斷的因素」「因應策略」三個探究焦點組織訪談大綱，並以自動化信任作為敏感概念；初步分析框架將依資料修正。研究者為具長照實務經驗之護理人員，進入本題目時推測「資深人員較不信任摘要」，將以反思日誌記錄此前理解，並請同儕檢視訪談是否有引導性提問。',
+      m5_design: '本研究採質性描述性設計（E 型：質性研究），以半結構深度訪談蒐集資料、主題分析歸納結果。選擇質性描述，是因研究目的在呈現工作情境中的判斷與策略，結果需貼近參與者語言，方便機構直接採用。',
+      m5_reject: '不採紮根理論，因本研究目標不是建構實質理論；不採詮釋現象學，因本研究關注工作情境中的判斷與策略，而非存在層次的經驗本質；不採問卷調查，因判斷歷程與因應策略尚未被描述，無法事先設計題項。',
+      m5_site: '研究場域為北部兩家已導入 AI 交班摘要之住宿式長照機構，兩機構均已同意協助邀請受訪者（附錄二）。研究對象為負責交班之護理師、資深照服員與單位主管。',
+      m5_incl: '納入條件：在職且使用 AI 交班摘要至少一個月、能以中文清楚表達經驗者。排除條件：與研究者有直屬上下關係者（避免受訪壓力）。',
+      m5_sample: '採立意抽樣並依最大變異原則，於職類（護理師／資深照服員／單位主管）、年資（3 年以下／3–10 年／10 年以上）與機構三個面向取得差異。以資料飽和為判準：連續兩位受訪者未出現新主題即停止，並續訪兩位確認；依 Hennink 與 Kaiser（2022）之回顧，預估約 12 人。',
+      m5_tool: '一、半結構訪談大綱：依三個探究焦點設計開放式問題，例如「請描述最近一次您覺得摘要『不太對』的情況」「當時您怎麼處理？」；全文見附錄三。\n二、大綱預試：正式訪談前以 1 位非研究對象之照護人員預試，修正措辭；前 3 次正式訪談後再檢討大綱，修訂前後版本均保留。\n三、研究者即為主要研究工具，訪談者已完成質性研究方法課程與訪談訓練。\n四、基本資料表：職類、年資、使用摘要時間。',
+      m5_flow: '一、第 1–2 月：IRB 送審；核准後由機構協助張貼招募說明，有意願者主動聯絡研究者。\n二、第 3–7 月：於機構內安靜空間進行訪談，每次 45–60 分鐘，簽署同意書後全程錄音並撰寫田野筆記。\n三、訪談後 1 週內完成逐字稿，以代號取代姓名與可識別資訊。\n四、第 4–9 月：邊蒐集邊分析，依分析結果調整後續訪談追問。\n五、第 9 月：將初步主題回饋 3–4 位受訪者進行成員檢核。',
+      m5_innov: '以質性描述呈現照護人員對 AI 摘要的信任判斷歷程，並以成員檢核確保結果貼近現場，研究成果可直接轉化為機構之核對流程與訓練內容。',
+      m6_common: '質性研究不做統計檢定。逐字稿以 ATLAS.ti〔版本〕管理；分析過程保留編碼簿、分析備忘錄與決策紀錄，作為稽核軌跡。',
+      m6_qual: '依 Braun 與 Clarke（2006）主題分析六步驟：熟悉資料、產生初始編碼、尋找主題、檢視主題、定義與命名主題、撰寫報告。前 4 份逐字稿由兩位研究者獨立編碼，比對差異並以協商共識處理，據以建立編碼簿；其餘逐字稿由主要研究者編碼，第二位研究者抽檢。',
+      m7_irb: '本研究將送〔大學或合作機構〕人體研究倫理審查委員會審查，於第 1 月送審，核准後才開始招募。',
+      m7_consent: '受訪者於訪談前簽署書面同意書，內容包含錄音同意；受訪者可拒絕錄音而改以筆記記錄。',
+      m7_risk: '本研究屬最小風險，但談及工作失誤可能令受訪者不安；訪談中可隨時暫停、跳過問題或退出。受訪內容不會提供給機構主管，受訪與否不影響考核。',
+      m7_deid: '逐字稿以代號取代姓名、機構與住民資訊；代號對照表由研究者保管於加密裝置，與研究資料分開存放。錄音檔於逐字稿核對完成後刪除；去識別化逐字稿保存至研究結束後 3 年，期滿以不可回復方式刪除。發表時引述內容會再檢查是否可能辨識出個人。',
+      m7_coi: '研究者與 AI 摘要工具廠商無財務關係；生成式 AI 不用於逐字稿分析，亦不輸入任何訪談內容。',
+      m8_feas: '場域：兩機構已同意協助招募（附錄二）。樣本：兩機構負責交班之照護人員共約 60 人，可提供足夠之最大變異。時間：訪談期安排 5 個月，並保留兩個月緩衝。研究者能力：已完成質性研究方法課程與兩次訪談練習。',
+      m9_acad: '補足長照場域照護人員對 AI 摘要之信任判斷與因應策略的描述，並以自動化信任框架對照討論。',
+      m9_prac: '提供機構設計摘要核對流程（何時必須回頭查證）與教育訓練內容之依據。',
+      m9_limd: '質性描述的結果在於呈現經驗的範圍與樣貌，不推論其發生比例；僅含北部兩家機構，轉移至其他場域時需由讀者依脈絡判斷。',
+      m9_lime: '受訪者可能傾向描述正面經驗（社會期許）；將以保密承諾、非主管訪談者與具體事件提問降低影響。',
+      m9_train: '參與之碩士生將習得半結構訪談、逐字稿處理、主題分析與質性嚴謹度策略（教學示意）。',
+      m9_output: '預計投稿期刊論文 1 篇、研討會論文 1 篇，並提供機構「AI 交班摘要核對建議」一份（教學示意）。',
+      m9_nation: '回應長照數位轉型中「人機協作安全」之需求，提供導入生成式 AI 時的人員訓練方向。',
+      t_iv: 'AI 交班摘要', t_pop: '長照機構照護人員', t_out: '信任判斷與因應策略', t_des: '質性描述性研究',
+      m10_title: '長照機構照護人員對 AI 交班摘要之信任判斷與因應策略：質性描述性研究',
+      m10_title_en: 'Trust Judgments and Coping Strategies of Long-Term Care Staff Toward AI-Generated Handover Summaries: A Qualitative Descriptive Study',
+      m10_kw: '長期照護、交班、生成式人工智慧、自動化信任、質性描述',
+      m10_abs: '長照機構導入 AI 交班摘要後，照護人員須自行判斷摘要內容是否可信，然現場的判斷歷程缺乏描述。本研究旨在探討照護人員如何判斷 AI 摘要之可信度、影響判斷的因素與衍生之因應策略。本研究將採質性描述性設計，於北部 2 家已導入之住宿式長照機構，以立意與最大變異抽樣邀請護理師、資深照服員與單位主管約 12 人進行半結構深度訪談，依 Braun 與 Clarke 主題分析六步驟分析，並以成員檢核與同儕檢核提升嚴謹度。預期結果可作為機構設計摘要核對流程與教育訓練之依據。',
+      m10_refs: 'Braun, V., & Clarke, V. (2006). Using thematic analysis in psychology. Qualitative Research in Psychology, 3(2), 77–101.\nHennink, M., & Kaiser, B. N. (2022). Sample sizes for saturation in qualitative research: A systematic review of empirical tests. Social Science & Medicine, 292, 114523.\nLee, J. D., & See, K. A. (2004). Trust in automation: Designing for appropriate reliance. Human Factors, 46(1), 50–80.\nLincoln, Y. S., & Guba, E. G. (1985). Naturalistic inquiry. Sage.\nSandelowski, M. (2000). Whatever happened to qualitative description? Research in Nursing & Health, 23(4), 334–340.\nTong, A., Sainsbury, P., & Craig, J. (2007). Consolidated criteria for reporting qualitative research (COREQ): A 32-item checklist for interviews and focus groups. International Journal for Quality in Health Care, 19(6), 349–357.\nVan Veen, D., et al. (2024). Adapted large language models can outperform medical experts in clinical text summarization. Nature Medicine, 30(4), 1134–1142.',
+      irb_pi: '〔指導教授姓名〕，〔職稱〕，〔系所〕；職責：計畫督導、研究倫理與參與者保護之最終責任',
+      irb_copi: '〔研究生姓名〕（協同主持人，負責訪談、轉錄與分析）；第二編碼者 1 名〔姓名〕，均完成研究倫理訓練',
+      irb_contact: '〔研究生姓名〕；電話〔　〕；電子郵件〔　〕',
+      irb_inst: '〔大學名稱〕〔系所〕；研究場域：北部兩家住宿式長照機構（以 A、B 代稱）',
+      irb_fund: '本研究無外部經費補助，所需經費由研究者自籌。', irb_period: '2026 年 9 月至 2027 年 8 月（自 IRB 核准日起執行）',
+      irb_review: '建議簡易審查：研究對象為成年工作人員，以訪談蒐集工作經驗，屬最小風險；不蒐集住民資料，逐字稿去識別化。是否符合簡易審查範圍，以送審機構之判定為準。',
+      irb_n: '兩機構負責交班之護理師、資深照服員與單位主管，預估約 12 人（依資料飽和調整）。',
+      irb_recruit: '由機構張貼招募說明，有意願者主動聯絡研究者；研究者不經由主管邀請，亦不告知機構誰參與訪談。',
+      irb_vuln: '否。參與者為成年工作人員；因與機構有僱傭關係，招募與訪談由非主管之研究者進行，訪談內容不提供給機構。',
+      irb_task: '接受一次約 45–60 分鐘的面對面訪談，談您使用 AI 交班摘要的經驗；訪談全程錄音（可拒絕錄音）；之後可能邀請您確認初步分析結果（約 15 分鐘，可拒絕）。',
+      irb_withdraw: '可隨時以口頭或書面告知研究者撤回同意，無須說明理由；撤回後將刪除您的錄音與逐字稿，不納入分析。',
+      irb_benefit: '參與者無直接利益；為感謝撥冗，致贈〔　〕元禮券，撤回者亦不收回。',
+      irb_harm: '本研究屬最小風險。若談及工作經驗使您不安，可隨時暫停或退出；如對研究有疑問或爭議，可聯絡研究者或〔送審機構 IRB 名稱與電話〕。',
+      irb_material: '研究材料為訪談錄音、逐字稿與田野筆記。錄音於逐字稿核對完成後刪除；去識別化逐字稿保存至研究結束後 3 年，期滿以不可回復方式刪除；不作本計畫以外之用途。',
+      irb_commercial: '本研究不涉及商業利益；研究者與 AI 摘要工具廠商無財務關係。',
+      irb_ad: '【邀請您分享使用經驗】想了解您在使用 AI 交班摘要時，怎麼判斷內容可不可信、遇到問題怎麼處理。訪談約 45–60 分鐘，時間地點依您方便，內容保密，不會提供給主管。有意願請聯絡〔研究生姓名〕〔電話／電子郵件〕。'
+    });
+    s.objs = [
+      { verb: '探討', text: '探討照護人員如何判斷 AI 交班摘要何者可信、何者需回頭查證', hyp: '', analysis: '主題分析（Braun & Clarke 六步驟），歸納判斷歷程之主題', crit: '以 Lincoln 與 Guba 四準則檢核嚴謹度；依 COREQ 報告', sens: '成員檢核、雙人獨立編碼前 4 份逐字稿', exp: '預期呈現照護人員判斷摘要可信度所依據的線索（例如內容是否與自己記憶相符、是否涉及高風險項目），以及「直接採用—部分查證—全部查證」的不同做法。' },
+      { verb: '探討', text: '探討影響照護人員信任判斷之個人、工作與工具因素', hyp: '', analysis: '主題分析，並以最大變異面向（職類、年資、機構）比較主題分布', crit: '同上', sens: '以反思日誌檢視研究者前理解是否影響詮釋', exp: '預期年資、職類、當班工作量與過去遇到摘要錯誤的經驗會影響判斷；結果將與自動化信任框架對照討論。' },
+      { verb: '探討', text: '探討照護人員因應 AI 摘要不確定性所發展之策略', hyp: '', analysis: '主題分析，整理因應策略之類型與使用情境', crit: '同上', sens: '同儕檢核', exp: '預期歸納出回頭查原紀錄、口頭確認、自行補寫等策略，並據以提出機構可採用之核對建議。' }];
+    s.vars = [
+      { name: '信任判斷歷程', role: '探索', concept: '決定採用或查證摘要內容的思考歷程', oper: '受訪者描述何時相信摘要、何時回頭查證及其理由', tool: '半結構訪談', scale: '', time: '訪談', rel: '雙人編碼、成員檢核' },
+      { name: '影響因素', role: '探索', concept: '影響信任判斷的個人、工作與工具條件', oper: '受訪者提及之影響判斷的情境與條件', tool: '半結構訪談', scale: '', time: '訪談', rel: '同上' },
+      { name: '因應策略', role: '探索', concept: '降低摘要出錯風險的作法', oper: '受訪者描述之具體做法與使用時機', tool: '半結構訪談', scale: '', time: '訪談', rel: '同上' }];
+    s.bias = [
+      { name: '研究者前理解（反身性）', why: '研究者具實務經驗並有既有推測，可能影響追問與詮釋', fix: '撰寫反思日誌；前 3 次訪談錄音由同儕檢視提問是否具引導性' },
+      { name: '社會期許', why: '受訪者可能只談正面經驗或避免承認失誤', fix: '保密承諾、非主管訪談者、以具體事件提問' },
+      { name: '選樣偏差', why: '主動報名者可能是較熟悉或較排斥工具者', fix: '依最大變異原則補足不同職類、年資與機構之受訪者' },
+      { name: '詮釋偏差', why: '單一研究者編碼可能偏向自己的觀點', fix: '雙人獨立編碼前 4 份、協商共識、成員檢核' }];
+    s.gantt = { n: 12, rows: [{ t: 'IRB 送審與核准', s: 1, e: 2 }, { t: '大綱預試與招募', s: 2, e: 3 }, { t: '訪談', s: 3, e: 7 }, { t: '轉錄與編碼', s: 3, e: 8 },
+      { t: '主題分析與成員檢核', s: 7, e: 9 }, { t: '論文撰寫', s: 9, e: 11 }, { t: '緩衝（招募延長、補訪、論文修訂）', s: 10, e: 11 }, { t: '論文口試', s: 12, e: 12 }] };
+    s.risks = [
+      { r: '招募人數不足或缺少某類受訪者', trig: '第 5 月仍缺少某一職類或年資層', when: 'M5', plan: '請機構再次張貼招募說明，並請已受訪者轉介（滾雪球）' },
+      { r: '未達資料飽和', trig: '第 7 月仍持續出現新主題', when: 'M7', plan: '延長訪談期至第 8 月，使用緩衝月' },
+      { r: '受訪者擔心內容外流', trig: '受訪者拒絕錄音或有所保留', when: '每次訪談', plan: '改以筆記記錄；重申保密與不提供主管' }];
+    s.kpi = [{ name: '完成訪談人數（產出指標）', calc: '完成訪談並取得逐字稿之人數；每月統計', base: '0', goal: '第 7 月前完成約 12 人，並達資料飽和' }];
+    allChecks(s); return s;
+  }
+
+  function caseA() {
+    var s = blank(); s.meta.fmt = S.meta.fmt || 'f1'; s.meta.type = 'A'; s.meta.type2 = ''; s.meta.step = 's1';
+    fill(s, CV);
+    fill(s, {
+      s1_1: '居家長者多重用藥，常忘記服藥或重複服藥；紙本藥袋與口頭提醒難以持續，照顧者也無法即時掌握服藥情形。',
+      s1_2: '北部某社區藥局合作之 65 歲以上、每日服用 3 種以上慢性病藥物之居家長者及其主要照顧者。',
+      s1_3: '自行開發之長者用藥提醒 App（提醒、服藥紀錄、照顧者通知）。',
+      s1_4: '可用性：任務完成率、操作時間、錯誤數、SUS 分數；服藥紀錄完整率。',
+      s1_5: '能否開發出長者能順利使用的用藥提醒 App？其可用性如何？',
+      s1_6: 'A 系統開發與評估：設計科學研究法（需求分析 → 設計開發 → 形成性評估迭代 → 總結性評估）。',
+      s1_7: '合作藥局同意協助招募；App 資料加密存於手機，不上傳可識別資料。',
+      s1_8: '12 個月：需求 2 個月、開發與迭代 5 個月、總結性評估 2 個月，保留兩個月緩衝。',
+      s1_9: '提出適合長者的用藥提醒設計原則；可用的 App 雛型供藥局後續推廣。',
+      m1_scene: '多重用藥在居家長者中相當普遍。長者須依不同時間服用多種藥物，視力、記憶與手部靈活度又逐漸退化，忘記服藥、重複服藥或自行停藥的情形時有所聞，照顧者若不同住，也難以即時掌握服藥情形。',
+      m1_gap: '現行做法以紙本藥袋、分裝藥盒與照顧者口頭提醒為主，需要人力持續投入；市售提醒 App 多以一般年輕使用者為設計對象，字體小、步驟多，長者常在設定階段就放棄使用。',
+      m1_new: '世界衛生組織指出，長期治療的服藥遵從是普遍且重要的問題（World Health Organization, 2003）。行動應用程式能提供定時提醒與紀錄，但若未經長者實際參與設計與可用性評估，難以真正被使用。',
+      m1_time: '合作社區藥局正推動長者用藥整合服務，需要一個長者能自行操作、照顧者能遠端掌握的工具；本研究可在服務推出前完成設計與評估。',
+      m1_stmt: '因此，本研究擬以設計科學研究法開發一款適合居家長者的用藥提醒 App，並評估其可用性。',
+      m2_pico: 'P：65 歲以上、多重用藥之居家長者及照顧者｜I：用藥提醒行動應用程式｜C：現行紙本藥袋與口頭提醒（需求分析時比較）｜O：可用性（任務完成率、時間、錯誤、SUS）、服藥紀錄完整率',
+      m2_search: 'PubMed：（"Medication Adherence"[Mesh] OR adherence[tiab]）AND（"Mobile Applications"[Mesh] OR app[tiab] OR mHealth[tiab] OR reminder*[tiab]）AND（"Aged"[Mesh] OR older[tiab] OR elderly[tiab]）AND（usability[tiab] OR "user-centered design"[tiab]）\n華藝：（用藥 OR 服藥）AND（App OR 行動應用程式 OR 提醒）AND（長者 OR 老人 OR 高齡）\n限制：2015 年以後、中英文；檢索日期與篩選流程見附錄一（教學示意：請以自己實際執行的檢索為準）。',
+      m2_body: '一、長者服藥遵從問題。世界衛生組織（2003）的報告指出，長期治療的服藥遵從不佳是普遍現象，並會影響治療成效。對本研究的意義：提醒與紀錄功能必須對準長者實際忘記服藥的情境。\n二、系統開發的方法論。設計科學研究法主張以解決實際問題的人工物為研究產出，並以嚴謹評估證明其效用（Hevner et al., 2004）；Peffers 等人（2007）提出問題界定、目標設定、設計開發、展示、評估與溝通六個步驟。對本研究的意義：App 本身是研究產出，評估要先找問題（形成性）、再量效果（總結性）。\n三、可用性評估。可用性指特定使用者在特定情境下，有效、有效率且滿意地達成目標的程度（ISO 9241-11）。SUS 是常用的 10 題可用性量表（Brooke, 1996），Bangor 等人（2008）的實證分析提供了分數解讀的參考；Nielsen（1993）的啟發式評估則適合在開發早期由專家找出問題。本研究初步檢索（附錄一）未見針對臺灣居家多重用藥長者、並納入照顧者角色之提醒 App 設計研究（教學示意：請以自己的實際檢索結果改寫）。',
+      m2_known: '既有研究已確認長者服藥遵從是重要問題（World Health Organization, 2003），並已有成熟的系統開發與可用性評估方法（Hevner et al., 2004；Brooke, 1996）。',
+      m2_unknown: '然而，針對臺灣居家多重用藥長者、由長者與照顧者共同參與設計，並經形成性與總結性評估的用藥提醒工具，仍缺乏完整的開發與評估紀錄。',
+      m2_worth: '此缺口使藥局在推動長者用藥服務時，缺乏可直接採用且經評估的工具；本研究將以設計科學研究法開發並評估一款長者適用的 App。',
+      m2_theory: '以設計科學研究法（Hevner et al., 2004；Peffers et al., 2007）為研究架構，並以 ISO 9241-11 之可用性定義（有效性、效率、滿意度）界定評估指標。',
+      m2_orig: '本計畫由長者與照顧者共同參與設計，結合照顧者通知功能，並以兩輪形成性評估與總結性評估完整記錄開發歷程，產出可推廣之長者用藥提醒設計原則。',
+      m3_rq: '能否開發出居家多重用藥長者能順利使用的用藥提醒 App？其可用性如何？',
+      m3_terms: '可用性：特定使用者在特定情境下，有效、有效率且滿意地達成目標的程度（ISO 9241-11），本研究以任務完成率、操作時間、錯誤數與 SUS 分數測量。\n服藥紀錄完整率：應服藥次數中，App 有服藥紀錄（已服或略過）的比例。\n照顧者通知：長者逾時未記錄服藥時，App 傳送給照顧者的提醒。',
+      m3_scope: '研究範圍為北部某社區藥局合作之居家長者及其照顧者；本研究評估 App 的可用性與紀錄完整率，不評估對服藥遵從或臨床結果的成效（需後續介入研究）。',
+      m4_frame: '依設計科學研究法，需求分析的結果決定 App 的功能設計；形成性評估找出的問題回饋修正設計（迭代 2 輪）；總結性評估以 ISO 9241-11 的三個面向測量可用性：有效性（任務完成率、錯誤數）、效率（操作時間）與滿意度（SUS）。另以服藥紀錄完整率觀察實際使用情形。',
+      m5_design: '本研究採設計科學研究法（A 型：系統開發與評估），分為問題界定、需求分析、設計開發、形成性評估與修正（2 輪）、總結性評估五個階段（Peffers et al., 2007）。',
+      m5_reject: '不直接進行隨機對照試驗，因 App 尚未開發完成且可用性未知，過早評估成效會混淆「不好用」與「沒效果」；不只做滿意度問卷，因滿意度無法找出具體操作問題，也不足以說明可用性。',
+      m5_site: '研究場域為北部某社區藥局及其服務之居家長者家庭，藥局已同意協助招募（附錄二）。研究對象：需求分析長者 6 人與照顧者 4 人；形成性評估專家 3 位與長者 5 人；總結性評估長者 12 人與其照顧者。',
+      m5_incl: '長者納入條件：65 歲以上、每日服用 3 種以上慢性病藥物、能自行使用智慧型手機接聽電話。排除條件：經診斷失智症或無法自行表達同意者；嚴重視力或聽力障礙無法操作手機者。',
+      m5_sample: '形成性評估以 5 位使用者為一輪，可找出多數主要可用性問題（課程 9.7），共 2 輪；專家啟發式評估 3 位。總結性評估招募長者 12 人與其照顧者，屬描述性可用性評估，不做推論檢定。',
+      m5_tool: '一、需求訪談大綱：日常服藥流程、忘記服藥的情境、對提醒方式的偏好（附錄三）。\n二、任務腳本：設定一種新藥、回應服藥提醒、補記漏服、查看本週紀錄共 4 項核心任務。\n三、可用性指標：任務完成率、完成時間、錯誤數（由觀察者記錄）。\n四、SUS 系統可用性量表中文版 10 題（Brooke, 1996），以 68 分作為平均可用性參考值。\n五、啟發式評估：Nielsen 十項原則，問題嚴重度 0–4 分。\n六、App 使用日誌：提醒次數、服藥紀錄筆數，計算服藥紀錄完整率。',
+      m5_flow: '一、第 1–2 月：IRB 送審；核准後進行需求訪談（長者 6 人、照顧者 4 人），以主題分析整理需求清單並以 MoSCoW 排序。\n二、第 3–4 月：繪製架構與資料流、製作可點選雛型，與 2 位長者走一遍核心任務。\n三、第 4–7 月：開發可運作版本；第 5 月第一輪形成性評估（專家 3 位啟發式評估＋長者 5 人放聲思考），修正後第 7 月第二輪。\n四、第 8–9 月：總結性評估，長者 12 人於家中完成 4 項任務並填 SUS，之後使用 2 週，匯出使用日誌。\n五、資料以研究編號儲存，App 測試資料不含姓名與身分證字號。',
+      m5_innov: '由長者與照顧者共同參與設計，並以兩輪形成性評估加一次總結性評估完整記錄開發與修正歷程；照顧者通知功能回應長者獨居時無人提醒的實際情境。',
+      m6_common: '總結性評估以描述統計呈現：任務完成率（%）、完成時間（中位數與四分位距）、錯誤數、SUS 平均與標準差；兩輪形成性評估之問題數與嚴重度以表格比較。服藥紀錄完整率以每人 2 週之百分比描述。分析以 Python（版本寫明）執行。',
+      m6_qual: '需求訪談與放聲思考紀錄以主題分析整理（Braun & Clarke, 2006），歸納需求與可用性問題類型；需求清單以 MoSCoW 排序並與長者確認。',
+      m7_irb: '本研究將送〔大學或合作機構〕人體研究倫理審查委員會審查，於第 1 月送審，核准後才開始需求訪談。',
+      m7_consent: '長者與照顧者均簽署書面同意書；說明時以大字版同意書並口頭逐項說明，確認長者理解後再簽署。',
+      m7_risk: '本研究屬最小風險；App 僅提供提醒與紀錄，不提供用藥建議，測試期間仍依原有方式服藥。長者操作感到疲累可隨時休息或退出。',
+      m7_deid: 'App 測試資料以研究編號儲存，不收集姓名與身分證字號；服藥紀錄加密存於手機，研究結束時匯出去識別化日誌後刪除 App 資料。研究資料存於加密裝置，保存至研究結束後 3 年後刪除。',
+      m7_coi: '研究者與合作藥局無財務關係，App 不作商業販售。依 9.10 判定：本 App 僅提供提醒與紀錄、不提供診斷或劑量建議，預期不屬軟體醫療器材，將於計畫中說明判定依據。生成式 AI 僅用於程式除錯，不輸入任何參與者資料。',
+      m8_feas: '場域：合作藥局已同意協助招募（附錄二）。技術：研究者已完成 App 開發課程並具跨平台開發經驗；指導教授實驗室提供測試手機。樣本：藥局服務之多重用藥長者人數足以招募所需人數。時間：開發與迭代安排 5 個月，並保留兩個月緩衝。',
+      m9_acad: '補足臺灣居家多重用藥長者用藥提醒工具之完整開發與評估紀錄，並歸納長者適用之設計原則。',
+      m9_prac: '產出經評估之 App 雛型與設計原則，供合作藥局推動長者用藥服務時採用；若可用性良好，可接續進行介入成效研究（C 型）。',
+      m9_limd: '本研究評估可用性，不評估服藥遵從或臨床結果之成效；樣本為單一藥局服務之長者，結果推論需保守。',
+      m9_lime: '長者手機型號與作業系統不一，可能影響操作表現；將事先列出支援版本並記錄測試手機型號。',
+      m9_train: '參與之碩士生將習得需求分析、雛型設計、可用性測試與設計科學研究法（教學示意）。',
+      m9_output: '預計投稿期刊論文 1 篇、研討會論文 1 篇，並產出 App 雛型與長者用藥提醒設計原則一份（教學示意）。',
+      m9_nation: '回應高齡社會多重用藥安全之需求，提供社區藥局推動長者用藥服務之數位工具。',
+      t_iv: '用藥提醒 App', t_pop: '居家多重用藥長者', t_out: '可用性', t_des: '設計科學研究',
+      m10_title: '居家多重用藥長者用藥提醒 App 之開發與可用性評估：設計科學研究',
+      m10_title_en: 'Development and Usability Evaluation of a Medication Reminder App for Community-Dwelling Older Adults with Polypharmacy: A Design Science Research Study',
+      m10_kw: '多重用藥、高齡者、行動應用程式、可用性、設計科學研究',
+      m10_abs: '居家多重用藥長者常忘記服藥或重複服藥，市售提醒 App 多未考量長者的使用能力。本研究旨在以設計科學研究法開發一款居家長者適用的用藥提醒 App，並評估其可用性。本研究將於北部某社區藥局，先訪談長者 6 人與照顧者 4 人整理需求，再開發 App 並進行兩輪形成性評估（專家 3 位啟發式評估、長者 5 人放聲思考），最後由長者 12 人與其照顧者進行總結性評估，以任務完成率、操作時間、錯誤數、SUS 與服藥紀錄完整率描述可用性。預期產出經評估之 App 雛型與長者用藥提醒設計原則，可供藥局推動長者用藥服務。',
+      m10_refs: 'Bangor, A., Kortum, P. T., & Miller, J. T. (2008). An empirical evaluation of the System Usability Scale. International Journal of Human–Computer Interaction, 24(6), 574–594.\nBraun, V., & Clarke, V. (2006). Using thematic analysis in psychology. Qualitative Research in Psychology, 3(2), 77–101.\nBrooke, J. (1996). SUS: A quick and dirty usability scale. In P. W. Jordan et al. (Eds.), Usability evaluation in industry (pp. 189–194). Taylor & Francis.\nHevner, A. R., March, S. T., Park, J., & Ram, S. (2004). Design science in information systems research. MIS Quarterly, 28(1), 75–105.\nInternational Organization for Standardization. (2018). Ergonomics of human-system interaction—Part 11: Usability: Definitions and concepts (ISO 9241-11:2018).\nNielsen, J. (1993). Usability engineering. Academic Press.\nPeffers, K., Tuunanen, T., Rothenberger, M. A., & Chatterjee, S. (2007). A design science research methodology for information systems research. Journal of Management Information Systems, 24(3), 45–77.\nWorld Health Organization. (2003). Adherence to long-term therapies: Evidence for action. World Health Organization.',
+      irb_pi: '〔指導教授姓名〕，〔職稱〕，〔系所〕；職責：計畫督導、研究倫理與參與者保護之最終責任',
+      irb_copi: '〔研究生姓名〕（協同主持人，負責 App 開發、訪談與可用性測試）；可用性專家 3 位〔姓名〕',
+      irb_contact: '〔研究生姓名〕；電話〔　〕；電子郵件〔　〕',
+      irb_inst: '〔大學名稱〕〔系所〕；研究場域：北部某社區藥局及其服務之長者家庭',
+      irb_fund: '本研究無外部經費補助，所需經費由研究者自籌；測試手機由指導教授實驗室提供。', irb_period: '2026 年 9 月至 2027 年 8 月（自 IRB 核准日起執行）',
+      irb_review: '建議簡易審查：以訪談、操作測試與問卷蒐集資料，App 僅提供提醒與紀錄，不改變原有服藥方式，屬最小風險；參與者含高齡者，已訂定理解確認程序。是否符合簡易審查範圍，以送審機構之判定為準。',
+      irb_n: '需求分析長者 6 人與照顧者 4 人；形成性評估長者 5 人（每輪）與專家 3 位；總結性評估長者 12 人與其照顧者。',
+      irb_recruit: '由合作藥局藥師向符合條件之長者發放邀請說明，有意願者由研究者另行聯絡說明；藥師不參與同意過程，是否參與不影響藥局服務。',
+      irb_vuln: '參與者含高齡者，雖非法定易受傷害族群，但考量視力、聽力與理解能力：使用大字版同意書、逐項口頭說明並以提問確認理解；排除經診斷失智症或無法自行同意者。',
+      irb_task: '需求訪談：聊聊您平常怎麼吃藥、什麼時候容易忘記，約 40 分鐘（錄音）。操作測試：在研究人員陪同下用 App 完成 4 個小任務，約 30 分鐘，並填一份 10 題問卷；之後在家使用 2 週。您仍照原來的方式吃藥。',
+      irb_withdraw: '可隨時以口頭或書面告知研究者撤回同意，無須說明理由；撤回後將刪除您的訪談錄音與 App 資料。',
+      irb_benefit: '參與者可免費使用 App 並獲得用藥整理協助；為感謝撥冗，致贈〔　〕元禮券。',
+      irb_harm: '本研究屬最小風險；若操作 App 感到疲累或困擾可隨時停止。App 不提供用藥建議，若有用藥問題請洽原藥師或醫師；對研究有疑問或爭議，可聯絡研究者或〔送審機構 IRB 名稱與電話〕。',
+      irb_material: '研究材料為訪談錄音、操作測試紀錄、問卷與 App 使用日誌。錄音於逐字稿核對完成後刪除；去識別化資料保存至研究結束後 3 年，期滿以不可回復方式刪除；不作本計畫以外之用途。',
+      irb_commercial: '本 App 為研究用雛型，不作商業販售；如日後有商業化可能，將另行送審並取得同意。',
+      irb_ad: '【長輩吃藥小幫手 App 試用邀請】想請每天要吃好幾種藥的長輩，幫忙試用並給我們意見，讓 App 更好用。參加者需要聊聊吃藥習慣、試用 App 兩週。有興趣請洽藥局藥師或〔研究生姓名〕〔電話〕。'
+    });
+    s.objs = [
+      { verb: '探討', text: '探討居家多重用藥長者與照顧者對用藥提醒工具之需求', hyp: '', analysis: '需求訪談之主題分析，整理需求清單並以 MoSCoW 排序', crit: '需求清單經 2 位長者確認', sens: '', exp: '預期歸納出提醒方式（聲音、震動、大字）、補記漏服、照顧者通知等需求，作為設計依據。' },
+      { verb: '開發', text: '開發用藥提醒 App 並經兩輪形成性評估修正', hyp: '', analysis: '啟發式評估與放聲思考問題清單，依嚴重度 0–4 分排序；比較兩輪問題數與嚴重度', crit: '第二輪無嚴重度 3–4 分之問題', sens: '回歸測試 4 項核心任務', exp: '預期第一輪找出主要可用性問題，第二輪嚴重問題明顯減少，並記錄每項修正與其依據。' },
+      { verb: '描述', text: '描述長者使用 App 之可用性與服藥紀錄完整率', hyp: '', analysis: '描述統計：任務完成率、完成時間（中位數與四分位距）、錯誤數、SUS 平均與標準差、服藥紀錄完整率', crit: 'SUS 以 68 分作為平均可用性參考值（描述性，不做推論檢定）', sens: '分別呈現長者自行操作與照顧者協助之結果', exp: '預期長者能完成多數核心任務；若某項任務完成率偏低，將作為後續修正與研究限制之說明。' }];
+    s.vars = [
+      { name: '任務完成率', role: '依變項', concept: '有效性：使用者能否完成任務', oper: '4 項核心任務中無協助完成之比例', tool: '觀察紀錄', scale: '比率', time: '總結性評估', rel: '標準化任務腳本' },
+      { name: '任務完成時間', role: '依變項', concept: '效率：完成任務所需時間', oper: '每項任務自開始至完成之秒數', tool: '螢幕錄影計時', scale: '比率', time: '總結性評估', rel: '同一觀察者計時' },
+      { name: '錯誤數', role: '依變項', concept: '操作偏離正確路徑之次數', oper: '每項任務之錯誤點擊或回頭次數', tool: '觀察紀錄', scale: '比率', time: '總結性評估', rel: '錯誤定義事先寫定' },
+      { name: 'SUS 分數', role: '依變項', concept: '滿意度：主觀可用性', oper: 'SUS 中文版 10 題，換算 0–100 分', tool: '問卷', scale: '等距', time: '總結性評估', rel: 'Brooke（1996）；Bangor 等人（2008）' },
+      { name: '服藥紀錄完整率', role: '探索', concept: '實際使用 App 記錄服藥之程度', oper: '應服藥次數中有紀錄（已服或略過）之比例', tool: 'App 使用日誌', scale: '比率', time: '使用 2 週', rel: '系統自動記錄' },
+      { name: '年齡、手機使用經驗', role: '控制', concept: '影響操作表現之個人因素', oper: '年齡（歲）；每日使用智慧型手機時間', tool: '基本資料表', scale: '比率', time: '總結性評估前', rel: '—' }];
+    s.bias = [
+      { name: '學習效應', why: '同一位長者參加多輪測試，會越來越熟悉 App', fix: '形成性與總結性評估招募不同長者' },
+      { name: '期望偏差（取悅研究者）', why: '長者可能因不好意思而說「很好用」', fix: '開發者不擔任測試主持人；強調要找的是 App 的問題，不是測試長者' },
+      { name: '觀察者效應', why: '有人在旁觀察時操作方式可能與平常不同', fix: '在長者家中測試；之後使用 2 週以日誌觀察實際使用' },
+      { name: '選樣偏差', why: '願意參加者可能較熟悉手機', fix: '記錄手機使用經驗並於結果中分層描述' }];
+    s.gantt = { n: 12, rows: [{ t: 'IRB 送審與核准', s: 1, e: 1 }, { t: '需求訪談與分析', s: 2, e: 3 }, { t: '系統設計與雛型', s: 3, e: 4 }, { t: '開發與兩輪形成性評估', s: 4, e: 7 },
+      { t: '總結性評估與使用 2 週', s: 8, e: 9 }, { t: '資料分析與撰寫', s: 9, e: 10 }, { t: '緩衝（開發延誤、招募延長）', s: 10, e: 11 }, { t: '論文口試', s: 12, e: 12 }] };
+    s.risks = [
+      { r: '開發進度落後', trig: '第 6 月核心任務仍無法運作', when: 'M6', plan: '刪減 Could 等級功能，優先完成 4 項核心任務；使用緩衝月' },
+      { r: '長者手機不相容', trig: '測試手機版本過舊無法安裝', when: '每次測試', plan: '提供實驗室測試手機，並記錄型號' },
+      { r: '總結性評估招募不足', trig: '第 8 月未達 12 人', when: 'M8', plan: '請藥局擴大邀請範圍並延長招募至第 9 月' }];
+    s.kpi = [
+      { name: '核心任務完成率（成果指標）', calc: '4 項核心任務中長者無協助完成之比例；總結性評估時計算', base: '第一輪形成性評估結果', goal: '較第一輪提高；具體目標於第一輪後訂定' },
+      { name: '完成總結性評估人數（產出指標）', calc: '完成任務測試與 SUS 之長者人數', base: '0', goal: '第 9 月前 12 人' }];
+    allChecks(s); return s;
+  }
+  var PRESETS = { quant: ['量性：Case Q 介入成效（準實驗）', caseQ], qual: ['質性：案例 L 信任判斷（質性描述）', caseL], sys: ['系統實作：長者用藥提醒 App（設計科學研究）', caseA] };
+
   // ---------- 起始 ----------
   function build() {
     var nav = '<ol class="steps">' + STEPS.map(function (st) {
@@ -1112,7 +1330,7 @@ textarea.flash{background:var(--accent-tint);transition:background .1s}
       if (/^[A-H]-/.test(c) && !S.meta.type) S.meta.type = c[0];
       go(target); sy.value = '';
     });
-    $('#oneclick').addEventListener('click', function () { go('setup'); var c = $('#loadq-c'); if (c) { c.hidden = false; $('#demo').scrollIntoView({ block: 'center' }); } });
+    $('#oneclick').addEventListener('click', function () { go('setup'); var d = $('#demo'); if (d) { d.scrollIntoView({ block: 'center' }); flash(d); } });
     go(STEP[S.meta.step] ? S.meta.step : 'setup', true);
     var st = $('#saved'); if (st) st.textContent = S.meta.updated ? '已存在這台電腦的瀏覽器 · ' + S.meta.updated : '草稿會自動存在這台電腦的瀏覽器';
   }
