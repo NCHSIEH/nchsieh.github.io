@@ -142,42 +142,70 @@ button,input,select,textarea{font:inherit;color:inherit}
 .pbtn b{display:block;font-size:12.8px;color:var(--brand-deep);margin-bottom:2px}
 .pbtn small{display:block;font-size:11.5px;color:var(--muted);line-height:1.35}
 .pbtn .ptag{display:inline-block;font-size:10.8px;font-weight:700;padding:1px 6px;border-radius:4px;background:var(--brand-soft);color:var(--brand-deep);margin-bottom:4px}
-/* README 總覽網頁專屬樣式（GitHub / 學術手冊風格） */
-.rm-doc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 28px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
-.rm-hero{border-bottom:2px solid var(--line);padding-bottom:16px;margin-bottom:18px}
-.rm-path{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.rm-path code{background:var(--subtle);padding:2px 7px;border-radius:4px;border:1px solid var(--line);color:var(--brand-deep);font-weight:600}
-.rm-hero h1{font-family:var(--serif);font-size:24px;margin:4px 0 8px;color:var(--brand-deep);line-height:1.35}
-.rm-hero p{margin:0 0 12px;color:var(--ink);font-size:14.2px;line-height:1.65}
-.rm-shields{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.rm-shield{display:inline-flex;align-items:center;border-radius:5px;overflow:hidden;font-size:11.5px;font-weight:700;border:1px solid var(--line)}
-.rm-shield b{background:var(--subtle);color:var(--muted);padding:2px 7px;font-weight:600}
-.rm-shield i{font-style:normal;background:var(--brand-soft);color:var(--brand-deep);padding:2px 8px}
-.rm-shield.ac i{background:var(--accent-soft);color:var(--accent)}
-.rm-shield.ok i{background:var(--ok-soft);color:var(--ok)}
-.rm-toc{background:var(--subtle);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.6px}
-.rm-toc b{color:var(--brand-deep);margin-right:4px}
-.rm-toc a{color:var(--brand);text-decoration:none;background:var(--panel);border:1px solid var(--line);padding:3px 9px;border-radius:99px;font-weight:500;transition:all .15s}
-.rm-toc a:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
-.rm-h2{font-family:var(--serif);font-size:18.5px;color:var(--brand-deep);border-bottom:1.5px solid var(--line);padding-bottom:7px;margin:26px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.rm-h2:first-of-type{margin-top:8px}
-.rm-h2 small{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--muted)}
-.rm-tbl-wrap{overflow-x:auto;margin:10px 0 18px;border:1px solid var(--line);border-radius:8px}
-.rm-tbl{width:100%;border-collapse:collapse;font-size:12.8px;min-width:860px}
-.rm-tbl th,.rm-tbl td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top;line-height:1.5}
+/* README 總覽網頁專屬樣式（清晰三步結構：選分類 → 看設計與範例 → 橫向比較） */
+.rm-doc{display:grid;gap:16px}
+.rm-sec{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:18px 22px;box-shadow:0 1px 6px rgba(0,0,0,.02)}
+.rm-sec-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.rm-sec-hd h2{margin:0;font-family:var(--serif);font-size:18px;color:var(--brand-deep);display:flex;align-items:center;gap:8px}
+.rm-sec-hd small{font-size:12.5px;color:var(--muted)}
+.rm-step-tag{background:var(--brand);color:#fff;font-family:var(--sans);font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:5px}
+.rm-flts{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:8px 11px;background:var(--subtle);border-radius:8px;font-size:12.5px}
+.rm-flt{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:4px 10px;border-radius:99px;font-size:12.2px;cursor:pointer;font-weight:500;transition:all .15s}
+.rm-flt:hover{border-color:var(--brand)}
+.rm-flt.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+.rm-fam-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.rm-fam{background:var(--subtle);border:1px solid var(--line);border-radius:9px;padding:10px;display:flex;flex-direction:column;gap:7px}
+.rm-fam-hd{padding-bottom:6px;border-bottom:1px dashed var(--line)}
+.rm-fam-hd b{display:block;font-size:13.2px;color:var(--brand-deep)}
+.rm-fam-hd span{display:block;font-size:11.4px;color:var(--muted);line-height:1.35;margin-top:2px}
+.rm-ditem{border:1.5px solid var(--line);background:var(--panel);border-radius:8px;padding:9px 10px;text-align:left;cursor:pointer;transition:all .15s;display:block;width:100%}
+.rm-ditem:hover{border-color:var(--brand);transform:translateY(-1px)}
+.rm-ditem.on{border:2px solid var(--brand);background:var(--brand-soft);box-shadow:0 2px 8px rgba(31,58,95,.12)}
+.rm-ditem.dim{opacity:.32}
+.rm-ditem-top{display:flex;justify-content:space-between;align-items:center;gap:4px;margin-bottom:3px}
+.rm-ditem-num{font-weight:700;font-size:12px;color:var(--brand-deep);background:var(--subtle);padding:1px 6px;border-radius:4px}
+.rm-ditem.on .rm-ditem-num{background:var(--brand);color:#fff}
+.rm-ditem-n{font-size:11px;color:var(--accent);font-weight:700}
+.rm-ditem b{display:block;font-size:13px;color:var(--brand-deep);line-height:1.35;margin-bottom:3px}
+.rm-ditem small{display:block;font-size:11.4px;color:var(--muted);line-height:1.35}
+.rm-focus{border:2px solid var(--brand);border-radius:11px;background:var(--panel);overflow:hidden}
+.rm-focus-bar{background:var(--brand-soft);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.rm-focus-title h2{margin:4px 0 2px;font-family:var(--serif);font-size:20px;color:var(--brand-deep)}
+.rm-focus-title p{margin:0;font-size:13px;color:var(--muted)}
+.rm-focus-acts{display:flex;gap:8px;flex-wrap:wrap}
+.rm-bento{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px 20px}
+.rm-bcard{border:1px solid var(--line);border-radius:9px;padding:13px 15px;background:var(--bg)}
+.rm-bcard h4{margin:0 0 8px;font-size:14px;color:var(--brand-deep);display:flex;align-items:center;justify-content:space-between;gap:6px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.rm-tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.rm-tbl{width:100%;border-collapse:collapse;font-size:12.6px;min-width:820px}
+.rm-tbl th,.rm-tbl td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:middle;line-height:1.45}
 .rm-tbl th:last-child,.rm-tbl td:last-child{border-right:0}
 .rm-tbl tr:last-child td{border-bottom:0}
 .rm-tbl th{background:var(--subtle);color:var(--brand-deep);font-weight:700;white-space:nowrap}
-.rm-tbl tr:hover td{background:var(--bg)}
-.rm-dcard{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:16px 18px;margin-bottom:16px;transition:border-color .15s}
-.rm-dcard:hover{border-color:var(--brand)}
-.rm-dcard-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;border-bottom:1px dashed var(--line);padding-bottom:10px;margin-bottom:10px}
-.rm-dcard-title h3{margin:0;font-size:16.5px;color:var(--brand-deep);font-family:var(--serif)}
-.rm-dcard-title p{margin:3px 0 0;font-size:12.6px;color:var(--muted)}
-.rm-dcard-acts{display:flex;gap:6px;flex-wrap:wrap}
-.rm-preset-box{background:var(--panel);border:1px solid var(--accent);border-left:4px solid var(--accent);border-radius:7px;padding:10px 13px;margin-top:10px;font-size:12.7px}
-.rm-preset-box h5{margin:0 0 5px;font-size:13.5px;color:var(--brand-deep);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
-.rm-code{font-family:ui-monospace,Consolas,monospace;font-size:12px;background:var(--subtle);border:1px solid var(--line);padding:8px 11px;border-radius:6px;overflow-x:auto;white-space:pre;line-height:1.55;margin:8px 0}
+.rm-tbl tr.on td{background:var(--brand-soft)}
+.rm-tbl tr:hover td{background:var(--subtle);cursor:pointer}
+/* APA 第 7 版預覽與表格樣式 */
+.apa-page{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:32px 42px;font-family:"Times New Roman","標楷體",var(--serif);line-height:1.85;max-height:680px;overflow:auto;font-size:15px;color:var(--ink)}
+.apa-rh{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:6px;margin-bottom:22px}
+.apa-cover{text-align:center;padding:24px 0 28px;margin-bottom:24px;border-bottom:2px double var(--line)}
+.apa-cover h2{font-size:20px;font-weight:700;margin:0 0 10px;color:var(--brand-deep)}
+.apa-cover p{margin:4px 0;font-size:14.5px}
+.apa-h1{text-align:center;font-weight:700;font-size:17px;margin:28px 0 12px;color:var(--brand-deep)}
+.apa-h2{text-align:left;font-weight:700;font-size:15.5px;margin:18px 0 8px;color:var(--brand-deep)}
+.apa-p{margin:0 0 10px;text-indent:2em;text-align:justify}
+.apa-item{margin:0 0 8px;padding-left:2em;text-indent:-2em;text-align:justify}
+.apa-twrap{margin:16px 0 20px}
+.apa-tnum{font-weight:700;font-size:14.5px;margin:0}
+.apa-ttitle{font-style:italic;font-size:14.5px;margin:2px 0 6px}
+.apa-tbl{width:100%;border-collapse:collapse;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);font-size:13.2px}
+.apa-tbl th{border-bottom:1px solid var(--ink);padding:6px 8px;text-align:left;font-weight:700;vertical-align:bottom}
+.apa-tbl td{padding:6px 8px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.apa-tbl tr:last-child td{border-bottom:0}
+.apa-tnote{font-size:12.5px;color:var(--muted);margin:5px 0 0}
+@media (max-width:1120px){
+  .rm-fam-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rm-bento{grid-template-columns:1fr}
+}
 @media (max-width:1024px){
   .shell{grid-template-columns:1fr}
   #menu{display:inline-block}
@@ -186,7 +214,8 @@ button,input,select,textarea{font:inherit;color:inherit}
   .panes{grid-template-columns:1fr}
   .side{position:static;max-height:none}
   .ebar{grid-template-columns:120px 1fr 75px}
-  .rm-doc{padding:16px 14px}
+  .rm-fam-grid{grid-template-columns:1fr}
+  .apa-page{padding:18px 16px}
 }
 @media print{
   .top,#side-nav,.side,.fnav,.chips,.tool{display:none!important}
@@ -2568,336 +2597,243 @@ function recDesignFromTree(){
   }
 }
 
+let RM_FLT = "all";
+
 function readmeHTML(){
-  const summaryRows = [
-    {num:"①", id:"rct", cat:"真實驗・組間", name:"平行隨機對照試驗（Between-Subject RCT）", sym:"R → (O₀) → X / C → O₁", ex:"全膝關節置換術後 VR 沉浸式復健止痛 RCT", stat:"獨立樣本 t 檢定 / ANCOVA；G*Power d ＝ 0.50 → 每組 64 人（共 128 人，加計 15% 流失招募 152 人）"},
-    {num:"②", id:"between", cat:"組間實驗 / A-B", name:"組間比較／線上 A-B 實驗（Between-Subject / A-B Test）", sym:"(R) → X_A / X_B → O₁", ex:"行動掛號 App 個人化推播 vs 標準簡訊 A/B 實驗", stat:"Pearson χ² 與雙樣本比例檢定、Welch t；h ≈ 0.44 → 每組 100 人（共 200 人，招募 224 人）"},
-    {num:"③", id:"within_prepost", cat:"組內設計・前後測", name:"組內單組前後測（Within-Subject Pre-Post）", sym:"(O₀) → O₁ → X → O₂〔→ O₃〕", ex:"急診護理師 SBAR 交班高擬真模擬工作坊前後測", stat:"配對樣本 t 檢定 / 單因子重複測量 ANOVA；G*Power dz ＝ 0.50 → 有效 34 人（招募 40 人）"},
-    {num:"④", id:"within_cross", cat:"組內設計・交叉", name:"組內交叉與對抗平衡（Within-Subject Crossover AB/BA）", sym:"R → AB 序列 vs BA 序列（含洗滌期）", ex:"ICU 智慧輸液幫浦圖形介面 vs 傳統階層選單 2×2 交叉試驗", stat:"配對樣本 t 檢定 ＋ Hills-Armitage 階段與殘留效應檢定；dz ＝ 0.50 → 有效 34 人（招募 40 人）"},
-    {num:"⑤", id:"mixed_rct", cat:"混合設計・隨機", name:"混合設計（一）：隨機分組 × 前後測（2×3 Mixed RCT）", sym:"R → O₁ → X / C → O₂ → O₃", ex:"AI 認知行為情緒日記 App 對大一新生焦慮之 2×3 混合 RCT", stat:"2（組別）× 3（時間）二因子混合設計 ANOVA（組別×時間交互作用 F 與 η²p）＋ ANCOVA；招募 80 人"},
-    {num:"⑥", id:"mixed_matched", cat:"混合設計・配對", name:"混合設計（二）：配對對照 × 前後測（Matched Mixed Design）", sym:"M（1:1 配對） → O₁ → X / C → O₂", ex:"社區日照中心外骨骼步態訓練之 1:1 配對混合設計", stat:"1:1 配對（年齡/性別/基線 SPPB）＋ 2×2 混合設計 ANOVA 交互作用 ＋ ANCOVA；30 對（60 人，招募 72 人）"},
-    {num:"⑦", id:"quasi_did", cat:"準實驗・雙重差分", name:"準實驗（一）：非對等控制組與雙重差分（DiD，案例 Q）", sym:"A 場域 O₁→X→O₂ vs B 場域 O₁→C→O₂", ex:"護理之家導入 AI 交班摘要系統之準實驗研究（課程貫穿案例 Q）", stat:"A 機構配對 t(33) ＝ −6.30, dz ＝ −1.08 ＋ 遺漏項非劣性（Δ ＝ −1.0）＋ 雙重差分 DiD ＝ −4.76 分鐘（95% CI [−7.18, −2.35]）"},
-    {num:"⑧", id:"quasi_its", cat:"準實驗・時間序列", name:"準實驗（二）：中斷時間序列（ITS）", sym:"O₁…O₂₆ →〔X 上線〕→ O₂₇…O₅₂", ex:"全院導入智慧給藥條碼（BCMA）防錯系統之 52 週中斷時間序列", stat:"分段迴歸（Segmented Regression：β₁ 基線斜率、β₂ 立即跳躍、β₃ 斜率改變）＋ Newey-West 自相關校正（N ＝ 52 週）"},
-    {num:"⑨", id:"corr", cat:"觀察性・相關迴歸", name:"觀察性橫斷／相關與多元迴歸（Observational / Regression）", sym:"測量 X₁, X₂, Z（混淆）, M（中介）, Y", ex:"數位健康識能與 AI 信任度對慢病長者遠距醫療遵從度之多元迴歸", stat:"Pearson r ＋ 三階層多元線性迴歸（控制 Z 後之 β 與 ΔR²）＋ Bootstrap 5,000 次中介間接效果（有效 N ＝ 210）"}
+  const families = [
+    {
+      title:"🅰️ 組間實驗（Between）",
+      desc:"每人只分到 1 組，無前後測污染",
+      items:[
+        {num:"①", id:"rct", short:"平行隨機對照試驗 (RCT)", n:"每組 64 人（共 128）", tags:["rand"], hook:"可隨機抽籤分兩組，比介入後差異"},
+        {num:"②", id:"between", short:"組間比較／線上 A-B 實驗", n:"每組 100 人（共 200）", tags:["rand"], hook:"比較 A/B 兩版本轉換率或單次表現"}
+      ]
+    },
+    {
+      title:"🅱️ 組內實驗（Within）",
+      desc:"自己跟自己比，最省樣本（僅需 1/4）",
+      items:[
+        {num:"③", id:"within_prepost", short:"組內單組前後測", n:"有效 34 人（招募 40）", tags:["nonrand","smalln"], hook:"單一群體於介入前後各測一次"},
+        {num:"④", id:"within_cross", short:"組內交叉與對抗平衡 (AB/BA)", n:"有效 34 人（招募 40）", tags:["rand","smalln"], hook:"效果短期可逆，每人輪流體驗 X 與 C"}
+      ]
+    },
+    {
+      title:"🆎 混合設計（Mixed）",
+      desc:"兩組都測前後，看「組別×時間」變化",
+      items:[
+        {num:"⑤", id:"mixed_rct", short:"隨機分組 × 前後測 (2×3)", n:"有效 68 人（招募 80）", tags:["rand"], hook:"隨機分組＋前/中/後測追蹤變化軌跡"},
+        {num:"⑥", id:"mixed_matched", short:"1:1 配對對照 × 前後測", n:"30 對（60 人，招募 72）", tags:["nonrand","smalln"], hook:"無法抽籤，依年齡/性別/基線 1:1 配對"}
+      ]
+    },
+    {
+      title:"🏛️ 準實驗（Quasi）",
+      desc:"真實場域無法個人抽籤時重建對照",
+      items:[
+        {num:"⑦", id:"quasi_did", short:"非對等控制組雙重差分 (DiD)", n:"兩機構 62 人（案例 Q）", tags:["nonrand"], hook:"A 機構導入 vs B 機構未導入之前後差"},
+        {num:"⑧", id:"quasi_its", short:"中斷時間序列 (ITS)", n:"連續 52 週（前後各 26）", tags:["nonrand"], hook:"全院同步上線，看長期多期斜率跳躍"}
+      ]
+    },
+    {
+      title:"🔍 觀察性（Observational）",
+      desc:"不人為操弄，自然測量預測與關聯",
+      items:[
+        {num:"⑨", id:"corr", short:"橫斷相關與多元階層迴歸", n:"有效 210 人（招募 240）", tags:["obs"], hook:"發問卷或取次級資料，控制 Z 看預測力"}
+      ]
+    }
   ];
 
-  const tblHTML = summaryRows.map(r=>`<tr>
-    <td style="white-space:nowrap"><b>${esc(r.num)}</b> <span class="ctag">${esc(r.cat)}</span></td>
-    <td><b>${esc(r.name)}</b><br><code style="font-size:11.5px;color:var(--brand-deep)">${esc(r.sym)}</code></td>
-    <td><b>${esc(r.ex)}</b></td>
-    <td style="font-size:12.2px">${esc(r.stat)}</td>
-    <td style="white-space:nowrap">
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
-        <button type="button" class="btn sm ac" data-rm-preset="${r.id}" data-rm-to="setup">⚡ 一鍵匯入範例</button>
-        <button type="button" class="btn sm pri" data-rm-preset="${r.id}" data-rm-to="s1">✏️ 匯入並編輯</button>
-        <a href="#rm-card-${r.id}" class="btn sm" style="text-decoration:none;display:inline-block">詳解 ↓</a>
-      </div>
-    </td>
-  </tr>`).join("");
+  const allItems = families.reduce((a,f)=>a.concat(f.items), []);
+  const curId = DESIGNS[S.design] ? S.design : "quasi_did";
+  const curItem = allItems.find(x=>x.id===curId) || allItems[6];
+  const d = DESIGNS[curId];
+  const p = PRESETS[curId];
+  const pd = p.data;
 
-  const detailCards = summaryRows.map(r=>{
-    const d = DESIGNS[r.id];
-    const p = PRESETS[r.id];
-    const pd = p.data;
-    return `<div class="rm-dcard" id="rm-card-${r.id}">
-      <div class="rm-dcard-hd">
-        <div class="rm-dcard-title">
-          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
-            <span class="badge">${esc(r.num)} ${esc(d.cat)}</span>
-            <span class="pill">${esc(d.evidence.split("（")[0])}</span>
-            <span class="pill ok">報告規範：${esc(d.guideline)}</span>
-            <span class="ctag">對應講義：${esc(d.unit_ref)}</span>
-          </div>
-          <h3>${esc(d.name)}</h3>
-          <p>${esc(d.sub)}</p>
-        </div>
-        <div class="rm-dcard-acts">
-          <button type="button" class="btn sm ac" data-rm-preset="${r.id}" data-rm-to="setup">🚀 一鍵匯入範例（至 STEP 0）</button>
-          <button type="button" class="btn sm pri" data-rm-preset="${r.id}" data-rm-to="s1">✏️ 匯入並開始第 ① 步</button>
-          <button type="button" class="btn sm" data-rm-docx="${r.id}">📄 下載範例 Word (.docx)</button>
-          <button type="button" class="btn sm" data-rm-csv="${r.id}">🗂️ 下載空白資料表 (.csv)</button>
-        </div>
-      </div>
+  const fltBtns = [
+    {k:"all", lbl:"全部 9 種設計"},
+    {k:"rand", lbl:"✅ 我可以隨機抽籤分組（① ② ④ ⑤）"},
+    {k:"nonrand", lbl:"🏥 場域不能抽籤，但有介入（③ ⑥ ⑦ ⑧）"},
+    {k:"smalln", lbl:"📉 樣本較少，想省人數（③ ④ ⑥）"},
+    {k:"obs", lbl:"📋 不做介入，只發問卷／分析病歷（⑨）"}
+  ].map(b=>`<button type="button" class="rm-flt ${RM_FLT===b.k?"on":""}" data-rm-flt="${b.k}">${esc(b.lbl)}</button>`).join("");
 
-      <div style="font-size:12.5px;margin-bottom:6px"><b style="color:var(--brand-deep)">📐 實驗／觀察執行流程圖：</b></div>
-      <div class="fsteps" style="margin:4px 0 8px">
-        ${d.flow.map((step,i)=>`<span class="fnode ${i===2?"ac":i===d.flow.length-1?"ok":""}"><b>${i+1}.</b> ${esc(step)}</span>${i<d.flow.length-1?'<span class="farr">→</span>':""}`).join("")}
-      </div>
-      <div class="fnotation">${esc(d.notation)}</div>
-
-      <div class="grid g2" style="margin-top:8px">
-        <div class="okbox" style="margin:0">
-          <b>✅ 方法學核心優勢（When & Why to Use）</b>
-          <ul style="margin:4px 0 0;padding-left:18px;font-size:12.2px">${d.pros.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+  const famGridHTML = families.map(f=>`<div class="rm-fam">
+    <div class="rm-fam-hd">
+      <b>${esc(f.title)}</b>
+      <span>${esc(f.desc)}</span>
+    </div>
+    ${f.items.map(it=>{
+      const on = it.id===curId;
+      const match = RM_FLT==="all" || it.tags.indexOf(RM_FLT)>=0;
+      return `<button type="button" class="rm-ditem ${on?"on":""} ${match?"":"dim"}" data-rm-pick="${it.id}">
+        <div class="rm-ditem-top">
+          <span class="rm-ditem-num">${esc(it.num)}</span>
+          <span class="rm-ditem-n">${esc(it.n)}</span>
         </div>
-        <div class="warnbox" style="margin:0">
-          <b>⚠️ 內外部效度威脅與必備防線（Threats & Controls）</b>
-          <ul style="margin:4px 0 0;padding-left:18px;font-size:12.2px">${d.cons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
-        </div>
-      </div>
+        <b>${esc(it.short)}</b>
+        <small>${esc(it.hook)}</small>
+      </button>`;
+    }).join("")}
+  </div>`).join("");
 
-      <div style="margin-top:8px;font-size:12.2px;background:var(--panel);border:1px solid var(--line);padding:7px 10px;border-radius:6px">
-        <b>🧮 預設對應統計檢定與效應量：</b>${esc(d.stat_default)}<br>
-        <b>🗂️ 標準資料表欄位（1 列 ＝ 1 位分析單位）：</b><code>${d.data_cols.join(" , ")}</code>
-      </div>
-
-      <div class="rm-preset-box">
-        <h5>
-          <span>📘 內建一鍵完整範例：${esc(p.label)}</span>
-          <span class="pill ac">${esc(pd.domain)}</span>
-        </h5>
-        <div style="margin-bottom:4px"><b>範例論文題目：</b>${esc(pd.title)}</div>
-        <div style="margin-bottom:4px"><b>研究問題（RQ）：</b>${esc(pd.s1_rq.split("\n")[0])}</div>
-        <div style="margin-bottom:4px"><b>統計與樣本數規劃：</b>${esc(pd.s4_power.split("\n")[0])}</div>
-        <div style="background:var(--subtle);padding:6px 9px;border-radius:5px;font-size:12px;margin-top:5px">
-          <b>📊 APA 第 7 版結果報告句預覽：</b><br>${esc(pd.s6_apa.split("\n")[0])}
-        </div>
-      </div>
-    </div>`;
+  const cmpRows = [
+    {num:"①", id:"rct", cat:"組間真實驗", when:"可個人隨機分派，且只比介入後（或以基線作共變數）", stat:"獨立樣本 t / ANCOVA（d 與 95% CI）", n:"每組 64（共 128）"},
+    {num:"②", id:"between", cat:"組間 / A-B", when:"比較兩個既有群體或線上隨機分流 A/B 介面版本", stat:"Pearson χ² / Welch t（OR 或 d）", n:"每組 100（共 200）"},
+    {num:"③", id:"within_prepost", cat:"組內前後測", when:"單一組別於介入前後各測一次（無外在對照組）", stat:"配對樣本 t / 重複測量 ANOVA（dz）", n:"有效 34 人"},
+    {num:"④", id:"within_cross", cat:"組內交叉", when:"介入短期可逆，同一人可依 AB/BA 順序體驗兩條件", stat:"配對 t ＋ 階段與殘留檢定（dz）", n:"有效 34 人"},
+    {num:"⑤", id:"mixed_rct", cat:"混合（隨機）", when:"可隨機分組，且兩組皆測前/中/後看變化軌跡差異", stat:"二因子混合 ANOVA（組別×時間 η²p）", n:"有效 68（招募 80）"},
+    {num:"⑥", id:"mixed_matched", cat:"混合（配對）", when:"無法抽籤，但可依年齡/性別/基線做 1:1 配對前後測", stat:"配對混合 ANOVA ＋ ANCOVA（η²p）", n:"30 對（共 60 人）"},
+    {num:"⑦", id:"quasi_did", cat:"準實驗 DiD", when:"以機構/病房導入，有同期未導入之對照場域（案例 Q）", stat:"配對 t ＋ 雙重差分 DiD 迴歸 ＋ 非劣性", n:"A 34 ＋ B 28（62人）"},
+    {num:"⑧", id:"quasi_its", cat:"準實驗 ITS", when:"全院同步上線無對照組，但有導入前後連續多期資料", stat:"分段迴歸（β₂ 立即跳躍、β₃ 斜率改變）", n:"連續 52 週"},
+    {num:"⑨", id:"corr", cat:"觀察性迴歸", when:"無法操弄自變項，自然測量 X、混淆 Z、中介 M 與 Y", stat:"Pearson r ＋ 多元階層迴歸（β、ΔR²）", n:"有效 210 人"}
+  ].map(r=>{
+    const on = r.id===curId;
+    const pr = PRESETS[r.id];
+    return `<tr class="${on?"on":""}" data-rm-pick="${r.id}">
+      <td style="white-space:nowrap"><b>${esc(r.num)} ${esc(DESIGNS[r.id].short)}</b><br><span class="ctag">${esc(r.cat)}</span></td>
+      <td>${esc(r.when)}</td>
+      <td>${esc(r.stat)}</td>
+      <td style="white-space:nowrap"><b>${esc(r.n)}</b></td>
+      <td>${esc(pr.label.replace(/^範例 [①-⑨]（[^）]+）：/,""))}</td>
+      <td style="white-space:nowrap">
+        <button type="button" class="btn sm ac" data-rm-preset="${r.id}" data-rm-to="s1">⚡ 載入範例並編輯</button>
+      </td>
+    </tr>`;
   }).join("");
 
   return `<div class="rm-doc">
-    <div class="rm-hero">
-      <div class="rm-path">
-        <code>README.md</code>
-        <span>研究方法論（0067）· 單元 2.1–2.7 &amp; 8.3 量性研究設計互動工作台與範例手冊</span>
-        <span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
-          <button type="button" class="btn sm pri" data-nav="setup">🛠️ 進入 STEP 0：選擇設計與決策樹 →</button>
-          <button type="button" class="btn sm ac" data-nav="s1">✏️ 直接進入 STEP ① 撰寫 →</button>
-        </span>
+    <div class="head" style="margin-bottom:0">
+      <div class="head-top" style="justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="badge">README 指南</span>
+          <h1>9 種主流量性研究設計：選型導覽與一鍵範例</h1>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="btn sm" data-nav="setup">🧭 用 4 問決策樹幫我選（STEP 0）</button>
+          <button type="button" class="btn sm pri" data-nav="s1">✏️ 直接開始填寫研究設計（STEP ①）→</button>
+        </div>
       </div>
-      <h1>1. 涵蓋 9 種主流量性研究設計（各附 1 個完整範例）</h1>
-      <p>本網頁為 <b>@ 2.X 量性研究設計工作台（Quantitative Research Design Workbench）</b> 之 README 總覽手冊。系統依據課程講義 <b>@ 2.1（研究設計）</b>、<b>@ 2.2 / 2.2A（變數測量與量表發展）</b>、<b>@ 2.3（抽樣與檢定力）</b>、<b>@ 2.4（敘述統計）</b>、<b>@ 2.5（推論統計）</b>、<b>@ 2.6（樣本數規劃與解讀）</b>、<b>@ 2.7（由淺入深實例演練）</b> 與 <b>@ 8.3（因果推論）</b> 建置，完整涵蓋<b>組間、組內、混合、準實驗與觀察性共 9 種主流量性研究設計</b>，並為每一種設計提供<b>可一鍵匯入的完整研究範例</b>、<b>G*Power 3.1 先驗樣本數精算器</b>、<b>統計檢定配對器</b>、<b>APA 結果句試算室</b>，以及<b>匯出標準排版 Word 計畫書（.docx）與空白收案資料表（.csv）</b>功能。</p>
-      <div class="rm-shields">
-        <span class="rm-shield"><b>主流研究設計</b><i>9 種完整架構（組間/組內/混合/準實驗/觀察）</i></span>
-        <span class="rm-shield ac"><b>一鍵完整範例</b><i>9 組跨領域實例（6/6 步 100% 完成・0 缺漏）</i></span>
-        <span class="rm-shield ok"><b>樣本數精算</b><i>G*Power 3.1 非中心 t / DEFF / 流失率對齊</i></span>
-        <span class="rm-shield"><b>貫穿案例驗證</b><i>Case Q 數值 100% 逐字元相符</i></span>
-        <span class="rm-shield ok"><b>報告規範</b><i>CONSORT 2025 / TREND / STROBE 檢核</i></span>
-      </div>
-      <div class="rm-toc">
-        <b>📑 快速目錄（TOC）：</b>
-        <a href="#rm-s1">§1. 9 種主流設計與範例總覽表</a>
-        <a href="#rm-s2">§2. 五大設計家族與四問決策樹</a>
-        <a href="#rm-s3">§3. 9 種設計逐一深度解析與範例卡（①–⑨）</a>
-        <a href="#rm-s4">§4. 統計檢定 × 樣本數速查矩陣</a>
-        <a href="#rm-s5">§5. 方法學與統計數值驗證</a>
-        <a href="#rm-s6">§6. 三步快速上手指南</a>
-      </div>
+      <p class="q">不知道該選哪一種量性研究設計？請依下方 <b>「第 1 步：從 5 大類挑設計」→「第 2 步：看懂該設計的流程、檢定與範例」→「一鍵載入範例開始改寫」</b> 操作。</p>
     </div>
 
-    <h2 class="rm-h2" id="rm-s1">
-      <span>§1. 涵蓋 9 種主流量性研究設計（各附 1 個完整範例）— 總覽表</span>
-      <small>點選任一列「⚡ 一鍵匯入範例」即可將該設計之完整 6 步內容載入工作台</small>
-    </h2>
-    <div class="rm-tbl-wrap">
-      <table class="rm-tbl">
-        <thead>
-          <tr>
-            <th style="width:125px">編號與設計家族</th>
-            <th style="width:235px">量性研究設計名稱與符號</th>
-            <th style="width:210px">一鍵範例主題（全 6 步填妥、0 缺漏）</th>
-            <th>範例核心設計、先驗樣本數（G*Power）與推論統計</th>
-            <th style="width:195px">快速操作</th>
-          </tr>
-        </thead>
-        <tbody>${tblHTML}</tbody>
-      </table>
-    </div>
+    <!-- 第 1 步：5 大類 × 9 種設計分類導覽 -->
+    <section class="rm-sec">
+      <div class="rm-sec-hd">
+        <h2><span class="rm-step-tag">STEP 1</span> 先從「5 大類」點選你想了解的量性研究設計（共 9 種）</h2>
+        <small>點擊任一張卡片，下方「STEP 2 說明書」會立即切換為該設計與範例</small>
+      </div>
+      <div class="rm-flts">
+        <b style="color:var(--brand-deep)">🔍 依你的研究處境快速篩選：</b>
+        ${fltBtns}
+      </div>
+      <div class="rm-fam-grid">${famGridHTML}</div>
+    </section>
 
-    <h2 class="rm-h2" id="rm-s2">
-      <span>§2. 五大設計家族對照與「四問選型決策樹」（對應 @ 2.1・@ 2.7）</span>
-      <small>不知道碩論該選組間、組內、混合還是準實驗？先看下方結構差異與決策流程</small>
-    </h2>
-    <div class="grid g3" style="margin-bottom:12px">
-      <div class="card" style="cursor:default">
-        <h4><span>🅰️ 組間設計（Between-Subject）</span><span class="ctag">設計 ①・②</span></h4>
-        <p><b>核心邏輯：</b>每位受試者只接受<b>單一條件</b>（實驗組 X 或對照組 C），比較不同群組間之結果差異。<br>
-        <b>最大優點：</b>完全無學習效應、順序殘留（Carryover）或前後測疲勞污染。<br>
-        <b>主要代價：</b>個體間基線差異進入誤差項，所需樣本數較大（如 d ＝ 0.50 雙尾需每組 64 人、共 128 人）。</p>
+    <!-- 第 2 步：當前選定設計之單一聚焦說明書與一鍵範例 -->
+    <section class="rm-focus" id="rm-focus-panel">
+      <div class="rm-focus-bar">
+        <div class="rm-focus-title">
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <span class="rm-step-tag">STEP 2｜當前檢視設計</span>
+            <span class="pill ac">${esc(d.cat)}</span>
+            <span class="pill ok">報告規範：${esc(d.guideline)}</span>
+            <span class="ctag">對應講義：${esc(d.unit_ref)}</span>
+          </div>
+          <h2>${esc(curItem.num)} ${esc(d.name)}</h2>
+          <p>${esc(d.sub)}</p>
+        </div>
+        <div class="rm-focus-acts">
+          <button type="button" class="btn ac" data-rm-preset="${curId}" data-rm-to="s1">⚡ 一鍵匯入此範例並開始撰寫（進入 STEP ①）</button>
+          <button type="button" class="btn pri" data-rm-docx="${curId}">📄 下載此範例 APA 格式 Word (.docx)</button>
+          <button type="button" class="btn" data-rm-csv="${curId}">🗂️ 下載空白收案表 (.csv)</button>
+        </div>
       </div>
-      <div class="card" style="cursor:default">
-        <h4><span>🅱️ 組內設計（Within-Subject）</span><span class="ctag">設計 ③・④</span></h4>
-        <p><b>核心邏輯：</b>同一位受試者接受<b>前後測</b>或<b>依序體驗所有條件（AB/BA 交叉）</b>，以「自己當自己的對照」。<br>
-        <b>最大優點：</b>消除個體間基線差異，統計檢定力極高（dz ＝ 0.50 僅需 34 人，約組間設計的 1/4）。<br>
-        <b>主要代價：</b>單組前後測易受歷史/成熟威脅；交叉設計須介入可逆並設洗滌期（Washout）與對抗平衡。</p>
-      </div>
-      <div class="card" style="cursor:default">
-        <h4><span>🆎 混合設計（Mixed Design）</span><span class="ctag">設計 ⑤・⑥</span></h4>
-        <p><b>核心邏輯：</b>結合「組間分組因子（實驗 vs 對照）」與「組內重複測量因子（前測 vs 後測 vs 追蹤）」。<br>
-        <b>最大優點：</b>透過<b>組別 × 時間交互作用（Group × Time）</b>，同時看清改善軌跡並扣除自然時間趨勢。<br>
-        <b>主要代價：</b>收案期較長，須防範兩組差異性流失（Differential Attrition）與球形性違反。</p>
-      </div>
-      <div class="card" style="cursor:default">
-        <h4><span>🏛️ 準實驗設計（Quasi-Experiment）</span><span class="ctag">設計 ⑦・⑧</span></h4>
-        <p><b>核心邏輯：</b>實務場域（如全病房/全院上線新系統）無法個人隨機抽籤時，利用<b>未介入平行機構（DiD）</b>或<b>長期密集時間序列（ITS）</b>建立反事實對照。<br>
-        <b>最大優點：</b>生態效度極高、貼近真實醫療與機構運作（如課程貫穿案例 Q）。<br>
-        <b>主要代價：</b>DiD 須檢驗導入前平行趨勢假設；ITS 須達足夠期數（≥24–52 期）並校正自相關。</p>
-      </div>
-      <div class="card" style="cursor:default">
-        <h4><span>🔍 觀察性相關與迴歸（Observational）</span><span class="ctag">設計 ⑨</span></h4>
-        <p><b>核心邏輯：</b>不人為操弄自變項，於自然情境下測量預測變項 X、混淆變項 Z、中介變項 M 與依變項 Y。<br>
-        <b>最大優點：</b>適用於不可操弄之特質、態度、識能或流行病學危險因子探討。<br>
-        <b>主要代價：</b>橫斷面無法確認時間先後，結論須嚴守保留語氣（Hedging，稱「預測/關聯」而非「導致」）。</p>
-      </div>
-      <div class="card" style="cursor:default;border-color:var(--accent);background:var(--accent-soft)">
-        <h4><span>🧭 想互動測試哪種適合你？</span><span class="ctag">決策樹工具</span></h4>
-        <p>工作台「<b>STEP 0：選擇研究設計與範例</b>」內建<b>互動式四問決策樹</b>，勾選你的場域條件即可自動推薦最合適的設計並載入範例！</p>
-        <div style="margin-top:8px"><button type="button" class="btn sm pri" data-nav="setup">前往互動決策樹（STEP 0） →</button></div>
-      </div>
-    </div>
 
-    <div class="rm-code">【量性研究設計四問選型決策樹（對應 @ 2.1 s26–s44）】
-Q1：研究者能否人為操弄／指派介入措施 X？
- ├── 否（僅自然觀察測量 X、Z、M、Y） ───────────────────────► ⑨ 觀察性橫斷／相關與多元迴歸設計（STROBE）
- └── 是（有介入 X，如新系統、新衛教、新醫材或 A/B 介面）
-      │
-      ▼
-     Q2：介入效果是否短期可逆，且同一受試者能依序體驗 X 與 C 兩種條件？
-      ├── 是（如兩種操作介面測試，可設洗滌期與 AB/BA 對抗平衡） ─► ④ 組內交叉與對抗平衡設計（CONSORT Crossover）
-      └── 否（介入具累積／不可逆性，每人僅能歸屬一組）
-           │
-           ▼
-          Q3：能否以「個人」為單位進行隨機分派（Random Assignment）？
-           ├── 是（可隨機抽籤分組）
-           │    ├── 僅測介入後（或以基線為共變數） ─────────► ① 平行隨機對照試驗 Between-Subject RCT（CONSORT 2025）
-           │    ├── 線上隨機分流比較 A/B 版本轉換或行為 ────► ② 組間比較／線上 A-B 實驗設計（CONSORT / TREND）
-           │    └── 兩組皆測「前測 → 期中 → 後測」看變化軌跡 ► ⑤ 混合設計（一）：隨機分組 × 前後測（2×3 Mixed RCT）
-           └── 否（場域限制無法個人隨機分派）
-                │
-                ▼
-               Q4：非隨機條件下，能否建立外在對照組或長期時間序列？
-                ├── 可依年齡/性別/基線分數進行 1:1 個案配對 ─► ⑥ 混合設計（二）：配對對照 × 前後測（TREND）
-                ├── 有同期未導入之對照機構／病房可比較前後差 ► ⑦ 準實驗（一）：非對等控制組與雙重差分 DiD（案例 Q）
-                ├── 全院同步上線無對照組，但有連續 ≥24–52 期 ► ⑧ 準實驗（二）：中斷時間序列 ITS（Segmented Regression）
-                └── 僅單一組別於介入前後各測一次 ───────────► ③ 組內單組前後測設計（Single-Group Pre-Post）</div>
+      <div class="rm-bento">
+        <!-- 左上：怎麼做 -->
+        <div class="rm-bcard">
+          <h4><span>① 這個設計怎麼做？（執行流程與實驗符號）</span><span class="ctag">${esc(d.evidence.split("（")[0])}</span></h4>
+          <div class="fsteps" style="margin:6px 0 10px">
+            ${d.flow.map((step,i)=>`<span class="fnode ${i===2?"ac":i===d.flow.length-1?"ok":""}"><b>${i+1}.</b> ${esc(step)}</span>${i<d.flow.length-1?'<span class="farr">→</span>':""}`).join("")}
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:3px"><b>Campbell &amp; Stanley 實驗符號與核心比較式：</b></div>
+          <div class="fnotation" style="margin:0">${esc(d.notation)}</div>
+        </div>
 
-    <h2 class="rm-h2" id="rm-s3">
-      <span>§3. 9 種主流量性研究設計 — 逐一深度解析與一鍵完整範例卡（①–⑨）</span>
-      <small>每張卡片皆包含架構圖、Campbell &amp; Stanley 符號、方法學優劣、資料表欄位與完整範例預覽</small>
-    </h2>
-    ${detailCards}
+        <!-- 右上：怎麼算與資料表長相 -->
+        <div class="rm-bcard">
+          <h4><span>② 用什麼統計檢定？資料表長怎樣？</span><span class="ctag">1 列 ＝ 1 位分析單位</span></h4>
+          <div style="font-size:13px;margin-bottom:8px">
+            <b style="color:var(--brand-deep)">🧮 對應推論統計與必報效應量：</b><br>
+            <span>${esc(d.stat_default)}</span>
+          </div>
+          <div style="font-size:12.5px;margin-bottom:4px"><b style="color:var(--brand-deep)">🗂️ 收案資料表標準欄位預覽（可點右上角下載 CSV）：</b></div>
+          <div style="overflow-x:auto">
+            <table class="tbl" style="margin:0;font-size:11.8px">
+              <thead><tr>${d.data_cols.map(c=>`<th><code>${esc(c)}</code></th>`).join("")}</tr></thead>
+              <tbody>
+                <tr>${d.data_cols.map((c,i)=>`<td style="color:var(--muted)">${i===0?"S001":i===1?"1 (實驗)":"數值"}</td>`).join("")}</tr>
+                <tr>${d.data_cols.map((c,i)=>`<td style="color:var(--muted)">${i===0?"S002":i===1?"0 (對照)":"數值"}</td>`).join("")}</tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-    <h2 class="rm-h2" id="rm-s4">
-      <span>§4. 統計檢定 × 測量尺度 × G*Power 樣本數速查矩陣（對應 @ 2.3・@ 2.5・@ 2.6）</span>
-      <small>雙尾 α ＝ .05、Power ＝ .80 下之母數檢定、無母數替代方案與效應量基準</small>
-    </h2>
-    <div class="rm-tbl-wrap">
-      <table class="rm-tbl">
-        <thead>
-          <tr>
-            <th>比較目標與設計結構</th>
-            <th>數值常態 DV（母數檢定）</th>
-            <th>小樣本嚴重偏態／順序 DV（無母數）</th>
-            <th>類別二元／名目 DV</th>
-            <th>必報效應量與小／中／大基準</th>
-            <th>G*Power 中效應基準樣本數（α=.05, Power=.80）</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>組間 2 組獨立比較</b><br>（設計 ① RCT、② A/B）</td>
-            <td>獨立樣本 t 檢定（Welch t 不假設等變異）／含基線用 ANCOVA</td>
-            <td>Mann–Whitney U 檢定（Wilcoxon rank-sum）</td>
-            <td>Pearson χ² 檢定（期望值 &lt; 5 用 Fisher 精確檢定）</td>
-            <td>Cohen's d（0.20 / 0.50 / 0.80）<br>勝算比 OR（1.68 / 3.47 / 6.71，Chen 2010）</td>
-            <td><b>d ＝ 0.50 → 每組 64 人（共 128 人）</b><br>（d ＝ 0.20 需每組 394 人；d ＝ 0.80 需每組 26 人）</td>
-          </tr>
-          <tr>
-            <td><b>組間 ≥ 3 組獨立比較</b><br>（多臂組間實驗）</td>
-            <td>單因子獨立樣本 ANOVA ＋ Tukey HSD（不等變異用 Welch ANOVA ＋ Games-Howell）</td>
-            <td>Kruskal–Wallis H 檢定 ＋ Dunn-Bonferroni 事後比較</td>
-            <td>k × 2 列聯表 Pearson χ² 檢定 ＋ Cramér's V</td>
-            <td>η²（0.01 / 0.06 / 0.14）或 Cohen's f（0.10 / 0.25 / 0.40）</td>
-            <td><b>f ＝ 0.25（3 組）→ 每組 53 人（共 159 人）</b></td>
-          </tr>
-          <tr>
-            <td><b>組內 2 次重複測量</b><br>（設計 ③ 前後測、④ 交叉）</td>
-            <td>配對樣本 t 檢定（Paired-samples t-test）</td>
-            <td>Wilcoxon 符號等級檢定（Signed-rank test）</td>
-            <td>McNemar 改變顯著性檢定（2×2 配對列聯表）</td>
-            <td>Cohen's dz（0.20 / 0.50 / 0.80）與 dav</td>
-            <td><b>dz ＝ 0.50 → 有效樣本 34 人</b><br>（dz ＝ 0.80 僅需 15 人；效率約為組間之 4 倍）</td>
-          </tr>
-          <tr>
-            <td><b>組內 ≥ 3 次重複測量</b><br>（多時間點單組追蹤）</td>
-            <td>單因子重複測量 ANOVA（球形性違反用 Greenhouse–Geisser 校正）</td>
-            <td>Friedman 檢定 ＋ Conover-Bonferroni 事後比較</td>
-            <td>Cochran's Q 檢定</td>
-            <td>局部 η²p（0.01 / 0.06 / 0.14）</td>
-            <td><b>f ＝ 0.25（3 次，r＝.50）→ 約 28–34 人</b></td>
-          </tr>
-          <tr>
-            <td><b>混合設計（組間 × 組內）</b><br>（設計 ⑤・⑥・⑦ DiD）</td>
-            <td>二因子混合設計 ANOVA（看 Group × Time 交互作用 F）／線性混合效應模型 LMM / DiD 迴歸</td>
-            <td>變化量（Δ ＝ Post − Pre）之 Mann–Whitney U 或廣義估計方程式 GEE</td>
-            <td>廣義線性混合模型 GLMM 或 GEE（Logit link）</td>
-            <td>交互作用局部 η²p（0.01 / 0.06 / 0.14）或 DiD 淨效應 95% CI</td>
-            <td><b>2×2 或 2×3 中小交互效應 → 總樣本約 54–80 人</b></td>
-          </tr>
-          <tr>
-            <td><b>雙變項相關與多元迴歸</b><br>（設計 ⑨ 觀察性研究）</td>
-            <td>Pearson 積差相關 r ＋ 多元階層線性迴歸（OLS，檢查 VIF &lt; 5）</td>
-            <td>Spearman 等級相關 ρ ／ 拔靴法（Bootstrap）穩健迴歸</td>
-            <td>二元邏輯斯迴歸（Logistic Regression，報調整後 aOR 與 95% CI）</td>
-            <td>|r|（.10 / .30 / .50，Mukaka 2012）<br>迴歸 R²、ΔR²、標準化 β</td>
-            <td><b>r ＝ .25 → 123 人；多元迴歸 f² ＝ 0.15（6 預測變項）→ 約 98–200 人</b></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <!-- 左下：優勢與必防偏誤 -->
+        <div class="rm-bcard">
+          <h4><span>③ 為什麼選它？口試委員最常問什麼弱點？</span><span class="ctag">內外部效度把關</span></h4>
+          <div class="okbox" style="margin:0 0 8px">
+            <b>✅ 方法學核心優勢（Pros）：</b>
+            <ul style="margin:4px 0 0;padding-left:18px;font-size:12.3px">${d.pros.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+          </div>
+          <div class="warnbox" style="margin:0">
+            <b>⚠️ 潛在偏誤與必寫防線（Cons &amp; Controls）：</b>
+            <ul style="margin:4px 0 0;padding-left:18px;font-size:12.3px">${d.cons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+          </div>
+        </div>
 
-    <h2 class="rm-h2" id="rm-s5">
-      <span>§5. 方法學與統計數值 100% 自動驗證規格</span>
-      <small>本工作台所有內建範例與計算公式均通過自動化腳本嚴格檢驗</small>
-    </h2>
-    <div class="grid g3" style="margin-bottom:14px">
-      <div class="okbox" style="margin:0">
-        <b>✅ 1. 九大範例 100% 完整且 0 方法學衝突</b>
-        <p style="margin:4px 0 0;font-size:12.3px">9 種設計之一鍵範例匯入後，核心步驟 ①～⑥ 均達 <b>100% 完成度（6/6 步）</b>，且通過 10 項跨步方法學一致性檢查（<code>issues() === 0</code>），匯出之 Word 計畫書無任何「尚未填寫」空白段落。</p>
+        <!-- 右下：內建完整範例預覽 -->
+        <div class="rm-bcard" style="border-color:var(--accent);background:var(--accent-soft)">
+          <h4><span>④ 內建一鍵完整範例預覽</span><span class="pill ac">${esc(pd.domain)}</span></h4>
+          <div style="font-size:12.8px;line-height:1.55">
+            <div style="margin-bottom:6px"><b style="color:var(--brand-deep)">📘 範例題目：</b><b>${esc(pd.title)}</b></div>
+            <div style="margin-bottom:6px"><b style="color:var(--brand-deep)">❓ 主要研究問題：</b>${esc(pd.s1_rq.split("\n")[0])}</div>
+            <div style="margin-bottom:6px"><b style="color:var(--brand-deep)">👥 先驗樣本數推算：</b>${esc(pd.s4_power.split("\n")[0])}</div>
+            <div style="background:var(--panel);border:1px solid var(--line);padding:8px 10px;border-radius:6px;font-size:12.2px;margin-top:6px">
+              <b style="color:var(--brand-deep)">📊 APA 第 7 版結果報告句示範：</b><br>
+              ${esc(pd.s6_apa.split("\n")[0])}
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+              <button type="button" class="btn sm ac" data-rm-preset="${curId}" data-rm-to="s1">⚡ 載入此範例到第 ①～⑥ 步開始改寫 →</button>
+              <button type="button" class="btn sm" data-rm-preset="${curId}" data-rm-to="review">🔍 載入並直接看第 ⑦ 步 APA 預覽 →</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="okbox" style="margin:0">
-        <b>✅ 2. G*Power 3.1 樣本數精算公式對齊</b>
-        <p style="margin:4px 0 0;font-size:12.3px">步驟 ④ 內建先驗樣本數計算器採用非中心 t 自由度校正（<code>z² / (2·df_factor)</code>）：<br>
-        ・配對 t 檢定（雙尾 α=.05, Power=.80, dz=0.50）→ <b>34 人</b><br>
-        ・獨立 t 檢定（雙尾 α=.05, Power=.80, d=0.50）→ <b>每組 64 人（共 128 人）</b><br>
-        完全與 G*Power 3.1 輸出一致，並支援群集設計效應 <code>DEFF ＝ 1 ＋ (m−1)·ICC</code> 與流失率反推。</p>
-      </div>
-      <div class="okbox" style="margin:0">
-        <b>✅ 3. 貫穿案例 Q 數值逐字元相符（鐵則 2）</b>
-        <p style="margin:4px 0 0;font-size:12.3px">範例 ⑦（案例 Q）與步驟 ⑥ 試算室完全對齊 <code>_case_q/analysis/驗證報告.txt</code>：<br>
-        ・A 機構（n=34）：前測 18.40 (SD=6.42) → 後測 13.03 (SD=3.92)，平均差 −5.37，<b>t(33) ＝ −6.30, p &lt; .001, dz ＝ −1.08, 95% CI [−7.10, −3.63]</b><br>
-        ・遺漏項非劣性：+0.60, <b>90% CI [+0.07, +1.13] &gt; −1.0</b><br>
-        ・雙重差分：<b>DiD ＝ −4.76 分鐘, 95% CI [−7.18, −2.35], p &lt; .001</b>。</p>
-      </div>
-    </div>
+    </section>
 
-    <h2 class="rm-h2" id="rm-s6">
-      <span>§6. 如何使用本工作台（3 步完成量性研究設計計畫書）</span>
-      <small>草稿自動儲存於瀏覽器 localStorage（鍵值 qw2x.v1），亦可匯出 JSON 備份</small>
-    </h2>
-    <div class="grid g3" style="margin-bottom:16px">
-      <div class="card" style="cursor:default">
-        <h4><span>STEP 1｜選設計或一鍵匯入範例</span><span class="ctag">1 分鐘</span></h4>
-        <p>在本 README 頁面任一設計點選「<b>⚡ 一鍵匯入範例</b>」，或前往「<b>0 選擇研究設計與範例</b>」透過 4 問決策樹選出最適合你碩論的架構。</p>
+    <!-- 第 3 步：9 種設計橫向速查比較表 -->
+    <section class="rm-sec">
+      <div class="rm-sec-hd">
+        <h2><span class="rm-step-tag">STEP 3</span> 9 種主流量性研究設計 — 一覽橫向比較表</h2>
+        <small>點選任一列可切換上方說明書，或直接點右側按鈕載入範例</small>
       </div>
-      <div class="card" style="cursor:default">
-        <h4><span>STEP 2｜逐步完成 ①～⑥ 並互動試算</span><span class="ctag">核心規劃</span></h4>
-        <p>依左側導覽列完成：① 研究問題與 H₀/H₁ → ② 變項定義表與信效度 → ③ 分組/盲法與偏誤防線 → ④ G*Power 樣本數試算 → ⑤ 資料清理五道篩與檢定配對 → ⑥ APA 結果句試算與四步解讀。</p>
+      <div class="rm-tbl-wrap">
+        <table class="rm-tbl">
+          <thead>
+            <tr>
+              <th style="width:180px">編號與設計名稱</th>
+              <th>什麼時候用？（一句話判準）</th>
+              <th style="width:210px">主要統計檢定與效應量</th>
+              <th style="width:120px">G*Power 基準人數</th>
+              <th style="width:210px">內建一鍵範例主題</th>
+              <th style="width:135px">快速載入</th>
+            </tr>
+          </thead>
+          <tbody>${cmpRows}</tbody>
+        </table>
       </div>
-      <div class="card" style="cursor:default">
-        <h4><span>STEP 3｜七步走查檢核與一鍵匯出</span><span class="ctag">產出文件</span></h4>
-        <p>前往「<b>⑦ 七步走查、檢核與匯出</b>」，確認方法學自動檢查 0 警示後，一鍵下載 <b>Word 量性研究設計計畫書（.docx）</b> 與 <b>空白收案資料表（.csv）</b>！</p>
-      </div>
-    </div>
-
-    <div class="fnav">
-      <span style="font-size:12.5px;color:var(--muted)">📖 您目前位於「9 種主流量性研究設計（README 總覽手冊）」</span>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="btn pri" data-nav="setup">前往 STEP 0：選擇研究設計與決策樹 →</button>
-        <button type="button" class="btn ac" data-nav="s1">前往 STEP ①：研究問題、假設與因果 →</button>
-      </div>
-    </div>
+    </section>
   </div>`;
 }
 
@@ -3925,21 +3861,263 @@ function fullDocText(){
   return lines.join("\n");
 }
 
+function apaDocSpec(){
+  const ds = DESIGNS[S.design] || DESIGNS.quasi_did;
+  return {
+    ds,
+    runningHead: `RUNNING HEAD: ${(S.title || ds.name).slice(0, 32)} — 量性研究設計計畫書（APA 7th）`,
+    docTitle: "量性研究設計與統計分析計畫書",
+    studyTitle: S.title || "〔研究題目〕",
+    authorLine: `研究者：${S.author || "〔研究者姓名〕"}　｜　指導教授：${S.advisor || "〔指導教授姓名〕"}`,
+    metaLine: `研究領域與場域：${S.domain || "〔研究領域與場域〕"}　｜　研究設計：${ds.name}（${ds.evidence}）`,
+    guideLine: `遵循國際報告規範：${ds.guideline}　｜　設計符號：${ds.notation}　｜　日期：${S.date || ""}`,
+    coverTable: {
+      num: "表 1",
+      title: "研究設計基本資訊與方法學架構摘要表",
+      headers: ["項目", "本研究之設定與內容"],
+      colPcts: [28, 72],
+      rows: [
+        ["研究題目", S.title || "〔研究題目〕"],
+        ["研究設計架構", `${ds.name}（${ds.en}｜${ds.evidence}）`],
+        ["設計符號表示式", ds.notation],
+        ["遵循國際報告規範", ds.guideline],
+        ["研究領域與場域", S.domain || "—"],
+        ["研究者／指導教授", `${S.author || "—"} ／ ${S.advisor || "—"}（日期：${S.date || ""}）`]
+      ],
+      note: "註：本計畫書依據美國心理學會（APA）第 7 版格式與國際醫學／社會科學報告規範編排。"
+    },
+    sections: [
+      {
+        h1: "壹、量性研究七步驟走查總表（對應 @ 2.7）",
+        items: [
+          {
+            type: "table",
+            num: "表 2",
+            title: "量性研究七步驟走查與方法學把關總表（對應 @ 2.7 第 74 張）",
+            headers: ["量性研究七步驟", "本研究的決定與核心設計", "決定的依據、檢定與把關細節"],
+            colPcts: [22, 38, 40],
+            rows: sevenStepRows(),
+            note: "註：走查表涵蓋問題假設、變項操作化、設計分組、母體抽樣、資料清理、推論統計與效應量解讀七大步驟。"
+          }
+        ]
+      },
+      {
+        h1: "貳、研究問題、假設與因果機制（對應 @ 2.1・@ 2.3）",
+        items: [
+          { type: "h2", text: "一、研究問題（Research Question）" },
+          { type: "text", text: S.s1_rq },
+          { type: "h2", text: "二、研究重要性、新穎性與時效性" },
+          { type: "text", text: S.s1_why },
+          { type: "h2", text: "三、虛無假設（H₀）與對立假設（H₁）" },
+          { type: "text", text: S.s1_h0h1 },
+          { type: "h2", text: "四、三種因果解釋與排除規劃" },
+          {
+            type: "table",
+            num: "表 3",
+            title: "三種因果解釋（正因果、逆因果、共同原因）與本研究之排除規劃表",
+            headers: ["因果方向與可能解釋", "本研究之機制說明或排除／控制做法"],
+            colPcts: [30, 70],
+            rows: S.s1_causal,
+            note: "註：依據因果推論三條件（共變性、時間先後、排除偽相關）檢視潛在替代解釋。"
+          },
+          { type: "h2", text: "五、混淆變項（Z）與中介變項（M）之辨析" },
+          { type: "text", text: S.s1_zm },
+          { type: "h2", text: "六、候選研究設計取捨決策" },
+          {
+            type: "table",
+            num: "表 4",
+            title: "候選研究設計優缺點比較與取捨決策表（對應 @ 2.1 第 61 張）",
+            headers: ["候選研究設計", "若採用可得之優點", "採用或不採用之關鍵理由", "本研究之補強或處理做法"],
+            colPcts: [20, 25, 28, 27],
+            rows: S.s1_reject,
+            note: "註：比較本研究設計與其他替代設計在內部效度、外部效度與場域可行性上之權衡。"
+          }
+        ]
+      },
+      {
+        h1: "參、變項操作化、測量尺度與信效度規劃（對應 @ 2.2・@ 2.2A）",
+        items: [
+          { type: "h2", text: "一、變項操作型定義與測量尺度" },
+          {
+            type: "table",
+            num: "表 5",
+            title: "研究變項操作型定義、測量尺度與測量時點總表",
+            headers: ["變項名稱", "角色", "型態與測量尺度", "操作型定義與計分範圍", "測量工具／來源", "測量時點"],
+            colPcts: [15, 11, 14, 28, 18, 14],
+            rows: S.s2_vars,
+            note: "註：IV = 自變項；DV = 依變項；Z = 控制／混淆變項；M = 中介／調節變項。"
+          },
+          { type: "h2", text: "二、變數設計原則說明（互斥、窮盡、保細、雙向可測、時間可比）" },
+          { type: "text", text: S.s2_principle },
+          { type: "h2", text: "三、測量信度（Reliability）規劃" },
+          { type: "text", text: S.s2_rel },
+          { type: "h2", text: "四、測量效度（Validity）規劃" },
+          { type: "text", text: S.s2_val }
+        ]
+      },
+      {
+        h1: "肆、分組／順序機制、盲法與偏誤控制（對應 @ 2.1・@ 2.6）",
+        items: [
+          { type: "h2", text: "一、分組、隨機分派或測量順序機制" },
+          { type: "text", text: S.s3_assign },
+          { type: "h2", text: "二、對照組設計與盲法層級（Blinding）" },
+          { type: "text", text: S.s3_blinding },
+          { type: "h2", text: "三、混淆變項與內外部效度威脅控制" },
+          {
+            type: "table",
+            num: "表 6",
+            title: "潛在偏誤與效度威脅來源及本研究之設計／統計防線表",
+            headers: ["潛在偏誤或混淆威脅來源", "對結果可能造成的扭曲方向", "本研究採取之具體設計或統計防線"],
+            colPcts: [24, 32, 44],
+            rows: S.s3_bias,
+            note: "註：涵蓋研究前、中、後三階段之設計把關與統計控制策略。"
+          },
+          { type: "h2", text: "四、內部效度與外部／生態效度之權衡" },
+          { type: "text", text: S.s3_ext }
+        ]
+      },
+      {
+        h1: "伍、目標母體、抽樣方法與先驗樣本數推算（對應 @ 2.3・@ 2.6）",
+        items: [
+          { type: "h2", text: "一、目標母體、抽樣架構與納入／排除條件" },
+          { type: "text", text: S.s4_pop },
+          { type: "h2", text: "二、抽樣方法與非抽樣誤差控制" },
+          { type: "text", text: S.s4_sampling },
+          { type: "h2", text: "三、先驗樣本數計算（A-priori Power Analysis）與流失率換算" },
+          { type: "text", text: S.s4_power },
+          { type: "h2", text: "四、不同效應量情境之檢定力對照" },
+          { type: "text", text: S.s4_scenarios }
+        ]
+      },
+      {
+        h1: "陸、資料清理、敘述統計與統計前提檢查（對應 @ 2.4・@ 2.5）",
+        items: [
+          { type: "h2", text: "一、資料表結構（Wide / Long Format）、分析單位與編碼規則" },
+          { type: "text", text: S.s5_layout },
+          { type: "h2", text: "二、資料清理五道篩、離群值與缺失值處理" },
+          { type: "text", text: S.s5_clean },
+          { type: "h2", text: "三、敘述統計表格（Table 1 / Table 2）與視覺化規劃" },
+          { type: "text", text: S.s5_desc },
+          { type: "h2", text: "四、推論統計前提假設檢查與無母數／穩健替代方案" },
+          { type: "text", text: S.s5_assump }
+        ]
+      },
+      {
+        h1: "柒、推論統計分析計畫、效應量與結果解讀（對應 @ 2.5・@ 2.6・@ 2.7）",
+        items: [
+          { type: "h2", text: "一、研究假設 × 統計檢定 × 效應量與 95% CI 對照" },
+          {
+            type: "table",
+            num: "表 7",
+            title: "統計分析計畫（SAP）對照總表：研究假設、統計檢定、效應量與 95% 信賴區間",
+            headers: ["對應研究假設與問題", "自變項 IV × 依變項 DV", "主要統計檢定（及替代方案）", "必報效應量指標與 95% CI", "共變項控制／多重比較校正"],
+            colPcts: [18, 18, 22, 22, 20],
+            rows: S.s6_sap,
+            note: "註：依 APA 第 7 版規範，所有推論檢定均同時報告檢定統計量、自由度、精確 p 值、效應量及 95% CI。"
+          },
+          { type: "h2", text: "二、意圖治療分析（ITT）、多重比較校正與敏感度分析" },
+          { type: "text", text: S.s6_mult },
+          { type: "h2", text: "三、APA 第 7 版標準結果報告句示範" },
+          { type: "text", text: S.s6_apa },
+          { type: "h2", text: "四、結果解讀四步驟、不顯著結果／非劣性檢定預案與研究限制" },
+          { type: "text", text: S.s6_interp }
+        ]
+      },
+      {
+        h1: `捌、${ds.guideline} 國際報告規範自我檢核表`,
+        items: [
+          {
+            type: "table",
+            num: "表 8",
+            title: `${ds.guideline} 報告規範與方法學品質自我檢核表`,
+            headers: ["檢核項目", "完成狀態"],
+            colPcts: [78, 22],
+            rows: (ds.checklist || []).map((c, i) => [c, S.chk["ds_" + i] ? "✓ 已規劃完成" : "□ 待確認"]),
+            note: `註：本表依據 ${ds.guideline} 檢核清單編製。`
+          }
+        ]
+      }
+    ]
+  };
+}
+
+function fmtApaSlots(escapedStr, highlightSlots){
+  if(!highlightSlots) return escapedStr;
+  return escapedStr.replace(/〔([^〕]+)〕/g, '<span class="slot">〔$1〕</span>');
+}
+
+function renderApaTableHTML(t, highlightSlots){
+  const fmt = (s)=>fmtApaSlots(esc(s), highlightSlots);
+  return `<div class="apa-twrap">
+    <div class="apa-tnum">${fmt(t.num)}</div>
+    <div class="apa-ttitle">${fmt(t.title)}</div>
+    <table class="apa-tbl">
+      <thead>
+        <tr>${t.headers.map((h,i)=>`<th style="width:${(t.colPcts&&t.colPcts[i])||Math.floor(100/t.headers.length)}%">${fmt(h)}</th>`).join("")}</tr>
+      </thead>
+      <tbody>
+        ${(t.rows||[]).map(r=>`<tr>${t.headers.map((_,ci)=>{
+          const lines = String((r&&r[ci])||"—").split(/\r?\n+/).map(s=>s.trim()).filter(Boolean);
+          return `<td>${lines.map(l=>`<div>${fmt(l)}</div>`).join("") || "—"}</td>`;
+        }).join("")}</tr>`).join("")}
+      </tbody>
+    </table>
+    ${t.note ? `<div class="apa-tnote">${fmt(t.note)}</div>` : ""}
+  </div>`;
+}
+
+function renderApaTextHTML(raw, highlightSlots){
+  const fmt = (s)=>fmtApaSlots(esc(s), highlightSlots);
+  const lines = String(raw || "（尚未填寫）").split(/\r?\n+/).map(s=>s.trim()).filter(Boolean);
+  if(!lines.length) return `<p class="apa-p">（尚未填寫）</p>`;
+  return lines.map(line=>{
+    const m = line.match(/^((?:[0-9]+[\.\、]|[①-⑳]|[\(（][0-9一二三四五六七八九十]+[\)）]|[・•\-]|【[^】]+】|\[[^\]]+\])\s*)(.*)$/);
+    if(m){
+      return `<p class="apa-item"><b>${fmt(m[1])}</b>${fmt(m[2])}</p>`;
+    }
+    return `<p class="apa-p">${fmt(line)}</p>`;
+  }).join("");
+}
+
+function apaPreviewHTML(highlightSlots){
+  const spec = apaDocSpec();
+  const fmt = (s)=>fmtApaSlots(esc(s), highlightSlots);
+  return `<div class="apa-page">
+    <div class="apa-runhead">
+      <span>${fmt(spec.runningHead)}</span>
+      <span>APA 7th Edition Format</span>
+    </div>
+    <div class="apa-cover">
+      <div class="apa-title">${fmt(spec.docTitle)}</div>
+      <div class="apa-subtitle">${fmt(spec.studyTitle)}</div>
+      <div class="apa-meta">${fmt(spec.authorLine)}<br>${fmt(spec.metaLine)}<br>${fmt(spec.guideLine)}</div>
+    </div>
+    ${renderApaTableHTML(spec.coverTable, highlightSlots)}
+    ${spec.sections.map(sec=>`
+      <div class="apa-h1">${fmt(sec.h1)}</div>
+      ${sec.items.map(it=>{
+        if(it.type==="h2") return `<div class="apa-h2">${fmt(it.text)}</div>`;
+        if(it.type==="table") return renderApaTableHTML(it, highlightSlots);
+        return renderApaTextHTML(it.text, highlightSlots);
+      }).join("")}
+    `).join("")}
+  </div>`;
+}
+
 function reviewHTML(){
   const ds = DESIGNS[S.design] || DESIGNS.quasi_did;
   const probs = issues();
   const srows = sevenStepRows();
-  const preview = esc(fullDocText()).replace(/〔([^〕]+)〕/g, '<span class="slot">〔$1〕</span>');
 
   return `<div class="head">
-    <div class="head-top"><span class="badge">STEP ⑦</span><h1>量性研究七步驟走查、方法學一致性檢核與匯出</h1></div>
-    <p class="q">對應 @ 2.7 第 74 張「量性研究七步驟走查表」與 @ 2.6 第 66–68 張「研究設計與分析檢核清單」：確認設計、樣本數、前提檢查與檢定方法前後一致，即可一鍵匯出 Word 計畫書與空白資料表 CSV。</p>
+    <div class="head-top"><span class="badge">STEP ⑦</span><h1>量性研究七步驟走查、方法學一致性檢核與 APA 第 7 版匯出</h1></div>
+    <p class="q">對應 @ 2.7 第 74 張「量性研究七步驟走查表」與 @ 2.6 第 66–68 張「研究設計與分析檢核清單」：確認設計、樣本數、前提檢查與檢定方法前後一致，即可一鍵匯出 <b>APA 第 7 版標準排版 Word 計畫書（含封面、標題階層、段落縮排與 APA 三線表）</b> 與空白資料表 CSV。</p>
   </div>
 
   <div class="form" style="margin-bottom:14px">
     <h3 style="margin:0 0 8px;font-size:15px;color:var(--brand-deep)">🔍 自動方法學一致性與常見錯誤檢核（共發現 ${probs.length} 項提醒）</h3>
     ${probs.length===0
-      ? `<div class="okbox"><b>🎉 太棒了！全數通過方法學一致性檢查（0 項缺失）！</b><br>你的研究設計（${esc(ds.name)}）、研究假設 H₀/H₁、變項操作型定義、先驗樣本數、前提假設替代方案與 APA 第 7 版效應量報告完全一致，可直接匯出 Word 計畫書。</div>`
+      ? `<div class="okbox"><b>🎉 太棒了！全數通過方法學一致性檢查（0 項缺失）！</b><br>你的研究設計（${esc(ds.name)}）、研究假設 H₀/H₁、變項操作型定義、先驗樣本數、前提假設替代方案與 APA 第 7 版效應量報告完全一致，可直接匯出 APA 第 7 版格式 Word 計畫書。</div>`
       : probs.map(p=>`<div class="${p.lvl==="bad"?"err":"warnbox"}" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
           <span>${esc(p.msg)}</span>
           <button type="button" class="btn sm" data-nav="${p.step}">前往修正 →</button>
@@ -3947,7 +4125,7 @@ function reviewHTML(){
     }
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
-      <button type="button" class="btn pri" id="btn_exp_docx">📄 匯出《量性研究設計與統計分析計畫書》Word (.docx)</button>
+      <button type="button" class="btn pri" id="btn_exp_docx">📄 匯出 APA 第 7 版格式 Word 計畫書 (.docx)</button>
       <button type="button" class="btn ac" id="btn_exp_csv">📊 匯出《空白資料蒐集表與編碼簿範本》Excel (.csv)</button>
       <button type="button" class="btn" id="btn_copy_txt">📋 一鍵複製全文</button>
       <button type="button" class="btn" id="btn_exp_json">💾 匯出草稿備份 (.json)</button>
@@ -3967,11 +4145,14 @@ function reviewHTML(){
   </div>
 
   <div class="form">
-    <h3 style="margin:0 0 8px;font-size:15px;color:var(--brand-deep)">📖 計畫書全文即時預覽（橘底高亮處為〔　〕可替換欄位）</h3>
-    <div class="doc-preview">${preview}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <h3 style="margin:0;font-size:15px;color:var(--brand-deep)">📖 計畫書 APA 第 7 版排版即時預覽（Times New Roman + 標楷體・三線表・段落縮排；橘底為〔　〕可替換處）</h3>
+      <span class="tag ok">✓ 匯出之 .docx 與下方 APA 排版一致</span>
+    </div>
+    ${apaPreviewHTML(true)}
     <div class="fnav">
       <button type="button" class="btn" data-nav="s6">← 上一步：步驟 ⑥ 推論統計、效應量與解讀</button>
-      <button type="button" class="btn pri" id="btn_exp_docx2">📄 匯出 Word 研究設計計畫書 (.docx)</button>
+      <button type="button" class="btn pri" id="btn_exp_docx2">📄 匯出 APA 第 7 版格式 Word 計畫書 (.docx)</button>
     </div>
   </div>`;
 }
@@ -4012,7 +4193,7 @@ function loadDocxLib(){
   if(window.docx) return Promise.resolve(window.docx);
   return new Promise((resolve, reject)=>{
     const s = document.createElement("script");
-    s.src = "https://cdn.jsdelivr.net/npm/docx@9.5.1/build/index.umd.min.js";
+    s.src = "https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js";
     s.onload = ()=>window.docx ? resolve(window.docx) : reject(new Error("docx load failed"));
     s.onerror = ()=>reject(new Error("network error"));
     document.head.appendChild(s);
@@ -4020,96 +4201,264 @@ function loadDocxLib(){
 }
 
 async function exportDocx(){
-  const ds = DESIGNS[S.design] || DESIGNS.quasi_did;
-  const fname = `量性研究設計與統計分析計畫書_${S.design}_${S.date||"2026"}`;
+  const spec = apaDocSpec();
+  const fname = `量性研究設計與統計分析計畫書_APA7_${S.design}_${S.date||"2026"}`;
   try{
     const dx = await loadDocxLib();
-    const {Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, BorderStyle} = dx;
-    const font = "標楷體";
-    const h1 = (txt)=>new Paragraph({heading:HeadingLevel.HEADING_1, spacing:{before:280,after:140}, children:[new TextRun({text:txt, bold:true, size:30, font})]});
-    const h2 = (txt)=>new Paragraph({heading:HeadingLevel.HEADING_2, spacing:{before:200,after:100}, children:[new TextRun({text:txt, bold:true, size:26, font})]});
-    const p = (txt)=>String(txt||"（尚未填寫）").split("\n").map(line=>new Paragraph({spacing:{after:100, line:340}, children:[new TextRun({text:line, size:24, font})]}));
-    const mkTbl = (headers, rows)=>{
-      const bdr = {style:BorderStyle.SINGLE, size:4, color:"888888"};
-      const borders = {top:bdr, bottom:bdr, left:bdr, right:bdr};
-      return new Table({
-        width:{size:100, type:WidthType.PERCENTAGE},
-        rows:[
-          new TableRow({
-            children:headers.map(h=>new TableCell({
-              borders, shading:{fill:"E7EEF6"},
-              children:[new Paragraph({children:[new TextRun({text:h, bold:true, size:21, font})]})]
-            }))
-          }),
-          ...(rows||[]).map(r=>new TableRow({
-            children:headers.map((_,ci)=>new TableCell({
-              borders,
-              children:String(r[ci]||"").split("\n").map(line=>new Paragraph({children:[new TextRun({text:line, size:21, font})]}))
-            }))
-          }))
-        ]
+    const {
+      Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+      WidthType, AlignmentType, HeadingLevel, BorderStyle,
+      Header, Footer, PageNumber, PageBreak
+    } = dx;
+
+    // APA 7th Edition 中英字型設定：英數 Times New Roman、中文標楷體
+    const FONT = { ascii: "Times New Roman", hAnsi: "Times New Roman", eastAsia: "標楷體", cs: "Times New Roman" };
+    // A4 頁面（寬 11906 DXA，高 16838 DXA），四邊 1 吋（2.54 cm = 1440 DXA）標準邊界，可用內容寬度 9026 DXA
+    const CONTENT_W = 9026;
+    const LINE_APA = 360; // 1.5 倍行高（360 DXA），兼顧中文計畫書閱讀性與 APA 段落規範
+
+    // APA Level 1 標題：置中、粗體、前後留白
+    const mkH1 = (txt)=>new Paragraph({
+      heading: HeadingLevel.HEADING_1,
+      alignment: AlignmentType.CENTER,
+      spacing: { before: 320, after: 160, line: LINE_APA },
+      keepNext: true,
+      children: [new TextRun({ text: txt, bold: true, size: 28, font: FONT, color: "000000" })]
+    });
+
+    // APA Level 2 標題：靠左對齊、粗體、前後留白
+    const mkH2 = (txt)=>new Paragraph({
+      heading: HeadingLevel.HEADING_2,
+      alignment: AlignmentType.LEFT,
+      spacing: { before: 240, after: 100, line: LINE_APA },
+      keepNext: true,
+      children: [new TextRun({ text: txt, bold: true, size: 25, font: FONT, color: "000000" })]
+    });
+
+    // APA 內文與條列解析：自動拆行，一般段落首行縮排 2 字元（480 DXA），編號／項目符號採凸排（Hanging Indent 480 DXA）並加粗導引詞
+    const mkTextParas = (raw)=>{
+      const lines = String(raw || "（尚未填寫）").split(/\r?\n+/).map(s=>s.trim()).filter(Boolean);
+      if(!lines.length){
+        return [new Paragraph({
+          indent: { firstLine: 480 },
+          spacing: { before: 40, after: 120, line: LINE_APA },
+          children: [new TextRun({ text: "（尚未填寫）", size: 24, font: FONT })]
+        })];
+      }
+      return lines.map(line=>{
+        const m = line.match(/^((?:[0-9]+[\.\、]|[①-⑳]|[\(（][0-9一二三四五六七八九十]+[\)）]|[・•\-]|【[^】]+】|\[[^\]]+\])\s*)(.*)$/);
+        if(m){
+          return new Paragraph({
+            alignment: AlignmentType.JUSTIFIED,
+            indent: { left: 480, hanging: 480 },
+            spacing: { before: 40, after: 120, line: LINE_APA },
+            children: [
+              new TextRun({ text: m[1], bold: true, size: 24, font: FONT }),
+              new TextRun({ text: m[2], size: 24, font: FONT })
+            ]
+          });
+        }
+        return new Paragraph({
+          alignment: AlignmentType.JUSTIFIED,
+          indent: { firstLine: 480 },
+          spacing: { before: 40, after: 120, line: LINE_APA },
+          children: [new TextRun({ text: line, size: 24, font: FONT })]
+        });
       });
     };
 
+    // APA 第 7 版標準三線表（Three-Line Table）：
+    // 表號粗體靠左 + 表題斜體靠左 + 頂線 1.5pt (size 12)、表頭底線 0.75pt (size 6)、表格底線 1.5pt (size 12)、無直線與內橫線 + 表註
+    const mkApaTableBlock = (t)=>{
+      const noneBdr = { style: BorderStyle.NONE, size: 0, color: "FFFFFF" };
+      const topRule = { style: BorderStyle.SINGLE, size: 12, color: "000000" };
+      const midRule = { style: BorderStyle.SINGLE, size: 6, color: "000000" };
+      const botRule = { style: BorderStyle.SINGLE, size: 12, color: "000000" };
+      const colPcts = t.colPcts || t.headers.map(()=>Math.floor(100 / t.headers.length));
+      const colWidths = colPcts.map(p=>Math.round(CONTENT_W * (p / 100)));
+      const safeRows = (t.rows && t.rows.length) ? t.rows : [t.headers.map(()=>"—")];
+
+      const tbl = new Table({
+        width: { size: CONTENT_W, type: WidthType.DXA },
+        columnWidths: colWidths,
+        rows: [
+          new TableRow({
+            tableHeader: true,
+            children: t.headers.map((h, ci)=>new TableCell({
+              width: { size: colWidths[ci], type: WidthType.DXA },
+              margins: { top: 100, bottom: 100, left: 100, right: 100 },
+              borders: { top: topRule, bottom: midRule, left: noneBdr, right: noneBdr },
+              children: [new Paragraph({
+                alignment: ci===0 ? AlignmentType.LEFT : AlignmentType.LEFT,
+                spacing: { before: 20, after: 20, line: 280 },
+                children: [new TextRun({ text: String(h || ""), bold: true, size: 21, font: FONT })]
+              })]
+            }))
+          }),
+          ...safeRows.map((r, ri)=>{
+            const isLast = ri === safeRows.length - 1;
+            return new TableRow({
+              children: t.headers.map((_, ci)=>{
+                const cellLines = String((r && r[ci]) || "—").split(/\r?\n+/).map(s=>s.trim()).filter(Boolean);
+                return new TableCell({
+                  width: { size: colWidths[ci], type: WidthType.DXA },
+                  margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                  borders: {
+                    top: noneBdr,
+                    bottom: isLast ? botRule : noneBdr,
+                    left: noneBdr,
+                    right: noneBdr
+                  },
+                  children: (cellLines.length ? cellLines : ["—"]).map(line=>new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { before: 20, after: 40, line: 280 },
+                    children: [new TextRun({ text: line, size: 21, font: FONT })]
+                  }))
+                });
+              })
+            });
+          })
+        ]
+      });
+
+      const out = [
+        new Paragraph({
+          alignment: AlignmentType.LEFT,
+          spacing: { before: 220, after: 40, line: 280 },
+          keepNext: true,
+          children: [new TextRun({ text: t.num, bold: true, size: 22, font: FONT })]
+        }),
+        new Paragraph({
+          alignment: AlignmentType.LEFT,
+          spacing: { before: 0, after: 80, line: 280 },
+          keepNext: true,
+          children: [new TextRun({ text: t.title, italics: true, size: 22, font: FONT })]
+        }),
+        tbl
+      ];
+      if(t.note){
+        out.push(new Paragraph({
+          alignment: AlignmentType.LEFT,
+          spacing: { before: 60, after: 180, line: 280 },
+          children: [
+            new TextRun({ text: "註：", italics: true, bold: true, size: 20, font: FONT }),
+            new TextRun({ text: String(t.note).replace(/^註[：:]\s*/, ""), size: 20, font: FONT })
+          ]
+        }));
+      }
+      return out;
+    };
+
     const children = [
-      new Paragraph({alignment:AlignmentType.CENTER, spacing:{after:160}, children:[new TextRun({text:"量性研究設計與統計分析計畫書", bold:true, size:36, font})]}),
-      new Paragraph({alignment:AlignmentType.CENTER, spacing:{after:240}, children:[new TextRun({text:S.title || "〔研究題目〕", bold:true, size:28, font})]}),
-      mkTbl(["項目","內容"], [
-        ["研究設計架構", `${ds.name}（${ds.evidence}）`],
-        ["遵循國際報告規範", ds.guideline],
-        ["研究領域與場域", S.domain || "—"],
-        ["研究者／指導教授", `${S.author || "—"} ／ ${S.advisor || "—"}（日期：${S.date || ""}）`],
-        ["設計符號表示式", ds.notation]
-      ]),
-      h1("壹、量性研究七步驟走查總表（@ 2.7）"),
-      mkTbl(["量性研究七步驟","本研究的決定與核心設計","決定的依據與把關細節"], sevenStepRows()),
-      h1("貳、研究問題、假設與因果機制（@ 2.1・@ 2.3）"),
-      h2("一、研究問題（Research Question）"), ...p(S.s1_rq),
-      h2("二、研究重要性、新穎性與時效性"), ...p(S.s1_why),
-      h2("三、虛無假設（H₀）與對立假設（H₁）"), ...p(S.s1_h0h1),
-      h2("四、三種因果解釋與排除規劃表"),
-      mkTbl(["因果方向與可能解釋","本研究之機制說明或排除／控制做法"], S.s1_causal),
-      h2("五、混淆變項（Z）与中介變項（M）之辨析"), ...p(S.s1_zm),
-      h2("六、候選研究設計取捨決策表（@ 2.1 s61）"),
-      mkTbl(["候選研究設計","若採用可得之優點","採用或不採用之關鍵理由","本研究之補強或處理做法"], S.s1_reject),
-      h1("參、變項操作化、測量尺度與信效度規劃（@ 2.2・@ 2.2A）"),
-      h2("一、變項操作型定義與測量尺度總表"),
-      mkTbl(["變項名稱","角色","型態與測量尺度","操作型定義與計分範圍","測量工具／來源","測量時點"], S.s2_vars),
-      h2("二、變數設計原則說明"), ...p(S.s2_principle),
-      h2("三、測量信度（Reliability）規劃"), ...p(S.s2_rel),
-      h2("四、測量效度（Validity）規劃"), ...p(S.s2_val),
-      h1("肆、分組／順序機制、盲法與偏誤控制（@ 2.1・@ 2.6）"),
-      h2("一、分組、隨機分派或測量順序機制"), ...p(S.s3_assign),
-      h2("二、對照組設計與盲法層級"), ...p(S.s3_blinding),
-      h2("三、混淆變項與效度威脅控制表"),
-      mkTbl(["潛在偏誤或混淆威脅來源","對結果可能造成的扭曲方向","本研究採取之具體設計或統計防線"], S.s3_bias),
-      h2("四、內部效度與外部／生態效度之權衡"), ...p(S.s3_ext),
-      h1("伍、目標母體、抽樣方法與先驗樣本數推算（@ 2.3・@ 2.6）"),
-      h2("一、目標母體、抽樣架構與納入／排除條件"), ...p(S.s4_pop),
-      h2("二、抽樣方法與非抽樣誤差控制"), ...p(S.s4_sampling),
-      h2("三、先驗樣本數計算與流失率換算"), ...p(S.s4_power),
-      h2("四、不同效應量情境之檢定力對照"), ...p(S.s4_scenarios),
-      h1("陸、資料清理、敘述統計與統計前提檢查（@ 2.4・@ 2.5）"),
-      h2("一、資料表結構、分析單位與編碼規則"), ...p(S.s5_layout),
-      h2("二、資料清理五道篩、離群值與缺失值處理"), ...p(S.s5_clean),
-      h2("三、敘述統計表格（Table 1 / Table 2）與視覺化規劃"), ...p(S.s5_desc),
-      h2("四、推論統計前提假設檢查與無母數替代方案"), ...p(S.s5_assump),
-      h1("柒、推論統計分析計畫、效應量與結果解讀（@ 2.5・@ 2.6・@ 2.7）"),
-      h2("一、研究假設 × 統計檢定 × 效應量與 95% CI 對照總表"),
-      mkTbl(["對應研究假設與問題","自變項 IV × 依變項 DV","主要統計檢定（及替代方案）","必報效應量指標與 95% CI","共變項控制／多重比較校正"], S.s6_sap),
-      h2("二、意圖治療分析（ITT）、多重比較校正與敏感度分析"), ...p(S.s6_mult),
-      h2("三、APA 第 7 版標準結果報告句"), ...p(S.s6_apa),
-      h2("四、結果解讀四步驟、非劣性／不顯著預案與研究限制"), ...p(S.s6_interp),
-      h1(`捌、${ds.guideline} 報告規範自我檢核表`),
-      mkTbl(["檢核項目","狀態"], (ds.checklist||[]).map((c,i)=>[c, S.chk["ds_"+i]?"✓ 已規劃完成":"□ 待確認"]))
+      // APA 封面標題區
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 120, after: 120, line: LINE_APA },
+        children: [new TextRun({ text: spec.docTitle, bold: true, size: 34, font: FONT })]
+      }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 0, after: 200, line: LINE_APA },
+        children: [new TextRun({ text: spec.studyTitle, bold: true, size: 28, font: FONT })]
+      }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 0, after: 60, line: 300 },
+        children: [new TextRun({ text: spec.authorLine, size: 22, font: FONT })]
+      }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 0, after: 60, line: 300 },
+        children: [new TextRun({ text: spec.metaLine, size: 22, font: FONT })]
+      }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 0, after: 200, line: 300 },
+        children: [new TextRun({ text: spec.guideLine, size: 22, font: FONT })]
+      }),
+      ...mkApaTableBlock(spec.coverTable)
     ];
 
-    const doc = new Document({sections:[{children}]});
+    spec.sections.forEach(sec=>{
+      children.push(mkH1(sec.h1));
+      sec.items.forEach(it=>{
+        if(it.type === "h2") children.push(mkH2(it.text));
+        else if(it.type === "table") children.push(...mkApaTableBlock(it));
+        else children.push(...mkTextParas(it.text));
+      });
+    });
+
+    const doc = new Document({
+      sections: [{
+        properties: {
+          page: {
+            size: { width: 11906, height: 16838 },
+            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+          }
+        },
+        headers: {
+          default: new Header({
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.LEFT,
+                spacing: { after: 80 },
+                children: [
+                  new TextRun({ text: spec.runningHead, size: 18, font: FONT, color: "444444" }),
+                  new TextRun({ text: "　　Page ", size: 18, font: FONT, color: "444444" }),
+                  new TextRun({ children: [PageNumber.CURRENT], size: 18, font: FONT, color: "444444" })
+                ]
+              })
+            ]
+          })
+        },
+        footers: {
+          default: new Footer({
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({ text: "第 ", size: 18, font: FONT, color: "555555" }),
+                  new TextRun({ children: [PageNumber.CURRENT], size: 18, font: FONT, color: "555555" }),
+                  new TextRun({ text: " 頁 ／ 共 ", size: 18, font: FONT, color: "555555" }),
+                  new TextRun({ children: [PageNumber.TOTAL_PAGES], size: 18, font: FONT, color: "555555" }),
+                  new TextRun({ text: " 頁（APA 7th Edition Format）", size: 18, font: FONT, color: "555555" })
+                ]
+              })
+            ]
+          })
+        },
+        children
+      }]
+    });
+
     const blob = await Packer.toBlob(doc);
     downloadBlob(blob, fname + ".docx");
   }catch(e){
-    const html = `<html><head><meta charset="utf-8"><title>${esc(S.title)}</title></head><body style="font-family:serif;line-height:1.8;white-space:pre-wrap">${esc(fullDocText())}</body></html>`;
-    downloadBlob(new Blob([html], {type:"application/msword;charset=utf-8"}), fname + ".doc");
+    // 離線備援：輸出完整 APA 第 7 版結構化 HTML 表格與段落給 Word 開啟（絕不使用會被 Word 忽略的 pre-wrap）
+    const wordHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>${esc(spec.studyTitle)}</title>
+<style>
+  @page { size: A4; margin: 2.54cm; }
+  body { font-family: "Times New Roman", "標楷體", "DFKai-SB", serif; font-size: 12pt; line-height: 1.8; color: #000; }
+  .apa-runhead { font-size: 9.5pt; color: #444; border-bottom: 1px solid #ccc; padding-bottom: 4pt; margin-bottom: 14pt; }
+  .apa-cover { text-align: center; margin-bottom: 16pt; }
+  .apa-title { font-size: 16pt; font-weight: bold; margin-bottom: 6pt; }
+  .apa-subtitle { font-size: 14pt; font-weight: bold; margin-bottom: 10pt; }
+  .apa-meta { font-size: 11pt; line-height: 1.6; }
+  .apa-h1 { text-align: center; font-size: 14pt; font-weight: bold; margin: 18pt 0 8pt; }
+  .apa-h2 { text-align: left; font-size: 12.5pt; font-weight: bold; margin: 14pt 0 6pt; }
+  .apa-p { margin: 0 0 8pt; text-indent: 24pt; text-align: justify; line-height: 1.85; }
+  .apa-item { margin: 0 0 8pt; padding-left: 24pt; text-indent: -24pt; text-align: justify; line-height: 1.85; }
+  .apa-twrap { margin: 14pt 0 16pt; }
+  .apa-tnum { font-weight: bold; font-size: 11pt; margin-bottom: 2pt; }
+  .apa-ttitle { font-style: italic; font-size: 11pt; margin-bottom: 6pt; }
+  table.apa-tbl { width: 100%; border-collapse: collapse; border-top: 1.5pt solid #000; border-bottom: 1.5pt solid #000; font-size: 10.5pt; }
+  table.apa-tbl th { border-bottom: 0.75pt solid #000; padding: 5pt 6pt; text-align: left; font-weight: bold; }
+  table.apa-tbl td { padding: 5pt 6pt; vertical-align: top; }
+  .apa-tnote { font-size: 9.5pt; margin-top: 4pt; }
+</style></head>
+<body>${apaPreviewHTML(false)}</body></html>`;
+    downloadBlob(new Blob(["\uFEFF" + wordHtml], {type:"application/msword;charset=utf-8"}), fname + ".doc");
   }
 }
 
@@ -4127,7 +4476,24 @@ function bindEvents(){
     b.onclick = ()=>applyPreset(b.dataset.preset, false);
   });
 
-  // README 頁面一鍵載入與匯出按鈕
+  // README 頁面情境篩選與設計切換按鈕
+  w.querySelectorAll("[data-rm-flt]").forEach(b=>{
+    b.onclick = ()=>{
+      RM_FLT = b.dataset.rmFlt || "all";
+      render();
+    };
+  });
+  w.querySelectorAll("[data-rm-pick]").forEach(b=>{
+    b.onclick = ()=>{
+      const code = b.dataset.rmPick;
+      if(code && DESIGNS[code]){
+        S.design = code;
+        save(); render();
+        const fp = document.getElementById("rm-focus-panel");
+        if(fp) fp.scrollIntoView({behavior:"smooth", block:"nearest"});
+      }
+    };
+  });
   w.querySelectorAll("[data-rm-preset]").forEach(b=>{
     b.onclick = ()=>{
       const pid = b.dataset.rmPreset;
