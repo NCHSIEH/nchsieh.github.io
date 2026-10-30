@@ -267,7 +267,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 <div id="who"></div>
 <div class="prog" id="prog"><i></i><span id="progt"></span></div>
 <button type="button" id="btn_readme" class="oneclick" style="border-color:var(--brand);background:var(--brand-soft);color:var(--brand-deep)">📖 9種取向 README 總覽</button>
-<button type="button" id="oneclick" class="oneclick">一鍵匯入目前取向範例</button>
+<button type="button" id="oneclick" class="oneclick">⚡ 一鍵匯入目前取向範例</button>
+<button type="button" id="btn_clear_all" class="oneclick" style="border-color:var(--bad);background:var(--bad-soft);color:var(--bad)">🗑️ 一鍵清除</button>
 <label class="vh" for="sy">我卡在哪裡</label><select id="sy"></select>
 </div></header>
 <div class="shell"><nav id="side-nav" aria-label="設計步驟"><div id="stepnav"></div><p class="saved" id="saved"></p></nav><main id="work"></main></div>
@@ -3215,22 +3216,22 @@ function defState(){
       ["替代候選取徑 B","","",""]
     ],
     s2_vars:[
-      ["第一層分群／次群體","立意抽樣策略","納入與排除條件","預計人數","抽樣目的與異質性檢查軸"],
+      ["第一層分群／次群體","","","",""],
       ["第二層分群／次群體","","","",""]
     ],
     s2_principle:"", s2_rel:"", s2_val:"",
     s3_assign:"", s3_blinding:"",
     s3_bias:[
-      ["① 暖身破冰題（自具體日常切入）","","自具體經驗切入，降低防衛心、避免抽象評價"],
-      ["② 主體核心題一（現象與行為）","","對應核心子問題一，搭配舉例追問（Probes）"],
-      ["③ 主體核心題二（內在判斷機制）","","對應核心子問題二，探索關鍵轉折與顧慮"],
-      ["④ 收束與補充題（開放收尾）","","賦權受訪者補充遺漏觀點並導出實務建議"]
+      ["① 暖身破冰題（自具體日常切入）","",""],
+      ["② 主體核心題一（現象與行為）","",""],
+      ["③ 主體核心題二（內在判斷機制）","",""],
+      ["④ 收束與補充題（開放收尾）","",""]
     ],
     s3_ext:"",
     s4_pop:"", s4_sampling:"", s4_power:"", s4_scenarios:"",
     s5_layout:"", s5_clean:"", s5_desc:"", s5_assump:"",
     s6_sap:[
-      ["主題一：","","「代表性語錄…」（P01-F-RN，INT01 p.3 L12）","觀察筆記／文件／量性數據佐證","臨床與系統改版實務意涵"],
+      ["主題一：","","","",""],
       ["主題二：","","","",""]
     ],
     s6_mult:"", s6_apa:"", s6_interp:"",
@@ -3285,7 +3286,7 @@ function esc(s){
 }
 
 function filled(v){
-  if(Array.isArray(v)) return v.some(r=>Array.isArray(r) ? r.some(c=>String(c||"").trim().length>2) : String(r||"").trim().length>2);
+  if(Array.isArray(v)) return v.some(r=>Array.isArray(r) ? r.slice(1).some(c=>String(c||"").trim().length>1) : String(r||"").trim().length>1);
   return String(v||"").trim().length > 2;
 }
 
@@ -3323,6 +3324,34 @@ function applyPreset(pid, silent){
   S.step = keepStep;
   save();
   if(!silent) render();
+}
+
+function clearAllFields(){
+  if(!confirm("確定要「一鍵清除」所有已填寫的內容嗎？\\n（將保留目前選擇的研究取徑架構，並清空題目與步驟 ①～⑥ 所有欄位，方便您從零開始撰寫）")) return;
+  const keepStep = S.step;
+  const keepDesign = S.design || "qual_thematic";
+  const keepDt = JSON.parse(JSON.stringify(S.dt || {q1:"indiv", q2:"theme"}));
+  S = defState();
+  S.step = keepStep;
+  S.design = keepDesign;
+  S.dt = keepDt;
+  save();
+  render();
+}
+
+function clearStepFields(sid){
+  const st = STEPS.find(x=>x.id===sid);
+  if(!st) return;
+  if(!confirm("確定要清除「" + st.code + " " + st.name + "」本步驟的所有欄位內容嗎？")) return;
+  const def = defState();
+  (st.req || []).forEach(k=>{
+    S[k] = JSON.parse(JSON.stringify(def[k]));
+  });
+  if(MODS[sid] && MODS[sid].gate){
+    MODS[sid].gate.forEach((_,i)=>{ delete S.gate[sid+"_"+i]; });
+  }
+  save();
+  render();
 }
 
 // 30 秒白話看懂本範例（四格故事線導讀卡）
@@ -3594,6 +3623,7 @@ function readmeHTML(){
           <button type="button" class="btn ac" data-rm-preset="${curId}" data-rm-to="s1">⚡ 一鍵匯入此範例並開始撰寫（進入 STEP ①）</button>
           <button type="button" class="btn pri" data-rm-docx="${curId}">📄 下載此範例 APA 格式 Word (.docx)</button>
           <button type="button" class="btn" data-rm-csv="${curId}">🗂️ 下載此取徑空白編碼／收案表 (.csv)</button>
+          <button type="button" class="btn" data-clear-all="1" style="border-color:var(--bad);color:var(--bad)">🗑️ 一鍵清除已填內容</button>
         </div>
       </div>
 
@@ -3810,13 +3840,19 @@ function setupHTML(){
   </div>
 
   <div class="card">
-    <h2>⚡ 9 種主流質性與混合研究取徑｜白話導讀與一鍵匯入完整範例庫</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h2 style="margin:0">⚡ 9 種主流質性與混合研究取徑｜白話導讀與一鍵匯入完整範例庫</h2>
+      <button type="button" class="btn sm" data-clear-all="1" style="border-color:var(--bad);color:var(--bad);background:var(--bad-soft);font-weight:700">🗑️ 一鍵清除全部已填欄位（從零開始撰寫）</button>
+    </div>
     <p class="sub">每個範例皆附有「🤔 痛點 → 👥 做法 → 💡 發現」白話導讀，匯入後各欄位開頭皆有「💡【白話一句話看懂】」提示，讓你秒懂論文每一段為什麼這樣寫！</p>
     <div class="pgrid">${presetCards}</div>
   </div>
 
   <div class="card">
-    <h2>📝 研究計畫基本資料設定（會顯示於匯出之 APA 第 7 版 Word 計畫書封面）</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+      <h2 style="margin:0">📝 研究計畫基本資料設定（會顯示於匯出之 APA 第 7 版 Word 計畫書封面）</h2>
+      <button type="button" class="btn sm" data-clear-all="1" style="border-color:var(--bad);color:var(--bad)">🗑️ 清空重填</button>
+    </div>
     <div class="grid g2">
       <div class="fld">
         <label>研究論文／計畫題目 <span class="h">建議點出「研究對象、核心現象與質性／混合取徑名稱」</span></label>
@@ -4204,9 +4240,14 @@ function stepFormHTML(sid){
   return `<div class="head">
     <div class="head-top"><span class="badge">${esc(m.code)}</span><h1>${esc(m.title)}</h1></div>
     <p class="q">${esc(m.q)}</p>
-    <div class="locbar">
+    <div class="locbar" style="align-items:center">
       <span class="loc on"><b>目前質性／混合取徑：</b>${esc(ds.name)}</span>
       <span class="loc"><b>對應講義：</b>${esc(m.ref_units)}</span>
+      <span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="btn sm ac" data-fill-step="${sid}">⚡ 一鍵帶入本步範例</button>
+        <button type="button" class="btn sm" data-clear-step="${sid}" style="border-color:var(--warn);color:var(--warn)">🧹 一鍵清除本步欄位</button>
+        <button type="button" class="btn sm" data-clear-all="1" style="border-color:var(--bad);color:var(--bad)">🗑️ 一鍵清除全部欄位</button>
+      </span>
     </div>
   </div>
 
@@ -4522,6 +4563,7 @@ function reviewHTML(){
       <button type="button" class="btn" id="btn_copy">📋 複製計畫書全文至剪貼簿</button>
       <button type="button" class="btn" id="btn_json_out">⬇️ 匯出工作台進度 (.json)</button>
       <label class="btn" style="cursor:pointer">⬆️ 匯入進度 (.json)<input type="file" id="inp_json" accept=".json" style="display:none"></label>
+      <button type="button" class="btn" data-clear-all="1" style="margin-left:auto;border-color:var(--bad);color:var(--bad);background:var(--bad-soft);font-weight:700">🗑️ 一鍵清除全部欄位（清空重填）</button>
     </div>
     <h3 style="font-size:13.5px;color:var(--brand-deep);margin:10px 0 6px">📄 APA 第 7 版格式計畫書即時排版預覽（含 💡 白話重點導讀、封面、表 1–表 7 標準三線表）：</h3>
     <div class="doc-preview">${apaPreviewHTML()}</div>
@@ -4823,8 +4865,8 @@ function bindEvents(){
       const shouldScroll = b.dataset.rmScroll === "1";
       if(code && DESIGNS[code]){
         const prevY = window.scrollY || document.documentElement.scrollTop || 0;
-        // 切換 README 卡片時同步載入該範例資料，讓使用者切到 STEP 1–7 時內容完全一致
-        applyPreset(code, true);
+        S.design = code;
+        save();
         render();
         if(shouldScroll){
           const fp = document.getElementById("rm-focus-panel");
@@ -4834,6 +4876,12 @@ function bindEvents(){
         }
       }
     };
+  });
+  w.querySelectorAll("[data-clear-all]").forEach(b=>{
+    b.onclick = ()=>clearAllFields();
+  });
+  w.querySelectorAll("[data-clear-step]").forEach(b=>{
+    b.onclick = ()=>clearStepFields(b.dataset.clearStep);
   });
   w.querySelectorAll("[data-rm-preset]").forEach(b=>{
     b.onclick = (e)=>{
@@ -5038,6 +5086,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
   const oc = document.getElementById("oneclick");
   if(oc) oc.onclick = ()=>applyPreset(S.design || "qual_thematic", false);
+  const clrAll = document.getElementById("btn_clear_all");
+  if(clrAll) clrAll.onclick = ()=>clearAllFields();
   const rmBtn = document.getElementById("btn_readme");
   if(rmBtn) rmBtn.onclick = ()=>{ S.step = "readme"; save(); render(); window.scrollTo({top:0,behavior:"smooth"}); };
   const menu = document.getElementById("menu");
