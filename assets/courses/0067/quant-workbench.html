@@ -268,7 +268,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 <div id="who"></div>
 <div class="prog" id="prog"><i></i><span id="progt"></span></div>
 <button type="button" id="btn_readme" class="oneclick" style="border-color:var(--brand);background:var(--brand-soft);color:var(--brand-deep)">📖 9種設計 README 總覽</button>
-<button type="button" id="oneclick" class="oneclick">一鍵匯入目前設計範例</button>
+<button type="button" id="oneclick" class="oneclick">⚡ 一鍵匯入目前設計範例</button>
+<button type="button" id="btn_clear_all" class="oneclick" style="border-color:var(--bad);background:var(--bad-soft);color:var(--bad)">🗑️ 一鍵清除</button>
 <label class="vh" for="sy">我卡在哪裡</label><select id="sy"></select>
 </div></header>
 <div class="shell"><nav id="side-nav" aria-label="設計步驟"><div id="stepnav"></div><p class="saved" id="saved"></p></nav><main id="work"></main></div>
@@ -3439,7 +3440,7 @@ function defState(){
     s4_pop:"", s4_sampling:"", s4_power:"", s4_scenarios:"",
     s5_layout:"", s5_clean:"", s5_desc:"", s5_assump:"",
     s6_sap:[
-      ["H1（主要結果）","","獨立樣本 t／配對 t／混合 ANOVA","Cohen's d / dz / η²p 與 95% CI",""],
+      ["H1（主要結果）","","","",""],
       ["H2（次要結果）","","","",""]
     ],
     s6_mult:"", s6_apa:"", s6_interp:"",
@@ -3480,7 +3481,7 @@ function esc(s){
   return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 function filled(v){
-  if(Array.isArray(v)) return v.some(r=>Array.isArray(r) && r.slice(1).some(c=>String(c||"").trim().length>1));
+  if(Array.isArray(v)) return v.some(r=>Array.isArray(r) && (r.length===6 ? (String(r[0]||"").trim().length>1 || r.slice(3).some(c=>String(c||"").trim().length>1)) : r.slice(1).some(c=>String(c||"").trim().length>1)));
   return String(v||"").trim().length > 1;
 }
 function stepPct(st){
@@ -3524,6 +3525,35 @@ function applyPreset(pid, silent){
   else if(pid==="mixed_rct" || pid==="mixed_matched"){ S.calc.test="mixed_anova"; S.calc.es=0.22; S.calc.drop=15; S.lab.mode="did"; }
   else if(pid==="quasi_did"){ S.calc.test="paired_t"; S.calc.es=0.50; S.calc.drop=10; S.lab.mode="paired"; S.lab.m1=18.40; S.lab.sd1=6.42; S.lab.n1=34; S.lab.m2=13.03; S.lab.sd2=3.92; S.lab.md=-5.3676; S.lab.sdd=4.97; S.lab.dv_name="每班交班文書時間"; S.lab.unit="分鐘"; }
   else if(pid==="corr"){ S.calc.test="corr"; S.calc.es=0.25; S.calc.drop=12; S.lab.mode="corr"; S.lab.r_val=0.46; S.lab.r_n=210; }
+  save();
+  render();
+}
+
+function clearAllFields(){
+  if(!confirm("確定要「一鍵清除」所有已填寫的內容嗎？\n（將保留目前選擇的研究設計架構，並清空題目與步驟 ①～⑥ 所有欄位，方便您從零開始撰寫）")) return;
+  const keepStep = S.step;
+  const keepDesign = S.design || "quasi_did";
+  const keepDt = JSON.parse(JSON.stringify(S.dt || {q1:"yes", q2:"no", q3:"yes", q4:"yes"}));
+  S = defState();
+  S.step = keepStep;
+  S.design = keepDesign;
+  S.dt = keepDt;
+  save();
+  render();
+}
+
+function clearStepFields(sid){
+  const st = STEPS.find(x=>x.id===sid);
+  if(!st) return;
+  if(!confirm(`確定要清除「${st.code} ${st.name}」本步驟的所有欄位內容嗎？`)) return;
+  const def = defState();
+  (st.req || []).forEach(k=>{
+    S[k] = JSON.parse(JSON.stringify(def[k]));
+  });
+  if(MODS[sid]){
+    (MODS[sid].must||[]).forEach((_,i)=>{ delete S.chk[sid+"_"+i]; });
+    (MODS[sid].gate||[]).forEach((_,i)=>{ delete S.gate[sid+"_"+i]; });
+  }
   save();
   render();
 }
@@ -3587,6 +3617,10 @@ function initSymp(){
       const pid = PRESETS[S.design] ? S.design : "quasi_did";
       applyPreset(pid, false);
     };
+  }
+  const clrAll = document.getElementById("btn_clear_all");
+  if(clrAll){
+    clrAll.onclick = ()=>clearAllFields();
   }
   const brm = document.getElementById("btn_readme");
   if(brm){
@@ -3826,6 +3860,7 @@ function readmeHTML(){
           <button type="button" class="btn ac" data-rm-preset="${curId}" data-rm-to="s1">⚡ 一鍵匯入此範例並開始撰寫（進入 STEP ①）</button>
           <button type="button" class="btn pri" data-rm-docx="${curId}">📄 下載此範例 APA 格式 Word (.docx)</button>
           <button type="button" class="btn" data-rm-csv="${curId}">🗂️ 下載含範例數據之收案表 (.csv)</button>
+          <button type="button" class="btn" data-clear-all="1" style="border-color:var(--bad);color:var(--bad)">🗑️ 一鍵清除已填內容</button>
         </div>
       </div>
 
@@ -3975,7 +4010,7 @@ function setupHTML(){
   <div class="form" style="margin-bottom:14px">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
       <h3 style="margin:0;font-size:15px;color:var(--brand-deep)">⚡ 一鍵匯入完整範例（9 種主流量性研究設計各一例，匯入後皆 100% 完成、檢查 0 缺失）</h3>
-      <span style="font-size:12px;color:var(--muted)">點選任一卡片即可載入該設計從研究問題、假設、變項表、樣本數到 APA 結果句之完整內容</span>
+      <button type="button" class="btn sm" data-clear-all="1" style="border-color:var(--bad);color:var(--bad);background:var(--bad-soft);font-weight:700">🗑️ 一鍵清除全部已填欄位（從零開始撰寫）</button>
     </div>
     <div class="preset-grid">${presetCards}</div>
   </div>
@@ -4795,9 +4830,14 @@ function stepFormHTML(sid){
   return `<div class="head">
     <div class="head-top"><span class="badge">${esc(m.code)}</span><h1>${esc(m.title)}</h1></div>
     <p class="q">${esc(m.q)}</p>
-    <div class="locbar">
+    <div class="locbar" style="align-items:center">
       <span class="loc on"><b>目前設計架構：</b>${esc(ds.name)}</span>
       <span class="loc"><b>對應講義：</b>${esc(m.ref_units)}</span>
+      <span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="btn sm ac" data-fill-step="${sid}">⚡ 一鍵帶入本步範例</button>
+        <button type="button" class="btn sm" data-clear-step="${sid}" style="border-color:var(--warn);color:var(--warn)">🧹 一鍵清除本步欄位</button>
+        <button type="button" class="btn sm" data-clear-all="1" style="border-color:var(--bad);color:var(--bad)">🗑️ 一鍵清除全部欄位</button>
+      </span>
     </div>
   </div>
   ${storylineCardHTML(sid)}
@@ -5741,6 +5781,12 @@ function bindEvents(){
         save(); render();
       }
     };
+  });
+  w.querySelectorAll("[data-clear-all]").forEach(b=>{
+    b.onclick = ()=>clearAllFields();
+  });
+  w.querySelectorAll("[data-clear-step]").forEach(b=>{
+    b.onclick = ()=>clearStepFields(b.dataset.clearStep);
   });
 
   // Step 4 樣本數計算器互動
