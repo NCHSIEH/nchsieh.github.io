@@ -85,8 +85,8 @@ const MODULES = [
     subs:[{code:'M0.1',title:'資料科學與監督／非監督',url:'m0/#p01'},{code:'M0.2',title:'技術演進與 2026 地圖',url:'m0/#p03'},{code:'M0.3',title:'應用、AI 家族與工作流程',url:'m0/#p05'},{code:'M0.4',title:'工具鏈與第一個模型',url:'m0/#p08'},{code:'作業',title:'專案界定與貫穿主線',url:'m0/#p10'}] },
   { code:'M1', title:'資料工程：從原始資料到可建模', en:'Data Engineering', tag:'基礎', desc:'資料品質、匯入、Join、遺失值、離群值、縮放、特徵工程與資料洩漏——13 節互動工具＋門診模擬資料實驗室。', tools:'AI Studio Module 1–10 · 醫療版模擬資料', status:'live', url:'m1/', pdf:null, key:'m1',
     subs:[{code:'M1.1',title:'品質、匯入、型態',url:'m1/#p01'},{code:'M1.2',title:'聚合、Join、重塑',url:'m1/#p04'},{code:'M1.3',title:'遺失值與離群值',url:'m1/#p06'},{code:'M1.4',title:'縮放、特徵、洩漏',url:'m1/#p10'},{code:'Lab',title:'門診資料健檢實驗室',url:'m1/#p13'}] },
-  { code:'M2', title:'監督式學習', en:'Supervised Learning', tag:'監督式', desc:'迴歸預測連續數值；分類從 kNN 到集成方法。', tools:'Linear / Logistic · kNN · Tree · RF', status:'soon', url:null, pdf:null,
-    subs:[{code:'M2-1',title:'迴歸：預測連續數值'},{code:'M2-2',title:'分類：從 kNN 到集成方法'}] },
+  { code:'M2', title:'監督式學習：迴歸與分類', en:'Supervised Learning', tag:'監督式', desc:'迴歸：最小平方法、殘差、共線性、過擬合、正則化。分類：k-NN、Logistic、混淆矩陣、ROC／門檻、不平衡、決策樹與集成。', tools:'Linear / Logistic · kNN · NB · Tree · RF', status:'live', url:'m2-1/', pdf:null, key:'m21',
+    subs:[{code:'M2-1',title:'迴歸：預測連續數值',url:'m2-1/'},{code:'M2-1 ★',title:'過擬合與正則化實驗',url:'m2-1/#p09'},{code:'M2-2',title:'分類：從 kNN 到集成方法',url:'m2-2/'},{code:'M2-2 ★',title:'混淆矩陣、盛行率與門檻',url:'m2-2/#p06'},{code:'M2-2 ★',title:'決策樹與隨機森林',url:'m2-2/#p11'}] },
   { code:'M3', title:'非監督式學習：分群與降維', en:'Unsupervised Learning', tag:'非監督式', desc:'K-Means、階層式分群、DBSCAN；PCA 與視覺化降維。', tools:'K-Means · PCA', status:'soon', url:null, pdf:null,
     subs:[{code:'M3.1',title:'分群（Clustering）'},{code:'M3.2',title:'降維（Dimensionality Reduction）'}] },
   { code:'M4', title:'進階監督式學習：集成、異常與關聯', en:'Ensembles, Anomaly & Association', tag:'監督式', desc:'Bagging／Boosting、異常偵測、關聯規則。', tools:'GBT · LOF · FP-Growth', status:'soon', url:null, pdf:null,
@@ -123,7 +123,8 @@ function card(m){
   const p=progressOf(m.key); if(live&&p!=null){ c.append(h('div',{class:'prog',title:'你的完成度'},h('i',{style:{width:(p*100).toFixed(0)+'%'}}))); }
   if(m.subs&&m.subs.length){ const sb=h('div',{class:'subs'}); m.subs.forEach(s=>{ const on=!!(s.url&&(live||s.status==='live')); sb.append(on? h('a',{class:'sub on',href:s.url},h('span',{class:'c'},s.code),s.title) : h('div',{class:'sub off',title:'預留入口'},h('span',{class:'c'},s.code),s.title,h('span',{class:'tag gray',style:{marginLeft:'auto',fontSize:'11px'}},'預留'))); }); c.append(sb); }
   const acts=h('div',{class:'acts'});
-  acts.append(live? h('a',{class:'btn primary',href:m.url},'進入互動單元 →') : h('button',{class:'btn',disabled:true},'互動版建置中'));
+  acts.append(live? h('a',{class:'btn primary',href:m.url},m.code==='M2'?'進入 M2-1 迴歸 →':'進入互動單元 →') : h('button',{class:'btn',disabled:true},'互動版建置中'));
+  if(m.code==='M2') acts.append(h('a',{class:'btn',href:'m2-2/'},'M2-2 分類 →'));
   if(m.pdf) acts.append(h('a',{class:'btn',href:m.pdf,target:'_blank',rel:'noopener'},'PDF 講義'));
   c.append(acts); return c;
 }
