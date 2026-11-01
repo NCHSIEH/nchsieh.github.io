@@ -166,5 +166,22 @@
     box.append(sc);
   }
 
-  G.U = { initModule, seg, slider, check, sorter, flashcards, finalQuiz, rng, randn, S, fmt, $, $$, h, s, svgBox, C, scale, ticks, hist, scatter, hbars, boxplot, Store, quiz, parseCSV };
+  /* 通用折線圖（M4 起使用） */
+  function lc(box, series, o = {}) {
+    const W = o.w || 420, H = o.h || 240, m = { l: o.ml || 46, r: 12, t: 12, b: 36 }, sv = svgBox(box, W, H);
+    const xs = series.flatMap(s => s.pts.map(p => p[0])), ys = series.flatMap(s => s.pts.map(p => p[1])).filter(Number.isFinite);
+    const x0 = o.xmin ?? Math.min(...xs), x1 = o.xmax ?? Math.max(...xs), y0 = o.ymin ?? Math.min(...ys), y1 = o.ymax ?? Math.max(...ys);
+    const x = scale(x0, x1, m.l, W - m.r), y = scale(y0, y1, H - m.b, m.t), cy = v => y(Math.max(y0, Math.min(y1, v)));
+    (o.yt || ticks(y0, y1, 4)).forEach(t => { s('line', { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: 'grid' }, sv); s('text', { x: m.l - 6, y: y(t) + 4, 'text-anchor': 'end', text: o.yfmt ? o.yfmt(t) : +(+t).toFixed(3) }, sv); });
+    (o.xt || ticks(x0, x1, 5)).forEach(t => s('text', { x: x(t), y: H - m.b + 16, 'text-anchor': 'middle', text: o.xfmt ? o.xfmt(t) : t }, sv));
+    s('line', { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, class: 'axis' }, sv);
+    (o.under || []).forEach(f => f(sv, x, y));
+    series.forEach(q => { if (q.pts.length > 1 && !q.dotsOnly) s('polyline', { points: q.pts.map(p => `${x(p[0])},${cy(p[1])}`).join(' '), fill: 'none', stroke: q.color || C.accent, 'stroke-width': q.w || 2, 'stroke-dasharray': q.dash || null, opacity: q.op ?? 1 }, sv); if (q.dots) q.pts.forEach(p => s('circle', { cx: x(p[0]), cy: cy(p[1]), r: q.r || 3, fill: q.color || C.accent, 'fill-opacity': q.dop ?? .8 }, sv)); });
+    (o.marks || []).forEach(mk => { s('line', { x1: x(mk.x), x2: x(mk.x), y1: m.t, y2: H - m.b, stroke: mk.color || C.ink, 'stroke-dasharray': '4 3', 'stroke-width': 1.4 }, sv); if (mk.label) s('text', { x: x(mk.x) + 4, y: m.t + 26 + (mk.dy || 0), text: mk.label, style: `font-size:11px;fill:${mk.color || C.ink}` }, sv); });
+    if (o.xl) s('text', { x: (m.l + W - m.r) / 2, y: H - 3, 'text-anchor': 'middle', text: o.xl, style: 'font-size:12px;fill:#5d6774' }, sv);
+    if (o.yl) s('text', { x: 12, y: (m.t + H - m.b) / 2, 'text-anchor': 'middle', transform: `rotate(-90 12 ${(m.t + H - m.b) / 2})`, text: o.yl, style: 'font-size:12px;fill:#5d6774' }, sv);
+    if (o.legend) o.legend.forEach(([t, c, d], i) => { const lx = m.l + 8 + i * (o.legW || 92); s('line', { x1: lx, x2: lx + 16, y1: m.t + 4, y2: m.t + 4, stroke: c, 'stroke-width': 2.4, 'stroke-dasharray': d || null }, sv); s('text', { x: lx + 20, y: m.t + 8, text: t, style: 'font-size:11px' }, sv); });
+    (o.over || []).forEach(f => f(sv, x, y)); return { sv, x, y };
+  }
+  G.U = { lc, initModule, seg, slider, check, sorter, flashcards, finalQuiz, rng, randn, S, fmt, $, $$, h, s, svgBox, C, scale, ticks, hist, scatter, hbars, boxplot, Store, quiz, parseCSV };
 })(window);
