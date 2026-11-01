@@ -3,21 +3,123 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Dify 實作手冊互動版：九個範例、知識庫設定、長照七節點流程與失敗案例除錯。">
-<title>Dify 實作手冊：九個範例與長照 3.0 專案 · 互動學習</title>
+<title>補充：Dify 實作手冊——九個範例與長照 3.0 專案 · 互動學習</title>
 <link rel="stylesheet" href="../assets/style.css">
-<link rel="stylesheet" href="handbook.css">
 </head>
 <body>
-<a class="skip" href="#content">跳到學習內容</a>
-<div class="topbar"><div class="in"><a class="brand" href="../"><span class="dot">DS</span>互動學習站</a><span class="meta crumb">/ Dify 實作手冊</span><span class="sp"></span><span class="meta" id="ptxt">完成 0 / 17</span><div class="pbar"><i id="pbar"></i></div></div></div>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">DS</span>互動學習站</a>
+  <span class="meta">/ 補充：Dify 實作手冊</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 13</span><div class="pbar"><i id="pbar"></i></div>
+</div></div>
+
 <div class="layout">
-<nav class="side" id="side" aria-label="單元段落"><div class="mh">DIFY HANDBOOK · 實作配套</div></nav>
-<main id="content">
-<header class="mhero"><div class="code">M8 COMPANION · LEARN BY DOING</div><h1>Dify 實作手冊<br>九個範例與長照 3.0 專案</h1><p class="lead">從一個提示詞開始，練習對話、工具與流程接線。最後把三個知識庫與七個節點組起來，逐步追查一份報告的資料來源。</p><div class="chips"><span class="tag">9 個漸進範例</span><span class="tag">7 節點流程實驗室</span><span class="tag amber">免金鑰・瀏覽器教學模擬</span></div><div class="jump"><a class="btn primary" href="#p03">從 Ex1 開始 →</a><a class="btn" href="#p14">直接進入長照專案</a><a class="btn" href="../m8/">回顧 M8 觀念</a></div><p class="hint">依課程 50 頁補充講義製作。模型回答與工具結果為固定教學示例；不呼叫 Dify、外部 API，也不傳送表單內容。進度僅保存在此瀏覽器。</p><details class="mobile-nav"><summary>展開單元目錄</summary><div id="mobile-links"></div></details></header>
-<div id="sections"></div>
-<footer class="source-note"><p>教材來源：〈補充教材. Dify 實作手冊 - 九個範例與長照 3.0 專案〉，謝楠楨，資料科學 2027 Spring。</p><p>介面與模型支援依安裝版本而異。延伸閱讀：<a href="https://github.com/langgenius/dify-docs/blob/main/en/cloud/use-dify/nodes/knowledge-retrieval.mdx" target="_blank" rel="noopener">Dify 官方檢索節點文件</a>、<a href="https://docs.dify.ai/" target="_blank" rel="noopener">Dify 官方文件</a>。</p><p>長照額度與排他規則均為講義版本的教學案例，不作為現行給付認定或臨床評估。本頁不由訪視描述自動推定 CMS 等級。</p></footer>
-</main></div>
-<noscript><p class="note">請啟用 JavaScript 以使用互動練習。</p></noscript>
-<script src="../assets/common.js"></script><script src="core.js"></script><script src="handbook.js"></script>
-</body></html>
+<nav class="side" id="side"><div class="mh">實作手冊 · 13 個段落</div></nav>
+<main>
+  <header class="mhero">
+    <div class="code">SUPPLEMENT · M8 實作配套</div>
+    <h1>Dify 實作手冊：九個範例與長照 3.0 專案</h1>
+    <p class="lead">M8 講義教你「為什麼」，這份手冊教你「怎麼做」。這一頁只收手冊獨有、M8 沒講的操作細節（觀念部分各節附 M8 連結），做成可以操作的模擬：免費額度夠不夠用、JSON 為什麼解析失敗、分隔符切塊、混合檢索怎麼算分，以及長照 3.0 七節點流程——包含程式碼節點的防呆、外籍看護排他條款，和一份要你親手找錯的「真實的失敗」。</p>
+    <div class="chips"><span class="tag">搭配 M8 互動頁一起使用</span><span class="tag amber">本頁依 M8 原則修正了原 PDF 的幾處設計（見 P12）</span><span class="tag gray">模擬器為教學示意，非 Dify 實際執行；個案皆為虛構</span></div>
+  </header>
+
+  <section class="part" id="p01" data-t="環境與免費額度">
+    <div class="ph"><span class="num">01</span><div><h2>環境建置四件事與免費額度</h2><div class="en">DOCKER · DIFY · API KEY · EMBEDDING MODEL</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p04">觀念見 M8 第 4 節 →</a></div>
+    <p class="one">多數卡關發生在這一步。免費額度最容易頂到的是每分鐘 Token（TPM）：長訪視逐字稿＋知識庫召回，可能一次就吃掉大半。</p>
+    <div class="wd"><div class="wh"><h3>環境檢核</h3><span class="tag">可勾選進度</span></div><div id="w-env"></div></div>
+    <div class="wd"><div class="wh"><h3>免費額度試算（以 Groq 的 gpt-oss-120b 為例）</h3><span class="tag amber">核心互動</span></div><p class="hint">額度：每分鐘 30 次、每天 1,000 次、每分鐘 8,000 tokens、每天 200,000 tokens（以帳號頁面實際額度為準）。中文約 0.6–1.5 token／字，這裡取 1.0。</p><div id="w-quota"></div></div>
+  </section>
+
+  <section class="part" id="p02" data-t="Ex1–Ex5 五種型態">
+    <div class="ph"><span class="num">02</span><div><h2>Ex1–Ex5：同一個平台，五種做法</h2><div class="en">TEXT GENERATOR → CHATBOT → AGENT → WORKFLOW → CHATFLOW</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p02">觀念見 M8 第 2 節 →</a></div>
+    <p class="one">建議照順序跑：Ex1→Ex2 學會「對話與記憶」、Ex3 學會「工具」、Ex4→Ex5 學會「流程編排」——最後全部組合起來就是長照專案。不要跳著做。</p>
+    <div class="wd"><div class="wh"><h3>五個範例：做完一個，驗證一個</h3><span class="tag">可勾選進度</span></div><div id="w-ex15"></div></div>
+  </section>
+
+  <section class="part" id="p03" data-t="模型選型">
+    <div class="ph"><span class="num">03</span><div><h2>Ex6／Ex9 模型選型：不同節點用不同模型</h2><div class="en">MODEL AGNOSTIC</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p04">觀念見 M8 第 4 節 →</a></div>
+    <p class="one">意圖判斷用快的、法規分析用強的、格式輸出用穩的、練習用免費的。入口分流節點用高階模型是浪費——它只需要判斷「這是哪一類問題」。具體型號變動很快，原則不會變。</p>
+    <div class="wd"><div class="wh"><h3>替每個節點挑一類模型</h3><span class="tag amber">互動</span></div><div id="w-model"></div></div>
+  </section>
+
+  <section class="part" id="p04" data-t="Temperature 與 Max Tokens">
+    <div class="ph"><span class="num">04</span><div><h2>Ex7：兩個最重要的參數</h2><div class="en">TEMPERATURE · MAX TOKENS</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p06">觀念見 M8 第 6 節 →</a></div>
+    <p class="one">評估與判定類一律低溫（0–0.3）。Max Tokens 設太小，JSON 會被截斷成不合法的字串，下游程式碼節點就解析失敗——這是很常見但不好查的錯誤。</p>
+    <div class="wd"><div class="wh"><h3>同一份逐字稿跑 5 次</h3><span class="tag amber">核心互動</span></div><p class="hint">等級變動幅度為示意模型。</p><div id="w-temp"></div></div>
+  </section>
+
+  <section class="part" id="p05" data-t="JSON 模式兩個坑">
+    <div class="ph"><span class="num">05</span><div><h2>Ex8：JSON 模式的兩個坑，與程式碼節點的防呆</h2><div class="en">RESPONSE FORMAT · CLEAN · VALIDATE</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p12">觀念見 M8 第 12 節 →</a></div>
+    <p class="one">開啟 JSON 模式後，部分供應商要求提示詞裡必須出現「json」這個字；就算開了，模型仍可能加上 ```json 標記。只靠 Prompt 不夠——程式碼節點裡一定要清洗與驗證。</p>
+    <div class="wd"><div class="wh"><h3>LLM 吐出這段文字，程式碼節點會怎樣？</h3><span class="tag amber">核心互動</span></div><p class="hint">左右對照：原 PDF 的寫法 vs 本頁修正版（依 M8：無法判定時不給金額、轉人工覆核）。</p><div id="w-json"></div></div>
+  </section>
+
+  <section class="part" id="p06" data-t="分隔符切塊">
+    <div class="ph"><span class="num">06</span><div><h2>分段策略：為什麼要用分隔符而不是固定字數</h2><div class="en">ONE CRITERION = ONE CHUNK</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p07">觀念見 M8 第 7 節 →</a></div>
+    <p class="one">目標：一個評估項目＝一個區塊。固定字數可能把一條判定標準切成兩半，檢索到前半段時看不到後半段。索引方式一定要選「高品質」才會做向量化——經濟模式只做關鍵字比對。</p>
+    <div class="wd"><div class="wh"><h3>同一份《CMS 評估標準》（示範文字，縮小比例）</h3><span class="tag amber">核心互動</span></div><div id="w-sep"></div></div>
+  </section>
+
+  <section class="part" id="p07" data-t="三種檢索策略">
+    <div class="ph"><span class="num">07</span><div><h2>檢索策略：向量、全文與混合</h2><div class="en">VECTOR · FULL-TEXT · HYBRID</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p08">觀念見 M8 第 8 節 →</a></div>
+    <p class="one">有專有名詞或代碼（BA07、CA07、人名）→ 務必開混合檢索，否則 AI 容易產生幻覺。混合檢索是兩條路各自給分、再依權重合併——權重要寫清楚，分數才看得懂。</p>
+    <div class="wd"><div class="wh"><h3>三個問題，三種找法</h3><span class="tag amber">核心互動</span></div><div id="w-hybrid"></div></div>
+  </section>
+
+  <section class="part" id="p08" data-t="四層架構與知識庫">
+    <div class="ph"><span class="num">08</span><div><h2>★ 長照 3.0 智慧評估系統：四層架構與三個知識庫</h2><div class="en">INPUT · DATA · LOGIC · OUTPUT</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p11">觀念見 M8 第 11 節 →</a></div>
+    <p class="one">第 ③ 層三個節點各司其職：LLM 1 做「判斷」、程式碼做「計算」、LLM 2 做「媒合與排程」。額度上限這種絕對不能算錯的數字，從頭到尾沒有經過任何一個 LLM。</p>
+    <div class="wd"><div class="wh"><h3>四層架構</h3><span class="tag amber">互動</span></div><div id="w-arch"></div></div>
+  </section>
+
+  <section class="part" id="p09" data-t="七節點流程模擬">
+    <div class="ph"><span class="num">09</span><div><h2>★ 七節點 Chatflow 模擬（修正版）</h2><div class="en">START → RETRIEVAL → LLM 1 → CODE → LLM 2 → TEMPLATE → HUMAN CHECK → ANSWER</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p11">觀念見 M8 第 11 節 →</a></div>
+    <p class="one">能由人明確指定的，就不要交給模型猜：外籍看護與福利身分別做成表單選項。等級標為「預估」，正式核定是照管專員的事；最後一個節點永遠是人為確認。</p>
+    <div class="wd"><div class="wh"><h3>選測試情境，按「執行」</h3><span class="tag amber">核心互動</span></div><p class="hint">情境改編自手冊的測試逐字稿（虛構）。等級判斷為示意規則；服務代碼名稱依長照給付基準，各碼支付價格請以 KB2 查表，本頁不示範。</p><div id="w-flow"></div></div>
+  </section>
+
+  <section class="part" id="p10" data-t="外籍看護排他條款">
+    <div class="ph"><span class="num">10</span><div><h2>外籍看護排他條款：一個真的邏輯閘</h2><div class="en">THE IRON RULE</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p06">觀念見 M8 第 6 節 →</a></div>
+    <p class="one">法規上的排他條款不能靠 LLM「自己知道」：判斷依據（CSV 的 Foreign_Caregiver_Allowed 欄）與處理規則（剔除＋改推替代方案）都要明寫進 Prompt。需求還是要被滿足——系統不能只說「不行」。</p>
+    <div class="wd"><div class="wh"><h3>家屬的要求 × 是否聘有外籍看護</h3><span class="tag amber">互動</span></div><p class="hint">依手冊規則示意；各服務是否適用，請以衛福部最新給付基準核對。</p><div id="w-iron"></div></div>
+  </section>
+
+  <section class="part" id="p11" data-t="找出真實的失敗">
+    <div class="ph"><span class="num">11</span><div><h2>★ 一個真實的失敗：你找得到幾個錯？</h2><div class="en">A DEMO THAT RUNS ≠ A SYSTEM YOU CAN TRUST</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p13">觀念見 M8 第 13 節 →</a></div>
+    <p class="one">原教材記錄了一次未修正版的執行結果：流程確實跑完了，報告看起來很專業，但裡面有三個會造成實際傷害的錯。沒有逐項檢查，你根本不會發現。</p>
+    <div class="wd"><div class="wh"><h3>點出你覺得有問題的地方</h3><span class="tag amber">核心互動</span></div><div id="w-fail"></div></div>
+  </section>
+
+  <section class="part" id="p12" data-t="六個檢查與修正說明">
+    <div class="ph"><span class="num">12</span><div><h2>六個一定要自己補的檢查，與本頁的修正說明</h2><div class="en">FROM “IT RUNS” TO “I CAN SAY WHY IT'S CREDIBLE”</div></div></div>
+    <div style="font-size:13px;margin:-4px 0 6px"><a href="../m9/#p19">完整版見 M9 第 19 節發表前檢核清單 →</a></div>
+    <p class="one">這六項就是 M9 檢核清單在這個專案上的具體化。做完這六項，你的專題就從「跑得動」變成「說得出可信度」。</p>
+    <div class="wd"><div class="wh"><h3>六個檢查</h3><span class="tag">可勾選進度</span></div><div id="w-six"></div></div>
+    <div class="wd"><div class="wh"><h3>本頁與原 PDF 的差異（依 M8、M9 原則修正）</h3></div><div id="w-diff"></div></div>
+  </section>
+
+  <section class="part" id="p13" data-t="術語、測驗與回顧">
+    <div class="ph"><span class="num">13</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
+    <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3></div><div id="w-final"></div></div>
+    <div class="wd"><div class="wh"><h3>重點回顧</h3></div><div id="w-review"></div></div>
+  </section>
+</main>
+</div>
+<script src="../assets/common.js"></script>
+<script src="difya.js"></script>
+<script src="difyb.js"></script>
+</body>
+</html>
