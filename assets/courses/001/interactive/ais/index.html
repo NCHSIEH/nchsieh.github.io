@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>補充：RapidMiner AI Studio 入門與 Python 對照 · 互動學習</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">DS</span>互動學習站</a>
+  <span class="meta">/ 補充：AI Studio × Python</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 18</span><div class="pbar"><i id="pbar"></i></div>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">補充教材 · 18 個段落</div></nav>
+<main>
+  <header class="mhero">
+    <div class="code">SUPPLEMENT · 全學期適用</div>
+    <h1>RapidMiner AI Studio 入門與 Python 對照</h1>
+    <p class="lead">先講結論：你在 AI Studio 學到的東西，換到 Python 一步都不會少。這一頁把九個步驟的 1:1 對照、Set Role、Apply Model 的兩條輸入、Cross Validation 子流程與常見錯誤訊息，都做成可以自己點、自己接線、自己跑的小工具。</p>
+    <div class="chips"><span class="tag">九步驟 ↔ pandas／scikit-learn</span><span class="tag amber">開課前：學生版授權＋四個擴充套件</span><span class="tag gray">示範資料為仿 Titanic 結構的模擬乘客，非真實資料</span></div>
+  </header>
+
+  <section class="part" id="p01" data-t="★ 九步驟 1:1 對照">
+    <div class="ph"><span class="num">01</span><div><h2>★ 核心論點：流程與 Python 幾乎 1:1</h2><div class="en">NINE STEPS, TWO NOTATIONS</div></div></div>
+    <p class="one">讀取 → 清理 → 特徵工程 → 設目標欄 → 切分 → 訓練 → 套用 → 評估 → 交叉驗證。只是換一種表達方式——一個用拖拉，一個用程式碼。未來要轉 Python，只需要學語法，不需要重學概念。</p>
+    <div class="wd"><div class="wh"><h3>點一個步驟，看兩邊各長什麼樣</h3><span class="tag amber">核心互動</span></div><p class="hint">右邊是把九步驟組起來的完整 Python 程式；選到的那一步會標亮。</p><div id="w-nine"></div></div>
+  </section>
+
+  <section class="part" id="p02" data-t="運算子 ↔ Python 對照表">
+    <div class="ph"><span class="num">02</span><div><h2>運算子 ↔ Python 對照表</h2><div class="en">OPERATOR LOOKUP</div></div></div>
+    <p class="one">學會左邊那一欄，右邊那一欄你只需要查語法。名字幾乎一樣——因為兩邊用的是同一套演算法，只是包裝不同。</p>
+    <div class="wd"><div class="wh"><h3>四張對照表（可搜尋）</h3><span class="tag amber">互動</span></div><div id="w-lookup"></div></div>
+    <div class="wd"><div class="wh"><h3>對照小測：這個運算子在 Python 叫什麼？</h3><span class="tag amber">練習</span></div><div id="w-match"></div></div>
+  </section>
+
+  <section class="part" id="p03" data-t="為什麼這門課用它">
+    <div class="ph"><span class="num">03</span><div><h2>為什麼這門課用 AI Studio</h2><div class="en">A SCAFFOLD FOR CONCEPTS</div></div></div>
+    <p class="one">AI Studio 不是「Python 的替代品」，是「學概念的鷹架」。護理與健康科技背景的你，要學的是「怎麼判斷」，而不是「怎麼寫迴圈」。</p>
+    <div class="concept">
+      <div><b>① 把注意力留給方法</b>初學者常卡在縮排、套件安裝、版本不相容——這些跟資料科學一點關係都沒有</div>
+      <div><b>② 流程視覺化＝思路視覺化</b>Python 的流程藏在程式碼順序裡；AI Studio 的流程畫在畫布上，資料現在在哪一眼就看得到</div>
+      <div><b>③ 概念可完整遷移</b>學會 Set Role 就懂 y = df['label']；學會 Cross Validation 子流程就懂 cross_val_score()</div>
+    </div>
+    <div class="wd"><div class="wh"><h3>那我到底要不要學 Python？</h3><span class="tag amber">練習</span></div><div id="w-learnpy"></div></div>
+  </section>
+
+  <section class="part" id="p04" data-t="名稱沿革與定位">
+    <div class="ph"><span class="num">04</span><div><h2>它是什麼、從哪來</h2><div class="en">YALE → RAPIDMINER → ALTAIR → SIEMENS</div></div></div>
+    <p class="one">名字換過好幾次，這是很多人搞混的原因。搜尋資料時用「RapidMiner」關鍵字往往找到更多內容；副檔名 .rmp 也還是 RapidMiner 的縮寫。</p>
+    <div class="wd"><div class="wh"><h3>名稱沿革</h3><span class="tag amber">互動</span></div><div id="w-name"></div></div>
+    <div class="wd"><div class="wh"><h3>同類工具與相對優勢</h3></div><div id="w-peers"></div></div>
+  </section>
+
+  <section class="part" id="p05" data-t="免費授權與安裝">
+    <div class="ph"><span class="num">05</span><div><h2>如何取得免費授權、安裝與啟用</h2><div class="en">FREE LICENSE · INSTALL · EXTENSIONS</div></div></div>
+    <p class="one">完全免費、沒有功能閹割。但兩套授權系統（Altair One 與 RapidMiner）並存，選錯會卡關。建議在第一次上課前完成——課堂不會有時間等大家安裝。</p>
+    <div class="wd"><div class="wh"><h3>我該走哪一條路徑？</h3><span class="tag amber">互動</span></div><div id="w-license"></div></div>
+    <div class="wd"><div class="wh"><h3>開課前安裝檢核</h3><span class="tag">可勾選進度</span></div><div id="w-install"></div></div>
+  </section>
+
+  <section class="part" id="p06" data-t="安裝常見問題">
+    <div class="ph"><span class="num">06</span><div><h2>安裝與啟用的六個常見問題</h2><div class="en">TROUBLESHOOTING SETUP</div></div></div>
+    <p class="one">最常見的是開範例檔出現紅色驚嘆號：課程範例大量使用 Text Processing 與 Deep Learning 運算子，沒裝就開不起來。</p>
+    <div class="wd"><div class="wh"><h3>症狀 → 解法</h3><span class="tag amber">練習</span></div><div id="w-setupfix"></div></div>
+  </section>
+
+  <section class="part" id="p07" data-t="介面六大區塊">
+    <div class="ph"><span class="num">07</span><div><h2>介面的六個區塊</h2><div class="en">INTERFACE MAP</div></div></div>
+    <p class="one">六個區塊裡，你每天真正會用到的只有兩個：中間的畫布，與右下角的 Help。其他都能慢慢摸。</p>
+    <div class="wd"><div class="wh"><h3>點區塊看說明</h3><span class="tag amber">互動</span></div><p class="hint">區塊配置示意圖，不是真實截圖——版本不同，面板位置可能略有差異。</p><div id="w-ui"></div></div>
+  </section>
+
+  <section class="part" id="p08" data-t="四個核心概念與 Role">
+    <div class="ph"><span class="num">08</span><div><h2>四個核心概念：Process・Operator・Port・ExampleSet</h2><div class="en">AND THE ROLE THAT PANDAS DOESN'T HAVE</div></div></div>
+    <p class="one">ExampleSet ≈ pandas DataFrame：一列叫 Example、一欄叫 Attribute。但多了「Role」——pandas 沒有內建方式標記「哪一欄是 y」，AI Studio 把它做成欄位的屬性。</p>
+    <div class="wd"><div class="wh"><h3>四個概念對應 Python</h3></div><div id="w-concepts"></div></div>
+    <div class="wd"><div class="wh"><h3>Set Role 練習：替每一欄設定角色，再按執行</h3><span class="tag amber">核心互動</span></div><div id="w-role"></div></div>
+  </section>
+
+  <section class="part" id="p09" data-t="第一個流程：六個運算子">
+    <div class="ph"><span class="num">09</span><div><h2>你的第一個流程：六個運算子</h2><div class="en">RETRIEVE → SET ROLE → SPLIT → TREE → APPLY → PERFORMANCE</div></div></div>
+    <p class="one">第 ⑤ 步最容易接錯：Apply Model 需要「兩個」輸入——模型從 Decision Tree 來、資料從 Split Data 的測試那條線來。Decision Tree 輸出的是「模型」不是預測值。</p>
+    <div class="wd"><div class="wh"><h3>自己接線、按 Ctrl+Enter 執行</h3><span class="tag amber">核心互動</span></div><p class="hint">點畫布上任一條連線＝「滑鼠中鍵看中間結果」。資料為 300 筆仿 Titanic 結構的模擬乘客。</p><div id="w-flow"></div></div>
+  </section>
+
+  <section class="part" id="p10" data-t="子流程與資料型別">
+    <div class="ph"><span class="num">10</span><div><h2>三個一定要弄懂的機制</h2><div class="en">ROLE · SUBPROCESS · DATA TYPE</div></div></div>
+    <p class="one">Cross Validation、Optimize Parameters、Loop 都是容器：雙擊進入內層畫布，裡面再放訓練與測試的流程——巢狀關係是畫出來的，比 cross_val_score() 更看得見在做什麼。</p>
+    <div class="wd"><div class="wh"><h3>Cross Validation 子流程＝cross_val_score()</h3><span class="tag amber">核心互動</span></div><div id="w-cv"></div></div>
+    <div class="wd"><div class="wh"><h3>型別不對，運算子就灰掉</h3><span class="tag amber">互動</span></div><div id="w-type"></div></div>
+  </section>
+
+  <section class="part" id="p11" data-t="內建演算法">
+    <div class="ph"><span class="num">11</span><div><h2>內建演算法的四大家族</h2><div class="en">60+ BUILT-IN ALGORITHMS</div></div></div>
+    <p class="one">內建演算法逾 60 種，另可透過 Weka、H2O 與其他擴充套件再加上更多。★ 為本課程實際使用（依 277 個範例流程檔統計）。</p>
+    <div class="wd"><div class="wh"><h3>點演算法看 Python 對應與課程模組</h3><span class="tag amber">互動</span></div><div id="w-algo"></div></div>
+  </section>
+
+  <section class="part" id="p12" data-t="擴充套件生態">
+    <div class="ph"><span class="num">12</span><div><h2>擴充套件生態：功能靠 Extension 加上去</h2><div class="en">MARKETPLACE</div></div></div>
+    <p class="one">必裝四個：Text Processing、Deep Learning、H2O、Generative Models。Extensions → Marketplace 搜尋後點 Install，裝完必須重開軟體。全部免費——但別亂裝，裝太多會拖慢啟動。</p>
+    <div class="wd"><div class="wh"><h3>277 個流程檔的實際使用次數</h3><span class="tag amber">互動</span></div><div id="w-ext"></div></div>
+    <div class="wd"><div class="wh"><h3>紅色驚嘆號：缺的是哪個擴充套件？</h3><span class="tag amber">練習</span></div><div id="w-extq"></div></div>
+  </section>
+
+  <section class="part" id="p13" data-t="三大生產力工具">
+    <div class="ph"><span class="num">13</span><div><h2>除了畫布之外的三大工具</h2><div class="en">TURBO PREP · AUTO MODEL · DEPLOYMENTS</div></div></div>
+    <p class="one">Auto Model 可以用來建立基準線，但作業與專題必須自己拉流程——這門課要學的是「為什麼這樣做」，不是「怎麼按到結果」。Turbo Prep 改完記得一鍵轉成 Process。</p>
+    <div class="concept">
+      <div><b>Turbo Prep 互動式資料準備</b>像 Excel 一樣看資料改資料；★ 改完要轉成 Process，否則無法重現</div>
+      <div><b>Auto Model 自動建模</b>自動試多種演算法並比較；★ 適合建立基準線，別直接交作業</div>
+      <div><b>Deployments 模型部署</b>發佈成服務、排程、REST API；免費版有功能限制</div>
+    </div>
+    <div class="wd"><div class="wh"><h3>這個情境該用哪個？</h3><span class="tag amber">練習</span></div><div id="w-tools3"></div></div>
+  </section>
+
+  <section class="part" id="p14" data-t="Execute Python">
+    <div class="ph"><span class="num">14</span><div><h2>Execute Python：兩個世界的橋樑</h2><div class="en">rm_main(data)</div></div></div>
+    <p class="one">上游的 ExampleSet 會自動轉成 pandas DataFrame，你寫一個 rm_main(data) 函式處理它，回傳後再轉回 ExampleSet。有現成運算子就別寫——寫了就失去「流程看得見」的好處。</p>
+    <div class="wd"><div class="wh"><h3>選一段程式碼，看資料進出的樣子</h3><span class="tag amber">核心互動</span></div><div id="w-pyop"></div></div>
+  </section>
+
+  <section class="part" id="p15" data-t="AI Studio 還是 Python">
+    <div class="ph"><span class="num">15</span><div><h2>AI Studio 還是 Python：怎麼選</h2><div class="en">NOT EITHER-OR</div></div></div>
+    <p class="one">這不是二選一：實務常見做法是用 AI Studio 快速探索與建立基準線，確定方向後再用 Python 做正式實作與部署。工具會換，流程不會。</p>
+    <div class="wd"><div class="wh"><h3>這個情境比較適合哪一邊？</h3><span class="tag amber">練習</span></div><div id="w-which"></div></div>
+  </section>
+
+  <section class="part" id="p16" data-t="快捷鍵與錯誤排除">
+    <div class="ph"><span class="num">16</span><div><h2>快捷鍵與常見錯誤訊息</h2><div class="en">SHORTCUTS · ERROR MESSAGES</div></div></div>
+    <p class="one">滑鼠中鍵看中間結果是最被低估的功能，等同於 print(df.head())。錯誤訊息的前三個佔新手九成，而且都出在同一個原因：資料還沒準備好就接到建模運算子。</p>
+    <div class="wd"><div class="wh"><h3>值得記住的操作</h3></div><div id="w-keys"></div></div>
+    <div class="wd"><div class="wh"><h3>看錯誤訊息，選解法</h3><span class="tag amber">練習</span></div><div id="w-errmsg"></div></div>
+  </section>
+
+  <section class="part" id="p17" data-t="資源、建議與限制">
+    <div class="ph"><span class="num">17</span><div><h2>學習資源、實用建議與誠實說明</h2><div class="en">RESOURCES · HONEST LIMITATIONS</div></div></div>
+    <p class="one">任何工具都有限制，說得出限制才表示你真的了解它。老師打不開你的流程，就沒辦法給分。</p>
+    <div class="wd"><div class="wh"><h3>本學期待辦</h3><span class="tag">可勾選進度</span></div><div id="w-todo"></div></div>
+    <div class="wd"><div class="wh"><h3>它做不到或不擅長的事</h3></div><div id="w-limits"></div></div>
+  </section>
+
+  <section class="part" id="p18" data-t="術語、測驗與回顧">
+    <div class="ph"><span class="num">18</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
+    <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3></div><div id="w-final"></div></div>
+    <div class="wd"><div class="wh"><h3>本補充教材重點回顧</h3></div><div id="w-review"></div></div>
+  </section>
+</main>
+</div>
+<script src="../assets/common.js"></script>
+<script src="../assets/ml.js"></script>
+<script src="aisa.js"></script>
+<script src="aisb.js"></script>
+</body>
+</html>
