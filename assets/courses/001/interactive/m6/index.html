@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M6 NLP 與文字探勘 · 互動學習</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">DS</span>互動學習站</a>
+  <span class="meta">/ M6 NLP 與文字探勘</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 20</span><div class="pbar"><i id="pbar"></i></div>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">M6 · 20 個段落</div></nav>
+<main>
+  <header class="mhero">
+    <div class="code">MODULE 6 · 第 11 週 · PHASE C</div>
+    <h1>NLP 與文字探勘：讓電腦讀懂文字</h1>
+    <p class="lead">護理與健康領域最有價值的資料多半是文字：病歷、交班紀錄、問卷開放題、衛教諮詢。這一頁裡的斷詞器、TF-IDF、否定偵測、主題模型、去識別化都是真的在你的瀏覽器裡跑——可以輸入自己的句子試試看。</p>
+    <div class="chips"><span class="tag">手算例：四篇病歷 TF-IDF、Naive Bayes 垃圾信、Cohen's Kappa</span><span class="tag amber">隨堂 Lab：W12 上課前繳交（不另計分）</span><span class="tag gray">所有文本皆為虛構</span></div>
+  </header>
+
+  <section class="part" id="p01" data-t="NLP 的三個時代">
+    <div class="ph"><span class="num">01</span><div><h2>為什麼要學、NLP 的三個時代</h2><div class="en">RULES · STATISTICAL ML · DEEP LEARNING</div></div></div>
+    <p class="one">你有一個資工背景的人沒有的優勢：你看得懂那些文字——知道「主訴」「否認」「PRN」是什麼意思。七十年來 NLP 換過三種做法，但新的沒有淘汰舊的：醫療場域今天仍大量使用規則式與 TF-IDF，因為可解釋、可稽核、不用算力。</p>
+    <div class="concept">
+      <div><b>規則式（1950s–80s）</b>人工寫規則、關鍵字比對。完全可解釋，但規則會爆炸、換句話說就抓不到</div>
+      <div><b>統計與傳統 ML（1990s–2010s）</b>TF-IDF、Naive Bayes、主題模型。★ 本週主要內容；小資料仍好用</div>
+      <div><b>深度學習（2013–）</b>Word2Vec → BERT → GPT。懂上下文，但不易解釋。M7 深入</div>
+      <div><b>★ 實務：三者並用</b>規則式當安全網、模型抓委婉表達、人工覆核當最後一層</div>
+    </div>
+    <div class="wd"><div class="wh"><h3>規則式的極限：用關鍵字找「跌倒相關」通報</h3><span class="tag amber">核心互動</span></div><p class="hint">勾選關鍵字，看八筆虛構通報哪些被抓到、哪些漏掉、哪些誤報。</p><div id="w-rule"></div></div>
+  </section>
+
+  <section class="part" id="p02" data-t="七步流程與前處理">
+    <div class="ph"><span class="num">02</span><div><h2>文字探勘的七步流程與前處理</h2><div class="en">THE TEXT MINING PIPELINE</div></div></div>
+    <p class="one">②③④（清理、斷詞、正規化）就是 M1 的資料清理；⑤ 向量化就是特徵工程；⑥⑦ 完全沿用 M2／M3。文字探勘沒有新的演算法——難點在「把字變乾淨」。</p>
+    <div class="wd"><div class="wh"><h3>一句病歷的六個階段</h3><span class="tag amber">核心互動</span></div><p class="hint">一步一步往下走；注意停用詞表裡有沒有否定詞。</p><div id="w-pipe"></div></div>
+  </section>
+
+  <section class="part" id="p03" data-t="中文斷詞">
+    <div class="ph"><span class="num">03</span><div><h2>★ 中文斷詞：這一步做不好，後面全白做</h2><div class="en">CHINESE WORD SEGMENTATION · 自訂詞典</div></div></div>
+    <p class="one">英文天生有空格，中文沒有。同一串字可以有多種切法；專有名詞沒收錄就會被切碎。一份好的自訂詞典，對結果的提升通常大於換一個更厲害的模型。</p>
+    <div class="wd"><div class="wh"><h3>迷你斷詞器（最大匹配法）＋ 自訂詞典</h3><span class="tag amber">核心互動</span></div><p class="hint">選句子或自己輸入；勾選要加入自訂詞典的醫療術語。也比較「正向」與「逆向」最大匹配的歧義。</p><div id="w-seg"></div></div>
+    <div class="concept">
+      <div><b>jieba（結巴）</b>簡體語料為主（可換繁體詞典），台灣用語較弱；輕量、快、易加詞典。適合社群貼文</div>
+      <div><b>CKIP Transformers（中研院）</b>★ 臺灣繁體語料訓練，本地用語準確；附詞性與 NER。適合醫療、公文</div>
+      <div><b>詞典來源①②</b>ICD-10 中文名、健保藥品檔、LOINC；從自己資料找「被切成單字的連續序列」</div>
+      <div><b>詞典來源③④</b>科內縮寫（BP、I/O、NPO）與同義詞歸一；持續維護，當成科內資產</div>
+    </div>
+  </section>
+
+  <section class="part" id="p04" data-t="詞袋與 DTM">
+    <div class="ph"><span class="num">04</span><div><h2>詞袋與文件—詞矩陣</h2><div class="en">BAG OF WORDS · DOCUMENT-TERM MATRIX</div></div></div>
+    <p class="one">每一列是一份文件、每一欄是一個詞、格子裡是次數——它真的只是一個袋子，裡面的詞沒有順序。真實資料通常 99% 以上是 0。</p>
+    <div class="wd"><div class="wh"><h3>四篇病歷變成一張表</h3><span class="tag amber">互動</span></div><p class="hint">可以直接修改文件（詞與詞之間用空格隔開）。</p><div id="w-dtm"></div></div>
+  </section>
+
+  <section class="part" id="p05" data-t="TF-IDF">
+    <div class="ph"><span class="num">05</span><div><h2>TF-IDF：為什麼「病人」這個詞沒有價值</h2><div class="en">TERM FREQUENCY × INVERSE DOCUMENT FREQUENCY</div></div></div>
+    <p class="one">IDF：出現在越少篇文件裡的詞，越能代表這篇文件。「病人」4 篇中出現 3 篇 → 權重最低。公式（scikit-learn）：idf = ln((1+N)/(1+df)) + 1，再做 L2 正規化。</p>
+    <div class="wd"><div class="wh"><h3>四篇病歷的 TF-IDF 完整手算</h3><span class="tag amber">核心互動</span></div><div id="w-tfidf"></div></div>
+  </section>
+
+  <section class="part" id="p06" data-t="探索性文字分析">
+    <div class="ph"><span class="num">06</span><div><h2>探索性文字分析：先看詞頻長什麼樣</h2><div class="en">ZIPF'S LAW · STOP WORDS · MIN-COUNT</div></div></div>
+    <p class="one">詞頻極度不平均：少數幾個詞佔掉大半，剩下是一條長尾。不去停用詞，結果會被「的、了、是」淹沒；長尾的詞出現太少，統計上不可靠。</p>
+    <div class="wd"><div class="wh"><h3>護理紀錄語料的詞頻分布</h3><span class="tag amber">互動</span></div><div id="w-zipf"></div></div>
+  </section>
+
+  <section class="part" id="p07" data-t="N-gram 與否定偵測">
+    <div class="ph"><span class="num">07</span><div><h2>N-gram 與否定偵測：把語序救回來</h2><div class="en">N-GRAMS · NEGEX-STYLE NEGATION SCOPE</div></div></div>
+    <p class="one">詞袋丟掉語序後，「否認發燒」與「發燒」幾乎沒有差別。順序建議：先加 bigram（免費）→ 不夠再加否定標記（便宜）→ 還不夠才考慮換模型。</p>
+    <div class="wd"><div class="wh"><h3>Unigram、Bigram、Trigram</h3><span class="tag amber">互動</span></div><div id="w-ngram"></div></div>
+    <div class="wd"><div class="wh"><h3>否定範圍標記（NegEx 風格）</h3><span class="tag amber">核心互動</span></div><p class="hint">調整視窗大小、邊界、與去停用詞的順序，看哪些詞被加上 NEG_ 前綴。</p><div id="w-neg"></div></div>
+  </section>
+
+  <section class="part" id="p08" data-t="關鍵詞抽取">
+    <div class="ph"><span class="num">08</span><div><h2>關鍵詞抽取：找出真正有訊息量的詞</h2><div class="en">COUNT vs TF-IDF · TEXTRANK · KEYBERT</div></div></div>
+    <p class="one">只看詞頻，跑出來全是「住院、醫師、護理師」——每則留言都有，看了等於沒看。TF-IDF 加權之後，可以拿去開會討論的詞才浮出來。</p>
+    <div class="wd"><div class="wh"><h3>30 則滿意度留言：兩種排序</h3><span class="tag amber">核心互動</span></div><div id="w-kw"></div></div>
+  </section>
+
+  <section class="part" id="p09" data-t="Naive Bayes 手算">
+    <div class="ph"><span class="num">09</span><div><h2>文本分類：Naive Bayes 手算</h2><div class="en">NAIVE BAYES · LAPLACE SMOOTHING</div></div></div>
+    <p class="one">「天真」指的是它假設各個詞互相獨立——語言上明顯不成立，但它照樣好用。小資料（< 1 萬筆）的文本分類首選；中等資料改用邏輯斯迴歸，可以看係數。</p>
+    <div class="wd"><div class="wh"><h3>這封信是垃圾信的機率</h3><span class="tag amber">核心互動</span></div><p class="hint">預設為講義例子（含「免費」、不含「會議」）。切換詞的有無、調整訓練資料的次數。</p><div id="w-nb"></div></div>
+  </section>
+
+  <section class="part" id="p10" data-t="解讀分類結果">
+    <div class="ph"><span class="num">10</span><div><h2>完整解讀一次分類結果</h2><div class="en">異常事件通報：是否為「用藥相關」</div></div></div>
+    <p class="one">準確率 93.7% 看起來很好，但全部猜「否」也有 92%。真正該看的是 Recall——漏掉的那幾筆才是風險所在。而係數表才是說服臨床單位的關鍵。</p>
+    <div class="wd"><div class="wh"><h3>混淆矩陣、指標與模型看重的詞</h3><span class="tag amber">互動</span></div><div id="w-cm"></div></div>
+  </section>
+
+  <section class="part" id="p11" data-t="主題模型 NMF">
+    <div class="ph"><span class="num">11</span><div><h2>主題模型：從沒有標籤的文字找主題</h2><div class="en">NMF · LDA · BERTOPIC</div></div></div>
+    <p class="one">把文件—詞矩陣分解成「文件—主題」×「主題—詞」。演算法只給你詞的組合，主題的名字是你取的——這正是護理背景的優勢。</p>
+    <div class="wd"><div class="wh"><h3>在瀏覽器裡跑 NMF</h3><span class="tag amber">核心互動</span></div><p class="hint">80 則虛構的衛教諮詢（已斷詞）。改主題數、改前處理，看主題怎麼變；替每個主題命名。</p><div id="w-nmf"></div></div>
+  </section>
+
+  <section class="part" id="p12" data-t="情感分析">
+    <div class="ph"><span class="num">12</span><div><h2>情感分析：三種做法在同一句話上的差異</h2><div class="en">LEXICON · ML · ASPECT-BASED SENTIMENT</div></div></div>
+    <p class="one">病人滿意度的開放題，用整句情感分析幾乎沒有價值——一句話裡通常同時誇跟罵。要做的是「面向情感分析」：分別看每一個面向的好惡。</p>
+    <div class="wd"><div class="wh"><h3>整句 vs 面向</h3><span class="tag amber">核心互動</span></div><div id="w-senti"></div></div>
+  </section>
+
+  <section class="part" id="p13" data-t="NER 與去識別化">
+    <div class="ph"><span class="num">13</span><div><h2>命名實體辨識與去識別化</h2><div class="en">NER · REDACTION · SURROGATE</div></div></div>
+    <p class="one">NER 是「病歷結構化」與「去識別化」共用的核心技術：把敘述變成可統計的欄位；也要先把人名、病歷號找出來才能遮蔽。不做去識別化，資料根本不能拿來分析。</p>
+    <div class="wd"><div class="wh"><h3>規則式 NER：抽欄位、遮蔽、代換</h3><span class="tag amber">核心互動</span></div><p class="hint">文字可直接修改（請勿貼上真實病歷）。</p><div id="w-ner"></div></div>
+  </section>
+
+  <section class="part" id="p14" data-t="任務地圖">
+    <div class="ph"><span class="num">14</span><div><h2>現代方法與任務地圖</h2><div class="en">ZERO-SHOT · SUMMARIZATION · TASK MAP</div></div></div>
+    <p class="one">零樣本分類讓你「想出類別名稱」就能開始，不用標任何一筆資料。但醫療場域要能解釋「為什麼判成這一類」時，TF-IDF＋邏輯斯迴歸反而是對的選擇。</p>
+    <div class="wd"><div class="wh"><h3>這個任務該用哪一代方法</h3><span class="tag amber">練習</span></div><div id="w-taskmap"></div></div>
+  </section>
+
+  <section class="part" id="p15" data-t="文件相似度">
+    <div class="ph"><span class="num">15</span><div><h2>文件相似度與分群</h2><div class="en">COSINE SIMILARITY · M8 知識檢索的原型</div></div></div>
+    <p class="one">把每份文件轉成 TF-IDF 向量，兩兩算餘弦相似度——不需要任何標籤就能把紀錄整理出結構。M8 的知識檢索概念完全一樣，只是改用嵌入向量。</p>
+    <div class="wd"><div class="wh"><h3>五筆護理紀錄的相似度矩陣＋檢索</h3><span class="tag amber">核心互動</span></div><div id="w-sim"></div></div>
+  </section>
+
+  <section class="part" id="p16" data-t="標註品質 Kappa">
+    <div class="ph"><span class="num">16</span><div><h2>標註品質：Cohen's Kappa</h2><div class="en">INTER-ANNOTATOR AGREEMENT</div></div></div>
+    <p class="one">監督式學習的天花板是標註品質：兩個人標不一致的資料，模型不可能學得比人準。κ 太低不是換模型，是把標註規則寫清楚再重標一次。</p>
+    <div class="wd"><div class="wh"><h3>兩位護理師各標 100 筆「是否高風險」</h3><span class="tag amber">核心互動</span></div><div id="w-kappa"></div></div>
+  </section>
+
+  <section class="part" id="p17" data-t="醫療文本的挑戰">
+    <div class="ph"><span class="num">17</span><div><h2>醫療文本的四個特殊挑戰</h2><div class="en">NEGATION · ABBREVIATION · SEGMENTATION · DE-IDENTIFICATION</div></div></div>
+    <p class="one">一個沒處理否定的醫療文本分類器，可能把「否認自殺意念」判成高風險，也可能反過來漏掉真正的個案。</p>
+    <div class="wd"><div class="wh"><h3>這是哪一種挑戰？</h3><span class="tag amber">練習</span></div><div id="w-chal"></div></div>
+    <div class="note warn"><b>去識別化不等於絕對安全：</b>罕見疾病＋特定年齡＋就診地區的組合仍可能識別出個人；自由文本的敘述（「本院唯一的某某手術個案」）也可能洩漏身分。★ 課程要求：一律使用公開資料集或完全虛構的資料，不碰真實病歷。</div>
+  </section>
+
+  <section class="part" id="p18" data-t="應用與五個問題">
+    <div class="ph"><span class="num">18</span><div><h2>醫護應用與開題前的五個問題</h2><div class="en">APPLICATIONS · PROJECT CHECKLIST</div></div></div>
+    <p class="one">文字探勘的價值：把「一個分數」變成「一份可以據以改善的診斷」。開始一個專題前，先過五個問題——前兩題過不了就換題目，不要硬做。</p>
+    <div class="wd"><div class="wh"><h3>六個可執行的應用方向</h3></div><div id="w-apps"></div></div>
+    <div class="wd"><div class="wh"><h3>我的題目做得成嗎？</h3><span class="tag amber">互動</span></div><div id="w-five"></div></div>
+  </section>
+
+  <section class="part" id="p19" data-t="AI Studio 與作業">
+    <div class="ph"><span class="num">19</span><div><h2>AI Studio 實作與隨堂 Lab</h2><div class="en">AMAZON ALEXA SENTIMENT · TAKE-HOME</div></div></div>
+    <p class="one">Repository ▸ 7. Text Mining（需安裝 Text Processing 擴充）。作業三個任務：前處理影響實驗（40%）、中文斷詞與自訂詞典（35%）、主題模型探索（25%）。一律使用公開或虛構資料。</p>
+    <div class="wd"><div class="wh"><h3>課堂實作步驟</h3><span class="tag">可勾選進度</span></div><div id="w-labs"></div></div>
+    <div class="wd"><div class="wh"><h3>任務一紀錄表：四組前處理</h3><span class="tag amber">可填寫、可下載</span></div><div id="w-t1"></div></div>
+    <div class="wd"><div class="wh"><h3>任務二工作台：自訂詞典前後對照</h3><span class="tag amber">可填寫、可下載</span></div><p class="hint">輸入你的 10 句虛構句子（一行一句）與自訂詞典（一行一詞），用本頁的迷你斷詞器產生前後對照表。正式作業仍請用 jieba。</p><div id="w-t2"></div></div>
+    <div class="wd"><div class="wh"><h3>三個任務檢查清單</h3></div><div id="w-tasks"></div></div>
+  </section>
+
+  <section class="part" id="p20" data-t="術語、測驗與回顧">
+    <div class="ph"><span class="num">20</span><div><h2>從 TF-IDF 到詞向量：術語、測驗與回顧</h2><div class="en">M6 → M7 → M8</div></div></div>
+    <div class="wd"><div class="wh"><h3>三種文本表示法</h3></div><div id="w-repr"></div></div>
+    <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
+    <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
+    <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
+  </section>
+</main>
+</div>
+<script src="../assets/common.js"></script>
+<script src="../assets/ml.js"></script>
+<script src="m6a.js"></script>
+<script src="m6b.js"></script>
+</body>
+</html>
