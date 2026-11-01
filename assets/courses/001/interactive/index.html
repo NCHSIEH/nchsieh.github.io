@@ -68,7 +68,7 @@
   <div class="filters" id="filters"></div>
   <div class="mods" id="mods"></div>
 
-  <div class="sect-h"><h2>補充教材與專班</h2><small>工具操作手冊，互動版預留</small></div>
+  <div class="sect-h"><h2>補充教材與專班</h2><small>工具操作手冊與互動實作</small></div>
   <div class="mods" id="extras"></div>
   <p class="foot">教學用網站 · 範例資料皆為模擬資料，非真實病人資料 · 進度僅存在你自己的瀏覽器</p>
 </main>
@@ -108,7 +108,8 @@ const MODULES = [
 const EXTRAS = [
   { code:'補充', title:'RapidMiner AI Studio 入門與 Python 對照', en:'AI Studio × Python', desc:'九步驟與 pandas／scikit-learn 1:1 對照、可搜尋的運算子對照表、授權與安裝檢核、Set Role 練習、六個運算子接線模擬（含中間結果）、Cross Validation 子流程、Execute Python、錯誤訊息排除。', tools:'Set Role · Apply Model · Cross Validation · Execute Python', status:'live', url:'ais/', pdf:null, key:'ais',
     subs:[{code:'S.1 ★',title:'九步驟 1:1 對照',url:'ais/#p01'},{code:'S.2',title:'授權與安裝',url:'ais/#p05'},{code:'S.3',title:'第一個流程',url:'ais/#p09'},{code:'S.4',title:'Execute Python',url:'ais/#p14'}] },
-  { code:'補充', title:'Dify 實作手冊：九個範例與長照 3.0 專案', en:'Dify Handbook', desc:'九個漸進範例與專題。', status:'soon' },
+  { code:'補充', title:'Dify 實作手冊：九個範例與長照 3.0 專案', en:'Dify Handbook', desc:'九個範例逐步練習：變數、對話記憶、工具與流程接線、模型配置、JSON 驗證；三庫檢索、七節點長照流程追蹤、額度與排他規則、失敗案例除錯。', tools:'Dify · JSON · RAG · Code · Tracing', status:'live', url:'dify/', pdf:null, key:'dify',
+    subs:[{code:'Ex1–5',title:'五種應用型態與接線',url:'dify/#p03'},{code:'Ex6–9',title:'模型、參數與 JSON',url:'dify/#p08'},{code:'RAG',title:'三庫分段與檢索',url:'dify/#p13'},{code:'專案 ★',title:'長照七節點追蹤',url:'dify/#p14'},{code:'除錯',title:'失敗案例與驗收',url:'dify/#p16'}] },
   { code:'補充', title:'n8n 入門與 AI Agent 實作', en:'n8n & Agents', desc:'自動化工作流與 Agent 串接。', status:'soon' },
   { code:'專班', title:'Vibe Coding 專班', en:'Vibe Coding Workshop', desc:'專班教材入口。', status:'soon' },
 ];
