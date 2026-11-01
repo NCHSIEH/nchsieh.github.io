@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M9 醫療 AI 的倫理、偏誤與可解釋性 · 互動學習</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">DS</span>互動學習站</a>
+  <span class="meta">/ M9 倫理、偏誤與可解釋性</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 20</span><div class="pbar"><i id="pbar"></i></div>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">M9 · 20 個段落</div></nav>
+<main>
+  <header class="mhero">
+    <div class="code">MODULE 9 · 第 10 週與第 16 週 · 貫穿全課程</div>
+    <h1>醫療 AI 的倫理、偏誤與可解釋性</h1>
+    <p class="lead">前八個模組教你「做得出來」。這一個模組問三個不同的問題：這樣做對嗎？對誰不公平？出事了誰負責？這一頁把標籤偏誤、代理變數、公平性的不可能定理、子群體稽核、SHAP 與自動化偏誤都做成可以自己調、自己看數字的模擬，最後附發表前檢核清單與模型卡產生器。</p>
+    <div class="chips"><span class="tag">W10 講前半（偏誤與公平性）・W16 講後半（責任與檢核）</span><span class="tag amber">四條紅線屬「不符即扣分」</span><span class="tag gray">模擬資料皆為虛構；法規為 2026 年 9 月概況，非法律意見</span></div>
+  </header>
+
+  <section class="part" id="p01" data-t="定位與三種失敗">
+    <div class="ph"><span class="num">01</span><div><h2>這個模組的定位與三種真實的失敗</h2><div class="en">ALL METRICS PASSED</div></div></div>
+    <p class="one">三種失敗的共同點：模型評估指標全部通過。這說明「準確率高」跟「可以用」是兩件事——而後者不是技術問題。</p>
+    <div class="concept">
+      <div><b>① 它沒有正確答案</b>核心問題是價值選擇：你要優先保障誰、願意犧牲什麼</div>
+      <div><b>② 不是做完再想</b>偏誤在「問題定義」那一刻就已經進來了——那是專題的第一步</div>
+      <div><b>③ W10 與 W16 的評分項目</b>W10 明列限制與倫理反思；W16 醫療場域四條紅線不符即扣分</div>
+    </div>
+    <div class="wd"><div class="wh"><h3>這是哪一種失敗？</h3><span class="tag amber">練習</span></div><div id="w-fail3"></div></div>
+  </section>
+
+  <section class="part" id="p02" data-t="案例一：標籤偏誤">
+    <div class="ph"><span class="num">02</span><div><h2>案例一：用「醫療花費」當作「醫療需求」</h2><div class="en">LABEL BIAS · OBERMEYER ET AL., 2019</div></div></div>
+    <p class="one">花費低 ≠ 健康。模型從頭到尾沒有使用「種族」欄位，偏誤來自「標籤的定義」；所有技術指標都正常——沒有任何一個評估數字會告訴你出事了。</p>
+    <div class="wd"><div class="wh"><h3>標籤偏誤模擬：同樣的病，B 群花得比較少</h3><span class="tag amber">核心互動</span></div><p class="hint">2,000 位虛構病人（B 群占 30%），兩群真實需求分布相同；模型完美預測「花費」，取分數前 10% 進入額外照護計畫。</p><div id="w-label"></div></div>
+  </section>
+
+  <section class="part" id="p03" data-t="案例二：捷徑學習">
+    <div class="ph"><span class="num">03</span><div><h2>案例二：模型學到「錯的東西」</h2><div class="en">SHORTCUT LEARNING · ZECH ET AL., 2018</div></div></div>
+    <p class="one">攜帶式 X 光機的片子有特定標記，而重症病人才用攜帶式——模型從未學會看肺部，它學會了看標記。只有外部驗證才會露餡。表格資料一樣會發生，例如「已開立會診單」預測「重症」。</p>
+    <div class="wd"><div class="wh"><h3>內部測試 vs 外部驗證</h3><span class="tag amber">核心互動</span></div><div id="w-shortcut"></div></div>
+  </section>
+
+  <section class="part" id="p04" data-t="案例三：準確但不該用">
+    <div class="ph"><span class="num">04</span><div><h2>案例三：準確，但不該這樣用</h2><div class="en">ACCURATE BUT MISUSED</div></div></div>
+    <p class="one">模型回答的是「會不會發生」，不是「值不值得投入」。把預測結果直接當成資源分配依據，中間跳過了價值判斷——這種失敗，任何技術檢核都攔不下來，只有「有人問了這個問題」才攔得下來。</p>
+    <div class="wd"><div class="wh"><h3>出院準備資源只夠 4 位：誰拿到？</h3><span class="tag amber">互動</span></div><div id="w-alloc"></div></div>
+  </section>
+
+  <section class="part" id="p05" data-t="偏誤進入的六個環節">
+    <div class="ph"><span class="num">05</span><div><h2>偏誤進入系統的六個環節</h2><div class="en">AND IT ACCUMULATES</div></div></div>
+    <p class="one">不是有人故意做壞。偏誤在每一個技術決策裡悄悄累積，而每一步看起來都很合理。</p>
+    <div class="wd"><div class="wh"><h3>點一個環節</h3><span class="tag amber">互動</span></div><div id="w-six"></div></div>
+  </section>
+
+  <section class="part" id="p06" data-t="偏誤的四種類型">
+    <div class="ph"><span class="num">06</span><div><h2>偏誤的四種類型：各自要用不同方法檢查</h2><div class="en">SELECTION · MEASUREMENT · LABEL · DEPLOYMENT</div></div></div>
+    <p class="one">多數人只想到選擇偏誤，但標籤偏誤往往最隱蔽也最嚴重——標籤是「你以為的正確答案」，如果它本身就有偏，模型只會忠實地把偏誤學起來並放大。</p>
+    <div class="wd"><div class="wh"><h3>這是哪一種偏誤？</h3><span class="tag amber">練習</span></div><div id="w-btype"></div></div>
+    <div class="wd"><div class="wh"><h3>具體檢查動作</h3></div><div id="w-bcheck"></div></div>
+  </section>
+
+  <section class="part" id="p07" data-t="代理變數">
+    <div class="ph"><span class="num">07</span><div><h2>代理變數：沒用敏感欄位，也會產生偏誤</h2><div class="en">FAIRNESS THROUGH UNAWARENESS IS A FALLACY</div></div></div>
+    <p class="one">把敏感欄位刪掉，並不能消除偏誤——因為其他欄位仍然攜帶那個資訊。檢查方法：把受保護屬性當成「標籤」，用其他特徵去預測它，預測得越準，代理越強。</p>
+    <div class="wd"><div class="wh"><h3>用其他欄位預測「非都會區」</h3><span class="tag amber">核心互動</span></div><p class="hint">2,000 筆虛構資料，非都會區占 22%。勾選要放進模型的欄位（樸素貝氏，平衡準確率：0.5＝完全猜不出，1＝完全猜中）。</p><div id="w-proxy"></div></div>
+  </section>
+
+  <section class="part" id="p08" data-t="公平性與不可能定理">
+    <div class="ph"><span class="num">08</span><div><h2>公平性的三種定義，與不可能定理</h2><div class="en">DEMOGRAPHIC PARITY · EQUAL OPPORTUNITY · PREDICTIVE PARITY</div></div></div>
+    <p class="one">盛行率不同時，除非模型完美預測，三種定義無法同時滿足（Kleinberg, 2016）。這不是演算法不夠好，是數學上的必然。所以「這個模型公平嗎」不是技術問題，是價值選擇。</p>
+    <div class="wd"><div class="wh"><h3>再入院風險模型：A 群盛行率 20%、B 群 10%，各 1,000 人</h3><span class="tag amber">核心互動</span></div><p class="hint">選一種公平定義，系統替你調整 B 群的選出人數；或自己拉。模型的命中曲線為示意，數字對應講義例子。</p><div id="w-fair"></div></div>
+    <div class="wd"><div class="wh"><h3>這個場景該優先哪一種？</h3><span class="tag amber">練習</span></div><div id="w-fairpick"></div></div>
+  </section>
+
+  <section class="part" id="p09" data-t="子群體稽核">
+    <div class="ph"><span class="num">09</span><div><h2>子群體稽核：交付前一定要做的一張表</h2><div class="en">SUBGROUP AUDIT</div></div></div>
+    <p class="one">整體 AUC 0.842 看起來不錯，但 80 歲以上只有 0.771、非都會區只有 0.782——而這兩群往往正是最需要這個模型的人。這張表不難做，但很少人做。</p>
+    <div class="wd"><div class="wh"><h3>拆到子群體看</h3><span class="tag amber">核心互動</span></div><div id="w-audit"></div></div>
+  </section>
+
+  <section class="part" id="p10" data-t="公平性的處理手段">
+    <div class="ph"><span class="num">10</span><div><h2>公平性的處理手段：技術三時機＋三個更有效的作法</h2><div class="en">PRE · IN · POST-PROCESSING · AND PROCESS</div></div></div>
+    <p class="one">技術手段有限，要搭配流程。實務上「對表現差的群體加強人工覆核」往往比任何演算法調整都有效；最根本的是回去補資料。</p>
+    <div class="wd"><div class="wh"><h3>這個做法屬於哪一類？</h3><span class="tag amber">練習</span></div><div id="w-fix"></div></div>
+  </section>
+
+  <section class="part" id="p11" data-t="可解釋性四個層次">
+    <div class="ph"><span class="num">11</span><div><h2>可解釋性的四個層次</h2><div class="en">INTRINSIC · GLOBAL · LOCAL · BLACK BOX</div></div></div>
+    <p class="one">SHAP 與 LIME 是「事後近似」，不是模型真正的推理過程。如果可解釋性是硬需求，優先選本質可解釋的模型，而不是「先用黑箱再加 SHAP」。</p>
+    <div class="wd"><div class="wh"><h3>這個模型／工具屬於哪一層？</h3><span class="tag amber">練習</span></div><div id="w-xlevel"></div></div>
+  </section>
+
+  <section class="part" id="p12" data-t="SHAP 怎麼用">
+    <div class="ph"><span class="num">12</span><div><h2>SHAP：怎麼用、以及不能怎麼用</h2><div class="en">CONTRIBUTION, NOT CAUSATION</div></div></div>
+    <p class="one">SHAP 只回答「在這個模型裡，哪些欄位把這一筆的分數推高或拉低」，它不回答「改變這個欄位會不會改變真實世界的結果」。不能拿來說「讓他不獨居就會降低風險」。</p>
+    <div class="wd"><div class="wh"><h3>瀑布圖：這一位病人為什麼被判高風險</h3><span class="tag amber">核心互動</span></div><p class="hint">取消勾選某個因素＝假設這筆資料沒有該因素時的示意貢獻（真實 SHAP 值會隨其他特徵與參照資料集改變）。</p><div id="w-shap"></div></div>
+  </section>
+
+  <section class="part" id="p13" data-t="Grad-CAM">
+    <div class="ph"><span class="num">13</span><div><h2>Grad-CAM：檢查模型「在看哪裡」</h2><div class="en">WHERE IS THE MODEL LOOKING?</div></div></div>
+    <p class="one">兩張熱區圖對應的準確率可能一模一樣，差別只有 Grad-CAM 看得出來。具體作法：抽 20 筆模型判「陽性」的案例，請臨床專家看熱區圖，問「它是不是在看該看的地方」。</p>
+    <div class="wd"><div class="wh"><h3>抽樣檢查：它在看肺野，還是在看標記？</h3><span class="tag amber">核心互動</span></div><p class="hint">示意圖，非真實影像。點每張圖判斷熱區落在哪裡。</p><div id="w-cam"></div></div>
+  </section>
+
+  <section class="part" id="p14" data-t="對不同對象說明">
+    <div class="ph"><span class="num">14</span><div><h2>不同對象要不同的解釋</h2><div class="en">CLINICIANS · PATIENTS · MANAGERS · AUDITORS · IRB</div></div></div>
+    <p class="one">共同點：好的說法都比較長。誠實的說明本來就比較費口舌——但那正是專業與話術的差別。專題發表時，你面對的是「管理者＋資訊稽核」的混合對象。</p>
+    <div class="wd"><div class="wh"><h3>選對象，看該怎麼說</h3><span class="tag amber">互動</span></div><div id="w-aud"></div></div>
+  </section>
+
+  <section class="part" id="p15" data-t="AI 介入的四個層級">
+    <div class="ph"><span class="num">15</span><div><h2>責任邊界：AI 介入程度的四個層級</h2><div class="en">WHO MAKES THE FINAL DECISION?</div></div></div>
+    <p class="one">目前實務共識：AI 是工具，最終決定與責任仍在專業人員身上。課程專題一律停在 ① 資訊提供或 ② 輔助判斷——這不只是保守，是責任歸屬還沒有明確答案。</p>
+    <div class="wd"><div class="wh"><h3>拉動層級</h3><span class="tag amber">互動</span></div><div id="w-level"></div></div>
+  </section>
+
+  <section class="part" id="p16" data-t="自動化偏誤">
+    <div class="ph"><span class="num">16</span><div><h2>自動化偏誤：設計上最該小心的一件事</h2><div class="en">AUTOMATION BIAS</div></div></div>
+    <p class="one">介面越權威、越像已成定局，人就越不會去質疑它。如果採納率 99%，那不是模型很準，是沒有人在思考。</p>
+    <div class="wd"><div class="wh"><h3>介面設計模擬器</h3><span class="tag amber">核心互動</span></div><p class="hint">切換介面元素，看「AI 其實錯了的時候，有多少人還是照做」（數字為示意模型，方向依講義）。</p><div id="w-auto"></div></div>
+  </section>
+
+  <section class="part" id="p17" data-t="生成式 AI 與法規">
+    <div class="ph"><span class="num">17</span><div><h2>生成式 AI 的六個新問題與四類法規</h2><div class="en">GENAI ETHICS & REGULATION</div></div></div>
+    <p class="one">六個問題的處方全部都在 M7、M8 教過了——這不是新的技術挑戰，是「你有沒有把學過的護欄真的裝上去」。全部用公開或虛構資料，就能避開絕大多數法規問題，同時仍能完整練習方法。</p>
+    <div class="wd"><div class="wh"><h3>問題 → 處方</h3><span class="tag amber">練習</span></div><div id="w-genai"></div></div>
+    <div class="wd"><div class="wh"><h3>四類法規要求</h3><span class="tag amber">互動</span></div><div id="w-law"></div></div>
+    <div class="wd"><div class="wh"><h3>迷思還是事實？</h3><span class="tag amber">練習</span></div><div id="w-myth"></div></div>
+  </section>
+
+  <section class="part" id="p18" data-t="模型卡產生器">
+    <div class="ph"><span class="num">18</span><div><h2>模型卡：交付模型時該附的說明文件</h2><div class="en">MODEL CARD · MITCHELL ET AL., 2019</div></div></div>
+    <p class="one">七項寫下來大約兩頁 A4。第 ③ 項「不適用範圍」是最常被省略的一項，也是接手的人最需要的一項。寫出「還沒做的事」，比宣稱「已經很完整」專業得多。</p>
+    <div class="wd"><div class="wh"><h3>模型卡產生器（自動存在這台電腦的瀏覽器）</h3><span class="tag amber">可直接使用</span></div><div id="w-card"></div></div>
+  </section>
+
+  <section class="part" id="p19" data-t="討論情境與檢核清單">
+    <div class="ph"><span class="num">19</span><div><h2>五個討論情境與 ★ 發表前自我檢核清單</h2><div class="en">W10 AND W16</div></div></div>
+    <p class="one">情境沒有標準答案——但你要能說出你的理由。檢核清單的前四大項有任一未打勾，發表時請主動說明原因。</p>
+    <div class="wd"><div class="wh"><h3>五個討論情境</h3></div><div id="w-disc"></div></div>
+    <div class="wd"><div class="wh"><h3>發表前自我檢核清單</h3><span class="tag amber">可勾選進度</span></div><div id="w-check"></div></div>
+  </section>
+
+  <section class="part" id="p20" data-t="術語、測驗與回顧">
+    <div class="ph"><span class="num">20</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
+    <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
+    <div class="wd"><div class="wh"><h3>本模組重點回顧與這門課想留給你的三件事</h3></div><div id="w-review"></div></div>
+  </section>
+</main>
+</div>
+<script src="../assets/common.js"></script>
+<script src="m9a.js"></script>
+<script src="m9b.js"></script>
+</body>
+</html>
