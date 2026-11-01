@@ -114,5 +114,52 @@
 
   function parseCSV(text) { const rows = []; let row = [], f = '', q = false; for (let i = 0; i < text.length; i++) { const c = text[i]; if (q) { if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; } else if (c === '"') q = true; else if (c === ',') { row.push(f); f = ''; } else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; } else f += c; } if (f !== '' || row.length) { row.push(f); rows.push(row); } return rows.filter(r => r.length > 1 || r[0] !== ''); }
 
-  G.U = { rng, randn, S, fmt, $, $$, h, s, svgBox, C, scale, ticks, hist, scatter, hbars, boxplot, Store, quiz, parseCSV };
+
+  // ---------- 單元頁共用：側欄導覽、完成標記、進度條 ----------
+  function initModule(KEY) {
+    const parts = $$('section.part'); Store.set(KEY + ':total', parts.length);
+    const side = $('#side'); const done = new Set(Store.get(KEY + ':done', []));
+    const prog = () => { $('#ptxt').textContent = `完成 ${done.size} / ${parts.length}`; $('#pbar').style.width = (done.size / parts.length * 100) + '%'; };
+    parts.forEach((p, i) => {
+      const a = h('a', { href: '#' + p.id, 'data-id': p.id }, h('span', { class: 'n' }, String(i + 1).padStart(2, '0')), h('span', null, p.dataset.t), h('span', { class: 'ck' }, '✓'));
+      side.append(a);
+      const b = h('button', { class: 'btn sm mark-done' });
+      const sync = () => { b.textContent = done.has(p.id) ? '✓ 已完成這一節（點擊取消）' : '標記這一節為已完成'; b.classList.toggle('on', done.has(p.id)); a.classList.toggle('done', done.has(p.id)); };
+      b.onclick = () => { done.has(p.id) ? done.delete(p.id) : done.add(p.id); Store.set(KEY + ':done', [...done]); sync(); prog(); };
+      p.append(h('div', { class: 'row', style: { justifyContent: 'flex-end', marginTop: '14px' } }, b)); sync();
+    });
+    prog();
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) $$('#side a').forEach(a => a.classList.toggle('cur', a.dataset.id === e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
+    parts.forEach(p => io.observe(p));
+  }
+  const seg = (opts, get, set, redraw) => { const sg = h('div', { class: 'seg' }); opts.forEach(([v, l]) => { const b = h('button', { class: get() === v ? 'on' : '' }, l); b.onclick = () => { set(v); redraw(); }; sg.append(b); }); return sg; };
+  const slider = (label, min, max, step, get, set, redraw, f = v => v) => { const i = h('input', { type: 'range', min, max, step }); i.value = get(); const v = h('span', { class: 'val' }, f(get())); i.oninput = () => { set(+i.value); v.textContent = f(+i.value); redraw(); }; return h('label', { class: 'ctl' }, label, i, v); };
+  const check = (label, get, set, redraw) => { const c = h('input', { type: 'checkbox' }); c.checked = get(); c.onchange = () => { set(c.checked); redraw(); }; return h('label', { class: 'ctl' }, c, label); };
+  /* 選擇題分類卡：items=[[text, answer, why]], choices=[...] */
+  function sorter(container, items, choices, foot) {
+    const ans = {}; const out = h('div');
+    function draw() { out.innerHTML = ''; let ok = 0;
+      items.forEach(([t, a, why], i) => { const row = h('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 0', borderBottom: '1px solid var(--line)', flexWrap: 'wrap' } }, h('div', { style: { flex: '1 1 280px', fontSize: '14.5px' } }, t));
+        choices.forEach(m => { const b = h('button', { class: 'btn sm' }, m); if (ans[i] === m) { if (m === a) b.classList.add('on'); else b.style.cssText = 'background:var(--bad-soft);border-color:var(--bad)'; } b.onclick = () => { ans[i] = m; draw(); }; row.append(b); });
+        if (ans[i]) { if (ans[i] === a) ok++; row.append(h('div', { style: { flexBasis: '100%', fontSize: '13px', color: ans[i] === a ? 'var(--good)' : 'var(--bad)' } }, (ans[i] === a ? '✓ ' : `✗ 應為 ${a}：`) + why)); }
+        out.append(row); });
+      out.append(h('div', { class: 'row', style: { marginTop: '10px' } }, h('span', { class: 'tag ' + (ok === items.length ? 'good' : 'gray') }, `答對 ${ok} / ${items.length}`), foot ? h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, foot) : ''));
+    }
+    (typeof container === 'string' ? $(container) : container).append(out); draw();
+  }
+  function flashcards(container, G) {
+    let front = 'zh'; const out = h('div');
+    function draw() { out.innerHTML = ''; const g = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(190px,1fr))', gap: '8px' } });
+      G.forEach(([zh, en, d]) => { const c = h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', minHeight: '86px', background: '#fff', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center' } }); let f = false; const paint = () => { c.innerHTML = ''; c.style.background = f ? 'var(--accent-soft)' : '#fff'; if (!f) c.append(h('div', { style: { fontWeight: 700, fontSize: '15.5px' } }, front === 'zh' ? zh : en)); else c.append(h('div', { style: { fontWeight: 600, fontSize: '13.5px', color: 'var(--accent-ink)' } }, front === 'zh' ? en : zh), h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, d)); }; c.onclick = () => { f = !f; paint(); }; paint(); g.append(c); });
+      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, seg([['zh', '正面：中文'], ['en', '正面：英文']], () => front, v => front = v, draw)), g); }
+    (typeof container === 'string' ? $(container) : container).append(out); draw();
+  }
+  function finalQuiz(box, Q) {
+    box = typeof box === 'string' ? $(box) : box; let score = 0; const sc = h('div', { class: 'note', style: { display: 'none' } });
+    Q.forEach(([q, o, a, ex], i) => quiz(box, { head: `第 ${i + 1} 題`, q, opts: o, a, ex, onRight: () => { if (!box.children[i].dataset.miss) score++; } }));
+    box.addEventListener('click', () => { if (box.querySelectorAll('.quiz.done').length === Q.length) { sc.style.display = 'block'; sc.textContent = `完成！一次答對 ${score} / ${Q.length} 題。${score >= Q.length * .8 ? '觀念扎實，可以進入下一個單元。' : '建議回頭看看答錯題目對應的段落。'}`; } });
+    box.append(sc);
+  }
+
+  G.U = { initModule, seg, slider, check, sorter, flashcards, finalQuiz, rng, randn, S, fmt, $, $$, h, s, svgBox, C, scale, ticks, hist, scatter, hbars, boxplot, Store, quiz, parseCSV };
 })(window);

@@ -108,3 +108,41 @@ svg.chart .grid{stroke:var(--line);stroke-width:1}
 .fade-in{animation:fi .35s ease}
 @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ---------- 單元頁版型（M0 起共用） ---------- */
+.layout{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:250px 1fr;gap:28px;padding:0 20px}
+nav.side{position:sticky;top:58px;align-self:start;max-height:calc(100vh - 70px);overflow:auto;padding:18px 0 30px}
+nav.side .mh{font-size:12px;letter-spacing:.1em;color:var(--faint);margin:0 0 8px 10px}
+nav.side a{display:flex;gap:8px;align-items:baseline;padding:5px 10px;border-radius:7px;text-decoration:none;color:var(--muted);font-size:14px;line-height:1.45}
+nav.side a .n{font-family:var(--mono);font-size:11.5px;color:var(--faint);min-width:20px}
+nav.side a:hover{background:#ebe7de;color:var(--ink)}
+nav.side a.cur{background:var(--paper);color:var(--ink);font-weight:600;box-shadow:var(--shadow)}
+nav.side a .ck{margin-left:auto;color:var(--good);font-size:13px;visibility:hidden}
+nav.side a.done .ck{visibility:visible}
+main{padding:24px 0 80px;min-width:0}
+.mhero{padding:18px 0 8px}
+.mhero .code{font-family:var(--mono);color:var(--accent);font-weight:700;letter-spacing:.1em;font-size:13px}
+.mhero h1{font-size:34px;margin:4px 0 6px}
+.mhero .lead{color:var(--muted);font-size:17px;max-width:46em}
+.mhero .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+section.part{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 28px 22px;margin:22px 0;box-shadow:var(--shadow);scroll-margin-top:70px}
+.ph{display:flex;align-items:flex-start;gap:14px;margin-bottom:10px}
+.ph .num{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--accent);border-radius:7px;padding:3px 8px;margin-top:5px}
+.ph h2{font-size:24px;margin:0}
+.ph .en{font-size:13px;color:var(--faint);letter-spacing:.04em}
+.ph .sp{flex:1}
+.one{font-size:16.5px;color:var(--ink);border-left:3px solid var(--amber);padding:2px 0 2px 12px;margin:6px 0 16px;max-width:52em}
+.wd{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:18px 0;background:#fcfbf8}
+.wd>.wh{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.wd>.wh h3{font-size:16px;margin:0}
+.wd>.wh .tag{font-size:11px}
+.wd .hint{font-size:13.5px;color:var(--muted);margin:-4px 0 10px}
+.concept{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:10px 0}
+.concept>div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;font-size:14px}
+.concept>div b{display:block;font-size:14.5px;margin-bottom:2px}
+.wrong{font-size:14px;background:var(--bad-soft);border-radius:8px;padding:8px 12px;margin:10px 0;color:#7a2318}
+.wrong b{color:var(--bad)}
+.mark-done{margin-top:6px}
+.ai{font-size:12.5px;color:var(--faint);margin-top:6px}
+.ai b{color:var(--muted);font-weight:600}
+@media (max-width:980px){.layout{grid-template-columns:1fr}nav.side{display:none}section.part{padding:20px 16px}}

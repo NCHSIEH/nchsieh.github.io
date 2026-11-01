@@ -81,8 +81,8 @@
    subs：子單元（例如 M3.1、M3.2），同樣以 url / status 控制。
    ============================================================ */
 const MODULES = [
-  { code:'M0', title:'資料科學導論與工具鏈建置', en:'Intro & Toolchain', tag:'基礎', desc:'資料科學流程（CRISP-DM）、AI Studio／Python／Ollama 環境建置。', tools:'AI Studio · Python · Ollama', status:'soon', url:null, pdf:null,
-    subs:[{code:'M0.1',title:'資料科學流程全貌'},{code:'M0.2',title:'工具鏈安裝與檢查'}] },
+  { code:'M0', title:'資料科學導論與工具鏈建置', en:'Intro & Toolchain', tag:'基礎', desc:'資料科學是什麼、技術怎麼演進、現在什麼重要、健康照護怎麼用；裝好工具、跑完第一個模型、寫下你的問題陳述。', tools:'AI Studio · Ollama · MPG 線性迴歸', status:'live', url:'m0/', pdf:null, key:'m0',
+    subs:[{code:'M0.1',title:'資料科學與監督／非監督',url:'m0/#p01'},{code:'M0.2',title:'技術演進與 2026 地圖',url:'m0/#p03'},{code:'M0.3',title:'應用、AI 家族與工作流程',url:'m0/#p05'},{code:'M0.4',title:'工具鏈與第一個模型',url:'m0/#p08'},{code:'作業',title:'專案界定與貫穿主線',url:'m0/#p10'}] },
   { code:'M1', title:'資料工程：從原始資料到可建模', en:'Data Engineering', tag:'基礎', desc:'資料品質、匯入、Join、遺失值、離群值、縮放、特徵工程與資料洩漏——13 節互動工具＋門診模擬資料實驗室。', tools:'AI Studio Module 1–10 · 醫療版模擬資料', status:'live', url:'m1/', pdf:null, key:'m1',
     subs:[{code:'M1.1',title:'品質、匯入、型態',url:'m1/#p01'},{code:'M1.2',title:'聚合、Join、重塑',url:'m1/#p04'},{code:'M1.3',title:'遺失值與離群值',url:'m1/#p06'},{code:'M1.4',title:'縮放、特徵、洩漏',url:'m1/#p10'},{code:'Lab',title:'門診資料健檢實驗室',url:'m1/#p13'}] },
   { code:'M2', title:'監督式學習', en:'Supervised Learning', tag:'監督式', desc:'迴歸預測連續數值；分類從 kNN 到集成方法。', tools:'Linear / Logistic · kNN · Tree · RF', status:'soon', url:null, pdf:null,
