@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M8 Dify 應用開發：從 Chatbot 到 Agent · 互動學習</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">DS</span>互動學習站</a>
+  <span class="meta">/ M8 Dify 應用開發</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 20</span><div class="pbar"><i id="pbar"></i></div>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">M8 · 20 個段落</div></nav>
+<main>
+  <header class="mhero">
+    <div class="code">MODULE 8 · 第 13–15 週 · PHASE C</div>
+    <h1>Dify 應用開發：從 Chatbot 到 Agent</h1>
+    <p class="lead">把模型變成能用的系統。三週走完 Chatbot → RAG 知識庫 → Agent，以台灣長照 3.0 為實例，最後交付你自己的期末專題。這一頁把 Dify 裡最容易出錯的環節做成模擬器：切塊怎麼把給付表切散、Top-K 與閾值怎麼篩段落、程式碼節點沒接上時金額怎麼亂跳、Agent 的思考迴圈怎麼失控。</p>
+    <div class="chips"><span class="tag">實例：長照給付試算 Chatflow（七步）</span><span class="tag amber">期末專題：構想書 W15（10%）＋ Demo W16（20%）</span><span class="tag gray">模擬器為教學示意，非 Dify 實際執行</span></div>
+  </header>
+
+  <section class="part" id="p01" data-t="Dify 是什麼">
+    <div class="ph"><span class="num">01</span><div><h2>Dify 是什麼、不是什麼</h2><div class="en">AN ASSEMBLY PLATFORM FOR LLM APPS</div></div></div>
+    <p class="one">它不是另一個 ChatGPT，也不是一個模型。它是把 LLM、知識庫、外部工具與流程邏輯「組裝」起來的地方——只做推論＋提示，不做訓練。</p>
+    <div class="wd"><div class="wh"><h3>是，還是不是？</h3><span class="tag amber">練習</span></div><div id="w-isnot"></div></div>
+    <div class="wd"><div class="wh"><h3>M1–M5 的機器學習 vs M8 的 Dify</h3></div><div id="w-vs"></div></div>
+  </section>
+
+  <section class="part" id="p02" data-t="四種應用型態">
+    <div class="ph"><span class="num">02</span><div><h2>四種應用型態：流程由誰決定</h2><div class="en">CHATBOT · WORKFLOW · CHATFLOW · AGENT</div></div></div>
+    <p class="one">從左到右可預測性遞減、自主性遞增。選型的第一個問題不是「哪個功能多」，而是「這個任務容不容許路徑不固定」。能用 Workflow 解決的就不要用 Agent。</p>
+    <div class="wd"><div class="wh"><h3>四種型態的流程結構</h3><span class="tag amber">核心互動</span></div><div id="w-modes"></div></div>
+    <div class="wd"><div class="wh"><h3>這個任務該用哪一種？</h3><span class="tag amber">練習</span></div><div id="w-pickmode"></div></div>
+  </section>
+
+  <section class="part" id="p03" data-t="跑三次比較 Tracing">
+    <div class="ph"><span class="num">03</span><div><h2>同樣的輸入跑三次：Workflow vs Agent</h2><div class="en">REPRODUCIBILITY</div></div></div>
+    <p class="one">Workflow 每次 Tracing 長得一模一樣——可重現、可稽核；Agent 同樣的輸入，兩次執行可能調用不同工具、迭代不同輪數——不可重現、成本不可預估。</p>
+    <div class="wd"><div class="wh"><h3>Tracing 模擬</h3><span class="tag amber">互動</span></div><div id="w-runs"></div></div>
+  </section>
+
+  <section class="part" id="p04" data-t="環境與成本">
+    <div class="ph"><span class="num">04</span><div><h2>環境建置與成本</h2><div class="en">CLOUD vs DOCKER · TOKEN COST</div></div></div>
+    <p class="one">課堂用雲端版最快；專題若處理健康資料，本地部署（Docker＋Ollama）不是選項而是必要條件。System Prompt 每次呼叫都重送；召回段落是唯一會隨設定放大的部分。</p>
+    <div class="wd"><div class="wh"><h3>一次 RAG 對話的 Token 組成</h3><span class="tag amber">互動</span></div><div id="w-cost"></div></div>
+    <div class="wd"><div class="wh"><h3>雲端 vs 本地、金鑰規範</h3></div><div id="w-env"></div></div>
+  </section>
+
+  <section class="part" id="p05" data-t="System Prompt 四段式">
+    <div class="ph"><span class="num">05</span><div><h2>System Prompt 四段式</h2><div class="en">ROLE · STEPS · CONSTRAINTS · FORMAT</div></div></div>
+    <p class="one">同一個模型，換一段 System Prompt，可以從話多的陌生人變成守規矩的專業助理。四者缺一，行為就會開始漂移。</p>
+    <div class="wd"><div class="wh"><h3>四段式組裝器：「我最近胸口悶，可能是什麼病？」</h3><span class="tag amber">核心互動</span></div><p class="hint">勾選要放進 System Prompt 的段落，看回答怎麼變（模擬輸出，對照教學 01／02）。</p><div id="w-sp"></div></div>
+  </section>
+
+  <section class="part" id="p06" data-t="Prompt 的約束力">
+    <div class="ph"><span class="num">06</span><div><h2>抑制幻覺的手法與 Prompt 的約束力</h2><div class="en">WHAT PROMPTS CAN — AND CAN'T — GUARANTEE</div></div></div>
+    <p class="one">需要「保證」的東西不能只靠 Prompt：數值計算一律用工具查表或計算；事實正確性接知識庫＋標註來源；數量限制用流程節點驗證。</p>
+    <div class="concept">
+      <div><b>① 階層式任務拆解</b>辨識 → 檢索 → 判斷分級 → 生成建議；不給步驟，中間推理是事後補編的</div>
+      <div><b>② Few-shot 範例</b>2–3 個「輸入 → 標準輸出」；範例比規則有效（SOAP、ISBAR）</div>
+      <div><b>③ 輸出格式約束</b>強制 Red Flags 欄位；更保險：交給模板轉換節點</div>
+      <div><b>④ 找不到就說找不到</b>★ 給替代動作——只寫「不要編造」效力很弱</div>
+    </div>
+    <div class="wd"><div class="wh"><h3>這個要求，Prompt 管得住嗎？</h3><span class="tag amber">練習</span></div><div id="w-force"></div></div>
+  </section>
+
+  <section class="part" id="p07" data-t="RAG 與切塊">
+    <div class="ph"><span class="num">07</span><div><h2>RAG 四步與切塊大小</h2><div class="en">CHUNK · EMBED · RETRIEVE · GENERATE</div></div></div>
+    <p class="one">品質瓶頸幾乎都在第 ③ 步：LLM 只看得到「被召回的那幾段」。召回錯了，生成再厲害也沒用——這也是為什麼一直改 Prompt 常常沒有效果。</p>
+    <div class="wd"><div class="wh"><h3>切塊模擬器：「CMS 第 4 級每月給付額度是多少？」</h3><span class="tag amber">核心互動</span></div><p class="hint">示範文件為依講義數字編寫的簡短給付基準（以衛福部最新公告為準）；字數按比例縮小。</p><div id="w-chunk"></div></div>
+  </section>
+
+  <section class="part" id="p08" data-t="Top-K、閾值、Rerank">
+    <div class="ph"><span class="num">08</span><div><h2>召回設定：Top-K、相似度閾值、Rerank</h2><div class="en">RETRIEVAL SETTINGS · HYBRID SEARCH</div></div></div>
+    <p class="one">Top-K 與閾值是「且」的關係：要進 Prompt，必須同時過閾值、又排進前 K。實務起點：Top-K 3–5、閾值 0.5；法規條號、藥名用混合檢索。</p>
+    <div class="wd"><div class="wh"><h3>20 個候選段落</h3><span class="tag amber">核心互動</span></div><p class="hint">★ 是真正含有答案的段落。</p><div id="w-topk"></div></div>
+  </section>
+
+  <section class="part" id="p09" data-t="Agentic RAG">
+    <div class="ph"><span class="num">09</span><div><h2>2026 的新做法：Agentic RAG</h2><div class="en">REWRITE · RETRIEVE · EVALUATE · RETRY</div></div></div>
+    <p class="one">差別只有一件事：檢索完之後，有沒有人回頭問一句「這些證據夠了嗎？」代價是迭代次數增加，Token 成本與延遲都上升——務必設最大迭代次數。</p>
+    <div class="wd"><div class="wh"><h3>「我媽最近常跌倒，長照可以幫什麼？」</h3><span class="tag amber">互動</span></div><div id="w-agentic"></div></div>
+  </section>
+
+  <section class="part" id="p10" data-t="RAG 五種失效">
+    <div class="ph"><span class="num">10</span><div><h2>RAG 的五種失效模式</h2><div class="en">DIAGNOSE BEFORE YOU TUNE</div></div></div>
+    <p class="one">五種失效在使用者眼裡都只是「答錯了」，但成因與處方完全不同。除錯的第一步永遠是打開 Tracing 看「召回了什麼」，而不是直接改 Prompt。</p>
+    <div class="wd"><div class="wh"><h3>看 Tracing 證據判斷失效模式</h3><span class="tag amber">練習</span></div><div id="w-fail"></div></div>
+  </section>
+
+  <section class="part" id="p11" data-t="長照給付試算 Chatflow">
+    <div class="ph"><span class="num">11</span><div><h2>★ 可操作實例：長照給付試算 Chatflow</h2><div class="en">HANDS-ON · 知識檢索 → LLM → IF/ELSE → 程式碼 → 模板</div></div></div>
+    <p class="one">LLM 做判斷，程式做計算。給付金額用程式查表算，不讓 LLM 生成——這是本模組最重要的一條規則。</p>
+    <div class="wd"><div class="wh"><h3>Chatflow 模擬器</h3><span class="tag amber">核心互動</span></div><p class="hint">輸入個案描述（或選三個測試個案），按「執行」；也可以故意拔掉程式碼節點或變數綁定，看會發生什麼。等級判定為示意規則。</p><div id="w-flow"></div></div>
+    <div class="wd"><div class="wh"><h3>Step 2 知識檢索節點、Step 3 System Prompt</h3></div><div id="w-steps"></div></div>
+  </section>
+
+  <section class="part" id="p12" data-t="程式碼節點">
+    <div class="ph"><span class="num">12</span><div><h2>程式碼節點與變數綁定</h2><div class="en">CODE NODE · VARIABLE BINDING</div></div></div>
+    <p class="one">連線決定「順序」，變數綁定才決定「內容」。最常見的失敗：變數沒綁 → 下游收到空值 → LLM 沒有資料可用 → 開始自由發揮——看起來像幻覺，其實是接線問題。</p>
+    <div class="wd"><div class="wh"><h3>Step 5 程式碼節點：輸入什麼、輸出什麼</h3><span class="tag amber">核心互動</span></div><p class="hint">左邊是講義的 Python；右邊用同一條規則即時解析你輸入的 LLM 輸出文字。</p><div id="w-code"></div></div>
+    <div class="wd"><div class="wh"><h3>變數綁定對照</h3></div><div id="w-bind"></div></div>
+  </section>
+
+  <section class="part" id="p13" data-t="除錯決策樹">
+    <div class="ph"><span class="num">13</span><div><h2>除錯決策樹：答案不對時依序檢查什麼</h2><div class="en">TRACING · DEBUGGING ORDER</div></div></div>
+    <p class="one">多數人一看到答案不對就改 Prompt——但如果 context 根本是空的，Prompt 改到天亮也沒用。Tracing 要看三個數字：召回段落數、各段相似度分數、LLM 收到的 context 長度。</p>
+    <div class="wd"><div class="wh"><h3>選一個症狀，沿著樹走</h3><span class="tag amber">核心互動</span></div><div id="w-debug"></div></div>
+  </section>
+
+  <section class="part" id="p14" data-t="Agent 思考迴圈">
+    <div class="ph"><span class="num">14</span><div><h2>Agent 的思考迴圈</h2><div class="en">THOUGHT → CALL TOOL → OBSERVATION → (REPEAT) → FINAL ANSWER</div></div></div>
+    <p class="one">每一輪都由 LLM 自己決定：還缺什麼、要不要再調一次工具、什麼時候可以收手。工具描述要寫清楚——LLM 是靠「描述」決定何時調用它。</p>
+    <div class="wd"><div class="wh"><h3>「查一下肌少症」</h3><span class="tag amber">核心互動</span></div><div id="w-loop"></div></div>
+    <div class="wd"><div class="wh"><h3>節點、Agent 類型、工具與 MCP</h3></div><div id="w-tools"></div></div>
+  </section>
+
+  <section class="part" id="p15" data-t="異常處理">
+    <div class="ph"><span class="num">15</span><div><h2>異常處理與 Fallback</h2><div class="en">429 · 503 · TIMEOUT · EMPTY RESULT</div></div></div>
+    <p class="one">流程不會永遠順利。每個會失敗的節點（工具調用、知識檢索、外部 API）都要有一條失敗分支；備援啟動時要明確告知使用者。專題「邏輯穩定性」20% 評的就是這一節。</p>
+    <div class="wd"><div class="wh"><h3>這個失敗該怎麼接？</h3><span class="tag amber">練習</span></div><div id="w-fallback"></div></div>
+  </section>
+
+  <section class="part" id="p16" data-t="Human-in-the-Loop">
+    <div class="ph"><span class="num">16</span><div><h2>Human-in-the-Loop：三段式權責分工</h2><div class="en">FRONTLINE · AI SYSTEM · SUPERVISOR</div></div></div>
+    <p class="one">AI 站在中間，但送出與拍板都在人手上。系統的定位是「把人的注意力放到對的地方」，不是「代替人做決定」。</p>
+    <div class="wd"><div class="wh"><h3>居服員 ISBAR 通報：一則現場觀察走完三段</h3><span class="tag amber">互動</span></div><div id="w-hitl"></div></div>
+  </section>
+
+  <section class="part" id="p17" data-t="期末專題">
+    <div class="ph"><span class="num">17</span><div><h2>期末專題：Dify Agent</h2><div class="en">PROPOSAL W15（10%）· DEMO W16（20%）</div></div></div>
+    <p class="one">構想書要交系統架構藍圖：節點、工具、知識庫、分支、Fallback、人為確認點——六樣都要標出來。最後一個節點永遠是「人為確認」。</p>
+    <div class="wd"><div class="wh"><h3>構想書四項檢查</h3><span class="tag">可勾選</span></div><div id="w-proposal"></div></div>
+    <div class="wd"><div class="wh"><h3>發表前自我檢核（依評分標準自動估分）</h3><span class="tag amber">可勾選</span></div><div id="w-rubric"></div></div>
+  </section>
+
+  <section class="part" id="p18" data-t="八個常見錯誤">
+    <div class="ph"><span class="num">18</span><div><h2>Dify 應用開發的八個常見錯誤</h2><div class="en">COMMON PITFALLS</div></div></div>
+    <div class="wd"><div class="wh"><h3>我的專題已經避開了嗎？</h3><span class="tag">可勾選</span></div><div id="w-err"></div></div>
+    <div class="wd"><div class="wh"><h3>本模組 Dify 範例與實作清單</h3><span class="tag">可勾選進度</span></div><div id="w-labs"></div></div>
+  </section>
+
+  <section class="part" id="p19" data-t="工具全景">
+    <div class="ph"><span class="num">19</span><div><h2>不只有 Dify：工具全景與選型</h2><div class="en">n8n · FLOWISE · COZE · ZAPIER</div></div></div>
+    <p class="one">判斷的關鍵問題：AI 是主角還是配角？AI 就是整個應用 → Dify；AI 只是流程中的一步 → n8n。實務上最強的組合是 n8n 負責整合與觸發＋Dify 負責 AI 推理。</p>
+    <div class="wd"><div class="wh"><h3>兩個軸看清楚各自的位置</h3><span class="tag amber">互動</span></div><div id="w-land"></div></div>
+    <div class="wd"><div class="wh"><h3>AI 是主角還是配角？</h3><span class="tag amber">練習</span></div><div id="w-role"></div></div>
+  </section>
+
+  <section class="part" id="p20" data-t="術語、測驗與回顧">
+    <div class="ph"><span class="num">20</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
+    <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
+    <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
+  </section>
+</main>
+</div>
+<script src="../assets/common.js"></script>
+<script src="../assets/ml.js"></script>
+<script src="m8a.js"></script>
+<script src="m8b.js"></script>
+</body>
+</html>
