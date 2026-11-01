@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vibe Coding 專班 · 互動學習站</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:14px 0 6px}
+  .week div{border:1px solid var(--line);border-radius:8px;padding:8px 6px;text-align:center;background:#fff;font-size:13px}
+  .week div b{display:block;color:var(--accent);font-family:var(--mono)}
+  @media (max-width:800px){.week{grid-template-columns:repeat(4,1fr)}}
+  .vc-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-top:14px}
+  .vc{border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px 16px;display:flex;flex-direction:column}
+  .vc .c{font-family:var(--mono);font-weight:700;color:var(--accent)}
+  .vc h3{margin:4px 0 2px;font-size:17px}
+  .vc .meta{font-size:12.5px;color:var(--muted)}
+  .vc ul{margin:8px 0;padding-left:18px;font-size:14px}
+  .vc .acts{margin-top:auto;display:flex;gap:6px;flex-wrap:wrap;padding-top:8px}
+  .vc.opt{background:#fbfaf6}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">DS</span>互動學習站</a>
+  <span class="meta">/ Vibe Coding 專班</span>
+</div></div>
+
+<div class="wrap">
+  <header class="mhero">
+    <div class="code">六週短期課 · 混合程度班（A 軌零基礎／B 軌本機工具，第 4 週起合流）</div>
+    <h1>Vibe Coding 專班</h1>
+    <p class="lead">六週，從一句話做到一個別人打得開、接得下去的小工具。貫穿全程的實例是長照給付試算器：W1 寫出規格、W2 修好三個錯、W3 驗證它是對的、W4 推上 GitHub 並上線、W5 處理資料、金鑰與成本、W6 交接與發表。</p>
+    <div class="chips"><span class="tag">講義 PDF 已可下載</span><span class="tag gray">各週互動版建置中</span><span class="tag amber">先看主課程 M10 的互動頁可以預習大部分內容</span></div>
+  </header>
+
+  <div class="week" id="week"></div>
+  <div class="note" style="font-size:14px">全課程只問一個問題的四種說法：你到底要什麼（W1）→ 它為什麼壞（W2）→ 你怎麼知道它是對的（W3）→ 別人用得到、接得下去嗎（W4–W6）。</div>
+
+  <h2 style="margin-top:26px">各週單元</h2>
+  <div class="vc-cards" id="cards"></div>
+
+  <h2 style="margin-top:26px">相關的互動頁（已上線）</h2>
+  <div class="vc-cards" id="related"></div>
+</div>
+
+<script src="../assets/common.js"></script>
+<script>
+(function () {
+  const { h, $ } = U;
+  const base = '../../../VC/';
+  const pdf = (d, f) => base + encodeURI(d + '/' + f);
+  const U7 = [
+    ['VC0', '開課前補強：網頁、檔案與部署是什麼', '開課前自讀 · A 軌零基礎 · 18 頁（約 20 分鐘）', ['網頁到底是什麼：HTML、CSS、JavaScript 各管什麼', '檔案與資料夾：路徑、副檔名、隱藏檔（.env、.gitignore）', '部署＝把檔案放到一台永遠開著的電腦'], 'VC0._開課前補強_-_網頁、檔案與部署是什麼', 'VC0._開課前補強_-_網頁、檔案與部署是什麼.pdf'],
+    ['VC1', '從一句話到第一個能跑的東西：需求規格', '第 1 週 · 44 頁', ['一份可執行的規格：五行＋至少 3 條可測的驗收條件', '第一個跑得起來的畫面：選等級與身分別，按一下出現金額', '判斷「強度」的能力：五級光譜，依任務風險調整'], 'VC1._從一句話到第一個能跑的東西_-_需求規格', 'VC1._從一句話到第一個能跑的東西_-_需求規格.pdf'],
+    ['VC2', '迭代與除錯：讀懂錯誤訊息', '第 2 週 · 51 頁', ['一個修好的試算器：三個錯全部修好，21 種組合都算得對', '一份除錯紀錄四欄表：現象／證據／我跟 AI 說了什麼／結果', '打開開發者工具（F12 → Console）的習慣'], 'VC2._迭代與除錯_-_讀懂錯誤訊息', 'VC2._迭代與除錯_-_讀懂錯誤訊息.pdf'],
+    ['VC3', '驗證：怎麼知道 AI 寫的是對的', '第 3 週 · 52 頁 · 全課程的中軸', ['一份審查檢核表：八個檢查項目，不需要會寫程式', '一份會自己跑的測試：雙擊 test.html 就顯示綠或紅', '一份驗證報告：第四段「還有哪些不確定」不能留白（評分 14%）'], 'VC3._驗證_-_怎麼知道_AI_寫的是對的', 'VC3._驗證_-_怎麼知道_AI_寫的是對的.pdf'],
+    ['VC4', '版本控制與上線：GitHub 與部署', '第 4 週 · 51 頁 · 兩軌自本週起合流', ['一個公開的網址：別人用手機點進去就能用', '一個 GitHub 儲存庫：完整的修改歷史', '一次 revert 的紀錄：故意讓 AI 改壞，再退回去'], 'VC4._版本控制與上線_-_GitHub_與部署', 'VC4._版本控制與上線_-_GitHub_與部署.pdf'],
+    ['VC5', '資料、風險與成本：真的要拿來用的時候', '第 5 週 · 46 頁', ['一個能存紀錄的成品：最近 10 筆試算紀錄（v1.1）', '金鑰的正確擺法：.env＋.gitignore＋平台環境變數（搜得到金鑰該項零分）', '一套可以回答別人的說法：能不能貼病歷、一個月要多少錢'], 'VC5._資料、風險與成本_-_真的要拿來用的時候', 'VC5._資料、風險與成本_-_真的要拿來用的時候.pdf'],
+    ['VC6', '專題發表與交接：讓別人接得下去', '第 6 週 · 30 頁 · 不分軌', ['一份交接文件：README 四段，且要有另一個人照著跑起來過', '一份 8 分鐘的發表：問題／做了什麼／怎麼驗證／還有什麼不確定', '一份課後反思：我在五級光譜的哪一級？是什麼限制了我？'], 'VC6._專題發表與交接_-_讓別人接得下去', 'VC6._專題發表與交接_-_讓別人接得下去.pdf'],
+  ];
+  const OPT = [
+    ['選修', '用 Vibe Coding 做 Agent', '選修延伸模組 · 33 頁 · 建議在六週正課之後', ['一個程式碼版的 Agent：跟 M8 在 Dify 做的是同一套邏輯', '一份護欄清單：最大輪數、逾時、最小權限、人在迴路……', '一份 Agent 評測集：20–30 題，四類題目（正常／邊界／範圍外／誘導）'], '補充教材._用_Vibe_Coding_做_Agent', '補充教材._用_Vibe_Coding_做_Agent.pdf'],
+    ['樣張', '圖解樣張', '4 頁 · 取自 W2 除錯、W3 驗證、W4 版本控制', ['你以為測完了：21 種組合，你實際測了幾種', 'AI 把東西改壞了，三種退路差在哪（revert／reset／checkout）', '全部為 PowerPoint 原生圖形，可直接編輯'], '圖解樣張._Vibe_Coding_專班', '圖解樣張._Vibe_Coding_專班.pdf'],
+  ];
+  $('#week').append(...[['VC0', '開課前'], ['W1', '規格'], ['W2', '除錯'], ['W3', '驗證'], ['W4', '上線'], ['W5', '資料與成本'], ['W6', '交接發表']].map(([a, b]) => h('div', null, h('b', null, a), b)));
+  const card = ([c, t, m, items, d, f], opt) => h('article', { class: 'vc' + (opt ? ' opt' : '') }, h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } }, h('span', { class: 'c' }, c), h('span', { class: 'tag gray' }, '互動版建置中')), h('h3', null, t), h('div', { class: 'meta' }, m), h('div', { style: { fontSize: '13px', color: 'var(--muted)', marginTop: '8px' } }, '這一份結束時，你手上會多出：'), h('ul', null, items.map(x => h('li', null, x))), h('div', { class: 'acts' }, h('a', { class: 'btn primary', href: pdf(d, f), target: '_blank', rel: 'noopener' }, 'PDF 講義'), h('button', { class: 'btn', disabled: true }, '互動版建置中')));
+  U7.forEach(u => $('#cards').append(card(u)));
+  OPT.forEach(u => $('#cards').append(card(u, true)));
+  const REL = [['M10', 'Vibe Coding：AI 驅動的軟體開發', '五行規格產生器、藏錯的長照給付試算器＋21 種組合測試、Git 推送模擬、部署平台決策樹、Agent 護欄模擬', '../m10/'], ['M8', 'Dify 應用開發：從 Chatbot 到 Agent', '長照給付試算 Chatflow、程式碼節點與變數綁定、Agent 思考迴圈', '../m8/'], ['M9', '醫療 AI 的倫理、偏誤與可解釋性', '自動化偏誤介面模擬、模型卡產生器、發表前檢核清單', '../m9/']];
+  REL.forEach(([c, t, d, u]) => $('#related').append(h('article', { class: 'vc' }, h('span', { class: 'c' }, c), h('h3', null, t), h('div', { class: 'meta', style: { fontSize: '13.5px' } }, d), h('div', { class: 'acts' }, h('a', { class: 'btn primary', href: u }, '進入互動頁 →')))));
+})();
+</script>
+</body>
+</html>
