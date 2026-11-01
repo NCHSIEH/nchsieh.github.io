@@ -132,8 +132,13 @@
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) $$('#side a').forEach(a => a.classList.toggle('cur', a.dataset.id === e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
     parts.forEach(p => io.observe(p));
   }
-  const seg = (opts, get, set, redraw) => { const sg = h('div', { class: 'seg' }); opts.forEach(([v, l]) => { const b = h('button', { class: get() === v ? 'on' : '' }, l); b.onclick = () => { set(v); redraw(); }; sg.append(b); }); return sg; };
-  const slider = (label, min, max, step, get, set, redraw, f = v => v) => { const i = h('input', { type: 'range', min, max, step }); i.value = get(); const v = h('span', { class: 'val' }, f(get())); i.oninput = () => { set(+i.value); v.textContent = f(+i.value); redraw(); }; return h('label', { class: 'ctl' }, label, i, v); };
+  const seg = (opts, get, set, redraw) => { const sg = h('div', { class: 'seg' }); opts.forEach(([v, l]) => { const b = h('button', { class: get() === v ? 'on' : '' }, l); b.onclick = () => { set(v); sg.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on'); redraw(); }; sg.append(b); }); return sg; };
+  const slider = (label, min, max, step, get, set, redraw, f = v => v) => { const i = h('input', { type: 'range', min, max, step }); i.value = get(); const v = h('span', { class: 'val' }, f(get())); i.oninput = () => { set(+i.value); v.textContent = f(+i.value); redraw(); };
+    /* 自行處理拖曳：重繪時元件被替換也能連續拖動 */
+    i.addEventListener('pointerdown', e => { if (e.button) return; e.preventDefault(); const rc = i.getBoundingClientRect(), th = 8;
+      const mv = ev => { let t = (ev.clientX - rc.left - th) / Math.max(1, rc.width - 2 * th); t = Math.min(1, Math.max(0, t)); let val = +min + Math.round(t * (max - min) / step) * step; val = +Math.min(+max, val).toFixed(6); if (val !== get()) { set(val); i.value = val; v.textContent = f(val); redraw(); } };
+      mv(e); const up = () => { document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up); }; document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up); });
+    return h('label', { class: 'ctl' }, label, i, v); };
   const check = (label, get, set, redraw) => { const c = h('input', { type: 'checkbox' }); c.checked = get(); c.onchange = () => { set(c.checked); redraw(); }; return h('label', { class: 'ctl' }, c, label); };
   /* 選擇題分類卡：items=[[text, answer, why]], choices=[...] */
   function sorter(container, items, choices, foot) {
