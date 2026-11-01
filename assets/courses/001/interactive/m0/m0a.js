@@ -3,6 +3,7 @@
   'use strict';
   const { h, $, S, fmt, C, rng, randn, quiz, seg, slider, check, sorter } = U;
   U.initModule('m0');
+  const cap = (el, px) => { el.style.maxWidth = px + 'px'; el.style.width = '100%'; el.style.margin = '0 auto'; return el; };
 
   // ================= P01 文氏圖 =================
   (function () {
@@ -22,8 +23,7 @@
       Object.entries(CIR).forEach(([k, [x, y, l]]) => { U.s('circle', { cx: x, cy: y, r: 95, fill: 'none', stroke: has[k] ? C.ink : C.gray, 'stroke-width': has[k] ? 2 : 1.2 }, sv); });
       [[95, 92, '程式與工具'], [305, 92, '數學與統計'], [200, 285, '領域專業'], [200, 84, '機器學習'], [130, 195, '危險區'], [270, 195, '傳統研究'], [200, 152, '資料科學']].forEach(([x, y, t]) => U.s('text', { x, y, 'text-anchor': 'middle', text: t, style: `font-size:${t === '資料科學' ? 14 : 12}px;fill:#1c2430;font-weight:${t === z[0] ? 700 : 400}` }, sv));
       const cbs = [['tools', '我會用工具處理資料'], ['stats', '我懂統計與機率'], ['domain', '我有健康照護領域專業']].map(([k, l]) => check(l, () => has[k], v => has[k] = v, draw));
-      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, ...cbs), h('div', { class: 'grid2' }, sv.parentNode, h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '你目前落在'), h('div', { class: 'v ' + (z[0] === '危險區' ? 'bad' : z[0] === '資料科學' ? 'good' : '') }, z[0]))), h('div', { class: 'note ' + (z[0] === '危險區' ? 'bad' : ''), style: { fontSize: '14px' } }, z[1]),
-        h('div', { class: 'concept' }, h('div', null, h('b', null, '統計與數學'), '描述統計、假設檢定、迴歸；本課只講到「能正確使用」'), h('div', null, h('b', null, '運算與工具'), '本課用 AI Studio；重點是流程對，不是語法熟'), h('div', null, h('b', null, '領域知識'), '哪些變數說得通、遺失有什麼意義、錯了會怎樣')))));
+      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, ...cbs), h('div', { class: 'grid2', style: { alignItems: 'center' } }, cap(sv.parentNode, 380), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '你目前落在'), h('div', { class: 'v ' + (z[0] === '危險區' ? 'bad' : z[0] === '資料科學' ? 'good' : '') }, z[0]))), h('div', { class: 'note ' + (z[0] === '危險區' ? 'bad' : ''), style: { fontSize: '14px' } }, z[1]))));
     }
     $('#w-venn').append(out); draw();
   })();
@@ -81,7 +81,7 @@
       const T = [['C001', 399, '基本', 12, '是'], ['C002', 799, '進階', 45, '否'], ['C003', 399, '基本', 3, '是'], ['C004', 1299, '旗艦', 80, '否']];
       const tb = h('table', { class: 'dt' }, h('tr', null, ['客戶', '月費', '方案', '使用時數'].map(c => h('th', null, c)), mode === 'sup' ? h('th', { style: { background: 'var(--amber-soft)', color: 'var(--amber)' } }, '是否取消（y）') : ''), T.map(r => h('tr', null, r.slice(0, 4).map((v, j) => h('td', { class: j === 1 || j === 3 ? 'num' : '' }, v)), mode === 'sup' ? h('td', { class: 'hl' }, r[4]) : '')));
       out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, seg([['sup', '監督式：有標籤 y'], ['uns', '非監督式：沒有標籤']], () => mode, v => { mode = v; km = null; }, draw), mode === 'uns' ? bt : ''),
-        h('div', { class: 'grid2' }, ch, h('div', null, h('div', { class: 'tscroll' }, tb), h('div', { class: 'note', style: { fontSize: '14px' } }, mode === 'sup' ? '每個點自帶顏色（y=0 或 1）。模型要學一條線把兩色分開，再用來預測新客戶會不會取消。x 是特徵＝輸入，y 是標籤＝目標。' : km ? '演算法自己把點分成兩群——它不知道「取消」是什麼，只是找出哪些點彼此相似。換到醫療：把病人依生活型態與共病分成幾個族群。' : '全部同色。沒有答案可學，只能問「哪些點自然聚在一起」。'))));
+        h('div', { class: 'grid2' }, cap(ch, 420), h('div', null, h('div', { class: 'tscroll' }, tb), h('div', { class: 'note', style: { fontSize: '14px' } }, mode === 'sup' ? '每個點自帶顏色（y=0 或 1）。模型要學一條線把兩色分開，再用來預測新客戶會不會取消。x 是特徵＝輸入，y 是標籤＝目標。' : km ? '演算法自己把點分成兩群——它不知道「取消」是什麼，只是找出哪些點彼此相似。換到醫療：把病人依生活型態與共病分成幾個族群。' : '全部同色。沒有答案可學，只能問「哪些點自然聚在一起」。'))));
     }
     $('#w-sup').append(out); draw();
   })();
@@ -126,11 +126,11 @@
     let cur = 8, era = 'all'; const out = h('div');
     function draw() {
       out.innerHTML = '';
-      const W = 680, H = 120, x = U.scale(1955, 2028, 20, W - 20), sv = U.svgBox(h('div'), W, H);
-      U.s('rect', { x: x(1955), y: 50, width: x(2011.5) - x(1955), height: 8, fill: '#e3ded2' }, sv); U.s('rect', { x: x(2011.5), y: 50, width: x(2028) - x(2011.5), height: 8, fill: '#cde5e1' }, sv);
-      U.s('text', { x: x(1983), y: 82, 'text-anchor': 'middle', text: '上篇：統計 → 資料探勘', style: 'font-size:11px;fill:#5d6774' }, sv); U.s('text', { x: x(2019.5), y: 82, 'text-anchor': 'middle', text: '下篇：深度學習 → Agent', style: 'font-size:11px;fill:#08504d' }, sv);
-      [1960, 1980, 2000, 2020].forEach(t => U.s('text', { x: x(t), y: 106, 'text-anchor': 'middle', text: t }, sv));
-      E.forEach(([yr, t, , e], i) => { const dim = era !== 'all' && era !== e; const g = U.s('g', { style: 'cursor:pointer', opacity: dim ? .25 : 1 }, sv); U.s('circle', { cx: x(yr), cy: 54, r: i === cur ? 8 : 5.5, fill: i === cur ? C.amber : (e === 'a' ? '#8a929c' : C.accent), stroke: '#fff', 'stroke-width': 1.5 }, g); if (i === cur) U.s('text', { x: x(yr), y: 34, 'text-anchor': 'middle', text: yr, style: 'font-size:12px;font-weight:700;fill:#b45309' }, g); g.addEventListener('click', () => { cur = i; draw(); }); });
+      const W = 680, H = 120, sv = U.svgBox(h('div'), W, H), xi = U.scale(0, E.length - 1, 24, W - 24), split = E.findIndex(e => e[3] === 'b') - .5, x = yr => { const i = E.findIndex(e => e[0] >= yr); return xi(i < 0 ? E.length - 1 : i); };
+      U.s('rect', { x: 10, y: 50, width: xi(split) - 10, height: 8, fill: '#e3ded2' }, sv); U.s('rect', { x: xi(split), y: 50, width: W - 10 - xi(split), height: 8, fill: '#cde5e1' }, sv);
+      U.s('text', { x: xi(split / 2), y: 82, 'text-anchor': 'middle', text: '上篇：統計 → 資料探勘', style: 'font-size:11px;fill:#5d6774' }, sv); U.s('text', { x: xi((split + E.length - 1) / 2), y: 82, 'text-anchor': 'middle', text: '下篇：深度學習 → Agent', style: 'font-size:11px;fill:#08504d' }, sv);
+      E.forEach(([yr], i) => U.s('text', { x: xi(i), y: 106, 'text-anchor': 'middle', text: "'" + String(yr).slice(2), style: 'font-size:10px' }, sv));
+      E.forEach(([yr, t, , e], i) => { const dim = era !== 'all' && era !== e; const g = U.s('g', { style: 'cursor:pointer', opacity: dim ? .25 : 1 }, sv); U.s('circle', { cx: xi(i), cy: 54, r: i === cur ? 8 : 5.5, fill: i === cur ? C.amber : (e === 'a' ? '#8a929c' : C.accent), stroke: '#fff', 'stroke-width': 1.5 }, g); if (i === cur) U.s('text', { x: xi(i), y: 34, 'text-anchor': 'middle', text: yr, style: 'font-size:12px;font-weight:700;fill:#b45309' }, g); g.addEventListener('click', () => { cur = i; draw(); }); });
       const [yr, t, d] = E[cur];
       const prev = h('button', { class: 'btn sm', disabled: cur === 0 }, '← 上一個'); prev.onclick = () => { cur--; draw(); };
       const next = h('button', { class: 'btn sm', disabled: cur === E.length - 1 }, '下一個 →'); next.onclick = () => { cur++; draw(); };
@@ -158,7 +158,7 @@
       N.forEach(([t], i) => { const g = U.s('g', { style: 'cursor:pointer' }, sv); U.s('circle', { cx: pos[i][0], cy: pos[i][1], r: 34, fill: i === active ? C.accent : '#fff', stroke: C.accent, 'stroke-width': 2 }, g); U.s('text', { x: pos[i][0], y: pos[i][1] - 4, 'text-anchor': 'middle', text: i + 1, style: `font-size:13px;font-weight:700;fill:${i === active ? '#fff' : '#0d6b67'}` }, g); U.s('text', { x: pos[i][0], y: pos[i][1] + 12, 'text-anchor': 'middle', text: t, style: `font-size:11px;fill:${i === active ? '#fff' : '#1c2430'}` }, g); g.addEventListener('click', () => { stop(); sel = i; draw(); }); });
       const bt = h('button', { class: 'btn sm primary' }, timer ? '■ 停止' : '▶ 模擬一個真實專案'); bt.onclick = () => { if (timer) stop(); else { step = 0; timer = setInterval(() => { step++; if (step >= PATH.length) { clearInterval(timer); timer = null; step = PATH.length - 1; } draw(); }, 1100); draw(); } };
       const log = h('ol', { style: { fontSize: '13.5px', paddingLeft: '1.4em', margin: '8px 0', color: 'var(--muted)' } }, PATH.slice(0, step + 1).map(([n, t], i) => h('li', { style: { color: i === step ? 'var(--ink)' : '', fontWeight: i === step ? 600 : 400 } }, `${N[n][0]}：${t}`)));
-      out.append(h('div', { class: 'grid2' }, sv.parentNode, h('div', null, h('div', { class: 'row' }, bt), step < 0 ? h('div', { class: 'note', style: { fontSize: '14px' } }, h('b', null, `${sel + 1}　${N[sel][0]}`), h('div', null, N[sel][1])) : log,
+      out.append(h('div', { class: 'grid2', style: { alignItems: 'center' } }, cap(sv.parentNode, 330), h('div', null, h('div', { class: 'row' }, bt), step < 0 ? h('div', { class: 'note', style: { fontSize: '14px' } }, h('b', null, `${sel + 1}　${N[sel][0]}`), h('div', null, N[sel][1])) : log,
         h('p', { class: 'ai' }, '它不是直線。評估後常要回到業務理解重新界定問題；資料準備與建模之間更是反覆來回。另兩套方法論：KDD（1996，學術標準）、SEMMA（1998，SAS）。三者共同點：建模都只是其中一步。'))));
     }
     function stop() { if (timer) clearInterval(timer); timer = null; step = -1; }
@@ -247,7 +247,7 @@
       const rAll = S.r(P.map(p => p.x), P.map(p => p.y)), rIn = [0, 1, 2].map(g => { const q = P.filter(p => p.g === g); return S.r(q.map(p => p.x), q.map(p => p.y)); });
       const ch = h('div'); U.scatter(ch, P.map(p => ({ x: p.x, y: p.y, c: color ? COL[p.g] : C.gray })), { w: 400, h: 290, xmin: 0, xmax: 15, ymin: 0, ymax: 21, xlabel: '用藥項目數', ylabel: '住院天數' });
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, check('依「疾病嚴重度」上色', () => color, v => color = v, draw)),
-        h('div', { class: 'grid2' }, ch, h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '整體 r'), h('div', { class: 'v bad' }, rAll.toFixed(2))), color ? NM.map((n, i) => h('div', null, h('div', { class: 'k' }, n + '組內 r'), h('div', { class: 'v' }, rIn[i].toFixed(2)))) : ''),
+        h('div', { class: 'grid2' }, cap(ch, 430), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '整體 r'), h('div', { class: 'v bad' }, rAll.toFixed(2))), color ? NM.map((n, i) => h('div', null, h('div', { class: 'k' }, n + '組內 r'), h('div', { class: 'v' }, rIn[i].toFixed(2)))) : ''),
           h('div', { class: 'note ' + (color ? '' : 'warn'), style: { fontSize: '14px' } }, color ? '每一群內部幾乎沒有斜率。用藥與住院天數都被「疾病嚴重度」推高——這叫混淆因子（Confounder）。依此設計「減少用藥」的介入，不會縮短住院，還可能傷害病人。' : '只看兩個變數：「用藥越多住院越久」。看起來減少用藥就能縮短住院……真的嗎？')))); }
     $('#w-conf').append(out); draw();
   })();
@@ -263,7 +263,7 @@
   (function () {
     const sv = U.svgBox(h('div'), 360, 250);
     [[175, 125, 170, 115, '#eef3f2', '人工智慧 AI'], [200, 140, 125, 85, '#d9ebe8', '機器學習 ML'], [222, 152, 82, 58, '#bfddd8', '深度學習 DL'], [240, 160, 42, 30, C.accent, '生成式 AI']].forEach(([cx, cy, rx, ry, f, t], i) => { U.s('ellipse', { cx, cy, rx, ry, fill: f, stroke: '#9ab', 'stroke-width': 1 }, sv); U.s('text', { x: i === 3 ? cx : cx - rx + 14, y: i === 3 ? cy + 4 : cy - ry + 20, 'text-anchor': i === 3 ? 'middle' : 'start', text: t, style: `font-size:${i === 3 ? 11 : 12}px;font-weight:600;fill:${i === 3 ? '#fff' : '#1c2430'}` }, sv); });
-    const box = $('#w-nest'); const wrap = h('div', { class: 'grid2' }, sv.parentNode, h('div', { id: 'w-nest-q' })); box.append(wrap);
+    const box = $('#w-nest'); const wrap = h('div', { class: 'grid2', style: { alignItems: 'center' } }, cap(sv.parentNode, 340), h('div', { id: 'w-nest-q' })); box.append(wrap);
     sorter('#w-nest-q', [
       ['規則式專家系統（if-then 規則寫死）', 'AI', '不需要從資料學習，但仍屬人工智慧'],
       ['A* 路徑搜尋演算法', 'AI', '搜尋演算法屬 AI 但不是 ML'],

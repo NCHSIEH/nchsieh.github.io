@@ -1,6 +1,7 @@
 /* M0 互動頁 B：PART 07–12 */
 (function () {
   'use strict';
+  const cap = (el, px) => { el.style.maxWidth = px + 'px'; el.style.width = '100%'; el.style.margin = '0 auto'; return el; };
   const { h, $, S, fmt, C, rng, randn, Store, seg, slider, check, sorter } = U;
 
   // ================= P07 六步驟 =================
@@ -85,7 +86,7 @@
       const fit = h('button', { class: 'btn sm primary' }, '最小平方法'); fit.onclick = () => { showBest = true; draw(); };
       const snap = h('button', { class: 'btn sm' }, '把我的線移到最佳解'); snap.onclick = () => { a = +best.a.toFixed(1); b = +best.b.toFixed(2); draw(); };
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, slider('截距', 25, 60, .1, () => a, v => a = v, draw, v => (+v).toFixed(1)), slider('斜率', -12, 0, .05, () => b, v => b = v, draw, v => (+v).toFixed(2)), check('顯示殘差', () => showRes, v => showRes = v, draw), fit, showBest ? snap : ''),
-        h('div', { class: 'grid2' }, ch, h('div', null,
+        h('div', { class: 'grid2' }, cap(ch, 480), h('div', null,
           h('div', { class: 'note', style: { fontSize: '15px', fontFamily: 'var(--mono)' } }, `我的模型：mpg = ${a.toFixed(1)} ${b < 0 ? '−' : '+'} ${Math.abs(b).toFixed(2)} × 車重`),
           h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '我的 RMSE'), h('div', { class: 'v ' + (my - bb < .15 ? 'good' : '') }, fmt(my, 2))), h('div', null, h('div', { class: 'k' }, '我的 R²'), h('div', { class: 'v' }, fmt(r2(MPG, a, b), 3))), showBest ? h('div', null, h('div', { class: 'k' }, '最佳解 RMSE'), h('div', { class: 'v good' }, fmt(bb, 2))) : ''),
           showBest ? h('div', { class: 'note', style: { fontSize: '14px' } }, `最小平方法：mpg = ${best.a.toFixed(1)} − ${Math.abs(best.b).toFixed(2)} × 車重，R² = ${fmt(r2(MPG, best.a, best.b), 2)}。斜率的意思：車重每多 1 千磅，每加侖少跑約 ${Math.abs(best.b).toFixed(1)} 英里。Linear Regression 就是在找「殘差平方和最小」的那條線。`) : h('div', { class: 'note warn', style: { fontSize: '14px' } }, 'RMSE＝預測誤差的典型大小（單位同 mpg）。R²＝模型解釋了多少變異。試著把 RMSE 壓到 3 左右。'),
@@ -103,7 +104,7 @@
       const ch = h('div'); U.scatter(ch, te.map((p, i) => ({ x: p.y, y: pred[i], c: C.blue, r: 3 })), { w: 360, h: 280, xmin: 5, xmax: 45, ymin: 5, ymax: 45, xlabel: '實際 mpg', ylabel: '預測 mpg', under: [(sv, x, y) => U.s('line', { x1: x(5), y1: y(5), x2: x(45), y2: y(45), stroke: C.ink, 'stroke-dasharray': '4 3' }, sv)] });
       const bt = h('button', { class: 'btn sm' }, '換一組隨機切分'); bt.onclick = () => { seed++; draw(); };
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, slider('訓練比例', .5, .9, .05, () => ratio, v => ratio = v, draw, v => Math.round(v * 100) + '%'), bt, check('Split Data 兩個輸出接反', () => swap, v => swap = v, draw)),
-        h('div', { class: 'grid2' }, ch, h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '訓練筆數'), h('div', { class: 'v' }, tr.length)), h('div', null, h('div', { class: 'k' }, '測試筆數'), h('div', { class: 'v' }, te.length)), h('div', null, h('div', { class: 'k' }, '測試 RMSE'), h('div', { class: 'v' }, fmt(e, 2))), h('div', null, h('div', { class: 'k' }, 'squared correlation'), h('div', { class: 'v' }, fmt(sc, 3)))),
+        h('div', { class: 'grid2' }, cap(ch, 400), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '訓練筆數'), h('div', { class: 'v' }, tr.length)), h('div', null, h('div', { class: 'k' }, '測試筆數'), h('div', { class: 'v' }, te.length)), h('div', null, h('div', { class: 'k' }, '測試 RMSE'), h('div', { class: 'v' }, fmt(e, 2))), h('div', null, h('div', { class: 'k' }, 'squared correlation'), h('div', { class: 'v' }, fmt(sc, 3)))),
           h('div', { class: 'note ' + (swap ? 'warn' : ''), style: { fontSize: '14px' } }, swap ? `接反了：模型只用 ${tr.length} 筆訓練，卻在 ${te.length} 筆上測試。這組資料很單純所以影響不大，但在複雜資料上 RMSE 會明顯變差——RMSE 異常偏高時先檢查這裡。` : '理想狀態是所有點落在對角線上；偏離越遠預測越不準。換幾次隨機切分，看 RMSE 跳動多少——這就是為什麼 W5 會改用交叉驗證。'),
           h('p', { class: 'ai' }, '講義預期：RMSE 約 2.5–4、squared correlation 約 0.7–0.85（測試集上不完全等於 R²）。')))); }
     $('#w-split').append(out); draw();
@@ -180,6 +181,12 @@
     const g = h('div', { class: 'grid3' }); E.forEach(([t, u, d]) => g.append(h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff' } }, h('b', null, t), h('div', { style: { margin: '3px 0' } }, h('span', { class: 'tag' }, u)), h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, 'Phase C 設計：' + d))));
     $('#w-examples').append(g, h('p', { class: 'ai' }, '共同特徵：都是第一線人員每天實際遇到、目前靠經驗與紙本處理的問題。'));
   })();
+
+  // ================= 各節隨堂小測 =================
+  U.quiz('#q01', { q: '會寫程式、懂臨床，卻缺統計，最可能發生什麼事？', opts: ['做不出東西', '做得出東西，卻可能誤讀結果', '做出的系統一定沒人用', '沒有影響'], a: 1, ex: '這就是文氏圖的「危險區」：統計上不可信的結果，看起來卻很像樣。' });
+  U.quiz('#q03', { q: '2012 年深度學習突然崛起，主要原因是？', opts: ['神經網路的想法第一次被提出', 'GPU 算力與百萬張標註影像同時到位', '法規開放', 'Transformer 被發明'], a: 1, ex: '神經網路的想法早在 1958 年就有；資料、算力、演算法三者到齊才起飛。Transformer 是 2017 年。' });
+  U.quiz('#q05', { q: '銀行信用評分與醫院再入院預測，技術上幾乎一樣。最大的差別在哪？', opts: ['演算法完全不同', '錯誤的代價、可解釋性要求、誰能推翻判斷', '醫院不需要資料', '銀行不需要評估'], a: 1, ex: '方法共通，差別在錯誤的代價——醫療多半漏診比誤報嚴重。' });
+  U.quiz('#q06', { q: '要預測住院天數，下列哪個最合適？', opts: ['GPT 類大型語言模型', '擴散模型', '迴歸或決策樹', '規則式聊天機器人'], a: 2, ex: '生成式 AI 不是「最進階所以最好」，它只是擅長不同的事。' });
 
   // ================= P12 =================
   U.flashcards('#w-cards', [['資料科學', 'Data Science', '用資料回答「接下來會怎樣、該怎麼做」'], ['資料探勘', 'Data Mining', '從大量資料中找出先前未知的模式'], ['知識發現', 'KDD', '資料 → 知識的完整流程（Fayyad 等人，1996）'], ['商業智慧', 'Business Intelligence, BI', '回答「過去發生了什麼」的報表與儀表板'], ['描述性分析', 'Descriptive Analytics', '發生了什麼事'], ['預測性分析', 'Predictive Analytics', '接下來會發生什麼'], ['指示性分析', 'Prescriptive Analytics', '我們該怎麼做'], ['監督式學習', 'Supervised Learning', '資料有標準答案，學輸入到答案的對應'], ['非監督式學習', 'Unsupervised Learning', '沒有答案，只找資料本身的結構'], ['強化學習', 'Reinforcement Learning', '從互動與回饋中學策略（本課程不含）'], ['標籤', 'Label / Target / y', '你想預測的那一欄'], ['特徵', 'Feature / Input / x', '餵給模型的欄位'], ['人工智慧', 'AI', '讓機器展現智慧行為的所有方法'], ['機器學習', 'Machine Learning', '從資料自動學規律，不寫死規則'], ['深度學習', 'Deep Learning', '以多層神經網路自動學特徵表示'], ['生成式 AI', 'Generative AI', '能產生新內容的深度學習模型'], ['自然語言處理', 'NLP', '讓電腦處理人類語言'], ['電腦視覺', 'Computer Vision', '讓電腦「看懂」影像'], ['基礎模型', 'Foundation Model', '大規模預訓練、可適應多種任務的通用模型'], ['檢索增強生成', 'RAG', '先檢索文件再生成，可標註來源'], ['提示詞工程', 'Prompt Engineering', '以指令設計引導模型行為'], ['專案界定', 'Scoping', '動手前先定義問題、使用者與資料需求'], ['最小可行產品', 'MVP', '先做出最小可用版本再擴充'], ['混淆因子', 'Confounder', '同時影響兩個變數，造成假性相關的第三者'], ['推理模型', 'Reasoning Model', '先產生思考步驟再作答'], ['模型上下文協定', 'MCP', '讓 AI 以統一方式連接外部工具與資料的開放標準'], ['資料洩漏', 'Data Leakage', '測試資料的資訊混進訓練過程，使評估過度樂觀']]);
