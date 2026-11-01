@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M1 資料工程：從原始資料到可建模 · 互動學習</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+.layout{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:250px 1fr;gap:28px;padding:0 20px}
+nav.side{position:sticky;top:58px;align-self:start;max-height:calc(100vh - 70px);overflow:auto;padding:18px 0 30px}
+nav.side .mh{font-size:12px;letter-spacing:.1em;color:var(--faint);margin:0 0 8px 10px}
+nav.side a{display:flex;gap:8px;align-items:baseline;padding:5px 10px;border-radius:7px;text-decoration:none;color:var(--muted);font-size:14px;line-height:1.45}
+nav.side a .n{font-family:var(--mono);font-size:11.5px;color:var(--faint);min-width:20px}
+nav.side a:hover{background:#ebe7de;color:var(--ink)}
+nav.side a.cur{background:var(--paper);color:var(--ink);font-weight:600;box-shadow:var(--shadow)}
+nav.side a .ck{margin-left:auto;color:var(--good);font-size:13px;visibility:hidden}
+nav.side a.done .ck{visibility:visible}
+main{padding:24px 0 80px;min-width:0}
+.mhero{padding:18px 0 8px}
+.mhero .code{font-family:var(--mono);color:var(--accent);font-weight:700;letter-spacing:.1em;font-size:13px}
+.mhero h1{font-size:34px;margin:4px 0 6px}
+.mhero .lead{color:var(--muted);font-size:17px;max-width:46em}
+.mhero .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+section.part{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 28px 22px;margin:22px 0;box-shadow:var(--shadow);scroll-margin-top:70px}
+.ph{display:flex;align-items:flex-start;gap:14px;margin-bottom:10px}
+.ph .num{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--accent);border-radius:7px;padding:3px 8px;margin-top:5px}
+.ph h2{font-size:24px;margin:0}
+.ph .en{font-size:13px;color:var(--faint);letter-spacing:.04em}
+.ph .sp{flex:1}
+.one{font-size:16.5px;color:var(--ink);border-left:3px solid var(--amber);padding:2px 0 2px 12px;margin:6px 0 16px;max-width:52em}
+.wd{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:18px 0;background:#fcfbf8}
+.wd>.wh{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.wd>.wh h3{font-size:16px;margin:0}
+.wd>.wh .tag{font-size:11px}
+.wd .hint{font-size:13.5px;color:var(--muted);margin:-4px 0 10px}
+.concept{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:10px 0}
+.concept>div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;font-size:14px}
+.concept>div b{display:block;font-size:14.5px;margin-bottom:2px}
+.wrong{font-size:14px;background:var(--bad-soft);border-radius:8px;padding:8px 12px;margin:10px 0;color:#7a2318}
+.wrong b{color:var(--bad)}
+.mark-done{margin-top:6px}
+.ai{font-size:12.5px;color:var(--faint);margin-top:6px}
+.ai b{color:var(--muted);font-weight:600}
+@media (max-width:980px){.layout{grid-template-columns:1fr}nav.side{display:none}section.part{padding:20px 16px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">DS</span>互動學習站</a>
+  <span class="meta">/ M1 資料工程</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 14</span><div class="pbar"><i id="pbar"></i></div>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">M1 · 14 個段落</div></nav>
+<main>
+  <header class="mhero">
+    <div class="code">MODULE 1 · 第 2–3 週 · PHASE A</div>
+    <h1>資料工程：從原始資料到可建模</h1>
+    <p class="lead">模型選錯還可以換，資料處理錯了，後面全部都是錯的。每一節都有一個可以動手的工具，並標出「這一步做錯會怎樣」。</p>
+    <div class="chips"><span class="tag">貫穿資料：門診整合模擬資料 765 筆 · 300 位病人</span><span class="tag amber">AI Studio Module 1–10</span><span class="tag gray">教學用模擬資料，非真實病人資料</span></div>
+  </header>
+
+  <!-- ============ P01 ============ -->
+  <section class="part" id="p01" data-t="資料品質六維度">
+    <div class="ph"><span class="num">01</span><div><h2>為什麼這段最花時間</h2><div class="en">WHY DATA WORK DOMINATES · 資料品質的六個維度</div></div></div>
+    <p class="one">資料準備約佔資料工作者 38% 的時間（Anaconda 2022）。它決定了後面所有模型的上限。</p>
+    <div class="wd"><div class="wh"><h3>六個維度</h3><span class="tag">點卡片看例子</span></div><div id="w-dims"></div>
+      <p class="ai">檢查順序建議：有效性 → 完整性 → 唯一性 → 一致性 → 正確性 → 時效性。前三項用 Statistics 就能看出大半。（DAMA UK, 2013）</p></div>
+    <div class="wd"><div class="wh"><h3>找碴：這份五列的資料有幾個問題？</h3><span class="tag amber">互動</span></div>
+      <p class="hint">點你覺得有問題的格子（重複列請點 ID）。找到一個會顯示它屬於哪個維度。</p><div id="w-spot"></div></div>
+    <div id="q01"></div>
+  </section>
+
+  <!-- ============ P02 ============ -->
+  <section class="part" id="p02" data-t="資料存取與匯入">
+    <div class="ph"><span class="num">02</span><div><h2>資料存取與匯入</h2><div class="en">ACCESSING DATA · 最常見的三個坑</div></div></div>
+    <p class="one">一半以上的下游問題，是在讀檔這一步種下的。匯入後立刻接 Statistics，看「筆數、欄位數、每欄型態、極值」四件事。</p>
+    <div class="grid2">
+      <div class="wd"><div class="wh"><h3>坑 1｜編碼：Big5 與 UTF-8</h3></div><p class="hint">選檔案實際的編碼與讀取時設定的編碼。台灣政府開放資料常為 Big5。</p><div id="w-enc"></div></div>
+      <div class="wd"><div class="wh"><h3>坑 2｜型態誤判</h3></div><p class="hint">切換「有沒有在 meta data 逐欄確認型態」，看 Statistics 變成什麼樣。</p><div id="w-type"></div></div>
+    </div>
+    <div class="wd"><div class="wh"><h3>實例｜FHIR JSON 攤平成一列</h3><span class="tag blue">醫院資料越來越常是 JSON</span></div>
+      <p class="hint">按「攤平」把巢狀 JSON 變成長表一列；再試試丟掉單位與 LOINC 代碼會發生什麼。</p><div id="w-fhir"></div></div>
+    <div id="q02"></div>
+  </section>
+
+  <!-- ============ P03 ============ -->
+  <section class="part" id="p03" data-t="型態與角色">
+    <div class="ph"><span class="num">03</span><div><h2>型態與角色</h2><div class="en">TYPES AND ROLES</div></div></div>
+    <p class="one">「型態」決定能做什麼運算，「角色」決定這個欄位在建模中扮演什麼。ID 留成 regular，模型可能學到病歷號的順序。</p>
+    <div class="wd"><div class="wh"><h3>幫貫穿資料的 15 個欄位設定型態與角色</h3><span class="tag amber">互動</span></div>
+      <p class="hint">參考範例值選擇，按「檢查」對答案。提示：有兩個欄位預測當下拿不到。</p><div id="w-roles"></div></div>
+    <div class="wd"><div class="wh"><h3>類別怎麼變數值：One-Hot vs 序數編碼</h3></div>
+      <p class="hint">問自己：這些類別之間有沒有「大小」或「先後」？看編碼方式如何改變兩筆資料的「距離」。</p><div id="w-encode"></div></div>
+  </section>
+
+  <!-- ============ P04 ============ -->
+  <section class="part" id="p04" data-t="篩選、排序與聚合">
+    <div class="ph"><span class="num">04</span><div><h2>篩選、排序與聚合</h2><div class="en">FILTER · SORT · AGGREGATE · PIVOT</div></div></div>
+    <p class="one">把資料整理成「一列代表一個分析單位」。要預測「這個病人會不會再就診」，一列就該是一位病人。</p>
+    <div class="concept">
+      <div><b>Filter Examples</b>篩選列：欄位 運算子 值</div><div><b>Select Attributes</b>篩選欄</div><div><b>Aggregate</b>多列壓成一列，改變分析單位</div><div><b>Pivot / De-Pivot</b>長寬表互轉</div>
+    </div>
+    <div class="wd"><div class="wh"><h3>Aggregate：選分組鍵與聚合函數</h3></div><div id="w-agg"></div></div>
+    <div class="wd"><div class="wh"><h3>長表 ⇄ 寬表（Pivot）</h3></div><p class="hint">檢驗值幾乎都以長表匯出。轉寬表前先決定：同一天驗兩次要取哪個值？</p><div id="w-pivot"></div></div>
+  </section>
+
+  <!-- ============ P05 ============ -->
+  <section class="part" id="p05" data-t="Join 四種類型">
+    <div class="ph"><span class="num">05</span><div><h2>合併：Join 的四種類型</h2><div class="en">JOINING TABLES · 本模組最容易出錯的地方</div></div></div>
+    <p class="one">筆數不對不會報錯，只會讓後面的分析全部建在錯的資料上。每做一次 Join，就在旁邊接一個 Statistics。</p>
+    <div class="wd"><div class="wh"><h3>Join 實驗台</h3><span class="tag amber">互動</span></div>
+      <p class="hint">切換 Join 類型與資料狀況，觀察筆數與「不重複病人數」是否一致。</p><div id="w-join"></div></div>
+    <div class="wrong"><b>這一步做錯會怎樣：</b>一對多 Join 後直接 count，會以為病人變多；Inner Join 因鍵值有空白而悄悄丟掉一半資料，模型照樣訓練完成。</div>
+    <div id="q05"></div>
+  </section>
+
+  <!-- ============ P06 ============ -->
+  <section class="part" id="p06" data-t="遺失值">
+    <div class="ph"><span class="num">06</span><div><h2>遺失值</h2><div class="en">MISSING DATA · 先問為什麼缺，再決定怎麼補</div></div></div>
+    <p class="one">「這欄有 30% 缺失，要刪還是補？」沒有標準答案——要先判斷遺失機制。</p>
+    <div class="concept">
+      <div><b>MCAR 完全隨機遺失</b>缺不缺與任何變數都無關。刪除只損失樣本數，不偏。</div>
+      <div><b>MAR 隨機遺失</b>缺不缺與<em>其他看得到的欄位</em>有關。可用其他欄位建模填補。</div>
+      <div><b>MNAR 非隨機遺失</b>缺不缺與<em>那個看不到的值本身</em>有關。資料無法自證，靠領域知識。</div>
+    </div>
+    <div class="wd"><div class="wh"><h3>遺失機制模擬器</h3><span class="tag amber">核心互動</span></div>
+      <p class="hint">600 位病人的空腹血糖。切換機制與缺失比例，看「留在資料裡的人」的平均偏了多少，以及判別步驟 1 會看到什麼。</p><div id="w-mech"></div></div>
+    <div class="wd"><div class="wh"><h3>情境分類：這是哪一種機制？</h3></div><div id="w-sort"></div></div>
+    <div class="wd"><div class="wh"><h3>遺失值模式圖</h3></div><p class="hint">紅色＝缺失。把病人依年齡排序後，糖化血色素的規律就浮現了。</p><div id="w-pattern"></div></div>
+    <div class="wd"><div class="wh"><h3>偽裝成 0 的遺失（Pima 資料集）</h3></div><div id="w-zero"></div></div>
+    <div class="wd"><div class="wh"><h3>填補方式比較：刪除／平均／中位數</h3><span class="tag amber">互動</span></div>
+      <p class="hint">模擬胰島素（右偏）600 筆。灰框是真實分布，看哪種方法讓標準差與分布形狀失真最多。</p><div id="w-impute"></div></div>
+    <div class="wrong"><b>填補最容易犯的三個錯：</b>①先填補再切分（測試集資訊滲入訓練）②偏態分布用平均數填補 ③填補後不留紀錄——建議同時新增 <code>is_missing</code> 欄位。</div>
+  </section>
+
+  <!-- ============ P07 ============ -->
+  <section class="part" id="p07" data-t="離群值">
+    <div class="ph"><span class="num">07</span><div><h2>離群值</h2><div class="en">OUTLIERS · 找出來之後呢？</div></div></div>
+    <p class="one">商業資料的預設是「找出來處理掉」；醫療資料的預設應該是「找出來看清楚」——極端值往往正是你要找的人。</p>
+    <div class="wd"><div class="wh"><h3>三種視角：直方圖、盒鬚圖、標準差法</h3><span class="tag amber">互動</span></div>
+      <p class="hint">模擬舒張壓 300 筆。加入極端值，觀察標準差法的門檻如何被「撐寬」（遮蔽效應），盒鬚圖則較穩健。</p><div id="w-out"></div></div>
+    <div class="wd"><div class="wh"><h3>找到之後怎麼辦？逐筆判斷</h3></div><p class="hint">先問「生理上可能嗎」，不可能 → 視為遺失；可能但罕見 → 可能是重症個案。</p><div id="w-outdec"></div></div>
+  </section>
+
+  <!-- ============ P08 ============ -->
+  <section class="part" id="p08" data-t="重複與不一致">
+    <div class="ph"><span class="num">08</span><div><h2>重複與不一致</h2><div class="en">DUPLICATES &amp; INCONSISTENCY</div></div></div>
+    <p class="one">「看起來一樣」跟「電腦覺得一樣」是兩件事。不統一的話，1 個類別會被當成 4 個。</p>
+    <div class="wd"><div class="wh"><h3>標準化工作台（貫穿資料真實數字）</h3><span class="tag amber">互動</span></div>
+      <p class="hint">逐一開啟清理步驟，看不重複值的數量怎麼降下來。</p><div id="w-norm"></div></div>
+    <div class="wd"><div class="wh"><h3>用 LLM 幫忙統一寫法：先問、再驗、才套用</h3></div>
+      <p class="hint">LLM 提出了下面的對照表。逐列確認，把錯的那一列打 ✗。</p><div id="w-llm"></div></div>
+    <div class="wd"><div class="wh"><h3>三種重複</h3></div><div id="w-dup"></div></div>
+  </section>
+
+  <!-- ============ P09 ============ -->
+  <section class="part" id="p09" data-t="相關與共線性">
+    <div class="ph"><span class="num">09</span><div><h2>相關與共線性</h2><div class="en">CORRELATION &amp; COLLINEARITY</div></div></div>
+    <p class="one">兩個欄位講的是同一件事，迴歸就分不清效果歸誰。|r| ≥ 0.8 是警戒區；更嚴謹看 VIF（&gt;10，嚴格用 5）。</p>
+    <div class="wd"><div class="wh"><h3>|r| 長什麼樣？</h3><span class="tag amber">互動</span></div><div id="w-rslider"></div></div>
+    <div class="wd"><div class="wh"><h3>手算 r：六位病人</h3></div><p class="hint">直接改表格裡的血壓數字，每一步會即時重算。</p><div id="w-hand"></div></div>
+    <div class="wd"><div class="wh"><h3>相關矩陣：點格子看解讀</h3></div><div id="w-matrix"></div></div>
+  </section>
+
+  <!-- ============ P10 ============ -->
+  <section class="part" id="p10" data-t="正規化與標準化">
+    <div class="ph"><span class="num">10</span><div><h2>正規化與標準化</h2><div class="en">NORMALIZATION &amp; STANDARDIZATION</div></div></div>
+    <p class="one">用到「距離」或「權重大小」的演算法需要縮放；樹模型只比大小，不需要。縮放參數只能從訓練集計算。</p>
+    <div class="wd"><div class="wh"><h3>公式實驗：Min-Max、Z-Score、Robust</h3></div><div id="w-scalef"></div></div>
+    <div class="wd"><div class="wh"><h3>不縮放時，年齡等於不存在（k-NN）</h3><span class="tag amber">互動</span></div>
+      <p class="hint">點散布圖任一處設定查詢點，比較原始尺度與 Z-Score 後找到的 5 個最近鄰居。</p><div id="w-knn"></div></div>
+    <div class="wd"><div class="wh"><h3>縮放如何改變分群結果（K-Means）</h3></div><div id="w-kmeans"></div></div>
+    <div class="wd"><div class="wh"><h3>哪些演算法需要縮放？</h3></div><p class="hint">點每個演算法，標成「需要」或「不需要」。</p><div id="w-algos"></div></div>
+  </section>
+
+  <!-- ============ P11 ============ -->
+  <section class="part" id="p11" data-t="特徵工程">
+    <div class="ph"><span class="num">11</span><div><h2>特徵工程</h2><div class="en">FEATURE ENGINEERING · 把領域知識變成欄位</div></div></div>
+    <p class="one">好的特徵來自領域知識，不是來自演算法。演算法不知道 BMI 24 那裡有一條線，但你知道。</p>
+    <div class="wd"><div class="wh"><h3>六種手法：用一位病人看衍生欄位</h3></div><div id="w-fe"></div></div>
+    <div class="wd"><div class="wh"><h3>分箱：等距、等頻、臨床切點</h3><span class="tag amber">互動</span></div><div id="w-bin"></div></div>
+    <div class="wd"><div class="wh"><h3>BMI 計算與兩套標準</h3></div><div id="w-bmi"></div></div>
+    <div class="wd"><div class="wh"><h3>對數轉換：讓右偏的費用變好用</h3></div><div id="w-log"></div></div>
+  </section>
+
+  <!-- ============ P12 ============ -->
+  <section class="part" id="p12" data-t="資料洩漏">
+    <div class="ph"><span class="num">12</span><div><h2>資料洩漏</h2><div class="en">DATA LEAKAGE · 做對每一步卻得到假的好成績</div></div></div>
+    <p class="one">每一步都做對了，指標卻好得不合理——八成是洩漏，而且它不會報錯。</p>
+    <div class="wd"><div class="wh"><h3>時間洩漏：預測那一刻拿得到嗎？</h3><span class="tag amber">互動</span></div><p class="hint">預測時點＝出院。點每個欄位，標成「可以用」或「洩漏」。</p><div id="w-time"></div></div>
+    <div class="wd"><div class="wh"><h3>流程排序挑戰</h3></div><p class="hint">用 ↑↓ 排出正確順序。規律：所有會用到整份資料統計量的動作，都要在切分之後。</p><div id="w-order"></div></div>
+    <div class="wd"><div class="wh"><h3>同一位病人不能同時出現在訓練與測試</h3></div><div id="w-group"></div></div>
+    <div class="wd"><div class="wh"><h3>實測：洩漏誘餌讓 Accuracy 變多少？</h3><span class="tag blue">用貫穿資料即時計算</span></div><div id="w-leakdemo"></div></div>
+    <div class="note warn"><b>三個「好到不合理」的警訊：</b>① Accuracy／AUC 超過 0.98　② 某一個特徵的重要性遠高於其他　③ 訓練與測試分數幾乎一樣好且異常高。</div>
+  </section>
+
+  <!-- ============ P13 ============ -->
+  <section class="part" id="p13" data-t="門診資料健檢實驗室">
+    <div class="ph"><span class="num">13</span><div><h2>實驗室：門診資料健檢與清理</h2><div class="en">HANDS-ON LAB · M1_門診主檔.csv ＋ M1_檢驗結果.csv</div></div></div>
+    <p class="one">用貫穿資料把整條前處理鏈跑一次，右側「對答案」會隨你的步驟亮燈。完成後可下載清理後的 CSV，與 AI Studio 結果比對。</p>
+    <div id="w-lab"></div>
+    <div class="note"><b>AI Studio 對應：</b>資料在 <code>資料/ML (AI Studio)/M1. 資料工程/M1 醫療版模擬資料/</code>；流程在 <code>範例/</code> 同名資料夾——五支 .rmp、Python 對照 .ipynb 與 README 對答案表。第 2 週做 Module 1–5，第 3 週做 Module 6–10。</div>
+  </section>
+
+  <!-- ============ P14 ============ -->
+  <section class="part" id="p14" data-t="作業與重點回顧">
+    <div class="ph"><span class="num">14</span><div><h2>作業、術語與回顧</h2><div class="en">TAKE-HOME · GLOSSARY · REVIEW</div></div></div>
+    <p class="one">帶回家作業：選一份有品質問題的公開資料集，完成從原始資料到可建模的完整前處理。第 4 週上課前繳交。</p>
+    <div class="wd"><div class="wh"><h3>七個必做任務（進度清單）</h3></div><div id="w-tasks"></div></div>
+    <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
+    <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3></div><div id="w-final"></div></div>
+    <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
+  </section>
+</main>
+</div>
+
+<script src="../assets/common.js"></script>
+<script src="data.js"></script>
+<script src="m1a.js"></script>
+<script src="m1b.js"></script>
+<script src="m1c.js"></script>
+</body>
+</html>
