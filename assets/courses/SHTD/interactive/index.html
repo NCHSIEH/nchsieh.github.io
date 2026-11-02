@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>智慧醫療與科技發展 · 互動學習站</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F0E6;--paper:#FBF8F1;--card:#fff;--line:#E3DBCB;--line2:#D2C7B2;--navy:#1B2A4A;--navy2:#2E4470;--navy-l:#E6EAF2;--ochre:#B5442A;--ochre2:#D0623F;--ochre-l:#F6E3DA;--green:#3D7A5A;--green-l:#E1EEE6;--amber-l:#F5EBD5;--ink:#1F2430;--mute:#6B6F7B;--mute2:#9A9CA4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;line-height:1.7}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+a{color:var(--navy2)}
+.topbar{background:var(--navy);color:#fff}
+.topbar .in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;gap:8px;align-items:center}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px}
+.topbar .sp{flex:1}.topbar .meta{color:#C9D0DE;font-size:13px}
+.hero{max-width:1200px;margin:0 auto;padding:44px 20px 10px;display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:end}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.hero .code{color:var(--ochre);font-weight:700;letter-spacing:1.5px;font-size:13px}
+.hero h1{font-size:38px;line-height:1.3;margin:6px 0 10px}
+.hero h1 em{font-style:normal;color:var(--ochre)}
+.hero .lead{color:var(--mute);font-size:16.5px;margin:0}
+.side{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:14px}
+.side h4{margin:0 0 6px;color:var(--ochre);font-size:13px;letter-spacing:1px}
+.side ol{margin:0;padding-left:1.3em;color:var(--mute)}
+.case{max-width:1200px;margin:18px auto 0;padding:0 20px}
+.case .in{background:var(--navy);color:#fff;border-radius:12px;padding:14px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.case b{color:#FFD3C2}
+.wrap{max-width:1200px;margin:0 auto;padding:10px 20px 60px}
+.unit{margin-top:30px}
+.unit-h{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--line2);padding-bottom:6px;margin-bottom:14px;flex-wrap:wrap}
+.unit-h .u{font-weight:900;color:var(--ochre);font-size:13px;letter-spacing:1px}
+.unit-h h2{font-size:21px}
+.unit-h small{color:var(--mute)}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;position:relative;transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card.live{border:1.5px solid var(--ochre);background:#fff}
+.card .wk{font-weight:900;font-family:"Noto Serif TC",serif;color:var(--ochre);font-size:15px}
+.card h3{font-size:18px;line-height:1.4}
+.card .en{font-size:12.5px;color:var(--mute2);margin-top:-4px}
+.card .desc{font-size:14px;color:var(--mute);margin:0}
+.st{position:absolute;top:14px;right:14px;font-size:12px;padding:1px 9px;border-radius:12px}
+.st.live{background:var(--ochre);color:#fff}.st.soon{background:#ECE8DF;color:var(--mute)}.st.exam{background:var(--navy-l);color:var(--navy)}.st.hands{background:var(--amber-l);color:#8A5F17}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:8px}
+.btn{font-size:13.5px;text-decoration:none;border:1px solid var(--line2);background:#fff;color:var(--ink);padding:5px 12px;border-radius:8px}
+.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.off{color:var(--mute2);border-style:dashed;cursor:default;background:transparent}
+.prog{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:4px}
+.prog i{display:block;height:100%;background:var(--ochre2)}
+.pt{font-size:12px;color:var(--mute)}
+.foot{color:var(--mute2);font-size:13px;text-align:center;padding:30px 0}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="./"><span class="dot">SHTD</span>智慧醫療與科技發展 · 互動學習站</a>
+  <span class="sp"></span><span class="meta">謝楠楨 講座教授 · 國立臺北護理健康大學</span>
+</div></div>
+
+<header class="hero">
+  <div>
+    <div class="code">SMART HEALTHCARE &amp; TECHNOLOGY DEVELOPMENT · 115-2</div>
+    <h1>同一位病人，<br>把每個案例變成<em>可以動手調</em>的判斷練習。</h1>
+    <p class="lead">每週一頁：講義裡的國際案例數據做成可調整的圖表與試算，擬真個案王伯伯的方案用模擬器比較，判斷題做成即時回饋的練習。搭配 PDF 講義使用。</p>
+  </div>
+  <aside class="side">
+    <h4>怎麼使用</h4>
+    <ol>
+      <li>上課前：瀏覽本週段落與每段的一句話重點</li>
+      <li>課堂中：跟著老師調整模擬器、完成判斷練習</li>
+      <li>課後：做總測驗，用評估表整理小組結論</li>
+    </ol>
+  </aside>
+</header>
+
+<div class="case"><div class="in">
+  <span style="font-weight:900;font-size:17px">王伯伯</span>
+  <span style="font-size:14px">72 歲・糖尿病、心衰竭與高血壓・每日 7 種藥・獨居台北・會用 LINE、不熟 App・台語為主</span>
+  <span style="font-size:14px">生活目標：<b>少跑醫院，維持自主生活</b></span>
+</div></div>
+
+<main class="wrap" id="units"></main>
+<p class="foot">教學用網站 · 所有擬真個案與模擬資料皆非真實病人資料 · 學習進度只存在你自己的瀏覽器</p>
+
+<script>
+/* ============================================================
+   新增一週互動頁：把該週 url 填上（例如 'w02/'），並設定 lsKey（該頁進度的 localStorage 前綴）。
+   pdf：講義 PDF 檔名（位於上一層 assets/courses/SHTD/）；評量週不放連結。
+   ============================================================ */
+const P = s => '../' + s;
+const UNITS = [
+ {u:'單元一', t:'全局與發展脈絡', s:'問題與價值、案例證據、資料條件與使用者驗證', weeks:[
+  {w:1, t:'智慧醫療的範疇與價值框架', en:'Scope & Value Frameworks', d:'四層系統與範疇地圖、五重目標指標配對、WSD 成本效益拉桿、王伯伯三方案模擬器、VA CCHT 回歸平均模擬。', url:'w01/', lsKey:'shtd-w1-seen', total:16, pdf:'W01_智慧醫療的範疇與價值框架_Scope_and_Value_Frameworks.pdf'},
+  {w:2, t:'智慧醫療科技演進與國際趨勢', en:'Evolution & Global Trends', d:'技術演進、AI 方法與系統、真實案例；WHO、美國、歐盟與台灣的治理條件。', pdf:'W02_智慧醫療科技演進與國際趨勢_Evolution_and_Global_Trends.pdf'},
+  {w:3, t:'醫療資料互通與數位成熟度', en:'Interoperability & Digital Maturity', d:'資料能傳、看得懂、用得對：王伯伯在新竹急診，醫師看得到什麼。', pdf:'W03_醫療資料互通與數位成熟度_Interoperability_and_Digital_Maturity.pdf'},
+  {w:4, t:'使用者中心設計與健康行為改變', en:'User-Centred Design & Behaviour Change', d:'先懂人，再做工具：設計、行為與 Vibe Coding。', hands:true, pdf:'W04_使用者中心設計與健康行為改變_User-Centred_Design_and_Behaviour_Change.pdf'} ]},
+ {u:'單元二', t:'醫療 AI 與臨床應用', s:'模型驗證、生成內容查核、流程權限與警示工作量', weeks:[
+  {w:5, t:'醫療 AI 方法論與模型生命週期', en:'Medical AI Methods & Model Lifecycle', d:'廠商說 AUROC 0.85：資料來源、驗證層級、盛行率與 PPV、介入人力。', pdf:'W05_醫療AI方法論與模型生命週期_Medical_AI_Methods_and_Model_Lifecycle.pdf'},
+  {w:6, t:'生成式 AI 與大型語言模型的臨床應用', en:'Generative AI & LLMs in Clinical Care', d:'讓 AI 執筆，讓人負責：AI 代筆的效益、錯誤與逐句查核。', hands:true, pdf:'W06_生成式AI與大型語言模型的臨床應用_Generative_AI_and_LLMs_in_Clinical_Care.pdf'},
+  {w:7, t:'AI Agent 與臨床流程自動化', en:'AI Agents & Clinical Workflow Automation', d:'從「幫你寫」到「幫你做」：權限矩陣、人機協作與出院準備多代理人流程。', pdf:'W07_AI_Agent與臨床流程自動化_AI_Agents_and_Clinical_Workflow_Automation.pdf'},
+  {w:8, t:'臨床決策支援與預警系統', en:'Clinical Decision Support & Early Warning', d:'NEWS2、警示疲勞、資料集偏移與 Epic 敗血症模型案例。', pdf:'W08_臨床決策支援與預警系統_Clinical_Decision_Support_and_Early_Warning.pdf'},
+  {w:9, t:'期中評量：個案分析', en:'Midterm Case Analysis', d:'單元一、二綜合評量（課堂進行，不提供互動頁）。', exam:true} ]},
+ {u:'單元三', t:'連網照護與新興服務模式', s:'警示處理、服務容量、失聯處置與照護責任', weeks:[
+  {w:10, t:'遠距病人監測與數位療法', en:'Remote Patient Monitoring & Digital Therapeutics', d:'RPM 成敗的分水嶺、DTx 與給付；實作三：心衰竭居家監測儀表板。', hands:true, pdf:'W10_遠距病人監測與數位療法_Remote_Patient_Monitoring_and_Digital_Therapeutics.pdf'},
+  {w:11, t:'智慧醫院、數位孿生與居家醫院', en:'Smart Hospitals, Digital Twins & Hospital at Home', d:'指揮中心與病床流動、智慧病房、數位孿生、醫療機器人到居家醫院。', pdf:'W11_智慧醫院_數位孿生與居家醫院_Smart_Hospitals,_Digital_Twins_and_Hospital_at_Home.pdf'} ]},
+ {u:'單元四', t:'評估、治理與落地', s:'評讀原始研究，法規、經濟與治理接續同一導入決策', weeks:[
+  {w:12, t:'醫療 AI 實證評估', en:'Evidence Appraisal of Medical AI', d:'證據階梯、差異中的差異、TRIPOD+AI、鑑別與校準、偏誤與公平。', pdf:'W12_醫療AI實證評估_Evidence_Appraisal_of_Medical_AI.pdf'},
+  {w:13, t:'醫療 AI 法規、倫理與資料治理', en:'Regulation, Ethics & Data Governance', d:'SaMD 判定、風險分級、各國監管、模型卡與去識別化。', pdf:'W13_醫療AI法規_倫理與資料治理_Regulation,_Ethics_and_Data_Governance.pdf'},
+  {w:14, t:'數位健康經濟評估與導入策略', en:'Economic Evaluation & Implementation', d:'ROI、ICER、QALY、給付路徑與 NASSS；實作四：ROI 試算工具。', hands:true, pdf:'W14_數位健康經濟評估與導入策略_Economic_Evaluation_and_Implementation.pdf'},
+  {w:15, t:'智慧醫療的組織治理與變革管理', en:'Governance & Change Management', d:'為何好科技會失敗、AI 治理架構、風險監測、Kotter 與 ADKAR。', pdf:'W15_智慧醫療的組織治理與變革管理_Governance_and_Change_Management.pdf'} ]},
+ {u:'單元五', t:'產業化與前瞻', s:'成熟度、採購條件與可撤回的投資決策', weeks:[
+  {w:16, t:'技術成熟度與產業化路徑', en:'Technology Readiness & Commercialization', d:'TRL 1–9、死亡之谷、法規與上市、給付與商業模式、產學合作。', pdf:'W16_技術成熟度與產業化路徑_Technology_Readiness_and_Commercialization.pdf'},
+  {w:17, t:'前瞻科技趨勢', en:'Emerging Technologies & Health Foresight', d:'成熟度曲線、三地平線與情境規劃：王伯伯的 2035 年。', pdf:'W17_前瞻科技趨勢_Emerging_Technologies_and_Health_Foresight.pdf'},
+  {w:18, t:'期末評量：個案分析', en:'Final Case Analysis', d:'單元三至五綜合評量（課堂進行，不提供互動頁）。', exam:true} ]}
+];
+function prog(w){if(!w.lsKey)return null;try{const v=JSON.parse(localStorage.getItem(w.lsKey)||"[]");return Math.min(1,v.length/w.total)}catch(e){return null}}
+const root=document.getElementById('units');
+UNITS.forEach(U=>{
+  const sec=document.createElement('section');sec.className='unit';
+  sec.innerHTML=`<div class="unit-h"><span class="u">${U.u}</span><h2>${U.t}</h2><small>${U.s}</small></div><div class="mods"></div>`;
+  const box=sec.querySelector('.mods');
+  U.weeks.forEach(w=>{
+    const live=!!w.url, c=document.createElement('div');c.className='card'+(live?' live':'');
+    const st=w.exam?'<span class="st exam">評量週</span>':live?'<span class="st live">互動版上線</span>':'<span class="st soon">互動版製作中</span>';
+    const p=live?prog(w):null;
+    c.innerHTML=`${st}<div class="wk">W${String(w.w).padStart(2,'0')}${w.hands?'　★ 課堂實作週':''}</div><h3>${w.t}</h3><div class="en">${w.en}</div><p class="desc">${w.d}</p>`+
+      (p!=null?`<div class="prog"><i style="width:${Math.round(p*100)}%"></i></div><div class="pt">你的進度 ${Math.round(p*100)}%</div>`:'')+
+      `<div class="acts">${live?`<a class="btn pri" href="${w.url}">進入互動頁</a>`:w.exam?'':`<span class="btn off">互動頁製作中</span>`}${w.pdf?`<a class="btn" href="${P(w.pdf)}" target="_blank" rel="noopener">講義 PDF</a>`:''}</div>`;
+    box.appendChild(c);
+  });
+  root.appendChild(sec);
+});
+</script>
+</body>
+</html>

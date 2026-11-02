@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W1 智慧醫療的範疇與價值框架 · 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W1 智慧醫療的範疇與價值框架</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W1 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div class="code">WEEK 1 · 課程導論 · 智慧醫療與科技發展</div>
+  <h1>智慧醫療的範疇與價值框架</h1>
+  <div class="en">Scope &amp; Value Frameworks of Smart Healthcare</div>
+  <p class="lead">這一頁陪王伯伯走一遍本週的六個問題：這是 AI 工具還是照護系統？什麼問題值得投入？誰受益、誰承擔？上線後怎麼改善？國際案例證據到哪裡？和替代方案比，值得導入嗎？每一段都有可以動手調整的數據或判斷練習。</p>
+  <div class="chips"><a class="tag" href="../../W01_智慧醫療的範疇與價值框架_Scope_and_Value_Frameworks.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W1）</a><span class="tag o">核心能力 C1 趨勢洞察・C2 技術應用・C3 實證評估</span><span class="tag a">標「擬真假設」者為教學用參數，可自行調整</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<!-- 01 -->
+<section class="part" id="p01" data-t="認識王伯伯">
+  <div class="ph"><span class="num">01</span><div><h2>認識王伯伯：先問他想怎麼生活</h2><div class="en">SIMULATED CASE · 全學期共用擬真人物</div></div></div>
+  <p class="one">先了解王伯伯的<b>目標、意願與可接受負擔</b>，再討論科技。</p>
+  <div class="wd">
+    <div class="person">
+      <div class="avatar"><svg viewBox="0 0 120 120" width="110" height="110"><circle cx="60" cy="44" r="24" fill="#1B2A4A"/><path d="M60 34c-10 0-17 4-18 10 6-3 12-4 18-4s12 1 18 4c-1-6-8-10-18-10z" fill="#D2C7B2"/><rect x="47" y="42" width="11" height="7" rx="3" fill="none" stroke="#F4F0E6" stroke-width="2"/><rect x="62" y="42" width="11" height="7" rx="3" fill="none" stroke="#F4F0E6" stroke-width="2"/><path d="M22 112c3-24 19-38 38-38s35 14 38 38z" fill="#2E4470"/><path d="M52 76l8 12 8-12" fill="#B5442A"/></svg></div>
+      <div>
+        <h3 style="font-size:20px">王伯伯　72 歲・男</h3>
+        <ul class="facts"><li>糖尿病、心衰竭、高血壓（NYHA II–III）</li><li>每日 <b>7 種藥</b>；過去一年<b>住院 2 次</b></li><li>獨居台北，女兒週末探視</li><li>會用 LINE，不熟悉 App；台語為主，華語可溝通</li></ul>
+      </div>
+      <div>
+        <h3 style="font-size:16px">生活目標與支持網絡</h3>
+        <ul class="facts"><li>少跑醫院，維持自主生活</li><li>醫療團隊、個管師、社區藥局與居服員</li><li>女兒依王伯伯意願參與決策</li></ul>
+      </div>
+    </div>
+    <div class="q" style="margin-top:12px;border-top:1px dashed var(--line);padding-top:12px">
+      <div class="qt">暖身：團隊討論王伯伯的照護，第一個該問的問題是？</div>
+      <div id="q-warm"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="part" id="p02" data-t="夜間血氧：誰接住">
+  <div class="ph"><span class="num">02</span><div><h2>開場：夜間血氧下降，誰接住下一步？</h2><div class="en">FROM SIGNAL TO ACTION</div></div></div>
+  <p class="one">智慧化的價值，要看資料能否<b>促成適當行動</b>及<b>回饋</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>切換流程，點每一站看斷點與殘餘風險</h3><span class="tag o">互動</span></div>
+    <div style="margin-bottom:12px"><span class="seg" id="flowseg"><button class="on" data-m="old">原有流程</button><button data-m="new">重新設計</button></span></div>
+    <div class="flow" id="flow"></div>
+    <div class="loopbar" id="loopbar">回饋：結果回到下一次量測與流程調整</div>
+    <div class="detail" id="flowdetail">點選上方任一站。</div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="part" id="p03" data-t="名詞與四層系統">
+  <div class="ph"><span class="num">03</span><div><h2>名詞不是階梯；系統分四層</h2><div class="en">TERMS · FOUR-LAYER STACK</div></div></div>
+  <p class="one">數位健康是廣泛領域；智慧照護系統整合資料、人與流程；醫療 AI 是可嵌入的工具。<b>線上掛號屬數位健康，未必包含 AI。</b></p>
+  <div class="wd">
+    <div class="wh"><h3>導航比喻：同一筆體重資料走過四層</h3><span class="tag o">點選層次</span></div>
+    <div class="grid2">
+      <div class="stack" id="stack"></div>
+      <div class="detail" id="stackdetail" style="margin-top:0"></div>
+    </div>
+    <p class="note">FHIR 是交換標準；通知家屬仍須病人同意與適當權限。品質、權限、安全與治理貫穿每一層。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>練習：這個描述屬於哪一層？</h3><span class="tag a">8 題</span><span class="scoreline" id="layerscore"></span></div>
+    <div id="layerquiz"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>名詞關係判斷</h3><span class="tag a">練習</span></div>
+    <div id="q-terms"></div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="part" id="p04" data-t="範疇地圖與 WHO 分類">
+  <div class="ph"><span class="num">04</span><div><h2>範疇地圖：把應用放到「技術層 × 場域」</h2><div class="en">SCOPE MAP · WHO CLASSIFICATION 2023</div></div></div>
+  <p class="one">圖上的位置用來<b>定位</b>應用，不代表技術高低或場域進步排序；同一應用可跨多層、多場域。</p>
+  <div class="wd">
+    <div class="wh"><h3>定位遊戲：題目中的應用，主要落在哪一格？</h3><span class="tag a">6 題</span><span class="scoreline" id="mapscore"></span></div>
+    <div id="mapq" class="detail" style="margin:0 0 10px;background:var(--ochre-l)"></div>
+    <div class="mapg" id="mapg"></div>
+    <div class="fb" id="mapfb"></div>
+    <div style="margin-top:10px"><button class="btn pri" id="mapnext">下一題</button></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>WHO 數位健康介入分類（第一軸）：服務誰？</h3><span class="tag o">點例子歸類</span></div>
+    <p class="hint">分類是共同語言，用來對準使用者與問題；<b>不是成效證明</b>。同一方案常跨多類。</p>
+    <div id="whoq"></div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="part" id="p05" data-t="利害關係人與社會技術">
+  <div class="ph"><span class="num">05</span><div><h2>同一方案，各方在意什麼？</h2><div class="en">STAKEHOLDERS · SOCIOTECHNICAL SYSTEM</div></div></div>
+  <p class="one">同一項「節省」，可能只是把<b>工作或費用轉移</b>給別人。</p>
+  <div class="wd">
+    <div class="wh"><h3>王伯伯遠距監測方案：點選利害關係人</h3><span class="tag o">互動</span></div>
+    <div class="sh-wrap">
+      <svg viewBox="0 0 360 320" class="chart" id="shsvg"></svg>
+      <div class="shcard" id="shcard"></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>失敗診斷：卡在科技、流程、人、還是制度？</h3><span class="tag a">5 個情境</span><span class="scoreline" id="stscore"></span></div>
+    <p class="hint">四個面向是檢查問題的框架，<b>不能當成數字相乘的成功公式</b>。</p>
+    <div id="stq"></div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="part" id="p06" data-t="為什麼是現在">
+  <div class="ph"><span class="num">06</span><div><h2>為什麼是現在：需求壓力 × 科技能力</h2><div class="en">WHY NOW · DRIVERS</div></div></div>
+  <p class="one">需求增加說明為何要改善；科技可用，<b>仍需流程、人力與證據</b>。</p>
+  <div class="grid4">
+    <div class="kpi o"><div class="v">20.06<small>%</small></div><div class="l">台灣 65 歲以上人口占比（2025 年底實績）</div></div>
+    <div class="kpi"><div class="v">約 1,100<small> 萬</small></div><div class="l">WHO 推估 2030 年全球健康人力缺口</div></div>
+    <div class="kpi"><div class="v">逾 1,600<small> 項</small></div><div class="l">取得美國上市許可的 AI 醫材（截至 2026-09）</div></div>
+    <div class="kpi"><div class="v">逾 1,248<small> 萬人</small></div><div class="l">健保健康存摺使用人數</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>台灣 65 歲以上人口占比：實績與推估分開看</h3><span class="tag o">滑動年份</span></div>
+    <svg viewBox="0 0 760 300" class="chart" id="agesvg"></svg>
+    <div class="ctl"><span>選擇年份</span><input type="range" id="ageyr" min="0" max="5" step="1" value="0"><output id="ageout"></output></div>
+    <div class="detail" id="agedetail"></div>
+    <p class="src">資料：講義 W1 p.21；國發會 2026 年版人口推估（中推估）。推估依賴假設情境，新版資料要整組更新，避免與舊版混搭。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>讀數字的陷阱</h3><span class="tag a">練習</span></div>
+    <div id="q-now"></div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="part" id="p07" data-t="五重目標與量測">
+  <div class="ph"><span class="num">07</span><div><h2>三重 → 四重 → 五重目標</h2><div class="en">TRIPLE · QUADRUPLE · QUINTUPLE AIM</div></div></div>
+  <p class="one">五重目標是<b>評估方向</b>，並非單一分數；每個指標先定義<b>對象、分母、期間與比較方案</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>演進時間軸</h3><span class="tag o">點選年份</span></div>
+    <div class="tl" id="tl"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>指標配對：為王伯伯遠距監測，每個目標選一個合適的指標</h3><span class="tag a">5 選 1 × 5</span><span class="scoreline" id="aimscore"></span></div>
+    <p class="hint">選錯會告訴你為什麼。注意：住院天數與檢查率是<b>資源使用</b>指標，不能直接當成本。</p>
+    <div class="grid5" id="aims"></div>
+    <p class="note">家屬照護負擔另外追蹤，避免和醫療工作者福祉混為一談。</p>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="part" id="p08" data-t="醫師的時間去哪了">
+  <div class="ph"><span class="num">08</span><div><h2>工作者福祉：醫師的時間去哪了？</h2><div class="en">SINSKY ET AL., 2016 · AMBIENT AI SCRIBE</div></div></div>
+  <p class="one">評估新工具，要把<b>查核、警示與訊息處理時間</b>算進工作者福祉。</p>
+  <div class="wd">
+    <div class="wh"><h3>直接觀察 430 小時：時間分配</h3><span class="tag gray">57 位醫師・美國 4 州 4 專科</span></div>
+    <div class="grid2">
+      <svg viewBox="0 0 360 250" class="chart" id="sinsvg"></svg>
+      <div>
+        <div class="kpi o" style="margin-bottom:10px"><div class="v">每晚 1–2<small> 小時</small></div><div class="l">下班後仍有，多為電子病歷工作（21 位醫師日誌）</div></div>
+        <p class="note">解讀限制：自願參與、表現較佳的美國診所，未必能外推。</p>
+      </div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>思考實驗：AI 代筆真的省下時間嗎？</h3><span class="tag a">擬真假設</span></div>
+    <p class="hint">以 Sinsky 的「文書占整個門診工作日 49.2%」為起點，調整 AI 代筆的減少比例與醫師的查核成本，看淨效果。</p>
+    <div class="ctl"><span>門診工作日（小時）</span><input type="range" id="sc-day" min="6" max="12" step="0.5" value="9"><output id="sc-day-o"></output></div>
+    <div class="ctl"><span>AI 減少文書比例</span><input type="range" id="sc-cut" min="0" max="60" step="5" value="30"><output id="sc-cut-o"></output></div>
+    <div class="ctl"><span>每位病人查核（分）</span><input type="range" id="sc-chk" min="0" max="5" step="0.5" value="1.5"><output id="sc-chk-o"></output></div>
+    <div class="ctl"><span>每日門診人數</span><input type="range" id="sc-n" min="10" max="60" step="2" value="28"><output id="sc-n-o"></output></div>
+    <svg viewBox="0 0 760 120" class="chart" id="scsvg"></svg>
+    <div class="grid3" id="sckpi"></div>
+    <p class="note as">擬真假設：工作日長度、減少比例、查核時間、門診量都是教學參數。真實效益需以工時紀錄與倦怠量表驗證（講義 p.31）。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>國際實證：TPMG AI 臨床記錄（2023-10 至 2024-12 觀察分析）</h3></div>
+    <div class="grid3">
+      <div class="kpi"><div class="v">7,260</div><div class="l">位醫師使用</div></div>
+      <div class="kpi"><div class="v">逾 250<small> 萬次</small></div><div class="l">門診使用</div></div>
+      <div class="kpi g"><div class="v">約 15,791<small> 小時</small></div><div class="l">記錄時間節省「估計」</div></div>
+    </div>
+    <div style="margin-top:12px" id="q-tpmg"></div>
+  </div>
+</section>
+
+<!-- 09 -->
+<section class="part" id="p09" data-t="價值醫療與 WSD">
+  <div class="ph"><span class="num">09</span><div><h2>健康結果改善，不代表划算：英國 WSD</h2><div class="en">VALUE-BASED HEALTH CARE · WHOLE SYSTEM DEMONSTRATOR</div></div></div>
+  <p class="one">價值 = 病人在意的健康結果 ÷ 達成結果的總投入。<b>不同單位不能任意相除</b>，要先定義結果與成本範圍。</p>
+  <div class="wd">
+    <div class="wh"><h3>① 健康結果：12 個月死亡率</h3><span class="tag gray">糖尿病、COPD、心衰竭・群集隨機試驗</span></div>
+    <div class="grid2">
+      <svg viewBox="0 0 360 230" class="chart" id="wsd1"></svg>
+      <div>
+        <div class="kpi g"><div class="v">4.6% <small>vs</small> 8.3%</div><div class="l">介入組 vs 對照組 12 個月死亡率</div></div>
+        <div class="kpi" style="margin-top:10px"><div class="v">OR 0.82</div><div class="l">住院（95% CI 0.70–0.97）</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>② 成本效益：每 QALY 增加成本</h3><span class="tag o">拉桿實驗</span><span class="tag a">教學簡化模型</span></div>
+    <p class="hint">講義兩個端點：實際情境約 <b>£92,000／QALY</b>（£30,000 門檻下具成本效益機率僅 11%）；設備降價 80% ＋服務滿載運轉才降至約 <b>£12,000</b>。拉動看看，哪一個槓桿影響比較大？</p>
+    <div class="ctl"><span>設備降價</span><input type="range" id="w-p" min="0" max="90" step="5" value="0"><output id="w-p-o"></output></div>
+    <div class="ctl"><span>服務容量使用率</span><input type="range" id="w-u" min="20" max="100" step="5" value="20"><output id="w-u-o"></output></div>
+    <svg viewBox="0 0 760 260" class="chart" id="wsd2"></svg>
+    <div class="detail" id="wsdtxt"></div>
+    <p class="note as">教學簡化模型：把每 QALY 增量成本拆成「設備」「服務人力（隨使用率攤提）」「減少住院的抵銷」三塊，參數經校準使兩端點與講義一致；中間值僅示意方向，<b>不是原研究模型</b>。</p>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="part" id="p10" data-t="學習型健康照護體系">
+  <div class="ph"><span class="num">10</span><div><h2>學習型健康照護體系（LHS）：閉環才會改善</h2><div class="en">LEARNING HEALTH SYSTEM</div></div></div>
+  <p class="one">持續監測之後，團隊可<b>調整流程、驗證更新、維持現況或停用</b>。導入前後不同，未必全由科技造成。</p>
+  <div class="wd">
+    <div class="wh"><h3>王伯伯方案的改善回圈：逐步播放</h3><span class="tag o">點「下一步」</span></div>
+    <div class="lhs">
+      <svg viewBox="0 0 330 330" class="chart" id="lhssvg"></svg>
+      <div>
+        <div class="detail" id="lhsdetail" style="margin-top:0"></div>
+        <div style="margin-top:10px;display:flex;gap:8px"><button class="btn" id="lhsprev">上一步</button><button class="btn pri" id="lhsnext">下一步</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>再量測之後：你會怎麼決定？</h3><span class="tag a">3 個情境</span></div>
+    <div id="lhsq"></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="part" id="p11" data-t="國際案例數據實驗室">
+  <div class="ph"><span class="num">11</span><div><h2>國際案例數據實驗室</h2><div class="en">GLOBAL CASES · DATA LAB</div></div></div>
+  <p class="one">效果方向、研究設計與證據確定性<b>分開判讀</b>；每個案例都要能回溯對象、比較、結果與限制。</p>
+  <div class="wd">
+    <div class="tabs" id="ctabs"></div>
+    <div id="cpanels"></div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="part" id="p12" data-t="四關判斷">
+  <div class="ph"><span class="num">12</span><div><h2>四關判斷：成功與失敗卡在哪一關？</h2><div class="en">FOUR GATES · 全學期案例預覽</div></div></div>
+  <p class="one">前一關成立，<b>不代表後一關成立</b>；每一關都需要自己的證據。</p>
+  <div class="wd">
+    <div class="wh"><h3>先點一張案例卡，再點它所在的關卡（通過列或卡關列）</h3><span class="tag a">8 張卡</span><span class="scoreline" id="gscore"></span></div>
+    <div class="pool" id="gpool"></div>
+    <div class="gates" id="ghead"></div>
+    <div style="font-size:13px;color:var(--green);font-weight:700;margin:8px 0 4px">✓ 通過</div>
+    <div class="gates" id="gpass"></div>
+    <div style="font-size:13px;color:var(--ochre);font-weight:700;margin:8px 0 4px">✕ 卡關</div>
+    <div class="gates" id="gfail"></div>
+    <div class="fb" id="gfb"></div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="part" id="p13" data-t="王伯伯方案模擬器">
+  <div class="ph"><span class="num">13</span><div><h2>王伯伯需要遠距監測嗎？三方案模擬器</h2><div class="en">USUAL CARE · TELEPHONE FOLLOW-UP · RPM</div></div></div>
+  <p class="one">比較一般照護、電話追蹤與 RPM：<b>早發現或少一次住院，不能直接當成淨效益</b>。看五重目標同時怎麼變。</p>
+  <div class="wd">
+    <div class="wh"><h3>一個擬真族群：200 位像王伯伯的心衰竭出院病人，追蹤一年</h3><span class="tag a">所有參數皆為擬真假設</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>基準 30 天再入院率</span><input type="range" id="s-base" min="10" max="30" step="1" value="20"><output></output></div>
+        <div class="ctl"><span>電話追蹤 相對降幅</span><input type="range" id="s-rrp" min="0" max="40" step="1" value="10"><output></output></div>
+        <div class="ctl"><span>RPM 相對降幅</span><input type="range" id="s-rrr" min="0" max="40" step="1" value="20"><output></output></div>
+        <div class="ctl"><span>RPM 加入率（熟悉科技者）</span><input type="range" id="s-ea" min="20" max="100" step="5" value="80"><output></output></div>
+        <div class="ctl"><span>RPM 加入率（台語為主・不熟 App）</span><input type="range" id="s-eb" min="10" max="100" step="5" value="45"><output></output></div>
+      </div>
+      <div>
+        <div class="ctl"><span>每人每日警示次數</span><input type="range" id="s-al" min="0.02" max="0.4" step="0.02" value="0.1"><output></output></div>
+        <div class="ctl"><span>警示陽性預測值 PPV</span><input type="range" id="s-ppv" min="5" max="80" step="5" value="25"><output></output></div>
+        <div class="ctl"><span>每次警示處理（分）</span><input type="range" id="s-min" min="3" max="20" step="1" value="8"><output></output></div>
+        <div class="ctl"><span>個管師人力（人）</span><input type="range" id="s-fte" min="0.5" max="4" step="0.5" value="1"><output></output></div>
+        <div class="ctl"><span>RPM 設備＋平台（元／人月）</span><input type="range" id="s-dev" min="300" max="3000" step="100" value="1500"><output></output></div>
+      </div>
+    </div>
+    <details class="adv"><summary>更多假設（族群組成、單位成本）</summary>
+      <div class="ctl"><span>不熟 App 者占比</span><input type="range" id="s-gb" min="10" max="70" step="5" value="40"><output></output></div>
+      <div class="ctl"><span>每次再入院成本（元）</span><input type="range" id="s-adm" min="40000" max="200000" step="5000" value="100000"><output></output></div>
+      <div class="ctl"><span>個管師時薪（元）</span><input type="range" id="s-wage" min="300" max="1000" step="50" value="550"><output></output></div>
+      <div class="ctl"><span>電話追蹤（分／人週）</span><input type="range" id="s-tel" min="5" max="30" step="1" value="12"><output></output></div>
+    </details>
+    <div style="margin:14px 0 4px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-preset="base">預設</button><button class="btn" data-preset="fatigue">情境：警示太多</button><button class="btn" data-preset="equity">情境：只有熟悉科技者加入</button><button class="btn" data-preset="cheap">情境：設備降價＋精準警示</button></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>五重目標儀表板</h3><span class="tag gray">每列比較三方案</span></div>
+    <div id="simout"></div>
+    <div id="simmsg"></div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="part" id="p14" data-t="VA CCHT 與回歸平均">
+  <div class="ph"><span class="num">14</span><div><h2>案例研討：VA 居家遠距照護（CCHT）</h2><div class="en">DARKINS ET AL., 2008 · REGRESSION TO THE MEAN</div></div></div>
+  <p class="one">先看照護模式（誰追蹤、誰回應），再看設備；CCHT 的核心是<b>照護協調員</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>決策點：你是 VA 決策者</h3><span class="tag a">先選再看結果</span></div>
+    <p>2003 年 VA 全國推動 CCHT：慢性病退伍軍人在家量測、回傳，由照護協調員追蹤；2008 年發表 17,025 位病人的整體成果。<b>這份成果足以支持「全國擴大」嗎？</b></p>
+    <div id="vaq"></div>
+    <div id="vares" style="display:none">
+      <div class="grid3" style="margin-top:12px">
+        <div class="kpi g"><div class="v">−25%</div><div class="l">平均住院天數</div></div>
+        <div class="kpi g"><div class="v">−19%</div><div class="l">住院（hospitalization）</div></div>
+        <div class="kpi"><div class="v">約 1,600<small> 美元</small></div><div class="l">每人每年計畫成本</div></div>
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="okmsg"><b>做得對的</b><br>以照護協調員與標準化流程為核心；依疾病分群設計問答與量測規則；全國同一套資料、訓練與管理。</div>
+        <div class="warn" style="margin-top:8px"><b>要保留的疑問</b><br>前後比較、無同期對照組，難排除<b>回歸平均</b>；自願加入者可能較穩定；成本只算計畫端，未含家屬時間與負擔。</div>
+      </div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>回歸平均模擬：沒有任何介入，住院也會「下降」</h3><span class="tag o">核心互動</span><span class="tag a">模擬資料</span></div>
+    <p class="hint">模擬 2,000 位病人，每人風險不變、兩年都<b>沒有任何介入</b>。只挑「去年住院次數多」的人收案，看今年平均。再加上一個「真實效果」，比較前後差異有多少是假象。</p>
+    <div class="ctl"><span>收案門檻：去年住院 ≥</span><input type="range" id="r-th" min="1" max="4" step="1" value="2"><output id="r-th-o"></output></div>
+    <div class="ctl"><span>介入真實效果</span><input type="range" id="r-eff" min="0" max="30" step="5" value="0"><output id="r-eff-o"></output></div>
+    <div style="margin:6px 0 10px"><button class="btn" id="r-re">重新抽樣</button></div>
+    <svg viewBox="0 0 760 290" class="chart" id="rtmsvg"></svg>
+    <div class="rtm-legend"><span><i style="background:#1B2A4A"></i>收案前一年</span><span><i style="background:#D0623F"></i>收案後一年（前後比較看到的）</span><span><i style="background:#9A9CA4"></i>同樣條件、未收案的對照（若有同期對照組）</span></div>
+    <div class="detail" id="rtmtxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>課堂討論（三題擇一深入）</h3></div>
+    <ol style="margin:0;padding-left:20px;font-size:15px">
+      <li><b>五重目標檢視：</b>CCHT 改善了哪幾項？哪幾項根本沒有被量測？</li>
+      <li><b>比較方案：</b>若要說服健保署給付類似方案，你會要求補哪一種比較組？</li>
+      <li><b>四層系統：</b>把 CCHT 套到王伯伯：誰扮演照護協調員？夜間異常由誰接？</li>
+    </ol>
+    <p class="note">沒有標準答案：好答案會說清楚判斷、依據的證據，以及還缺什麼。出處：Darkins A 等，Telemed J E Health 2008;14(10):1118-26。</p>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="part" id="p15" data-t="小組評估表產生器">
+  <div class="ph"><span class="num">15</span><div><h2>小組演練：提出一個可驗證的方案</h2><div class="en">CLASS PRODUCT · 個案評估表</div></div></div>
+  <p class="one">每組繳一張表：<b>問題、受益者、比較方案、主指標、一項目前不知道的資訊與決策</b>。</p>
+  <div class="wd form">
+    <div class="grid2">
+      <div>
+        <label>組別／成員</label><input id="f-team" placeholder="例：第 3 組 王小明、李小華">
+        <label>1 問題：選一個王伯伯旅程的痛點</label><select id="f-pain"></select>
+        <label>照護目標與對象</label><input id="f-goal" placeholder="例：出院後 30 天內，及早發現體重上升並由個管師回應">
+        <label>2 方案比較（自動帶入，可修改）</label>
+        <input id="f-a1"><input id="f-a2" style="margin-top:6px"><input id="f-a3" style="margin-top:6px">
+      </div>
+      <div>
+        <label>3 主要結果指標</label><select id="f-main"></select>
+        <label>負擔或公平指標</label><select id="f-burden"></select>
+        <label>4 目前不知道的資訊，以及如何補資料</label><textarea id="f-unknown" placeholder="例：台語為主長者的加入率與持續量測率；以 20 人小規模試行 4 週量測"></textarea>
+        <label>5 決策</label><select id="f-dec"><option>試行</option><option>調整設計後再評估</option><option>暫緩</option></select>
+        <label>理由</label><textarea id="f-why" placeholder="說清楚判斷、證據與缺口"></textarea>
+      </div>
+    </div>
+    <div style="margin:14px 0"><button class="btn oc" id="f-copy">複製評估表文字</button> <button class="btn" id="f-clear">清空</button> <span id="f-msg" style="font-size:13px;color:var(--green)"></span></div>
+    <div class="out" id="f-out"></div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section class="part" id="p16" data-t="名詞卡、測驗與回顧">
+  <div class="ph"><span class="num">16</span><div><h2>名詞卡、總測驗與本週帶走的三個問題</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+  <div class="wd">
+    <div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div>
+    <div class="cards" id="cards"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div>
+    <div id="final"></div>
+  </div>
+  <div class="take">
+    <div><b>定位</b>為誰解決什麼問題？資料如何變成有人負責的行動？</div>
+    <div><b>價值</b>與什麼方案相比？結果、成本、負擔與公平如何量測？</div>
+    <div><b>證據與回饋</b>哪些已證實、哪些是假設？何時調整、更新或停用？</div>
+  </div>
+  <div class="closing">
+    <div class="tag o">CLOSING</div>
+    <h2 style="margin-top:8px">科技是手段，價值才是目的</h2>
+    <p style="color:var(--mute)">先問為誰、在哪個環節、推動哪個目標，再談用什麼科技。<br>下週 W2：智慧醫療科技演進與國際趨勢——課前從 FDA 官方 AI 醫材清單選一項產品，記錄產品名、預期用途、許可資訊與官方連結。</p>
+  </div>
+</section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w1-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w1-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+/* ---------- 01 warm ---------- */
+mcq("#q-warm",[{q:"",o:["要選哪一款遠距監測設備？","王伯伯希望怎麼生活、願意承擔多少量測負擔？","AI 預測模型的 AUROC 要多高？","健保有沒有給付？"],a:1,e:"先定位問題與對象，再選科技、指標及比較方案。設備、模型與給付都重要，但要建立在王伯伯的目標與可接受負擔之上。"}]);
+
+/* ---------- 02 flow ---------- */
+const FLOW={
+ old:[{t:"量測",s:"訊號斷在半路",d:"夜間血氧由床邊設備量到，但沒有傳出去，或要等人手抄。<b>斷點：</b>資料停在設備裡。"},{t:"判讀",s:"資料分散，重複抄寫",d:"數值散在不同紙本與系統，夜班人員需要翻找。<b>斷點：</b>異常沒被即時注意。"},{t:"回應",s:"通知後不清楚誰處理",d:"有人看到了，但不知道該通知誰、多久內要處理。<b>斷點：</b>責任不明。"},{t:"追蹤",s:"處理後未回看結果",d:"事件結束就結束，沒有人回頭檢視處置是否有效。<b>斷點：</b>沒有回饋，下次一樣。"}],
+ new:[{t:"量測",s:"自動傳入系統",d:"設備自動上傳到系統。<b>仍要面對：</b>檢查感測品質（脫落、移動造成假讀值）。"},{t:"判讀",s:"規則或模型提示",d:"規則或模型提示異常。<b>仍要面對：</b>誤報與漏報——門檻怎麼設定，會決定工作量。"},{t:"回應",s:"值班人員複核與升級",d:"明確指定由值班人員複核並依流程升級。<b>仍要面對：</b>需要人力與交接安排。"},{t:"追蹤",s:"追蹤處置與結果",d:"記錄處置與結果，資料促成行動。<b>仍要面對：</b>回看傷害與工作量，避免只看「抓到幾次」。"}]
+};
+let flowMode="old",flowSel=-1;
+function drawFlow(){const f=$("#flow");f.innerHTML="";FLOW[flowMode].forEach((s,i)=>{const d=h("div",{class:"fstep "+(flowMode==="old"?"bad":"good")+(i===flowSel?" sel":"")},`<span class="x">${flowMode==="old"?"✕":"✓"}</span><div class="t">${s.t}</div><div class="s">${s.s}</div>`);d.onclick=()=>{flowSel=i;drawFlow();$("#flowdetail").innerHTML=`<b>${s.t}｜</b>${s.d}`};f.appendChild(d)});$("#loopbar").classList.toggle("on",flowMode==="new");$("#loopbar").textContent=flowMode==="new"?"↻ 回饋：結果回到下一次量測與流程調整":"（沒有回饋迴路）"}
+$$("#flowseg button").forEach(b=>b.onclick=()=>{$$("#flowseg button").forEach(x=>x.classList.remove("on"));b.classList.add("on");flowMode=b.dataset.m;flowSel=-1;$("#flowdetail").textContent=flowMode==="old"?"點選上方任一站，看斷點在哪裡。":"重新設計後，每一站仍有要面對的風險。點選看看。";drawFlow()});
+drawFlow();$("#flowdetail").textContent="點選上方任一站，看斷點在哪裡。";
+
+/* ---------- 03 stack ---------- */
+const LAYERS=[
+ {n:"①",t:"資料取得",c:"#7A8BAA",ex:"量測、影像、病歷與病人經驗",gps:"GPS 取得位置",w:"體重計／血壓計，每天早上量測"},
+ {n:"②",t:"交換與整合",c:"#4F6390",ex:"設備網路、API、FHIR 與交換平台",gps:"網路整合路況",w:"設備、網路與授權交換，依同意範圍傳送"},
+ {n:"③",t:"判讀與智能",c:"#2E4470",ex:"規則、機器學習與大型語言模型",gps:"依路況計算路線",w:"規則或模型提示：3 日體重增加超過 2 公斤"},
+ {n:"④",t:"照護服務",c:"#B5442A",ex:"App、Agent、衛教與臨床人員回應",gps:"駕駛決定怎麼開",w:"個管師複核、聯絡，必要時升級處理"}];
+let layerSel=0;
+function drawStack(){const s=$("#stack");s.innerHTML="";LAYERS.forEach((L,i)=>{const d=h("div",{class:"layer"+(i===layerSel?" sel":"")},`<div class="ln" style="background:${L.c}">${L.n}</div><div class="lc"><b>${L.t}</b><div class="ex">${L.ex}</div></div>`);d.onclick=()=>{layerSel=i;drawStack()};s.appendChild(d)});const L=LAYERS[layerSel];$("#stackdetail").innerHTML=`<div style="font-size:13px;color:var(--mute)">第 ${L.n} 層　${L.t}</div><div style="margin-top:8px"><span class="tag gray">導航</span> ${L.gps}</div><div style="margin-top:8px"><span class="tag o">王伯伯</span> ${L.w}</div><div style="margin-top:10px;font-size:13px;color:var(--mute)">${i4note(layerSel)}</div>`}
+function i4note(i){return["比喻有界線：醫療決策仍由人負責。","每一層都需能運作。","提示只是建議，下一層要有人接。","服務層還需要人員、責任與回應流程。"][i]}
+drawStack();
+const LQ=[["居家血壓計每天早上自動量測","0"],["院際以 FHIR 交換檢驗結果","1"],["大型語言模型草擬出院衛教單","2"],["個管師接到提示後打電話給王伯伯","3"],["離床感測器的照護紀錄","0"],["病人授權後，量測值傳入醫院病歷","1"],["敗血症預警模型計算風險分數","2"],["值班護理師依升級流程通知醫師","3"]];
+(function(){const r=$("#layerquiz");let ok=0,dn=0;LQ.forEach(([t,a])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});let done=false;LAYERS.forEach((L,i)=>{const b=h("button",{class:"btn"},L.n+" "+L.t);b.onclick=()=>{if(done)return;done=true;dn++;const good=String(i)===a;if(good)ok++;b.style.background=good?"#E1EEE6":"#F6E3DA";b.style.borderColor=good?C.green:C.ochre;if(!good){box.children[+a].style.background="#E1EEE6";box.children[+a].style.borderColor=C.green}$("#layerscore").textContent=`${ok} / ${LQ.length}`+(dn===LQ.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);r.appendChild(row)})})();
+mcq("#q-terms",[
+ {q:"關於 eHealth、mHealth、智慧醫療與醫療 AI，哪一個說法正確？",o:["它們是逐代取代的階梯：eHealth → mHealth → 智慧醫療 → AI","名詞可以重疊；政策年份不等於名詞誕生年","醫療 AI 是生成式 AI 普及後才出現的","Smart Healthcare 有國際唯一的分界定義"],a:1,e:"講義提醒避免把這些名詞畫成逐代取代的階梯。醫療 AI 早於生成式 AI 普及就已存在；Smart Healthcare 是本課工作定義，並無唯一分界。"},
+ {q:"「規則式血氧提示」屬於哪一類？",o:["一定是醫療 AI","智慧照護系統可以運用規則式判斷，不一定是 AI","只是數位健康，與智慧照護無關","不屬於任何一類"],a:1,e:"智慧照護也可能運用規則式判斷；醫療 AI 則可以嵌入照護系統。分類看的是整合資料、人與流程的程度。"}]);
+
+/* ---------- 04 map ---------- */
+const MAPROWS=["照護服務","判讀與智能","交換與整合","資料取得"],MAPCOLS=["醫院","社區／居家","長照"];
+const MAPCELL=[["交班與出院準備","遠距追蹤與衛教","照護計畫與交接"],["預警、影像 AI","風險分層與異常提示","跌倒風險評估"],["API、FHIR、院際交換","授權健康資料交換","醫養資訊銜接"],["監測、影像、病歷","體重計、血壓計","離床感測與照護紀錄"]];
+const MAPQ=[{t:"住院病房的早期預警分數，提醒護理師病人可能惡化",r:1,c:0},{t:"王伯伯在家用的藍牙體重計",r:3,c:1},{t:"長照機構把住民的照護計畫交接給下一班居服員",r:0,c:2},{t:"出院後依授權把居家量測傳給社區診所",r:2,c:1},{t:"機構夜間離床感測器的事件紀錄",r:3,c:2},{t:"個管師依異常提示，在家庭端提供遠距追蹤與衛教",r:0,c:1}];
+let mqi=0,mok=0,mans=false;
+function drawMap(){const g=$("#mapg");g.innerHTML="";g.appendChild(h("div",{}," "));MAPCOLS.forEach(c=>g.appendChild(h("div",{class:"h"},c)));MAPROWS.forEach((r,ri)=>{g.appendChild(h("div",{class:"rh"},r));MAPCOLS.forEach((c,ci)=>{const d=h("div",{class:"c"},MAPCELL[ri][ci]);d.onclick=()=>{if(mans)return;mans=true;const q=MAPQ[mqi];const ok=ri===q.r&&ci===q.c;if(ok)mok++;d.classList.add(ok?"hit":"miss");if(!ok)g.children[4+q.r*4+1+q.c].classList.add("hit");const fb=$("#mapfb");fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>正確。</b>":"<b>不太對。</b>")+`主要定位：<b>${MAPROWS[q.r]} × ${MAPCOLS[q.c]}</b>。同一應用也可能跨到其他格，練習的是找出「主要」位置。`;$("#mapscore").textContent=`${mok} / ${MAPQ.length}`};g.appendChild(d)})});$("#mapq").innerHTML=`<b>第 ${mqi+1} 題：</b>${MAPQ[mqi].t}`}
+$("#mapnext").onclick=()=>{if(mqi>=MAPQ.length-1){mqi=0;mok=0;$("#mapscore").textContent=""}else mqi++;mans=false;$("#mapfb").className="fb";drawMap();$("#mapnext").textContent=mqi===MAPQ.length-1?"重新開始":"下一題"};
+drawMap();
+const WHO=[{n:"1 個人",en:"Persons",ex:"1.4 個人健康追蹤"},{n:"2 醫療服務提供者",en:"Healthcare providers",ex:"2.3 決策支援、2.4 遠距醫療"},{n:"3 健康管理與支援人員",en:"Health management & support",ex:"3.1 人力資源、3.2 供應鏈"},{n:"4 資料服務",en:"Data services",ex:"4.4 資料交換與互通"}];
+const WHOQ=[["王伯伯每天量體重、血壓",0],["個管師看提示、視訊追蹤",1],["個管師排班、設備配送與回收",2],["量測依授權傳入病歷",3],["健康存摺讓民眾查看自己的就醫紀錄",0]];
+(function(){const r=$("#whoq");WHOQ.forEach(([t,a])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});let done=false;const fb=h("div",{class:"fb"});WHO.forEach((w,i)=>{const b=h("button",{class:"btn"},w.n);b.title=w.ex;b.onclick=()=>{if(done)return;done=true;const ok=i===a;b.style.background=ok?"#E1EEE6":"#F6E3DA";if(!ok)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=`${ok?"<b>正確。</b>":"<b>再想想。</b>"}屬於「${WHO[a].n}（${WHO[a].en}）」，例：${WHO[a].ex}。`};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})})();
+
+/* ---------- 05 stakeholders ---------- */
+const SH=[{n:"病人與家屬",p:"生活自主、安心、易理解",m:"量測負擔、時間與隱私"},{n:"醫院管理者",p:"品質、效率與持續營運",m:"建置及維運投入"},{n:"支付者／政府",p:"健康、可近性、公平與預算",m:"資源分配與監管責任"},{n:"醫師與護理團隊",p:"正確資訊、減少重複工作",m:"警示、查核與新流程"},{n:"技術供應者",p:"可用產品與持續服務",m:"品質、資安與合約責任"}];
+let shSel=0;
+function drawSH(){const s=$("#shsvg");const cx=180,cy=160,R=115;let g=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${C.line}" stroke-dasharray="4 4"/>`;SH.forEach((x,i)=>{const a=-Math.PI/2+i*2*Math.PI/SH.length;const x1=cx+R*Math.cos(a),y1=cy+R*Math.sin(a);g+=`<line x1="${cx}" y1="${cy}" x2="${x1}" y2="${y1}" stroke="${i===shSel?C.ochre:C.line}" stroke-width="${i===shSel?3:1.5}"/>`});g+=`<circle cx="${cx}" cy="${cy}" r="42" fill="${C.navy}"/><text x="${cx}" y="${cy-3}" fill="#fff" font-size="14" text-anchor="middle" font-weight="700">遠距監測</text><text x="${cx}" y="${cy+15}" fill="#C9D0DE" font-size="12" text-anchor="middle">方案</text>`;SH.forEach((x,i)=>{const a=-Math.PI/2+i*2*Math.PI/SH.length;const x1=cx+R*Math.cos(a),y1=cy+R*Math.sin(a);g+=`<g class="shn" data-i="${i}" style="cursor:pointer"><circle cx="${x1}" cy="${y1}" r="34" fill="${i===shSel?C.ochre:"#fff"}" stroke="${i===shSel?C.ochre:C.navy2}" stroke-width="2"/>`;const parts=x.n.length>4?[x.n.slice(0,x.n.indexOf("與")>0?x.n.indexOf("與")+1:4),x.n.slice(x.n.indexOf("與")>0?x.n.indexOf("與")+1:4)]:[x.n];parts.forEach((t,k)=>g+=`<text x="${x1}" y="${y1+5+(k-(parts.length-1)/2)*16}" font-size="13" text-anchor="middle" font-weight="700" fill="${i===shSel?"#fff":C.navy}">${t}</text>`);g+=`</g>`});s.innerHTML=g;s.querySelectorAll(".shn").forEach(n=>n.onclick=()=>{shSel=+n.dataset.i;drawSH()});const x=SH[shSel];$("#shcard").innerHTML=`<h3 style="font-size:19px">${x.n}</h3><p style="margin:10px 0 4px"><span class="plus">＋ 希望改善</span>　${x.p}</p><p style="margin:4px 0"><span class="minus">－ 可能承擔的代價</span>　${x.m}</p><p class="note">先辨識使用者、受益者、付款者與承擔風險者。點左圖切換角色。</p>`}
+drawSH();
+const STQ=[{t:"體重計藍牙常斷線，資料一週只傳回三天",a:0},{t:"警示送出後，週末沒有人被指定要看",a:1},{t:"王伯伯看不懂 App 上的數字，第三天就不再量",a:2},{t:"試辦結束後沒有財源支付個管師人力，方案停擺",a:3},{t:"沒有約定誰能把資料通知女兒，團隊不敢聯絡家屬",a:3}];
+const STN=["科技","流程","人","制度"],STD=["量測可靠、資料可交換、服務穩定（資訊與設備團隊）","誰看警示、多久回應、如何交接（臨床及個管團隊）","是否理解、會使用、負擔是否合理（病人、家屬與醫護）","權限、財源、責任與維運安排（管理、法務及支付者）"];
+(function(){const r=$("#stq");let ok=0,dn=0;STQ.forEach(q=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},q.t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let done=false;STN.forEach((n,i)=>{const b=h("button",{class:"btn"},n);b.onclick=()=>{if(done)return;done=true;dn++;const g=i===q.a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[q.a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=`主要卡在「${STN[q.a]}」：${STD[q.a]}。`;$("#stscore").textContent=`${ok} / ${STQ.length}`+(dn===STQ.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})})();
+
+/* ---------- 06 aging ---------- */
+const AGE=[[2026,20.9],[2035,28.7],[2045,37.0],[2055,43.8],[2065,50.4],[2075,52.9]];
+function drawAge(sel){const s=$("#agesvg"),W=760,H=300,L=56,B=250,T=26,bw=70,gap=(W-L-30-bw*AGE.length)/(AGE.length-1);let g="";for(let v=0;v<=60;v+=10){const y=B-(v/60)*(B-T);g+=`<line x1="${L}" x2="${W-20}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-8}" y="${y+4}" font-size="12" fill="${C.mute}" text-anchor="end">${v}%</text>`}
+ const y20=B-(20.06/60)*(B-T);g+=`<line x1="${L}" x2="${W-20}" y1="${y20}" y2="${y20}" stroke="${C.navy}" stroke-dasharray="5 4"/><text x="${W-22}" y="${y20-6}" font-size="12" fill="${C.navy}" text-anchor="end" font-weight="700">2025 年底實績 20.06%</text>`;
+ AGE.forEach(([yr,v],i)=>{const x=L+12+i*(bw+gap),y=B-(v/60)*(B-T);const on=i===sel;g+=`<rect class="ab" data-i="${i}" x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${on?C.ochre:"#E3B6A6"}" style="cursor:pointer"/><text x="${x+bw/2}" y="${y-7}" font-size="14" text-anchor="middle" font-weight="700" fill="${on?C.ochre:C.mute}">${v}%</text><text x="${x+bw/2}" y="${B+20}" font-size="13" text-anchor="middle" fill="${C.ink||"#333"}">${yr}</text>`});
+ s.innerHTML=g;s.querySelectorAll(".ab").forEach(r=>{r.onclick=()=>{$("#ageyr").value=r.dataset.i;upAge()}});}
+function upAge(){const i=+$("#ageyr").value,[yr,v]=AGE[i];drawAge(i);$("#ageout").textContent=yr;const per=Math.round(100/v*10)/10;$("#agedetail").innerHTML=`<b>${yr} 年（推估）：</b>65 歲以上約占 <b>${v}%</b>，相當於每 <b>${per}</b> 人中有 1 位長者。${i===0?"注意：2026 是推估值，2025 年底實績是 20.06%，兩者不要混在同一條線上解讀。":"推估依賴生育、死亡與遷移假設；用於規劃時應標明版本與情境。"}`}
+$("#ageyr").oninput=upAge;upAge();
+mcq("#q-now",[
+ {q:"「逾 1,600 項 AI 醫材獲美國上市許可」最能支持哪一個結論？",o:["AI 已經普遍改善了病人健康結果","AI 醫材數量快速增加，但不同產品與用途適用不同審查路徑，仍需在地驗證","每項 AI 醫材都具成本效益","台灣醫院可以直接採用這些產品"],a:1,e:"許可件數不能取代在地驗證，也不能代表每項產品都有成本效益；清單並非完整普查。早期例子 PAPNET 於 1995 年即獲准輔助子宮頸抹片複篩。"},
+ {q:"健保資料涵蓋廣，用來開發智慧醫療還需要確認什麼？",o:["不需要，涵蓋廣就代表完整","申報不等於完整臨床資料，也不含所有未就醫者","只要確認檔案格式","只要確認資料量夠大"],a:1,e:"資料與設備是起點；W3、W14、W15 將進一步處理互通、經濟與落地。"}]);
+
+/* ---------- 07 aims ---------- */
+const TLD=[{y:2008,n:"Triple Aim",s:"Berwick 等：病人體驗、族群健康與每人醫療成本",inc:[0,1,2]},{y:2014,n:"Quadruple Aim",s:"Bodenheimer 等：加入醫療工作者福祉",inc:[0,1,2,3],nw:3},{y:2022,n:"Quintuple Aim",s:"Nundy 等：明列健康公平",inc:[0,1,2,3,4],nw:4}];
+const AIMN=["病人體驗","族群健康","每人成本","工作者福祉","健康公平"];
+let tlSel=2;function drawTL(){const t=$("#tl");t.innerHTML="";TLD.forEach((d,i)=>{const c=h("div",{class:"tlc"+(i===tlSel?" on":"")},`<div class="y">${d.y}</div><b>${d.n}</b><div style="font-size:13px;color:var(--mute)">${d.s}</div><div class="dots">${AIMN.map((a,k)=>`<span class="${d.inc.includes(k)?(k===d.nw?"new":"in"):""}">${a}</span>`).join("")}</div>`);c.onclick=()=>{tlSel=i;drawTL()};t.appendChild(c)})}drawTL();
+const AIMQ=[
+ {n:"病人體驗",o:["病人自述經驗 PREMs（知情、理解、共同決策）","App 下載次數","住院天數","設備故障率"],a:0,why:["正確：PREMs 量測病人的照護經驗。","下載次數是使用量，不是經驗。","住院天數是資源使用指標。","設備故障率是技術品質指標。"]},
+ {n:"族群健康",o:["個管師接聽電話數","30 天再入院率（定義納入、追蹤與排除條件）","病人滿意度","警示總數"],a:1,why:["這是工作量。","正確：需明確定義納入者、追蹤與排除。","滿意度屬體驗面向。","警示數是流程量，不是健康結果。"]},
+ {n:"每人成本",o:["住院天數","檢查次數","每人年照護總成本（標示支付者／醫院／社會觀點）","設備單價"],a:2,why:["住院天數是資源使用，不能直接當成本。","檢查率是資源使用，不能直接當成本。","正確：要標示觀點與期間。","只看設備單價會漏掉平台與人力。"]},
+ {n:"工作者福祉",o:["警示總數","倦怠量表＋下班後文書時間，搭配警示量與離職","醫院營收","病人加入率"],a:1,why:["警示量要搭配，但單獨不等於福祉。","正確：多面向搭配解讀。","營收與工作者福祉無直接關係。","加入率屬公平／涵蓋面向。"]},
+ {n:"健康公平",o:["整體平均再入院率","服務涵蓋及各族群指標差距（語言、年齡、地區、負擔能力）","全院滿意度","AI 模型 AUROC"],a:1,why:["整體平均會掩蓋族群差距。","正確：要分族群檢查。","全院平均同樣掩蓋差距。","AUROC 是模型表現，不是公平指標。"]}];
+(function(){const r=$("#aims");let ok=0,dn=0;AIMQ.forEach(q=>{const c=h("div",{class:"aimcard"});c.appendChild(h("h4",{},q.n));const s=h("select",{});s.innerHTML=`<option value="">請選擇…</option>`+q.o.map((o,i)=>`<option value="${i}">${o}</option>`).join("");const res=h("div",{class:"res"});let done=false;s.onchange=()=>{if(s.value==="")return;const i=+s.value;res.innerHTML=`<span style="color:${i===q.a?C.green:C.ochre};font-weight:700">${i===q.a?"✓":"✕"}</span> ${q.why[i]}`;if(!done){done=true;dn++;if(i===q.a)ok++;$("#aimscore").textContent=`首選答對 ${ok} / 5`+(dn===5?"　✓":"")}};c.appendChild(s);c.appendChild(res);r.appendChild(c)})})();
+
+/* ---------- 08 sinsky ---------- */
+(function(){const s=$("#sinsvg");const groups=[["整個門診工作日",27.0,49.2],["在診間內",52.9,37.0]];let g="";const L=40,B=200,T=20,max=60;for(let v=0;v<=60;v+=20){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="350" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}%</text>`}groups.forEach(([n,a,b],i)=>{const x=L+30+i*150;[[a,C.navy,"直接面對病人"],[b,C.ochre,"電子病歷與文書"]].forEach(([v,col,lab],k)=>{const y=B-v/max*(B-T);g+=`<rect x="${x+k*52}" y="${y}" width="46" height="${B-y}" fill="${col}" rx="3" data-t="${n}・${lab}：${v}%"/><text x="${x+k*52+23}" y="${y-6}" font-size="13" text-anchor="middle" font-weight="700" fill="${col}">${v}%</text>`});g+=`<text x="${x+49}" y="${B+20}" font-size="13" text-anchor="middle">${n}</text>`});g+=`<rect x="${L+10}" y="228" width="12" height="12" fill="${C.navy}"/><text x="${L+27}" y="238" font-size="12">直接面對病人</text><rect x="${L+130}" y="228" width="12" height="12" fill="${C.ochre}"/><text x="${L+147}" y="238" font-size="12">電子病歷與文書</text>`;s.innerHTML=g;s.querySelectorAll("rect[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})})();
+function upScribe(){const day=+$("#sc-day").value,cut=+$("#sc-cut").value,chk=+$("#sc-chk").value,n=+$("#sc-n").value;$("#sc-day-o").textContent=day+" 時";$("#sc-cut-o").textContent=cut+"%";$("#sc-chk-o").textContent=chk+" 分";$("#sc-n-o").textContent=n+" 人";
+ const docMin=day*60*0.492,face=day*60*0.27,other=day*60-docMin-face,saved=docMin*cut/100,check=chk*n,net=saved-check;
+ const after=[face,other,docMin-saved,check];const s=$("#scsvg"),W=740,x0=110;const tot=day*60;function bar(y,arr,cols,labs){let g="",x=x0;arr.forEach((v,i)=>{const w=Math.max(0,v/tot*(W-x0));g+=`<rect x="${x}" y="${y}" width="${w}" height="30" fill="${cols[i]}" data-t="${labs[i]}：${fmt(v)} 分"/>`;if(w>46)g+=`<text x="${x+w/2}" y="${y+20}" font-size="12" fill="#fff" text-anchor="middle">${fmt(v)}′</text>`;x+=w});return g}
+ let g=`<text x="0" y="31" font-size="13" font-weight="700" fill="${C.navy}">導入前</text>`+bar(12,[face,other,docMin],[C.navy,"#9A9CA4",C.ochre],["面對病人","其他","文書"]);g+=`<text x="0" y="81" font-size="13" font-weight="700" fill="${C.navy}">導入後</text>`+bar(62,after,[C.navy,"#9A9CA4",C.ochre,C.amber],["面對病人","其他","文書（剩餘）","AI 草稿查核"]);
+ g+=`<text x="${x0}" y="112" font-size="11" fill="${C.mute}"><tspan fill="${C.navy}">■</tspan> 面對病人　<tspan fill="#9A9CA4">■</tspan> 其他　<tspan fill="${C.ochre}">■</tspan> 文書　<tspan fill="${C.amber}">■</tspan> AI 草稿查核（導入後新增）</text>`;s.innerHTML=g;s.querySelectorAll("rect").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip});
+ $("#sckpi").innerHTML=`<div class="kpi g"><div class="v">${fmt(saved)}<small> 分</small></div><div class="l">每日減少的文書時間</div></div><div class="kpi o"><div class="v">${fmt(check)}<small> 分</small></div><div class="l">每日新增的草稿查核時間</div></div><div class="kpi ${net>=0?"g":"o"}"><div class="v">${net>=0?"+":""}${fmt(net)}<small> 分</small></div><div class="l">每日淨變化${net<0?"（反而更忙）":""}</div></div>`}
+["#sc-day","#sc-cut","#sc-chk","#sc-n"].forEach(id=>$(id).oninput=upScribe);upScribe();
+mcq("#q-tpmg",[{q:"有人把「15,791 小時 ÷ 250 萬次門診」當作「每次門診省多少時間」並以此推算全院效益。問題在哪？",o:["沒有問題，數字都是官方發布的","使用量、估計節時與問卷意見是不同資料，不能共用分母解讀；節時是估計值","應該改用醫師人數當分母就沒問題","只要乘上台灣的門診量就能推估"],a:1,e:"講義提醒：三種數字來源與性質不同。另外仍須評估草稿錯誤、使用者差異、不同語言及完整成本。"}]);
+
+/* ---------- 09 WSD ---------- */
+(function(){const s=$("#wsd1");let g="";const L=50,B=190,T=20,max=10;for(let v=0;v<=10;v+=2){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="340" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}%</text>`}[["介入組",4.6,C.green],["對照組",8.3,C.gray]].forEach(([n,v,c],i)=>{const x=L+50+i*120,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="70" height="${B-y}" rx="3" fill="${c}"/><text x="${x+35}" y="${y-7}" font-size="15" font-weight="700" text-anchor="middle" fill="${c}">${v}%</text><text x="${x+35}" y="${B+20}" font-size="13" text-anchor="middle">${n}</text>`});s.innerHTML=g})();
+const WM={D:62000,S:38000,u0:0.2,O:8000};
+function upWSD(){const p=+$("#w-p").value/100,u=+$("#w-u").value/100;$("#w-p-o").textContent=Math.round(p*100)+"%";$("#w-u-o").textContent=Math.round(u*100)+"%";
+ const dev=WM.D*(1-p),svc=WM.S*WM.u0/u,icer=dev+svc-WM.O;
+ const s=$("#wsd2"),W=760,L=150,R=730,max=100000;const X=v=>L+Math.max(0,v)/max*(R-L);let g="";
+ for(let v=0;v<=max;v+=20000){g+=`<line x1="${X(v)}" x2="${X(v)}" y1="20" y2="210" stroke="${C.line}"/><text x="${X(v)}" y="228" font-size="11" fill="${C.mute}" text-anchor="middle">£${v/1000}k</text>`}
+ g+=`<rect x="${X(20000)}" y="20" width="${X(30000)-X(20000)}" height="190" fill="#E1EEE6"/><text x="${X(25000)}" y="246" font-size="11" fill="${C.green}" text-anchor="middle" font-weight="700">NICE 門檻 £20k–30k</text>`;
+ const rows=[["設備",dev,C.navy2],["服務人力",svc,C.amber],["減少住院抵銷",-WM.O,C.green]];
+ rows.forEach(([n,v],i)=>{});
+ // stacked waterfall
+ let y=34;g+=`<text x="${L-10}" y="${y+16}" font-size="13" text-anchor="end" font-weight="700" fill="${C.navy}">組成</text>`;let x=L;g+=`<rect x="${x}" y="${y}" width="${X(dev)-L}" height="24" fill="${C.navy2}" data-t="設備：£${fmt(dev)}"/>`;x=X(dev);g+=`<rect x="${x}" y="${y}" width="${X(dev+svc)-X(dev)}" height="24" fill="${C.amber}" data-t="服務人力：£${fmt(svc)}"/>`;g+=`<rect x="${X(dev+svc-WM.O)}" y="${y+26}" width="${X(dev+svc)-X(dev+svc-WM.O)}" height="10" fill="${C.green}" data-t="減少住院抵銷：−£${fmt(WM.O)}"/>`;
+ g+=`<text x="${L}" y="${y+52}" font-size="11" fill="${C.mute}"><tspan fill="${C.navy2}">■</tspan> 設備　<tspan fill="${C.amber}">■</tspan> 服務人力（隨使用率攤提）　<tspan fill="${C.green}">■</tspan> 減少住院的抵銷</text>`;
+ const col=icer<=30000?C.green:icer<=50000?C.amber:C.ochre;
+ y=110;g+=`<text x="${L-10}" y="${y+20}" font-size="13" text-anchor="end" font-weight="700" fill="${C.navy}">每 QALY 成本</text><rect x="${L}" y="${y}" width="${X(icer)-L}" height="32" rx="3" fill="${col}"/><text x="${Math.min(X(icer)+8,R-110)}" y="${y+22}" font-size="16" font-weight="900" fill="${col}">£${fmt(Math.round(icer/100)*100)}</text>`;
+ g+=`<line x1="${X(92000)}" x2="${X(92000)}" y1="${y-6}" y2="${y+40}" stroke="${C.ochre}" stroke-dasharray="3 3"/><text x="${X(92000)}" y="${y+56}" font-size="11" fill="${C.ochre}" text-anchor="middle">實際 £92k</text><line x1="${X(12000)}" x2="${X(12000)}" y1="${y-6}" y2="${y+40}" stroke="${C.green}" stroke-dasharray="3 3"/><text x="${X(12000)}" y="${y+56}" font-size="11" fill="${C.green}" text-anchor="middle">最佳情境 £12k</text>`;
+ s.innerHTML=g;s.querySelectorAll("rect[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip});
+ const pOnly=WM.D*(1-p)+WM.S-WM.O,uOnly=WM.D+WM.S*WM.u0/u-WM.O;
+ $("#wsdtxt").innerHTML=`目前組合：每 QALY 約 <b style="color:${col}">£${fmt(Math.round(icer/100)*100)}</b>，${icer<=30000?"<b>落在 NICE 門檻內</b>":"<b>仍高於 NICE £30,000 門檻</b>"}。拆開看：只降價（使用率維持 20%）約 £${fmt(Math.round(pOnly/100)*100)}；只提高使用率（不降價）約 £${fmt(Math.round(uOnly/100)*100)}。<br><b>啟示：</b>成本取決於價格、容量與服務設計——同樣的健康效果，服務怎麼營運決定了划不划算。`}
+$("#w-p").oninput=upWSD;$("#w-u").oninput=upWSD;upWSD();
+
+/* ---------- 10 LHS ---------- */
+const LHS=[{t:"1 定義問題",d:"王伯伯這類病人的 <b>30 天再入院</b>、病人負擔、醫護工作量——同時追蹤，不只看一個數字。"},{t:"2 整合證據",d:"病歷＋居家量測＋<b>外部研究</b>＋病人意見。內部經驗結合外部證據，才是 LHS。"},{t:"3 小規模驗證",d:"體重變化等訊號是否有用？先在小範圍試行，檢查誤報與漏報。"},{t:"4 安排回應",d:"個管師複核，依值班與升級流程回應。資料要變成「有人負責的行動」。"},{t:"5 再量測",d:"結果、漏接與工作量；<b>調整或停用</b>都是合理選項。導入前後不同，未必全由科技造成；需考慮病情與同期變化。"}];
+let lhsI=0;function drawLHS(){const s=$("#lhssvg"),cx=165,cy=165,R=118;let g=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${C.line}" stroke-width="10"/>`;const a0=-Math.PI/2;const frac=(lhsI+1)/LHS.length;const a1=a0+frac*2*Math.PI;const large=frac>0.5?1:0;const x1=cx+R*Math.cos(a1),y1=cy+R*Math.sin(a1);if(frac>=1)g+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${C.ochre}" stroke-width="10"/>`;else g+=`<path d="M ${cx} ${cy-R} A ${R} ${R} 0 ${large} 1 ${x1} ${y1}" fill="none" stroke="${C.ochre}" stroke-width="10" stroke-linecap="round"/>`;
+ LHS.forEach((x,i)=>{const a=a0+(i+0.5)/LHS.length*2*Math.PI*0+i/LHS.length*2*Math.PI;const px=cx+R*Math.cos(a),py=cy+R*Math.sin(a);const on=i<=lhsI;g+=`<circle class="ln" data-i="${i}" cx="${px}" cy="${py}" r="22" fill="${i===lhsI?C.ochre:on?C.navy:"#fff"}" stroke="${on?C.navy:C.line}" stroke-width="2" style="cursor:pointer"/><text x="${px}" y="${py+6}" font-size="16" text-anchor="middle" font-weight="900" fill="${on?"#fff":C.mute}" style="pointer-events:none">${i+1}</text>`});
+ g+=`<text x="${cx}" y="${cy-4}" font-size="15" text-anchor="middle" font-weight="900" fill="${C.navy}">持續改善回圈</text><text x="${cx}" y="${cy+16}" font-size="12" text-anchor="middle" fill="${C.mute}">${LHS[lhsI].t}</text>`;s.innerHTML=g;s.querySelectorAll(".ln").forEach(c=>c.onclick=()=>{lhsI=+c.dataset.i;drawLHS()});$("#lhsdetail").innerHTML=`<b style="font-size:17px;color:var(--navy)">${LHS[lhsI].t}</b><div style="margin-top:6px">${LHS[lhsI].d}</div>`}
+$("#lhsnext").onclick=()=>{lhsI=(lhsI+1)%LHS.length;drawLHS()};$("#lhsprev").onclick=()=>{lhsI=(lhsI+LHS.length-1)%LHS.length;drawLHS()};drawLHS();
+mcq("#lhsq",[
+ {q:"試行 3 個月：再入院略降，但個管師每天花 3 小時處理警示，其中八成是誤報。",o:["維持現況，再入院有下降就好","調整流程：重新設定警示門檻並驗證，同時追蹤工作量","立刻全面擴大","停用，因為誤報太多"],a:1,e:"有初步效益但工作者福祉受損，合理做法是調整並再驗證，而不是只看單一指標。"},
+ {q:"上線一年後，病人族群改變（更多高齡獨居者），模型預警的漏報明顯增加。",o:["沒關係，模型上市時有驗證過","監測後決定是否更新並再驗證；必要時暫停使用","把門檻調到最低","改回紙本作業"],a:1,e:"族群與流程改變可能影響效能，需監測判斷；AI 更新要經審查與驗證。"},
+ {q:"導入後再入院率比去年低 15%，院長想直接宣布「科技有效」。",o:["可以，前後差異很明確","先考慮病情與同期變化，尋找合適的比較方案","把數字乘上全國病人數宣傳","只要統計顯著就可以"],a:1,e:"導入前後不同，未必全由科技造成。第 14 段的回歸平均模擬會讓你看到為什麼。"}]);
+
+/* ---------- 11 cases ---------- */
+const CASES=[
+ {id:"hah",n:"居家醫院（美國）",html:`
+  <p class="hint">Levine 等 2020：兩據點隨機試驗，91 位成人（43 人居家照護、48 人一般住院）；到宅訪視、遠距監測、視訊與現場檢測。</p>
+  <div class="grid2"><svg viewBox="0 0 360 220" class="chart" id="hah1"></svg>
+  <div><div class="kpi g"><div class="v">−38%</div><div class="l">直接成本（95% CI 24%–49%）</div></div>
+  <div class="wd" style="margin:10px 0 0;padding:12px"><b style="color:var(--navy)">試算：如果用在你的醫院</b><span class="tag a" style="margin-left:6px">擬真假設</span>
+  <div class="ctl"><span>符合條件住院／年</span><input type="range" id="hh-n" min="20" max="500" step="10" value="120"><output></output></div>
+  <div class="ctl"><span>每次住院直接成本</span><input type="range" id="hh-c" min="30000" max="200000" step="5000" value="80000"><output></output></div>
+  <div id="hh-out"></div></div></div></div>
+  <p class="note">適用於<b>經篩選的病人與環境</b>，需評估團隊能力、病情及家屬負擔。小樣本 RCT 的信賴區間很寬，試算請用區間而非單一數字。</p>`},
+ {id:"och",n:"Ochsner 血壓控制（美國）",html:`
+  <p class="hint">Price-Haywood 等 2025：5,057 人回溯觀察研究，配對對照及 18 個月追蹤。比較數位照護與配對對照的血壓控制率。</p>
+  <div class="grid2"><svg viewBox="0 0 360 240" class="chart" id="och1"></svg><div id="och-txt"></div></div>
+  <div class="seg" id="ochseg" style="margin-top:8px"><button class="on" data-m="rate">看控制率</button><button data-m="gain">看改善幅度</button><button data-m="gap">看族群差距</button></div>
+  <p class="note">兩族群皆改善，仍需比較對照與<b>未能加入者</b>，才能完整判斷公平。配對觀察研究有選擇偏差的可能。</p>`},
+ {id:"nhi",n:"健保雲端（台灣）",html:`
+  <p class="hint">健保署歷史分析（2018 年公告近四年成果）：六類慢性病藥品重疊日數減少逾半、藥費節省約 3.4 億元；30 日內再開 CT／MRI 檢查率的相對指數。</p>
+  <div class="grid2"><svg viewBox="0 0 360 220" class="chart" id="nhi1"></svg><div id="nhiq"></div></div>`},
+ {id:"nhs",n:"NHS 虛擬病房（英國）",html:`
+  <p class="hint">Virtual wards：結合到宅團隊與科技，提供住院等級服務。統計範圍為 England；床數不是療效。把每個問題配到「能回答它的數字」。</p><div id="nhsq"></div>`},
+ {id:"pc",n:"ProvenCare 與 Healthier SG",html:`
+  <div class="grid2"><div><b style="color:var(--navy)">Geisinger ProvenCare（美國）</b><p class="hint" style="margin-top:4px">選擇性冠狀動脈繞道手術的品質改善：指引轉成 40 項可量測流程元素。點四個要素：</p><div id="pcbox"></div></div>
+  <div><b style="color:var(--navy)">Healthier SG（新加坡）</b><div class="grid2" style="margin-top:8px"><div class="kpi"><div class="v">逾 31<small> 萬人</small></div><div class="l">2023 年 9 月已登記</div></div><div class="kpi"><div class="v">約 75%</div><div class="l">約 1,300 家 CHAS GP 診所加入</div></div></div><p class="note">參與與涵蓋是<b>導入指標</b>，不能直接代替健康、成本或公平的改善。</p></div></div>`},
+ {id:"cmp",n:"六案比較：證據能回答什麼",html:`<p class="hint">點選研究設計，看它可支持什麼、仍需追蹤什麼。未報告不代表無效。</p><div id="cmpbox"></div>`}
+];
+(function(){const tb=$("#ctabs"),pn=$("#cpanels");CASES.forEach((c,i)=>{const b=h("button",{class:i===0?"on":""},c.n);b.onclick=()=>{$$("#ctabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");$$(".tabp").forEach(p=>p.classList.toggle("on",p.dataset.id===c.id))};tb.appendChild(b);const p=h("div",{class:"tabp"+(i===0?" on":"")},c.html);p.dataset.id=c.id;pn.appendChild(p)})})();
+// HaH
+(function(){const s=$("#hah1");let g="";const L=46,B=180,T=20,max=30;for(let v=0;v<=30;v+=10){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="340" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}%</text>`}[["居家組",7,C.green],["住院組",23,C.gray]].forEach(([n,v,c],i)=>{const x=L+50+i*120,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="70" height="${B-y}" rx="3" fill="${c}"/><text x="${x+35}" y="${y-7}" font-size="15" font-weight="700" text-anchor="middle" fill="${c}">${v}%</text><text x="${x+35}" y="${B+20}" font-size="13" text-anchor="middle">${n}</text>`});g+=`<text x="190" y="214" font-size="12" text-anchor="middle" fill="${C.mute}">30 天再入院率</text>`;s.innerHTML=g})();
+function upHH(){const n=+$("#hh-n").value,c=+$("#hh-c").value;$("#hh-n").nextElementSibling.textContent=n;$("#hh-c").nextElementSibling.textContent=fmt(c/10000,1)+" 萬";const tot=n*c;const lo=tot*0.24,mid=tot*0.38,hi=tot*0.49;$("#hh-out").innerHTML=`<div style="font-size:14px;margin-top:6px">若效果可外推，每年直接成本可能減少 <b style="color:var(--green)">${fmt(lo/1e4)}–${fmt(hi/1e4)} 萬元</b>（點估計 ${fmt(mid/1e4)} 萬）。<br><span style="color:var(--mute);font-size:13px">尚未計入：到宅團隊建置、設備、家屬照護時間——講義所說的「總投入」。</span></div>`}
+$("#hh-n").oninput=upHH;$("#hh-c").oninput=upHH;upHH();
+// Ochsner
+const OCH={b:[76.1,68.7],w:[77.7,72.7]};let ochM="rate";
+function drawOch(){const s=$("#och1");let g="";const L=44,B=190,T=20;
+ if(ochM==="rate"){const max=100;for(let v=0;v<=100;v+=20){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="350" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}%</text>`}[["黑人病人",OCH.b],["白人病人",OCH.w]].forEach(([n,[a,b]],i)=>{const x=L+30+i*150;[[a,C.ochre,"數位照護"],[b,C.gray,"配對對照"]].forEach(([v,col,lab],k)=>{const y=B-v/max*(B-T);g+=`<rect x="${x+k*54}" y="${y}" width="48" height="${B-y}" rx="3" fill="${col}" data-t="${n}・${lab}：${v}%"/><text x="${x+k*54+24}" y="${y-6}" font-size="13" font-weight="700" text-anchor="middle" fill="${col}">${v}%</text>`});g+=`<text x="${x+51}" y="${B+20}" font-size="13" text-anchor="middle">${n}</text>`});g+=`<rect x="70" y="218" width="12" height="12" fill="${C.ochre}"/><text x="87" y="228" font-size="12">數位照護</text><rect x="170" y="218" width="12" height="12" fill="${C.gray}"/><text x="187" y="228" font-size="12">配對對照</text>`;
+  $("#och-txt").innerHTML=`<div class="kpi"><div class="v">5,057<small> 人</small></div><div class="l">回溯觀察・18 個月</div></div><p style="font-size:14px">血壓控制率：兩族群在數位照護組都比配對對照高。切換上方按鈕，用兩種角度再看一次。</p>`}
+ else if(ochM==="gain"){const gb=+(OCH.b[0]-OCH.b[1]).toFixed(1),gw=+(OCH.w[0]-OCH.w[1]).toFixed(1),max=10;for(let v=0;v<=10;v+=2){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="350" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}</text>`}[["黑人病人",gb],["白人病人",gw]].forEach(([n,v],i)=>{const x=L+60+i*140,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="70" height="${B-y}" rx="3" fill="${C.navy2}"/><text x="${x+35}" y="${y-7}" font-size="15" font-weight="700" text-anchor="middle" fill="${C.navy}">+${v}</text><text x="${x+35}" y="${B+20}" font-size="13" text-anchor="middle">${n}</text>`});g+=`<text x="190" y="228" font-size="12" text-anchor="middle" fill="${C.mute}">數位照護 − 配對對照（百分點）</text>`;
+  $("#och-txt").innerHTML=`<p style="font-size:14px">黑人病人改善 <b>+${gb}</b> 個百分點，白人病人 <b>+${gw}</b>。在這個比較裡，原本控制率較低的族群改善較多。</p><p class="note">這是配對觀察，不是隨機試驗；差異可能部分來自誰選擇加入。</p>`}
+ else{const gd=+(OCH.w[0]-OCH.b[0]).toFixed(1),gc=+(OCH.w[1]-OCH.b[1]).toFixed(1),max=5;for(let v=0;v<=5;v+=1){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="350" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}</text>`}[["數位照護組",gd,C.ochre],["配對對照組",gc,C.gray]].forEach(([n,v,c],i)=>{const x=L+60+i*140,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="70" height="${B-y}" rx="3" fill="${c}"/><text x="${x+35}" y="${y-7}" font-size="15" font-weight="700" text-anchor="middle" fill="${c}">${v}</text><text x="${x+35}" y="${B+20}" font-size="13" text-anchor="middle">${n}</text>`});g+=`<text x="190" y="228" font-size="12" text-anchor="middle" fill="${C.mute}">白人 − 黑人 控制率差距（百分點）</text>`;
+  $("#och-txt").innerHTML=`<p style="font-size:14px">族群間差距：數位照護組 <b>${gd}</b> 個百分點，配對對照組 <b>${gc}</b>。差距縮小了，但還要問：<b>沒有加入</b>數位照護的人呢？</p>`}
+ s.innerHTML=g;s.querySelectorAll("rect[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+$$("#ochseg button").forEach(b=>b.onclick=()=>{$$("#ochseg button").forEach(x=>x.classList.remove("on"));b.classList.add("on");ochM=b.dataset.m;drawOch()});drawOch();
+// NHI
+(function(){const s=$("#nhi1");let g="";const L=40,B=180,T=20,max=2.5;for(let v=0;v<=2.5;v+=0.5){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="340" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v.toFixed(1)}</text>`}[["有調閱影像",1.0,C.navy2],["未調閱影像",2.0,C.ochre]].forEach(([n,v,c],i)=>{const x=L+50+i*120,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="70" height="${B-y}" rx="3" fill="${c}"/><text x="${x+35}" y="${y-7}" font-size="15" font-weight="700" text-anchor="middle" fill="${c}">${v.toFixed(1)}</text><text x="${x+35}" y="${B+20}" font-size="13" text-anchor="middle">${n}</text>`});g+=`<text x="190" y="214" font-size="12" text-anchor="middle" fill="${C.mute}">30 日內再開 CT／MRI 檢查率（相對指數，有調閱組＝1）</text>`;s.innerHTML=g})();
+mcq("#nhiq",[{q:"這張圖可以說明什麼？",o:["醫院導入雲端調閱後，重複檢查率減半","有調閱與未調閱兩組之間有差異，但不等於同一組導入前後減半，也不等於因果","雲端調閱使影像檢查費用減少一半","未調閱的醫師都在浪費資源"],a:1,e:"「有調閱組較低」是組間差異。兩組的病人、醫院與情境可能本來就不同——觀察結果與因果推論要分開。"}]);
+// NHS
+(function(){const items=[["這個地區可以同時提供多少個虛擬病床？","容量"],["實際收治了多少病人、周轉如何？","占床率／收治量"],["政府希望達到的服務規模是多少？","政策目標"],["病人健康是否比住院更好、資源是否減少？","比較後結果"]];const opts=["容量","占床率／收治量","政策目標","比較後結果"];const notes={"容量":"可提供多少服務位置，但不等於實際有多少人使用。","占床率／收治量":"可看服務使用與周轉，但不能證明病人健康改善。","政策目標":"是希望達到的規模，不代表已經達標或可達標。","比較後結果":"可回答效益、傷害及資源變化，但不保證在所有地區均可重現。"};const r=$("#nhsq");items.forEach(([q,a])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},q));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach(o=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;const ok=o===a;b.style.background=ok?"#E1EEE6":"#F6E3DA";if(!ok)box.children[opts.indexOf(a)].style.background="#E1EEE6";fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=`「${a}」：${notes[a]}`};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})})();
+// ProvenCare
+(function(){const k=[["實證","將指引轉成 40 項可量測流程元素。"],["工作流程","多專業團隊把必要步驟嵌入日常工作。"],["資訊支持","電子病歷提供提示、資料蒐集與回饋。"],["誘因","特定照護合約將支付與照護週期連結。"],["證據限制","前後比較支持改善經驗，不能保證各院重現。"]];const box=$("#pcbox");const det=h("div",{class:"detail"},"知識、流程、資訊與支付誘因共同作用，才形成持續改善。");const row=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});k.forEach(([n,d],i)=>{const b=h("button",{class:"btn"+(i===4?" oc":"")},n);b.onclick=()=>{det.innerHTML=`<b>${n}：</b>${d}`};row.appendChild(b)});box.appendChild(row);box.appendChild(det)})();
+// compare
+(function(){const rows=[["居家醫院","RCT","特定病人直接成本與再入院","外推、家屬及總投入",4],["虛擬病房","管理與政策資料","模式、規模與服務限制","可比較健康結果與成本",1],["ProvenCare","前後比較","流程落實與品質改善經驗","病例差異及可重現性",2],["Ochsner","配對觀察","血壓控制及不同族群結果","選擇偏差及服務取得",3],["健保雲端","行政觀察","重疊用藥及影像組間差異","因果、體驗與工作量",2],["Healthier SG","推動資料","初期登記與診所參與","健康、成本及公平結果",1]];const box=$("#cmpbox");const wrap=h("div",{class:"grid3"});const det=h("div",{class:"detail"},"點選任一案例卡。");rows.forEach(r=>{const c=h("div",{class:"kpi",style:"cursor:pointer"},`<div style="font-weight:900;color:var(--navy)">${r[0]}</div><div class="l">${r[1]}</div><div style="margin-top:6px;display:flex;gap:3px" title="因果推論強度（教學示意）">${[1,2,3,4].map(i=>`<i style="display:inline-block;width:22px;height:6px;border-radius:3px;background:${i<=r[4]?C.navy2:C.line}"></i>`).join("")}</div>`);c.onclick=()=>{det.innerHTML=`<b>${r[0]}｜${r[1]}</b><br><span class="plus">可支持：</span>${r[2]}<br><span class="minus">仍需追蹤：</span>${r[3]}`};wrap.appendChild(c)});box.appendChild(wrap);box.appendChild(det);box.appendChild(h("p",{class:"note"},"色條為「回答因果問題的能力」教學示意，不是證據等級評分；效果方向、研究設計與證據確定性仍要分開判讀。"))})();
+
+/* ---------- 12 gates ---------- */
+const GATES=["1 技術可行","2 流程可用","3 病人受益","4 經濟可承擔"],GC=["#6B6F7B","#4A4F5C","#2E4470","#B5442A"];
+const GCARDS=[{n:"TPMG AI 記錄",g:0,p:1,d:"7,260 位醫師、逾 250 萬次門診使用",w:"本週"},{n:"Epic 敗血症模型",g:0,p:0,d:"外部驗證 AUROC 0.63",w:"W8"},{n:"TIM-HF2",g:1,p:1,d:"24 小時遠距中心，全死因死亡 HR 0.70",w:"W10"},{n:"BEAT-HF",g:1,p:0,d:"警示未連結調藥，再入院無差異",w:"W10"},{n:"三總 AI 心電圖",g:2,p:1,d:"RCT：90 天死亡 3.6% vs 4.3%",w:"W12"},{n:"Babylon AI 問診",g:2,p:0,d:"宣稱缺獨立驗證，2023 破產",w:"W16"},{n:"居家醫院 RCT",g:3,p:1,d:"直接成本低 38%（特定病人）",w:"本週"},{n:"英國 WSD 遠距照護",g:3,p:0,d:"每 QALY 約 £92,000",w:"本週"}];
+let gSel=-1,gOk=0,gPlaced=new Set();
+(function(){$("#ghead").innerHTML=GATES.map((g,i)=>`<div class="gate" style="background:${GC[i]}">${g}</div>`).join("");["#gpass","#gfail"].forEach((id,pi)=>{GATES.forEach((g,i)=>{const sl=h("div",{class:"gslot "+(pi===0?"pass":"fail")});sl.dataset.g=i;sl.dataset.p=pi===0?1:0;sl.onclick=()=>placeG(sl);$(id).appendChild(sl)})});drawPool()})();
+function drawPool(){const p=$("#gpool");p.innerHTML="";const order=[5,2,7,0,3,6,1,4];order.forEach(i=>{if(gPlaced.has(i))return;const c=GCARDS[i];const b=h("span",{class:"gc"+(gSel===i?" sel":"")},c.n);b.onclick=()=>{gSel=i;drawPool()};p.appendChild(b)});if(gPlaced.size===GCARDS.length)p.innerHTML=`<span class="okmsg">全部完成！答對 ${gOk} / 8。前一關成立，不代表後一關成立。</span>`}
+function placeG(sl){if(gSel<0)return;const c=GCARDS[gSel],g=+sl.dataset.g,p=+sl.dataset.p,ok=c.g===g&&c.p===p;const fb=$("#gfb");if(ok){gOk++;}fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>正確。</b>":`<b>不在這裡。</b>已放到正確位置：`)+`${c.n} —— ${GATES[c.g]}・${c.p?"通過":"卡關"}（${c.d}；詳見 ${c.w}）`;const target=document.querySelector(`#${c.p?"gpass":"gfail"} .gslot:nth-child(${c.g+1})`);target.appendChild(h("div",{class:"gcard"},`<b>${c.n}</b><br>${c.d}<br><span style="color:var(--ochre);font-weight:700">${c.w}</span>`));gPlaced.add(gSel);gSel=-1;$("#gscore").textContent=`${gOk} / 8`;drawPool()}
+
+/* ---------- 13 simulator ---------- */
+const SIDS=["s-base","s-rrp","s-rrr","s-ea","s-eb","s-al","s-ppv","s-min","s-fte","s-dev","s-gb","s-adm","s-wage","s-tel"];
+const SFMT={"s-base":v=>v+"%","s-rrp":v=>v+"%","s-rrr":v=>v+"%","s-ea":v=>v+"%","s-eb":v=>v+"%","s-al":v=>(+v).toFixed(2),"s-ppv":v=>v+"%","s-min":v=>v+" 分","s-fte":v=>v+" 人","s-dev":v=>fmt(v),"s-gb":v=>v+"%","s-adm":v=>fmt(v/10000,1)+" 萬","s-wage":v=>fmt(v),"s-tel":v=>v+" 分"};
+const PRESET={base:{"s-base":20,"s-rrp":10,"s-rrr":20,"s-ea":80,"s-eb":45,"s-al":0.1,"s-ppv":25,"s-min":8,"s-fte":1,"s-dev":1500,"s-gb":40,"s-adm":100000,"s-wage":550,"s-tel":12},fatigue:{"s-al":0.32,"s-ppv":10},equity:{"s-ea":90,"s-eb":15},cheap:{"s-dev":500,"s-al":0.06,"s-ppv":50}};
+function V(id){return +document.getElementById(id).value}
+function sim(){SIDS.forEach(id=>{const e=document.getElementById(id);e.nextElementSibling.textContent=SFMT[id](e.value)});
+ const N=200,base=V("s-base")/100,gb=V("s-gb")/100,ea=V("s-ea")/100,eb=V("s-eb")/100,adm=V("s-adm"),wage=V("s-wage"),fteH=V("s-fte")*7*250/365; // available hours/day averaged
+ const nA=N*(1-gb),nB=N*gb;
+ const opts=[
+  {k:"一般照護",enA:1,enB:1,rr:0,staffDay:0,dev:0,meas:0,alerts:0,ppv:null},
+  {k:"電話追蹤",enA:0.95,enB:0.9,rr:V("s-rrp")/100,staffPerPt:V("s-tel")/7,dev:0,meas:2},
+  {k:"RPM",enA:ea,enB:eb,rr:V("s-rrr")/100,dev:V("s-dev"),meas:6}];
+ const res=opts.map(o=>{const enr=nA*o.enA+nB*o.enB;const avoided=enr*base*o.rr;const readm=N*base-avoided;
+  let staffMinDay=0,alertsDay=0,falseDay=0;
+  if(o.k==="電話追蹤")staffMinDay=enr*o.staffPerPt;
+  if(o.k==="RPM"){alertsDay=enr*V("s-al");falseDay=alertsDay*(1-V("s-ppv")/100);staffMinDay=alertsDay*V("s-min")+enr*0.5;}
+  const staffH=staffMinDay/60;const progCost=enr*o.dev*12+staffH*365*wage;const net=progCost-avoided*adm;
+  const gap=o.k==="一般照護"?0:Math.abs(o.enA-o.enB)*100;
+  return {k:o.k,enr,avoided,readm,staffH,alertsDay,falseDay,perPerson:net/N,prog:progCost/N,gap,meas:o.meas,util:staffH/fteH*100};});
+ const cols=[C.gray,C.navy2,C.ochre];
+ function row(name,sub,vals,fmtf,max,goodLow){let g=`<div class="aimrow"><div class="an">${name}<small>${sub}</small></div><div class="bars3">`;vals.forEach((v,i)=>{const w=Math.min(100,Math.abs(v)/max*100);g+=`<div class="b"><span>${res[i].k}</span><div class="track"><div class="fill" style="width:${w}%;background:${cols[i]}"></div></div><span class="val">${fmtf(v)}</span></div>`});return g+`</div></div>`}
+ const mx=a=>Math.max(...a.map(Math.abs),1e-9);
+ let out="";
+ const a1=res.map(r=>r.meas),a2=res.map(r=>r.readm),a3=res.map(r=>r.perPerson),a4=res.map(r=>r.staffH),a5=res.map(r=>r.gap);
+ out+=row("病人體驗","每日量測／通話負擔（分）",a1,v=>fmt(v,0)+" 分",mx(a1));
+ out+=row("族群健康","一年 30 天再入院（次）",a2,v=>fmt(v,1)+" 次",mx(a2));
+ out+=row("每人成本","方案淨成本／人年（元）",a3,v=>(v<0?"省 ":"")+fmt(Math.abs(v))+" 元",mx(a3));
+ out+=row("工作者福祉","個管師每日工時（小時）",a4,v=>fmt(v,1)+" 時",Math.max(mx(a4),fteH));
+ out+=row("健康公平","兩群加入率差距（百分點）",a5,v=>fmt(v,0)+" pp",Math.max(mx(a5),10));
+ const R=res[2];
+ out+=`<table class="cmp" style="margin-top:14px"><tr><th>RPM 細項</th><th style="text-align:right">數值</th><th>解讀</th></tr>
+ <tr><td>加入人數</td><td class="num">${fmt(R.enr)} / 200</td><td>熟悉科技者 ${fmt(nA*ea)}、不熟 App 者 ${fmt(nB*eb)}</td></tr>
+ <tr><td>每日警示</td><td class="num">${fmt(R.alertsDay,1)} 則</td><td>其中誤報約 <b>${fmt(R.falseDay,1)}</b> 則</td></tr>
+ <tr><td>避免再入院</td><td class="num">${fmt(R.avoided,1)} 次／年</td><td>只發生在<b>有加入</b>的人身上</td></tr>
+ <tr><td>方案投入／人年</td><td class="num">${fmt(R.prog)} 元</td><td>設備平台＋個管師時間（不含家屬時間）</td></tr>
+ <tr><td>個管師負荷</td><td class="num" style="color:${R.util>100?C.ochre:C.navy}">${fmt(R.util)}%</td><td>相對現有人力（${V("s-fte")} 人，以每日平均工時換算）</td></tr></table>`;
+ $("#simout").innerHTML=out;
+ let msg=[];if(R.util>100)msg.push(`<div class="warn"><b>容量超載：</b>RPM 需要的個管師工時是現有人力的 ${fmt(R.util)}%，警示會沒人接——回到第 02 段的「回應」斷點。</div>`);
+ if(R.falseDay>=R.alertsDay*0.75&&R.alertsDay>5)msg.push(`<div class="warn"><b>警示疲勞風險：</b>每日約 ${fmt(R.falseDay,1)} 則誤報（${fmt(100-V("s-ppv"))}%）。W8 會再深入談。</div>`);
+ if(R.gap>=30)msg.push(`<div class="warn"><b>公平警訊：</b>兩群加入率差 ${fmt(R.gap)} 個百分點——效益集中在熟悉科技者，像王伯伯這樣的長者反而被排除。</div>`);
+ if(R.perPerson<res[1].perPerson&&R.readm<res[1].readm&&R.util<=100&&R.gap<30)msg.push(`<div class="okmsg">在這組假設下，RPM 在健康與成本上優於電話追蹤，且人力與公平未亮紅燈。<b>下一步是用真實資料驗證這些假設</b>——這正是 LHS 的「小規模驗證」。</div>`);
+ if(!msg.length)msg.push(`<div class="detail">沒有任一方案在五個目標上全面勝出——這很常見。說清楚你優先在意哪一項、願意承擔哪些代價。</div>`);
+ $("#simmsg").innerHTML=msg.join("");
+}
+SIDS.forEach(id=>document.getElementById(id).addEventListener("input",sim));
+$$("[data-preset]").forEach(b=>b.onclick=()=>{const p=b.dataset.preset;const set=Object.assign({},PRESET.base,p==="base"?{}:PRESET[p]);for(const k in set)document.getElementById(k).value=set[k];sim()});
+sim();
+
+/* ---------- 14 VA + RTM ---------- */
+mcq("#vaq",[{q:"",o:["足以支持全國擴大，17,025 人的樣本很大","值得進一步驗證，但還需要同期對照組等證據","不足，因為遠距照護一定無效","不需要證據，政策已經決定"],a:1,e:"樣本大不等於設計強。結果亮眼，但前後比較的設計只支持「值得進一步驗證」，不等於已證實因果；可對照英國 WSD 試驗。"}]);
+$("#vaq").addEventListener("click",()=>{if($("#vaq .opt.ok"))$("#vares").style.display="block"});
+let seed=7;function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646}
+function randn(){let u=0,v=0;while(u===0)u=rnd();while(v===0)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function pois(l){const L=Math.exp(-l);let k=0,p=1;do{k++;p*=rnd()}while(p>L);return k-1}
+let POP=[];function genPop(){POP=[];for(let i=0;i<2000;i++){const lam=Math.exp(-0.9+0.75*randn());POP.push({lam,y1:pois(lam),y2:pois(lam),y2c:pois(lam)})}}
+function rtm(){const th=+$("#r-th").value,eff=+$("#r-eff").value/100;$("#r-th-o").textContent=th+" 次";$("#r-eff-o").textContent=eff===0?"無":"−"+Math.round(eff*100)+"%";
+ const enr=POP.filter(p=>p.y1>=th);const n=enr.length;const m1=enr.reduce((a,p)=>a+p.y1,0)/n;
+ // apply effect by thinning y2
+ let s2=0;seed=12345;enr.forEach(p=>{let k=0;for(let j=0;j<p.y2;j++)if(rnd()>eff)k++;s2+=k});const m2=s2/n;
+ const mc=enr.reduce((a,p)=>a+p.y2c,0)/n; // concurrent control: same selection, no intervention
+ const allm=POP.reduce((a,p)=>a+p.y1,0)/POP.length;
+ const s=$("#rtmsvg"),L=60,B=240,T=24,max=Math.max(4,Math.ceil(m1+0.5));let g="";
+ for(let v=0;v<=max;v+=1){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="740" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-8}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}</text>`}
+ const bars=[["收案前一年",m1,C.navy],["收案後一年",m2,C.ochre2],["同期對照（未介入）",mc,C.gray]];
+ bars.forEach(([nm,v,c],i)=>{const x=L+60+i*200,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="110" height="${B-y}" rx="4" fill="${c}"/><text x="${x+55}" y="${y-8}" font-size="16" font-weight="900" text-anchor="middle" fill="${c}">${v.toFixed(2)}</text><text x="${x+55}" y="${B+20}" font-size="13" text-anchor="middle">${nm}</text>`});
+ const ya=B-allm/max*(B-T);g+=`<line x1="${L}" x2="740" y1="${ya}" y2="${ya}" stroke="${C.green}" stroke-dasharray="6 4"/><text x="738" y="${ya-6}" font-size="12" fill="${C.green}" text-anchor="end" font-weight="700">全體平均 ${allm.toFixed(2)}</text><text x="${L}" y="14" font-size="12" fill="${C.mute}">每人每年平均住院次數（收案 ${n} 人）</text>`;
+ s.innerHTML=g;
+ const pre=(1-m2/m1)*100,trueRel=(1-m2/mc)*100,fake=(1-mc/m1)*100;
+ $("#rtmtxt").innerHTML=`前後比較看到住院下降 <b style="color:var(--ochre)">${pre.toFixed(0)}%</b>；其中光是回歸平均（對照組也一樣下降）就有 <b>${fake.toFixed(0)}%</b>。和同期對照比，介入的真實效果約 <b style="color:var(--green)">${Math.max(0,trueRel).toFixed(0)}%</b>${eff===0?"——也就是<b>根本沒有效果</b>，前後比較卻看起來很成功":""}。<br><span style="color:var(--mute);font-size:13px">為什麼？去年住院多的人，部分只是「運氣不好的一年」，今年自然回到平均附近。門檻越高，假象越大。這就是 CCHT 前後比較最大的疑問。</span>`}
+$("#r-th").oninput=rtm;$("#r-eff").oninput=rtm;$("#r-re").onclick=()=>{seed=Math.floor(Math.random()*1e6)+1;genPop();rtm()};genPop();rtm();
+
+/* ---------- 15 form ---------- */
+const PAINS=[{p:"用藥資訊不完整",a:["一般照護：現行門診核對","流程改善：藥袋核對、藥師評估","數位方案：授權的跨院資料交換"]},{p:"住院異常未即時處理",a:["一般照護：現行定時巡視","流程改善：交班與升級流程","數位方案：預警提示與監測整合"]},{p:"出院衛教難理解",a:["一般照護：發放紙本衛教單","流程改善：口頭回述、語言支持","數位方案：經查核的個人化草稿"]},{p:"居家變化無人知",a:["一般照護：等待下次回診","流程改善：電話追蹤與明確聯絡方式","數位方案：RPM 搭配個管師回應"]}];
+const MAINS=["30 天再入院率","安全事件（漏接異常）次數","病人理解度（回述正確率）","重複用藥／交互作用事件","每人年照護總成本（標示觀點）"];
+const BURD=["病人每日量測／操作負擔（分鐘）","個管師處理工時與無效警示數","台語為主／高齡者加入率差距","家屬照護時間","下班後文書時間"];
+const FIDS=["f-team","f-pain","f-goal","f-a1","f-a2","f-a3","f-main","f-burden","f-unknown","f-dec","f-why"];
+$("#f-pain").innerHTML=PAINS.map((x,i)=>`<option value="${i}">${x.p}</option>`).join("");$("#f-main").innerHTML=MAINS.map(x=>`<option>${x}</option>`).join("");$("#f-burden").innerHTML=BURD.map(x=>`<option>${x}</option>`).join("");
+function fillAlt(){const p=PAINS[+$("#f-pain").value];$("#f-a1").value=p.a[0];$("#f-a2").value=p.a[1];$("#f-a3").value=p.a[2]}
+const saved=LS.get("form",null);if(saved){FIDS.forEach(id=>{if(saved[id]!=null)document.getElementById(id).value=saved[id]})}else fillAlt();
+$("#f-pain").addEventListener("change",fillAlt);
+function formText(){const v=id=>document.getElementById(id).value.trim();return `【W1 小組個案評估表】${v("f-team")}
+1 問題：${PAINS[+v("f-pain")].p}
+　照護目標與對象：${v("f-goal")||"（未填）"}
+2 比較方案：
+　- ${v("f-a1")}
+　- ${v("f-a2")}
+　- ${v("f-a3")}
+3 主要結果指標：${v("f-main")}
+　負擔或公平指標：${v("f-burden")}
+4 目前不知道的資訊與補資料方式：${v("f-unknown")||"（未填）"}
+5 決策：${v("f-dec")}
+　理由：${v("f-why")||"（未填）"}`}
+function upForm(){const o={};FIDS.forEach(id=>o[id]=document.getElementById(id).value);LS.set("form",o);const v=id=>(document.getElementById(id).value.trim()||"<span style='color:var(--mute2)'>（未填）</span>");$("#f-out").innerHTML=`<div style="font-weight:900;color:var(--navy);margin-bottom:8px">個案評估表預覽　${v("f-team")}</div><dl><dt>1 問題</dt><dd>${PAINS[+$("#f-pain").value].p}</dd><dt>目標與對象</dt><dd>${v("f-goal")}</dd><dt>2 比較方案</dt><dd>${v("f-a1")}<br>${v("f-a2")}<br>${v("f-a3")}</dd><dt>3 主指標</dt><dd>${v("f-main")}</dd><dt>負擔／公平</dt><dd>${v("f-burden")}</dd><dt>4 未知與補資料</dt><dd>${v("f-unknown")}</dd><dt>5 決策</dt><dd><b>${v("f-dec")}</b>　${v("f-why")}</dd></dl>`}
+FIDS.forEach(id=>document.getElementById(id).addEventListener("input",upForm));$("#f-pain").addEventListener("change",upForm);upForm();
+$("#f-copy").onclick=()=>{const t=formText();const done=()=>{$("#f-msg").textContent="已複製，可貼到作業表單。";setTimeout(()=>$("#f-msg").textContent="",3000)};try{navigator.clipboard.writeText(t).then(done,()=>fallback(t,done))}catch(e){fallback(t,done)}};
+function fallback(t,done){const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$("#f-msg").textContent="無法自動複製，請手動選取預覽文字。"}ta.remove()}
+$("#f-clear").onclick=()=>{FIDS.forEach(id=>{const e=document.getElementById(id);if(e.tagName!=="SELECT")e.value=""});$("#f-pain").value=0;fillAlt();upForm()};
+
+/* ---------- 16 cards + quiz ---------- */
+const GL=[["智慧醫療","Smart Healthcare","本課：資料、技術、人與流程整合，支援行動與回饋"],["EHR／EMR","","EHR 強調縱向及共享；EMR 多指單一提供者病歷"],["RPM","Remote Patient Monitoring","遠距取得生理資料，搭配醫療團隊的追蹤回應"],["LHS","Learning Health System","內部經驗結合外部證據，落實後再量測改善"],["RWD","Real-World Data","常規蒐集的健康與照護資料，可供研究使用"],["PREMs","Patient-Reported Experience Measures","病人自述照護經驗，與健康結果指標區分"],["Quintuple Aim","五重目標","病人體驗、族群健康、每人成本、工作者福祉、健康公平"],["FHIR","","醫療資料交換標準；交換仍需授權與同意"]];
+(function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}${b?`<small>${b}</small>`:""}</div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
+mcq("#final",[
+ {q:"下列哪一項最符合本課對「智慧醫療」的工作定義？",o:["使用最新 AI 模型的醫療","資料、技術、人與流程整合，支援行動與回饋","所有線上醫療服務","醫院資訊系統升級"],a:1,e:"重點在整合與「資料促成行動及回饋」，不是技術新舊。"},
+ {q:"王伯伯的體重計資料依同意範圍傳入病歷，屬四層系統的哪一層？",o:["① 資料取得","② 交換與整合","③ 判讀與智能","④ 照護服務"],a:1,e:"設備網路、API、FHIR 與授權交換屬第二層。"},
+ {q:"2014 年 Quadruple Aim 在 Triple Aim 之外加入了什麼？",o:["健康公平","醫療工作者福祉","每人成本","病人體驗"],a:1,e:"2022 年 Quintuple Aim 再明列健康公平。"},
+ {q:"哪一個是「資源使用」指標，不能直接當成本？",o:["每人年照護總成本","住院天數","倦怠量表","PREMs"],a:1,e:"住院天數與檢查率是資源使用指標，需結合單位成本與觀點才成為成本。"},
+ {q:"英國 WSD 試驗告訴我們什麼？",o:["遠距照護沒有效果","健康結果改善，但每 QALY 約 £92,000，未必划算","遠距照護一定省錢","設備越貴效果越好"],a:1,e:"價值要同時看結果與總投入；設備降價 80% ＋服務滿載才降至約 £12,000。"},
+ {q:"VA CCHT 住院天數下降 25%，最大的研究設計疑問是？",o:["樣本太小","前後比較、無同期對照，難排除回歸平均","沒有使用 AI","發表期刊不夠好"],a:1,e:"17,025 人樣本很大，但設計只支持「值得進一步驗證」。"},
+ {q:"四關判斷中，Epic 敗血症模型卡在哪一關？",o:["技術可行（外部驗證 AUROC 0.63）","流程可用","病人受益","經濟可承擔"],a:0,e:"外部驗證表現不佳，第一關就卡住；W8 會深入。"},
+ {q:"健保雲端「有調閱影像組」再檢查率較低，正確解讀是？",o:["導入後同一組減半","組間差異，不等於因果","證明雲端省下一半費用","未調閱者違規"],a:1,e:"觀察結果與因果推論分開。"},
+ {q:"為什麼評估 AI 代筆要把「查核時間」算進來？",o:["法規要求","醫師仍須審閱與負責，查核本身就是新增工作","查核時間通常為零","為了增加成本"],a:1,e:"評估新工具，要把查核、警示與訊息處理時間算進工作者福祉。"},
+ {q:"LHS 持續監測之後，哪一個不是合理選項？",o:["調整流程","驗證後更新","停用","不再量測，維持上線即可"],a:3,e:"LHS 的核心是閉環：調整、更新、維持或停用，都建立在持續量測之上。"}],"#finalscore");
+})();
+</script>
+</body>
+</html>
