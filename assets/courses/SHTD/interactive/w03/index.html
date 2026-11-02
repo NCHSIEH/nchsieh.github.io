@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W3 醫療資料互通與數位成熟度 · 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+<style>
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.spec{grid-template-columns:1fr}}
+.spec label{display:block;font-weight:700;color:var(--navy);font-size:14px;margin:8px 0 4px}
+.spec select{width:100%;padding:7px;border-radius:8px;border:1px solid var(--line2);background:#fff}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;margin:6px 0}
+.lane .ln{font-weight:700;color:#fff;border-radius:8px;padding:8px;font-size:13px;text-align:center}
+.lane .track{position:relative;height:96px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.ms{position:absolute;top:6px;transform:translateX(-50%);text-align:center;cursor:pointer;width:84px}
+.ms.lo{top:48px}
+.ms .d{width:14px;height:14px;border-radius:50%;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.ms .y{font-size:11px;color:var(--mute);margin-top:2px}
+.ms .n{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2}
+.ms.on .d{box-shadow:0 0 0 3px var(--ochre)}
+.conf{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:420px}
+.conf i{display:block;aspect-ratio:1;border-radius:3px}
+.cell2{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:13.5px;margin-top:10px}
+.cell2 div{padding:8px;border-radius:8px;background:var(--paper);border:1px solid var(--line)}
+.cell2 .h{background:var(--navy-l);font-weight:700;color:var(--navy);text-align:center}
+.agent{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.astep{flex:1;min-width:130px;border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.astep b{display:block;color:var(--navy);font-size:15px}
+.astep.run{border-color:var(--navy2);background:var(--navy-l)}
+.astep.ok{border-color:var(--green);background:var(--green-l)}
+.astep.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.astep.skip{opacity:.45}
+.tree{display:flex;flex-direction:column;gap:8px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.tq.dim{opacity:.4}
+.tq b{color:var(--navy)}
+.tres{border-radius:10px;padding:12px 16px;color:#fff;font-weight:700;font-size:16px}
+.reg{display:grid;grid-template-columns:120px repeat(3,1fr);gap:6px;font-size:13.5px}
+.reg .h{background:var(--navy);color:#fff;font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.reg .rh{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;display:flex;align-items:center}
+.reg .c{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;min-height:54px;color:var(--mute2)}
+.reg .c.open{color:var(--ink);background:#fff;border-color:var(--navy2)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.prin{grid-template-columns:1fr}}
+.prin .pc{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.prin .pc h4{margin:0 0 4px;color:var(--navy);font-size:15px}
+.prin select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff;margin-top:4px;font-size:13px}
+.gen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.gen{grid-template-columns:1fr}}
+.gen .gc2{border:2px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.gen .gc2 h4{margin:0;color:var(--navy)}
+.gen label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;margin:6px 0;cursor:pointer}
+</style>
+<style>
+.need{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.need{grid-template-columns:1fr 1fr}}
+.nd{border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.nd .st{display:inline-block;font-size:12px;font-weight:700;border-radius:10px;padding:0 8px;color:#fff;margin-bottom:4px}
+.nd b{display:block;color:var(--navy);font-size:14.5px}
+.nd.ok{border-color:var(--green);background:#EEF6F1}
+.nd.bad{border-color:var(--ochre);background:#FCF1EC}
+.nd.partial{border-color:#D9A441;background:#FBF4E4}
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tog label{display:flex;gap:6px;align-items:center;border:1px solid var(--line2);background:#fff;border-radius:20px;padding:4px 12px;font-size:13.5px;cursor:pointer}
+.tog label.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tog input{display:none}
+.code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13px;background:#1B2A4A;color:#E6EAF2;border-radius:10px;padding:12px 14px;line-height:1.75;overflow:auto}
+.code .ln{display:block;border-radius:4px;padding:0 6px;cursor:pointer;white-space:pre}
+.code .ln:hover{background:#2E4470}
+.code .ln.hit{background:#3D7A5A}
+.code .ln.miss{background:#B5442A}
+.code .k{color:#FFD3C2}.code .s{color:#B9E3C6}.code .n{color:#F5D08A}
+.url{font-family:"JetBrains Mono",monospace;font-size:13px;background:#fff;border:1px dashed var(--navy2);border-radius:8px;padding:10px 12px;word-break:break-all;color:var(--navy)}
+.wt{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wt div{text-align:center;font-size:12.5px;color:var(--mute)}
+.wt input{width:100%;padding:6px 4px;border:1px solid var(--line2);border-radius:7px;text-align:center;font-family:inherit;font-size:14px}
+.ladder{display:flex;flex-direction:column-reverse;gap:4px}
+.rung{display:grid;grid-template-columns:44px 1fr;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent}
+.rung .rn{color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
+.rung .rc{background:var(--paper);padding:7px 12px;font-size:14px}
+.rung.sel{border-color:var(--ochre)}
+.rec{width:100%;border-collapse:collapse;font-size:13.5px}
+.rec th,.rec td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.rec th{color:var(--mute);font-weight:500;font-size:12.5px}
+.rec td .chk{display:flex;flex-wrap:wrap;gap:4px}
+.rec td .chk label{font-size:12.5px;border:1px solid var(--line2);border-radius:14px;padding:1px 8px;cursor:pointer;background:#fff}
+.rec td .chk label.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.rec td .chk input{display:none}
+.rec select{width:100%;padding:5px;border:1px solid var(--line2);border-radius:7px;font-size:12.5px;background:#fff}
+.rec tr.good td{background:#F2F8F4}.rec tr.badr td{background:#FCF3EF}
+@media(max-width:860px){.rec{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W3 醫療資料互通與數位成熟度</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與草稿">重置進度</button>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W3 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div class="code-h" style="font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px">WEEK 3 · 智慧醫療的地基 · 資料能傳、看得懂、用得對</div>
+  <h1>醫療資料互通與數位成熟度</h1>
+  <div class="en">Health Data Interoperability &amp; Digital Maturity</div>
+  <p class="lead">王伯伯週末在新竹急診，醫師看得到什麼？這一頁從「資料卡在哪一層」出發，親手讀一筆 FHIR、組一條查詢、跑一條 CQL 規則，最後完成本週的課堂交付：<b>四筆資料的處置表</b>與<b>一項有理由的改善建議</b>。</p>
+  <div class="chips"><a class="tag" href="../../W03_醫療資料互通與數位成熟度_Interoperability_and_Digital_Maturity.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W3）</a><span class="tag o">不需程式基礎</span><span class="tag a">所有病人資料皆為合成資料</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<section class="part" id="p01" data-t="急診 23:00：看得到什麼">
+  <div class="ph"><span class="num">01</span><div><h2>開場：王伯伯在新竹急診，醫師看得到什麼？</h2><div class="en">23:00 · REGIONAL HOSPITAL B · 擬真情境</div></div></div>
+  <p class="one">資料存在，不代表急診當下<b>拿得到、看得懂、用得上</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>打開連結與標準，看哪些需求被接住</h3><span class="tag o">切換</span><span class="scoreline" id="needscore"></span></div>
+    <div class="tog" id="needtog"></div>
+    <div class="need" id="needs"></div>
+    <div class="detail" id="needtxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p02" data-t="互通四層級">
+  <div class="ph"><span class="num">02</span><div><h2>互通性的四個層級</h2><div class="en">HIMSS · FOUNDATIONAL · STRUCTURAL · SEMANTIC · ORGANIZATIONAL</div></div></div>
+  <p class="one">能傳不等於能用：AI 需要<b>結構與語意一致</b>，也需要組織層的<b>授權與責任</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>寄一封信給外院醫師</h3><span class="tag gray">點每一層</span></div>
+    <div class="grid4" id="layers4"></div>
+    <div class="detail" id="l4txt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>診斷練習：這個問題卡在哪一層？</h3><span class="tag a">8 題</span><span class="scoreline" id="l4score"></span></div>
+    <div id="l4q"></div>
+  </div>
+</section>
+
+<section class="part" id="p03" data-t="交換架構與介面數">
+  <div class="ph"><span class="num">03</span><div><h2>三種交換架構：資料放哪裡、怎麼查</h2><div class="en">CENTRALIZED · FEDERATED · POINT-TO-POINT</div></div></div>
+  <p class="one">架構決定<b>風險落在哪裡</b>；實務多為混合，台灣兼有集中查詢（健保雲端）與分散調閱（電子病歷交換）。</p>
+  <div class="wd">
+    <div class="wh"><h3>介面爆炸試算：醫院越多，點對點要拉幾條線？</h3><span class="tag o">拉桿</span></div>
+    <div class="ctl"><span>參與醫院數 N</span><input type="range" id="ar-n" min="2" max="60" value="12"><output></output></div>
+    <div class="grid2">
+      <svg viewBox="0 0 380 260" class="chart" id="arsvg"></svg>
+      <div>
+        <div class="grid2" id="arkpi"></div>
+        <div class="grid3" style="margin-top:10px">
+          <div class="kpi"><div style="font-weight:900;color:var(--navy)">集中式</div><div class="l">例：澳洲 My Health Record<br><span class="plus">＋</span>查詢快、格式一致<br><span class="minus">－</span>單點資安、信任門檻高</div></div>
+          <div class="kpi"><div style="font-weight:900;color:var(--navy)">聯邦式</div><div class="l">例：美國 TEFCA<br><span class="plus">＋</span>資料不集中<br><span class="minus">－</span>各院品質與回應不一</div></div>
+          <div class="kpi"><div style="font-weight:900;color:var(--navy)">點對點</div><div class="l">例：早期院際轉診介面<br><span class="plus">＋</span>起步簡單<br><span class="minus">－</span>介面數量快速增加</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>延伸：病人識別——同一個姓名，未必是同一個人</h3><span class="tag a">4 題</span></div>
+    <div id="pmq"></div>
+  </div>
+</section>
+
+<section class="part" id="p04" data-t="各國政策與 CMS API">
+  <div class="ph"><span class="num">04</span><div><h2>各國如何用制度推動互通</h2><div class="en">CURES ACT · EHDS · 標準大平臺 · CMS-0057-F</div></div></div>
+  <p class="one">互通很少靠市場自然發生，多需<b>規範、標準與誘因</b>。共同方向：標準 API、病人取得自身資料、有條件的次級利用。</p>
+  <div class="wd">
+    <div class="grid3">
+      <div class="kpi"><div style="font-weight:900;color:var(--navy)">美國｜法律＋認證</div><div class="l">21 世紀治癒法案（2016）、ONC 2020 規則：禁止資訊封鎖；認證 EHR 提供 FHIR R4 標準 API</div></div>
+      <div class="kpi"><div style="font-weight:900;color:var(--navy)">歐盟｜法律＋分期</div><div class="l">EHDS（EU）2025/327：病人存取權；2029 年起跨境交換病歷摘要與電子處方</div></div>
+      <div class="kpi"><div style="font-weight:900;color:var(--navy)">台灣｜政策＋標準</div><div class="l">臺灣醫療資訊標準大平臺（2025）：以 FHIR、CQL、SMART 推動三統一</div></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>美國 CMS-0057-F：四種 FHIR API 各服務誰？</h3><span class="tag a">配對</span></div>
+    <p class="hint">2024-01 公布 → 2026-01 營運規定（拒絕理由、指標公開）→ 2027-01 API 開發完成。事前審查時限：急件 72 小時、一般 7 個日曆天（適用對象依規則）。</p>
+    <div id="cmsq"></div>
+  </div>
+</section>
+
+<section class="part" id="p05" data-t="EMR／EHR／PHR 與資料型態">
+  <div class="ph"><span class="num">05</span><div><h2>EMR、EHR、PHR 與資料型態</h2><div class="en">RECORDS · STRUCTURED → UNSTRUCTURED</div></div></div>
+  <p class="one">三者不是新舊取代，而是<b>同一份資料在不同範圍被使用</b>；許多臨床脈絡藏在文字與影像裡。</p>
+  <div class="wd">
+    <div class="wh"><h3>這是哪一種紀錄？</h3><span class="tag a">5 題</span></div>
+    <div id="rq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>資料型態光譜：機器直接可算 → 需要專用格式與模型</h3><span class="tag a">6 題</span><span class="scoreline" id="dtscore"></span></div>
+    <div id="dtq"></div>
+    <p class="note">生成式 AI 可協助把文字轉成結構化資料，但結果需逐項查核（W6 實作）。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>台灣健康資料的主要流向</h3><span class="tag gray">點節點</span></div>
+    <svg viewBox="0 0 760 300" class="chart" id="flowsvg"></svg>
+    <div class="detail" id="flowtxt">健保資料廣而偏申報；院內病歷深而分散。互通要把兩者接起來。點選任一節點。</div>
+  </div>
+</section>
+
+<section class="part" id="p06" data-t="標準詞彙">
+  <div class="ph"><span class="num">06</span><div><h2>標準詞彙：讓同一件事在每個系統都是同一個代碼</h2><div class="en">ICD · SNOMED CT · LOINC · UCUM · ATC · DICOM</div></div></div>
+  <p class="one">編碼讓資料可統計、可交換；但<b>先要判斷寫的是哪一件事</b>：是診斷，還是一次量測偏高？</p>
+  <div class="wd">
+    <div class="wh"><h3>同一個「高血壓」：該編 I10 還是 R03.0？</h3><span class="tag a">3 題</span></div>
+    <div class="chips" style="margin:0 0 10px"><span class="tag gray">高血壓</span><span class="tag gray">HTN</span><span class="tag gray">Hypertension</span><span class="tag gray">原發性高血壓</span><span class="tag gray">血壓高</span><span class="tag gray">BP ↑</span></div>
+    <div id="icdq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>標準配對：王伯伯一次住院，各項資料用哪套標準？</h3><span class="tag a">8 題</span><span class="scoreline" id="stdscore"></span></div>
+    <div id="stdq"></div>
+    <p class="note">記憶法：診斷 ICD、概念 SNOMED、檢驗 LOINC、單位 UCUM、藥品 ATC、影像 DICOM。名稱相近不代表完全等義，轉碼時要記錄對應依據與版本。</p>
+  </div>
+</section>
+
+<section class="part" id="p07" data-t="資料護照：72.5">
+  <div class="ph"><span class="num">07</span><div><h2>資料護照：72.5，要帶著哪些資訊才有意義？</h2><div class="en">DATA CONTEXT · LOINC 29463-7 · UCUM kg</div></div></div>
+  <p class="one">一個可用的數值，還需要<b>身分、時間、來源與使用脈絡</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>拿掉一項資訊，看會出什麼問題</h3><span class="tag o">切換</span></div>
+    <div class="grid2">
+      <div id="pp"></div>
+      <div><div class="kpi" style="text-align:center;padding:18px"><div style="font-size:13px;color:var(--mute)">王伯伯居家量測（合成）</div><div class="v" style="font-size:44px" id="ppv">72.5 kg</div><div class="l" id="ppmeta"></div></div><div id="ppout" style="margin-top:10px"></div></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>王伯伯的量測值：LOINC 與 UCUM</h3><span class="tag gray">擬真數值</span></div>
+    <div class="grid4">
+      <div class="kpi"><div class="l">體重</div><div class="v" style="font-size:22px">72.5 <small>kg</small></div><div class="l">LOINC 29463-7・看趨勢比單次重要</div></div>
+      <div class="kpi"><div class="l">收縮壓</div><div class="v" style="font-size:22px">148 <small>mm[Hg]</small></div><div class="l">LOINC 8480-6・FHIR 常以血壓面板 85354-9 記錄</div></div>
+      <div class="kpi"><div class="l">糖化血色素</div><div class="v" style="font-size:22px">8.2 <small>%</small></div><div class="l">LOINC 4548-4・約三個月平均血糖</div></div>
+      <div class="kpi o"><div class="l">NT-proBNP</div><div class="v" style="font-size:22px">1,850 <small>pg/mL</small></div><div class="l">LOINC 33762-6・與 BNP（30934-4）不可混比</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p08" data-t="讀一筆 FHIR">
+  <div class="ph"><span class="num">08</span><div><h2>讀一筆 FHIR Observation：先找六個答案</h2><div class="en">HL7 FHIR R4 4.0.1 · RESOURCE · REFERENCE</div></div></div>
+  <p class="one">HL7 v2（1980s 末）、CDA R2（2005）、FHIR（2014 起；R4 2019 首個規範性版本）會<b>長期並存</b>。FHIR 讓資料可用網址存取。</p>
+  <div class="wd">
+    <div class="wh"><h3>讀碼練習：依問題點選 JSON 中回答它的那一行</h3><span class="tag o">核心互動</span><span class="scoreline" id="fhscore"></span></div>
+    <div class="grid2">
+      <div class="code" id="fhjson"></div>
+      <div><div class="detail" id="fhq" style="margin-top:0;font-size:15px"></div><div id="fhfb" class="fb"></div><div style="margin-top:8px"><button class="btn" id="fhskip">下一題</button></div><p class="note">final 表示狀態完成，仍需要資料品質檢查；本例另含 vital-signs 類別。</p></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>延伸：找錯——這筆血壓哪一行不符合 R4 血壓 Profile？</h3><span class="tag a">點錯的那一行</span></div>
+    <div class="grid2">
+      <div class="code" id="bpjson"></div>
+      <div class="detail" id="bptxt" style="margin-top:0">血壓 148／92 通常是一組觀察值：主層 code 用 85354-9，收縮壓、舒張壓分別放在 component。點選你認為錯的行。</div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p09" data-t="FHIR 查詢與資源關係">
+  <div class="ph"><span class="num">09</span><div><h2>FHIR 查詢與資源關係</h2><div class="en">RESTful SEARCH · REFERENCES</div></div></div>
+  <p class="one">AI 要的病人特徵，就是依時間整理這些資源；<b>參照斷了，資料就拼不起來</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>查詢組合器</h3><span class="tag o">選條件</span></div>
+    <div class="grid4">
+      <div><label style="font-size:13px;font-weight:700;color:var(--navy)">資源</label><select id="qb-r" class="qsel"><option>Observation</option><option>MedicationRequest</option><option>Condition</option></select></div>
+      <div><label style="font-size:13px;font-weight:700;color:var(--navy)">病人</label><select id="qb-p" class="qsel"><option value="wang">Patient/wang</option><option value="">（不指定）</option></select></div>
+      <div><label style="font-size:13px;font-weight:700;color:var(--navy)">項目（LOINC）</label><select id="qb-c" class="qsel"><option value="29463-7">體重 29463-7</option><option value="85354-9">血壓面板 85354-9</option><option value="4548-4">HbA1c 4548-4</option><option value="33762-6">NT-proBNP 33762-6</option><option value="">（不指定）</option></select></div>
+      <div><label style="font-size:13px;font-weight:700;color:var(--navy)">期間</label><select id="qb-d" class="qsel"><option value="">（不限）</option><option value="ge2026-10-05">2026-10-05 之後</option><option value="ge2026-07-12">近三個月</option></select></div>
+    </div>
+    <div class="url" id="qburl" style="margin-top:10px"></div>
+    <div class="detail" id="qbtxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>資源關係圖：剪斷一條參照，看哪個問題答不出來</h3><span class="tag o">點箭頭</span></div>
+    <svg viewBox="0 0 760 300" class="chart" id="graph"></svg>
+    <div class="detail" id="graphtxt">點選任一條箭頭把它剪斷（再點一次接回）。</div>
+  </div>
+</section>
+
+<section class="part" id="p10" data-t="TW Core、SMART 與 CQL">
+  <div class="ph"><span class="num">10</span><div><h2>TWCDI、TW Core、SMART 與 CQL 各做哪一件事</h2><div class="en">DATA · RULES · APPS</div></div></div>
+  <p class="one">共同標準可以減少重複串接；有讀取權限後，仍要檢查<b>用途、資料品質與後續責任</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>誰回答哪個問題？</h3><span class="tag a">6 題</span></div>
+    <div id="twq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>CQL 規則試跑：「3 日內體重增加超過門檻」</h3><span class="tag o">核心互動</span><span class="tag a">門檻依醫囑；數值為合成</span></div>
+    <p class="hint">修改一週的體重（留空＝缺測），調整門檻與缺值處理，看規則在哪幾天觸發。先訂門檻與缺值處理，才寫成規則。</p>
+    <div class="wt" id="wt"></div>
+    <div class="grid2" style="margin-top:10px">
+      <div>
+        <div class="ctl"><span>門檻（kg）</span><input type="range" id="cq-t" min="1" max="3" step="0.5" value="2"><output></output></div>
+        <div class="ctl"><span>比較天數</span><input type="range" id="cq-d" min="2" max="5" step="1" value="3"><output></output></div>
+        <label style="display:block;font-weight:700;color:var(--navy);font-size:14px;margin-top:6px">缺值處理</label>
+        <div class="seg" id="cq-m" style="display:flex;width:fit-content;flex-wrap:wrap;margin-top:6px"><button class="on" data-v="skip">略過不判斷</button><button data-v="flag">缺測也提示個管師</button><button data-v="carry">沿用前一筆（不建議）</button></div>
+        <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn" data-wp="rise">情境：逐步上升</button><button class="btn" data-wp="gap">情境：週末缺測</button><button class="btn" data-wp="lb">情境：混入一筆磅</button></div>
+      </div>
+      <div><div class="code" id="cql" style="white-space:pre;font-size:12.5px"></div></div>
+    </div>
+    <svg viewBox="0 0 760 230" class="chart" id="cqsvg" style="margin-top:10px"></svg>
+    <div class="detail" id="cqtxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p11" data-t="EMRAM 與用藥閉環">
+  <div class="ph"><span class="num">11</span><div><h2>數位成熟度：EMRAM 0–7 階</h2><div class="en">HIMSS EMRAM · 閉環與資料回流</div></div></div>
+  <p class="one">成熟度評的是<b>流程能否追溯、資料能否回流</b>；不是買了多少系統。</p>
+  <div class="wd">
+    <div class="wh"><h3>EMRAM 階梯</h3><span class="tag gray">依 HIMSS 現行公開概述（查閱 2026-10-20）</span></div>
+    <div class="grid2"><div class="ladder" id="ladder"></div><div class="detail" id="ladtxt" style="margin-top:0"></div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>臺北榮總第 7 級的關鍵：用藥閉環</h3><span class="tag o">剪斷一環</span></div>
+    <p class="hint">2025 年 6 月第 6 級、12 月第 7 級（院方經驗分享，非 HIMSS 評審報告）。點任一環節讓它「沒有回寫」，看閉環在哪裡斷掉。</p>
+    <svg viewBox="0 0 760 270" class="chart" id="loop"></svg>
+    <div class="detail" id="looptxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>課堂討論：北城醫院先補哪個缺口？</h3><span class="tag a">練習</span></div>
+    <p class="hint">虛構 450 床區域醫院：電子醫囑超過九成；護理紀錄仍有四成紙本；居家量測尚未接回；院方想添購 AI 預警。</p>
+    <div id="nbq"></div>
+  </div>
+</section>
+
+<section class="part" id="p12" data-t="資料品質與時間">
+  <div class="ph"><span class="num">12</span><div><h2>資料品質三方向與三種時間</h2><div class="en">KAHN ET AL., 2016 · effective · issued · lastUpdated</div></div></div>
+  <p class="one">kg 與 [lb_av] 都可正確表示體重，錯誤在<b>未辨識單位就直接混算</b>；一筆舊資料今天才傳來，也不會變成今天的量測。</p>
+  <div class="wd">
+    <div class="wh"><h3>符合性、完整性、還是合理性？</h3><span class="tag a">6 題</span><span class="scoreline" id="dqscore"></span></div>
+    <div id="dqq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>時區換算器</h3><span class="tag o">輸入</span></div>
+    <div class="grid2">
+      <div>
+        <label style="display:block;font-weight:700;color:var(--navy);font-size:14px">FHIR 時間字串</label>
+        <input id="tz-in" value="2026-10-11T23:00:00Z" style="width:100%;padding:8px;border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button class="btn" data-tz="2026-10-11T23:00:00Z">藥局 23:00Z</button><button class="btn" data-tz="2026-10-12T09:10:00+08:00">門診 09:10+08:00</button><button class="btn" data-tz="2026-10-12">只有日期</button></div>
+      </div>
+      <div class="detail" id="tz-out" style="margin-top:0"></div>
+    </div>
+    <p class="note">將 Z 換為 +08:00 是同一時刻換表示法，不能再重加八小時；只有日期、沒有時間時，保留「時間未知」，不要自行補成 00:00。</p>
+  </div>
+</section>
+
+<section class="part" id="p13" data-t="四筆資料檢核（交付）">
+  <div class="ph"><span class="num">13</span><div><h2>案例操作：四筆體重，哪些可用、哪些要補資料？</h2><div class="en">CLASS PRODUCT · 四筆資料的處置表</div></div></div>
+  <p class="one">每筆填：<b>問題、需補證據、目前可做的處置</b>。授權判讀要指明用途。</p>
+  <div class="wd">
+    <div class="wh"><h3>處置表（同一病人的合成資料）</h3><span class="tag o">課堂交付</span></div>
+    <div style="overflow:auto"><table class="rec" id="rect"></table></div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" id="recchk">對照教師引導</button><button class="btn oc" id="reccopy">複製處置表</button><span id="recmsg" style="font-size:13px;color:var(--green);align-self:center"></span></div>
+    <div id="recfb"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>清理與驗收：160 磅轉公斤，還要留下處理紀錄</h3><span class="tag o">ETL 紀錄產生器</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>原始值</span><input type="number" id="etl-v" value="160" step="0.1" style="width:100%;padding:6px;border:1px solid var(--line2);border-radius:7px"><span></span></div>
+        <div class="ctl"><span>原始單位</span><select id="etl-u" style="padding:6px;border:1px solid var(--line2);border-radius:7px"><option value="lb">[lb_av] 磅</option><option value="kg">kg 公斤</option><option value="g">g 公克</option></select><span></span></div>
+        <div class="ctl"><span>時間已知？</span><select id="etl-t" style="padding:6px;border:1px solid var(--line2);border-radius:7px"><option value="0">只有日期</option><option value="1">有完整時間與時區</option></select><span></span></div>
+        <div class="ctl"><span>量測對象已確認？</span><select id="etl-s" style="padding:6px;border:1px solid var(--line2);border-radius:7px"><option value="0">家屬代傳，未確認</option><option value="1">已確認為王伯伯</option></select><span></span></div>
+      </div>
+      <div class="code" id="etl-log" style="white-space:pre-wrap"></div>
+    </div>
+    <p class="note">驗收包含數值正確、來源可追溯、缺漏有處理、使用目的已確認。顯示四捨五入只為易讀，不代表量測精度提高。</p>
+  </div>
+</section>
+
+<section class="part" id="p14" data-t="國際案例數據">
+  <div class="ph"><span class="num">14</span><div><h2>國際案例：各國如何讓資料流動</h2><div class="en">ESTONIA · TEFCA · MY HEALTH RECORD · NPfIT · SURGISPHERE</div></div></div>
+  <p class="one">共同規律：<b>標準先行、信任到位、讓第一線看到價值</b>。依本課引用資料整理，不作國家排名。</p>
+  <div class="wd">
+    <div class="tabs" id="gtabs"></div>
+    <div id="gpanels"></div>
+  </div>
+</section>
+
+<section class="part" id="p15" data-t="案例研討：Particle 控告 Epic">
+  <div class="ph"><span class="num">15</span><div><h2>案例研討：資料能傳，該不該傳？</h2><div class="en">PARTICLE HEALTH v. EPIC · S.D.N.Y. 2024</div></div></div>
+  <p class="one">技術上資料已經傳得到；爭議在<b>誰、為了什麼用途、由誰判定</b>。FHIR 與網路解決了「能傳」，用途、信任與誘因是互通的組織層。</p>
+  <div class="wd">
+    <div class="wh"><h3>時間軸</h3></div>
+    <div id="pctl"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>決策點：保險方的照護管理，算不算「治療」用途？</h3><span class="tag a">先投票再看論點</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap" id="pcvote"><button class="btn" data-v="y">算治療用途</button><button class="btn" data-v="n">不算</button><button class="btn" data-v="c">看情況，需要更多條件</button></div>
+    <div id="pcres" style="display:none;margin-top:12px">
+      <div class="grid2">
+        <div class="okmsg"><b>一方主張：保護病人資料</b><br>▪ Epic：防止以「治療」名義取得資料後另作他用<br>▪ Carequality 爭議程序曾要求 Particle 提出改善計畫<br>▪ 非 HIPAA 規範對象若能查詢，醫院可能退出交換</div>
+        <div class="warn" style="margin-top:8px"><b>另一方主張：阻擋競爭</b><br>▪ Particle：Epic 用市場地位阻擋競爭者<br>▪ 價值導向照護下，保險方也提供照護服務<br>▪ 平台同時是裁判與參賽者，用途由誰判定？</div>
+      </div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>課堂討論（三題擇一）</h3></div>
+    <ol style="margin:0;padding-left:20px;font-size:15px"><li><b>互通四層級：</b>這場爭議卡在哪一層？為何技術標準解決不了？</li><li><b>資料治理：</b>若台灣開放保險公司查詢電子病歷，你會設計哪三道用途檢核？</li><li><b>TEFCA：</b>交換網路要求聲明「用途」，平台如何稽核聲明是否屬實？</li></ol>
+  </div>
+</section>
+
+<section class="part" id="p16" data-t="改善表與離堂檢核">
+  <div class="ph"><span class="num">16</span><div><h2>課堂討論：一張改善表，與離堂檢核</h2><div class="en">PROBLEM · EVIDENCE · ACTION · ACCEPTANCE</div></div></div>
+  <p class="one">有理由、有待查資訊、有驗收方式，就<b>比只寫「導入 AI」更具體</b>。</p>
+  <div class="wd form">
+    <div class="grid2">
+      <div>
+        <label>組別／成員</label><input id="i-team" placeholder="例：第 4 組">
+        <label>選一個缺口</label><select id="i-gap"><option>王伯伯：居家體重趨勢</option><option>王伯伯：用藥調整理由</option><option>王伯伯：他院檢驗與單位</option><option>王伯伯：心超報告全文</option><option>北城醫院：護理紀錄四成紙本</option><option>北城醫院：居家量測尚未接回</option></select>
+        <label>卡在哪一層（可複選）</label><div class="tog" id="i-layer" style="margin:4px 0"></div>
+        <label>證據與還不知道的事</label><textarea id="i-ev"></textarea>
+      </div>
+      <div>
+        <label>改善做法（誰做什麼）</label><textarea id="i-act"></textarea>
+        <label>負責人</label><input id="i-own" placeholder="例：資訊室＋個管師組長">
+        <label>驗收方式</label><textarea id="i-acc" placeholder="例：單位 100% 為 UCUM、時間皆含時區、缺測當日有人處理"></textarea>
+      </div>
+    </div>
+    <div style="margin:14px 0"><button class="btn oc" id="i-copy">複製改善表</button> <span id="i-msg" style="font-size:13px;color:var(--green)"></span></div>
+    <div class="out" id="i-out"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>離堂檢核（三題）</h3><span class="scoreline" id="exscore"></span></div>
+    <div id="exq"></div>
+    <p class="note">最後補一句：「我還需要知道＿＿，才能決定是否使用這筆資料。」</p>
+  </div>
+</section>
+
+<section class="part" id="p17" data-t="名詞卡、測驗與回顧">
+  <div class="ph"><span class="num">17</span><div><h2>名詞卡、總測驗與三個判斷</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+  <div class="wd"><div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div><div class="cards" id="cards"></div></div>
+  <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
+  <div class="take">
+    <div><b>卡在哪裡</b>傳遞、格式、意義、治理，可能同時存在多個卡點。</div>
+    <div><b>資料能否用</b>核對病人、項目、單位、時間、來源、版本與用途。</div>
+    <div><b>下一步做什麼</b>先補最影響照護的缺口，寫出責任與驗收方式。</div>
+  </div>
+  <div class="closing">
+    <div class="tag o">CLOSING</div>
+    <h2 style="margin-top:8px">資料流得通，智慧才長得出來</h2>
+    <p style="color:var(--mute)">先問資料卡在哪一層，再選標準、平台或 AI。<br>下週 W4（★ 第一次課堂實作）：使用者中心設計與 Vibe Coding——攜帶筆電、註冊一種生成式 AI 工具、想一個長者常遇到的健康困擾。</p>
+  </div>
+</section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w3-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w3-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w3-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
+function bind(sel){$$(sel).forEach(r=>{r.addEventListener("click",e=>{})})}
+function tipify(root){root.querySelectorAll("[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+function segInit(id,cb){$$(id+" button").forEach(b=>b.onclick=()=>{$$(id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset)})}
+function choiceRows(container,items,opts,scoreEl,noteFn){const r=$(container);let ok=0,dn=0;items.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach((o,i)=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;dn++;const g=i===a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+(why||(noteFn?noteFn(a):""));if(scoreEl)$(scoreEl).textContent=`${ok} / ${items.length}`+(dn===items.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})}
+function bars(svg,data,{max,unit="",dec=1,W=360,H=220,cols}){const L=46,B=H-36,T=22;let g="";const step=max/5;for(let v=0;v<=max+1e-9;v+=step){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v,v<10&&step<1?1:0)}${unit}</text>`}const n=data.length,bw=Math.min(80,(W-L-30)/n-30);data.forEach(([lab,v,c],i)=>{const x=L+20+i*((W-L-30)/n)+((W-L-30)/n-bw)/2-10,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${c||cols[i]}" data-t="${lab}：${fmt(v,dec)}${unit}"/><text x="${x+bw/2}" y="${y-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${c||cols[i]}">${fmt(v,dec)}${unit}</text><text x="${x+bw/2}" y="${B+18}" font-size="12.5" text-anchor="middle">${lab}</text>`});$(svg).innerHTML=g;tipify($(svg))}
+
+
+function togGroup(container,items,onchange,initial){const r=$(container);r.innerHTML="";items.forEach((t,i)=>{const l=h("label",{class:initial&&initial.includes(i)?"on":""},`<input type="checkbox" ${initial&&initial.includes(i)?"checked":""}>${t}`);l.querySelector("input").onchange=e=>{l.classList.toggle("on",e.target.checked);onchange()};r.appendChild(l)})}
+function togVals(container){return $$(container+" input").map(i=>i.checked)}
+function copyText(t,msgEl){const done=()=>{$(msgEl).textContent="已複製。";setTimeout(()=>$(msgEl).textContent="",3000)};const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$(msgEl).textContent="無法自動複製，請手動選取預覽文字。"}ta.remove()};try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+
+/* 01 needs */
+const LINKS=["健保雲端查詢","電子病歷交換：全文調閱","居家量測接入＋病人授權","結構化出院摘要（保留原文）","檢驗對碼：LOINC＋UCUM"];
+const NEEDS=[{n:"近期用藥與檢驗",base:"ok",need:[0],res:"可核對重複或交互作用",fail:"看不到他院用藥，可能重複開藥",lay:"已可查（依規定使用）"},
+ {n:"原院心臟超音波報告",base:"partial",need:[1],res:"取得全文，不必重做檢查",fail:"可能只有摘要，全文需調閱 → 重做檢查或延誤判斷",lay:"傳遞、組織"},
+ {n:"近三個月居家體重",base:"bad",need:[2],res:"看得出是否逐步惡化",fail:"多半不在任何醫院系統 → 看不出是否逐步惡化",lay:"傳遞、組織"},
+ {n:"出院時用藥調整理由",base:"partial",need:[3],res:"理由可擷取，避免誤停或重複加藥",fail:"寫在文字紀錄，不易擷取 → 誤停或重複加藥",lay:"結構、語意"},
+ {n:"他院檢驗名稱與單位",base:"bad",need:[4],res:"同一檢驗對上同一代碼與單位",fail:"名稱、代碼或單位可能不同 → 數值被誤讀",lay:"語意"}];
+const STC={ok:["拿得到",C.green],partial:["部分",C.amber],bad:["拿不到／看不懂",C.ochre]};
+const needOn=[true,false,false,false,false];
+function drawNeeds(){const t=$("#needtog");t.innerHTML="";LINKS.forEach((l,i)=>{const lb=h("label",{class:needOn[i]?"on":""},`<input type="checkbox" ${needOn[i]?"checked":""}>${l}`);lb.querySelector("input").onchange=e=>{needOn[i]=e.target.checked;drawNeeds()};t.appendChild(lb)});
+ const r=$("#needs");r.innerHTML="";let ok=0;NEEDS.forEach(n=>{const met=n.need.every(k=>needOn[k]);const st=met?"ok":(n.base==="ok"?"bad":n.base);if(met)ok++;const [lab,col]=STC[st];r.appendChild(h("div",{class:"nd "+st},`<span class="st" style="background:${col}">${met?"接住了":lab}</span><b>${n.n}</b>${met?n.res:n.fail}<div style="font-size:12px;color:var(--mute);margin-top:4px">卡點：${n.lay}</div>`))});
+ $("#needscore").textContent=`${ok} / 5 項接住`;$("#needtxt").innerHTML=ok===5?"五項都接住了——但這需要<b>傳遞、結構、語意、組織</b>四層同時到位，下一段逐層拆解。":`開場時只有「近期用藥」可查。打開上方的連結或標準，看看每一項需要什麼才能接住。<span style="color:var(--mute)">同一問題可以跨多個層級。</span>`}
+drawNeeds();
+
+/* 02 layers */
+const L4=[["① 基礎","Foundational","資料能從 A 送到 B","郵局把信送到","網路把檔案傳到；例：以 PDF 傳出院摘要",C.gray],["② 結構","Structural","欄位一致，機器能拆解","信封與信紙格式正確","資料欄位格式一致；例：HL7 訊息、FHIR 資源",C.navy2],["③ 語意","Semantic","代碼一致，雙方理解相同","雙方用同一種語言","雙方用同一套代碼；例：LOINC、SNOMED CT",C.navy],["④ 組織","Organizational","授權、法規、信任與流程","收件人有權讀、願意讀","病人授權、法規與流程配合；例：病人同意、跨院協議",C.ochre]];
+(function(){const g=$("#layers4");L4.forEach((l,i)=>{const d=h("div",{class:"kpi",style:`cursor:pointer;border-top:5px solid ${l[5]}`},`<div style="font-weight:900;color:var(--navy);font-size:17px">${l[0]}</div><div class="l">${l[1]}｜${l[2]}</div>`);d.onclick=()=>{$("#l4txt").innerHTML=`<b>${l[0]} ${l[1]}</b><br><span class="tag gray">寄信</span> ${l[3]}　<span class="tag o">醫療資料</span> ${l[4]}`};g.appendChild(d)});$("#l4txt").innerHTML="後一層建立在前一層之上。PDF 病歷人看得懂，機器卻難以拆解、比對與計算。點選任一層。"})();
+choiceRows("#l4q",[["兩院網路沒有打通，轉診資料只能列印給病人帶",0,"基礎層：資料送不到。"],["收到的是掃描 PDF，系統無法自動擷取檢驗值",1,"結構層：能傳，但欄位無法拆解。"],["A 院寫「Cr」，B 院寫「肌酸酐」，代碼也不同",2,"語意層：要對上同一套代碼（LOINC）。"],["技術上可查，但沒有病人同意與跨院協議，不能調閱",3,"組織層：授權、法規與流程。"],["收縮壓單位一院寫 mmHg、一院寫 kPa 未標示",2,"語意層：單位要用 UCUM 並明確標示。"],["FHIR 資源欄位放錯位置，接收端解析失敗",1,"結構層：資源結構不符規範或 Profile。"],["交換網路成員不信任保險公司查詢的用途聲明",3,"組織層：信任與用途治理（第 15 段案例）。"],["居家體重計只存在手機 App，沒有任何上傳管道",0,"基礎層：沒有傳遞路徑；接上後還有組織層的授權問題。"]],["基礎","結構","語意","組織"],"#l4score");
+
+/* 03 architecture */
+function ar(){const n=+$("#ar-n").value;$("#ar-n").nextElementSibling.textContent=n+" 家";const p2p=n*(n-1)/2;const s=$("#arsvg"),L=46,R=370,B=220,T=16,maxN=60,maxY=1770;const X=v=>L+(v-2)/(maxN-2)*(R-L),Y=v=>B-v/maxY*(B-T);let g="";[0,500,1000,1500].forEach(v=>{g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v)}</text>`});
+ let a="",b="";for(let k=2;k<=maxN;k++){a+=(k===2?"M":"L")+X(k)+","+Y(k*(k-1)/2);b+=(k===2?"M":"L")+X(k)+","+Y(k)}g+=`<path d="${a}" fill="none" stroke="${C.ochre}" stroke-width="3"/><path d="${b}" fill="none" stroke="${C.navy2}" stroke-width="3"/>`;
+ g+=`<circle cx="${X(n)}" cy="${Y(p2p)}" r="6" fill="${C.ochre}"/><circle cx="${X(n)}" cy="${Y(n)}" r="6" fill="${C.navy2}"/><line x1="${X(n)}" x2="${X(n)}" y1="${T}" y2="${B}" stroke="${C.mute}" stroke-dasharray="3 3"/>`;
+ [10,20,30,40,50,60].forEach(v=>g+=`<text x="${X(v)}" y="${B+16}" font-size="11" fill="${C.mute}" text-anchor="middle">${v}</text>`);g+=`<text x="${(L+R)/2}" y="${B+32}" font-size="12" fill="${C.mute}" text-anchor="middle">參與醫院數</text><text x="${L+8}" y="${T+12}" font-size="12" fill="${C.ochre}" font-weight="700">點對點 N×(N−1)/2</text><text x="${L+8}" y="${T+28}" font-size="12" fill="${C.navy2}" font-weight="700">經交換中樞 N</text>`;s.innerHTML=g;
+ $("#arkpi").innerHTML=`<div class="kpi o"><div class="v">${fmt(p2p)}</div><div class="l">點對點介面數</div></div><div class="kpi"><div class="v">${n}</div><div class="l">接上同一個交換中樞的介面數</div></div>`}
+$("#ar-n").oninput=ar;ar();
+mcq("#pmq",[
+ {q:"女兒用自己的帳號上傳王伯伯的體重，系統應該怎麼記？",o:["當成女兒的體重","帳號屬於女兒、量測對象是王伯伯，兩者分開記","直接合併到兩人的紀錄","刪掉這筆"],a:1,e:"先確認病人：上傳者與量測對象要分開。"},
+ {q:"跨院時，只拿到「病歷號 123456」夠嗎？",o:["夠，號碼是唯一的","不夠，還要知道是哪個機構發給這個號碼","只要姓名一致就好","病歷號可以當身分證字號用"],a:1,e:"同一院內可用病歷號，跨院還要知道識別碼的發放者（FHIR identifier 的 system）。"},
+ {q:"家中共用體重計，最新一筆可能是誰？",o:["一定是王伯伯","可能量的是家中其他人，需確認裝置與量測對象","一定是女兒","不重要"],a:1,e:"接著確認裝置：共用裝置的資料要能追溯量測者。"},
+ {q:"無法確定兩筆紀錄是不是同一人時，最好的做法？",o:["依姓名合併","暫緩合併並向來源單位確認","兩筆都刪除","交給 AI 自動判斷"],a:1,e:"保留疑義。Patient/wang 是伺服器內的參照，不能直接當作跨院通用的身分證明。"}]);
+
+/* 04 CMS */
+choiceRows("#cmsq",[["病人想在 App 裡看到自己的理賠與事前審查資訊",0,"Patient Access API。"],["有治療關係的醫師要取得病人的理賠與 USCDI 資料",1,"Provider Access API。"],["病人換保險公司，資料跟著病人走",2,"Payer-to-Payer API。"],["醫院電子化申請事前審查，保險方核准或要求補件",3,"Prior Authorization API：急件 72 小時、一般 7 個日曆天內決定（適用對象依規則）。"]],["Patient Access","Provider Access","Payer-to-Payer","Prior Authorization"]);
+
+/* 05 records & types */
+choiceRows("#rq",[["醫院 A 的 HIS 病歷",0,"單一機構的電子病歷，由醫療機構管理。"],["健保雲端讓各院查詢病人的跨院用藥",1,"跨機構、縱向的健康紀錄，由醫療體系／交換平台管理。"],["病人在健康存摺查看自己的就醫紀錄，並補上居家血壓",2,"病人可取得、管理並補充；健康存摺以健保資料為主。"],["電子病歷交換中心的院際調閱",1,"跨機構交換屬 EHR 範圍。"],["社區診所的門診病歷",0,"單一機構的 EMR。"]],["EMR","EHR","PHR"]);
+choiceRows("#dtq",[["HbA1c 8.2%",0,"結構化：易統計與交換，仍要確認代碼與單位。"],["出院摘要的固定章節",1,"半結構化：可依段落擷取，但各院格式不同。"],["護理交班紀錄、LINE 留言",2,"非結構化文字：資訊豐富，需人工或語言模型擷取。"],["心臟超音波影像",3,"影像與訊號：需 DICOM 等格式與專用模型。"],["ICD-10 診斷碼",0,"結構化。"],["心電圖波形",3,"影像與訊號。"]],["結構化","半結構化","非結構化文字","影像與訊號"],"#dtscore");
+(function(){const N=[["his",120,70,"醫院／診所 HIS","院內病歷：內容深、分散在各院"],["nhi",380,70,"健保署","申報資料；提供雲端查詢。涵蓋廣但偏申報"],["px",640,70,"民眾：健康存摺","查詢與下載自己的資料"],["eec",380,200,"電子病歷交換中心","衛福部；院際調閱索引，病歷仍存放在各院"],["home",120,240,"居家量測","血壓計、體重計——多半未接入上述系統"],["ltc",640,240,"長照、藥局等","照護與領藥紀錄——多半未接入"]];const E=[["his","nhi","申報"],["nhi","his","雲端查詢"],["nhi","px",""],["his","eec","院際調閱"]];const s=$("#flowsvg");const P={};N.forEach(n=>P[n[0]]=n);let g=`<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="${C.navy2}"/></marker></defs>`;
+ g+=`<line x1="${P.his[1]+80}" y1="60" x2="${P.nhi[1]-80}" y2="60" stroke="${C.navy2}" stroke-width="2" marker-end="url(#ar)"/><text x="250" y="52" font-size="12" text-anchor="middle" fill="${C.navy2}">申報</text><line x1="${P.nhi[1]-80}" y1="84" x2="${P.his[1]+80}" y2="84" stroke="${C.navy2}" stroke-width="2" marker-end="url(#ar)"/><text x="250" y="102" font-size="12" text-anchor="middle" fill="${C.navy2}">雲端查詢</text><line x1="${P.nhi[1]+80}" y1="70" x2="${P.px[1]-80}" y2="70" stroke="${C.navy2}" stroke-width="2" marker-end="url(#ar)"/><path d="M${P.his[1]} 100 L${P.his[1]} 200 L${P.eec[1]-90} 200" fill="none" stroke="${C.navy2}" stroke-width="2" marker-end="url(#ar)"/><text x="200" y="192" font-size="12" fill="${C.navy2}">院際調閱</text>`;
+ N.forEach(([id,x,y,t,d])=>{const dash=id==="home"||id==="ltc";g+=`<g class="fn" data-d="${d}" data-t="${t}" style="cursor:pointer"><rect x="${x-80}" y="${y-28}" width="160" height="56" rx="10" fill="${dash?"#fff":"#E6EAF2"}" stroke="${dash?C.ochre:C.navy2}" stroke-width="2" ${dash?'stroke-dasharray="6 4"':""}/><text x="${x}" y="${y+5}" font-size="13.5" text-anchor="middle" font-weight="700" fill="${C.navy}">${t}</text></g>`});
+ g+=`<text x="380" y="292" font-size="12" text-anchor="middle" fill="${C.ochre}">虛線框：居家與長照資料，多半未接入上述系統</text>`;s.innerHTML=g;s.querySelectorAll(".fn").forEach(e=>e.onclick=()=>$("#flowtxt").innerHTML=`<b>${e.dataset.t}</b>：${e.dataset.d}`)})();
+
+/* 06 codes */
+mcq("#icdq",[
+ {q:"門診病歷：「已確診原發性高血壓，持續服藥」",o:["I10 原發性高血壓","R03.0 血壓讀值偏高，未診斷高血壓"],a:0,e:"已確診的疾病，用 I10。"},
+ {q:"急診護理紀錄：「BP ↑ 165/95，疼痛中，尚未診斷高血壓」",o:["I10 原發性高血壓","R03.0 血壓讀值偏高，未診斷高血壓"],a:1,e:"一次量測偏高、未診斷——不能直接編成高血壓。"},
+ {q:"把所有寫「血壓高」的紀錄都自動編成 I10 會造成什麼？",o:["沒問題，比較快","高血壓病人數被高估，AI 拿到錯誤的標籤","可以提高 AI 準確率","符合健保規定"],a:1,e:"編碼前先確認臨床意義：診斷還是讀值。"}]);
+choiceRows("#stdq",[["主診斷：心衰竭（申報用）",0,"ICD-10-CM／PCS：分類、申報（台灣 2016 起）。"],["細緻的臨床概念與關係",1,"SNOMED CT：細緻臨床紀錄；需授權。"],["NT-proBNP 檢驗項目",2,"LOINC：檢驗、生命徵象項目（33762-6）。"],["檢驗值的單位 pg/mL",3,"UCUM：FHIR 數值的單位代碼。"],["利尿劑 furosemide 的藥品分類",4,"ATC／健保藥品代碼。"],["心臟超音波影像與傳輸",5,"DICOM：影像格式與傳輸、PACS。"],["體重這個量測項目",2,"LOINC 29463-7。"],["體重單位 kg",3,"UCUM kg。"]],["ICD","SNOMED CT","LOINC","UCUM","ATC","DICOM"],"#stdscore");
+
+/* 07 passport */
+const PP=[["誰、量什麼","王伯伯／體重 29463-7","可能對錯人或弄錯項目"],["多少、什麼單位","72.5 kg","可能把磅當公斤（160 磅也會被當成 160 公斤）"],["何時量","10/12 07:30，臺灣時間","可能把舊資料當最新"],["誰量、誰傳","家用體重計／女兒代傳","量測者與上傳者混淆"],["何種版本、用途","最終紀錄／個管追蹤","更正未套用，或超出用途"]];
+const ppOn=[1,1,1,1,1];function drawPP(){const r=$("#pp");r.innerHTML="";PP.forEach((p,i)=>{const d=h("div",{class:"kpi",style:`cursor:pointer;margin-bottom:8px;border-left:5px solid ${ppOn[i]?C.green:C.ochre}`},`<div style="display:flex;justify-content:space-between"><b style="color:var(--navy)">${p[0]}</b><span style="font-size:12px;color:${ppOn[i]?C.green:C.ochre}">${ppOn[i]?"✓ 有":"✕ 缺"}</span></div><div class="l">${ppOn[i]?p[1]:"（缺少）"}</div>`);d.onclick=()=>{ppOn[i]=1-ppOn[i];drawPP()};r.appendChild(d)});
+ $("#ppv").textContent=ppOn[1]?"72.5 kg":"72.5 ？";$("#ppmeta").textContent=[ppOn[0]?"王伯伯・體重":"對象／項目？",ppOn[2]?"10/12 07:30 +08:00":"時間？",ppOn[3]?"女兒代傳":"來源？"].join("　｜　");
+ const miss=PP.filter((p,i)=>!ppOn[i]);$("#ppout").innerHTML=miss.length?`<div class="warn"><b>${miss.length} 項缺少：</b><br>${miss.map(m=>"▪ "+m[2]).join("<br>")}<br><b>處置：</b>先補件，不要猜補。</div>`:`<div class="okmsg">五項都有：這個數值可以放進個管追蹤的趨勢圖（用途限個管追蹤）。點左側卡片拿掉一項試試。</div>`}
+drawPP();
+
+/* 08 FHIR reader */
+const FJ=[['{',null],['  <k>"resourceType"</k>: <s>"Observation"</s>,','type'],['  <k>"status"</k>: <s>"final"</s>,','status'],['  <k>"category"</k>: [{ <k>"coding"</k>: [{ <k>"code"</k>: <s>"vital-signs"</s> }] }],','cat'],['  <k>"code"</k>: { <k>"coding"</k>: [{','code'],['      <k>"system"</k>: <s>"http://loinc.org"</s>,','code'],['      <k>"code"</k>: <s>"29463-7"</s>, <k>"display"</k>: <s>"Body weight"</s> }] },','code'],['  <k>"subject"</k>: { <k>"reference"</k>: <s>"Patient/wang"</s> },','subj'],['  <k>"effectiveDateTime"</k>: <s>"2026-10-12T07:30:00+08:00"</s>,','time'],['  <k>"valueQuantity"</k>: {','val'],['    <k>"value"</k>: <n>72.5</n>, <k>"unit"</k>: <s>"kg"</s>,','val'],['    <k>"system"</k>: <s>"http://unitsofmeasure.org"</s>, <k>"code"</k>: <s>"kg"</s> }','val'],['}',null]];
+const FQ=[["哪種紀錄？",'type',"resourceType 告訴你這是 Observation（觀察結果）。"],["是否已完成？",'status',"status = final：狀態完成——但仍需要資料品質檢查。"],["量的是什麼？",'code',"code.coding：LOINC 29463-7 體重。"],["量的是誰？",'subj',"subject.reference：Patient/wang——伺服器內的參照，不是跨院身分證明。"],["什麼時候量？",'time',"effectiveDateTime：臨床相關的時間，含 +08:00 時區。"],["多少？什麼單位？",'val',"valueQuantity：72.5，unit kg，system 為 UCUM。"]];
+let fqi=0,fok=0,fdone=false;function drawFJ(){$("#fhjson").innerHTML=FJ.map(([l,k],i)=>`<span class="ln" data-k="${k||""}" data-i="${i}">${l.replace(/<k>/g,'<span class="k">').replace(/<s>/g,'<span class="s">').replace(/<n>/g,'<span class="n">').replace(/<\/[ksn]>/g,"</span>")}</span>`).join("");$$("#fhjson .ln").forEach(e=>e.onclick=()=>pickFJ(e))}
+function askFJ(){if(fqi>=FQ.length){$("#fhq").innerHTML=`<b>完成！</b>六題答對 ${fok} 題。再按「下一題」重來。`;return}$("#fhq").innerHTML=`<span style="color:var(--mute);font-size:13px">第 ${fqi+1} / 6 題</span><br><b>${FQ[fqi][0]}</b>`;$("#fhfb").className="fb";fdone=false;$$("#fhjson .ln").forEach(e=>e.classList.remove("hit","miss"))}
+function pickFJ(e){if(fqi>=FQ.length||fdone)return;fdone=true;const q=FQ[fqi];const ok=e.dataset.k===q[1];if(ok)fok++;$$("#fhjson .ln").forEach(x=>{if(x.dataset.k===q[1])x.classList.add("hit")});if(!ok)e.classList.add("miss");$("#fhfb").className="fb show "+(ok?"ok":"no");$("#fhfb").innerHTML=(ok?"<b>正確。</b>":"<b>綠色那幾行才是。</b>")+q[2];$("#fhscore").textContent=`${fok} / 6`;}
+$("#fhskip").onclick=()=>{if(fqi>=FQ.length){fqi=0;fok=0;$("#fhscore").textContent=""}else fqi++;askFJ()};drawFJ();askFJ();
+const BJ=[['{',0],['  <k>"resourceType"</k>: <s>"Observation"</s>, <k>"status"</k>: <s>"final"</s>,',0],['  <k>"code"</k>: { <k>"coding"</k>: [{ <k>"system"</k>: <s>"http://loinc.org"</s>, <k>"code"</k>: <s>"85354-9"</s> }] },',0],['  <k>"subject"</k>: { <k>"reference"</k>: <s>"Patient/wang"</s> },',0],['  <k>"valueQuantity"</k>: { <k>"value"</k>: <n>148</n>, <k>"code"</k>: <s>"mm[Hg]"</s> },',1],['  <k>"component"</k>: [',0],['    { <k>"code"</k>: <s>"8480-6"</s>, <k>"valueQuantity"</k>: { <k>"value"</k>: <n>148</n>, <k>"code"</k>: <s>"mm[Hg]"</s> } }',0],['  ]',2],['}',0]];
+(function(){$("#bpjson").innerHTML=BJ.map(([l,k],i)=>`<span class="ln" data-k="${k}">${l.replace(/<k>/g,'<span class="k">').replace(/<s>/g,'<span class="s">').replace(/<n>/g,'<span class="n">').replace(/<\/[ksn]>/g,"</span>")}</span>`).join("");let found=new Set();$$("#bpjson .ln").forEach(e=>e.onclick=()=>{const k=+e.dataset.k;if(k){e.classList.add("hit");found.add(k)}else e.classList.add("miss");setTimeout(()=>e.classList.remove("miss"),700);$("#bptxt").innerHTML=`找到 ${found.size} / 2 個錯誤。<br>`+(found.has(1)?"✓ <b>主層不放單一 valueQuantity</b>——收縮壓與舒張壓要分別放在 component。<br>":"")+(found.has(2)?"✓ <b>缺少舒張壓 component（8462-4，92 mm[Hg]）</b>——符合 R4 血壓 Profile 時兩個 component 都要有，缺值需說明原因。":"")+(found.size<2?"<br><span style='color:var(--mute)'>還有錯誤沒找到。</span>":"")})})();
+
+/* 09 query + graph */
+function qb(){const r=$("#qb-r").value,p=$("#qb-p").value,c=$("#qb-c").value,d=$("#qb-d").value;const q=[];if(p)q.push("patient="+p);if(c&&r==="Observation")q.push("code=http://loinc.org|"+c);if(d)q.push((r==="Observation"?"date=":r==="MedicationRequest"?"authoredon=":"recorded-date=")+d);if(r==="Observation")q.push("_sort=date");
+ $("#qburl").textContent=`GET [base]/${r}`+(q.length?"?"+q.join("&"):"");const w=[];if(!p)w.push("沒有指定病人：會查到所有病人的資料——權限與用途必須先確認（SMART 授權範圍）。");if(r!=="Observation"&&c)w.push("LOINC 項目代碼只用在 Observation；藥品與診斷要用各自的代碼系統。");if(r==="Observation"&&!c)w.push("沒有指定項目：體重、血壓、檢驗會全部混在一起。");
+ $("#qbtxt").innerHTML=(w.length?w.map(x=>"⚠ "+x).join("<br>"):"✓ 這條查詢的白話：")+`<br><span style="color:var(--mute)">「找${p?"王伯伯":"所有病人"}${r==="Observation"?(c?"的"+$("#qb-c").selectedOptions[0].text.split(" ")[0]:"的所有觀察值"):r==="MedicationRequest"?"的處方":"的診斷"}${d?"（"+$("#qb-d").selectedOptions[0].text+"）":""}」</span>`}
+$$(".qsel").forEach(s=>{s.style.cssText="width:100%;padding:7px;border:1px solid #D2C7B2;border-radius:8px;background:#fff";s.onchange=qb});qb();
+const GN={Patient:[380,40,"Patient\n王伯伯"],Encounter:[140,140,"Encounter\n住院"],Condition:[620,140,"Condition\n心衰竭、糖尿病"],Observation:[140,250,"Observation\n體重、NT-proBNP"],MedicationRequest:[380,250,"MedicationRequest\n利尿劑處方"],DiagnosticReport:[620,250,"DiagnosticReport\n心超報告"],Practitioner:[380,145,"Practitioner\n主治醫師"]};
+const GE=[["Encounter","Patient","subject","這次住院是誰的？"],["Condition","Patient","subject","這些診斷是誰的？"],["Observation","Patient","subject","體重與 NT-proBNP 是誰的？——AI 特徵直接拼不起來"],["MedicationRequest","Patient","subject","利尿劑處方是誰的？"],["DiagnosticReport","Patient","subject","心超報告是誰的？"],["MedicationRequest","Practitioner","requester","處方是誰開的？——責任無法追溯"],["Observation","Encounter","encounter","哪些量測發生在這次住院？"]];
+const cut=new Set();function drawG(){const s=$("#graph");let g=`<defs><marker id="ga" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="${C.navy2}"/></marker></defs>`;
+ GE.forEach(([a,b,f],i)=>{const [x1,y1]=GN[a],[x2,y2]=GN[b];const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy);const sx=x1+dx/len*48,sy=y1+dy/len*26,ex=x2-dx/len*60,ey=y2-dy/len*26;const c=cut.has(i);g+=`<g class="ge" data-i="${i}" style="cursor:pointer"><line x1="${sx}" y1="${sy}" x2="${ex}" y2="${ey}" stroke="transparent" stroke-width="14"/><line x1="${sx}" y1="${sy}" x2="${ex}" y2="${ey}" stroke="${c?C.ochre:C.navy2}" stroke-width="2.2" ${c?'stroke-dasharray="5 5"':'marker-end="url(#ga)"'}/><text x="${(sx+ex)/2}" y="${(sy+ey)/2-4}" font-size="11" fill="${c?C.ochre:C.mute}" text-anchor="middle">${c?"✂ ":""}${f}</text></g>`});
+ for(const k in GN){const [x,y,t]=GN[k];const [a,b]=t.split("\n");g+=`<rect x="${x-78}" y="${y-24}" width="156" height="48" rx="9" fill="${k==="Patient"?C.navy:"#fff"}" stroke="${C.navy2}" stroke-width="1.5"/><text x="${x}" y="${y-3}" font-size="12.5" text-anchor="middle" font-weight="700" fill="${k==="Patient"?"#fff":C.navy}">${a}</text><text x="${x}" y="${y+14}" font-size="11.5" text-anchor="middle" fill="${k==="Patient"?"#C9D0DE":C.mute}">${b}</text>`}
+ s.innerHTML=g;s.querySelectorAll(".ge").forEach(e=>e.onclick=()=>{const i=+e.dataset.i;cut.has(i)?cut.delete(i):cut.add(i);drawG()});$("#graphtxt").innerHTML=cut.size?`<b>答不出來的問題：</b><br>${[...cut].map(i=>"✂ "+GE[i][3]).join("<br>")}`:"箭頭是「參照」：一筆資源的欄位指向另一筆資源。點選任一條箭頭把它剪斷（再點一次接回）。"}
+drawG();
+
+/* 10 roles + CQL */
+choiceRows("#twq",[["哪些健康資料需要能交換？（核心資料項目的清單）",0,"TWCDI：核心資料項目清單（第一版 20 類、109 項欄位）。"],["提供共通的資料結構，例如 Patient、Observation",1,"FHIR R4。"],["在臺灣情境約定欄位、識別碼與代碼表",2,"TW Core IG。"],["針對特定照護或申報用途增加細節與限制",3,"專題 IG。"],["用共通語言表達「3 日體重增加 >2 kg」這種判斷邏輯",4,"CQL：規則。"],["醫師從病歷系統開啟 App，系統依權限範圍決定 App 可讀哪些資料",5,"SMART App Launch：啟動與授權。"]],["TWCDI","FHIR R4","TW Core IG","專題 IG","CQL","SMART"]);
+const DAYS=["10/06","10/07","10/08","10/09","10/10","10/11","10/12"];const WP={rise:["70.2","70.4","70.9","71.5","72.1","72.6","72.9"],gap:["70.2","70.4","70.6","","","72.8","73.0"],lb:["70.2","70.4","70.6","156","70.9","71.2","71.4"]};
+let cqm="skip";(function(){const w=$("#wt");DAYS.forEach((d,i)=>{const c=h("div",{},`${d}<input id="wt${i}" value="${WP.gap[i]}">`);w.appendChild(c)});DAYS.forEach((d,i)=>$("#wt"+i).oninput=cq)})();
+function cq(){const T=+$("#cq-t").value,D=+$("#cq-d").value;$("#cq-t").nextElementSibling.textContent=T+" kg";$("#cq-d").nextElementSibling.textContent=D+" 天";
+ const raw=DAYS.map((d,i)=>{const v=$("#wt"+i).value.trim();return v===""?null:+v});let vals=raw.slice();const notes=[];
+ if(cqm==="carry"){let last=null;vals=vals.map(v=>{if(v==null)return last;last=v;return v})}
+ const out=DAYS.map((d,i)=>{if(i<D-1)return {s:"n/a"};const cur=vals[i],prev=vals[i-(D-1)];if(raw[i]==null&&cqm==="flag")return {s:"miss"};if(cur==null||prev==null)return {s:cqm==="flag"?"miss":"skip"};const diff=cur-prev;return {s:diff>T?"alert":"ok",diff}});
+ const implaus=raw.map((v,i)=>v!=null&&(v>140||v<25));
+ $("#cql").textContent=`define "體重明顯上升":\n  exists (\n    [Observation: "Body weight"] W\n      where W.effective within ${D-1} days\n        and Δ(W.value as kg) > ${T} 'kg'\n  )\n// 缺值處理：${cqm==="skip"?"資料不足時不判斷":cqm==="flag"?"當日缺測即提示個管師":"沿用前一筆數值（會掩蓋缺測）"}`;
+ const s=$("#cqsvg"),L=50,R=740,B=180,T0=20;const nums=raw.filter(v=>v!=null&&v<140&&v>25);const mn=Math.min(...nums,69)-0.5,mx=Math.max(...nums,74)+0.5;const X=i=>L+i*(R-L)/6,Y=v=>B-(v-mn)/(mx-mn)*(B-T0);let g="";for(let v=Math.ceil(mn);v<=mx;v++){g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}</text>`}
+ let d="";let pen=false;vals.forEach((v,i)=>{if(v==null||v>140){pen=false;return}d+=(pen?"L":"M")+X(i)+","+Y(v);pen=true});g+=`<path d="${d}" fill="none" stroke="${C.navy2}" stroke-width="2.5"/>`;
+ raw.forEach((v,i)=>{const o=out[i];const col=o.s==="alert"?C.ochre:o.s==="miss"?C.amber:o.s==="ok"?C.green:C.gray;if(v!=null&&v<140&&v>25)g+=`<circle cx="${X(i)}" cy="${Y(v)}" r="6" fill="#fff" stroke="${C.navy2}" stroke-width="2"/>`;else if(v==null){g+=`<text x="${X(i)}" y="${(B+T0)/2}" font-size="12" text-anchor="middle" fill="${C.amber}">缺測</text>`;if(cqm==="carry"&&vals[i]!=null)g+=`<circle cx="${X(i)}" cy="${Y(vals[i])}" r="5" fill="${C.gray}" opacity=".6"/>`}else g+=`<text x="${X(i)}" y="${T0+12}" font-size="12" text-anchor="middle" fill="${C.ochre}" font-weight="700">${v}?</text>`;
+  g+=`<rect x="${X(i)-34}" y="${B+10}" width="68" height="22" rx="6" fill="${col}"/><text x="${X(i)}" y="${B+25}" font-size="11.5" text-anchor="middle" fill="#fff" font-weight="700">${o.s==="alert"?"⚠ 警示":o.s==="miss"?"缺測提示":o.s==="ok"?"正常":o.s==="skip"?"不判斷":"—"}</text><text x="${X(i)}" y="${B+46}" font-size="11" text-anchor="middle" fill="${C.mute}">${DAYS[i]}</text>`});
+ s.innerHTML=g;const al=out.filter(o=>o.s==="alert").length,ms=out.filter(o=>o.s==="miss").length;let msg=`這週規則觸發 <b style="color:var(--ochre)">${al}</b> 次警示`+(cqm==="flag"?`、<b style="color:#8A5F17">${ms}</b> 次缺測提示`:"")+"。";
+ if(implaus.some(x=>x))msg+=`<br><b style="color:var(--ochre)">合理性問題：</b>有一筆數值明顯不像公斤（可能是磅），規則直接相減會產生錯誤警示——先辨識單位再計算（第 12 段）。`;
+ if(cqm==="carry"&&raw.some(v=>v==null))msg+=`<br><b>沿用前一筆</b>會讓缺測日看起來「正常」，個管師不知道其實沒量——這就是先訂缺值處理的原因。`;
+ if(cqm==="skip"&&raw.some(v=>v==null))msg+=`<br>缺測日不判斷：系統安靜，但「沒量」本身可能就是警訊（W10 失聯處置）。`;$("#cqtxt").innerHTML=msg}
+$("#cq-t").oninput=cq;$("#cq-d").oninput=cq;segInit("#cq-m",d=>{cqm=d.v;cq()});$$("[data-wp]").forEach(b=>b.onclick=()=>{WP[b.dataset.wp].forEach((v,i)=>$("#wt"+i).value=v);cq()});cq();
+
+/* 11 EMRAM + loop */
+const EM=["部門系統尚未建置","輔助系統已建置","臨床資料儲存與整合","電子紀錄與安全強化","治理與電子醫囑","資料整合","進階資料交換","動態健康紀錄"];
+(function(){const r=$("#ladder");let sel=4;function draw(){r.innerHTML="";EM.forEach((t,i)=>{const col=`hsl(${215-i*4},${30+i*5}%,${62-i*5}%)`;const d=h("div",{class:"rung"+(i===sel?" sel":"")},`<div class="rn" style="background:${i===7?C.ochre:col}">${i}</div><div class="rc">${t}</div>`);d.onclick=()=>{sel=i;draw()};r.appendChild(d)});$("#ladtxt").innerHTML=`<b>第 ${sel} 階：${EM[sel]}</b><br>${sel===7?"臺北榮總 2025-12 通過；林口長庚、高醫亦取得第 7 級（2025-07）。連第 7 階醫院都還在補「跨院交換」與「病人資料回流」。":sel>=5?"資料整合與交換：本週主題正落在這幾階。":"公開摘要用來理解方向，正式階級還需要完整條件與驗證證據。"}<div class="note" style="margin-top:10px">台灣通過家數會變動，以 HIMSS 公告為準。</div>`}draw()})();
+const LP=["醫師開立","藥師核對","藥局調劑","病房給藥","身分＋藥物條碼","回寫用藥紀錄"];let lpCut=-1;
+function drawLoop(){const s=$("#loop"),cx=380,cy=135,R=105,rx=250;let g="";LP.forEach((t,i)=>{const a=-Math.PI/2+i*2*Math.PI/LP.length,a2=-Math.PI/2+(i+1)*2*Math.PI/LP.length;const x1=cx+rx*Math.cos(a),y1=cy+R*Math.sin(a),x2=cx+rx*Math.cos(a2),y2=cy+R*Math.sin(a2);const broken=lpCut>=0&&i>=lpCut;g+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${broken?C.ochre:C.green}" stroke-width="3" ${broken?'stroke-dasharray="6 5"':""}/>`});
+ LP.forEach((t,i)=>{const a=-Math.PI/2+i*2*Math.PI/LP.length,x=cx+rx*Math.cos(a),y=cy+R*Math.sin(a);const on=lpCut===i;g+=`<g class="lpn" data-i="${i}" style="cursor:pointer"><rect x="${x-62}" y="${y-18}" width="124" height="36" rx="18" fill="${on?C.ochre:"#fff"}" stroke="${on?C.ochre:C.navy2}" stroke-width="2"/><text x="${x}" y="${y+5}" font-size="13" text-anchor="middle" font-weight="700" fill="${on?"#fff":C.navy}">${t}</text></g>`});
+ g+=`<text x="${cx}" y="${cy-4}" font-size="18" text-anchor="middle" font-weight="900" fill="${lpCut<0?C.green:C.ochre}">${lpCut<0?"用藥閉環":"閉環斷了"}</text><text x="${cx}" y="${cy+16}" font-size="12" text-anchor="middle" fill="${C.mute}">${lpCut<0?"每一步可追溯、資料回流":"斷點之後無法追溯"}</text>`;s.innerHTML=g;s.querySelectorAll(".lpn").forEach(e=>e.onclick=()=>{const i=+e.dataset.i;lpCut=lpCut===i?-1:i;drawLoop()});
+ $("#looptxt").innerHTML=lpCut<0?"做到的事：輸血 12 環節也閉環；500 萬人資料的大數據中心與資料中台；85 個 AI 專案（含規畫中）。<br>仍待補強：門急住系統切換、AI 未全進入日常流程、跨院交換、病人資料回流。點任一環節模擬「沒有回寫」。":`<b>「${LP[lpCut]}」沒有留下電子紀錄：</b>之後的步驟無法確認是同一個病人、同一個藥——AI 拿到的用藥資料也會缺一段。<span style="color:var(--mute)">這就是「做了，但資料沒有回到系統」。</span>`}
+drawLoop();
+mcq("#nbq",[
+ {q:"根據這些資訊，北城醫院的 EMRAM 是第幾階？",o:["第 4 階（電子醫囑過九成）","第 5 階","資訊不足以判定正式等級；應提出缺口與驗收方式","第 7 階"],a:2,e:"常見誤解：「有電子醫囑就到第 4 階」。正式階級需依完整條件評估。"},
+ {q:"院方想先買 AI 預警，你會建議？",o:["馬上買，AI 最重要","先補護理紀錄電子化與居家量測接回，AI 才有可靠的輸入資料","兩者都不做","只買更多電腦"],a:1,e:"資料流得通，智慧才長得出來；買系統不等於完成改善——要寫出責任與驗收方式。"}]);
+
+/* 12 DQ + time */
+choiceRows("#dqq",[["單位欄寫「公斤」，但約定要求 UCUM kg",0,"符合性：欄位與代碼有按規則嗎？"],["每天應有一次量測，週末兩天沒有紀錄",1,"完整性：需要的資料有沒有缺？"],["體重 725 kg",2,"合理性：數值可信嗎？需回查輸入或裝置。"],["LOINC 欄位填了院內自編碼",0,"符合性：代碼系統不符約定。"],["量測時間比出生日期還早",2,"合理性：時間不可信。"],["出院摘要缺少用藥調整理由欄",1,"完整性。"]],["符合性","完整性","合理性"],"#dqscore");
+function tz(){const v=$("#tz-in").value.trim();let html="";const mD=v.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(mD){html=`<b>只有日期：</b>${v}<br>不能精確排序，<b>保留「時間未知」</b>；不要補成 00:00 當作真實量測時間。`}else{const d=new Date(v);if(isNaN(d)){html="無法解析，請用 2026-10-11T23:00:00Z 這類格式。"}else{const tw=new Date(d.getTime()+8*3600e3);const s=`${tw.getUTCFullYear()}-${String(tw.getUTCMonth()+1).padStart(2,"0")}-${String(tw.getUTCDate()).padStart(2,"0")} ${String(tw.getUTCHours()).padStart(2,"0")}:${String(tw.getUTCMinutes()).padStart(2,"0")}`;const hasZ=/Z$|[+-]\d{2}:\d{2}$/.test(v);html=`<b>臺灣時間（UTC+8）：</b><span style="font-size:20px;font-weight:900;color:var(--navy)">${s}</span><br>${hasZ?"同一時刻換表示法；不能再重加八小時。":"⚠ 沒有時區：無法確定是哪一個時刻，需向來源確認。"}${v.endsWith("Z")&&s.startsWith("2026-10-12 07:00")?"<br>和門診 10/12 09:10+08:00 比：藥局這筆較早，兩筆都在臺灣 10/12 上午，但<b>不是同一次量測</b>。":""}`}}$("#tz-out").innerHTML=html}
+$("#tz-in").oninput=tz;$$("[data-tz]").forEach(b=>b.onclick=()=>{$("#tz-in").value=b.dataset.tz;tz()});tz();
+
+/* 13 records */
+const RECS=[["1","門診量測","10/12 09:10+08:00","72.5","kg","院內診療"],["2","女兒代傳","2026-10-12","160","[lb_av]","僅個管師可看"],["3","社區藥局","10/11 23:00Z","71.0","kg","未載明"],["4","長照機構","未提供","70.8","未提供","未載明"]];
+const RP=["單位","時間","身分／來源","用途"];const RD=["可用（限載明用途）","可供個管檢視，並標示待補","補件後再用","退回來源，不猜補"];
+const RANS=[{p:[],d:0,e:"院內診療可用。院內診療用途不能自動推成模型訓練。"},{p:[0,1,2],d:1,e:"160×0.45359237＝72.5747792 kg，約 72.6 kg（單位不同不是錯誤，要保留原值與轉換規則）；只有日期不能精確排序；需確認量測者與裝置。依題設可供個管師檢視。"},{p:[1,3],d:2,e:"23:00Z＝臺灣 10/12 07:00，與第 1 筆同在臺灣上午但不是同一時刻；用途未載明需確認，並非直接判定違法。"},{p:[0,1,3],d:3,e:"時間與單位皆缺，不應猜補，退回來源。"}];
+const recState=LS.get("rec",RECS.map(()=>({p:[],d:"",n:""})));
+(function(){const t=$("#rect");t.innerHTML=`<tr><th>筆</th><th>來源</th><th>時間</th><th>數值</th><th>單位</th><th>已知用途</th><th>問題（可複選）</th><th>處置</th><th>需補證據</th></tr>`+RECS.map((r,i)=>`<tr id="rr${i}"><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td><div class="chk">${RP.map((p,k)=>`<label class="${recState[i].p.includes(k)?"on":""}"><input type="checkbox" data-r="${i}" data-k="${k}" ${recState[i].p.includes(k)?"checked":""}>${p}</label>`).join("")}</div></td><td><select data-r="${i}" class="rd"><option value="">選擇…</option>${RD.map((d,k)=>`<option value="${k}" ${String(recState[i].d)===String(k)?"selected":""}>${d}</option>`).join("")}</select></td><td><input data-r="${i}" class="rn" value="${recState[i].n.replace(/"/g,"&quot;")}" placeholder="例：確認量測時間" style="width:100%;padding:5px;border:1px solid var(--line2);border-radius:7px;font-size:12.5px"></td></tr>`).join("");
+ $$("#rect input[type=checkbox]").forEach(c=>c.onchange=()=>{const i=+c.dataset.r,k=+c.dataset.k;c.parentElement.classList.toggle("on",c.checked);const a=recState[i].p;c.checked?a.includes(k)||a.push(k):a.splice(a.indexOf(k),1);LS.set("rec",recState)});
+ $$("#rect .rd").forEach(s=>s.onchange=()=>{recState[+s.dataset.r].d=s.value;LS.set("rec",recState)});$$("#rect .rn").forEach(s=>s.oninput=()=>{recState[+s.dataset.r].n=s.value;LS.set("rec",recState)})})();
+$("#recchk").onclick=()=>{let html="";RANS.forEach((a,i)=>{const st=recState[i];const pOk=a.p.length===st.p.length&&a.p.every(x=>st.p.includes(x));const dOk=String(st.d)===String(a.d);$("#rr"+i).className=pOk&&dOk?"good":"badr";html+=`<div class="${pOk&&dOk?"okmsg":"detail"}" style="margin-top:6px"><b>第 ${i+1} 筆</b>　問題${pOk?"✓":"✕（參考："+(a.p.length?a.p.map(k=>RP[k]).join("、"):"無")+"）"}　處置${dOk?"✓":"✕（參考："+RD[a.d]+"）"}<br>${a.e}</div>`});html+=`<div class="warn" style="margin-top:6px"><b>共同結論：</b>四筆都沒有足夠資訊授權直接訓練 AI；權限屬題目設定，真實法律依據與研究審查在 W13 展開。</div>`;$("#recfb").innerHTML=html};
+$("#reccopy").onclick=()=>{const t="【W3 四筆資料處置表】\n"+RECS.map((r,i)=>{const s=recState[i];return `第${r[0]}筆（${r[1]}｜${r[2]}｜${r[3]} ${r[4]}｜${r[5]}）\n　問題：${s.p.map(k=>RP[k]).join("、")||"無"}\n　處置：${s.d===""?"（未選）":RD[+s.d]}\n　需補證據：${s.n||"（未填）"}`}).join("\n");copyText(t,"#recmsg")};
+function etl(){const v=+$("#etl-v").value,u=$("#etl-u").value,t=$("#etl-t").value,s=$("#etl-s").value;const f={lb:0.45359237,kg:1,g:0.001}[u],kg=v*f;const un={lb:"[lb_av]",kg:"kg",g:"g"}[u];
+ const pend=[];if(t==="0")pend.push("量測時間不明（只有日期）→ 不得混入逐時趨勢");if(s==="0")pend.push("家屬代傳，需確認量測對象為王伯伯");
+ const plaus=kg<25||kg>250;$("#etl-log").textContent=`# ETL 處理紀錄（合成資料）\n[取出] 原始值 ${v}，原始單位 ${un}（保留，不覆蓋來源）\n[轉換] ${u==="kg"?"單位已是 kg，不需轉換":`${v} × ${f} ＝ ${(+kg.toFixed(7))} kg`}\n[顯示] 約 ${kg.toFixed(1)} kg（四捨五入只為易讀）\n[合理性] ${plaus?"⚠ 數值不合理，回查輸入或裝置":"通過（25–250 kg）"}\n[狀態] ${pend.length?"未完成":"可存入（限個管檢視用途）"}\n${pend.map(p=>"  - "+p).join("\n")}\n[用途] 個管檢視與模型訓練分開確認；\n       記錄誰核准、何時核准`}
+["#etl-v","#etl-u","#etl-t","#etl-s"].forEach(id=>{$(id).oninput=etl;$(id).onchange=etl});etl();
+
+/* 14 global */
+const GC=[{id:"ee",n:"愛沙尼亞",html:`<div class="grid3"><div class="kpi"><div class="v">約 130<small> 萬</small></div><div class="l">人口；國民以電子身分證使用公共服務</div></div><div class="kpi"><div class="v">2008</div><div class="l">年底上線全國系統，整合各院資料、可依需要向各院取資料</div></div><div class="kpi g"><div class="v">99%</div><div class="l">處方以電子方式開立（官方資料）</div></div></div><p class="note">先有數位身分與交換骨幹，醫療資料才能搭上國家基礎建設。限制：小國、單一數位身分；經驗需依體制轉譯。</p>`},
+ {id:"tefca",n:"美國 TEFCA",html:`<div class="grid3"><div class="kpi"><div class="v">11</div><div class="l">合格健康資訊網路（QHIN）</div></div><div class="kpi"><div class="v">71,000＋</div><div class="l">參與的據點或組織</div></div><div class="kpi"><div class="v">4.64<small> 億</small></div><div class="l">累計交換文件（截至 2025 年底）</div></div></div><div class="grid2" style="margin-top:12px"><svg viewBox="0 0 380 240" class="chart" id="tefsvg"></svg><div><div class="seg" id="tefseg" style="display:flex;width:fit-content"><button class="on" data-m="ok">正確：兩個時點</button><button data-m="bad">錯誤示範：畫成曲線</button></div><div class="detail" id="teftxt"></div></div></div><p class="note">2023 年 12 月 12 日上線。TEFCA 的核心是共同協議：組織層的信任與法律安排最難。文件交換量是使用指標，不等於照護結果改善。</p>`},
+ {id:"au",n:"澳洲 My Health Record",html:`<div class="grid3"><div class="kpi"><div class="v">2,516<small> 萬</small></div><div class="l">份個人健康紀錄（2026 年 7 月）</div></div><div class="kpi"><div class="v">24<small> 億</small></div><div class="l">累計上傳文件</div></div><div class="kpi"><div class="v">2019</div><div class="l">起預設建立（選擇退出），可設定存取控制</div></div></div><div class="wd" style="margin-top:12px"><div class="wh"><h3 style="font-size:16px">註冊 ≠ 使用</h3><span class="tag gray">ADHA 2026-07</span></div><svg viewBox="0 0 760 210" class="chart" id="ausvg"></svg></div><p class="note">預設選項能快速擴大涵蓋，但需透明的隱私保障與退出機制；2018 年改制期間曾引發隱私爭議。</p>`},
+ {id:"uk",n:"英國 NPfIT",html:`<div class="grid3"><div class="kpi"><div class="v">2002–2011</div><div class="l">英格蘭國家醫療資訊計畫，2011 宣布解散</div></div><div class="kpi o"><div class="v">約 98<small> 億英鎊</small></div><div class="l">英國審計署估計成本（2013）；病歷系統目標未達成</div></div><div class="kpi"><div class="v">留下</div><div class="l">Spine、N3 網路、PACS 等基礎建設延續使用</div></div></div><div class="detail">做法：中央統一採購，由大型承包商分區建置。問題：在地需求差異大、臨床參與不足、交付延誤。<br><b>教訓：共同標準加上在地彈性，比一套系統統一全國更可行。</b></div>`},
+ {id:"sg",n:"Surgisphere",html:`<div class="grid3"><div class="kpi"><div class="v">671</div><div class="l">家醫院、六大洲（宣稱）</div></div><div class="kpi"><div class="v">約 9.6<small> 萬</small></div><div class="l">位病人（宣稱）</div></div><div class="kpi o"><div class="v">2020-06-04</div><div class="l">Lancet 與 NEJM 相關論文同日撤稿</div></div></div><div class="detail">WHO 一度暫停羥氯奎寧試驗分組；資料公司未能提供原始資料供第三方稽核。<br><b>資料很多不等於資料可信：來源可追溯，是互通與 AI 的前提。</b></div>`},
+ {id:"cmp",n:"比較",html:`<div class="grid3" id="gcmp"></div><div class="detail" id="gcmptxt">點選任一案例。</div>`}];
+(function(){const tb=$("#gtabs"),pn=$("#gpanels");GC.forEach((c,i)=>{const b=h("button",{class:i===0?"on":""},c.n);b.onclick=()=>{$$("#gtabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");$$("#gpanels .tabp").forEach(p=>p.classList.toggle("on",p.dataset.id===c.id))};tb.appendChild(b);const p=h("div",{class:"tabp"+(i===0?" on":"")},c.html);p.dataset.id=c.id;pn.appendChild(p)})})();
+function tef(m){const s=$("#tefsvg"),L=56,R=370,B=200,T=20,max=500;const Y=v=>B-v/max*(B-T);let g="";[0,100,200,300,400,500].forEach(v=>g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}</text>`);const x1=L+70,x2=R-70;
+ if(m==="ok"){[[x1,10,"2025 年以前"],[x2,464,"2025 年底"]].forEach(([x,v,l],i)=>{g+=`<rect x="${x-34}" y="${Y(v)}" width="68" height="${B-Y(v)}" rx="3" fill="${i?C.navy2:C.gray}"/><text x="${x}" y="${Y(v)-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${i?C.navy2:C.gray}">${v}</text><text x="${x}" y="${B+18}" font-size="12.5" text-anchor="middle">${l}</text>`});$("#teftxt").innerHTML="<b>能看出：</b>2025 年交換量大幅增加。<br><b>看不出：</b>每月趨勢、文件類型、照護是否改善。<br><b>解讀：</b>參與者增加可能帶動網路效應（推論）。單位：百萬份（累計）。"}
+ else{let d="";for(let k=0;k<=12;k++){const x=x1+(x2-x1)*k/12,v=10*Math.pow(46.4,k/12);d+=(k?"L":"M")+x+","+Y(v)}g+=`<path d="${d}" fill="none" stroke="${C.ochre}" stroke-width="3" stroke-dasharray="6 4"/><circle cx="${x1}" cy="${Y(10)}" r="6" fill="${C.gray}"/><circle cx="${x2}" cy="${Y(464)}" r="6" fill="${C.navy2}"/><text x="${(x1+x2)/2}" y="${Y(250)}" font-size="13" text-anchor="middle" fill="${C.ochre}" font-weight="700">「每月成長 38%」？</text>`;$("#teftxt").innerHTML="<b>錯誤示範：</b>把兩個點連成指數曲線，算出「每月成長約 38%」。<br>問題：前一時點沒有確切日期、中間沒有任何資料——曲線形狀與成長率都是<b>編出來的</b>。<br>只有兩個時點，不宜畫成連續成長曲線或推算月成長率。"}
+ s.innerHTML=g}
+segInit("#tefseg",d=>tef(d.m));tef("ok");
+(function(){const s=$("#ausvg");const rows=[["公立醫院",97,95],["專科醫師",76,45],["長照機構",57,21]];const L=110,R=620;let g="";rows.forEach(([n,a,b],i)=>{const y=20+i*60;g+=`<text x="${L-10}" y="${y+22}" font-size="13" text-anchor="end" font-weight="700" fill="${C.navy}">${n}</text><rect x="${L}" y="${y}" width="${(R-L)*a/100}" height="18" rx="3" fill="${C.navy2}"/><text x="${L+(R-L)*a/100+6}" y="${y+14}" font-size="12" fill="${C.navy2}" font-weight="700">註冊 ${a}%</text><rect x="${L}" y="${y+22}" width="${(R-L)*b/100}" height="18" rx="3" fill="${C.ochre}"/><text x="${L+(R-L)*b/100+6}" y="${y+36}" font-size="12" fill="${C.ochre}" font-weight="700">實際使用 ${b}%</text>`});s.innerHTML=g})();
+(function(){const R=[["愛沙尼亞","全國系統；數位身分","全民紀錄、電子處方普及","小國情境"],["美國 TEFCA","網路的網路；共同協議","跨網路交換量擴大","交換量≠照護改善"],["澳洲 MHR","集中式；選擇退出","涵蓋與文件量大","隱私信任、使用深度"],["英國 NPfIT","中央統一採購","失敗教訓","部分基礎建設延續"],["台灣","健保雲端＋交換中心＋大平臺","全民健保資料涵蓋廣","申報與臨床脈絡落差"]];const g=$("#gcmp");R.forEach(r=>{const d=h("div",{class:"kpi",style:"cursor:pointer"},`<div style="font-weight:900;color:var(--navy)">${r[0]}</div><div class="l">${r[1]}</div>`);d.onclick=()=>$("#gcmptxt").innerHTML=`<b>${r[0]}｜${r[1]}</b><br><span class="plus">可支持：</span>${r[2]}<br><span class="minus">仍需注意：</span>${r[3]}`;g.appendChild(d)})})();
+
+/* 15 Particle */
+(function(){const T=[["2024-03","Epic 發現 Particle 的客戶將資料提供給保險方（BCBS Michigan），開始切斷部分 Particle 客戶的 EHR 資料存取"],["2024-09","Particle 提起反壟斷訴訟，主張 Epic 濫用市場地位（紐約南區聯邦法院）"],["2025-09-04","法院部分駁回、部分准予續審（壟斷主張保留），進入證據開示"],["2026-01","Epic 另告 Health Gorilla 及其客戶，指以醫療提供者名義取得近 30 萬筆病歷"]];const r=$("#pctl");T.forEach(([d,t],i)=>r.appendChild(h("div",{style:"display:grid;grid-template-columns:110px 1fr;gap:10px;margin:6px 0;align-items:start"},`<span class="tag ${i===T.length-1?"o":""}" style="text-align:center">${d}</span><span style="font-size:14.5px">${t}</span>`)));r.appendChild(h("p",{class:"note"},"進行中事項：課前請再確認最新狀態。"))})();
+$$("#pcvote button").forEach(b=>b.onclick=()=>{$$("#pcvote button").forEach(x=>x.classList.remove("on"));b.classList.add("on");$("#pcres").style.display="block";LS.set("vote",b.dataset.v)});
+
+/* 16 improvement + exit */
+const IF=["i-team","i-ev","i-act","i-own","i-acc"];const iS=LS.get("imp",{});IF.forEach(id=>{if(iS[id])$("#"+id).value=iS[id];$("#"+id).addEventListener("input",iOut)});if(iS.gap)$("#i-gap").value=iS.gap;$("#i-gap").onchange=iOut;
+togGroup("#i-layer",["基礎（傳遞）","結構（格式）","語意（代碼）","組織（授權）"],iOut,iS.lay||[]);
+function iVals(){const o={};IF.forEach(id=>o[id]=$("#"+id).value.trim());o.gap=$("#i-gap").value;o.lay=togVals("#i-layer").map((v,i)=>v?i:-1).filter(i=>i>=0);return o}
+function iOut(){const o=iVals();LS.set("imp",o);const L=["基礎","結構","語意","組織"];const v=x=>x||"<span style='color:var(--mute2)'>（未填）</span>";$("#i-out").innerHTML=`<div style="font-weight:900;color:var(--navy);margin-bottom:8px">改善表預覽　${o["i-team"]}</div><dl><dt>缺口</dt><dd>${o.gap}</dd><dt>卡在哪一層</dt><dd>${o.lay.map(i=>L[i]).join("、")||v("")}</dd><dt>證據與未知</dt><dd>${v(o["i-ev"])}</dd><dt>改善做法</dt><dd>${v(o["i-act"])}</dd><dt>負責人</dt><dd>${v(o["i-own"])}</dd><dt>驗收方式</dt><dd>${v(o["i-acc"])}</dd></dl>`}
+iOut();$("#i-copy").onclick=()=>{const o=iVals();const L=["基礎","結構","語意","組織"];copyText(`【W3 改善表】${o["i-team"]}\n缺口：${o.gap}\n卡在哪一層：${o.lay.map(i=>L[i]).join("、")||"（未選）"}\n證據與未知：${o["i-ev"]||"（未填）"}\n改善做法：${o["i-act"]||"（未填）"}\n負責人：${o["i-own"]||"（未填）"}\n驗收方式：${o["i-acc"]||"（未填）"}`,"#i-msg")};
+mcq("#exq",[
+ {q:"160 磅換成公斤後（約 72.6 kg），還要確認什麼？",o:["不用再確認","量測時間、是否王伯伯本人、來源裝置、修訂狀態或用途（任兩項）","只要確認小數點","只要確認是公斤"],a:1,e:"換算只解決單位；身分、時間與用途仍待確認。"},
+ {q:"10/11 23:00Z 與 10/12 07:00+08:00，哪筆較新？",o:["23:00Z 較新","07:00+08:00 較新","同一時刻","無法比較"],a:2,e:"同一時刻、兩種表示法——但相同時刻不自動證明是同一來源或重複紀錄。"},
+ {q:"醫院取得高成熟度認證，就能直接讓新 AI 上線嗎？",o:["可以","不能只憑認證推論；需另查資料品質、使用目的、在地驗證與責任流程","只要廠商同意就可以","第 7 階就可以"],a:1,e:"成熟度是流程與資料的方向指標，不是 AI 上線許可。"}],"#exscore");
+
+/* 17 glossary + quiz */
+const GL=[["FHIR Resource","","一類標準資料單位，例如病人或量測紀錄"],["LOINC／UCUM","","前者說量什麼，後者說用什麼單位"],["Profile／IG","","Profile 訂約束，IG 整理某地區或用途的實作規則"],["SMART／CQL","","前者管 App 啟動與授權，後者表達判斷邏輯"],["ETL／OMOP CDM","","前者是資料整理流程，後者是常用研究資料模型"],["EMRAM","","用 0–7 階描述醫院電子病歷使用成熟度的模型"],["TWCDI","臺灣核心資料集","哪些健康資料需要能交換（第一版 20 類、109 項欄位）"],["TEFCA","","美國「網路的網路」：共同協議一次簽署、跨網路交換"]];
+(function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}${b?`<small>${b}</small>`:""}</div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
+mcq("#final",[
+ {q:"以 PDF 傳出院摘要，達到互通的哪一層？",o:["基礎","結構","語意","組織"],a:0,e:"能傳，但機器難以拆解——結構層還沒到。"},
+ {q:"20 家醫院兩兩點對點串接，需要幾條介面？",o:["20","40","190","400"],a:2,e:"N×(N−1)/2 ＝ 20×19/2 ＝ 190。"},
+ {q:"「血壓讀值偏高，未診斷高血壓」應編？",o:["I10","R03.0","8480-6","85354-9"],a:1,e:"讀值偏高不等於診斷。"},
+ {q:"NT-proBNP 與 BNP 的關係？",o:["同一檢驗","不同檢驗、代碼與參考值都不同，不可混比","單位不同而已","可以直接換算"],a:1,e:"LOINC 33762-6 vs 30934-4。"},
+ {q:"FHIR 血壓 85354-9 的收縮壓與舒張壓應放在？",o:["主層 valueQuantity","component","note","category"],a:1,e:"主層不放單一 valueQuantity；兩個 component 都要有。"},
+ {q:"subject.reference = Patient/wang 代表？",o:["王伯伯的身分證字號","伺服器內指向病人資源的參照，不能直接當作跨院通用的身分證明","醫院病歷號","女兒的帳號"],a:1,e:"跨院還要知道識別碼的發放者。"},
+ {q:"居家體重通常用哪個時間排序趨勢？",o:["meta.lastUpdated","issued","effective[x] 實際量測時間","上傳時間"],a:2,e:"issued、lastUpdated 都不代表重新量過。"},
+ {q:"「3 日體重增加 >2 kg」這條判斷邏輯，最適合用哪個標準表達？",o:["FHIR","CQL","SMART","DICOM"],a:1,e:"CQL 表達規則；先訂門檻與缺值處理。"},
+ {q:"美國 TEFCA 只有兩個公開累計時點，正確做法？",o:["畫成指數曲線並推算月成長率","呈現兩個時點，說明能看出與看不出什麼","用平均成長率外推到 2030","刪掉不報"],a:1,e:"只有兩個時點，不宜畫成連續成長曲線。"},
+ {q:"Particle 控告 Epic 的爭議主要卡在互通哪一層？",o:["基礎","結構","語意","組織：用途、信任與誘因"],a:3,e:"技術上已經傳得到；爭議在誰、為了什麼用途、由誰判定。"}],"#finalscore");
+})();
+</script>
+</body>
+</html>
