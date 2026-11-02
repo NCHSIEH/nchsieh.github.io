@@ -219,6 +219,9 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 .rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
 .rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .scoreline{font-weight:700;color:var(--navy)}
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
 </style>
 </head>
 <body>
@@ -227,6 +230,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <span class="meta">/ W1 智慧醫療的範疇與價值框架</span>
   <span class="sp"></span>
   <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與評估表草稿">重置進度</button>
 </div></div>
 
 <div class="layout">
@@ -628,6 +632,7 @@ parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelect
 function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
 const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
 parts.forEach(p=>io.observe(p));prog();
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w1-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
 
 /* ---------- generic MCQ ---------- */
 function mcq(container,items,scoreEl){

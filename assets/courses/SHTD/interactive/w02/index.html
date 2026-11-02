@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W2 智慧醫療科技演進與國際趨勢 · 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+<style>
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.spec{grid-template-columns:1fr}}
+.spec label{display:block;font-weight:700;color:var(--navy);font-size:14px;margin:8px 0 4px}
+.spec select{width:100%;padding:7px;border-radius:8px;border:1px solid var(--line2);background:#fff}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;margin:6px 0}
+.lane .ln{font-weight:700;color:#fff;border-radius:8px;padding:8px;font-size:13px;text-align:center}
+.lane .track{position:relative;height:96px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.ms{position:absolute;top:6px;transform:translateX(-50%);text-align:center;cursor:pointer;width:84px}
+.ms.lo{top:48px}
+.ms .d{width:14px;height:14px;border-radius:50%;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.ms .y{font-size:11px;color:var(--mute);margin-top:2px}
+.ms .n{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2}
+.ms.on .d{box-shadow:0 0 0 3px var(--ochre)}
+.conf{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:420px}
+.conf i{display:block;aspect-ratio:1;border-radius:3px}
+.cell2{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:13.5px;margin-top:10px}
+.cell2 div{padding:8px;border-radius:8px;background:var(--paper);border:1px solid var(--line)}
+.cell2 .h{background:var(--navy-l);font-weight:700;color:var(--navy);text-align:center}
+.agent{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.astep{flex:1;min-width:130px;border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.astep b{display:block;color:var(--navy);font-size:15px}
+.astep.run{border-color:var(--navy2);background:var(--navy-l)}
+.astep.ok{border-color:var(--green);background:var(--green-l)}
+.astep.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.astep.skip{opacity:.45}
+.tree{display:flex;flex-direction:column;gap:8px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.tq.dim{opacity:.4}
+.tq b{color:var(--navy)}
+.tres{border-radius:10px;padding:12px 16px;color:#fff;font-weight:700;font-size:16px}
+.reg{display:grid;grid-template-columns:120px repeat(3,1fr);gap:6px;font-size:13.5px}
+.reg .h{background:var(--navy);color:#fff;font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.reg .rh{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;display:flex;align-items:center}
+.reg .c{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;min-height:54px;color:var(--mute2)}
+.reg .c.open{color:var(--ink);background:#fff;border-color:var(--navy2)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.prin{grid-template-columns:1fr}}
+.prin .pc{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.prin .pc h4{margin:0 0 4px;color:var(--navy);font-size:15px}
+.prin select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff;margin-top:4px;font-size:13px}
+.gen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.gen{grid-template-columns:1fr}}
+.gen .gc2{border:2px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.gen .gc2 h4{margin:0;color:var(--navy)}
+.gen label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;margin:6px 0;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W2 智慧醫療科技演進與國際趨勢</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與草稿">重置進度</button>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W2 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div class="code">WEEK 2 · 科技發展主軸 · AI 能力、臨床證據與治理條件</div>
+  <h1>智慧醫療科技演進與國際趨勢</h1>
+  <div class="en">Evolution of Smart Health Technologies &amp; Global Trends</div>
+  <p class="lead">同一個問題貫穿本週：虛構產品 <b>HF-Guard</b>（心衰竭惡化預警）如何進入安全、有效且可持續的照護？沿著「技術 → 證據 → 制度 → 回到產品」走一遍，每段都有可以動手的數據或判斷練習。</p>
+  <div class="chips"><a class="tag" href="../../W02_智慧醫療科技演進與國際趨勢_Evolution_and_Global_Trends.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W2）</a><span class="tag o">承上 W1 價值框架・啟下 W3 資料互通</span><span class="tag a">標「擬真假設／概念示意」者為教學參數</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<!-- 01 -->
+<section class="part" id="p01" data-t="HF-Guard：先界定用途">
+  <div class="ph"><span class="num">01</span><div><h2>開場：HF-Guard 要先界定用途</h2><div class="en">INTENDED USE FIRST · 虛構產品，尚無試驗結果</div></div></div>
+  <p class="one">先界定<b>用途</b>與<b>誰會據此行動</b>，之後才討論分類、證據與許可。</p>
+  <div class="wd">
+    <div class="wh"><h3>預期用途產生器：選完設定，看它會開啟哪些治理問題</h3><span class="tag o">互動</span></div>
+    <div class="spec">
+      <div>
+        <label>資料</label><select id="hf-data"><option value="0">每日體重、血壓、心率（居家設備）</option><option value="1">再加上病歷用藥與檢驗</option><option value="2">再加上穿戴裝置連續心律</option></select>
+        <label>輸出</label><select id="hf-out"><option value="0">未來 7 天惡化風險分數</option><option value="1">風險分級＋建議處置</option><option value="2">直接判定「需就醫」</option></select>
+        <label>行動：誰據此做什麼</label><select id="hf-act"><option value="0">通知個管師，由團隊依流程處理</option><option value="1">同時以 LINE 通知王伯伯與女兒</option><option value="2">自動預約回診並調整利尿劑建議</option></select>
+        <label>回應時限</label><select id="hf-time"><option value="0">當日上班時段內</option><option value="1">4 小時內（含夜間）</option><option value="2">未定</option></select>
+      </div>
+      <div><div class="detail" id="hf-stmt" style="margin-top:0"></div><div id="hf-q"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="part" id="p02" data-t="形成條件">
+  <div class="ph"><span class="num">02</span><div><h2>醫療 AI 應用增加的形成條件</h2><div class="en">DATA · COMPUTE · ALGORITHMS · DEMAND</div></div></div>
+  <p class="one">1995 年已有早期 AI 醫材；有資料和模型之後，<b>仍需驗證它是否適合真實照護</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>關掉一個條件，看會卡在哪裡</h3><span class="tag o">切換</span></div>
+    <div class="grid4" id="cond"></div>
+    <div class="detail" id="condtxt"></div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="part" id="p03" data-t="全球與台灣里程碑">
+  <div class="ph"><span class="num">03</span><div><h2>三條軌道並行：全球與台灣里程碑</h2><div class="en">AI CAPABILITY · DATA STANDARDS · POLICY</div></div></div>
+  <p class="one">資料標準、政策與 AI 能力<b>持續並行</b>，既有方法仍會使用——不是單一替代序列。</p>
+  <div class="wd">
+    <div class="wh"><h3>點選里程碑</h3><span class="seg" id="tlseg"><button class="on" data-m="g">全球</button><button data-m="t">台灣</button></span></div>
+    <div id="lanes"></div>
+    <div class="detail" id="mstxt">點選任一里程碑看說明。</div>
+    <p class="note">間距依年份比例繪製（台灣軌道 1995–2026；全球軌道 1970s–2022）。同一年可在不同軌道各有進展。</p>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="part" id="p04" data-t="政策與擴散數據">
+  <div class="ph"><span class="num">04</span><div><h2>政策的力量與 AI 醫材許可趨勢</h2><div class="en">HITECH · FDA · TFDA</div></div></div>
+  <p class="one">採用系統、持有認證技術、改善照護結果，<b>需要分別量測</b>；件數不等於臨床價值。</p>
+  <div class="grid2">
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>美國醫院基本 EHR 採用率</h3><span class="tag gray">ONC 2016</span></div>
+      <svg viewBox="0 0 360 230" class="chart" id="ehrsvg"></svg>
+      <div class="kpi" style="margin-top:6px"><div class="v">96%</div><div class="l">2015 年「持有」認證 EHR 技術——不同於實際採用的口徑</div></div>
+    </div>
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>AI 醫材許可：口徑切換</h3><span class="seg" id="fdaseg"><button class="on" data-m="us">美國單年</button><button data-m="tw">台灣累計</button></span></div>
+      <svg viewBox="0 0 360 230" class="chart" id="fdasvg"></svg>
+      <div class="detail" id="fdatxt" style="font-size:13.5px"></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>口徑練習</h3><span class="tag a">練習</span></div>
+    <div id="q-gauge"></div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="part" id="p05" data-t="創新擴散與炒作週期">
+  <div class="ph"><span class="num">05</span><div><h2>影響採用速度的五個特性</h2><div class="en">ROGERS DIFFUSION OF INNOVATIONS · HYPE CYCLE</div></div></div>
+  <p class="one">把特性轉為可測問題：<b>學多久、改多少、節省多少時間？</b></p>
+  <div class="wd">
+    <div class="wh"><h3>擴散曲線模擬器</h3><span class="tag a">概念示意，非實測或預測</span></div>
+    <div class="grid2">
+      <div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" data-rp="scribe">AI 病歷草稿</button><button class="btn" data-rp="sepsis">敗血症預警模型</button><button class="btn" data-rp="hf">HF-Guard</button></div>
+        <div class="ctl"><span>相對優勢</span><input type="range" id="ro-1" min="1" max="5" value="4"><output></output></div>
+        <div class="ctl"><span>相容性</span><input type="range" id="ro-2" min="1" max="5" value="4"><output></output></div>
+        <div class="ctl"><span>複雜度（越高越難）</span><input type="range" id="ro-3" min="1" max="5" value="2"><output></output></div>
+        <div class="ctl"><span>可試用性</span><input type="range" id="ro-4" min="1" max="5" value="4"><output></output></div>
+        <div class="ctl"><span>可觀察性</span><input type="range" id="ro-5" min="1" max="5" value="3"><output></output></div>
+        <div class="detail" id="rotxt"></div>
+      </div>
+      <svg viewBox="0 0 380 260" class="chart" id="rosvg"></svg>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>炒作週期：每一階段該問什麼？</h3><span class="tag o">點選階段</span><span class="tag a">曲線為概念示意</span></div>
+    <svg viewBox="0 0 760 230" class="chart" id="hypesvg"></svg>
+    <div class="detail" id="hypetxt"></div>
+    <p class="note">不是每項技術都會走完五階段；病歷草稿與自主診斷要分開放，不把整個生成式 AI 醫療領域放在單一位置。可以回答「無法判定」，但要提出證據缺口。</p>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="part" id="p06" data-t="四種 AI 方法">
+  <div class="ph"><span class="num">06</span><div><h2>四種 AI 方法與系統：先辨認輸出與錯誤型態</h2><div class="en">RULE-BASED · ML · GENERATIVE · AGENTIC</div></div></div>
+  <p class="one">流暢回答與正確執行，<b>需要不同的檢查</b>。方法可以共存、組合；年份不代表彼此取代。</p>
+  <div class="wd">
+    <div class="wh"><h3>四種方法卡</h3><span class="tag gray">點卡片翻面看白話比喻</span></div>
+    <div class="cards" id="mcards"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>辨認練習：這是哪一種？主要失誤會是什麼？</h3><span class="tag a">6 題</span><span class="scoreline" id="mscore"></span></div>
+    <div id="mq"></div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="part" id="p07" data-t="LLM 題庫與 MAI-DxO">
+  <div class="ph"><span class="num">07</span><div><h2>大型語言模型：題庫成績與逐步診斷</h2><div class="en">MEDQA · MAI-DxO</div></div></div>
+  <p class="one">題庫成績提供知識表現線索；<b>展示能力不等於臨床效益</b>。</p>
+  <div class="grid2">
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>MedQA（USMLE 風格四選項題庫）</h3></div>
+      <svg viewBox="0 0 360 220" class="chart" id="medqa"></svg>
+      <p class="note">Flan-PaLM 67.6%（Nature 2023）→ Med-PaLM 2 最佳設定 86.5%（統一模型另報告 85.4%，Nature Medicine 2025）。不同設定不可混讀；非正式執照考試成績。</p>
+    </div>
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>MAI-DxO：304 個 NEJM 困難病例</h3><span class="tag gray">2025-06 預印本</span></div>
+      <svg viewBox="0 0 360 220" class="chart" id="maisvg"></svg>
+      <p class="hint" style="margin-top:6px">翻開每一張「解讀前先問」：</p>
+      <div id="maicav" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+  </div>
+  <div class="wd"><div id="q-llm"></div></div>
+</section>
+
+<!-- 08 -->
+<section class="part" id="p08" data-t="風險 × 自主程度">
+  <div class="ph"><span class="num">08</span><div><h2>風險與自主程度的情境分析</h2><div class="en">RISK × AUTONOMY · 教學分析架構</div></div></div>
+  <p class="one">合適的自主程度取決於用途與後果，<b>沒有必須往右上走的路線</b>。此架構不同於 FDA／歐盟的法定風險分級。</p>
+  <div class="wd">
+    <div class="wh"><h3>把 HF-Guard 放上矩陣</h3><span class="tag o">調整設定</span></div>
+    <div class="grid2">
+      <svg viewBox="0 0 400 330" class="chart" id="rasvg"></svg>
+      <div>
+        <label style="display:block;font-weight:700;color:var(--navy);font-size:14px">HF-Guard 的自主程度</label>
+        <div class="seg" id="ra-a" style="display:flex;width:fit-content;margin:6px 0 12px;flex-wrap:wrap"><button class="on" data-v="1">只顯示分數</button><button data-v="2">通知個管師</button><button data-v="3">自動通知家屬</button><button data-v="4">自動調整藥物</button></div>
+        <label style="display:block;font-weight:700;color:var(--navy);font-size:14px">最壞的錯誤後果</label>
+        <div class="seg" id="ra-r" style="display:flex;width:fit-content;margin:6px 0 12px;flex-wrap:wrap"><button class="on" data-v="1">多一次電話</button><button data-v="2">延遲回應</button><button data-v="3">漏報惡化</button><button data-v="4">錯誤用藥</button></div>
+        <div class="detail" id="ratxt"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 -->
+<section class="part" id="p09" data-t="Agent 授權流程">
+  <div class="ph"><span class="num">09</span><div><h2>出院準備 Agent 的授權流程</h2><div class="en">AGENT · HUMAN CONFIRMATION · FALLBACK</div></div></div>
+  <p class="one">工具能讀寫資料之前，須有<b>正確身分、權限與明確責任</b>；失敗或不確定就停止，回到人工處理。</p>
+  <div class="wd">
+    <div class="wh"><h3>注入一個錯誤，看流程在哪裡停下</h3><span class="tag o">模擬執行</span></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="agfault"><button class="btn on" data-f="none">一切正常</button><button class="btn" data-f="id">病人身分不符</button><button class="btn" data-f="stale">用藥資料過期</button><button class="btn" data-f="reject">藥師退回一項</button><button class="btn" data-f="send">通知送出失敗</button></div>
+    <div class="agent" id="agent"></div>
+    <div style="margin-top:10px"><button class="btn pri" id="agrun">▶ 執行</button></div>
+    <div class="detail" id="agtxt">選擇情境後按「執行」。</div>
+    <p class="note">家屬通知依病人授權；偏好記憶不等於模型自動再訓練。W7 會深入 Agent 流程驗證。</p>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="part" id="p10" data-t="IDx-DR 篩檢試算">
+  <div class="ph"><span class="num">10</span><div><h2>IDx-DR：前瞻診斷效能與上市許可</h2><div class="en">PIVOTAL TRIAL 2018 · 10 SITES · 900 ENROLLED · DE NOVO</div></div></div>
+  <p class="one">指定用途的效能與許可，<b>仍需配合拍攝、轉診與後續照護</b>；無法判讀不是陰性。</p>
+  <div class="grid3">
+    <div class="kpi o"><div class="v">87.2%</div><div class="l">敏感度（主分析調整值，95% CI 81.8–91.2）</div></div>
+    <div class="kpi"><div class="v">90.7%</div><div class="l">特異度（調整值，88.3–92.7）</div></div>
+    <div class="kpi"><div class="v">96.1%</div><div class="l">可判讀率（819／852）</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>如果在一家基層診所篩檢：會發生什麼？</h3><span class="tag o">核心互動</span><span class="tag a">篩檢人數與盛行率為假設</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>每年篩檢糖尿病人</span><input type="range" id="dr-n" min="200" max="5000" step="100" value="1000"><output></output></div>
+        <div class="ctl"><span>需轉診 DR 盛行率</span><input type="range" id="dr-p" min="2" max="40" step="1" value="24"><output></output></div>
+        <div class="ctl"><span>敏感度</span><input type="range" id="dr-se" min="70" max="99" step="0.1" value="87.2"><output></output></div>
+        <div class="ctl"><span>特異度</span><input type="range" id="dr-sp" min="70" max="99" step="0.1" value="90.7"><output></output></div>
+        <div class="ctl"><span>可判讀率</span><input type="range" id="dr-im" min="80" max="100" step="0.1" value="96.1"><output></output></div>
+        <p class="note">試驗中需轉診者約占可分析者 24%（198／819）。盛行率下降時（例如一般基層），陽性預測值會明顯下降。</p>
+      </div>
+      <div>
+        <div class="conf" id="drgrid"></div>
+        <div class="rtm-legend" style="margin-top:6px"><span><i style="background:#3D7A5A"></i>真陽性</span><span><i style="background:#B5442A"></i>偽陰性（漏掉）</span><span><i style="background:#D9A441"></i>偽陽性</span><span><i style="background:#D2C7B2"></i>真陰性</span><span><i style="background:#1B2A4A"></i>無法判讀</span></div>
+        <div class="grid2" id="drkpi" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="part" id="p11" data-t="MASAI 乳癌篩檢">
+  <div class="ph"><span class="num">11</span><div><h2>MASAI：間隔癌結果支持非劣性，不等於已證實減少</h2><div class="en">RANDOMISED SCREENING TRIAL · SWEDEN</div></div></div>
+  <p class="one">偵測率、判讀工作量、間隔癌與死亡率，是<b>不同的研究結果</b>。</p>
+  <div class="grid2">
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>間隔癌比值：點估計與信賴區間</h3><span class="tag gray">2026 主要終點・約 10.6 萬人</span></div>
+      <svg viewBox="0 0 380 200" class="chart" id="masfp"></svg>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" data-mq="nonin">非劣性？</button><button class="btn" data-mq="sup">已證實減少 12%？</button></div>
+      <div class="detail" id="mastxt" style="font-size:14px">1.55 vs 1.76／千人；比值 0.88（95% CI 0.65–1.18）。點上方按鈕判讀。</div>
+    </div>
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>判讀次數 −44.3%：省下多少工時？</h3><span class="tag a">思考實驗</span></div>
+      <svg viewBox="0 0 380 150" class="chart" id="masrd"></svg>
+      <div class="ctl"><span>每次判讀（分鐘）</span><input type="range" id="ma-m" min="0.5" max="5" step="0.5" value="2"><output></output></div>
+      <div class="ctl"><span>新增複核與維護（%）</span><input type="range" id="ma-o" min="0" max="60" step="5" value="15"><output></output></div>
+      <div id="mastime"></div>
+      <p class="note">講義提醒：判讀次數不等於醫師全年工作量；沒有每次耗時與工時假設時不換算人年。這裡的分鐘數與新增負擔都是假設，用來說明「實際節省仍須另量測」。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="part" id="p12" data-t="四案例證據層次">
+  <div class="ph"><span class="num">12</span><div><h2>四案例：已知證據與尚未證明事項</h2><div class="en">IDx-DR · MASAI · OEA · BABYLON</div></div></div>
+  <p class="one">取證、試驗、院內部署與商業持續，是<b>不同層次的結果</b>；資料缺失時寫「未報告」。</p>
+  <div class="wd">
+    <div class="wh"><h3>把證據放到對的格子：每一句話能支持什麼？</h3><span class="tag a">8 題</span><span class="scoreline" id="evscore"></span></div>
+    <div id="evq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>四案例對照</h3><span class="tag gray">點選案例</span></div>
+    <div class="grid4" id="c4"></div>
+    <div class="detail" id="c4txt">點選任一案例。</div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="part" id="p13" data-t="WHO 六大倫理原則">
+  <div class="ph"><span class="num">13</span><div><h2>WHO 健康 AI 六大倫理原則：用在 HF-Guard</h2><div class="en">WHO ETHICS &amp; GOVERNANCE OF AI FOR HEALTH</div></div></div>
+  <p class="one">一項原則至少對應<b>一個責任人</b>與<b>一種可檢查的措施</b>。原則不能代替個別產品的上市許可。</p>
+  <div class="wd">
+    <div class="wh"><h3>倫理檢核表：每個原則選責任人與措施</h3><span class="tag o">產生檢核表</span></div>
+    <div class="prin" id="prin"></div>
+    <div class="out" id="prinout" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="part" id="p14" data-t="FDA 路徑與 PCCP">
+  <div class="ph"><span class="num">14</span><div><h2>FDA 常見上市路徑與 PCCP</h2><div class="en">510(k) · DE NOVO · PMA · PREDETERMINED CHANGE CONTROL PLAN</div></div></div>
+  <p class="one">三個問題決定常見路徑；實際以產品分類與 FDA 判定為準。<b>符合已授權計畫條件的修改</b>，才可免另提上市申請。</p>
+  <div class="wd">
+    <div class="wh"><h3>路徑決策樹</h3><span class="tag o">回答三題</span></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span style="font-size:13px;color:var(--mute);align-self:center">範例：</span><button class="btn" data-fx="idx">IDx-DR（2018）</button><button class="btn" data-fx="hf">HF-Guard（假設有比較器材）</button><button class="btn" data-fx="admin">排班助理</button><button class="btn" data-fx="reset">清空</button></div>
+    <div class="tree" id="tree"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>PCCP 情境判斷：這個修改可以依計畫直接做嗎？</h3><span class="tag a">4 題</span></div>
+    <div id="pccpq"></div>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="part" id="p15" data-t="歐盟 AI Act 與 EHDS">
+  <div class="ph"><span class="num">15</span><div><h2>歐盟 AI Act 與 EHDS：哪天適用什麼？</h2><div class="en">REGULATION (EU) 2024/1689 · 2026/1744 · EHDS 2025/327</div></div></div>
+  <p class="one">生效不等於義務全部適用；醫材 AI 高風險義務延後，<b>不等於透明義務、禁止行為或醫材法規全面延後</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>拖動日期，看哪些時點已經到了</h3><span class="tag o">時間軸</span></div>
+    <svg viewBox="0 0 760 290" class="chart" id="eusvg"></svg>
+    <div class="ctl"><span>檢視日期</span><input type="range" id="eu-d" min="0" max="89" step="1" value="27"><output id="eu-o" style="min-width:90px"></output></div>
+    <div class="grid2" id="eulist"></div>
+    <p class="note">依 Regulation (EU) 2026/1744 調整後時點（講義查核 2026-10-16）。既有 MDR／IVDR 義務與過渡條款仍須分別確認；本頁列核心時點，非全部過渡例外。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>AI Act 風險層級：這屬於哪一層？</h3><span class="tag a">練習</span></div>
+    <div id="euq"></div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section class="part" id="p16" data-t="台灣制度與三地比較">
+  <div class="ph"><span class="num">16</span><div><h2>台灣的制度分工與三地比較</h2><div class="en">AI BASIC ACT · TWCDI · THREE AI CENTERS</div></div></div>
+  <p class="one">取得上市許可、獲得支付、醫院採用，<b>需要不同的決定</b>；三大 AI 中心提供支援，主管機關依法作決定。</p>
+  <div class="wd">
+    <div class="wh"><h3>台灣：誰負責什麼？</h3><span class="tag a">配對</span></div>
+    <div id="twq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>三地治理：同一個問題，不同制度</h3><span class="tag o">點格子揭開</span><button class="btn" id="regall" style="margin-left:auto">全部顯示</button></div>
+    <div class="reg" id="reg"></div>
+  </div>
+</section>
+
+<!-- 17 -->
+<section class="part" id="p17" data-t="HF-Guard 市場策略">
+  <div class="ph"><span class="num">17</span><div><h2>整合演練：HF-Guard 先進哪個市場？</h2><div class="en">PRODUCT STRATEGY · 一張產品分析表</div></div></div>
+  <p class="one">先寫出<b>一個上市假設、一項證據缺口、一個停止或轉向條件</b>。許可、支付與採購是不同決定。</p>
+  <div class="wd form">
+    <div class="grid3" id="strat"></div>
+    <div class="grid2" style="margin-top:6px">
+      <div>
+        <label>組別／成員</label><input id="g-team" placeholder="例：第 2 組">
+        <label>用途與方法（族群、使用者、輸出、可執行動作）</label><textarea id="g-use"></textarea>
+        <label>證據與限制（一項研究或監管決定，能支持什麼）</label><textarea id="g-ev"></textarea>
+      </div>
+      <div>
+        <label>上市假設</label><input id="g-hyp" placeholder="例：以台灣兩家醫院跨院驗證，取得 TFDA 許可">
+        <label>停止或轉向條件</label><input id="g-stop" placeholder="例：跨院驗證敏感度低於 X，或個管師無法在 4 小時內回應">
+        <label>倫理與責任（一項風險、責任人、可檢查的措施）</label><textarea id="g-eth"></textarea>
+        <label>下一步官方查核</label><input id="g-next" placeholder="例：查 TFDA 分級資料庫與 FDA 產品代碼">
+      </div>
+    </div>
+    <div style="margin:14px 0"><button class="btn oc" id="g-copy">複製產品分析表</button> <span id="g-msg" style="font-size:13px;color:var(--green)"></span></div>
+    <div class="out" id="g-out"></div>
+    <p class="note">查不到 AI 清單，不代表沒有許可；也可能是不屬醫材或名稱不同。</p>
+  </div>
+</section>
+
+<!-- 18 -->
+<section class="part" id="p18" data-t="案例研討：Nuance">
+  <div class="ph"><span class="num">18</span><div><h2>案例研討：Nuance 從聽寫到環境式 AI 助理</h2><div class="en">DRAGON MEDICAL → DAX COPILOT → DRAGON COPILOT</div></div></div>
+  <p class="one">同一個品牌一路走到生成式 AI 與 Agent：<b>每一代的風險不同</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>決策點：你是醫院資訊長，哪些評估要「重新來過」？</h3><span class="tag a">先勾再看結果</span></div>
+    <p class="hint">Microsoft 2022-03 完成收購 Nuance（含債務約 197 億美元）；DAX Copilot 環境聆聽門診對話生成病歷草稿；2025-03 整合為 Dragon Copilot。勾選每一代你認為必須重新評估的項目。</p>
+    <div class="gen" id="gen"></div>
+    <div style="margin-top:10px"><button class="btn pri" id="genchk">看參考方向</button></div>
+    <div id="genres"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>結果：擴散很快，但成效數字多來自廠商</h3></div>
+    <div class="grid3">
+      <div class="kpi"><div class="v">60 萬+</div><div class="l">曾使用 Dragon Medical One 的臨床人員</div></div>
+      <div class="kpi"><div class="v">300 萬+<small>／月</small></div><div class="l">DAX Copilot 記錄的門診對話（600 家機構）</div></div>
+      <div class="kpi o"><div class="v">約 5<small> 分鐘</small></div><div class="l">每次看診「自述」節省（廠商調查約 900 人）</div></div>
+    </div>
+    <div style="margin-top:12px" id="q-nu"></div>
+  </div>
+</section>
+
+<!-- 19 -->
+<section class="part" id="p19" data-t="名詞卡、測驗與回顧">
+  <div class="ph"><span class="num">19</span><div><h2>名詞卡、總測驗與三個判斷問題</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+  <div class="wd"><div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div><div class="cards" id="cards"></div></div>
+  <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
+  <div class="take">
+    <div><b>用途與能力</b>它為誰、在什麼場景，產生什麼判斷或動作？</div>
+    <div><b>證據與風險</b>研究支持哪個結果？換族群或流程後還缺什麼？</div>
+    <div><b>許可與採用</b>哪個機關作決定？誰支付、回應警示及持續監測？</div>
+  </div>
+  <div class="closing">
+    <div class="tag o">CLOSING</div>
+    <h2 style="margin-top:8px">未知可以保留，但下一步要能查證</h2>
+    <p style="color:var(--mute)">HF-Guard 導入前，你最想先查證哪一件事？<br>下週 W3：醫療資料互通與數位成熟度——課前觀察健康存摺的資料類型（或改用教師擬真範例），不需提交個人健康資料。</p>
+  </div>
+</section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w2-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w2-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w2-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
+function bind(sel){$$(sel).forEach(r=>{r.addEventListener("click",e=>{})})}
+function tipify(root){root.querySelectorAll("[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+function segInit(id,cb){$$(id+" button").forEach(b=>b.onclick=()=>{$$(id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset)})}
+function choiceRows(container,items,opts,scoreEl,noteFn){const r=$(container);let ok=0,dn=0;items.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach((o,i)=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;dn++;const g=i===a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+(why||(noteFn?noteFn(a):""));if(scoreEl)$(scoreEl).textContent=`${ok} / ${items.length}`+(dn===items.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})}
+function bars(svg,data,{max,unit="",dec=1,W=360,H=220,cols}){const L=46,B=H-36,T=22;let g="";const step=max/5;for(let v=0;v<=max+1e-9;v+=step){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v,v<10&&step<1?1:0)}${unit}</text>`}const n=data.length,bw=Math.min(80,(W-L-30)/n-30);data.forEach(([lab,v,c],i)=>{const x=L+20+i*((W-L-30)/n)+((W-L-30)/n-bw)/2-10,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${c||cols[i]}" data-t="${lab}：${fmt(v,dec)}${unit}"/><text x="${x+bw/2}" y="${y-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${c||cols[i]}">${fmt(v,dec)}${unit}</text><text x="${x+bw/2}" y="${B+18}" font-size="12.5" text-anchor="middle">${lab}</text>`});$(svg).innerHTML=g;tipify($(svg))}
+
+/* 01 HF-Guard spec */
+function hf(){const d=+$("#hf-data").value,o=+$("#hf-out").value,a=+$("#hf-act").value,t=+$("#hf-time").value;
+ const D=["每日體重、血壓、心率","居家量測＋病歷用藥與檢驗","居家量測＋穿戴裝置連續心律"][d],O=["未來 7 天惡化風險分數","風險分級與建議處置","「需就醫」判定"][o],A=["通知個管師，由團隊依流程處理","同時以 LINE 通知王伯伯與女兒","自動預約回診並提出利尿劑調整建議"][a],T=["當日上班時段內","4 小時內（含夜間）","未定"][t];
+ $("#hf-stmt").innerHTML=`<div style="font-size:13px;color:var(--mute)">預期用途聲明（草稿）</div><div style="margin-top:6px">HF-Guard 使用<b>${D}</b>，為居家心衰竭病人產生<b>${O}</b>；結果用於<b>${A}</b>，回應時限為<b>${T}</b>。</div>`;
+ const q=[];q.push(["W5／W12","惡化終點怎麼定義？（再入院？急診？體重上升？）"]);
+ if(d>=1)q.push(["W3","病歷資料如何取得、授權與互通？"]);if(d===2)q.push(["W10","穿戴裝置的訊號品質與缺測如何處理？"]);
+ if(o>=1)q.push(["W8／W13","給出處置建議：屬臨床決策支援，醫材判定與驗證要求提高"]);if(o===2)q.push(["W13","直接判定需就醫：接近診斷用途，路徑與證據要求更高"]);
+ if(a===1)q.push(["W13","通知家屬：需病人授權與個資範圍；誤報會直接造成家屬焦慮"]);if(a===2)q.push(["W7","自動執行動作：需權限、確認點與失敗回退（Agent 授權）"]);
+ if(t===1)q.push(["W10／W15","夜間回應：誰值班？人力與費用從哪來？"]);if(t===2)q.push(["W1","沒有回應時限，警示會沒人接——回到 W1 的「回應」斷點"]);
+ $("#hf-q").innerHTML=`<div style="font-weight:700;color:var(--navy);margin:10px 0 4px">這個設定會開啟 ${q.length} 個要先回答的問題</div>`+q.map(([w,x])=>`<div style="display:flex;gap:8px;margin:5px 0;font-size:14px"><span class="tag o" style="white-space:nowrap">${w}</span><span>${x}</span></div>`).join("")}
+["#hf-data","#hf-out","#hf-act","#hf-time"].forEach(id=>$(id).onchange=hf);hf();
+
+/* 02 conditions */
+const COND=[["資料 Data","病歷與影像數位化；品質、代表性、授權","沒有足夠且具代表性的資料：模型學不到，或只在少數族群表現好。"],["算力 Compute","GPU 與雲端擴大規模；總成本仍需評估","算力不足或成本過高：大型模型無法訓練或部署，維運費用壓垮預算。"],["方法 Algorithms","深度學習與 Transformer 支持新任務","沒有合適的方法：影像判讀、語言理解等新任務做不到。"],["需求與制度","高齡化、人力、流程與支付共同影響","沒有需求與制度：做得出來也沒人用、沒人付錢、沒有流程接住結果。"]];
+const condOn=[1,1,1,1];function drawCond(){const g=$("#cond");g.innerHTML="";COND.forEach((c,i)=>{const d=h("div",{class:"kpi",style:`cursor:pointer;border:2px solid ${condOn[i]?C.navy2:C.ochre};background:${condOn[i]?"#fff":"#FCF1EC"}`},`<div style="font-weight:900;color:${condOn[i]?C.navy:C.ochre}">${condOn[i]?"✓":"✕"} ${c[0]}</div><div class="l">${c[1]}</div>`);d.onclick=()=>{condOn[i]=1-condOn[i];drawCond()};g.appendChild(d)});const off=COND.filter((c,i)=>!condOn[i]);$("#condtxt").innerHTML=off.length?off.map(c=>`<div>✕ <b>${c[0]}：</b>${c[2]}</div>`).join(""):"四個條件都具備：醫療 AI 應用會增加——但<b>仍要通過真實照護驗證</b>：適合族群？流程可用？結果與成本？（點選卡片關掉某個條件）"}drawCond();
+
+/* 03 lanes */
+const LG={g:{range:[1970,2024],lanes:[["AI 能力",C.ochre,[[1975,"MYCIN","專家規則","1970 年代史丹佛的專家系統研究；不是醫院普遍部署的證據。"],[1995,"PAPNET","抹片複篩","1995 年 FDA 核准，輔助子宮頸抹片複篩；早期 AI 醫材代表。"],[2012,"深度學習","ImageNet","影像辨識大幅進步，帶動醫學影像 AI。"],[2018,"IDx-DR","自主篩檢","同時是 AI 能力與監管里程碑：指定用途下不需專家覆讀。"],[2022,"生成模型","問答草稿","大型語言模型能產生文字草稿與回答；錯誤型態是編造與遺漏。"]]],["資料標準",C.navy2,[[1989,"HL7 v2","訊息交換","醫院系統間傳送訊息的標準，至今仍廣泛使用。"],[1993,"DICOM","影像交換","醫學影像格式與傳輸標準（DICOM 3.0）。"],[2014,"FHIR","API 交換","2014 年首版 DSTU1；以 API 方式交換資料，W3 深入。"]]],["政策制度",C.green,[[2009,"HITECH","EHR 誘因","美國以誘因推動醫院採用電子病歷（見下一段數據）。"],[2018.6,"De Novo","IDx-DR","FDA 以 De Novo 路徑建立新類別（DEN180001）。"],[2021,"WHO","AI 倫理","WHO 發布健康 AI 倫理與治理指引，六大原則（第 13 段）。"]]]]},
+ t:{range:[1993,2027],lanes:[["資料建設",C.ochre,[[1995,"全民健保","廣泛申報資料","建立涵蓋廣的申報資料；申報不等於完整臨床資料。"],[2004,"健保 IC 卡","就醫數位化","就醫紀錄數位化。"],[2013,"雲端藥歷","跨院查詢用藥","2013 年 7 月建置、2016 年擴大為醫療資訊雲端查詢。"],[2014,"健康存摺","個人資料查閱","民眾可查閱自己的就醫資料（W1：逾 1,248 萬人使用）。"]]],["資料標準",C.navy2,[[2016,"ICD-10","申報編碼轉換","申報編碼由 ICD-9 轉為 ICD-10。"],[2025.2,"標準大平台","正式啟動","2025-03-12 醫療資訊標準大平台啟動；TWCDI、TW Core IG（W3）。"]]],["平台治理",C.green,[[2024,"次世代計畫","AI 中心","次世代數位醫療平台計畫；三大 AI 中心（第 16 段）。"],[2026,"AI 基本法","公布施行","2025-12-23 三讀，2026-01-14 公布施行；部會依職掌管理。"]]]]}};
+let lmode="g";function drawLanes(){const M=LG[lmode],[a,b]=M.range,r=$("#lanes");r.innerHTML="";M.lanes.forEach(([n,c,items])=>{const row=h("div",{class:"lane"});row.appendChild(h("div",{class:"ln",style:`background:${c}`},n));const tr=h("div",{class:"track"});items.forEach(([y,nm,sub,d],k)=>{const x=6+(y-a)/(b-a)*88;const m=h("div",{class:"ms"+(k%2?" lo":""),style:`left:${x}%`},`<div class="d" style="background:${c}"></div><div class="n">${nm}</div><div class="y">${y<1980?"1970s":Math.floor(y)}</div>`);m.onclick=()=>{$$(".ms").forEach(z=>z.classList.remove("on"));m.classList.add("on");$("#mstxt").innerHTML=`<b>${nm}｜${sub}</b>（${y<1980?"1970 年代":Math.floor(y)}）<br>${d}`};tr.appendChild(m)});row.appendChild(tr);r.appendChild(row)})}
+segInit("#tlseg",d=>{lmode=d.m;drawLanes();$("#mstxt").textContent="點選任一里程碑看說明。"});drawLanes();
+
+/* 04 charts */
+bars("#ehrsvg",[["2008",9,C.gray],["2015",84,C.navy2]],{max:100,unit:"%",dec:0});
+function drawFDA(m){if(m==="us"){bars("#fdasvg",[["2015",6,C.gray],["2023",223,C.ochre]],{max:250,dec:0});$("#fdatxt").innerHTML="美國 FDA <b>單年</b>核准的 AI 醫材：2015 年 6 件 → 2023 年 223 件（Stanford AI Index 2025）。累計逾 1,600 件（截至 2026-09），多屬放射影像。"}else{bars("#fdasvg",[["2023-10",96,C.gray],["2025-03",180,C.navy2]],{max:200,dec:0});$("#fdatxt").innerHTML="台灣 AI 醫材許可證<b>累計</b>：2023-10 約 96 件 → 2025-03 約 180 張，仍以進口醫材為主（媒體報導；食藥署清單持續更新）。"}}
+segInit("#fdaseg",d=>drawFDA(d.m));drawFDA("us");
+mcq("#q-gauge",[
+ {q:"「美國 2023 年 223 件、台灣累計 180 張，所以美國一年就超過台灣全部」——這個比較的問題是？",o:["沒有問題","單年 vs 累計、許可證張數 vs 產品數、不同擷取日，口徑不同不能直接比較","應該用人口數標準化就可以","台灣數字是錯的"],a:1,e:"講義提醒：口徑不同不能直接相除或比較成長率；件數增加也不等於臨床效益或已獲給付。"},
+ {q:"2015 年 96% 美國醫院持有認證 EHR，代表什麼？",o:["96% 醫院照護結果已改善","96% 醫院持有認證技術，不等於實際採用或結果改善","HITECH 的因果效果是 96%","EHR 已完全普及，不需再評估"],a:1,e:"持有、採用、改善結果需分別量測；兩個時點的描述也不能單獨估出 HITECH 的因果效果。"}]);
+
+/* 05 rogers */
+const RP={scribe:[4,4,2,4,4],sepsis:[3,2,4,2,2],hf:[3,3,3,4,2]};
+function ro(){const v=[1,2,3,4,5].map(i=>+$("#ro-"+i).value);[1,2,3,4,5].forEach(i=>$("#ro-"+i).nextElementSibling.textContent=$("#ro-"+i).value);
+ const score=(v[0]+v[1]+(6-v[2])+v[3]+v[4])/25; const k=0.35+score*1.1, t0=9-score*5;
+ const s=$("#rosvg"),W=380,H=260,L=40,B=220,T=16,R=370;let g="";for(let p=0;p<=100;p+=25){const y=B-p/100*(B-T);g+=`<line x1="${L}" x2="${R}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${p}%</text>`}
+ const base=t=>100/(1+Math.exp(-0.9*(t-7.5)));const f=t=>100/(1+Math.exp(-k*(t-t0)));let p1="",p2="";for(let t=0;t<=15;t+=0.25){const x=L+t/15*(R-L);p1+=(t?"L":"M")+x+","+(B-base(t)/100*(B-T));p2+=(t?"L":"M")+x+","+(B-f(t)/100*(B-T))}
+ g+=`<path d="${p1}" fill="none" stroke="${C.gray}" stroke-width="2" stroke-dasharray="5 4"/><path d="${p2}" fill="none" stroke="${C.ochre}" stroke-width="3"/>`;
+ let t50=t0;const x50=L+t50/15*(R-L);g+=`<line x1="${x50}" x2="${x50}" y1="${B}" y2="${B-(B-T)/2}" stroke="${C.ochre}" stroke-dasharray="3 3"/><text x="${x50}" y="${B+16}" font-size="11" fill="${C.ochre}" text-anchor="middle">達 50%</text><text x="${(L+R)/2}" y="${B+32}" font-size="12" fill="${C.mute}" text-anchor="middle">時間（概念）</text><text x="${R}" y="${T+12}" font-size="11" fill="${C.gray}" text-anchor="end">虛線：中等特性對照</text>`;
+ s.innerHTML=g;const faster=7.5-t0;$("#rotxt").innerHTML=`綜合特性分數 <b>${Math.round(score*100)}</b>／100；達 50% 採用的時間比中等對照${faster>=0?"<b>提早</b>":"<b>延後</b>"}約 <b>${Math.abs(faster).toFixed(1)}</b> 個時間單位。<br><span style="color:var(--mute);font-size:13px">最弱的特性：${["相對優勢","相容性","複雜度","可試用性","可觀察性"][[v[0],v[1],6-v[2],v[3],v[4]].indexOf(Math.min(v[0],v[1],6-v[2],v[3],v[4]))]}——把它轉成可測問題，就是試點要量的東西。</span>`}
+[1,2,3,4,5].forEach(i=>$("#ro-"+i).oninput=ro);$$("[data-rp]").forEach(b=>b.onclick=()=>{RP[b.dataset.rp].forEach((v,i)=>$("#ro-"+(i+1)).value=v);ro()});ro();
+const HY=[["萌芽",1.2,"討論具體用途","這項技術「具體」要做什麼？給誰用？先寫出用途，避免把整個領域當成一個點。"],["過度期望",3.2,"查證研究與採用資料","宣稱很多：哪些是同儕審查研究？哪些只是展示或新聞稿？有沒有真實採用數據？"],["低谷",5.8,"允許無法判定階段","失望出現時不代表無效；問：失敗卡在技術、流程、證據還是制度？"],["爬升",8.2,"應用逐漸清楚","哪些特定用途已有前瞻證據與穩定採用？哪些還沒有？"],["應用逐漸清楚",11,"不保證最終成功","進入穩定期也要持續監測；不是每項技術都會走完五階段。"]];
+function drawHype(sel){const s=$("#hypesvg"),L=30,R=740,B=200,T=20;const pts=[5,30,70,95,70,40,25,28,36,45,52,56,58];let d="";pts.forEach((v,i)=>{const x=L+i/(pts.length-1)*(R-L),y=B-v/100*(B-T);d+=(i?"L":"M")+x+","+y});let g=`<path d="${d}" fill="none" stroke="${C.navy2}" stroke-width="3"/>`;
+ HY.forEach(([n,pos],i)=>{const x=L+pos/12*(R-L);const idx=pos;const lo=Math.floor(idx),hi=Math.min(12,lo+1),v=pts[lo]+(pts[hi]-pts[lo])*(idx-lo);const y=B-v/100*(B-T);g+=`<g class="hy" data-i="${i}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="${i===sel?11:8}" fill="${i===sel?C.ochre:"#fff"}" stroke="${C.ochre}" stroke-width="2.5"/><text x="${x}" y="${B+20}" font-size="13" text-anchor="middle" font-weight="${i===sel?900:500}" fill="${i===sel?C.ochre:C.mute}">${n}</text></g>`});
+ g+=`<text x="${L}" y="14" font-size="11" fill="${C.mute}">期望程度</text>`;s.innerHTML=g;s.querySelectorAll(".hy").forEach(e=>e.onclick=()=>drawHype(+e.dataset.i));const hy=HY[sel];$("#hypetxt").innerHTML=`<b>${hy[0]}｜用來提出問題：${hy[2]}</b><br>${hy[3]}`}
+drawHype(1);
+
+/* 06 methods */
+const MT=[["規則式","Rule-based","專家規則與知識庫 → 提醒、條件判斷","比喻：照明確手冊核對條件<br><b>留意：</b>手冊可能漏掉例外或互相矛盾（規則衝突、難維護）"],["學習式","Machine learning","資料訓練 → 分類、預測、特徵","比喻：受訓處理特定問題的工具<br><b>留意：</b>換族群或設備後表現可能改變（分布改變、偏差）"],["生成模型","Generative","預訓練與任務對齊 → 文字、影像","比喻：產生流暢的草稿與回答<br><b>留意：</b>內容可能編造，須核對來源（編造、遺漏）"],["Agent 系統","Agentic system","模型＋工具＋授權 → 規劃並執行","比喻：依授權操作工具的流程助理<br><b>留意：</b>動作範圍、確認點及回退要明確（錯誤行動、權限濫用）"]];
+(function(){const r=$("#mcards");MT.forEach(([a,b,c,d])=>{const x=h("div",{class:"fc",style:"height:150px"},`<div class="in"><div class="f">${a}<small>${b}</small><small style="margin-top:6px;color:#FFD3C2">${c}</small></div><div class="bk">${d}</div></div>`);x.onclick=()=>x.classList.toggle("flip");r.appendChild(x)})})();
+choiceRows("#mq",[["「病人腎功能 eGFR 低於 30 時，跳出禁用某藥的提醒」",0,"依明確條件觸發——規則式。主要失誤：規則漏掉例外或彼此衝突。"],["用十萬張眼底影像訓練，判斷是否有糖尿病視網膜病變",1,"學習式。換相機或族群後表現可能改變，需外部驗證。"],["把門診對話整理成 SOAP 病歷草稿",2,"生成模型。可能編造或遺漏，醫師須逐句核對（W6）。"],["讀取病歷、草擬衛教、送藥師確認後自動發送回診通知",3,"Agent 系統：模型＋工具＋授權。主要失誤是錯誤行動與權限濫用（第 09 段）。"],["HF-Guard 依過去資料訓練出 7 天惡化風險分數",1,"學習式預測模型；注意族群與資料分布改變。"],["MAI-DxO 讓同一模型扮演多個虛擬醫師、提問並開檢查",3,"以生成模型為核心、會「開檢查」的 Agent 架構；接上真實系統前需權限與確認點。"]],["規則式","學習式","生成模型","Agent 系統"],"#mscore");
+
+/* 07 llm */
+bars("#medqa",[["Flan-PaLM",67.6,C.gray],["Med-PaLM 2",86.5,C.navy2]],{max:100,unit:"%"});
+bars("#maisvg",[["MAI-DxO",85.5,C.ochre],["醫師平均",20.0,C.gray]],{max:100,unit:"%"});
+(function(){const cv=[["預印本","尚未經期刊審查"],["21 位醫師","美英醫師，測試時不能查資料或問同事"],["困難教學病例","NEJM CPC 罕見困難病例，不是日常病人"],["模擬成本","檢查費用為模擬值"],["沒有病人結果","尚未用於臨床、未取得許可"]];const r=$("#maicav");cv.forEach(([a,b])=>{const x=h("button",{class:"btn"},"？ "+a);x.onclick=()=>{x.innerHTML=`<b>${a}</b>：${b}`;x.style.background="#F5EBD5"};r.appendChild(x)})})();
+mcq("#q-llm",[{q:"醫院想用「MedQA 86.5%」「MAI-DxO 85.5%」說服醫師採用 AI 診斷助理。最合理的回應是？",o:["分數夠高，可以直接上線","題庫與困難病例展示提供知識表現線索；仍需真實病人、真實流程的前瞻驗證與許可","醫師平均只有 20%，所以醫師不可靠","只要模型夠新就可以"],a:1,e:"題庫成績與展示研究回答的是「能力」問題；臨床安全與效益（W12）、上市許可（第 14 段）是另外的證據。"}]);
+
+/* 08 risk x autonomy */
+const RAX=[["一般行政問答",3.6,1.1],["指定自主篩檢 IDx-DR",3.4,3.2],["排班或文書建議",1.3,1.2],["臨床決策支援",1.4,3.4]];
+let raA=1,raR=1;function drawRA(){const s=$("#rasvg"),L=50,R=390,T=14,B=290;const X=a=>L+(a-0.5)/4*(R-L),Y=r=>B-(r-0.5)/4*(B-T);let g=`<rect x="${L}" y="${T}" width="${R-L}" height="${B-T}" fill="#FBF8F1" stroke="${C.line}"/>`;
+ for(let i=1;i<4;i++){g+=`<line x1="${X(i+0.5)}" x2="${X(i+0.5)}" y1="${T}" y2="${B}" stroke="${C.line}" stroke-dasharray="3 3"/><line x1="${L}" x2="${R}" y1="${Y(i+0.5)}" y2="${Y(i+0.5)}" stroke="${C.line}" stroke-dasharray="3 3"/>`}
+ g+=`<text x="${(L+R)/2}" y="${B+28}" font-size="12.5" text-anchor="middle" fill="${C.mute}">自主程度：低 → 高</text><text x="16" y="${(T+B)/2}" font-size="12.5" text-anchor="middle" fill="${C.mute}" transform="rotate(-90 16 ${(T+B)/2})">錯誤後果與臨床風險：低 → 高</text>`;
+ RAX.forEach(([n,a,r])=>{g+=`<circle cx="${X(a)}" cy="${Y(r)}" r="6" fill="${C.gray}"/><text x="${X(a)}" y="${Y(r)-10}" font-size="11.5" text-anchor="middle" fill="${C.mute}">${n}</text>`});
+ g+=`<circle cx="${X(raA)}" cy="${Y(raR)}" r="13" fill="${C.ochre}" opacity=".9"/><text x="${X(raA)}" y="${Y(raR)+4}" font-size="11" text-anchor="middle" fill="#fff" font-weight="900">HF</text>`;s.innerHTML=g;
+ const lvl=raA+raR;const need=[];need.push("用途、版本與限制寫清楚（透明）");if(raR>=2)need.push("回應時限與值班責任（W10）");if(raR>=3)need.push("前瞻驗證：漏報率與在地驗證（W5、W12）");if(raA>=3)need.push("病人授權與通知範圍（W13 個資）");if(raA>=3&&raR>=3)need.push("確認點與失敗回退；必要時改為人工確認後才執行（W7）");if(raA===4)need.push("自動調藥接近治療決策：醫材路徑與證據要求大幅提高（第 14 段）");if(raR===4)need.push("事件通報與停用條件（W15）");
+ $("#ratxt").innerHTML=`<b>${lvl<=3?"低監督需求":lvl<=5?"中度監督需求":"高監督需求"}</b>：這個組合至少需要——<ul style="margin:6px 0 0;padding-left:18px">${need.map(x=>`<li>${x}</li>`).join("")}</ul><div style="font-size:12.5px;color:var(--mute);margin-top:6px">灰點為講義示例；位置為教學示意。</div>`}
+segInit("#ra-a",d=>{raA=+d.v;drawRA()});segInit("#ra-r",d=>{raR=+d.v;drawRA()});drawRA();
+
+/* 09 agent */
+const AG=[["界定目標","出院準備；確認病人與用途"],["取得與核對","依權限讀資料；檢查時效與身分"],["產生草稿","衛教、藥物整理、回診與通知建議"],["專業確認","合適醫事角色逐項審閱與授權"],["執行並記錄","送出核定項目；確認完成並留痕"]];
+const FAULT={none:[-1,""],id:[1,"病人身分與出院單不符：<b>停止自動動作</b>，回到人工確認身分。沒有任何資料被寫入。"],stale:[1,"用藥資料超過時效：<b>不產生草稿</b>，提示重新取得最新用藥（W3 互通問題）。"],reject:[3,"藥師退回一項藥物整理：該項<b>不執行</b>，退回草稿修改；其他已核定項目才送出。"],send:[4,"回診通知送出失敗：<b>不重複亂送</b>，記錄失敗並轉人工聯絡；確認完成才算結束。"]};
+let agF="none";function drawAg(state){const r=$("#agent");r.innerHTML="";AG.forEach(([a,b],i)=>{r.appendChild(h("div",{class:"astep "+(state?state[i]:"")},`<b>${i+1} ${a}</b>${b}`))})}drawAg();
+$$("#agfault button").forEach(b=>b.onclick=()=>{$$("#agfault button").forEach(x=>x.classList.remove("on"));b.classList.add("on");agF=b.dataset.f;drawAg();$("#agtxt").textContent="按「執行」。"});
+$("#agrun").onclick=()=>{const [stop,msg]=FAULT[agF];let i=0;const st=AG.map(()=>"");$("#agrun").disabled=true;const tick=()=>{if(i>=AG.length){$("#agrun").disabled=false;$("#agtxt").innerHTML="全部完成：每一步都有<b>身分、權限、人工確認與留痕</b>。";return}st[i]="run";drawAg(st);setTimeout(()=>{if(i===stop){st[i]="stop";for(let k=i+1;k<AG.length;k++)st[k]="skip";drawAg(st);$("#agtxt").innerHTML=msg;$("#agrun").disabled=false;return}st[i]="ok";drawAg(st);i++;tick()},550)};tick()};
+
+/* 10 IDx-DR */
+function dr(){const N=+$("#dr-n").value,p=+$("#dr-p").value/100,se=+$("#dr-se").value/100,sp=+$("#dr-sp").value/100,im=+$("#dr-im").value/100;
+ [["dr-n",v=>fmt(v)+" 人"],["dr-p",v=>v+"%"],["dr-se",v=>(+v).toFixed(1)+"%"],["dr-sp",v=>(+v).toFixed(1)+"%"],["dr-im",v=>(+v).toFixed(1)+"%"]].forEach(([id,f])=>$("#"+id).nextElementSibling.textContent=f($("#"+id).value));
+ const un=N*(1-im),rd=N*im,dis=rd*p,TP=dis*se,FN=dis-TP,TN=(rd-dis)*sp,FP=rd-dis-TN;const ppv=TP/(TP+FP),npv=TN/(TN+FN);
+ const cnt=[TP,FN,FP,TN,un].map(x=>x/N*100);let rnd=cnt.map(Math.floor),rem=100-rnd.reduce((a,b)=>a+b,0);const fr=cnt.map((x,i)=>[x-Math.floor(x),i]).sort((a,b)=>b[0]-a[0]);for(let k=0;k<rem;k++)rnd[fr[k][1]]++;
+ const cols=[C.green,C.ochre,"#D9A441","#D2C7B2",C.navy];let html="";rnd.forEach((n,i)=>{for(let k=0;k<n;k++)html+=`<i style="background:${cols[i]}"></i>`});$("#drgrid").innerHTML=html;
+ $("#drkpi").innerHTML=`<div class="kpi"><div class="v">${fmt(TP+FP+un)}<small> 人</small></div><div class="l">需轉介眼科（陽性 ${fmt(TP+FP)}＋無法判讀 ${fmt(un)}）</div></div><div class="kpi o"><div class="v">${fmt(FN)}<small> 人</small></div><div class="l">被判陰性但其實需轉診（漏掉）</div></div><div class="kpi"><div class="v">${(ppv*100).toFixed(0)}<small>%</small></div><div class="l">陽性預測值 PPV：轉診者中真的有病的比例</div></div><div class="kpi g"><div class="v">${(npv*100).toFixed(1)}<small>%</small></div><div class="l">陰性預測值 NPV</div></div>`}
+["dr-n","dr-p","dr-se","dr-sp","dr-im"].forEach(id=>$("#"+id).oninput=dr);dr();
+
+/* 11 MASAI */
+(function(){const s=$("#masfp"),L=30,R=360,lo=0.5,hi=1.4;const X=v=>L+(v-lo)/(hi-lo)*(R-L);let g="";[0.6,0.8,1.0,1.2,1.4].forEach(v=>{g+=`<line x1="${X(v)}" x2="${X(v)}" y1="40" y2="130" stroke="${C.line}"/><text x="${X(v)}" y="148" font-size="11" fill="${C.mute}" text-anchor="middle">${v.toFixed(1)}</text>`});
+ g+=`<rect id="nimz" x="${X(1.2)}" y="40" width="${R-X(1.2)}" height="90" fill="${C.ochre}" opacity="0"/>`;
+ g+=`<line x1="${X(1)}" x2="${X(1)}" y1="34" y2="136" stroke="${C.navy}" stroke-width="2"/><text x="${X(1)}" y="28" font-size="11" text-anchor="middle" fill="${C.navy}" font-weight="700">1.0 無差異</text>`;
+ g+=`<line id="nim" x1="${X(1.2)}" x2="${X(1.2)}" y1="34" y2="136" stroke="${C.ochre}" stroke-width="2" stroke-dasharray="5 4" opacity=".35"/><text x="${X(1.2)}" y="28" font-size="11" text-anchor="middle" fill="${C.ochre}">非劣性邊界 1.2</text>`;
+ g+=`<line x1="${X(0.65)}" x2="${X(1.18)}" y1="85" y2="85" stroke="${C.navy2}" stroke-width="3"/><line x1="${X(0.65)}" x2="${X(0.65)}" y1="77" y2="93" stroke="${C.navy2}" stroke-width="3"/><line x1="${X(1.18)}" x2="${X(1.18)}" y1="77" y2="93" stroke="${C.navy2}" stroke-width="3"/><rect x="${X(0.88)-8}" y="77" width="16" height="16" fill="${C.ochre}"/><text x="${X(0.88)}" y="70" font-size="13" font-weight="900" text-anchor="middle" fill="${C.ochre}">0.88</text>`;
+ g+=`<text x="${X(0.7)}" y="178" font-size="11.5" fill="${C.green}" text-anchor="middle">← AI 組間隔癌較少</text><text x="${X(1.25)}" y="178" font-size="11.5" fill="${C.ochre}" text-anchor="middle">AI 組較多 →</text>`;s.innerHTML=g})();
+$$("[data-mq]").forEach(b=>b.onclick=()=>{const nim=$("#nim"),z=$("#nimz");if(b.dataset.mq==="nonin"){nim.setAttribute("opacity","1");z.setAttribute("opacity",".08");$("#mastxt").innerHTML="<b>是，達非劣性：</b>整條信賴區間（上限 1.18）都在預設邊界 1.2 以內——AI 組的間隔癌不會「明顯較多」。"}else{nim.setAttribute("opacity",".35");z.setAttribute("opacity","0");$("#mastxt").innerHTML="<b>不能這樣說：</b>信賴區間 0.65–1.18 <b>跨過 1.0</b>（p＝0.41），0.88 只是點估計。正確用語：「間隔癌結果支持非劣性」，不說「AI 減少間隔癌 12%」。"}});
+bars("#masrd",[["標準雙人判讀",83231,C.gray],["AI 輔助",46345,C.navy2]],{max:90000,dec:0,W:380,H:150});
+function mas(){const m=+$("#ma-m").value,o=+$("#ma-o").value/100;$("#ma-m").nextElementSibling.textContent=m+" 分";$("#ma-o").nextElementSibling.textContent=Math.round(o*100)+"%";const saved=36886*m/60,extra=saved*o,net=saved-extra;$("#mastime").innerHTML=`<div class="grid3" style="margin-top:6px"><div class="kpi g"><div class="v" style="font-size:20px">${fmt(saved)}<small> 時</small></div><div class="l">少判讀 36,886 次 × 每次分鐘</div></div><div class="kpi o"><div class="v" style="font-size:20px">${fmt(extra)}<small> 時</small></div><div class="l">新增回召、複核、AI 維護（假設）</div></div><div class="kpi"><div class="v" style="font-size:20px">${fmt(net)}<small> 時</small></div><div class="l">淨節省（整個試驗期間）</div></div></div>`}
+$("#ma-m").oninput=mas;$("#ma-o").oninput=mas;mas();
+
+/* 12 evidence */
+choiceRows("#evq",[["IDx-DR 樞紐試驗：敏感度 87.2%、特異度 90.7%",0,"支持「指定用途的診斷效能」；未證明降低失明率或長期成本。"],["IDx-DR 經 FDA De Novo 許可",1,"支持「在指定用途下的上市資格」——不是給付，也不是長期效益。"],["MASAI 判讀次數減少 44.3%",0,"支持「該流程的判讀工作量」；實際工時與總成本仍須另量測。"],["MD Anderson OEA 的採購與稽核議題",2,"回答流程整合、採購與責任問題；不能替代臨床效能評估。"],["Babylon 2020 年模擬病例研究",0,"病例研究回答效能問題，但要檢查利益衝突與外推性。"],["Babylon 2023 年重整、英國法人進入破產管理",3,"公司財務結果與模型表現，需要不同證據支持；導入時要問：誰接手、資料如何取回？"],["MASAI 間隔癌比值 0.88（CI 0.65–1.18）",0,"支持非劣性；不等於已證實減少。"],["Nuance 廠商調查：每次看診自述省 5 分鐘",4,"廠商調查屬自述資料，非隨機試驗；可作為假設，需要獨立研究驗證（第 18 段）。"]],["臨床／效能證據","監管決定","導入與採購","商業持續性","廠商自述"],"#evscore");
+(function(){const C4=[["IDx-DR","前瞻診斷試驗、FDA 決定","指定用途診斷效能及上市資格","失明等長期結果；完整成本與可及性"],["MASAI","隨機篩檢流程試驗","該流程的篩檢表現及判讀工作量","跨系統外推性；長期效益與傷害"],["OEA","院方專案目標；採購與導入議題","分辨流程整合與責任需求","稽核原文細節；獨立臨床效能"],["Babylon","病例研究；公司重整公告","研究設計的限制；服務持續性問題","實際照護結果；財務困境的因果"]];const g=$("#c4");C4.forEach(c=>{const d=h("div",{class:"kpi",style:"cursor:pointer"},`<div style="font-weight:900;color:var(--navy);font-size:17px">${c[0]}</div><div class="l">${c[1]}</div>`);d.onclick=()=>{$("#c4txt").innerHTML=`<b>${c[0]}</b><br><span class="plus">可以支持：</span>${c[2]}<br><span class="minus">仍須另驗證：</span>${c[3]}`};g.appendChild(d)})})();
+
+/* 13 WHO principles */
+const PR=[["1 自主","病人能否理解、選擇與退出？",["個管師","醫師","資訊室","廠商"],["加入前說明並取得同意，可隨時退出","只在 App 條款中說明","不需說明，預設加入"]],["2 福祉、安全與公共利益","效能是否達標？傷害由誰處理？",["醫療品質委員會","廠商","個管師","病人自己"],["上線前在地驗證、上線後追蹤漏報與傷害事件","相信廠商的驗證報告","出事再處理"]],["3 透明與可解釋","用途、版本與限制能否理解？",["資訊室","廠商","醫師","個管師"],["提供模型卡：用途、版本、驗證族群與限制","只告知「有用 AI」","不揭露，避免病人困惑"]],["4 責任與問責","誰承接錯誤、申訴與救濟？",["醫院管理者","廠商","個管師","病人自己"],["明訂警示處理責任、申訴管道與事件通報","交給廠商合約處理","未規定"]],["5 包容與公平","不熟 App 的人如何得到照護？",["個管師","資訊室","社工","廠商"],["提供電話或居服員量測替代管道，分族群追蹤加入率","只提供 App 版本","鼓勵家屬代為操作即可"]],["6 回應與永續","環境與人力影響如何持續追蹤？",["醫院管理者","資訊室","廠商","個管師"],["定期檢討警示量、人力負荷與停用條件","上線後不再檢討","只看使用人數"]]];
+(function(){const r=$("#prin");PR.forEach((p,i)=>{const c=h("div",{class:"pc"},`<h4>${p[0]}</h4><div style="font-size:13px;color:var(--mute)">${p[1]}</div>`);const s1=h("select",{id:"pr-r"+i});s1.innerHTML=`<option value="">責任人…</option>`+p[2].map(x=>`<option>${x}</option>`).join("");const s2=h("select",{id:"pr-m"+i});s2.innerHTML=`<option value="">可檢查的措施…</option>`+p[3].map((x,k)=>`<option value="${k}">${x}</option>`).join("");c.appendChild(s1);c.appendChild(s2);const fb=h("div",{style:"font-size:12.5px;margin-top:4px"});c.appendChild(fb);s2.onchange=()=>{const k=s2.value;fb.innerHTML=k===""?"":k==="0"?`<span style="color:${C.green}">✓ 可執行、可檢查</span>`:`<span style="color:${C.ochre}">✕ 不可檢查或沒有落實原則</span>`;prinOut()};s1.onchange=prinOut;r.appendChild(c)})})();
+function prinOut(){let ok=0;const rows=PR.map((p,i)=>{const rr=$("#pr-r"+i).value,m=$("#pr-m"+i).value;if(m==="0"&&rr)ok++;return `<dt>${p[0]}</dt><dd>${rr||"<span style='color:var(--mute2)'>（未選責任人）</span>"}｜${m===""?"<span style='color:var(--mute2)'>（未選措施）</span>":p[3][+m]}</dd>`}).join("");$("#prinout").innerHTML=`<div style="font-weight:900;color:var(--navy);margin-bottom:8px">HF-Guard 倫理檢核表　<span style="color:${ok===6?C.green:C.ochre}">${ok} / 6 項可檢查</span></div><dl>${rows}</dl>`}prinOut();
+
+/* 14 FDA tree */
+const TQ=["① 依預期用途，是否屬醫療器材？","② 有合適的合法比較器材？","③ 風險屬中低？"];let ans=[null,null,null];
+function result(){if(ans[0]===false)return["非醫材功能或豁免","行政、一般健康功能等另行判定（仍須確認）",C.gray];if(ans[0]==null)return null;if(ans[1]===true)return["510(k)","證明與比較器材實質相等；可能需臨床資料",C.navy2];if(ans[1]==null)return null;if(ans[2]===true)return["De Novo","建立新類別與管制；例：2018 IDx-DR",C.green];if(ans[2]===false)return["PMA","高風險；提供安全有效性證據",C.ochre];return null}
+function drawTree(){const t=$("#tree");t.innerHTML="";let dim=false;TQ.forEach((q,i)=>{const show=i===0||(i===1&&ans[0]===true)||(i===2&&ans[0]===true&&ans[1]===false);const d=h("div",{class:"tq"+(show?"":" dim")},`<b>${q}</b> `);if(show){["是","否"].forEach((l,k)=>{const b=h("button",{class:"btn"+(ans[i]===(k===0)?" on":""),style:"margin-left:8px"},l);b.onclick=()=>{ans[i]=k===0;for(let j=i+1;j<3;j++)ans[j]=null;drawTree()};d.appendChild(b)})}t.appendChild(d)});const r=result();if(r)t.appendChild(h("div",{class:"tres",style:`background:${r[2]}`},`→ ${r[0]}<div style="font-weight:400;font-size:13.5px">${r[1]}${r[0]!=="非醫材功能或豁免"?"；PCCP 可隨適用的上市申請一併提出":""}</div>`))}
+$$("[data-fx]").forEach(b=>b.onclick=()=>{const f=b.dataset.fx;ans=f==="idx"?[true,false,true]:f==="hf"?[true,true,null]:f==="admin"?[false,null,null]:[null,null,null];drawTree()});drawTree();
+mcq("#pccpq",[
+ {q:"已授權 PCCP 寫明「每年以新資料重新訓練，驗證方法 X，效能低於門檻即回退」。今年依此重訓並通過驗證。",o:["可以依計畫實施，需紀錄與監測","必須另提上市申請","不需要任何紀錄"],a:0,e:"符合已授權計畫條件的修改，可依計畫實施；仍要執行驗證、紀錄與監測。"},
+ {q:"想把 HF-Guard 的用途從「心衰竭」擴大到「COPD 病人」。",o:["可以依 PCCP 直接做","超出計畫的修改，需另判是否需申請","只要通知病人即可"],a:1,e:"PCCP 不允許任意更新用途或族群。"},
+ {q:"依計畫重訓後，驗證效能低於計畫門檻。",o:["照樣上線，下次再改","依計畫停止或回退","改用另一個驗證方法讓它通過"],a:1,e:"不符即停止／回退；新資料不保證模型改善。"},
+ {q:"「每一項 AI 醫材都必須附 PCCP」這句話正確嗎？",o:["正確","不正確：PCCP 可隨適用的上市申請提出，不是每項產品必附"],a:1,e:"PCCP 是選擇性的預先規劃機制（FDA 正式指引，現行版 2025 年 8 月）。"}]);
+
+/* 15 EU timeline */
+const EV=[["2024-08-01","AI Act 生效","生效≠義務全部適用",C.navy],["2025-02-02","禁止行為等","依各條款範圍適用",C.ochre],["2025-03-26","EHDS 生效","主要規則依資料類別分期適用",C.green],["2025-08-02","通用 AI 模型義務","既有模型另有過渡",C.navy2],["2026-08-02","透明義務等","未隨高風險延後",C.navy2],["2027-12-02","附件 III 高風險","依該類系統條件",C.ochre],["2028-08-02","Art. 6(1)／附件 I","含符合條件的醫材 AI",C.ochre],["2029-03-26","EHDS 第一批","照護：摘要、處方與調劑；研究：大部分資料類別",C.green],["2031-03-26","EHDS 第二批","照護：影像、檢驗、出院報告；研究：基因體等其餘類別",C.green]];
+const D0=new Date("2024-06-01"),months=89;function md(i){const d=new Date(D0);d.setMonth(d.getMonth()+i);return d}
+function eu(){const i=+$("#eu-d").value,cur=md(i);$("#eu-o").textContent=`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,"0")}`;const s=$("#eusvg"),L=30,R=740;const X=d=>L+((d-D0)/(md(months)-D0))*(R-L);let g=`<line x1="${L}" x2="${R}" y1="120" y2="120" stroke="${C.line2||"#D2C7B2"}" stroke-width="4"/>`;
+ for(let y=2025;y<=2031;y++){const x=X(new Date(y+"-01-01"));g+=`<line x1="${x}" x2="${x}" y1="112" y2="128" stroke="${C.mute}"/><text x="${x}" y="146" font-size="12" fill="${C.mute}" text-anchor="middle">${y}</text>`}
+ const LV=[-1,1,-2,2,-1,1,-1,2,-1];EV.forEach(([d,n,sub,c],k)=>{const x=X(new Date(d)),lv=LV[k],up=lv<0,on=new Date(d)<=cur;const y=up?(lv===-1?76:36):(lv===1?176:216);g+=`<line x1="${x}" x2="${x}" y1="120" y2="${up?y+18:y-14}" stroke="${on?c:C.line}" stroke-width="1.5"/><circle cx="${x}" cy="120" r="7" fill="${on?c:"#fff"}" stroke="${c}" stroke-width="2"/><text x="${x}" y="${y}" font-size="11.5" text-anchor="middle" font-weight="700" fill="${on?c:C.mute2||"#9A9CA4"}">${n}</text><text x="${x}" y="${y+14}" font-size="10.5" text-anchor="middle" fill="${C.mute}">${d.slice(0,7)}</text>`});
+ const xn=X(cur);g+=`<line x1="${xn}" x2="${xn}" y1="20" y2="250" stroke="${C.ochre}" stroke-width="2" stroke-dasharray="4 3"/><text x="${xn}" y="272" font-size="12" font-weight="900" text-anchor="middle" fill="${C.ochre}">檢視：${$("#eu-o").textContent}</text>`;s.innerHTML=g;
+ const done=EV.filter(e=>new Date(e[0])<=cur),next=EV.filter(e=>new Date(e[0])>cur);$("#eulist").innerHTML=`<div class="okmsg"><b>已適用（${done.length}）</b><br>${done.map(e=>`${e[0]}　${e[1]}：${e[2]}`).join("<br>")||"（尚無）"}</div><div class="detail" style="margin-top:8px"><b>尚未到（${next.length}）</b><br>${next.map(e=>`${e[0]}　${e[1]}`).join("<br>")||"（全部已適用）"}</div>`}
+(function(){const now=new Date();const i=(now.getFullYear()-2024)*12+now.getMonth()-5;$("#eu-d").value=Math.max(0,Math.min(months,i))})();$("#eu-d").oninput=eu;eu();
+choiceRows("#euq",[["醫院的衛教聊天機器人，病人可能不知道對方是 AI",2,"特定透明情境：與人互動的 AI 依條件揭露（2026-08-02 起適用）。"],["符合醫材條件、需第三方合格評估的 AI 判讀軟體",1,"可能屬法定高風險（Art. 6(1)／附件 I），須依條件判定，不能只看名稱；2028-08-02 起。"],["以社會評分決定病人能否就醫",0,"屬依法禁止的特定行為類型（2025-02-02 起）。"],["醫院內部的會議紀錄摘要工具",3,"一般用途：無此處高風險特定義務，但仍須遵守個資、消保等法律。"]],["禁止行為","法定高風險","特定透明","其餘一般用途"]);
+
+/* 16 Taiwan + regions */
+choiceRows("#twq",[["公布施行人工智慧基本法（2026-01-14），部會依職掌管理",0,"法律原則層：國科會為中央主管機關；部會依職掌管理。"],["TWCDI 第一版 20 類、109 項欄位；TW Core IG 的 FHIR 實作規格",1,"資料規格層（W3 深入）；109 項是欄位數，不是 Profile 數。"],["臨床 AI 取證驗證中心協助跨院驗證",2,"驗證支援：提供取證所需證據，但不是每項產品依法必經的關卡。"],["決定 HF-Guard 能否以醫材上市",3,"TFDA 依分類與用途審查——依法決定。"],["決定 HF-Guard 是否給付",4,"健保等支付評估，與許可各自獨立判斷。"]],["法律原則","資料規格","驗證支援","TFDA 許可","支付評估"]);
+const RG=[["誰審查",["FDA 依醫材功能與產品分類判定","MDR／IVDR 合格評估及適用 AI Act 義務","TFDA 依分類與用途審查醫材"]],["如何更新",["依變更規則；可使用已授權 PCCP","依醫材變更管理及適用 AI 要求","依 TFDA 適用變更規範"]],["如何交換",["FHIR 等認證標準及實作規格","EHDS 分期制度與交換規格","TWCDI 核心欄位、TW Core IG"]],["誰支付",["公保與商保等，各有評估條件","依各國支付制度與採購安排","健保評估影響廣；仍有其他支付途徑"]]];
+(function(){const g=$("#reg");g.appendChild(h("div",{}," "));["美國","歐盟","台灣"].forEach(x=>g.appendChild(h("div",{class:"h"},x)));RG.forEach(([q,cs])=>{g.appendChild(h("div",{class:"rh"},q));cs.forEach(c=>{const d=h("div",{class:"c"},"？ 點選揭開");d.onclick=()=>{d.classList.add("open");d.textContent=c};d.dataset.full=c;g.appendChild(d)})});$("#regall").onclick=()=>{$$("#reg .c").forEach(d=>{d.classList.add("open");d.textContent=d.dataset.full})}})();
+
+/* 17 strategy */
+const ST=[["A","先美國",["確認比較器材與路徑","資料須適用目標族群","評估許可與支付成本"]],["B","先台灣",["盤點合作院所與資料","選擇合適驗證支援","確認支付及採購需求"]],["C","先歐盟",["確認分級與合格評估","確認 AI 義務適用時點","評估國別支付與流程"]]];
+let stSel=LS.get("strat","B");function drawSt(){const r=$("#strat");r.innerHTML="";ST.forEach(([k,n,l])=>{const d=h("div",{class:"kpi",style:`cursor:pointer;border:2px solid ${stSel===k?C.ochre:C.line}`},`<div style="font-weight:900;color:${stSel===k?C.ochre:C.navy}">策略 ${k}　${n}</div><ul style="margin:4px 0 0;padding-left:18px;font-size:13.5px">${l.map(x=>`<li>${x}</li>`).join("")}</ul>`);d.onclick=()=>{stSel=k;LS.set("strat",k);drawSt();gOut()};r.appendChild(d)})}
+const GF=["g-team","g-use","g-ev","g-hyp","g-stop","g-eth","g-next"];const gs=LS.get("form",{});GF.forEach(id=>{if(gs[id])$("#"+id).value=gs[id];$("#"+id).addEventListener("input",gOut)});
+function gText(){const v=id=>$("#"+id).value.trim()||"（未填）";const s=ST.find(x=>x[0]===stSel);return `【W2 HF-Guard 產品分析表】${$("#g-team").value.trim()}
+選定策略：${s[0]} ${s[1]}
+用途與方法：${v("g-use")}
+證據與限制：${v("g-ev")}
+可能路徑：上市假設——${v("g-hyp")}；停止或轉向條件——${v("g-stop")}
+倫理與責任：${v("g-eth")}
+下一步官方查核：${v("g-next")}`}
+function gOut(){const o={};GF.forEach(id=>o[id]=$("#"+id).value);LS.set("form",o);const v=id=>$("#"+id).value.trim()||"<span style='color:var(--mute2)'>（未填）</span>";const s=ST.find(x=>x[0]===stSel);$("#g-out").innerHTML=`<div style="font-weight:900;color:var(--navy);margin-bottom:8px">產品分析表預覽　${$("#g-team").value.trim()}</div><dl><dt>選定策略</dt><dd><b>${s[0]} ${s[1]}</b></dd><dt>用途與方法</dt><dd>${v("g-use")}</dd><dt>證據與限制</dt><dd>${v("g-ev")}</dd><dt>上市假設</dt><dd>${v("g-hyp")}</dd><dt>停止／轉向</dt><dd>${v("g-stop")}</dd><dt>倫理與責任</dt><dd>${v("g-eth")}</dd><dt>下一步查核</dt><dd>${v("g-next")}</dd></dl>`}
+drawSt();gOut();
+$("#g-copy").onclick=()=>{const t=gText();const done=()=>{$("#g-msg").textContent="已複製。";setTimeout(()=>$("#g-msg").textContent="",3000)};const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$("#g-msg").textContent="無法自動複製，請手動選取預覽文字。"}ta.remove()};try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}};
+
+/* 18 Nuance */
+const GEN=[["聽寫","Dragon Medical：口述轉文字（語音辨識）",[["辨識準確率（口音、術語）",1],["生成內容的幻覺查核",0],["寫入病歷與下單的權限",0],["資安與錄音保存",1]]],["環境式記錄","DAX Copilot：聆聽對話、生成病歷草稿",[["病人知情同意（被錄音）",1],["生成內容的幻覺與遺漏查核",1],["醫師審閱責任與時間",1],["自動送出醫囑的授權",0]]],["任務自動化","Dragon Copilot：聽寫＋環境記錄＋任務自動化",[["動作範圍、確認點與回退",1],["錯誤行動的責任歸屬",1],["生成內容查核",1],["只要沿用上一代評估即可",0]]]];
+(function(){const r=$("#gen");GEN.forEach(([n,d,items],gi)=>{const c=h("div",{class:"gc2"},`<h4>${gi+1}　${n}</h4><div style="font-size:12.5px;color:var(--mute);margin-bottom:6px">${d}</div>`);items.forEach(([t],k)=>{const l=h("label",{},`<input type="checkbox" data-g="${gi}" data-k="${k}"> <span>${t}</span>`);c.appendChild(l)});r.appendChild(c)})})();
+$("#genchk").onclick=()=>{let ok=0,tot=0;$$("#gen input").forEach(i=>{const it=GEN[+i.dataset.g][2][+i.dataset.k];tot++;const right=(i.checked?1:0)===it[1];if(right)ok++;i.parentElement.style.color=right?C.green:C.ochre;i.parentElement.style.fontWeight="700"});$("#genres").innerHTML=`<div class="${ok===tot?"okmsg":"detail"}">勾選判斷 ${ok} / ${tot} 項與參考方向一致（綠色＝一致，赭紅＝再想想）。<br><b>重點：</b>聽寫要看辨識準確率；環境式記錄多了<b>知情同意</b>與<b>生成內容查核</b>（W6）；任務自動化再多了<b>授權與責任</b>（W7）。技術世代可以疊加，但每一代都要針對新的錯誤型態重新評估。</div>`};
+mcq("#q-nu",[{q:"廠商自述「每次省 5 分鐘」，你要看到哪一種研究才比較能採信？",o:["更多使用者的滿意度調查","有同期對照（最好隨機）的研究，客觀量測工時與病歷品質","廠商提供的個案故事","使用人數持續成長的報告"],a:1,e:"擴散很快，但成效數字多來自廠商調查（約 900 人自述）。需要獨立、有對照、客觀量測的研究——證據成熟度（第 05 段、W12）。"}]);
+
+/* 19 glossary + quiz */
+const GL=[["SaMD","醫療器材軟體","不作為硬體醫材一部分即可完成醫療目的"],["510(k)","上市前通知","證明與合法比較器材實質相等"],["De Novo","新類別申請","無合適比較器材的中低風險產品路徑"],["PCCP","預定變更計畫","預先界定修改及驗證，限已授權範圍"],["MDR／IVDR","歐盟醫材法規","一般醫材／體外診斷器材的法規"],["EHDS","健康資料空間","照護使用與資料再利用的制度框架"],["Hype Cycle","炒作週期","描述期待與成熟度的分析框架"],["AI Agent","AI 代理系統","依授權結合模型與工具執行任務"]];
+(function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}<small>${b}</small></div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
+mcq("#final",[
+ {q:"HF-Guard 討論分類、證據與許可之前，最先要做的是？",o:["選擇模型架構","界定用途與誰會據此行動","申請 FDA","計算 ROI"],a:1,e:"先界定用途（資料、輸出、行動、回應時限），才能判斷分類與證據要求。"},
+ {q:"關於規則式、學習式、生成模型與 Agent，哪個正確？",o:["新的會取代舊的","可以共存、組合；Agent 常以生成模型為核心再接上工具與授權","Agent 不需要人工確認","規則式已經沒有人用"],a:1,e:"年份不代表彼此取代；要先辨認輸出與可執行動作。"},
+ {q:"IDx-DR 的「無法判讀」影像應如何處理？",o:["當作陰性","需另行處理（例如轉介）","重新拍到判讀為陰性","忽略"],a:1,e:"無法判讀不是陰性；第 10 段的試算把它算進轉介人數。"},
+ {q:"盛行率從 24% 降到 5%，IDx-DR 的陽性預測值會？",o:["不變","明顯下降","上升","變成 100%"],a:1,e:"敏感度、特異度不變時，盛行率越低，偽陽性占陽性的比例越高。"},
+ {q:"MASAI 間隔癌比值 0.88（95% CI 0.65–1.18），正確說法是？",o:["AI 顯著減少間隔癌 12%","結果支持非劣性，不等於已證實減少","AI 增加間隔癌","研究失敗"],a:1,e:"信賴區間跨過 1.0；上限低於非劣性邊界 1.2。"},
+ {q:"沒有合適比較器材的中低風險 AI 醫材，常見 FDA 路徑是？",o:["510(k)","De Novo","PMA","不需申請"],a:1,e:"例：2018 IDx-DR（DEN180001）。"},
+ {q:"PCCP 允許什麼？",o:["任意更新用途或族群","依已授權計畫範圍與驗證方法進行修改","免除所有監測","取代上市申請"],a:1,e:"超出計畫的修改需另判是否需申請；不符即停止或回退。"},
+ {q:"歐盟醫材 AI 的高風險義務延後到 2028-08-02，代表？",o:["所有 AI Act 義務都延後","透明義務、禁止行為與 MDR 不一定延後，須分別確認","醫材法規暫停","不用再準備"],a:1,e:"高風險延後不等於全面延後；透明義務 2026-08-02 起適用。"},
+ {q:"台灣三大 AI 中心的角色是？",o:["依法核發醫材許可","提供治理、跨院驗證與影響研究等支援；主管機關依法作決定","決定健保給付","每項產品依法必經的三站"],a:1,e:"支援工作可並行，不是強制關卡；TFDA 許可與支付另行審議。"},
+ {q:"Nuance 從聽寫升級到任務自動化，最需要新增評估的是？",o:["辨識準確率","動作範圍、確認點、回退與責任歸屬","介面顏色","使用人數"],a:1,e:"能執行動作之後，錯誤會直接變成行動——授權與責任要重新界定（W7）。"}],"#finalscore");
+})();
+</script>
+</body>
+</html>
