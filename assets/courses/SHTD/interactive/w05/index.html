@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W5 醫療 AI 方法論與模型生命週期 · 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+<style>
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.spec{grid-template-columns:1fr}}
+.spec label{display:block;font-weight:700;color:var(--navy);font-size:14px;margin:8px 0 4px}
+.spec select{width:100%;padding:7px;border-radius:8px;border:1px solid var(--line2);background:#fff}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;margin:6px 0}
+.lane .ln{font-weight:700;color:#fff;border-radius:8px;padding:8px;font-size:13px;text-align:center}
+.lane .track{position:relative;height:96px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.ms{position:absolute;top:6px;transform:translateX(-50%);text-align:center;cursor:pointer;width:84px}
+.ms.lo{top:48px}
+.ms .d{width:14px;height:14px;border-radius:50%;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.ms .y{font-size:11px;color:var(--mute);margin-top:2px}
+.ms .n{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2}
+.ms.on .d{box-shadow:0 0 0 3px var(--ochre)}
+.conf{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:420px}
+.conf i{display:block;aspect-ratio:1;border-radius:3px}
+.cell2{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:13.5px;margin-top:10px}
+.cell2 div{padding:8px;border-radius:8px;background:var(--paper);border:1px solid var(--line)}
+.cell2 .h{background:var(--navy-l);font-weight:700;color:var(--navy);text-align:center}
+.agent{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.astep{flex:1;min-width:130px;border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.astep b{display:block;color:var(--navy);font-size:15px}
+.astep.run{border-color:var(--navy2);background:var(--navy-l)}
+.astep.ok{border-color:var(--green);background:var(--green-l)}
+.astep.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.astep.skip{opacity:.45}
+.tree{display:flex;flex-direction:column;gap:8px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.tq.dim{opacity:.4}
+.tq b{color:var(--navy)}
+.tres{border-radius:10px;padding:12px 16px;color:#fff;font-weight:700;font-size:16px}
+.reg{display:grid;grid-template-columns:120px repeat(3,1fr);gap:6px;font-size:13.5px}
+.reg .h{background:var(--navy);color:#fff;font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.reg .rh{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;display:flex;align-items:center}
+.reg .c{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;min-height:54px;color:var(--mute2)}
+.reg .c.open{color:var(--ink);background:#fff;border-color:var(--navy2)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.prin{grid-template-columns:1fr}}
+.prin .pc{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.prin .pc h4{margin:0 0 4px;color:var(--navy);font-size:15px}
+.prin select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff;margin-top:4px;font-size:13px}
+.gen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.gen{grid-template-columns:1fr}}
+.gen .gc2{border:2px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.gen .gc2 h4{margin:0;color:var(--navy)}
+.gen label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;margin:6px 0;cursor:pointer}
+</style>
+<style>
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tog label{display:flex;gap:6px;align-items:center;border:1px solid var(--line2);background:#fff;border-radius:20px;padding:4px 12px;font-size:13.5px;cursor:pointer}
+.tog label.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tog input{display:none}
+.code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;background:#1B2A4A;color:#E6EAF2;border-radius:10px;padding:12px 14px;line-height:1.7;white-space:pre-wrap}
+.cm{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:14px}
+.cm .h{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.cm .c{border-radius:10px;padding:12px;text-align:center}
+.cm .c .n{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums}
+.cm .c .t{font-size:12.5px}
+.claim{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:stretch}
+.claim .v{background:var(--navy);color:#fff;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+.claim .a{background:var(--paper);border:2px dashed var(--line2);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--mute2)}
+.claim .a.open{border-style:solid;border-color:var(--ochre);color:var(--ink);background:#fff}
+.lead2{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:end}
+.lv{border-radius:8px 8px 0 0;color:#fff;font-weight:700;text-align:center;padding:8px 4px;font-size:13px;cursor:pointer}
+.qd{border:2px dashed var(--line2);border-radius:10px;padding:8px;min-height:80px;background:var(--paper);cursor:pointer}
+.qd h4{margin:0 0 4px;color:var(--navy);font-size:13.5px}
+.qd .it{background:#fff;border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-size:12.5px;margin:3px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer;display:inline-block;margin:3px}
+.pool .gc.sel{background:var(--navy);color:#fff}
+.split{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:560px}
+.split i{display:block;aspect-ratio:1;border-radius:3px;position:relative}
+.split i.dup::after{content:"";position:absolute;inset:30%;border-radius:50%;background:#D9A441}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W5 醫療 AI 方法論與模型生命週期</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與草稿">重置進度</button>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W5 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div style="font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px">WEEK 5 · 單元二：醫療 AI 技術與臨床應用</div>
+  <h1>醫療 AI 方法論與模型生命週期</h1>
+  <div class="en">Medical AI Methods &amp; Model Lifecycle</div>
+  <p class="lead">廠商說：「我們的再入院預測 AI，AUROC 0.85。」這一頁用講義同一份<b>北城區域醫院 2,000 次出院合成資料</b>（固定種子、可重現），讓你親手拉閾值、看 ROC、校準與決策曲線，最後寫出一份 ReAdmit-X 採購建議與追問清單。</p>
+  <div class="chips"><a class="tag" href="../../W05_醫療AI方法論與模型生命週期_Medical_AI_Methods_and_Model_Lifecycle.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W5）</a><span class="tag o">ReAdmit-X 與北城區域醫院為虛構</span><span class="tag a">所有指標在瀏覽器即時計算</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<section class="part" id="p01" data-t="開場：AUROC 0.85">
+  <div class="ph"><span class="num">01</span><div><h2>廠商說：「我們的再入院預測 AI，AUROC 0.85」</h2><div class="en">REaDMIT-X · 北城區域醫院評估小組</div></div></div>
+  <p class="one">下課前要能逐一回答右欄五個問題，<b>這就是醫療 AI 的識讀能力</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>點廠商簡報，看評估小組該追問什麼</h3><span class="tag o">翻開</span></div>
+    <div id="claims"></div>
+  </div>
+  <div class="grid3">
+    <div class="kpi o"><div class="v">2,334<small> 家</small></div><div class="l">美國醫院 FY2027 被再入院減少計畫（HRRP）扣款，約八成受評醫院；最高扣 3%</div></div>
+    <div class="kpi"><div class="v">0.684</div><div class="l">LACE 指數的 C 統計量（van Walraven 2010）</div></div>
+    <div class="kpi"><div class="v">2 次</div><div class="l">王伯伯過去一年住院</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>固定分數表：LACE 指數試算</h3><span class="tag o">預設為王伯伯</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>住院天數 L</span><input type="range" id="la-l" min="0" max="20" value="9"><output></output></div>
+        <label style="display:flex;gap:8px;align-items:center;font-size:14px;margin:6px 0"><input type="checkbox" id="la-a" checked> 急性（非計畫性）入院 A</label>
+        <div class="ctl"><span>Charlson 共病 C</span><input type="range" id="la-c" min="0" max="6" value="4"><output></output></div>
+        <div class="ctl"><span>半年內急診 E</span><input type="range" id="la-e" min="0" max="6" value="2"><output></output></div>
+      </div>
+      <div><div class="kpi" style="text-align:center;padding:16px"><div class="l">LACE 總分（0–19）</div><div class="v" id="la-v" style="font-size:44px"></div><div id="la-t" style="font-weight:700"></div></div><div class="detail" id="la-d" style="font-size:13.5px"></div></div>
+    </div>
+    <p class="note">LACE 由迴歸推導再簡化成整數給分，不是專家憑經驗手寫的規則；10 分以上為常用切點，非原始研究規定。0.684 與 0.85 在不同資料上計算，不能直接比較。</p>
+  </div>
+</section>
+
+<section class="part" id="p02" data-t="AI 名詞地圖">
+  <div class="ph"><span class="num">02</span><div><h2>AI、機器學習、深度學習、基礎模型</h2><div class="en">NESTED, NOT SUCCESSIVE</div></div></div>
+  <p class="one">是包含與重疊的關係，<b>不是一代取代一代</b>；規則式警示、迴歸與傳統機器學習至今仍是臨床主力。</p>
+  <div class="wd">
+    <div class="wh"><h3>點選每一層</h3><span class="tag o">互動</span></div>
+    <div class="grid2"><svg viewBox="0 0 380 300" class="chart" id="nest"></svg><div class="detail" id="nesttxt" style="margin-top:0"></div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>學習方式與任務類型</h3><span class="tag a">6 題</span><span class="scoreline" id="lmscore"></span></div>
+    <div id="lmq"></div>
+  </div>
+</section>
+
+<section class="part" id="p03" data-t="資料切分與過度擬合">
+  <div class="ph"><span class="num">03</span><div><h2>不能用考古題出期末考：切分與過度擬合</h2><div class="en">TRAIN · VALIDATION · TEST · OVERFITTING</div></div></div>
+  <p class="one">內部切分只能證明在同一家醫院有效；<b>同一病人跨組會高估表現</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>依住院隨機切 vs 依病人切：同一病人跨組了幾次？</h3><span class="tag o">切換</span><span class="tag a">示意資料：200 次住院、120 位病人</span></div>
+    <div class="seg" id="spseg" style="display:flex;width:fit-content;margin-bottom:10px"><button class="on" data-m="adm">依住院隨機</button><button data-m="pt">依病人</button><button data-m="time">依時間</button></div>
+    <div class="split" id="split"></div>
+    <div class="rtm-legend" style="margin-top:8px"><span><i style="background:#2E4470"></i>訓練</span><span><i style="background:#B5442A"></i>測試</span><span><i style="background:#D9A441;border-radius:50%"></i>這位病人的其他住院也在訓練集</span></div>
+    <div class="detail" id="sptxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>過度擬合：背熟考古題，遇到新題就不會</h3><span class="tag o">拉複雜度</span><span class="tag a">曲線為示意</span></div>
+    <div class="grid2"><svg viewBox="0 0 380 250" class="chart" id="ofsvg"></svg><div><div class="ctl"><span>模型複雜度</span><input type="range" id="of-c" min="0" max="6" value="5"><output></output></div><div class="detail" id="oftxt"></div></div></div>
+  </div>
+</section>
+
+<section class="part" id="p04" data-t="資料洩漏與捷徑學習">
+  <div class="ph"><span class="num">04</span><div><h2>模型很準，但學錯了東西</h2><div class="en">LEAKAGE · TREATMENT CONFOUNDING · SHORTCUT LEARNING</div></div></div>
+  <p class="one">看<b>時間軸</b>，不看變數名稱：同一個變數，出院時預測可以用，入院時預測就不行。</p>
+  <div class="wd">
+    <div class="wh"><h3>洩漏檢查器：切換預測時點，看哪些變數可以用</h3><span class="tag o">核心互動</span></div>
+    <div class="seg" id="lkseg" style="display:flex;width:fit-content;margin-bottom:10px"><button data-m="0">入院時預測</button><button class="on" data-m="1">出院時預測</button></div>
+    <svg viewBox="0 0 760 120" class="chart" id="lksvg"></svg>
+    <div id="lklist"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>兩個國際經典案例</h3><span class="tag a">練習</span></div>
+    <div id="scq"></div>
+  </div>
+</section>
+
+<section class="part" id="p05" data-t="生命週期與驗證層級">
+  <div class="ph"><span class="num">05</span><div><h2>模型生命週期與驗證層級</h2><div class="en">LIFECYCLE · INTERNAL → TEMPORAL → EXTERNAL → PROSPECTIVE → RCT</div></div></div>
+  <p class="one">最常被跳過的是第一步：只問能不能預測，<b>沒問預測之後要做什麼</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>七個階段：臨床人員要回答的問題</h3><span class="tag gray">點階段</span></div>
+    <div class="grid5" id="lc" style="grid-template-columns:repeat(7,1fr)"></div>
+    <div class="detail" id="lctxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>這份證據在哪一層？</h3><span class="tag a">5 題</span><span class="scoreline" id="vlscore"></span></div>
+    <div class="lead2" id="ladder"></div>
+    <div id="vlq" style="margin-top:12px"></div>
+  </div>
+  <div class="grid2">
+    <div class="wd" style="margin:0"><div class="wh"><h3>FDA 核准的 AI 醫材，驗證到哪一層？</h3><span class="tag gray">Wu 2021・130 項</span></div><svg viewBox="0 0 380 210" class="chart" id="wusvg"></svg><p class="note">指公開摘要中未報告，不等於廠商完全沒做；也不代表 2021 年之後的醫材狀況相同。</p></div>
+    <div class="wd" style="margin:0"><div class="wh"><h3>準確的模型走進真實診所</h3><span class="tag gray">Beede 2020・泰國 11 家診所</span></div>
+      <div class="grid2"><div class="kpi o"><div class="v">約兩成</div><div class="l">照片被判為無法判讀，模型不給結果（光線不足）</div></div><div class="kpi"><div class="v">逐張上傳</div><div class="l">網路緩慢，雲端判讀增加等待</div></div></div>
+      <div class="detail">無法判讀即轉眼科，病人可能要長途就醫、請假 → 後來改為先由專科醫師看照片與紀錄再決定轉診。<b>部署是生命週期中最容易被低估的一段。</b></div></div>
+  </div>
+</section>
+
+<section class="part" id="p06" data-t="資料集偏移與 MLOps">
+  <div class="ph"><span class="num">06</span><div><h2>上線後為什麼會變不準？</h2><div class="en">DATASET SHIFT · MLOps · GMLP</div></div></div>
+  <p class="one">世界變了，模型不會自己知道。誰負責監測、多久一次、變不準時誰決定更新，<b>都要寫進採購合約</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>盛行率偏移模擬：推出出院後追蹤計畫，再入院率下降</h3><span class="tag o">拉桿</span></div>
+    <p class="hint">固定閾值 ≥20%（敏感度、特異度沿用北城驗證值 59%、78%），只改變再入院率。</p>
+    <div class="ctl"><span>再入院率</span><input type="range" id="ds-p" min="3" max="35" value="16"><output></output></div>
+    <div class="grid3" id="dskpi"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>四種偏移：哪一種？</h3><span class="tag a">4 題</span></div>
+    <div id="dsq"></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>MLOps 合約條款產生器</h3><span class="tag o">勾選後複製</span></div>
+    <div class="tog" id="ml"></div>
+    <div class="code" id="mlout"></div>
+    <div style="margin-top:8px"><button class="btn oc" id="mlcopy">複製條款</button> <span id="mlmsg" style="font-size:13px;color:var(--green)"></span></div>
+  </div>
+</section>
+
+<section class="part" id="p07" data-t="混淆矩陣與閾值">
+  <div class="ph"><span class="num">07</span><div><h2>北城本地驗證：混淆矩陣、四個指標與工作量</h2><div class="en">CONFUSION MATRIX · SENSITIVITY · SPECIFICITY · PPV · NPV</div></div></div>
+  <p class="one">閾值怎麼選，<b>其實是在選工作量</b>。臨床人員最該看 PPV：被警示的人裡，有多少真的需要處理。</p>
+  <div class="wd">
+    <div class="wh"><h3>拉高風險閾值（重新校準後的風險）</h3><span class="tag o">核心互動</span><span class="tag gray">2,000 次出院・324 人再入院（16.2%）</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>高風險閾值</span><input type="range" id="th" min="2" max="60" value="20"><output></output></div>
+        <div class="ctl"><span>專責個管師人數</span><input type="range" id="cmn" min="1" max="5" value="1"><output></output></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0"><button class="btn" data-th="10">≥10%</button><button class="btn" data-th="20">≥20%</button><button class="btn" data-th="30">≥30%</button><button class="btn" id="thfit">依人力自動選閾值</button></div>
+        <div class="cm" id="cm"></div>
+      </div>
+      <div><div class="grid2" id="mets"></div><div id="wl" style="margin-top:10px"></div></div>
+    </div>
+    <div class="detail" id="thtxt"></div>
+    <p class="note">每位個管師每月可額外追蹤約 25 人。準確率陷阱：一律預測「不會再入院」，準確率就有 83.8%，卻一個也沒抓到。</p>
+  </div>
+</section>
+
+<section class="part" id="p08" data-t="盛行率與 PPV">
+  <div class="ph"><span class="num">08</span><div><h2>同一個模型，在不同醫院的 PPV 天差地遠</h2><div class="en">PREVALENCE · BAYES</div></div></div>
+  <p class="one">沒有盛行率，「準確率 88%」<b>無法判斷臨床負擔</b>；要換算成本院盛行率。</p>
+  <div class="wd">
+    <div class="wh"><h3>PPV 計算器</h3><span class="tag o">拉桿</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>敏感度</span><input type="range" id="pp-se" min="50" max="99" value="80"><output></output></div>
+        <div class="ctl"><span>特異度</span><input type="range" id="pp-sp" min="50" max="99" value="80"><output></output></div>
+        <div class="ctl"><span>盛行率</span><input type="range" id="pp-pr" min="1" max="50" value="15"><output></output></div>
+        <div class="grid2" id="ppkpi" style="margin-top:8px"></div>
+      </div>
+      <svg viewBox="0 0 380 250" class="chart" id="ppsvg"></svg>
+    </div>
+    <p class="note">講義假設：敏感度、特異度都是 80%；再入院率 5% → PPV 約 17%，15% → 約 41%，30% → 約 63%。</p>
+  </div>
+</section>
+
+<section class="part" id="p09" data-t="ROC 與 AUROC">
+  <div class="ph"><span class="num">09</span><div><h2>AUROC：模型分辨高低風險的能力</h2><div class="en">ROC CURVE · C-STATISTIC</div></div></div>
+  <p class="one">AUROC <b>沒有通用的「及格線」</b>；它只看排序，不看機率準不準，也不看處理得了幾個警示。</p>
+  <div class="wd">
+    <div class="wh"><h3>ReAdmit-X 在北城資料上的 ROC 曲線</h3><span class="tag o">與第 07 段閾值連動</span></div>
+    <div class="grid2"><svg viewBox="0 0 330 330" class="chart" id="roc"></svg><div><div class="kpi"><div class="l">AUROC（即時計算）</div><div class="v" id="aucv"></div></div><div class="detail" id="roctxt"></div><div class="ctl" style="margin-top:8px"><span>閾值</span><input type="range" id="th2" min="2" max="60" value="20"><output></output></div></div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>放進文獻：再入院模型的真實水準</h3><span class="tag gray">Kansagara 等 JAMA 2011：30 篇、26 個模型</span></div>
+    <svg viewBox="0 0 760 230" class="chart" id="kansvg"></svg>
+    <p class="note">不同資料計算，僅供量級參考：LACE 原始研究 0.684、ReAdmit-X 廠商宣稱 0.85、北城本院 0.76。</p>
+  </div>
+</section>
+
+<section class="part" id="p10" data-t="校準與重新校準">
+  <div class="ph"><span class="num">10</span><div><h2>校準度：模型說 30%，真的有 30% 嗎？</h2><div class="en">VAN CALSTER 2019 · THE ACHILLES HEEL</div></div></div>
+  <p class="one">好消息：<b>校準度可以用醫院自己的資料修正</b>；鑑別力不足就難救了。</p>
+  <div class="wd">
+    <div class="wh"><h3>十分位校準圖</h3><span class="seg" id="calseg"><button class="on" data-m="o">原始（廠商）</button><button data-m="r">本院重新校準後</button></span></div>
+    <div class="grid2"><svg viewBox="0 0 330 330" class="chart" id="calsvg"></svg><div class="detail" id="caltxt" style="margin-top:0"></div></div>
+    <p class="note">以邏輯式重新校準（logistic recalibration）調整截距與斜率；排序不變，所以 AUROC 不變。課堂示範在同一份資料上校準，實務應保留獨立資料確認，並在合約寫明多久重新校準一次。</p>
+  </div>
+</section>
+
+<section class="part" id="p11" data-t="決策曲線">
+  <div class="ph"><span class="num">11</span><div><h2>決策曲線分析：模型有沒有用</h2><div class="en">VICKERS &amp; ELKIN 2006 · NET BENEFIT</div></div></div>
+  <p class="one">AUROC 說模型好不好，<b>決策曲線說模型有沒有用</b>。線越高越有用；低於 0 表示弊大於利。</p>
+  <div class="wd">
+    <div class="wh"><h3>每 100 次出院，淨多抓到幾位？</h3><span class="tag o">滑鼠移到曲線上</span></div>
+    <svg viewBox="0 0 760 290" class="chart" id="dca"></svg>
+    <div class="detail" id="dcatxt"></div>
+    <p class="note">淨效益＝真陽性率 − 偽陽性率 × 閾值／(1−閾值)。以北城合成資料計算；講義三個閾值：依模型介入 9.3、4.9、2.5，全部介入 6.9、−4.7、−19.7。</p>
+  </div>
+</section>
+
+<section class="part" id="p12" data-t="採購決策：ReAdmit-X">
+  <div class="ph"><span class="num">12</span><div><h2>採購決策：ReAdmit-X 該不該買？</h2><div class="en">VENDOR CLAIM vs LOCAL VALIDATION</div></div></div>
+  <p class="one">閾值是<b>從人力倒推</b>，不是從統計最佳點決定：這是臨床人員的專業價值。</p>
+  <div class="grid4">
+    <div class="kpi"><div class="l">AUROC</div><div class="v">0.85 → 0.76</div><div class="l">廠商宣稱 → 北城本院</div></div>
+    <div class="kpi o"><div class="l">平均預測風險</div><div class="v">32%</div><div class="l">實際再入院率 16.2%：高估約一倍</div></div>
+    <div class="kpi"><div class="l">廠商未揭露</div><div class="v" style="font-size:18px">再入院率・平均預測・驗證層級</div></div>
+    <div class="kpi g"><div class="l">建議</div><div class="v">有條件採用</div></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>採購建議與追問清單（課堂產物）</h3><span class="tag o">產生後複製</span></div>
+    <div class="grid3">
+      <div><label>組別</label><input id="pc-team" placeholder="例：第 5 組"></div>
+      <div><label>建議</label><select id="pc-dec"><option>有條件採用</option><option>採用</option><option>暫不採用</option></select></div>
+      <div><label>試行範圍</label><input id="pc-scope" value="心衰竭等高風險科別試行 6 個月"></div>
+      <div><label>介入方式</label><input id="pc-int" value="出院 7 天內電話追蹤並安排回診"></div>
+      <div><label>監測頻率</label><input id="pc-mon" value="每季檢查 AUROC、校準度、各族群、個管師工作量"></div>
+      <div><label>閾值依據</label><input id="pc-th" readonly style="background:#F4F0E6"></div>
+    </div>
+    <label>向廠商追問的十個問題（勾選要寫進評選的）</label>
+    <div class="tog" id="tenq"></div>
+    <div style="margin:10px 0"><button class="btn oc" id="pc-copy">複製採購建議</button> <span id="pc-msg" style="font-size:13px;color:var(--green)"></span></div>
+    <div class="code" id="pc-out"></div>
+  </div>
+</section>
+
+<section class="part" id="p13" data-t="案例研討：Duke Sepsis Watch">
+  <div class="ph"><span class="num">13</span><div><h2>案例研討：Duke Sepsis Watch 的完整生命週期</h2><div class="en">SENDAK ET AL., JMIR MED INFORM 2020</div></div></div>
+  <p class="one">讓模型能上線的，<b>多半不是模型本身</b>：資料、靜默期、流程分工與治理監測。</p>
+  <div class="wd">
+    <div class="wh"><h3>時間軸</h3></div>
+    <div id="dktl"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>決策點：靜默期結果不錯，你會用哪些條件決定正式上線？</h3><span class="tag a">勾選後看結果</span></div>
+    <div class="tog" id="dkv"></div>
+    <div id="dkres" style="display:none">
+      <div class="grid3"><div class="kpi"><div class="v">39,918</div><div class="l">2018 年 3–8 月急診成人病人（約 6.5% 敗血症）</div></div><div class="kpi o"><div class="v">約 4 則<small>／小時</small></div><div class="l">每位護理師的高風險警示上限</div></div><div class="kpi"><div class="v">約 8,000<small> 小時</small></div><div class="l">專案人力投入（不含學員）</div></div></div>
+      <div class="grid2" style="margin-top:10px"><div class="okmsg"><b>做得對的</b><br>▪ 靜默期先驗證，再發警示<br>▪ 明確分工：護理師篩選，醫師確認並治療<br>▪ 治理委員會每週看使用量與 3 小時處置達成率</div><div class="warn" style="margin-top:8px"><b>限制與代價</b><br>▪ 單一醫學中心；2020 論文尚未報告臨床結果<br>▪ 可解釋性被排在陽性預測值之後<br>▪ 需建置 EHR 介接與監測工具，長期仰賴人力</div></div>
+      <div class="detail"><b>連回第 07 段：</b>「每小時 4 則上限」其實就是在選閾值——先決定人力能接住多少警示，再回推閾值與可接受的 PPV。</div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p14" data-t="名詞卡、測驗與回顧">
+  <div class="ph"><span class="num">14</span><div><h2>名詞卡、總測驗與三個問題</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+  <div class="wd"><div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div><div class="cards" id="cards"></div></div>
+  <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
+  <div class="take">
+    <div><b>怎麼來</b>訓練資料代表誰？標籤怎麼定義？有沒有洩漏或捷徑？</div>
+    <div><b>準不準</b>在本院資料上，鑑別力與校準度各如何？盛行率是多少？</div>
+    <div><b>能不能用</b>閾值對應多少工作量？誰接手、做什麼、誰監測？</div>
+  </div>
+  <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">模型不會自己說謊，但數字會被誤讀</h2><p style="color:var(--mute)">模型標記了王伯伯，誰會接到通知？他們會做什麼？<br>下週 W6（★ 第二次課堂實作）：生成式 AI 與大型語言模型——門診對話 → SOAP 病歷。攜帶筆電，複習 W4 提示詞五要素。</p></div>
+</section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w5-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w5-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w5-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
+function bind(sel){$$(sel).forEach(r=>{r.addEventListener("click",e=>{})})}
+function tipify(root){root.querySelectorAll("[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+function segInit(id,cb){$$(id+" button").forEach(b=>b.onclick=()=>{$$(id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset)})}
+function choiceRows(container,items,opts,scoreEl,noteFn){const r=$(container);let ok=0,dn=0;items.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach((o,i)=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;dn++;const g=i===a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+(why||(noteFn?noteFn(a):""));if(scoreEl)$(scoreEl).textContent=`${ok} / ${items.length}`+(dn===items.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})}
+function bars(svg,data,{max,unit="",dec=1,W=360,H=220,cols}){const L=46,B=H-36,T=22;let g="";const step=max/5;for(let v=0;v<=max+1e-9;v+=step){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v,v<10&&step<1?1:0)}${unit}</text>`}const n=data.length,bw=Math.min(80,(W-L-30)/n-30);data.forEach(([lab,v,c],i)=>{const x=L+20+i*((W-L-30)/n)+((W-L-30)/n-bw)/2-10,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${c||cols[i]}" data-t="${lab}：${fmt(v,dec)}${unit}"/><text x="${x+bw/2}" y="${y-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${c||cols[i]}">${fmt(v,dec)}${unit}</text><text x="${x+bw/2}" y="${B+18}" font-size="12.5" text-anchor="middle">${lab}</text>`});$(svg).innerHTML=g;tipify($(svg))}
+
+
+function copyText(t,msgEl){const done=()=>{$(msgEl).textContent="已複製。";setTimeout(()=>$(msgEl).textContent="",3000)};const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$(msgEl).textContent="無法自動複製，請手動選取文字。"}ta.remove()};try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+function togGroup(container,items,init,onchange){const r=$(container);r.innerHTML="";items.forEach((t,i)=>{const on=init.includes(i);const l=h("label",{class:on?"on":""},`<input type="checkbox" ${on?"checked":""}>${t}`);l.querySelector("input").onchange=e=>{l.classList.toggle("on",e.target.checked);onchange($$(container+" input").map((x,k)=>x.checked?k:-1).filter(k=>k>=0))};r.appendChild(l)})}
+
+/* ===== data (sim5.py, seed 2026) ===== */
+const D={"y": "01000000000000100000011110001000010000000000001001000000100010000100000010000000000110000010000100000000001100000000001001000000000000000000010001011000000010010000000000101000110110000000000000000000000000001000100000000000010000100000000000100000001000001000000100000101000000000110100001000010100000000100001000010000000000100100000100000000100000010100000000011000000000010100000010000100010000100000010000000110001010011000000000000000010010000000000000001001000000010000000000000000000010100000000011000010000000011000000010000010000100000010001000000010100000101000001000000000100000000000000010001000000000001000000000110000100100000000000000100000001000000000101000000000000101010000000000000000000010011010110000100011000000000000000111001000000001000000010000000010000010110001000000001001000000000010001000000011001100010000000000010000000000000100000000001000001010000001000000000000010000011000000010000000000000000100000000100100000000000001001000000000000100100010000000000000100000000010010001000000000000001000000000110000100000000000100011000001000100000000000000000000000001000000010000001010100000000000000000000100000000001010000100000000000010100000000000000010011001000000000100100000011000001011000000000101100000011000110000000001100000000010010100000000010000000000100100001010100000000011000000010000011000000001000101101000000000000000000000000000010000000010100000000100000001100000001001010000100001000000000011000000000011000010000101000000011010000001000000000110000000000000000011000001000000000000000001010000110001000000011000000001001000000001000000001100000000000000100000010010000001000000000010000100000000000101000000000000001011000100000000000000100010000110001000000000000001100001001000001000000100000001000000000001000000000001001000000000010000000000000000100100000000000000110000000000100001000000010100101000010000001100000100110010000000001000000000000000000010000011110011100100000000000000000000000000000000000000001001010000000100010100001000100001", "p": [0.10973, 0.26304, 0.28402, 0.21878, 0.15843, 0.36117, 0.29084, 0.2939, 0.09835, 0.09095, 0.36147, 0.14067, 0.37152, 0.21969, 0.44847, 0.12851, 0.09724, 0.79505, 0.46032, 0.37141, 0.11764, 0.49227, 0.67355, 0.51066, 0.77066, 0.30893, 0.18375, 0.12077, 0.57432, 0.51482, 0.3744, 0.09795, 0.7297, 0.32874, 0.24525, 0.37522, 0.12738, 0.12718, 0.21372, 0.24193, 0.46976, 0.46311, 0.36734, 0.77921, 0.37548, 0.21714, 0.32828, 0.16537, 0.58487, 0.34981, 0.57913, 0.33922, 0.2457, 0.63832, 0.14617, 0.08564, 0.70875, 0.5131, 0.38702, 0.28797, 0.44608, 0.16185, 0.10568, 0.12002, 0.06105, 0.60075, 0.20624, 0.08982, 0.27698, 0.13569, 0.17924, 0.08645, 0.85433, 0.14232, 0.45757, 0.16275, 0.21868, 0.12836, 0.54153, 0.53831, 0.54421, 0.3923, 0.08641, 0.17032, 0.67358, 0.29666, 0.4551, 0.19324, 0.30899, 0.30039, 0.38916, 0.25719, 0.34445, 0.16443, 0.21371, 0.67147, 0.15585, 0.36361, 0.29728, 0.06015, 0.1488, 0.11783, 0.52594, 0.1463, 0.34448, 0.27202, 0.23259, 0.15745, 0.31117, 0.32743, 0.05265, 0.37955, 0.29193, 0.62803, 0.42627, 0.21069, 0.1678, 0.15012, 0.45558, 0.27405, 0.13424, 0.22222, 0.11878, 0.31412, 0.4405, 0.14931, 0.14758, 0.4399, 0.07388, 0.26324, 0.08386, 0.27745, 0.39392, 0.16822, 0.14086, 0.49876, 0.26511, 0.30596, 0.43455, 0.16201, 0.46318, 0.41972, 0.462, 0.11598, 0.09219, 0.69005, 0.86633, 0.45317, 0.0509, 0.23757, 0.21419, 0.11187, 0.24467, 0.25028, 0.59563, 0.18385, 0.49451, 0.03656, 0.12432, 0.44922, 0.30868, 0.61979, 0.58265, 0.53151, 0.64923, 0.12991, 0.35391, 0.29276, 0.07614, 0.68502, 0.55727, 0.39553, 0.42698, 0.12772, 0.10305, 0.26912, 0.35418, 0.63517, 0.52123, 0.5976, 0.40937, 0.5078, 0.20808, 0.20913, 0.24596, 0.23346, 0.60815, 0.26958, 0.16308, 0.65125, 0.21211, 0.28143, 0.31492, 0.23405, 0.0671, 0.08184, 0.62442, 0.24936, 0.1073, 0.12172, 0.15056, 0.31238, 0.22058, 0.4369, 0.38174, 0.48279, 0.21312, 0.19999, 0.86956, 0.1817, 0.11137, 0.39192, 0.20539, 0.13285, 0.40662, 0.18588, 0.40154, 0.67222, 0.35576, 0.17192, 0.0994, 0.26489, 0.07565, 0.28527, 0.212, 0.25736, 0.50837, 0.19873, 0.07893, 0.19685, 0.58265, 0.31445, 0.24709, 0.14891, 0.2874, 0.10495, 0.11724, 0.23909, 0.87818, 0.43123, 0.2195, 0.09149, 0.65746, 0.35266, 0.09057, 0.34194, 0.20449, 0.21981, 0.38915, 0.5885, 0.52914, 0.38967, 0.63335, 0.19997, 0.08614, 0.21111, 0.61912, 0.58304, 0.23476, 0.04108, 0.12873, 0.12351, 0.06026, 0.2017, 0.51638, 0.1642, 0.05238, 0.24611, 0.48124, 0.49741, 0.38438, 0.46672, 0.53997, 0.13088, 0.23181, 0.14708, 0.42799, 0.12597, 0.25439, 0.35677, 0.16211, 0.49776, 0.32317, 0.23849, 0.92774, 0.4272, 0.32473, 0.20984, 0.0796, 0.6348, 0.41177, 0.12479, 0.59069, 0.58472, 0.63755, 0.65707, 0.32959, 0.54608, 0.0628, 0.20292, 0.21475, 0.08202, 0.48522, 0.18309, 0.14141, 0.7491, 0.51641, 0.11765, 0.27199, 0.24019, 0.33514, 0.42092, 0.22818, 0.46027, 0.19049, 0.60292, 0.07999, 0.14134, 0.29543, 0.52774, 0.21609, 0.31096, 0.37235, 0.2864, 0.13497, 0.52756, 0.27454, 0.37048, 0.41151, 0.43264, 0.05918, 0.3742, 0.12701, 0.36594, 0.23469, 0.14785, 0.20679, 0.09994, 0.14585, 0.06954, 0.45005, 0.04318, 0.34366, 0.18061, 0.33686, 0.16349, 0.17513, 0.09825, 0.10863, 0.12801, 0.03142, 0.37539, 0.56912, 0.68483, 0.2059, 0.6694, 0.11607, 0.53574, 0.25374, 0.17804, 0.32612, 0.24861, 0.35038, 0.5329, 0.75554, 0.2835, 0.18003, 0.1258, 0.06157, 0.16614, 0.15348, 0.18187, 0.50655, 0.22201, 0.32235, 0.27781, 0.04736, 0.61756, 0.17219, 0.28571, 0.74512, 0.1009, 0.18329, 0.41476, 0.4318, 0.34864, 0.46147, 0.03148, 0.284, 0.42249, 0.42034, 0.51289, 0.5022, 0.58042, 0.36852, 0.44225, 0.22612, 0.25008, 0.56355, 0.45462, 0.50232, 0.09857, 0.2639, 0.19556, 0.80127, 0.57866, 0.23398, 0.43499, 0.25266, 0.19426, 0.0759, 0.08918, 0.46954, 0.86143, 0.67936, 0.09874, 0.42627, 0.1407, 0.63363, 0.43308, 0.53146, 0.35063, 0.13422, 0.15288, 0.43854, 0.24156, 0.16785, 0.22534, 0.63705, 0.29599, 0.23048, 0.10565, 0.20627, 0.17455, 0.48042, 0.24145, 0.13903, 0.21531, 0.07325, 0.1602, 0.37254, 0.77537, 0.4159, 0.17103, 0.30436, 0.53645, 0.55692, 0.36312, 0.42256, 0.4527, 0.44156, 0.27971, 0.21638, 0.17096, 0.26927, 0.14557, 0.18062, 0.15011, 0.18947, 0.51615, 0.41974, 0.19791, 0.28051, 0.05209, 0.38588, 0.61231, 0.17649, 0.30867, 0.17037, 0.12934, 0.44704, 0.67785, 0.17235, 0.35603, 0.14226, 0.6182, 0.71499, 0.32886, 0.1263, 0.56428, 0.40569, 0.53403, 0.55903, 0.3684, 0.04916, 0.28707, 0.20122, 0.21338, 0.19734, 0.39253, 0.12256, 0.22087, 0.26979, 0.37455, 0.2939, 0.06491, 0.25224, 0.51418, 0.49984, 0.40263, 0.27781, 0.19282, 0.10916, 0.28809, 0.11986, 0.39988, 0.47345, 0.06685, 0.1385, 0.47851, 0.87893, 0.29884, 0.32905, 0.11834, 0.24308, 0.33023, 0.12473, 0.21534, 0.41679, 0.57382, 0.50374, 0.21261, 0.469, 0.08337, 0.4696, 0.18884, 0.1053, 0.25421, 0.58789, 0.10529, 0.27991, 0.08779, 0.07733, 0.3541, 0.44178, 0.14963, 0.07723, 0.4395, 0.14017, 0.29719, 0.25831, 0.24591, 0.45815, 0.14298, 0.38458, 0.17852, 0.54766, 0.26311, 0.44244, 0.28872, 0.47067, 0.21138, 0.35326, 0.28569, 0.14863, 0.36673, 0.37302, 0.29929, 0.83556, 0.1865, 0.77928, 0.2413, 0.26312, 0.26432, 0.77349, 0.5072, 0.8337, 0.60516, 0.63175, 0.49687, 0.54077, 0.33126, 0.2509, 0.18546, 0.71818, 0.35458, 0.13659, 0.20248, 0.25302, 0.14603, 0.37955, 0.39533, 0.28938, 0.1604, 0.17158, 0.12254, 0.30429, 0.07163, 0.2517, 0.27297, 0.25913, 0.56092, 0.07924, 0.33481, 0.17298, 0.35157, 0.25713, 0.50145, 0.14013, 0.46585, 0.81655, 0.24273, 0.73082, 0.28526, 0.29602, 0.33523, 0.1934, 0.7266, 0.229, 0.21009, 0.29236, 0.66495, 0.16331, 0.64815, 0.05357, 0.63397, 0.53749, 0.41865, 0.1523, 0.43434, 0.21298, 0.22303, 0.14656, 0.10451, 0.18962, 0.18684, 0.30566, 0.48947, 0.56319, 0.60146, 0.48509, 0.33823, 0.63431, 0.26895, 0.33834, 0.46264, 0.54196, 0.30537, 0.32442, 0.09532, 0.18514, 0.58627, 0.24641, 0.31696, 0.1837, 0.14182, 0.21847, 0.14282, 0.05768, 0.3588, 0.52831, 0.34305, 0.48043, 0.14931, 0.35088, 0.10939, 0.09579, 0.1336, 0.74128, 0.45588, 0.15986, 0.35663, 0.17478, 0.12415, 0.69213, 0.2204, 0.14257, 0.36154, 0.42665, 0.2797, 0.44376, 0.60017, 0.10221, 0.28384, 0.20098, 0.24452, 0.44565, 0.4042, 0.47273, 0.41373, 0.48713, 0.23169, 0.53175, 0.84138, 0.30733, 0.45062, 0.16525, 0.84018, 0.0814, 0.43223, 0.16967, 0.1192, 0.15106, 0.05745, 0.42711, 0.39623, 0.2542, 0.36751, 0.22622, 0.11669, 0.05961, 0.1823, 0.16223, 0.29712, 0.24055, 0.22279, 0.05697, 0.47669, 0.25808, 0.24648, 0.11945, 0.22252, 0.3331, 0.11029, 0.14705, 0.21915, 0.33429, 0.2253, 0.26569, 0.10174, 0.25959, 0.49114, 0.04856, 0.12397, 0.64877, 0.35846, 0.24684, 0.37027, 0.19854, 0.14458, 0.63801, 0.38689, 0.09264, 0.04837, 0.25475, 0.36981, 0.13612, 0.20682, 0.28016, 0.03959, 0.25143, 0.12604, 0.46369, 0.27194, 0.52621, 0.63746, 0.63407, 0.09946, 0.31689, 0.05458, 0.38741, 0.1906, 0.10588, 0.18699, 0.67333, 0.24109, 0.07154, 0.51341, 0.4461, 0.16641, 0.07621, 0.34612, 0.15827, 0.22237, 0.70575, 0.88222, 0.17257, 0.08204, 0.0493, 0.39676, 0.09051, 0.34452, 0.45686, 0.20647, 0.67135, 0.3745, 0.39799, 0.13238, 0.06256, 0.40628, 0.36242, 0.5901, 0.61622, 0.63402, 0.58356, 0.08434, 0.06431, 0.30863, 0.22451, 0.56158, 0.44637, 0.29123, 0.33195, 0.08545, 0.23541, 0.30545, 0.31609, 0.35709, 0.06799, 0.33392, 0.57225, 0.36455, 0.54988, 0.24974, 0.19128, 0.19893, 0.55691, 0.77366, 0.67765, 0.09477, 0.73508, 0.1533, 0.16625, 0.32373, 0.27665, 0.37238, 0.57251, 0.5462, 0.37059, 0.23302, 0.25702, 0.39084, 0.3453, 0.37306, 0.47216, 0.56695, 0.27697, 0.36647, 0.24382, 0.20923, 0.30569, 0.45253, 0.62943, 0.17966, 0.16751, 0.09431, 0.31158, 0.35413, 0.19372, 0.48421, 0.19072, 0.81179, 0.22452, 0.32677, 0.12739, 0.44191, 0.52193, 0.45822, 0.03786, 0.16434, 0.09118, 0.32805, 0.50569, 0.10774, 0.73183, 0.18445, 0.21433, 0.51105, 0.16857, 0.31395, 0.32308, 0.25597, 0.12405, 0.43632, 0.34604, 0.08737, 0.19458, 0.11363, 0.81533, 0.18617, 0.34282, 0.12224, 0.06906, 0.47296, 0.42896, 0.69995, 0.33626, 0.17823, 0.33341, 0.15462, 0.54446, 0.30019, 0.43516, 0.32389, 0.65502, 0.31348, 0.2957, 0.05449, 0.38067, 0.10752, 0.39866, 0.1182, 0.26668, 0.48093, 0.24289, 0.07985, 0.32321, 0.45827, 0.39038, 0.11067, 0.33409, 0.06936, 0.28591, 0.12671, 0.17808, 0.07525, 0.11629, 0.24865, 0.35104, 0.89604, 0.05188, 0.33638, 0.23568, 0.38786, 0.08438, 0.19586, 0.23517, 0.63357, 0.67354, 0.56559, 0.07478, 0.24353, 0.55117, 0.78147, 0.16229, 0.45234, 0.45273, 0.10208, 0.46357, 0.33133, 0.11271, 0.27395, 0.54142, 0.19272, 0.20594, 0.07789, 0.09639, 0.2616, 0.66986, 0.08662, 0.01997, 0.30302, 0.45479, 0.17054, 0.08697, 0.11016, 0.36563, 0.09424, 0.1956, 0.17544, 0.2424, 0.08003, 0.52536, 0.17236, 0.13104, 0.67115, 0.35702, 0.42717, 0.32888, 0.18707, 0.19639, 0.30408, 0.39768, 0.27412, 0.39753, 0.06187, 0.10501, 0.06342, 0.75968, 0.13463, 0.40205, 0.63392, 0.23981, 0.21173, 0.16589, 0.27028, 0.11735, 0.24142, 0.52485, 0.24761, 0.25308, 0.27339, 0.19086, 0.26327, 0.25013, 0.16463, 0.06475, 0.49561, 0.0329, 0.22118, 0.27938, 0.19562, 0.13065, 0.34567, 0.72867, 0.37137, 0.17408, 0.28963, 0.53976, 0.65927, 0.38231, 0.43147, 0.48355, 0.13825, 0.3375, 0.4068, 0.35654, 0.17897, 0.19635, 0.11438, 0.37124, 0.31271, 0.36816, 0.5284, 0.1584, 0.69273, 0.03402, 0.30978, 0.04624, 0.3873, 0.15208, 0.43564, 0.17347, 0.49194, 0.67217, 0.60229, 0.41951, 0.43698, 0.40235, 0.09172, 0.19691, 0.41082, 0.3254, 0.32081, 0.45299, 0.29202, 0.41108, 0.49734, 0.22879, 0.33307, 0.44348, 0.36974, 0.40719, 0.05872, 0.58878, 0.67938, 0.44065, 0.15123, 0.41108, 0.606, 0.29597, 0.3849, 0.53427, 0.54567, 0.10153, 0.27718, 0.49609, 0.49338, 0.4875, 0.18029, 0.34344, 0.2315, 0.25895, 0.05009, 0.47613, 0.20606, 0.37803, 0.40681, 0.30944, 0.13946, 0.21003, 0.381, 0.18647, 0.1321, 0.16769, 0.67427, 0.15944, 0.45149, 0.18776, 0.21756, 0.09259, 0.11189, 0.31202, 0.67668, 0.28594, 0.09371, 0.13264, 0.05215, 0.59654, 0.20639, 0.19414, 0.34352, 0.28933, 0.87671, 0.14771, 0.16184, 0.21446, 0.31558, 0.10732, 0.27177, 0.12864, 0.43503, 0.51092, 0.21081, 0.36408, 0.57223, 0.44727, 0.22543, 0.6342, 0.204, 0.78971, 0.36307, 0.38561, 0.3343, 0.45258, 0.30522, 0.3257, 0.17533, 0.27536, 0.21797, 0.20623, 0.13831, 0.2261, 0.6726, 0.48554, 0.41923, 0.42461, 0.15281, 0.44384, 0.08191, 0.24084, 0.12028, 0.21077, 0.72801, 0.17283, 0.12584, 0.76688, 0.42099, 0.64814, 0.23572, 0.05816, 0.08564, 0.071, 0.22451, 0.51465, 0.43521, 0.37044, 0.21907, 0.43718, 0.49652, 0.1177, 0.35525, 0.27792, 0.16916, 0.32433, 0.15354, 0.14113, 0.45227, 0.15203, 0.32998, 0.33435, 0.70644, 0.11892, 0.10637, 0.39453, 0.10604, 0.2908, 0.37588, 0.42089, 0.08287, 0.15649, 0.15676, 0.7721, 0.12517, 0.16083, 0.47457, 0.25421, 0.2103, 0.67117, 0.11438, 0.42412, 0.17199, 0.29224, 0.32596, 0.08542, 0.64602, 0.68484, 0.34507, 0.27978, 0.61019, 0.23002, 0.30561, 0.25589, 0.23741, 0.2128, 0.10511, 0.31541, 0.32813, 0.23361, 0.31983, 0.30427, 0.34063, 0.88339, 0.27307, 0.39187, 0.05404, 0.25143, 0.16611, 0.0834, 0.53788, 0.29459, 0.44182, 0.54723, 0.25909, 0.49376, 0.47299, 0.83613, 0.3204, 0.18335, 0.79614, 0.54166, 0.72525, 0.09852, 0.46546, 0.22201, 0.28941, 0.32078, 0.4452, 0.55276, 0.81158, 0.2094, 0.6817, 0.30615, 0.30477, 0.1391, 0.19001, 0.2011, 0.04108, 0.63538, 0.16952, 0.79388, 0.38292, 0.06975, 0.43908, 0.29102, 0.49622, 0.25035, 0.1136, 0.08783, 0.3102, 0.83766, 0.07226, 0.03823, 0.59053, 0.6422, 0.43774, 0.504, 0.25711, 0.17748, 0.26918, 0.09849, 0.23834, 0.76425, 0.33165, 0.15423, 0.0914, 0.41985, 0.5776, 0.19988, 0.69171, 0.34832, 0.73846, 0.20357, 0.22236, 0.55863, 0.28338, 0.32458, 0.02727, 0.40845, 0.60992, 0.4515, 0.24963, 0.39828, 0.10886, 0.2583, 0.62182, 0.41054, 0.0526, 0.07716, 0.06758, 0.09581, 0.32409, 0.52271, 0.08443, 0.21345, 0.13404, 0.1349, 0.29529, 0.22208, 0.62313, 0.89529, 0.1774, 0.59962, 0.12758, 0.59582, 0.09475, 0.35767, 0.27213, 0.28866, 0.08628, 0.11784, 0.15671, 0.28113, 0.12868, 0.2214, 0.55379, 0.295, 0.46014, 0.15825, 0.55083, 0.249, 0.20875, 0.52192, 0.30918, 0.17157, 0.16572, 0.3448, 0.70058, 0.49686, 0.40471, 0.64315, 0.78514, 0.10521, 0.20983, 0.3923, 0.06277, 0.12294, 0.05381, 0.02812, 0.65699, 0.46176, 0.45095, 0.16977, 0.56364, 0.29444, 0.76449, 0.50666, 0.06545, 0.47885, 0.57692, 0.11761, 0.27468, 0.24597, 0.25693, 0.44885, 0.49828, 0.17066, 0.2366, 0.57306, 0.34788, 0.17733, 0.21312, 0.12744, 0.10613, 0.23982, 0.12049, 0.09359, 0.36592, 0.11112, 0.07612, 0.20004, 0.5452, 0.3819, 0.15427, 0.24815, 0.58112, 0.26628, 0.52877, 0.10745, 0.09616, 0.07813, 0.39052, 0.55813, 0.20033, 0.34095, 0.12095, 0.25717, 0.32114, 0.09547, 0.32949, 0.17001, 0.09177, 0.23697, 0.72444, 0.30484, 0.26362, 0.19684, 0.69971, 0.2584, 0.062, 0.33638, 0.09876, 0.16455, 0.04938, 0.18771, 0.33818, 0.30984, 0.1773, 0.39446, 0.16695, 0.11201, 0.1587, 0.26527, 0.08105, 0.20108, 0.35704, 0.58564, 0.55856, 0.42484, 0.29325, 0.32403, 0.23448, 0.59556, 0.09366, 0.08697, 0.5463, 0.26987, 0.19203, 0.30221, 0.53369, 0.06323, 0.13422, 0.08845, 0.12048, 0.21813, 0.09295, 0.6223, 0.6354, 0.26229, 0.57182, 0.2971, 0.30596, 0.14241, 0.12928, 0.12361, 0.3879, 0.43837, 0.59645, 0.73848, 0.0828, 0.32307, 0.08638, 0.62171, 0.44382, 0.14067, 0.05394, 0.18802, 0.11897, 0.12403, 0.45274, 0.25745, 0.12985, 0.1016, 0.68641, 0.57872, 0.37355, 0.46293, 0.33577, 0.11544, 0.15992, 0.07438, 0.47375, 0.37132, 0.63524, 0.59185, 0.11457, 0.07755, 0.3248, 0.25359, 0.2835, 0.15691, 0.70119, 0.12519, 0.6913, 0.6477, 0.19963, 0.17973, 0.18488, 0.09448, 0.20402, 0.192, 0.41325, 0.19525, 0.26812, 0.33193, 0.35981, 0.14635, 0.34143, 0.16927, 0.13532, 0.18627, 0.33131, 0.3136, 0.4078, 0.1393, 0.32385, 0.13565, 0.33652, 0.25502, 0.21977, 0.10713, 0.06627, 0.79404, 0.5882, 0.259, 0.16759, 0.06981, 0.17655, 0.20454, 0.29051, 0.30833, 0.21133, 0.55662, 0.05555, 0.26607, 0.21328, 0.31731, 0.40145, 0.53721, 0.27296, 0.17398, 0.33864, 0.29401, 0.0728, 0.12802, 0.56724, 0.34676, 0.52157, 0.20365, 0.21769, 0.63618, 0.62803, 0.28211, 0.70731, 0.83408, 0.44843, 0.36323, 0.27795, 0.26756, 0.5702, 0.4014, 0.24063, 0.20246, 0.31258, 0.32411, 0.18133, 0.39666, 0.72893, 0.58457, 0.13676, 0.34673, 0.51595, 0.27273, 0.33354, 0.19055, 0.8952, 0.27239, 0.42378, 0.57105, 0.3206, 0.34472, 0.37843, 0.17877, 0.0559, 0.37469, 0.25265, 0.47223, 0.23293, 0.11339, 0.63722, 0.65339, 0.1574, 0.41785, 0.37754, 0.53982, 0.13079, 0.20383, 0.20534, 0.4043, 0.73569, 0.21369, 0.08337, 0.11855, 0.3427, 0.17186, 0.16352, 0.50213, 0.64072, 0.24757, 0.24004, 0.06981, 0.55201, 0.27987, 0.3515, 0.13141, 0.79942, 0.17041, 0.09327, 0.05337, 0.33331, 0.23065, 0.33617, 0.77894, 0.43029, 0.40198, 0.31881, 0.29055, 0.22572, 0.49118, 0.19056, 0.13664, 0.31955, 0.17006, 0.09583, 0.27412, 0.09568, 0.23279, 0.31972, 0.23713, 0.5851, 0.28079, 0.19322, 0.24927, 0.67187, 0.15022, 0.16741, 0.12827, 0.50259, 0.34035, 0.58836, 0.35874, 0.23675, 0.68028, 0.20221, 0.26691, 0.33235, 0.19758, 0.42224, 0.32972, 0.82584, 0.39341, 0.66562, 0.57559, 0.32632, 0.21622, 0.2723, 0.0848, 0.3068, 0.33034, 0.25927, 0.63268, 0.50831, 0.25772, 0.25956, 0.3421, 0.19291, 0.40839, 0.09258, 0.79709, 0.47843, 0.40351, 0.10603, 0.55107, 0.8946, 0.13141, 0.19939, 0.32297, 0.54372, 0.34105, 0.62169, 0.39934, 0.63743, 0.10646, 0.69599, 0.31747, 0.21167, 0.51368, 0.11968, 0.44911, 0.0963, 0.43469, 0.39883, 0.49384, 0.44883, 0.15972, 0.38268, 0.29338, 0.79043, 0.5849, 0.27525, 0.05596, 0.09518, 0.61798, 0.27463, 0.18172, 0.47635, 0.49382, 0.64907, 0.08938, 0.26233, 0.67172, 0.1026, 0.23285, 0.21272, 0.32461, 0.38625, 0.11322, 0.37844, 0.46543, 0.11285, 0.29834, 0.07539, 0.1344, 0.90695, 0.15649, 0.19274, 0.29269, 0.18259, 0.04815, 0.41676, 0.18934, 0.0654, 0.30811, 0.11676, 0.66629, 0.20223, 0.13351, 0.26859, 0.30521, 0.29443, 0.06222, 0.3994, 0.35216, 0.18983, 0.32073, 0.10593, 0.13586, 0.33861, 0.21402, 0.42802, 0.24652, 0.16577, 0.65236, 0.06779, 0.25662, 0.3926, 0.40598, 0.10659, 0.44027, 0.78644, 0.76881, 0.29463, 0.34267, 0.39897, 0.43943, 0.29309, 0.37735, 0.20312, 0.12166, 0.45994, 0.21338, 0.69279, 0.46878, 0.13126, 0.35223, 0.30329, 0.49445, 0.68741, 0.11399, 0.24106, 0.11072, 0.3608, 0.19593, 0.13208, 0.24161, 0.27823, 0.06255, 0.52962, 0.09501, 0.51817, 0.33817, 0.05813, 0.15, 0.36265, 0.2075, 0.30565, 0.29218, 0.57683, 0.15427, 0.16181, 0.47571, 0.74704, 0.96651, 0.15607, 0.16246, 0.32445, 0.11814, 0.73487, 0.30678, 0.33341, 0.23124, 0.68157, 0.04691, 0.15959, 0.22161, 0.06431, 0.24708, 0.33373, 0.48286, 0.50963, 0.17913, 0.09387, 0.17982, 0.30965, 0.19112, 0.03527, 0.21592, 0.12697, 0.16059, 0.42241, 0.18247, 0.29975, 0.41456, 0.20507, 0.45281, 0.24738, 0.12379, 0.60011, 0.06329, 0.1928, 0.28197, 0.23309, 0.54294, 0.29015, 0.29248, 0.48175, 0.53544, 0.59588, 0.22632, 0.40235, 0.16393, 0.1755, 0.75487, 0.05257, 0.32721, 0.37879, 0.26385, 0.60867, 0.0872, 0.26078, 0.17062, 0.24787, 0.48175, 0.06352, 0.32056, 0.76075, 0.32842, 0.09764, 0.20892, 0.14995, 0.29374, 0.87099, 0.47978, 0.23067, 0.8391, 0.19291, 0.10207, 0.09886, 0.3674, 0.409, 0.38565, 0.14163, 0.20435, 0.14585, 0.16058, 0.22066, 0.1408, 0.50755, 0.49887, 0.58175, 0.61801, 0.31311, 0.45589, 0.15418, 0.08502, 0.3021, 0.10237, 0.15951, 0.22173, 0.13993, 0.23652, 0.08759, 0.77394, 0.40186, 0.1864, 0.4324, 0.59606, 0.66151, 0.4118, 0.38944, 0.54437, 0.16679, 0.15462, 0.12301, 0.49306, 0.68974, 0.62883, 0.35646, 0.15736, 0.16051, 0.16024, 0.64769, 0.73097, 0.03771, 0.25546, 0.67731, 0.14233, 0.1456, 0.09202, 0.1921, 0.08649, 0.09915, 0.1133, 0.15853, 0.06116, 0.46343, 0.30375, 0.22239, 0.22329, 0.18025, 0.09848, 0.44118, 0.09829, 0.18876, 0.12608, 0.25001, 0.09101, 0.5375, 0.19944, 0.71609, 0.37835, 0.20964, 0.83997, 0.22651, 0.28593, 0.1457, 0.3878, 0.21406, 0.21438, 0.16511, 0.08407, 0.17436, 0.29875, 0.38299, 0.17124, 0.19384, 0.45805, 0.20242, 0.63238, 0.56221, 0.06644, 0.2977, 0.26633, 0.34917, 0.12037, 0.86522, 0.43635, 0.33351, 0.2001, 0.2676, 0.30685, 0.14574, 0.18557, 0.42431, 0.38321, 0.31247, 0.29682, 0.47307, 0.1999, 0.42326, 0.21717, 0.60503, 0.22971, 0.43675, 0.48391, 0.0714, 0.86964, 0.4583, 0.27972, 0.37568], "b": [-1.0581664183368942, 0.9827576507290957]};
+const Y=D.y.split("").map(Number),PV=D.p,N=Y.length,POS=Y.reduce((a,b)=>a+b,0),NEG=N-POS;
+const PR=PV.map(p=>{const x=Math.log(p/(1-p));return 1/(1+Math.exp(-(D.b[0]+D.b[1]*x)))});
+function at(t,P){P=P||PR;let tp=0,fp=0;for(let i=0;i<N;i++)if(P[i]>=t){Y[i]?tp++:fp++}const fn=POS-tp,tn=NEG-fp;return{t,flag:tp+fp,tp,fp,fn,tn,sens:tp/POS,spec:tn/NEG,ppv:tp/Math.max(1,tp+fp),npv:tn/Math.max(1,tn+fn),acc:(tp+tn)/N}}
+const AUC=(function(){const idx=PV.map((p,i)=>i).sort((a,b)=>PV[a]-PV[b]);let rs=0;idx.forEach((i,r)=>{if(Y[i])rs+=r+1});return(rs-POS*(POS+1)/2)/(POS*NEG)})();
+function deciles(P){const idx=P.map((p,i)=>i).sort((a,b)=>P[a]-P[b]);const out=[];for(let k=0;k<10;k++){const s=idx.slice(Math.round(k*N/10),Math.round((k+1)*N/10));out.push([s.reduce((a,i)=>a+P[i],0)/s.length,s.reduce((a,i)=>a+Y[i],0)/s.length])}return out}
+
+/* 01 claims + LACE */
+const CL=[["「以 50 萬筆住院資料訓練」","哪裡、哪些年份、哪些病人的資料？——資料能代表北城的病人嗎？（第 03 段）"],["「AUROC 高達 0.85」","在誰的資料上算的？是哪一層驗證？（第 05、09 段）"],["「準確率 88%」","再入院率多少？只看準確率會誤導嗎？（第 07、08 段）"],["「可提早找出高風險病人」","預測 30%，真的有 30% 會再住院嗎？（第 10 段校準）"],["「降低再入院」","要標記多少人？人力負擔得起？有介入嗎？（第 07、12 段）"]];
+(function(){const r=$("#claims");CL.forEach(([a,b])=>{const row=h("div",{class:"claim",style:"margin:6px 0"},`<div class="v">${a}</div><div class="a">？ 點左邊翻開</div>`);row.querySelector(".v").onclick=()=>{const x=row.querySelector(".a");x.classList.add("open");x.textContent=b};r.appendChild(row)})})();
+function lace(){const l=+$("#la-l").value,a=$("#la-a").checked,c=+$("#la-c").value,e=+$("#la-e").value;$("#la-l").nextElementSibling.textContent=l+" 天";$("#la-c").nextElementSibling.textContent=c;$("#la-e").nextElementSibling.textContent=e+" 次";
+ const L=l<1?0:l===1?1:l===2?2:l===3?3:l<=6?4:l<=13?5:7,A=a?3:0,Cs=c>=4?5:c,E=Math.min(e,4),tot=L+A+Cs+E;$("#la-v").textContent=tot;$("#la-t").innerHTML=tot>=10?`<span style="color:${C.ochre}">≥10：高風險</span>`:`<span style="color:${C.green}">&lt;10</span>`;$("#la-d").innerHTML=`L 住院天數 ${L}＋A 急性入院 ${A}＋C 共病 ${Cs}＋E 急診 ${E}＝<b>${tot}</b><br>＋ 透明、好懂、好執行　－ 鑑別力有限`}
+["#la-l","#la-c","#la-e"].forEach(id=>$(id).oninput=lace);$("#la-a").onchange=lace;lace();
+
+/* 02 nest */
+const NS=[["人工智慧 AI","含規則","用藥交互作用警示",150,C.gray],["機器學習 ML","從資料學","再入院風險預測",112,C.navy2],["深度學習 DL","多層神經網路","胸部 X 光、心電圖判讀",76,C.navy],["基礎模型","預訓練、多任務","病歷摘要、衛教生成（W6）",42,C.ochre]];let nsI=1;
+function drawNest(){const s=$("#nest");let g="";NS.forEach(([n,,,r,c],i)=>{g+=`<circle class="ns" data-i="${i}" cx="${190}" cy="${150+ (150-r)*0.55}" r="${r}" fill="${i===nsI?c:"#fff"}" fill-opacity="${i===nsI?.9:1}" stroke="${c}" stroke-width="2.5" style="cursor:pointer"/>`});NS.forEach(([n,,,r,c],i)=>{const y=150+(150-r)*0.55-r+20;g+=`<text x="190" y="${y}" font-size="13" text-anchor="middle" font-weight="900" fill="${i===nsI?"#fff":c}" style="pointer-events:none">${n}</text>`});s.innerHTML=g;s.querySelectorAll(".ns").forEach(e=>e.onclick=ev=>{ev.stopPropagation();nsI=+e.dataset.i;drawNest()});const x=NS[nsI];$("#nesttxt").innerHTML=`<b style="font-size:17px;color:var(--navy)">${x[0]}</b>（${x[1]}）<br>醫療例子：${x[2]}<br><span style="font-size:13px;color:var(--mute)">${nsI===3?"生成式 AI 與基礎模型大幅重疊，但不等同。":nsI===2?"表格型資料（如再入院預測）用傳統機器學習常就足夠；影像與波形才是深度學習的主場。":nsI===1?"臨床最常見的是監督式學習，所以標籤品質決定模型的上限。":"新方法不會淘汰舊方法。"}</span>`}drawNest();
+choiceRows("#lmq",[["預測 30 天再入院（有歷史答案）",0,"監督式：有答案的考古題；標籤品質決定上限。"],["把心衰竭病人分成幾種亞型（沒有答案）",1,"非監督式：自己分組；評估看臨床可解釋性。"],["加護病房給藥策略，嘗試錯誤、獲得獎勵",2,"強化式：多在研究階段。"],["X 光有無肺炎",0,"監督式分類任務。"],["預測住院天數",3,"迴歸任務：評估用誤差（例如 MAE）。"],["寫出院摘要草稿",4,"生成任務：看正確性與幻覺（W6）。"]],["監督式","非監督式","強化式","迴歸任務","生成任務"],"#lmscore");
+
+/* 03 split */
+const SP=(function(){let s=5;const r=()=>{s=(s*16807)%2147483647;return(s-1)/2147483646};const adm=[];for(let i=0;i<200;i++){const pt=i<120?i:Math.floor(r()*120);adm.push({pt,yr:i<100?0:1,rnd:r()})}adm.forEach(a=>a.yr=a.rnd<0.6?0:1);return adm})();
+let spM="adm";function drawSplit(){let test;const ptRand={};SP.forEach(a=>{if(!(a.pt in ptRand))ptRand[a.pt]=((a.pt*7919)%100)/100});
+ if(spM==="adm")test=SP.map(a=>a.rnd>0.8);else if(spM==="pt")test=SP.map(a=>ptRand[a.pt]>0.8);else test=SP.map((a,i)=>((i*7537+13)%100)/100>=0.8);
+ const trainPts=new Set(SP.filter((a,i)=>!test[i]).map(a=>a.pt));let dup=0,nt=0;$("#split").innerHTML=SP.map((a,i)=>{const d=test[i]&&trainPts.has(a.pt);if(test[i]){nt++;if(d)dup++}return `<i class="${d?"dup":""}" style="background:${test[i]?C.ochre:C.navy2}"></i>`}).join("");
+ $("#sptxt").innerHTML=`測試集 ${nt} 次住院中，<b style="color:var(--ochre)">${dup}</b> 次的病人也出現在訓練集（${Math.round(dup/nt*100)}%）。`+(spM==="adm"?"模型可能只是「認得這個病人」——表現被高估。":spM==="pt"?"依病人切：沒有跨組，回答「對沒看過的病人表現如何」；但仍是同一時期、同一醫院。":"依時間切（後 20% 為較新的住院）：回答「部署到之後的病人表現如何」；但同一病人可能跨期，要另查。")}
+segInit("#spseg",d=>{spM=d.m;drawSplit()});drawSplit();
+const OF={tr:[30,22,16,11,7,4,2],te:[32,25,20,18,19,23,29]};
+function of(){const c=+$("#of-c").value;$("#of-c").nextElementSibling.textContent=["很簡單","","","","","","很複雜"][c]||("第 "+(c+1)+" 級");const s=$("#ofsvg"),L=40,R=370,B=210,T=14;const X=i=>L+i*(R-L)/6,Y=v=>B-v/35*(B-T);let g="";[0,10,20,30].forEach(v=>g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}%</text>`);
+ [["tr",C.navy2,"訓練資料錯誤率"],["te",C.ochre,"新資料錯誤率"]].forEach(([k,col,n],j)=>{let d="";OF[k].forEach((v,i)=>d+=(i?"L":"M")+X(i)+","+Y(v));g+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="3"/><text x="${R}" y="${Y(OF[k][6])+(j?-8:16)}" font-size="12" fill="${col}" text-anchor="end" font-weight="700">${n}</text>`});
+ g+=`<line x1="${X(3)}" x2="${X(3)}" y1="${T}" y2="${B}" stroke="${C.green}" stroke-dasharray="4 4"/><text x="${X(3)}" y="${T+10}" font-size="11" fill="${C.green}" text-anchor="middle">最佳複雜度</text><line x1="${X(c)}" x2="${X(c)}" y1="${T}" y2="${B}" stroke="${C.mute}"/><circle cx="${X(c)}" cy="${Y(OF.tr[c])}" r="6" fill="${C.navy2}"/><circle cx="${X(c)}" cy="${Y(OF.te[c])}" r="6" fill="${C.ochre}"/><text x="${(L+R)/2}" y="${B+20}" font-size="12" fill="${C.mute}" text-anchor="middle">模型複雜度：很簡單 → 很複雜</text>`;s.innerHTML=g;
+ $("#oftxt").innerHTML=`訓練錯誤率 <b>${OF.tr[c]}%</b>，新資料錯誤率 <b style="color:var(--ochre)">${OF.te[c]}%</b>，落差 ${OF.te[c]-OF.tr[c]} 個百分點。<br>${c>3?"<b>過度擬合：</b>背熟考古題。避免方法：資料量足夠、正規化、用驗證集挑模型、在沒看過的資料上測試。":c<3?"<b>擬合不足：</b>模型太簡單，兩邊都不準。":"<b>最佳複雜度附近。</b>"}<br><span style="color:var(--mute);font-size:13px">看到「訓練準確率 99%」先追問：沒看過的資料上是多少？</span>`}
+$("#of-c").oninput=of;of();
+
+/* 04 leakage */
+const LK=[["年齡、共病",0,"入院時就有"],["入院檢驗",0,"入院時就有"],["住院天數",1,"出院時才知道"],["出院時已安排居家護理",1,"出院時已知；但可能只是重現團隊判斷"],["出院後回診紀錄",2,"預測時點之後"],["30 天內再入院",3,"這就是標籤"]];let lkT=1;
+function lk(){const s=$("#lksvg"),pts=[["入院",60],["住院中",250],["出院",440],["出院後 30 天",680]];const pt=lkT?440:60;let g=`<line x1="40" x2="720" y1="50" y2="50" stroke="${C.line2||"#D2C7B2"}" stroke-width="5"/><rect x="${pt}" y="22" width="${720-pt}" height="56" fill="${C.ochre}" opacity=".08"/><text x="${(pt+720)/2}" y="98" font-size="12" text-anchor="middle" fill="${C.ochre}">預測時點之後：上線時拿不到</text>`;pts.forEach(([n,x])=>{const on=x===pt;g+=`<circle cx="${x}" cy="50" r="${on?11:7}" fill="${on?C.ochre:C.navy2}"/><text x="${x}" y="${on?24:30}" font-size="13" text-anchor="middle" font-weight="${on?900:500}" fill="${on?C.ochre:C.navy}">${n}${on?"＝預測時點":""}</text>`});s.innerHTML=g;
+ $("#lklist").innerHTML=LK.map(([n,when,why])=>{const ok=when===3?false:when<=lkT;const warn=when===1&&lkT===1&&n.includes("居家");return `<div style="display:grid;grid-template-columns:28px 1fr 1.4fr;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px"><span>${ok?(warn?"⚠️":"✅"):"❌"}</span><b>${n}</b><span style="color:var(--mute)">${when===3?"這就是標籤，不能當特徵":ok?(warn?why:"可用："+why):"不可用："+why}</span></div>`}).join("")+`<p class="note">五個檢查：時點、先後、標籤、上線、價值。</p>`}
+segInit("#lkseg",d=>{lkT=+d.m;lk()});lk();
+mcq("#scq",[
+ {q:"Caruana 2015 肺炎死亡風險模型學到「有氣喘 → 死亡風險較低」。真相是？",o:["氣喘能保護肺炎病人","氣喘病人直接送加護病房，照護更積極——治療混淆","資料打錯","模型壞掉"],a:1,e:"若據此讓氣喘病人回家，後果嚴重。不是偷看答案，而是學到照護流程。"},
+ {q:"Zech 2018 胸部 X 光肺炎模型換醫院後表現下降，原因是？",o:["X 光機比較舊","模型學到「影像來自哪家醫院」——各院肺炎盛行率不同，成了捷徑","醫師判讀標準不同","病人比較年輕"],a:1,e:"捷徑學習：高分不等於學到病人的病情；外部驗證才會露餡。"}]);
+
+/* 05 lifecycle + ladder */
+const LC=[["問題","預測出來之後，誰要做什麼？沒有行動的預測沒有價值。"],["資料","資料代表我們的病人嗎？標籤怎麼定義（含不含計畫性住院、他院住院）？"],["特徵","有沒有洩漏？預測當下拿得到嗎？"],["訓練","依病人、依時間切分；避免過度擬合。"],["驗證","在本院資料上準不準？各族群是否一樣準？"],["部署","放在哪個畫面、誰看？光線、網路、轉診流程都會改變結果。"],["監測","上線後表現有沒有下滑？誰負責、多久一次？"]];
+(function(){const g=$("#lc");LC.forEach(([n,d],i)=>{const c=h("div",{class:"kpi",style:`cursor:pointer;text-align:center;border-top:4px solid ${i===0?C.ochre:C.navy2}`},`<div style="font-weight:900;color:var(--navy)">${i+1}</div><div style="font-size:13.5px;font-weight:700">${n}</div>`);c.onclick=()=>$("#lctxt").innerHTML=`<b>${i+1} ${n}：</b>${d}`;g.appendChild(c)});$("#lctxt").innerHTML="最常被跳過的是第一步。點任一階段。"})();
+const VL=[["內部驗證","同一資料隨機切分","#9A9CA4",60],["時間驗證","較新年份資料","#7A8BAA",90],["外部驗證","其他醫院資料","#4F6390",120],["前瞻性評估","上線後即時追蹤","#2E4470",150],["隨機對照試驗","改善病人結果","#B5442A",180]];
+$("#ladder").innerHTML=VL.map(([n,d,c,hgt])=>`<div><div class="lv" style="background:${c};height:${hgt}px;display:flex;flex-direction:column;justify-content:flex-end">${n}<span style="font-weight:400;font-size:11.5px">${d}</span></div></div>`).join("");
+choiceRows("#vlq",[["廠商：用同一家醫院資料 70/15/15 切分，測試集 AUROC 0.85",0,"內部驗證——對北城的證據力有限。"],["用 2025 年的新病人測試 2023–2024 年訓練的模型",1,"時間驗證。"],["北城用自己 2,000 次出院資料驗證 ReAdmit-X，AUROC 0.76",2,"本地外部驗證：不靠廠商的數字。"],["Duke Sepsis Watch 靜默運行 3 個月，以即時資料比對",3,"前瞻性評估（不發警示的靜默期）。"],["隨機分派一半病房使用模型，比較再入院率",4,"隨機對照試驗：證明改善病人結果。"]],VL.map(v=>v[0]),"#vlscore");
+(function(){const s=$("#wusvg");const R=[["只用回溯性資料評估",126,130],["未公開報告多院評估",93,130],["高風險醫材有前瞻評估",0,54]];const L=150,RR=360;let g="";R.forEach(([n,v,t],i)=>{const y=20+i*60;g+=`<text x="${L-8}" y="${y+18}" font-size="12.5" text-anchor="end" font-weight="700" fill="${C.navy}">${n}</text><rect x="${L}" y="${y}" width="${RR-L}" height="28" rx="4" fill="#EFEAE0"/><rect x="${L}" y="${y}" width="${(RR-L)*v/t}" height="28" rx="4" fill="${i===2?C.ochre:C.navy2}"/><text x="${L+6}" y="${y+19}" font-size="14" font-weight="900" fill="${v/t>0.3?"#fff":C.ochre}">${v}／${t}</text>`});s.innerHTML=g})();
+
+/* 06 shift + MLOps */
+function ds(){const p=+$("#ds-p").value/100;$("#ds-p").nextElementSibling.textContent=Math.round(p*100)+"%";const se=190/324,sp=1304/1676;const tp=p*se,fp=(1-p)*(1-sp);const ppv=tp/(tp+fp);const flag=(tp+fp)*2000;$("#dskpi").innerHTML=`<div class="kpi ${ppv<0.25?"o":""}"><div class="v">${(ppv*100).toFixed(0)}%</div><div class="l">PPV：被標記者真的再入院</div></div><div class="kpi"><div class="v">${fmt(flag)}</div><div class="l">每 2,000 次出院被標記人數</div></div><div class="kpi"><div class="v">${fmt(flag-tp*2000)}</div><div class="l">其中虛驚（偽陽性）</div></div>`}
+$("#ds-p").oninput=ds;ds();
+choiceRows("#dsq",[["模型從醫學中心移到區域醫院，病人更老、共病更多",0,"病人組成改變。"],["推出出院後追蹤計畫，再入院率下降 → PPV 改變",1,"盛行率改變（上面的模擬）。"],["新藥上市，心衰竭與再入院的關聯減弱",2,"關係改變。"],["換 HIS、ICD 規則或檢驗儀器，同一欄位意義悄悄改變",3,"流程與編碼改變。COVID-19 期間許多模型同時失準。"]],["病人組成","盛行率","關係","流程與編碼"]);
+const MLI=["每季監測 AUROC、校準度與各族群表現","每月回報警示量與個管師工作量","輸入資料分布與訓練時比較（偏移偵測）","表現低於約定門檻時，廠商依預定程序重新校準或訓練","每一版模型可追溯（版本紀錄），出事可回溯","更新前通知醫院並提供驗證報告；醫院可拒絕或回退","揭露開發資料來源、標籤定義與驗證層級","若屬醫療器材，提供許可文件與預定變更計畫（PCCP，W2）"];const mlS=LS.get("ml",[0,1,3,4,5]);
+togGroup("#ml",MLI,mlS,v=>{LS.set("ml",v);mlOut(v)});function mlOut(v){$("#mlout").textContent="【ReAdmit-X 合約維運條款（草案）】\n"+v.map((k,i)=>`${i+1}. ${MLI[k]}`).join("\n")+(v.length?"":"（尚未勾選）")}mlOut(mlS);$("#mlcopy").onclick=()=>copyText($("#mlout").textContent,"#mlmsg");
+
+/* 07 confusion + threshold */
+let TH=0.2;
+function thUI(){$("#th").value=Math.round(TH*100);$("#th2").value=Math.round(TH*100);$("#th").nextElementSibling.textContent="≥"+Math.round(TH*100)+"%";$("#th2").nextElementSibling.textContent="≥"+Math.round(TH*100)+"%";const m=at(TH),cap=+$("#cmn").value*25;$("#cmn").nextElementSibling.textContent=$("#cmn").value+" 名";
+ $("#cm").innerHTML=`<div></div><div class="h">實際：再入院</div><div class="h">實際：未再入院</div><div class="h" style="display:flex;align-items:center">預測：高風險</div><div class="c" style="background:#E1EEE6"><div class="n" style="color:${C.green}">${m.tp}</div><div class="t">真陽性 TP</div></div><div class="c" style="background:#FBF4E4"><div class="n" style="color:#8A5F17">${m.fp}</div><div class="t">偽陽性 FP：個管師白打電話</div></div><div class="h" style="display:flex;align-items:center">預測：低風險</div><div class="c" style="background:#F6E3DA"><div class="n" style="color:${C.ochre}">${m.fn}</div><div class="t">偽陰性 FN：漏掉王伯伯</div></div><div class="c" style="background:#EFEAE0"><div class="n" style="color:${C.mute}">${m.tn}</div><div class="t">真陰性 TN</div></div>`;
+ $("#mets").innerHTML=[["敏感度",m.sens,"真的再入院的人，抓到幾成"],["特異度",m.spec,"沒再入院的人，正確排除幾成"],["PPV",m.ppv,"被標高風險的人，真的再入院幾成"],["NPV",m.npv,"被標低風險的人，真的沒事幾成"]].map(([n,v,d],i)=>`<div class="kpi ${i===2?"o":""}"><div class="l">${n}</div><div class="v">${(v*100).toFixed(0)}%</div><div class="l">${d}</div></div>`).join("");
+ const mo=m.flag/12,over=mo>cap;$("#wl").innerHTML=`<div class="kpi ${over?"o":"g"}"><div class="l">每月被標記（全院估計）</div><div class="v">${mo.toFixed(0)}<small> 人／月</small></div><div class="l">個管師量能 ${cap} 人／月（${$("#cmn").value} 名 × 25）${over?`——<b style="color:var(--ochre)">超出 ${(mo/cap).toFixed(1)} 倍</b>`:"——接得住"}</div></div>`;
+ $("#thtxt").innerHTML=`閾值 ≥${Math.round(TH*100)}%：標記 <b>${m.flag}</b> 人（${(m.flag/N*100).toFixed(0)}%），抓到 ${m.tp}／324 位再入院者，漏掉 <b style="color:var(--ochre)">${m.fn}</b> 位；準確率 ${(m.acc*100).toFixed(1)}%（全猜不會：83.8%）。`;drawROC();}
+$("#th").oninput=()=>{TH=+$("#th").value/100;thUI()};$("#th2").oninput=()=>{TH=+$("#th2").value/100;thUI()};$("#cmn").oninput=thUI;$$("[data-th]").forEach(b=>b.onclick=()=>{TH=+b.dataset.th/100;thUI()});
+function fitTh(){const cap=+$("#cmn").value*25*12;let best=0.6;for(let t=2;t<=60;t++){if(at(t/100).flag<=cap){best=t/100;break}}return best}
+$("#thfit").onclick=()=>{TH=fitTh();thUI();pcOut()};
+
+/* 08 PPV calc */
+function pp(){const se=+$("#pp-se").value/100,sp=+$("#pp-sp").value/100,pr=+$("#pp-pr").value/100;["se","sp","pr"].forEach(k=>$("#pp-"+k).nextElementSibling.textContent=$("#pp-"+k).value+"%");const ppv=se*pr/(se*pr+(1-sp)*(1-pr)),npv=sp*(1-pr)/(sp*(1-pr)+(1-se)*pr);$("#ppkpi").innerHTML=`<div class="kpi o"><div class="l">PPV</div><div class="v">${(ppv*100).toFixed(0)}%</div></div><div class="kpi g"><div class="l">NPV</div><div class="v">${(npv*100).toFixed(0)}%</div></div><div class="kpi" style="grid-column:span 2"><div class="l">每 100 個警示中虛驚</div><div class="v">${((1-ppv)*100).toFixed(0)}<small> 個</small></div></div>`;
+ const s=$("#ppsvg"),L=40,R=370,B=210,T=14;const X=v=>L+v/50*(R-L),Yv=v=>B-v*(B-T);let g="";[0,.25,.5,.75,1].forEach(v=>g+=`<line x1="${L}" x2="${R}" y1="${Yv(v)}" y2="${Yv(v)}" stroke="${C.line}"/><text x="${L-6}" y="${Yv(v)+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v*100}%</text>`);let d="";for(let q=1;q<=50;q++){const p=q/100,v=se*p/(se*p+(1-sp)*(1-p));d+=(q>1?"L":"M")+X(q)+","+Yv(v)}g+=`<path d="${d}" fill="none" stroke="${C.ochre}" stroke-width="3"/><circle cx="${X(pr*100)}" cy="${Yv(ppv)}" r="7" fill="${C.ochre}"/>`;[5,15,30].forEach(q=>{g+=`<line x1="${X(q)}" x2="${X(q)}" y1="${B}" y2="${B+5}" stroke="${C.mute}"/><text x="${X(q)}" y="${B+18}" font-size="11" text-anchor="middle" fill="${C.mute}">${q}%</text>`});g+=`<text x="${(L+R)/2}" y="${B+34}" font-size="12" text-anchor="middle" fill="${C.mute}">盛行率（再入院率）</text><text x="${L+6}" y="${T+12}" font-size="12" fill="${C.ochre}" font-weight="700">PPV</text>`;s.innerHTML=g}
+["#pp-se","#pp-sp","#pp-pr"].forEach(id=>$(id).oninput=pp);pp();
+
+/* 09 ROC */
+const ROCP=(function(){const pts=[[0,0]];const idx=PR.map((p,i)=>i).sort((a,b)=>PR[b]-PR[a]);let tp=0,fp=0;idx.forEach(i=>{Y[i]?tp++:fp++;pts.push([fp/NEG,tp/POS])});return pts.filter((p,i)=>i%10===0||i===pts.length-1)})();
+function drawROC(){const s=$("#roc"),L=40,R=320,T=10,B=290;const X=v=>L+v*(R-L),Yv=v=>B-v*(B-T);let g=`<rect x="${L}" y="${T}" width="${R-L}" height="${B-T}" fill="#FBF8F1" stroke="${C.line}"/>`;[.25,.5,.75].forEach(v=>g+=`<line x1="${X(v)}" x2="${X(v)}" y1="${T}" y2="${B}" stroke="${C.line}"/><line x1="${L}" x2="${R}" y1="${Yv(v)}" y2="${Yv(v)}" stroke="${C.line}"/>`);
+ g+=`<line x1="${X(0)}" y1="${Yv(0)}" x2="${X(1)}" y2="${Yv(1)}" stroke="${C.gray}" stroke-dasharray="5 4"/><text x="${X(0.62)}" y="${Yv(0.55)}" font-size="11" fill="${C.gray}">隨機猜測 0.5</text>`;let d="";ROCP.forEach((p,i)=>d+=(i?"L":"M")+X(p[0])+","+Yv(p[1]));g+=`<path d="${d}" fill="none" stroke="${C.navy2}" stroke-width="3"/>`;const m=at(TH);g+=`<circle cx="${X(1-m.spec)}" cy="${Yv(m.sens)}" r="8" fill="${C.ochre}"/><text x="${X(1-m.spec)+12}" y="${Yv(m.sens)+4}" font-size="12" font-weight="700" fill="${C.ochre}">≥${Math.round(TH*100)}%</text>`;
+ g+=`<text x="${(L+R)/2}" y="${B+18}" font-size="11.5" text-anchor="middle" fill="${C.mute}">1 − 特異度（偽陽性率）</text><text x="14" y="${(T+B)/2}" font-size="11.5" text-anchor="middle" fill="${C.mute}" transform="rotate(-90 14 ${(T+B)/2})">敏感度</text>`;s.innerHTML=g;
+ $("#aucv").textContent=AUC.toFixed(3);$("#roctxt").innerHTML=`白話：隨機抽一位再入院者與一位未再入院者，模型給前者較高分的機率約 <b>${Math.round(AUC*100)}%</b>。<br>曲線上每一點是一個閾值；目前 ≥${Math.round(TH*100)}%：敏感度 ${(m.sens*100).toFixed(0)}%、偽陽性率 ${((1-m.spec)*100).toFixed(0)}%。`}
+(function(){const s=$("#kansvg"),L=180,R=740;const X=v=>L+(v-0.5)/0.4*(R-L);let g="";[0.5,0.6,0.7,0.8,0.9].forEach(v=>g+=`<line x1="${X(v)}" x2="${X(v)}" y1="10" y2="170" stroke="${C.line}"/><text x="${X(v)}" y="186" font-size="11" text-anchor="middle" fill="${C.mute}">${v.toFixed(1)}</text>`);[["大型行政資料模型（9 個）",0.55,0.65],["住院早期可用（7 個）",0.56,0.72],["出院時可用（5 個）",0.68,0.83]].forEach(([n,a,b],i)=>{const y=20+i*44;g+=`<text x="${L-10}" y="${y+16}" font-size="12.5" text-anchor="end" fill="${C.navy}" font-weight="700">${n}</text><rect x="${X(a)}" y="${y}" width="${X(b)-X(a)}" height="24" rx="12" fill="${C.navy2}" opacity=".75"/><text x="${X(b)+6}" y="${y+16}" font-size="11.5" fill="${C.navy2}">${a}–${b}</text>`});[[0.684,"LACE",C.gray],[0.76,"北城本院",C.green],[0.85,"廠商宣稱",C.ochre]].forEach(([v,n,c])=>{g+=`<line x1="${X(v)}" x2="${X(v)}" y1="8" y2="160" stroke="${c}" stroke-width="2.5" stroke-dasharray="5 3"/><text x="${X(v)}" y="210" font-size="12" text-anchor="middle" fill="${c}" font-weight="700">${n} ${v}</text>`});g+=`<text x="${(L+R)/2}" y="226" font-size="11" text-anchor="middle" fill="${C.mute}">C 統計量（＝AUROC）</text>`;s.innerHTML=g})();
+
+/* 10 calibration */
+const DO=deciles(PV),DR=deciles(PR);let calM="o";
+function cal(){const s=$("#calsvg"),L=40,R=320,T=10,B=290,mx=0.8;const X=v=>L+v/mx*(R-L),Yv=v=>B-v/mx*(B-T);let g=`<rect x="${L}" y="${T}" width="${R-L}" height="${B-T}" fill="#FBF8F1" stroke="${C.line}"/>`;[.2,.4,.6].forEach(v=>g+=`<line x1="${X(v)}" x2="${X(v)}" y1="${T}" y2="${B}" stroke="${C.line}"/><line x1="${L}" x2="${R}" y1="${Yv(v)}" y2="${Yv(v)}" stroke="${C.line}"/><text x="${X(v)}" y="${B+14}" font-size="10" text-anchor="middle" fill="${C.mute}">${v*100}%</text><text x="${L-4}" y="${Yv(v)+4}" font-size="10" text-anchor="end" fill="${C.mute}">${v*100}%</text>`);
+ g+=`<line x1="${X(0)}" y1="${Yv(0)}" x2="${X(mx)}" y2="${Yv(mx)}" stroke="${C.gray}" stroke-dasharray="5 4"/><text x="${X(0.55)}" y="${Yv(0.6)}" font-size="11" fill="${C.gray}">完美校準</text>`;const D2=calM==="o"?DO:DR;const col=calM==="o"?C.ochre:C.green;let d="";D2.forEach((p,i)=>d+=(i?"L":"M")+X(p[0])+","+Yv(p[1]));g+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="2.5"/>`;D2.forEach(p=>g+=`<circle cx="${X(p[0])}" cy="${Yv(p[1])}" r="5" fill="${col}" data-t="預測 ${(p[0]*100).toFixed(0)}%｜實際 ${(p[1]*100).toFixed(0)}%"/>`);
+ g+=`<text x="${(L+R)/2}" y="${B+30}" font-size="11.5" text-anchor="middle" fill="${C.mute}">預測風險（十分位平均）</text><text x="12" y="${(T+B)/2}" font-size="11.5" text-anchor="middle" fill="${C.mute}" transform="rotate(-90 12 ${(T+B)/2})">實際再入院率</text>`;s.innerHTML=g;tipify(s);
+ const mp=(calM==="o"?PV:PR).reduce((a,b)=>a+b,0)/N,top=D2[9];$("#caltxt").innerHTML=calM==="o"?`<b style="color:var(--ochre)">系統性高估約一倍</b>：點都在線下。<br>最高組：預測 ${(top[0]*100).toFixed(0)}%，實際 ${(top[1]*100).toFixed(0)}%。<br>全院：平均預測 ${(mp*100).toFixed(0)}%，實際 16%。<br><span style="font-size:13px;color:var(--mute)">可能在再入院率較高的醫院開發。AUROC 0.76 但高估一倍時，不能直接拿風險數字跟病人說明。</span>`:`<b style="color:var(--green)">重新校準後</b>：點貼近對角線。<br>最高組：預測 ${(top[0]*100).toFixed(0)}%，實際 ${(top[1]*100).toFixed(0)}%。<br>平均預測 ${(mp*100).toFixed(1)}% ＝ 實際 16.2%。<br>截距 ${D.b[0].toFixed(2)}、斜率 ${D.b[1].toFixed(2)}；AUROC 仍是 ${AUC.toFixed(3)}（排序不變）。`}
+segInit("#calseg",d=>{calM=d.m;cal()});cal();
+
+/* 11 DCA */
+function dca(){const s=$("#dca"),L=60,R=740,T=14,B=240,lo=0.05,hi=0.4,ymin=-10,ymax=16;const X=t=>L+(t-lo)/(hi-lo)*(R-L),Yv=v=>B-(v-ymin)/(ymax-ymin)*(B-T);let g="";for(let v=-10;v<=15;v+=5)g+=`<line x1="${L}" x2="${R}" y1="${Yv(v)}" y2="${Yv(v)}" stroke="${v===0?C.mute:C.line}"/><text x="${L-6}" y="${Yv(v)+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}</text>`;[0.1,0.2,0.3,0.4].forEach(t=>g+=`<text x="${X(t)}" y="${B+16}" font-size="11" text-anchor="middle" fill="${C.mute}">${t*100}%</text>`);
+ const ts=[];for(let t=5;t<=40;t+=1)ts.push(t/100);const nbM=ts.map(t=>{const m=at(t);return 100*(m.tp/N-m.fp/N*t/(1-t))}),nbA=ts.map(t=>100*(POS/N-NEG/N*t/(1-t)));
+ const path=arr=>arr.map((v,i)=>(i?"L":"M")+X(ts[i])+","+Yv(Math.max(ymin,v))).join("");g+=`<path d="${path(nbA)}" fill="none" stroke="${C.gray}" stroke-width="2.5" stroke-dasharray="6 4"/><path d="${path(ts.map(()=>0))}" fill="none" stroke="${C.navy}" stroke-width="2"/><path d="${path(nbM)}" fill="none" stroke="${C.ochre}" stroke-width="3"/>`;
+ ts.forEach((t,i)=>g+=`<rect x="${X(t)-9}" y="${T}" width="18" height="${B-T}" fill="transparent" data-t="閾值 ${Math.round(t*100)}%｜依模型 ${nbM[i].toFixed(1)}｜全部介入 ${nbA[i].toFixed(1)}｜全部不介入 0"/>`);
+ g+=`<text x="${X(0.36)}" y="${Yv(nbM[31])-10}" font-size="12" fill="${C.ochre}" font-weight="700">依模型介入</text><text x="${X(0.11)}" y="${Yv(nbA[6])-10}" font-size="12" fill="${C.gray}" font-weight="700">全部介入</text><text x="${X(0.33)}" y="${Yv(0)+16}" font-size="12" fill="${C.navy}" font-weight="700">全部不介入</text><text x="${(L+R)/2}" y="${B+34}" font-size="12" text-anchor="middle" fill="${C.mute}">閾值機率</text><text x="18" y="${(T+B)/2}" font-size="12" text-anchor="middle" fill="${C.mute}" transform="rotate(-90 18 ${(T+B)/2})">淨效益（每 100 次出院）</text>`;s.innerHTML=g;tipify(s);
+ const v=t=>{const i=ts.findIndex(x=>Math.abs(x-t)<1e-9);return [nbM[i].toFixed(1),nbA[i].toFixed(1)]};$("#dcatxt").innerHTML=`閾值 10%：依模型 <b>${v(0.1)[0]}</b>、全部介入 ${v(0.1)[1]}　｜　20%：${v(0.2)[0]}、${v(0.2)[1]}　｜　30%：${v(0.3)[0]}、${v(0.3)[1]}<br>北城的結果：三個閾值下，依模型介入都高於其他兩種策略。`}
+dca();
+
+/* 12 procurement */
+const TQ=["訓練資料來自哪些醫院、年份、病人？","標籤（結果）怎麼定義？","驗證停在哪一層？有外部驗證嗎？","AUROC 之外，有校準度嗎？","各年齡、性別、族群表現一樣嗎？","用了哪些特徵？有無洩漏疑慮？","建議閾值與預估工作量？","上線後誰監測？多久一次？","模型更新的程序與通知方式？","是否屬醫療器材？取得哪些許可？"];const tqS=LS.get("tq",[0,1,2,3,4,5,6,7,8,9]);
+togGroup("#tenq",TQ,tqS,v=>{LS.set("tq",v);pcOut()});["pc-team","pc-dec","pc-scope","pc-int","pc-mon"].forEach(id=>{const s=LS.get("pc",{});if(s[id])$("#"+id).value=s[id];$("#"+id).addEventListener("input",pcOut);$("#"+id).addEventListener("change",pcOut)});
+function pcOut(){const o={};["pc-team","pc-dec","pc-scope","pc-int","pc-mon"].forEach(id=>o[id]=$("#"+id).value);LS.set("pc",o);const m=at(TH),n=+$("#cmn").value;$("#pc-th").value=`≥${Math.round(TH*100)}%（個管師 ${n} 名）`;const v=$$("#tenq input").map((x,k)=>x.checked?k:-1).filter(k=>k>=0);
+ $("#pc-out").textContent=`【ReAdmit-X 採購建議】${o["pc-team"]}
+建議：${o["pc-dec"]}
+理由：廠商宣稱 AUROC 0.85（驗證層級未揭露）；北城本地驗證 AUROC ${AUC.toFixed(2)}，平均預測 32% vs 實際 16.2%，系統性高估約一倍，需先以本院資料重新校準。
+1 試行：${o["pc-scope"]}（人數為全院估計，科別內要重算）
+2 閾值：≥${Math.round(TH*100)}%，依個管師 ${n} 名、每月約 ${n*25} 人量能倒推；全院每年約標記 ${m.flag} 人，敏感度 ${(m.sens*100).toFixed(0)}%、PPV ${(m.ppv*100).toFixed(0)}%，漏掉 ${m.fn} 位再入院者
+3 介入：${o["pc-int"]}（沒有介入的預測沒有意義）
+4 監測：${o["pc-mon"]}
+5 合約：揭露開發資料、驗證報告、更新程序；責任分工寫清楚
+向廠商追問：
+${v.map((k,i)=>`  ${i+1}. ${TQ[k]}`).join("\n")}`}
+$("#pc-copy").onclick=()=>copyText($("#pc-out").textContent,"#pc-msg");
+["#th","#th2","#cmn"].forEach(id=>$(id).addEventListener("input",pcOut));$$("[data-th]").forEach(b=>b.addEventListener("click",pcOut));
+TH=0.2;thUI();pcOut();
+
+/* 13 Duke */
+(function(){const T=[["2015-10","第一線臨床人員提案"],["2016–2018","約兩年設計開發；再以即時資料「靜默運行」3 個月，不發警示"],["2018-11-05","急診正式上線：快速反應小組護理師用平板篩選，再電話通知急診醫師"],["2019-06","擴展到兩家社區醫院急診；治理委員會每週追蹤"]];$("#dktl").innerHTML=T.map(([d,t],i)=>`<div style="display:grid;grid-template-columns:110px 1fr;gap:10px;margin:6px 0"><span class="tag ${i===2?"o":""}" style="text-align:center">${d}</span><span style="font-size:14.5px">${t}</span></div>`).join("")})();
+togGroup("#dkv",["靜默期的敏感度與 PPV 達標","每位護理師每小時警示量可承受","誰篩選、誰確認、誰治療已寫清楚","治理委員會與監測指標已建立","可解釋性足夠","EHR 介接穩定、當機有備援"],[],()=>{$("#dkres").style.display="block"});
+
+/* 14 */
+const GL=[["資料洩漏","Data Leakage","特徵中混入了答案或預測當下拿不到的資訊"],["外部驗證","External Validation","在開發以外的機構或族群資料上測試"],["資料集偏移","Dataset Shift","上線後資料分布與訓練時不同，導致失準"],["PPV","陽性預測值","被判為陽性者中，真正陽性的比例；受盛行率影響"],["AUROC","C 統計量","區分有無結果的能力；0.5 等同亂猜，沒有通用及格線"],["校準度","Calibration","預測機率與實際發生比例是否一致"],["決策曲線","Decision Curve","在不同閾值下比較淨效益：模型有沒有用"],["MLOps","","模型上線後的監測、偏移偵測、更新與版本管理"]];
+(function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}${b?`<small>${b}</small>`:""}</div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
+mcq("#final",[
+ {q:"北城再入院率 16.2%，一律預測「不會再入院」，準確率約？",o:["16%","50%","84%","100%"],a:2,e:"卻一個也沒抓到——準確率陷阱。"},
+ {q:"依住院隨機切分，同一病人跨訓練與測試集，會讓表現？",o:["低估","高估","不變","無法判斷"],a:1,e:"模型可能只是認得這個病人；改依病人切分。"},
+ {q:"出院時預測，「出院後回診紀錄」可以當特徵嗎？",o:["可以","不行：預測時點之後才有","只要有就可以","看廠商"],a:1,e:"看時間軸，不看變數名稱。"},
+ {q:"廠商的 0.85 若只是用自己醫院資料切分，屬於？",o:["內部驗證","外部驗證","前瞻性評估","隨機對照試驗"],a:0,e:"對北城的證據力有限；要做本地外部驗證。"},
+ {q:"敏感度、特異度各 80%，再入院率由 15% 降到 5%，PPV 約？",o:["41% → 63%","41% → 17%","不變","80% → 80%"],a:1,e:"低盛行率時，警示多半是虛驚。"},
+ {q:"AUROC 0.76 代表？",o:["76% 的病人被正確預測","隨機抽一位再入院者與一位未再入院者，模型給前者較高分的機率約 76%","機率很準","可以直接上線"],a:1,e:"只看排序，不看機率準不準。"},
+ {q:"ReAdmit-X 平均預測 32%、實際 16%，屬於哪個問題？可以修嗎？",o:["鑑別力不足，難救","校準度不佳，可用本院資料重新校準","資料洩漏","過度擬合"],a:1,e:"重新校準調整截距與斜率，排序（AUROC）不變。"},
+ {q:"個管師只有 1 名（每年約 300 人量能），北城應選哪個閾值？",o:["≥10%（1,171 人）","≥20%（562 人）","≥30%（277 人）","不設閾值"],a:2,e:"閾值從人力倒推：每年約 277 人，PPV 約 43%。"},
+ {q:"決策曲線低於「全部不介入」的 0 線代表？",o:["模型很好","弊大於利","閾值太低","AUROC 太高"],a:1,e:"AUROC 說好不好，決策曲線說有沒有用。"},
+ {q:"Duke Sepsis Watch 每位護理師每小時約 4 則警示上限，其實是在選？",o:["模型架構","閾值與工作量","AUROC","資料來源"],a:1,e:"先決定人力能接住多少警示，再回推閾值。"}],"#finalscore");
+})();
+</script>
+</body>
+</html>
