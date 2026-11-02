@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W4 使用者中心設計與健康行為改變 · 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+<style>
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.spec{grid-template-columns:1fr}}
+.spec label{display:block;font-weight:700;color:var(--navy);font-size:14px;margin:8px 0 4px}
+.spec select{width:100%;padding:7px;border-radius:8px;border:1px solid var(--line2);background:#fff}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;margin:6px 0}
+.lane .ln{font-weight:700;color:#fff;border-radius:8px;padding:8px;font-size:13px;text-align:center}
+.lane .track{position:relative;height:96px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.ms{position:absolute;top:6px;transform:translateX(-50%);text-align:center;cursor:pointer;width:84px}
+.ms.lo{top:48px}
+.ms .d{width:14px;height:14px;border-radius:50%;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.ms .y{font-size:11px;color:var(--mute);margin-top:2px}
+.ms .n{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2}
+.ms.on .d{box-shadow:0 0 0 3px var(--ochre)}
+.conf{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:420px}
+.conf i{display:block;aspect-ratio:1;border-radius:3px}
+.cell2{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:13.5px;margin-top:10px}
+.cell2 div{padding:8px;border-radius:8px;background:var(--paper);border:1px solid var(--line)}
+.cell2 .h{background:var(--navy-l);font-weight:700;color:var(--navy);text-align:center}
+.agent{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.astep{flex:1;min-width:130px;border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.astep b{display:block;color:var(--navy);font-size:15px}
+.astep.run{border-color:var(--navy2);background:var(--navy-l)}
+.astep.ok{border-color:var(--green);background:var(--green-l)}
+.astep.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.astep.skip{opacity:.45}
+.tree{display:flex;flex-direction:column;gap:8px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.tq.dim{opacity:.4}
+.tq b{color:var(--navy)}
+.tres{border-radius:10px;padding:12px 16px;color:#fff;font-weight:700;font-size:16px}
+.reg{display:grid;grid-template-columns:120px repeat(3,1fr);gap:6px;font-size:13.5px}
+.reg .h{background:var(--navy);color:#fff;font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.reg .rh{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;display:flex;align-items:center}
+.reg .c{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;min-height:54px;color:var(--mute2)}
+.reg .c.open{color:var(--ink);background:#fff;border-color:var(--navy2)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.prin{grid-template-columns:1fr}}
+.prin .pc{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.prin .pc h4{margin:0 0 4px;color:var(--navy);font-size:15px}
+.prin select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff;margin-top:4px;font-size:13px}
+.gen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.gen{grid-template-columns:1fr}}
+.gen .gc2{border:2px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.gen .gc2 h4{margin:0;color:var(--navy)}
+.gen label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;margin:6px 0;cursor:pointer}
+</style>
+<style>
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tog label{display:flex;gap:6px;align-items:center;border:1px solid var(--line2);background:#fff;border-radius:20px;padding:4px 12px;font-size:13.5px;cursor:pointer}
+.tog label.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tog input{display:none}
+.code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;background:#1B2A4A;color:#E6EAF2;border-radius:10px;padding:12px 14px;line-height:1.7;white-space:pre-wrap;overflow:auto}
+.jt{position:relative;height:150px;margin:6px 0 4px}
+.jt .bar{position:absolute;left:2%;right:2%;top:70px;height:6px;background:var(--line2);border-radius:3px}
+.jt .ev{position:absolute;top:42px;transform:translateX(-50%);cursor:pointer;text-align:center;width:110px}
+.jt .ev .dot{width:22px;height:22px;border-radius:50%;margin:16px auto 0;border:3px solid #fff;box-shadow:0 0 0 2px var(--ochre);background:var(--ochre)}
+.jt .ev .lb{font-size:12.5px;font-weight:700;color:var(--navy);margin-top:6px}
+.jt .ev.on .dot{box-shadow:0 0 0 5px var(--ochre)}
+.jt .tk{position:absolute;top:86px;font-size:11px;color:var(--mute);transform:translateX(-50%)}
+.quad{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quad .qd{border:2px dashed var(--line2);border-radius:10px;padding:8px;min-height:100px;background:var(--paper);cursor:pointer}
+.quad .qd h4{margin:0 0 4px;color:var(--navy);font-size:14px}
+.quad .qd .it{background:#fff;border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-size:12.5px;margin:3px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer;display:inline-block;margin:3px}
+.pool .gc.sel{background:var(--navy);color:#fff}
+.light{display:flex;align-items:center;gap:14px;padding:16px;border-radius:14px;background:#fff;border:2px solid var(--line);min-height:96px}
+.light .bulb{width:64px;height:64px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;font-weight:900}
+.light .msg{font-size:20px;font-weight:900;color:var(--ink);line-height:1.4}
+.tt{width:100%;border-collapse:collapse;font-size:13.5px}
+.tt th,.tt td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left}
+.tt th{color:var(--mute);font-weight:500;font-size:12.5px}
+.tt td.p{color:#1F4D36;font-weight:700}.tt td.f{color:#7A2A17;font-weight:700}
+.timer{display:flex;gap:6px;margin-top:8px}
+.timer div{flex:1;border-radius:8px;padding:8px 6px;font-size:12.5px;text-align:center;background:var(--paper);border:2px solid var(--line)}
+.timer div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.timer div.done{border-color:var(--green);background:var(--green-l)}
+.clock{font-family:"JetBrains Mono",monospace;font-size:40px;font-weight:700;color:var(--navy)}
+.swatch{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.preview{border-radius:12px;padding:16px;border:1px solid var(--line)}
+.sus{display:grid;grid-template-columns:1fr repeat(5,40px);gap:4px;align-items:center;font-size:13px}
+.sus .hd{font-size:11.5px;color:var(--mute);text-align:center}
+.sus input{margin:0 auto;display:block;accent-color:var(--ochre)}
+.url{background:#fff;border:1px dashed var(--navy2);border-radius:8px;padding:10px 12px;color:var(--navy)}
+mark{background:#F6E3DA;color:#7A2A17;border-radius:3px;padding:0 2px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W4 使用者中心設計與健康行為改變 ★ 實作週</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與草稿">重置進度</button>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W4 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div style="font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px">WEEK 4 · ★ 課堂實作週 · 先懂人，再做工具</div>
+  <h1>使用者中心設計與健康行為改變</h1>
+  <div class="en">User-Centred Design &amp; Health Behaviour Change</div>
+  <p class="lead">工具本身沒有壞，只是不是為王伯伯設計的。這一頁先用設計思考、COM-B 與無障礙原則把「為誰、為何、怎麼驗證」想清楚，再到<b>實作一</b>：產生提示詞、在測試台上對 AI 第一版跑四類測試、計時 80 分鐘、產出繳交用的測試紀錄與 AI 使用紀錄。</p>
+  <div class="chips"><a class="tag" href="../../W04_使用者中心設計與健康行為改變_User-Centred_Design_and_Behaviour_Change.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W4）</a><span class="tag o">實作一 占學期成績 10%</span><span class="tag a">閾值為教學示意，實際依醫囑</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<section class="part" id="p01" data-t="開場：App 只開三天">
+  <div class="ph"><span class="num">01</span><div><h2>王伯伯出院兩週多：衛教單在抽屜，App 只開三天</h2><div class="en">16 DAYS AFTER DISCHARGE · 擬真情境</div></div></div>
+  <p class="one">工具本身沒有壞，只是<b>不是為王伯伯設計的</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>點選每個卡點</h3><span class="tag o">時間軸</span></div>
+    <div class="jt" id="jt"><div class="bar"></div></div>
+    <div class="detail" id="jttxt"></div>
+  </div>
+  <div class="grid3">
+    <div class="kpi o"><div class="v">約 50%</div><div class="l">已開發國家慢性病長期治療遵從率（WHO 2003）</div></div>
+    <div class="kpi o"><div class="v">3.3%</div><div class="l">心理健康 App 30 天留存率中位數（93 款，Baumel 2019）</div></div>
+    <div class="kpi"><div class="v">53.8%</div><div class="l">台灣 70 歲以上上網率（TWNIC 2025）</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>70 歲以上上網率：快速上升，仍近半未上網</h3><span class="tag gray">TWNIC</span></div>
+    <svg viewBox="0 0 760 230" class="chart" id="twnic"></svg>
+    <p class="note">三個數字來自不同族群與定義，不能互相換算，也不代表王伯伯所屬族群的實際比例。會上網不等於會操作健康 App。保留電話、紙本與家人協助等管道。</p>
+  </div>
+</section>
+
+<section class="part" id="p02" data-t="兩種起點與 ISO 9241-210">
+  <div class="ph"><span class="num">02</span><div><h2>拿著鎚子找釘子，還是先找到釘子</h2><div class="en">TECHNOLOGY PUSH vs NEED PULL · ISO 9241-210</div></div></div>
+  <p class="one">先找痛點，再找科技。以人為本設計的關鍵字是<b>「反覆」</b>：越早測試，修正越便宜。</p>
+  <div class="wd">
+    <div class="wh"><h3>同一個專案，兩種起點會走到哪裡？</h3><span class="seg" id="pushseg"><button class="on" data-m="t">以科技為中心</button><button data-m="u">以使用者為中心</button></span></div>
+    <div class="grid5" id="push"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>ISO 9241-210 四個活動：點「下一步」走一圈</h3></div>
+    <div class="grid2"><svg viewBox="0 0 330 300" class="chart" id="isosvg"></svg><div><div class="detail" id="isotxt" style="margin-top:0"></div><div style="margin-top:8px"><button class="btn pri" id="isonext">下一步</button></div></div></div>
+  </div>
+</section>
+
+<section class="part" id="p03" data-t="使用者衝突：通知模擬">
+  <div class="ph"><span class="num">03</span><div><h2>使用者不只王伯伯：同一工具，不同期待</h2><div class="en">DIRECT &amp; INDIRECT USERS · TRADE-OFFS</div></div></div>
+  <p class="one">設計就是在需求衝突之間取捨：<b>女兒想每筆都知道，個管師怕警示疲勞</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>通知規則模擬器：一個月 30 筆體重，誰收到幾則？</h3><span class="tag o">核心互動</span><span class="tag a">體重序列為合成資料</span></div>
+    <div class="grid2">
+      <div>
+        <label style="display:block;font-weight:700;color:var(--navy);font-size:14px">女兒收到通知</label>
+        <div class="seg" id="nt-d" style="display:flex;width:fit-content;flex-wrap:wrap;margin:6px 0 12px"><button data-v="0">每一筆</button><button class="on" data-v="1">黃燈以上</button><button data-v="2">只有紅燈</button></div>
+        <label style="display:block;font-weight:700;color:var(--navy);font-size:14px">個管師收到警示</label>
+        <div class="seg" id="nt-c" style="display:flex;width:fit-content;flex-wrap:wrap;margin:6px 0 12px"><button data-v="1">黃燈以上</button><button class="on" data-v="2">只有紅燈</button><button data-v="3">紅燈或缺測 2 天</button></div>
+        <div class="grid3" id="ntkpi"></div>
+      </div>
+      <svg viewBox="0 0 400 240" class="chart" id="ntsvg"></svg>
+    </div>
+    <div class="detail" id="nttxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>六個使用者的 ＋ 與 －</h3><span class="tag gray">點卡片</span></div>
+    <div class="grid3" id="users6"></div>
+  </div>
+</section>
+
+<section class="part" id="p04" data-t="設計思考與雙鑽石">
+  <div class="ph"><span class="num">04</span><div><h2>設計思考五步驟與雙鑽石</h2><div class="en">STANFORD d.school · DESIGN COUNCIL 2005</div></div></div>
+  <p class="one">醫療人員最容易<b>跳過同理直接發想</b>，因為以為自己很懂病人；很多失敗的專案，是在第一顆鑽石就選錯了問題。</p>
+  <div class="wd">
+    <div class="wh"><h3>雙鑽石：點每個階段</h3><span class="tag o">互動</span></div>
+    <svg viewBox="0 0 760 220" class="chart" id="ddsvg"></svg>
+    <div class="detail" id="ddtxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p05" data-t="同理心地圖">
+  <div class="ph"><span class="num">05</span><div><h2>同理心地圖：王伯伯怎麼說、想、做、感受</h2><div class="en">EMPATHY MAP · 擬真示意</div></div></div>
+  <p class="one">說的和做的常不一致：王伯伯說還好，行為卻顯示<b>他不知道何時該求救</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>把訪談與觀察放進四個象限</h3><span class="tag a">先點卡片、再點象限</span><span class="scoreline" id="emscore"></span></div>
+    <div class="pool" id="empool"></div>
+    <div class="quad" id="emquad"></div>
+    <div class="fb" id="emfb"></div>
+  </div>
+</section>
+
+<section class="part" id="p06" data-t="人物誌與旅程地圖">
+  <div class="ph"><span class="num">06</span><div><h2>人物誌與使用者旅程地圖</h2><div class="en">PERSONA · USER JOURNEY MAP</div></div></div>
+  <p class="one">「這個按鈕王伯伯看得到嗎？」比「使用者會喜歡嗎？」具體得多。<b>斷點就是設計機會</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>人物誌</h3><span class="seg" id="perseg"><button class="on" data-m="0">王伯伯（主要）</button><button data-m="1">女兒（次要）</button></span></div>
+    <div class="grid5" id="persona"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>出院後第一週：情緒曲線與斷點</h3><span class="tag gray">點選資料點</span></div>
+    <svg viewBox="0 0 760 240" class="chart" id="jmsvg"></svg>
+    <div class="detail" id="jmtxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p07" data-t="HMW 問句">
+  <div class="ph"><span class="num">07</span><div><h2>把痛點改寫成「我們可以如何…？」</h2><div class="en">HOW MIGHT WE</div></div></div>
+  <p class="one">夠具體才能動手，夠開放才有創意。HMW 寫得好，<b>解法常自己浮現</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>哪一句剛好？</h3><span class="tag a">3 題</span></div>
+    <div id="hmwq"></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>HMW 產生器（實作一第 0–10 分鐘用）</h3><span class="tag o">產生後複製</span></div>
+    <div class="grid4">
+      <div><label>誰</label><input id="h-who" value="王伯伯"></div>
+      <div><label>在什麼情境</label><input id="h-when" value="早上量完體重後"></div>
+      <div><label>做到什麼</label><input id="h-what" value="知道今天要不要緊"></div>
+      <div><label>多具體（時間／次數）</label><input id="h-how" value="3 秒內"></div>
+    </div>
+    <div class="url" id="h-out" style="margin-top:10px;font-family:inherit;font-size:16px;font-weight:700"></div>
+    <div id="h-chk" style="margin-top:6px;font-size:13.5px"></div>
+  </div>
+</section>
+
+<section class="part" id="p08" data-t="COM-B 診斷">
+  <div class="ph"><span class="num">08</span><div><h2>COM-B：缺能力、機會還是動機？</h2><div class="en">MICHIE, VAN STRALEN &amp; WEST 2011 · BEHAVIOUR CHANGE WHEEL</div></div></div>
+  <p class="one">COM-B 的價值在<b>診斷</b>：先找出缺哪一塊，再選介入，而不是一律加強衛教。</p>
+  <div class="wd">
+    <div class="wh"><h3>王伯伯為什麼沒有每天量體重？診斷每個障礙</h3><span class="tag a">6 題</span><span class="scoreline" id="cbscore"></span></div>
+    <div id="cbq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>行為改變輪：選一種介入，看它補哪個缺口</h3><span class="tag gray">點選介入功能</span></div>
+    <svg viewBox="0 0 760 300" class="chart" id="bcw"></svg>
+    <div class="detail" id="bcwtxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p09" data-t="BCT 與真實證據">
+  <div class="ph"><span class="num">09</span><div><h2>行為改變技術與真實證據</h2><div class="en">BCT TAXONOMY v1 · TEXT ME · MILKMAN MEGASTUDY</div></div></div>
+  <p class="one">有效的關鍵是行為改變技術，<b>不是科技多新</b>；要測試，不要猜。</p>
+  <div class="wd">
+    <div class="wh"><h3>為你的工具選 BCT（93 項、16 大類中的五項）</h3><span class="tag o">勾選</span></div>
+    <div class="tog" id="bct"></div>
+    <div id="bcttxt"></div>
+  </div>
+  <div class="grid2">
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>TEXT ME（JAMA 2015）</h3><span class="tag gray">710 位冠心病病人・6 個月</span></div>
+      <div class="seg" id="tmseg" style="display:flex;width:fit-content"><button class="on" data-m="s">吸菸比例</button><button data-m="l">LDL</button></div>
+      <svg viewBox="0 0 360 220" class="chart" id="tmsvg"></svg>
+      <p class="note">每週 4 則生活型態簡訊。限制：6 個月後是否持續仍未知；單一中心、澳洲情境。BCT 對應為教學歸納。</p>
+    </div>
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>68 萬人簡訊巨型研究（PNAS 2022）</h3></div>
+      <svg viewBox="0 0 360 220" class="chart" id="mksvg"></svg>
+      <div id="mkq"></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p10" data-t="Fogg 行為模型與倫理">
+  <div class="ph"><span class="num">10</span><div><h2>B＝MAP：動機、能力、提示同時出現</h2><div class="en">FOGG BEHAVIOR MODEL · 推一把，不是騙一把</div></div></div>
+  <p class="one">與其拚命提高動機，<b>不如讓行為更簡單</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>把王伯伯放上圖：提示會不會有效？</h3><span class="tag o">拉桿</span><span class="tag a">曲線為概念示意</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>動機（怕再住院）</span><input type="range" id="fg-m" min="1" max="10" value="6"><output></output></div>
+        <div class="ctl"><span>量測步驟數</span><input type="range" id="fg-s" min="1" max="8" value="6"><output></output></div>
+        <label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-top:6px"><input type="checkbox" id="fg-p" checked> 有提示（刷牙後、體重計旁）</label>
+        <div class="detail" id="fgtxt"></div>
+      </div>
+      <svg viewBox="0 0 380 280" class="chart" id="fgsvg"></svg>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>輕推、留意副作用、還是黑暗模式？</h3><span class="tag a">6 題</span></div>
+    <p class="hint">判斷標準：病人完全了解這個設計的用意後，還會同意嗎？</p>
+    <div id="ethq"></div>
+  </div>
+</section>
+
+<section class="part" id="p11" data-t="健康識能與白話改寫">
+  <div class="ph"><span class="num">11</span><div><h2>健康識能：從醫院語言到王伯伯語言</h2><div class="en">HEALTH LITERACY · UNIVERSAL PRECAUTIONS · TEACH-BACK</div></div></div>
+  <p class="one">通用預防原則：假設每個人都可能有理解困難。生成式 AI 擅長白話改寫，但<b>數字與醫囑必須由醫療人員確認</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>術語偵測器：貼上衛教文字，看哪些字王伯伯可能看不懂</h3><span class="tag o">輸入</span></div>
+    <textarea id="jg-in" style="width:100%;min-height:80px;padding:10px;border:1px solid var(--line2);border-radius:8px;font-size:15px">每日監測體重，若 3 日內增加超過 2 公斤，請儘速返診。請限制鈉攝取量並適度限制水分。如有端坐呼吸或下肢水腫惡化，請立即就醫。</textarea>
+    <div class="detail" id="jg-out"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>選出最好的改寫</h3><span class="tag a">3 題</span></div>
+    <div id="rwq"></div>
+  </div>
+</section>
+
+<section class="part" id="p12" data-t="長者友善介面工具">
+  <div class="ph"><span class="num">12</span><div><h2>長者友善介面：五個具體原則</h2><div class="en">W3C WCAG 2.2 (2023) · 1.4.3 · 1.4.1 · 2.5.5 · 2.5.8</div></div></div>
+  <p class="one">這張表可以直接寫進提示詞：<b>AI 照著做，你負責檢查</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>對比、字級、按鈕檢查器</h3><span class="tag o">核心互動</span></div>
+    <div class="grid2">
+      <div>
+        <div class="swatch"><label>文字色 <input type="color" id="cc-fg" value="#9a9ca4"></label><label>背景色 <input type="color" id="cc-bg" value="#ffffff"></label><button class="btn" id="cc-fix">換成高對比</button></div>
+        <div class="ctl"><span>內文字級（px）</span><input type="range" id="cc-fs" min="12" max="28" value="14"><output></output></div>
+        <div class="ctl"><span>按鈕大小（px）</span><input type="range" id="cc-bs" min="16" max="72" value="32"><output></output></div>
+        <label style="display:flex;gap:8px;align-items:center;font-size:14px"><input type="checkbox" id="cc-txt"> 燈號旁加上文字與圖示</label>
+        <label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-top:4px"><input type="checkbox" id="cc-gray"> 模擬看不出顏色（灰階）</label>
+        <div id="cc-res" style="margin-top:10px"></div>
+      </div>
+      <div class="preview" id="cc-prev"></div>
+    </div>
+    <p class="note">18 px 內文為本課建議值，非 WCAG 規定；對比 4.5:1 為 1.4.3（AA）；按鈕 44×44 px 為 2.5.5（AAA），2.5.8 最低 24 px（AA，WCAG 2.2 新增）。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>SUS 易用性量表計算器</h3><span class="tag o">10 題・5 點</span></div>
+    <p class="hint">平均約 68 分；80 分以上表現良好。代理測試時請同學扮演王伯伯填寫——但結果<b>不能寫成使用者研究</b>。</p>
+    <div class="grid2"><div class="sus" id="sus"></div><div><div class="kpi" style="text-align:center;padding:20px"><div class="l">SUS 分數</div><div class="v" id="susv" style="font-size:48px">—</div><div class="l" id="susl"></div></div><svg viewBox="0 0 360 60" class="chart" id="sussvg" style="margin-top:10px"></svg></div></div>
+  </div>
+</section>
+
+<section class="part" id="p13" data-t="Vibe Coding 與提示詞">
+  <div class="ph"><span class="num">13</span><div><h2>Vibe Coding：用自然語言指揮 AI 寫程式</h2><div class="en">KARPATHY 2025-02 · COLLINS WORD OF THE YEAR 2025</div></div></div>
+  <p class="one">人親手寫的程式越來越少——<b>但查核責任不變</b>。提示詞越具體，第一版越接近需求。</p>
+  <div class="wd form">
+    <div class="wh"><h3>提示詞產生器：五個要素</h3><span class="tag o">選題後可直接複製</span></div>
+    <div class="seg" id="pmseg" style="display:flex;width:fit-content;margin-bottom:8px"><button class="on" data-m="A">選題 A 體重紅綠燈</button><button data-m="B">選題 B 衰弱自我篩檢</button></div>
+    <div class="grid2">
+      <div>
+        <label>1 角色與目標</label><input id="pm1">
+        <label>2 使用者</label><input id="pm2">
+        <label>3 功能與規則</label><textarea id="pm3" style="min-height:110px"></textarea>
+        <label>4 設計限制</label><input id="pm4">
+        <label>5 安全與驗收</label><textarea id="pm5"></textarea>
+      </div>
+      <div><div class="code" id="pmout" style="min-height:380px"></div><div style="margin-top:8px"><button class="btn oc" id="pmcopy">複製提示詞</button> <span id="pmmsg" style="font-size:13px;color:var(--green)"></span></div><div id="pmchk" style="font-size:13.5px;margin-top:6px"></div></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>說 → 看 → 測 → 改：哪一句是好的修改指令？</h3><span class="tag a">4 題</span></div>
+    <div id="itq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>AI 寫的程式：能跑，不等於安全</h3><span class="tag gray">Veracode 2025-07</span></div>
+    <svg viewBox="0 0 760 140" class="chart" id="vcsvg"></svg>
+    <p class="note">100 多個語言模型、80 項程式任務；為廠商研究報告，用來說明「需要查核」，不作為各模型的排名。原型只放在本機或教學用頁面，不收集、不上傳任何資料。</p>
+  </div>
+</section>
+
+<section class="part" id="p14" data-t="測試台：抓出 AI 的錯">
+  <div class="ph"><span class="num">14</span><div><h2>實作一測試台：對 AI 第一版跑四類測試</h2><div class="en">NORMAL · BOUNDARY · MISSING · INVALID</div></div></div>
+  <p class="one">每一輪都要測：AI 寫的判斷邏輯常在<b>邊界值</b>出錯，例如剛好 2.0 公斤；缺值也常被<b>預設成綠燈</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>體重紅綠燈（兩個版本並排）</h3><span class="tag o">核心互動</span><span class="tag a">教學示範，非醫療用途</span></div>
+    <div class="grid2">
+      <div><label style="font-size:13px;font-weight:700;color:var(--navy)">今天體重（公斤）</label><input id="tl-a" value="72.0" style="width:100%;padding:10px;font-size:20px;border:2px solid var(--line2);border-radius:10px"></div>
+      <div><label style="font-size:13px;font-weight:700;color:var(--navy)">3 天前體重（公斤）</label><input id="tl-b" value="70.0" style="width:100%;padding:10px;font-size:20px;border:2px solid var(--line2);border-radius:10px"></div>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div><div style="font-size:13px;color:var(--mute);margin-bottom:4px">✓ 依提示詞規格的正確版</div><div class="light" id="tl-ok"></div></div>
+      <div><div style="font-size:13px;color:var(--mute);margin-bottom:4px">？ AI 第一版（藏了錯誤）</div><div class="light" id="tl-ai"></div></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" id="tl-run">▶ 跑完講義的 8 組測試</button><button class="btn" id="tl-src">看 AI 第一版的判斷邏輯</button></div>
+    <div id="tl-table" style="margin-top:10px;overflow:auto"></div>
+    <div class="code" id="tl-code" style="display:none;margin-top:10px"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>選題 B：FRAIL 衰弱自我篩檢</h3><span class="tag gray">Morley 等 2012</span></div>
+    <div class="grid2"><div id="frail"></div><div><div class="light" id="frailres"></div><p class="note">各 1 分：0 分健壯、1–2 分衰弱前期、3–5 分衰弱。白話建議需由醫療人員確認。</p></div></div>
+  </div>
+</section>
+
+<section class="part" id="p15" data-t="80 分鐘與繳交">
+  <div class="ph"><span class="num">15</span><div><h2>80 分鐘時間配置、評分與繳交</h2><div class="en">LAB 1 · TIMER · RUBRIC · AI USE LOG</div></div></div>
+  <p class="one">時間不足時，<b>優先保留四類測試與代理測試</b>，縮短美化。重點在設計過程，不是程式寫得多漂亮。</p>
+  <div class="wd">
+    <div class="wh"><h3>課堂計時器</h3><span class="tag o">開始後自動切換階段</span></div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div class="clock" id="clk">80:00</div><button class="btn pri" id="clk-go">開始</button><button class="btn" id="clk-rs">歸零</button><span id="clk-ph" style="font-weight:700;color:var(--ochre)"></span></div>
+    <div class="timer" id="phases"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>評分規準自我檢核</h3><span class="tag a">每項 0–2：未達／部分／達成</span></div>
+    <div id="rub"></div>
+    <div class="kpi" style="margin-top:10px"><div class="l">預估實作一得分（占學期 10%）</div><div class="v" id="rubv">0 / 100</div></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>繳交包產生器：測試紀錄＋AI 使用紀錄</h3><span class="tag o">複製後貼進作業</span></div>
+    <div class="grid3">
+      <div><label>組別／成員</label><input id="s-team" placeholder="例：第 1 組 王小明"></div>
+      <div><label>選題</label><select id="s-topic"><option>選題 A 體重紅綠燈</option><option>選題 B 衰弱自我篩檢</option></select></div>
+      <div><label>AI 工具（介面顯示名稱）</label><input id="s-tool" placeholder="例：Claude"></div>
+      <div><label>HMW 問句</label><input id="s-hmw" placeholder="可從第 07 段複製"></div>
+      <div><label>COM-B 缺口與 BCT</label><input id="s-cb" placeholder="例：心理能力；自我監測＋回饋＋提示"></div>
+      <div><label>修改輪數</label><input id="s-rounds" placeholder="例：4"></div>
+    </div>
+    <label>代理測試發現的卡點</label><textarea id="s-proxy" placeholder="例：同學輸入 72,0（逗號）時沒有反應"></textarea>
+    <label>AI 第一版寫錯的地方與修正</label><textarea id="s-fix" placeholder="例：剛好 2.0 公斤顯示紅燈 → 改為「超過 2」才紅燈"></textarea>
+    <div style="margin:12px 0"><button class="btn oc" id="s-copy">複製繳交包</button> <span id="s-msg" style="font-size:13px;color:var(--green)"></span></div>
+    <div class="code" id="s-out"></div>
+    <p class="note">安全規範：不輸入任何真實病人資料、不得宣稱診斷或治療功能、頁面標示「教學示範」、醫療數字與閾值自行查核出處。同學互換試用只算「代理測試」。</p>
+  </div>
+</section>
+
+<section class="part" id="p16" data-t="案例研討：Kaiser 床邊交班">
+  <div class="ph"><span class="num">16</span><div><h2>案例研討：Kaiser 護理交班改到病人床邊</h2><div class="en">KAISER PERMANENTE × IDEO · BROWN, HBR 2008</div></div></div>
+  <p class="one">問題不是「交班單不好用」，而是<b>交班時病人不在場</b>、資訊沒有到病人身上。</p>
+  <div class="wd">
+    <div class="wh"><h3>決策點：你是護理部主任，最擔心誰反對？怎麼用最小成本先測？</h3><span class="tag a">先選再看結果</span></div>
+    <div class="tog" id="kpvote"></div>
+    <div id="kpres" style="display:none">
+      <div class="grid3" style="margin-top:10px">
+        <div class="kpi g"><div class="v">減半以上</div><div class="l">到班到第一次接觸病人的時間（Brown 2008）</div></div>
+        <div class="kpi g"><div class="v">3 倍快</div><div class="l">試行單位到班看到病人的速度（KP 2010）</div></div>
+        <div class="kpi o"><div class="v">35.3%</div><div class="l">護理時間花在記錄（KP 時間動作研究，767 位護理人員）</div></div>
+      </div>
+      <div class="grid2" style="margin-top:10px"><div class="okmsg"><b>做得對的</b><br>▪ 先觀察真實交班（每班開頭約 45 分鐘在護理站），再定義問題<br>▪ 粗略原型一週完成，在真實病房測試<br>▪ 讓病人成為交班的參與者</div><div class="warn" style="margin-top:8px"><b>實務上的挑戰</b><br>▪ 成效多為內部報告，缺少對照研究<br>▪ 床邊交班涉及隱私與病人在場時的用語<br>▪ 需有人接手呼叫鈴，否則護理師仍會被拉走</div></div>
+    </div>
+  </div>
+  <div class="wd"><div class="wh"><h3>課堂討論（三題擇一）</h3></div><ol style="margin:0;padding-left:20px;font-size:15px"><li><b>雙鑽石：</b>這個專案「對的問題」是什麼？原本可能被定義成什麼？</li><li><b>COM-B：</b>床邊交班要改變護理師的能力、機會，還是動機？</li><li><b>同理心地圖：</b>王伯伯住院時，床邊交班他想聽到什麼？不想讓誰聽到什麼？</li></ol></div>
+</section>
+
+<section class="part" id="p17" data-t="名詞卡、測驗與反思">
+  <div class="ph"><span class="num">17</span><div><h2>名詞卡、總測驗與實作後反思</h2><div class="en">GLOSSARY · QUIZ · REFLECTION</div></div></div>
+  <div class="wd"><div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div><div class="cards" id="cards"></div></div>
+  <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
+  <div class="wd form">
+    <div class="wh"><h3>實作後反思（課後約 5 分鐘）</h3><span class="tag gray">自動存在瀏覽器</span></div>
+    <label>1 測試：代理測試時同學卡在哪？真正的長者還可能卡在哪？</label><textarea id="rf1"></textarea>
+    <label>2 COM-B：你的工具補了哪個缺口？哪個缺口是工具補不了的？</label><textarea id="rf2"></textarea>
+    <label>3 AI 查核：AI 第一版有沒有寫錯？你是怎麼發現的？</label><textarea id="rf3"></textarea>
+    <label>4 落地：醫院要正式採用，還缺什麼？（提示：W3 資料、W13 法規）</label><textarea id="rf4"></textarea>
+  </div>
+  <div class="take">
+    <div><b>為誰設計</b>誰在什麼情境卡住？使用者不只病人。</div>
+    <div><b>為何會做</b>缺能力、機會還是動機？選對應的介入與 BCT。</div>
+    <div><b>怎麼驗證</b>四類測試＋代理測試查核 AI 產出；正式導入前要讓目標使用者試用。</div>
+  </div>
+  <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">為一個人設計，才會被每個人使用</h2><p style="color:var(--mute)">看得清楚、聽得懂、按得到、做得到。<br>下週 W5：醫療 AI 方法論與模型生命週期——課前想三個要問「再入院預測 AI」廠商的問題。</p></div>
+</section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w4-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w4-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w4-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
+function bind(sel){$$(sel).forEach(r=>{r.addEventListener("click",e=>{})})}
+function tipify(root){root.querySelectorAll("[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+function segInit(id,cb){$$(id+" button").forEach(b=>b.onclick=()=>{$$(id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset)})}
+function choiceRows(container,items,opts,scoreEl,noteFn){const r=$(container);let ok=0,dn=0;items.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach((o,i)=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;dn++;const g=i===a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+(why||(noteFn?noteFn(a):""));if(scoreEl)$(scoreEl).textContent=`${ok} / ${items.length}`+(dn===items.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})}
+function bars(svg,data,{max,unit="",dec=1,W=360,H=220,cols}){const L=46,B=H-36,T=22;let g="";const step=max/5;for(let v=0;v<=max+1e-9;v+=step){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v,v<10&&step<1?1:0)}${unit}</text>`}const n=data.length,bw=Math.min(80,(W-L-30)/n-30);data.forEach(([lab,v,c],i)=>{const x=L+20+i*((W-L-30)/n)+((W-L-30)/n-bw)/2-10,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${c||cols[i]}" data-t="${lab}：${fmt(v,dec)}${unit}"/><text x="${x+bw/2}" y="${y-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${c||cols[i]}">${fmt(v,dec)}${unit}</text><text x="${x+bw/2}" y="${B+18}" font-size="12.5" text-anchor="middle">${lab}</text>`});$(svg).innerHTML=g;tipify($(svg))}
+
+
+function copyText(t,msgEl){const done=()=>{$(msgEl).textContent="已複製。";setTimeout(()=>$(msgEl).textContent="",3000)};const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$(msgEl).textContent="無法自動複製，請手動選取文字。"}ta.remove()};try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+function persist(ids,key,cb){const s=LS.get(key,{});ids.forEach(id=>{const e=$("#"+id);if(s[id]!=null)e.value=s[id];const f=()=>{const o={};ids.forEach(k=>o[k]=$("#"+k).value);LS.set(key,o);cb&&cb()};e.addEventListener("input",f);e.addEventListener("change",f)})}
+
+/* 01 */
+const JT=[[0,"出院","12 頁衛教單、字小術語多；也裝了 App","卡在：看不懂「限鈉、限水」怎麼做"],[3,"第 3 天","之後不再打開 App；註冊要密碼與驗證碼，字和按鈕太小","卡在：操作太難"],[10,"約第 10 天","體重 3 天增加 2.3 公斤；數字沒有解讀，也沒人接手","卡在：沒人發現"],[16,"第 16 天","再次急診住院","卡在：工具與照護流程脫節"]];
+(function(){const r=$("#jt");for(let d=0;d<=16;d+=2)r.appendChild(h("div",{class:"tk",style:`left:${2+d/16*96}%`},d?`第 ${d} 天`:"出院"));JT.forEach(([d,n,a,b],i)=>{const e=h("div",{class:"ev",style:`left:${2+d/16*96}%;top:${i%2?78:0}px`},`<div class="lb">${n}</div><div class="dot"></div>`);e.onclick=()=>{$$(".jt .ev").forEach(x=>x.classList.remove("on"));e.classList.add("on");$("#jttxt").innerHTML=`<b>${n}：</b>${a}<br><span style="color:var(--ochre);font-weight:700">${b}</span>`};r.appendChild(e)});$("#jttxt").innerHTML="四個卡點分屬不同原因：看不懂、操作太難、沒人發現、和照護流程脫節。點選時間軸上的紅點。"})();
+bars("#twnic",[["2022",31.9,C.gray],["2023",40.4,C.gray],["2024",50.2,C.navy2],["2025",53.8,C.ochre]],{max:100,unit:"%",W:760,H:230});
+
+/* 02 */
+const PUSH={t:[["起點","我們有 AI，可以做什麼？"],["功能","越多越好"],["參與","工程師或管理者的想像"],["測試","上線後才發現沒人用"],["結果","試辦結束即停用"]],u:[["起點","誰在什麼情境遇到什麼困難？"],["功能","只做真正需要的"],["參與","使用者全程參與、反覆測試"],["測試","先做粗略原型，及早測試"],["結果","小而好用，逐步擴大"]]};
+function drawPush(m){$("#push").innerHTML=PUSH[m].map(([a,b])=>`<div class="kpi" style="border-top:4px solid ${m==="t"?C.ochre:C.green}"><div class="l">${a}</div><div style="font-weight:700;color:var(--navy)">${b}</div></div>`).join("")}segInit("#pushseg",d=>drawPush(d.m));drawPush("t");
+const ISO=[["1 了解使用情境","誰、在哪、做什麼、有何限制","王伯伯早上在浴室量體重，手機放在客廳。"],["2 界定使用者需求","把觀察轉成需求與成功標準","1 分鐘內完成，知道今天要不要緊。"],["3 產出設計方案","從草圖到可操作原型","Vibe Coding 做出體重紅綠燈。"],["4 以使用者評估","讓真實使用者試用並回饋","發現小數點輸入困難 → 回到 1 或 3 修改。"]];let isoI=0;
+function drawISO(){const s=$("#isosvg"),cx=165,cy=150,R=100;let g=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${C.line}" stroke-width="8"/>`;ISO.forEach((x,i)=>{const a=-Math.PI/2+i*Math.PI/2,px=cx+R*Math.cos(a),py=cy+R*Math.sin(a);g+=`<circle cx="${px}" cy="${py}" r="26" fill="${i===isoI?C.ochre:i<isoI?C.navy:"#fff"}" stroke="${C.navy}" stroke-width="2"/><text x="${px}" y="${py+6}" font-size="17" text-anchor="middle" font-weight="900" fill="${i<=isoI?"#fff":C.navy}">${i+1}</text>`});g+=`<text x="${cx}" y="${cy-4}" font-size="15" text-anchor="middle" font-weight="900" fill="${C.navy}">反覆循環</text><text x="${cx}" y="${cy+16}" font-size="12" text-anchor="middle" fill="${C.mute}">直到符合需求</text>`;s.innerHTML=g;const x=ISO[isoI];$("#isotxt").innerHTML=`<b style="font-size:17px;color:var(--navy)">${x[0]}</b><br>${x[1]}<br><span class="tag o" style="margin-top:6px">王伯伯例</span> ${x[2]}`}
+$("#isonext").onclick=()=>{isoI=(isoI+1)%4;drawISO()};drawISO();
+
+/* 03 notifications */
+const WS=(function(){const w=[];let s=11;const r=()=>{s=(s*16807)%2147483647;return(s-1)/2147483646};for(let d=0;d<30;d++){let v=70.2+(r()-0.5)*0.9+(d>=24?(d-23)*0.55:0)+(d>=10&&d<=12?0.6:0);w.push(d===15||d===16?null:Math.round(v*10)/10)}return w})();
+function light(d){const v=WS[d];if(v==null)return "miss";if(d<3||WS[d-3]==null)return "na";const diff=Math.round((v-WS[d-3])*10)/10;return diff>2?"r":diff>=1?"y":"g"}
+let ntD=1,ntC=2;function nt(){const L=WS.map((v,i)=>light(i));let dau=0,cm=0,caught=false,missRun=0;L.forEach((l,i)=>{if(l==="miss")missRun++;else missRun=0;const lv={g:0,y:1,r:2,na:-1,miss:-1}[l];if(ntD===0?l!=="miss":lv>=ntD)dau++;const cmHit=ntC===3?(lv>=2||missRun===2):lv>=ntC;if(cmHit){cm++;if(i>=24)caught=true}});
+ const s=$("#ntsvg"),Lx=40,R=390,B=190,T=16;const vals=WS.filter(v=>v!=null),mn=Math.min(...vals)-0.5,mx=Math.max(...vals)+0.5;const X=i=>Lx+i*(R-Lx)/29,Y=v=>B-(v-mn)/(mx-mn)*(B-T);let g="";for(let v=Math.ceil(mn);v<=mx;v++)g+=`<line x1="${Lx}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${Lx-5}" y="${Y(v)+4}" font-size="10" fill="${C.mute}" text-anchor="end">${v}</text>`;
+ let d="",pen=false;WS.forEach((v,i)=>{if(v==null){pen=false;return}d+=(pen?"L":"M")+X(i)+","+Y(v);pen=true});g+=`<path d="${d}" fill="none" stroke="${C.navy2}" stroke-width="2"/>`;
+ WS.forEach((v,i)=>{const l=L[i];const col={g:C.green,y:"#D9A441",r:C.ochre,na:C.gray,miss:C.gray}[l];if(v!=null)g+=`<circle cx="${X(i)}" cy="${Y(v)}" r="4.5" fill="${col}"/>`;else g+=`<text x="${X(i)}" y="${B-6}" font-size="10" text-anchor="middle" fill="${C.amber}">缺</text>`});
+ g+=`<rect x="${X(24)-5}" y="${T}" width="${X(29)-X(24)+10}" height="${B-T}" fill="${C.ochre}" opacity=".07"/><text x="${X(26.5)}" y="${T+12}" font-size="11" text-anchor="middle" fill="${C.ochre}">真正惡化</text>`;[0,10,20,29].forEach(i=>g+=`<text x="${X(i)}" y="${B+16}" font-size="10" text-anchor="middle" fill="${C.mute}">第 ${i+1} 天</text>`);s.innerHTML=g;
+ $("#ntkpi").innerHTML=`<div class="kpi"><div class="v">${dau}</div><div class="l">女兒一個月收到的通知</div></div><div class="kpi ${cm>8?"o":""}"><div class="v">${cm}</div><div class="l">個管師一個月收到的警示</div></div><div class="kpi ${caught?"g":"o"}"><div class="v">${caught?"抓到":"漏掉"}</div><div class="l">月底的真正惡化</div></div>`;
+ let msg=[];if(dau>=20)msg.push("女兒幾乎天天收到通知：一開始放心，之後可能焦慮或乾脆不看。");if(cm>8)msg.push("個管師警示偏多：警示疲勞會讓真正的紅燈被忽略（W8）。");if(!caught)msg.push("<b style='color:var(--ochre)'>月底的惡化沒有通知到個管師</b>——規則太寬鬆。");if(ntC===3)msg.push("加上「缺測 2 天」：第 16–17 天沒量也會被注意到（W10 失聯處置）。");$("#nttxt").innerHTML=(msg.length?msg.join("<br>"):"這組規則在通知量與抓到惡化之間取得平衡。")+"<br><span style='color:var(--mute);font-size:13px'>設計就是在需求衝突之間取捨；規則要和使用者一起決定，並在試用後調整。</span>"}
+segInit("#nt-d",d=>{ntD=+d.v;nt()});segInit("#nt-c",d=>{ntC=+d.v;nt()});nt();
+(function(){const U=[["王伯伯","簡單、不麻煩別人","每天量測的負擔"],["心臟科醫師","可信的趨勢，不要雜訊","判讀責任與時間"],["居服員、社區藥師","不增加工作，交接清楚","角色不明時責任落空"],["女兒","遠端放心，有事早知道","通知太多反而焦慮"],["個案管理師","只看需要處理的人","警示疲勞、工作量增加"],["醫院管理者","降低再入院、可持續","建置與維運投入"]];const g=$("#users6");U.forEach(([n,p,m])=>{const d=h("div",{class:"kpi",style:"cursor:pointer"},`<div style="font-weight:900;color:var(--navy)">${n}</div><div class="l">點看 ＋／－</div>`);d.onclick=()=>{d.querySelector(".l").innerHTML=`<span class="plus">＋</span> ${p}<br><span class="minus">－</span> ${m}`};g.appendChild(d)})})();
+
+/* 04 double diamond */
+const DD=[["探索 Discover","發散","多看、多試：陪王伯伯量一次體重，看他卡在哪（同理）。"],["定義 Define","收斂","寫出真正的問題：不是不會用 App，而是看不懂數字。"],["發展 Develop","發散","先求量、再求質：語音提醒？燈號？女兒代管？做出能摸的原型。"],["交付 Deliver","收斂","讓真人試用，看哪裡卡住，聚焦成能交付的解法。"]];let ddI=1;
+function drawDD(){const s=$("#ddsvg");let g="";const P=[[20,110],[200,20],[380,110],[200,200],[380,110],[560,20],[740,110],[560,200]];const d1=`M20,110 L200,20 L380,110 L200,200 Z`,d2=`M380,110 L560,20 L740,110 L560,200 Z`;g+=`<path d="${d1}" fill="#E6EAF2" stroke="${C.navy2}" stroke-width="2"/><path d="${d2}" fill="#F6E3DA" stroke="${C.ochre}" stroke-width="2"/>`;
+ [[110,"探索"],[290,"定義"],[470,"發展"],[650,"交付"]].forEach(([x,t],i)=>{g+=`<g class="dd" data-i="${i}" style="cursor:pointer"><rect x="${x-60}" y="88" width="120" height="44" rx="22" fill="${i===ddI?C.navy:"#fff"}" stroke="${C.navy}" stroke-width="2"/><text x="${x}" y="116" font-size="15" text-anchor="middle" font-weight="900" fill="${i===ddI?"#fff":C.navy}">${t}</text></g>`});g+=`<text x="200" y="218" font-size="12.5" text-anchor="middle" fill="${C.navy2}" font-weight="700">問題空間：找到對的問題</text><text x="560" y="218" font-size="12.5" text-anchor="middle" fill="${C.ochre}" font-weight="700">解方空間：做出對的解法</text>`;s.innerHTML=g;s.querySelectorAll(".dd").forEach(e=>e.onclick=()=>{ddI=+e.dataset.i;drawDD()});const x=DD[ddI];$("#ddtxt").innerHTML=`<b>${x[0]}（${x[1]}）</b><br>${x[2]}`}drawDD();
+
+/* 05 empathy map */
+const EMQ=["說 Says","想 Thinks","做 Does","感受 Feels"];const EMI=[["「我身體還好啦，不用麻煩」",0],["「那個 App 太複雜了」",0],["「量了也不知道是好是壞」",1],["「不想讓女兒擔心」",1],["早上想到才量，常忘記",2],["腳腫了就少喝水自己處理",2],["怕再住院、怕成為負擔",3],["對科技有點挫折",3]];
+let emSel=-1,emOk=0,emDone=new Set();function drawEm(){const p=$("#empool");p.innerHTML="";EMI.forEach(([t],i)=>{if(emDone.has(i))return;const b=h("span",{class:"gc"+(emSel===i?" sel":"")},t);b.onclick=()=>{emSel=i;drawEm()};p.appendChild(b)});if(emDone.size===EMI.length)p.innerHTML=`<span class="okmsg">完成！答對 ${emOk} / 8。注意「說」和「做」的落差。</span>`}
+(function(){const q=$("#emquad");EMQ.forEach((n,k)=>{const d=h("div",{class:"qd"},`<h4>${n}</h4>`);d.onclick=()=>{if(emSel<0)return;const [t,a]=EMI[emSel];const ok=a===k;if(ok)emOk++;$$("#emquad .qd")[a].appendChild(h("div",{class:"it",style:ok?"":"border-color:#B5442A"},t));const fb=$("#emfb");fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=ok?"<b>正確。</b>":`<b>不在這裡</b>，已放到「${EMQ[a]}」。`;emDone.add(emSel);emSel=-1;$("#emscore").textContent=`${emOk} / 8`;drawEm()};q.appendChild(d)})})();drawEm();
+
+/* 06 persona + journey */
+const PER=[[["目標","不要再住院，也不想麻煩別人"],["情境","早上在浴室量體重，手機放客廳"],["能力","會用 LINE 語音，看小字吃力"],["痛點","不知道數字代表什麼、何時該打電話"],["成功標準","1 分鐘內完成，知道今天要不要緊"]],[["目標","遠端放心，有事能及早知道"],["情境","45 歲，新竹上班，用手機偶爾看"],["能力","熟悉手機，時間有限"],["痛點","每天打電話問，爸爸會不耐煩"],["成功標準","只在需要時收到清楚通知"]]];
+function drawPer(i){$("#persona").innerHTML=PER[i].map(([a,b],k)=>`<div class="kpi" style="${k===4?"border:2px solid "+C.ochre:""}"><div class="l">${a}</div><div style="font-weight:700;color:var(--navy);font-size:14px">${b}</div></div>`).join("")}segInit("#perseg",d=>drawPer(+d.m));drawPer(0);
+const JM=[["出院當天",1,"聽衛教、裝 App","資訊過載"],["第 1 天",0,"量了體重","數字無解讀 ← 今天實作要解決的"],["第 2 天",-1,"忘了量","缺提醒"],["第 3 天",-2,"App 登入失敗","操作太難"],["第 5 天",-1,"腳腫、少喝水","自行處置"],["第 7 天",-2,"喘、不敢說","未求助"]];let jmI=1;
+function drawJM(){const s=$("#jmsvg"),L=60,R=740,T=20,B=190;const X=i=>L+i*(R-L)/5,Y=v=>T+(1-v)/3*(B-T-20);let g="";[1,0,-1,-2].forEach(v=>g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-8}" y="${Y(v)+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v>0?"+":""}${v}</text>`);let d="";JM.forEach((p,i)=>d+=(i?"L":"M")+X(i)+","+Y(p[1]));g+=`<path d="${d}" fill="none" stroke="${C.ochre}" stroke-width="3"/>`;JM.forEach((p,i)=>{g+=`<g class="jm" data-i="${i}" style="cursor:pointer"><circle cx="${X(i)}" cy="${Y(p[1])}" r="${i===jmI?11:7}" fill="${i===jmI?C.ochre:"#fff"}" stroke="${C.ochre}" stroke-width="3"/><text x="${X(i)}" y="${B+20}" font-size="12.5" text-anchor="middle" font-weight="${i===jmI?900:500}">${p[0]}</text></g>`});g+=`<text x="16" y="${(T+B)/2}" font-size="12" fill="${C.mute}" transform="rotate(-90 16 ${(T+B)/2})" text-anchor="middle">情緒</text>`;s.innerHTML=g;s.querySelectorAll(".jm").forEach(e=>e.onclick=()=>{jmI=+e.dataset.i;drawJM()});const p=JM[jmI];$("#jmtxt").innerHTML=`<b>${p[0]}</b>　行為：${p[2]}　<span style="color:var(--ochre);font-weight:700">斷點：${p[3]}</span>`}drawJM();
+
+/* 07 HMW */
+mcq("#hmwq",[
+ {q:"痛點：量了體重不知道好壞",o:["如何提升自我照顧？","如何讓王伯伯量完 3 秒內知道今天要不要緊？","如何做一個 AI App？"],a:1,e:"太廣難以動手；直接說出解法（做 App）又太窄。這一句就是今天「體重紅綠燈」的起點。"},
+ {q:"痛點：常常忘記量",o:["如何提高遵從率？","如何把量體重綁進他早上已有的習慣？","如何每小時提醒他？"],a:1,e:"綁進既有習慣（刷牙後）＝Fogg 的提示；每小時提醒會造成負擔。"},
+ {q:"痛點：女兒擔心又不想一直打電話",o:["如何讓家屬參與？","如何讓女兒只在需要時收到看得懂的通知？","如何讓女兒每天收到報表？"],a:1,e:"對應第 03 段的通知規則取捨。"}]);
+persist(["h-who","h-when","h-what","h-how"],"hmw",hmw);
+function hmw(){const w=$("#h-who").value.trim(),n=$("#h-when").value.trim(),x=$("#h-what").value.trim(),y=$("#h-how").value.trim();$("#h-out").textContent=`我們可以如何讓${w}${n?"在"+n:""}${y?"，"+y:""}${x}？`;const c=[];if(!w)c.push("缺少「誰」");if(!n)c.push("缺少情境");if(/App|AI|程式|系統/.test(x))c.push("「做到什麼」寫成了解法（App／AI），改寫成使用者要達到的結果");if(/提升|改善|增加/.test(x)&&!y)c.push("太廣：加上時間或次數讓它可以動手");$("#h-chk").innerHTML=c.length?c.map(z=>`<span style="color:${C.ochre}">⚠ ${z}</span>`).join("<br>"):`<span style="color:${C.green}">✓ 具體、可動手，也沒有直接寫死解法。</span>`}hmw();
+
+/* 08 COM-B */
+choiceRows("#cbq",[["看不懂數字代表什麼",0,"心理能力 → 對策：與 3 天前比較，燈號＋一句話結論。"],["常常忘記",0,"心理能力（記憶）→ 對策：固定時間 LINE 或語音提醒。"],["體重計在浴室、手機在客廳",2,"物理機會 → 對策：藍牙自動上傳；或大字快速輸入。"],["獨居，沒人一起確認",3,"社會機會 → 對策：紅燈時依同意通知女兒與個管師。"],["覺得量了也沒用",4,"反思動機 → 對策：說明體重變化意義，顯示連續紀錄。"],["膝蓋痛，站上體重計很吃力",1,"身體能力 → 數位工具補不了：需要扶手或坐式體重計等環境與人力協助。"]],["心理能力","身體能力","物理機會","社會機會","反思動機","自動動機"],"#cbscore");
+const BCW=[["教育","白話衛教、短影音","心理能力、反思動機"],["說服","病友故事","反思動機、自動動機"],["誘因","連續量測徽章","反思動機、自動動機"],["訓練","互動式操作教學","心理與身體能力"],["環境重建","藍牙自動上傳、預設提醒","物理機會、自動動機"],["示範","同齡長者示範影片","心理能力、社會機會、動機"],["賦能","家屬代管、語音輸入","能力、物理與社會機會"]];let bcI=4;
+function drawBCW(){const s=$("#bcw"),cx=380,cy=150;let g=`<circle cx="${cx}" cy="${cy}" r="62" fill="${C.navy}"/><text x="${cx}" y="${cy-4}" font-size="16" text-anchor="middle" font-weight="900" fill="#fff">COM-B</text><text x="${cx}" y="${cy+16}" font-size="12" text-anchor="middle" fill="#C9D0DE">缺口</text>`;BCW.forEach((b,i)=>{const a=-Math.PI/2+i*2*Math.PI/BCW.length,x=cx+250*Math.cos(a),y=cy+115*Math.sin(a);g+=`<line x1="${cx+62*Math.cos(a)}" y1="${cy+62*Math.sin(a)}" x2="${x}" y2="${y}" stroke="${i===bcI?C.ochre:C.line}" stroke-width="${i===bcI?3:1.5}"/><g class="bw" data-i="${i}" style="cursor:pointer"><rect x="${x-60}" y="${y-18}" width="120" height="36" rx="18" fill="${i===bcI?C.ochre:"#fff"}" stroke="${C.ochre}" stroke-width="2"/><text x="${x}" y="${y+5}" font-size="14" text-anchor="middle" font-weight="700" fill="${i===bcI?"#fff":C.navy}">${b[0]}</text></g>`});s.innerHTML=g;s.querySelectorAll(".bw").forEach(e=>e.onclick=()=>{bcI=+e.dataset.i;drawBCW()});const b=BCW[bcI];$("#bcwtxt").innerHTML=`<b>${b[0]}</b>：例如${b[1]}<br>主要補的缺口：<b>${b[2]}</b><span style="color:var(--mute);font-size:13px">（教學歸納；九種介入功能中數位工具常用的七種）</span>`}drawBCW();
+
+/* 09 BCT + evidence */
+const BCT=["自我監測：記錄自己的體重","回饋：量完立即告訴他結果代表什麼","目標設定：這週每天都量","提示與線索：固定時間與情境提醒","社會支持：家人一起看、一起鼓勵"];const bs=LS.get("bct",[0,1]);
+(function(){const r=$("#bct");BCT.forEach((t,i)=>{const l=h("label",{class:bs.includes(i)?"on":""},`<input type="checkbox" ${bs.includes(i)?"checked":""}>${t}`);l.querySelector("input").onchange=e=>{l.classList.toggle("on",e.target.checked);const v=$$("#bct input").map((x,k)=>x.checked?k:-1).filter(k=>k>=0);LS.set("bct",v);bctMsg(v)};r.appendChild(l)});bctMsg(bs)})();
+function bctMsg(v){const n=v.length;const mvp=[0,1,3].every(k=>v.includes(k));$("#bcttxt").innerHTML=`<div class="${n>=2?"okmsg":"warn"}">已選 ${n} 項${n<2?"：實作至少放進兩項":n===2?"：符合最低要求，建議三項":"：很好"}。${mvp?"<br><b>自我監測＋回饋＋提示</b>＝最小可行的行為改變工具。":""}${v.includes(4)?"<br>社會支持要注意通知量（第 03 段）與病人授權。":""}</div>`}
+function drawTM(m){if(m==="s")bars("#tmsvg",[["簡訊組",26.0,C.green],["一般照護",42.9,C.gray]],{max:50,unit:"%"});else bars("#tmsvg",[["簡訊組",79,C.green],["一般照護",84,C.gray]],{max:100,unit:"",dec:0})}segInit("#tmseg",d=>drawTM(d.m));drawTM("s");
+bars("#mksvg",[["未收簡訊",100,C.gray],["收到提醒（平均）",106.8,C.navy2]],{max:120});
+mcq("#mkq",[{q:"從這個研究，王伯伯的提醒文字該怎麼決定？",o:["請專家寫最好的一則","A/B 測試幾種寫法，看哪種真的讓人去量","越多則越好","不需要提醒"],a:1,e:"連專家與一般民眾都沒猜中哪一則最有效（最有效的是間隔 3 天的兩則「疫苗已經為你準備好了」）。但這是美國流感疫苗情境，不能直接套用到每日量體重。"}]);
+
+/* 10 Fogg + ethics */
+function fg(){const m=+$("#fg-m").value,st=+$("#fg-s").value,p=$("#fg-p").checked;$("#fg-m").nextElementSibling.textContent=m;$("#fg-s").nextElementSibling.textContent=st+" 步";const ab=11-st*1.25;
+ const s=$("#fgsvg"),L=40,R=370,T=14,B=240;const X=a=>L+(a-0.5)/10*(R-L),Y=v=>B-(v-0.5)/10*(B-T);const line=a=>9.5/(0.42*a+0.6)+0.3;let d="";for(let a=0.8;a<=10.5;a+=0.2)d+=(a<0.9?"M":"L")+X(a)+","+Y(Math.min(10.4,line(a)));let g=`<path d="${d}" fill="none" stroke="${C.navy2}" stroke-width="3"/><text x="${X(8.6)}" y="${Y(line(8.6))-10}" font-size="12" fill="${C.navy2}" font-weight="700">行動線</text><text x="${X(7)}" y="${Y(8.5)}" font-size="12" fill="${C.green}">線上方：提示有效</text><text x="${X(1.2)}" y="${Y(1.2)}" font-size="12" fill="${C.ochre}">線下方：提示無效</text>`;
+ g+=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="${C.mute}"/><line x1="${L}" y1="${B}" x2="${L}" y2="${T}" stroke="${C.mute}"/><text x="${(L+R)/2}" y="${B+20}" font-size="12" text-anchor="middle" fill="${C.mute}">能力：很難 → 很簡單</text><text x="14" y="${(T+B)/2}" font-size="12" text-anchor="middle" fill="${C.mute}" transform="rotate(-90 14 ${(T+B)/2})">動機：低 → 高</text>`;
+ const above=m>line(ab);g+=`<circle cx="${X(ab)}" cy="${Y(m)}" r="12" fill="${above&&p?C.green:C.ochre}"/><text x="${X(ab)}" y="${Y(m)+4}" font-size="11" text-anchor="middle" fill="#fff" font-weight="900">王</text>`;s.innerHTML=g;
+ $("#fgtxt").innerHTML=!p?"<b>沒有提示：</b>就算動機和能力都夠，行為也不會在對的時間發生。":above?"<b style='color:var(--green)'>提示有效：</b>王伯伯在行動線上方，看到提示就會量。":`<b style='color:var(--ochre)'>提示無效：</b>行為還太難。試著把步驟從 6 步減到 2 步（藍牙自動上傳、一鍵輸入）——比再加強衛教更有效。`}
+["#fg-m","#fg-s"].forEach(id=>$(id).oninput=fg);$("#fg-p").onchange=fg;fg();
+choiceRows("#ethq",[["預設每天早上提醒，可隨時在設定中關閉",0,"輕推：病人知情後仍會同意。"],["量完立即正向回饋「連續 5 天都有量，很棒」",0,"輕推。"],["紅燈時跳出「再不就醫可能會死」的恐嚇訊息",2,"黑暗模式：製造恐慌，利用而非協助。"],["通知很難關閉，藏在三層選單裡",2,"黑暗模式。"],["預設把資料分享給保險公司，要自己去取消",2,"黑暗模式：預設分享給第三方。"],["每筆都推播給女兒，結果女兒更焦慮",1,"留意副作用：數據焦慮與警示疲勞，需持續監測與調整。"]],["輕推","留意副作用","黑暗模式"]);
+
+/* 11 jargon */
+const JG=[["監測","量"],["儘速","今天"],["返診","回醫院／打電話給個管師"],["鈉","鹽分"],["攝取","吃進去"],["適度限制","照醫師說的份量"],["端坐呼吸","躺平會喘、要坐起來才好睡"],["下肢水腫","腳腫"],["惡化","變更嚴重"],["就醫","去看醫生"],["遵從","照著做"],["每日","每天"],["若","如果"]];
+function jg(){let t=$("#jg-in").value.replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]));const found=[];JG.forEach(([a,b])=>{if(t.includes(a)){found.push([a,b]);t=t.split(a).join(`<mark title="${b}">${a}</mark>`)}});const len=$("#jg-in").value.replace(/\s/g,"").length,sent=($("#jg-in").value.match(/[。！？!?]/g)||[]).length||1;$("#jg-out").innerHTML=`<div style="font-size:16px;line-height:1.9">${t}</div><div style="margin-top:8px">找到 <b style="color:var(--ochre)">${found.length}</b> 個術語：${found.map(([a,b])=>`${a} → <b>${b}</b>`).join("；")||"無"}</div><div style="font-size:13px;color:var(--mute);margin-top:4px">平均每句 ${Math.round(len/sent)} 字。一次一件事、先說要做什麼、用數字和例子。</div>`}
+$("#jg-in").oninput=jg;jg();
+mcq("#rwq",[
+ {q:"原文：每日監測體重，若 3 日內增加超過 2 公斤，請儘速返診。",o:["請每天量體重並注意變化。","每天早上上完廁所先量體重。跟 3 天前比多了超過 2 公斤，今天就打電話給個管師。","體重增加時請小心。"],a:1,e:"改了：時間點＋具體動作；數字保留，不可改動醫囑。"},
+ {q:"原文：請限制鈉攝取量並適度限制水分。",o:["湯不要喝、醬料少沾。喝水量請照醫師說的份量。","不要吃鹹、不要喝水。","每天喝水不超過 500 cc。"],a:0,e:"改了：生活中的例子。「每天不超過 500 cc」是 AI 自己補的數字——改寫不能改動醫囑。"},
+ {q:"改寫完，怎麼確認王伯伯真的懂？",o:["問他：「懂了嗎？」","請他用自己的話說一遍：「回家後，體重增加多少要打電話？」","給他一份更詳細的衛教單"],a:1,e:"回授法 teach-back；數位版：量完問一題確認理解。"}]);
+
+/* 12 WCAG */
+function lum(hex){const c=hex.match(/[0-9a-f]{2}/gi).map(x=>parseInt(x,16)/255).map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4));return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]}
+function cc(){const fg=$("#cc-fg").value,bg=$("#cc-bg").value,fs=+$("#cc-fs").value,bs=+$("#cc-bs").value,txt=$("#cc-txt").checked,gray=$("#cc-gray").checked;$("#cc-fs").nextElementSibling.textContent=fs+" px";$("#cc-bs").nextElementSibling.textContent=bs+" px";const L1=lum(fg),L2=lum(bg),r=(Math.max(L1,L2)+0.05)/(Math.min(L1,L2)+0.05);
+ const items=[["文字對比 ≥ 4.5:1（1.4.3 AA）",r>=4.5,r.toFixed(2)+":1"],["內文 ≥ 18 px（本課建議）",fs>=18,fs+" px"],["按鈕 ≥ 44 px（2.5.5 AAA）",bs>=44,bs+" px"],["按鈕 ≥ 24 px（2.5.8 AA 最低）",bs>=24,bs+" px"],["不只靠顏色（1.4.1）",txt,txt?"有文字":"只有顏色"]];
+ $("#cc-res").innerHTML=items.map(([a,ok,v])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--line);font-size:14px"><span>${ok?"✅":"❌"} ${a}</span><b>${v}</b></div>`).join("")+`<div style="margin-top:6px;font-weight:700;color:${items.every(x=>x[1])?C.green:C.ochre}">${items.filter(x=>x[1]).length} / 5 通過</div>`;
+ const lights=[["#3D7A5A","未達增重提醒"],["#D9A441","注意鹽分與水分"],["#B5442A","今天請打電話"]];$("#cc-prev").style.background=bg;$("#cc-prev").style.filter=gray?"grayscale(1)":"none";$("#cc-prev").innerHTML=`<div style="color:${fg};font-size:${fs}px;font-weight:700;margin-bottom:8px">體重紅綠燈　今天 72.1 公斤</div><div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">${lights.map(([c,t],i)=>`<div style="text-align:center"><div style="width:44px;height:44px;border-radius:50%;background:${c};margin:0 auto;${i===2?"box-shadow:0 0 0 4px "+c+"55":""};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:20px">${txt?["✓","!","☎"][i]:""}</div>${txt?`<div style="font-size:${Math.max(12,fs-4)}px;color:${fg};margin-top:4px">${t}</div>`:""}</div>`).join("")}</div><div style="color:${fg};font-size:${fs}px;margin-bottom:10px">${txt?"紅燈：今天請打電話給個管師":"（只有顏色，看不出是哪一個燈亮）"}</div><button style="font-size:${Math.max(14,fs)}px;min-height:${bs}px;min-width:${bs*2.6}px;border-radius:10px;border:0;background:#B5442A;color:#fff;font-weight:700">打給個管師</button>`}
+["#cc-fg","#cc-bg","#cc-fs","#cc-bs"].forEach(id=>$(id).oninput=cc);["#cc-txt","#cc-gray"].forEach(id=>$(id).onchange=cc);$("#cc-fix").onclick=()=>{$("#cc-fg").value="#1f2430";$("#cc-bg").value="#ffffff";cc()};cc();
+const SUSQ=["我想我會願意經常使用這個工具","我覺得這個工具過於複雜","我認為這個工具很容易使用","我想我需要技術人員協助才能使用","我覺得這個工具的各項功能整合得很好","我覺得這個工具有太多不一致","我想大部分人能很快學會使用","我覺得這個工具用起來很笨拙","我使用時很有信心","我需要先學很多東西才能開始使用"];
+(function(){const r=$("#sus");r.innerHTML=`<div></div>`+[1,2,3,4,5].map(k=>`<div class="hd">${["非常不同意","","","","非常同意"][k-1]||k}</div>`).join("");SUSQ.forEach((q,i)=>{r.innerHTML+=`<div>${i+1}. ${q}</div>`+[1,2,3,4,5].map(k=>`<input type="radio" name="sus${i}" value="${k}">`).join("")});$$("#sus input").forEach(x=>x.onchange=sus)})();
+function sus(){let tot=0,n=0;SUSQ.forEach((q,i)=>{const v=document.querySelector(`input[name=sus${i}]:checked`);if(v){n++;tot+=i%2===0?(+v.value-1):(5-+v.value)}});if(n<10){$("#susv").textContent="—";$("#susl").textContent=`已答 ${n} / 10 題（奇數題正向、偶數題反向計分）`;drawSusBar(null);return}const sc=tot*2.5;$("#susv").textContent=sc.toFixed(1);$("#susl").textContent=sc>=80?"表現良好（≥80）":sc>=68?"高於平均（約 68）":"低於平均，找出卡點再修";drawSusBar(sc)}
+function drawSusBar(sc){const s=$("#sussvg"),L=10,R=350;const X=v=>L+v/100*(R-L);let g=`<rect x="${L}" y="20" width="${R-L}" height="14" rx="7" fill="#EFEAE0"/><rect x="${X(68)}" y="20" width="${X(80)-X(68)}" height="14" fill="#F5EBD5"/><rect x="${X(80)}" y="20" width="${R-X(80)}" height="14" rx="0" fill="#E1EEE6"/><text x="${X(68)}" y="50" font-size="11" text-anchor="middle" fill="${C.mute}">68</text><text x="${X(80)}" y="50" font-size="11" text-anchor="middle" fill="${C.green}">80</text>`;if(sc!=null)g+=`<circle cx="${X(sc)}" cy="27" r="9" fill="${C.ochre}"/>`;s.innerHTML=g}sus();
+
+/* 13 prompt */
+const PMD={A:["你是醫療 UX 設計師，做一個單一 HTML 檔的網頁小工具「體重紅綠燈」。","72 歲心衰竭長者，看小字吃力，不熟 App。","輸入「今天體重」與「3 天前體重」（公斤），按「檢查」後顯示：\n增加未滿 1 公斤（含持平或下降）→ 綠燈「未達增重提醒」\n增加 1 公斤以上、未超過 2 公斤 → 黃燈「注意鹽分與水分，明天再量」\n增加超過 2 公斤 → 紅燈「今天請打電話給個管師」，顯示電話按鈕\n空白、非數字或不在 30–200 公斤：不顯示燈號，請重新輸入（不可預設綠燈）。","字至少 18 px、按鈕至少 44 px、高對比；燈號旁加文字；一次一件事；不需登入。","不儲存或上傳資料；頁尾註明「綠燈只代表未達增重提醒，不代表身體狀況安全；教學示範」。附正常、邊界（剛好 1.0、2.0、2.1 公斤）、缺值、不合理輸入四類測試與預期結果。"],
+ B:["你是醫療 UX 設計師，做一個單一 HTML 檔的網頁小工具「衰弱自我篩檢」。","70 歲以上社區長者，看小字吃力，可能由家人陪同操作。","FRAIL 五題，每題「是／否」各 1 分：疲憊、爬一層樓梯有困難、走一段路有困難、11 種疾病中有 5 種以上、一年內體重減輕超過 5%。\n0 分健壯、1–2 分衰弱前期、3–5 分衰弱；依結果給一則白話建議。\n有題目未作答時不顯示結果，提示完成作答。","字至少 18 px、按鈕至少 44 px、高對比；一次一題；結果用文字＋圖示，不只靠顏色；不需登入。","不儲存或上傳資料；註明「篩檢結果不是診斷；教學示範」；白話建議由醫療人員確認。附正常、邊界（0、1、2、3 分）、缺值（漏答一題）、不合理操作（連點）四類測試與預期結果。"]};
+let pmTopic="A";function pmFill(t){PMD[t].forEach((v,i)=>$("#pm"+(i+1)).value=v);pm()}
+function pm(){const v=[1,2,3,4,5].map(i=>$("#pm"+i).value.trim());$("#pmout").textContent=`【角色與目標】${v[0]}\n【使用者】${v[1]}\n【功能與規則】\n${v[2]}\n【設計限制】${v[3]}\n【安全與驗收】${v[4]}`;const c=[];if(!/\d+\s*px/.test(v[3]))c.push("設計限制沒有寫具體尺寸（px）");if(!/不(可|要)?預設|不顯示燈號|不顯示結果/.test(v[2]))c.push("沒寫缺值或不合理輸入怎麼處理（AI 常預設綠燈）");if(!/邊界/.test(v[4]))c.push("驗收沒要求邊界值測試");if(!/教學示範/.test(v[4]))c.push("沒標示「教學示範」");if(/弄得好看|漂亮|酷/.test(v.join("")))c.push("含糊的形容詞：換成具體規格");LS.set("pm",{t:pmTopic,v});$("#pmchk").innerHTML=c.length?c.map(x=>`<span style="color:${C.ochre}">⚠ ${x}</span>`).join("<br>"):`<span style="color:${C.green}">✓ 五要素齊全，規則與驗收具體。</span>`}
+[1,2,3,4,5].forEach(i=>$("#pm"+i).oninput=pm);segInit("#pmseg",d=>{pmTopic=d.m;pmFill(d.m)});
+(function(){const s=LS.get("pm",null);if(s&&s.v){pmTopic=s.t;$$("#pmseg button").forEach(b=>b.classList.toggle("on",b.dataset.m===s.t));s.v.forEach((x,i)=>$("#pm"+(i+1)).value=x);pm()}else pmFill("A")})();
+$("#pmcopy").onclick=()=>copyText($("#pmout").textContent,"#pmmsg");
+mcq("#itq",[
+ {q:"哪一句是好的修改指令？",o:["「弄得好看一點」","「紅燈時，電話按鈕放大兩倍並放在最上方」","「感覺怪怪的，再改改」"],a:1,e:"具體指出要改的地方。"},
+ {q:"測到剛好 2.0 公斤顯示紅燈，你要怎麼告訴 AI？",o:["「有 bug，修一下」","「增加剛好 2.0 公斤應顯示黃燈；只有超過 2.0 才顯示紅燈，請修正判斷式並附上 2.0 與 2.1 的測試」","「重寫一次」"],a:1,e:"說清楚預期結果與要附的測試，AI 才不會改錯別的地方。"},
+ {q:"輸入空白時顯示綠燈，最大的風險是？",o:["版面不好看","王伯伯以為今天沒事——綠燈被誤解成安全","沒有風險"],a:1,e:"所以規格寫「不可預設綠燈」，頁尾也註明「綠燈不代表身體狀況安全」。"},
+ {q:"同學互換試用後，能不能寫「長者使用者測試通過」？",o:["可以","不行，只算代理測試；同學不是 72 歲心衰竭長者"],a:1,e:"正式導入前要讓目標使用者試用。"}]);
+(function(){const s=$("#vcsvg"),L=170,R=700;let g="";[["所有任務：引入資安漏洞",45,C.navy2],["跨站腳本（XSS）未能防範",86,C.ochre]].forEach(([n,v,c],i)=>{const y=20+i*56;g+=`<text x="${L-10}" y="${y+22}" font-size="13" text-anchor="end" font-weight="700" fill="${C.navy}">${n}</text><rect x="${L}" y="${y}" width="${R-L}" height="32" rx="4" fill="#EFEAE0"/><rect x="${L}" y="${y}" width="${(R-L)*v/100}" height="32" rx="4" fill="${c}"/><text x="${L+(R-L)*v/100+8}" y="${y+22}" font-size="16" font-weight="900" fill="${c}">${v}%</text>`});s.innerHTML=g})();
+
+/* 14 test bench */
+function parse(s){s=String(s).trim();if(s===""||!/^-?\d+(\.\d+)?$/.test(s))return NaN;return +s}
+function correct(a,b){const x=parse(a),y=parse(b);if(isNaN(x)||isNaN(y)||x<30||x>200||y<30||y>200)return{c:"none",t:"請重新輸入（需為 30–200 的數字）"};const d=Math.round((x-y)*10)/10;if(d>2)return{c:"r",t:"今天請打電話給個管師",d};if(d>=1)return{c:"y",t:"注意鹽分與水分，明天再量",d};return{c:"g",t:"未達增重提醒",d}}
+function aiv1(a,b){const x=parseFloat(a)||0,y=parseFloat(b)||0;const d=x-y;if(d>=2)return{c:"r",t:"今天請打電話給個管師",d};if(d>1)return{c:"y",t:"注意鹽分與水分",d};return{c:"g",t:"未達增重提醒",d}}
+const AISRC=`// AI 第一版產生的判斷邏輯（藏了 3 個錯誤）
+function check(today, before) {
+  const x = parseFloat(today) || 0;   // ← 空白或「七十」變成 0，不會擋下
+  const y = parseFloat(before) || 0;  // ← 也沒有檢查 30–200 公斤
+  const d = x - y;
+  if (d >= 2) return "紅燈";          // ← 剛好 2.0 就變紅燈（規格是「超過 2」）
+  if (d > 1)  return "黃燈";          // ← 剛好 1.0 變綠燈（規格是「1 公斤以上」）
+  return "綠燈";                       // ← 什麼都不符合就預設綠燈
+}`;
+function showLight(el,r){const col={g:C.green,y:"#D9A441",r:C.ochre,none:"#D2C7B2"}[r.c];const ic={g:"✓",y:"!",r:"☎",none:"?"}[r.c];const nm={g:"綠燈",y:"黃燈",r:"紅燈",none:"不顯示燈號"}[r.c];el.innerHTML=`<div class="bulb" style="background:${col}">${ic}</div><div><div class="msg">${nm}${r.d!=null&&isFinite(r.d)?`（${r.d>0?"+":""}${(Math.round(r.d*10)/10).toFixed(1)}）`:""}</div><div style="font-size:16px">${r.t}</div></div>`;el.style.borderColor=col}
+function tl(){showLight($("#tl-ok"),correct($("#tl-a").value,$("#tl-b").value));showLight($("#tl-ai"),aiv1($("#tl-a").value,$("#tl-b").value))}
+$("#tl-a").oninput=tl;$("#tl-b").oninput=tl;tl();
+const TC=[["正常","70.5","70.2"],["正常","71.0","69.8"],["邊界","71.0","70.0"],["邊界","72.0","70.0"],["邊界","72.1","70.0"],["缺值","","70.0"],["不合理","25","70.0"],["不合理","七十","70.0"]];
+const NM={g:"綠",y:"黃",r:"紅",none:"不顯示燈號"};
+$("#tl-run").onclick=()=>{let fail=0;const rows=TC.map(([t,a,b])=>{const e=correct(a,b),g=aiv1(a,b);const ok=e.c===g.c;if(!ok)fail++;return `<tr><td>${t}</td><td>${a===""?"（空白）":a}／${b}</td><td>${NM[e.c]}${e.d!=null?`（${e.d>0?"+":""}${e.d.toFixed(1)}）`:""}</td><td class="${ok?"p":"f"}">${NM[g.c]}</td><td class="${ok?"p":"f"}">${ok?"✓ 通過":"✕ 錯誤"}</td></tr>`}).join("");$("#tl-table").innerHTML=`<table class="tt"><tr><th>類型</th><th>今天／3 天前（公斤）</th><th>預期結果</th><th>AI 第一版實際</th><th>判定</th></tr>${rows}</table><div class="warn" style="margin-top:8px"><b>${fail} / ${TC.length} 組沒通過。</b>錯在邊界值（剛好 1.0、2.0）、缺值與不合理輸入都被預設成綠燈。這就是「能跑，不等於正確」——教師現場示範輸入剛好 2.0 公斤，看哪幾組燈號錯了。</div>`;LS.set("ran",1);subOut()};
+$("#tl-src").onclick=()=>{const c=$("#tl-code");c.textContent=AISRC;c.style.display=c.style.display==="none"?"block":"none"};
+const FQ=[["疲憊","過去四週，大部分時間都感到疲憊？"],["阻力","不休息、不用輔具，爬一層樓梯有困難？"],["行走","走一段路（約一條街）有困難？"],["疾病","醫師說過的 11 種慢性病中，有 5 種以上？"],["體重減輕","一年內體重減輕超過 5%？"]];
+(function(){const r=$("#frail");FQ.forEach(([n,q],i)=>{r.innerHTML+=`<div class="q"><div class="qt">${i+1}. ${n}：${q}</div><div class="seg" style="display:flex;width:fit-content" data-fq="${i}"><button data-v="1">是</button><button data-v="0">否</button></div></div>`});$$("[data-fq]").forEach(sg=>sg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sg.querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");frail()}))})();
+function frail(){const a=$$("[data-fq]").map(sg=>{const o=sg.querySelector("button.on");return o?+o.dataset.v:null});const el=$("#frailres");if(a.some(x=>x==null)){el.innerHTML=`<div class="bulb" style="background:#D2C7B2">?</div><div><div class="msg">還有 ${a.filter(x=>x==null).length} 題未作答</div><div>完成作答才顯示結果（缺值不預設）</div></div>`;el.style.borderColor="#D2C7B2";return}const s=a.reduce((x,y)=>x+y,0);const [n,c,t]=s===0?["健壯",C.green,"繼續保持活動與均衡飲食。"]:s<=2?["衰弱前期","#D9A441","可以和醫師或社區據點聊聊如何增加活動量。"]:["衰弱",C.ochre,"建議找醫師或個管師進一步評估。"];el.innerHTML=`<div class="bulb" style="background:${c}">${s}</div><div><div class="msg">${s} 分：${n}</div><div>${t}</div><div style="font-size:12.5px;color:var(--mute)">篩檢結果不是診斷；教學示範</div></div>`;el.style.borderColor=c}frail();
+
+/* 15 timer, rubric, submission */
+const PH=[[0,10,"選題與 HMW"],[10,25,"提示詞與第一版"],[25,45,"說→看→測→改"],[45,60,"代理測試"],[60,80,"修正與繳交"]];let tStart=null,tInt=null,tElapsed=0;
+function drawPh(min){$("#phases").innerHTML=PH.map(([a,b,n])=>`<div class="${min>=b?"done":min>=a?"on":""}"><b>${a}–${b} 分</b><br>${n}</div>`).join("");const cur=PH.find(([a,b])=>min>=a&&min<b);$("#clk-ph").textContent=min>=80?"時間到：繳交！":cur?"現在："+cur[2]+(min>=75?"（最後 5 分鐘繳交）":""):""}
+function tick(){const e=tElapsed+(tStart?(Date.now()-tStart)/1000:0);const left=Math.max(0,80*60-e);$("#clk").textContent=`${String(Math.floor(left/60)).padStart(2,"0")}:${String(Math.floor(left%60)).padStart(2,"0")}`;drawPh(e/60);if(left<=0&&tInt){clearInterval(tInt);tInt=null}}
+$("#clk-go").onclick=()=>{if(tInt){tElapsed+=(Date.now()-tStart)/1000;tStart=null;clearInterval(tInt);tInt=null;$("#clk-go").textContent="繼續"}else{tStart=Date.now();tInt=setInterval(tick,500);$("#clk-go").textContent="暫停"}};$("#clk-rs").onclick=()=>{clearInterval(tInt);tInt=null;tStart=null;tElapsed=0;$("#clk-go").textContent="開始";tick()};tick();
+const RB=[["問題與需求","有清楚的 HMW，對應旅程的一個斷點",20],["設計及行為改變理由","說明 COM-B 缺口與至少兩項 BCT 如何對應設計",20],["原型與可近用性","字級、按鈕、對比、不只靠顏色；綠燈文字不誤導",20],["測試、邊界與修正","四類測試都有；預期、實際、修正有紀錄",30],["個人說明及 AI 紀錄","能解釋一個測試結果；工具、提示與修正處具體",10]];const rbS=LS.get("rub",[0,0,0,0,0]);
+(function(){const r=$("#rub");RB.forEach(([n,d,w],i)=>{r.innerHTML+=`<div class="q" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><div><b>${n}</b>（${w}%）<div style="font-size:13px;color:var(--mute)">${d}</div></div><div class="seg" data-rb="${i}" style="display:flex">${["未達","部分","達成"].map((t,k)=>`<button data-v="${k}" class="${rbS[i]===k?"on":""}">${t}</button>`).join("")}</div></div>`});$$("[data-rb]").forEach(sg=>sg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sg.querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");rbS[+sg.dataset.rb]=+b.dataset.v;LS.set("rub",rbS);rub()}));rub()})();
+function rub(){const s=RB.reduce((a,r,i)=>a+r[2]*rbS[i]/2,0);$("#rubv").textContent=`${s} / 100`}
+const SF=["s-team","s-topic","s-tool","s-hmw","s-cb","s-rounds","s-proxy","s-fix"];persist(SF,"sub",subOut);
+function subOut(){const v=id=>$("#"+id).value.trim()||"（未填）";const ran=LS.get("ran",0);$("#s-out").textContent=`【實作一繳交包】${v("s-team")}
+選題：${v("s-topic")}
+HMW：${v("s-hmw")}
+COM-B 缺口與 BCT：${v("s-cb")}
+
+【測試紀錄】類型｜輸入（今天／3 天前）｜預期｜實際｜修正
+${TC.map(([t,a,b])=>{const e=correct(a,b);return `${t}｜${a===""?"空白":a}／${b}｜${NM[e.c]}｜（填實際）｜（填修正）`}).join("\n")}
+（測試台已跑：${ran?"是":"否"}）
+
+【代理測試】${v("s-proxy")}
+（同學互換試用＝代理測試，不是長者使用者研究）
+
+【AI 使用紀錄】
+工具：${v("s-tool")}
+日期與提示：附第一版提示全文
+用途：產生網頁程式、白話改寫
+輪數：${v("s-rounds")}
+查核：四類測試（見上表）；同儕代理測試
+AI 寫錯與修正：${v("s-fix")}
+責任：最終內容由本組負責`}
+subOut();$("#s-copy").onclick=()=>copyText($("#s-out").textContent,"#s-msg");
+
+/* 16 Kaiser */
+(function(){const opts=["資深護理師（習慣護理站交班）","醫師","病人或家屬（隱私）","資訊室","管理層（成本）"];const r=$("#kpvote");opts.forEach(o=>{const l=h("label",{},`<input type="checkbox">${o}`);l.querySelector("input").onchange=e=>{l.classList.toggle("on",e.target.checked);$("#kpres").style.display="block"};r.appendChild(l)})})();
+
+/* 17 */
+const GL=[["以人為本設計","Human-centred design","以使用者需求與情境為核心、反覆測試的設計方法"],["使用者旅程地圖","User journey map","依時間呈現使用者的行為、情緒與斷點"],["COM-B","","行為由能力、機會、動機共同決定"],["行為改變技術","BCT","可具體操作、可辨識的改變行為策略"],["健康識能","Health literacy","取得、理解、評估與應用健康資訊的能力"],["回授法","Teach-back","請病人用自己的話複述，確認理解"],["HMW","How Might We","把痛點改寫成「我們可以如何…？」的問句"],["Vibe Coding","","用自然語言描述需求，由 AI 寫出程式；人負責查核"]];
+(function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}${b?`<small>${b}</small>`:""}</div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
+persist(["rf1","rf2","rf3","rf4"],"refl");
+mcq("#final",[
+ {q:"ISO 9241-210 以人為本設計的關鍵字是？",o:["一次到位","反覆","功能越多越好","先上線再說"],a:1,e:"越早測試，修正越便宜。"},
+ {q:"雙鑽石的第一顆鑽石在做什麼？",o:["做出對的解法","找到對的問題","寫程式","上線推廣"],a:1,e:"問題空間：很多失敗的專案在這裡就選錯了問題。"},
+ {q:"「量了也不知道是好是壞」屬於 COM-B 的？",o:["物理機會","社會機會","心理能力","自動動機"],a:2,e:"對策：與 3 天前比較，燈號＋一句話結論。"},
+ {q:"最小可行的行為改變工具，至少包含哪三項 BCT？",o:["誘因、說服、示範","自我監測、回饋、提示","目標設定、社會支持、訓練","教育、說服、誘因"],a:1,e:"實作至少兩項，建議三項。"},
+ {q:"Fogg 模型告訴我們，王伯伯動機已經不低時，最該改善？",o:["再多一份衛教","讓行為更簡單（步驟從 6 減到 2）","更恐怖的警告","更多通知"],a:1,e:"「更簡單」常比「更多衛教」有效。"},
+ {q:"預設把資料分享給第三方、要自己取消，屬於？",o:["輕推","黑暗模式","回授法","社會支持"],a:1,e:"判斷標準：病人完全了解用意後還會同意嗎？"},
+ {q:"WCAG 1.4.3 AA 要求一般文字對比至少？",o:["3:1","4.5:1","7:1","2:1"],a:1,e:"另：1.4.1 不只靠顏色；2.5.8 目標最低 24 px（AA）。"},
+ {q:"SUS 量表的平均經驗值約為？",o:["50","68","80","100"],a:1,e:"80 分以上表現良好。"},
+ {q:"AI 第一版在「剛好 2.0 公斤」顯示紅燈，屬於哪一類測試抓到的錯？",o:["正常","邊界","缺值","不合理"],a:1,e:"規格是「超過 2」才紅燈；邊界值是 AI 最常錯的地方。"},
+ {q:"Kaiser 床邊交班專案「對的問題」是？",o:["交班單格式不好","交班時病人不在場、資訊沒有到病人身上","護理師不夠努力","電腦太慢"],a:1,e:"設計思考的價值在先看見被忽略的問題。"}],"#finalscore");
+})();
+</script>
+</body>
+</html>
