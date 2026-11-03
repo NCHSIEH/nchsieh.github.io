@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W8 臨床決策支援與預警系統 · 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+<style>
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.spec{grid-template-columns:1fr}}
+.spec label{display:block;font-weight:700;color:var(--navy);font-size:14px;margin:8px 0 4px}
+.spec select{width:100%;padding:7px;border-radius:8px;border:1px solid var(--line2);background:#fff}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;margin:6px 0}
+.lane .ln{font-weight:700;color:#fff;border-radius:8px;padding:8px;font-size:13px;text-align:center}
+.lane .track{position:relative;height:96px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.ms{position:absolute;top:6px;transform:translateX(-50%);text-align:center;cursor:pointer;width:84px}
+.ms.lo{top:48px}
+.ms .d{width:14px;height:14px;border-radius:50%;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.ms .y{font-size:11px;color:var(--mute);margin-top:2px}
+.ms .n{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2}
+.ms.on .d{box-shadow:0 0 0 3px var(--ochre)}
+.conf{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:420px}
+.conf i{display:block;aspect-ratio:1;border-radius:3px}
+.cell2{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:13.5px;margin-top:10px}
+.cell2 div{padding:8px;border-radius:8px;background:var(--paper);border:1px solid var(--line)}
+.cell2 .h{background:var(--navy-l);font-weight:700;color:var(--navy);text-align:center}
+.agent{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.astep{flex:1;min-width:130px;border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.astep b{display:block;color:var(--navy);font-size:15px}
+.astep.run{border-color:var(--navy2);background:var(--navy-l)}
+.astep.ok{border-color:var(--green);background:var(--green-l)}
+.astep.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.astep.skip{opacity:.45}
+.tree{display:flex;flex-direction:column;gap:8px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.tq.dim{opacity:.4}
+.tq b{color:var(--navy)}
+.tres{border-radius:10px;padding:12px 16px;color:#fff;font-weight:700;font-size:16px}
+.reg{display:grid;grid-template-columns:120px repeat(3,1fr);gap:6px;font-size:13.5px}
+.reg .h{background:var(--navy);color:#fff;font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.reg .rh{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;display:flex;align-items:center}
+.reg .c{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;min-height:54px;color:var(--mute2)}
+.reg .c.open{color:var(--ink);background:#fff;border-color:var(--navy2)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.prin{grid-template-columns:1fr}}
+.prin .pc{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.prin .pc h4{margin:0 0 4px;color:var(--navy);font-size:15px}
+.prin select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff;margin-top:4px;font-size:13px}
+.gen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.gen{grid-template-columns:1fr}}
+.gen .gc2{border:2px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.gen .gc2 h4{margin:0;color:var(--navy)}
+.gen label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;margin:6px 0;cursor:pointer}
+</style>
+<style>
+.code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;background:#1B2A4A;color:#E6EAF2;border-radius:10px;padding:12px 14px;line-height:1.75;white-space:pre-wrap;min-height:90px}
+.code .r{color:#F3A58C}.code .g{color:#9FD8B5}.code .y{color:#F2D38A}.code .m{color:#9AA6BF}
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tog label{display:flex;gap:6px;align-items:center;border:1px solid var(--line2);background:#fff;border-radius:20px;padding:4px 12px;font-size:13.5px;cursor:pointer;user-select:none}
+.tog label.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tog input{display:none}
+.roles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:860px){.roles{grid-template-columns:1fr 1fr}}
+.role{border:2px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--paper);cursor:pointer;font-size:13px;line-height:1.5;transition:.2s}
+.role b{display:block;color:var(--navy);font-size:14.5px}
+.role.on{border-color:var(--ochre);background:var(--ochre-l)}
+.role.dim{opacity:.45}
+.gens3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:760px){.gens3{grid-template-columns:1fr}}
+.gens3 .g3{border-radius:10px;padding:12px;background:var(--paper);border:1px solid var(--line);font-size:13.5px}
+.gens3 .g3 h4{margin:0 0 4px;font-size:16px;color:var(--navy)}
+.gens3 .g3 .who{display:inline-block;margin-top:6px;padding:2px 10px;border-radius:12px;background:var(--navy-l);color:var(--navy);font-weight:700;font-size:12.5px}
+.gens3 .g3.ag{border-color:var(--ochre);background:var(--ochre-l)}
+.gens3 .g3.ag .who{background:var(--ochre);color:#fff}
+.ladder{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}
+.ladder div{border-radius:8px;padding:8px 4px;text-align:center;font-size:12px;background:#EFEAE0;color:var(--mute);border:2px solid transparent;line-height:1.35}
+.ladder div b{display:block;font-size:15px;color:var(--navy)}
+.ladder div.ok{background:var(--green-l)}
+.ladder div.cur{border-color:var(--ochre)}
+.ladder div.over{background:var(--ochre-l)}
+.cmpt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:760px){.cmpt{grid-template-columns:1fr 1fr}}
+.cmpt label{border:2px solid var(--navy2);border-radius:10px;padding:8px 10px;background:var(--navy-l);font-size:13px;cursor:pointer;line-height:1.45}
+.cmpt label b{display:block;color:var(--navy);font-size:15px}
+.cmpt label.off{border-color:var(--line2);background:#fff;opacity:.55;text-decoration:line-through}
+.cmpt input{display:none}
+.itbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.itbl th,.itbl td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+.itbl th{color:var(--mute);font-weight:500;font-size:12.5px}
+.itbl td.bad{color:var(--ochre);font-weight:700}
+.itbl td.good{color:var(--green);font-weight:700}
+.itbl td.mid{color:var(--amber);font-weight:700}
+.orch{display:flex;flex-direction:column;align-items:center;gap:10px}
+.orch .top{background:var(--navy);color:#fff;border-radius:10px;padding:10px 18px;font-weight:700;text-align:center}
+.orch .wk{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%}
+@media(max-width:760px){.orch .wk{grid-template-columns:1fr 1fr}}
+.orch .wk div{border:2px solid var(--line2);border-radius:10px;padding:8px;text-align:center;font-size:13px;cursor:pointer;background:var(--paper)}
+.orch .wk div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.orch .wk div b{display:block;color:var(--navy)}
+.mx{display:grid;grid-template-columns:90px 1fr 1fr;gap:6px;font-size:13px}
+.mx .h{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:6px;text-align:center;display:flex;align-items:center;justify-content:center}
+.mx .c{border-radius:10px;padding:8px;min-height:92px}
+.mx .c h4{margin:0 0 4px;font-size:14px}
+.mx .c span{display:inline-block;background:#fff;border-radius:12px;padding:1px 9px;margin:2px;font-size:12px;border:1px solid var(--line2)}
+.c-auto{background:var(--green-l)}.c-auto h4{color:var(--green)}
+.c-note{background:var(--amber-l)}.c-note h4{color:var(--amber)}
+.c-appr{background:var(--navy-l)}.c-appr h4{color:var(--navy)}
+.c-ban{background:var(--ochre-l)}.c-ban h4{color:var(--ochre)}
+.lanes{display:grid;grid-template-columns:70px repeat(4,1fr);gap:4px;font-size:12.5px}
+.lanes .lh{background:var(--navy);color:#fff;border-radius:6px;padding:6px 4px;text-align:center;font-weight:700}
+.lanes .rh{background:var(--navy-l);color:var(--navy);border-radius:6px;padding:6px 4px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.lanes .cl{background:var(--paper);border:1px solid var(--line);border-radius:6px;min-height:40px;padding:3px;display:flex;flex-direction:column;gap:3px}
+.lanes .cl span{border-radius:5px;padding:3px 6px;background:#fff;border:1px solid var(--line2);line-height:1.3}
+.lanes .cl span.w{background:var(--ochre-l);border-color:var(--ochre);color:var(--ochre);font-weight:700}
+.lanes .cl span.a{background:var(--navy-l);border-color:var(--navy2);color:var(--navy)}
+.lanes .cl span.h{background:var(--green-l);border-color:var(--green);color:var(--green);font-weight:700}
+.steps5{display:flex;gap:8px;flex-wrap:wrap}
+.steps5 button{flex:1;min-width:120px;border:2px solid var(--line2);border-radius:10px;padding:10px 6px;background:#fff;font-size:13.5px;cursor:pointer;font-family:inherit}
+.steps5 button.got{border-color:var(--green);background:var(--green-l);color:var(--green);font-weight:700}
+.steps5 button.bad{border-color:var(--ochre);background:var(--ochre-l)}
+.cmpg{display:grid;grid-template-columns:150px repeat(4,1fr);gap:4px;font-size:13px;align-items:center}
+.cmpg .h{font-weight:700;color:var(--navy);text-align:center;font-size:12.5px}
+.cmpg .rn{font-weight:700;color:var(--navy)}
+.cmpg button{border:1px solid var(--line2);border-radius:8px;background:#fff;padding:6px;font-size:16px;cursor:pointer;font-family:inherit}
+.cmpg .ans{font-size:12px;color:var(--mute);text-align:center}
+.tl7{display:flex;gap:6px;flex-wrap:wrap}
+.tl7 button{flex:1;min-width:92px;border:2px solid var(--line2);border-radius:10px;padding:8px 4px;background:#fff;cursor:pointer;font-family:inherit;font-size:13px}
+.tl7 button b{display:block;font-size:15px;color:var(--navy)}
+.tl7 button.on{border-color:var(--ochre);background:var(--ochre-l)}
+.tobe{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:860px){.tobe{grid-template-columns:1fr 1fr}}
+.tobe .ag{border:2px solid var(--navy2);border-radius:10px;padding:8px;background:var(--navy-l);font-size:12.5px;text-align:center}
+.tobe .ag b{display:block;color:var(--navy);font-size:14px}
+.tobe .ckpt{margin-top:6px;border-radius:8px;padding:5px;font-weight:700;cursor:pointer;background:var(--green);color:#fff;font-size:12.5px}
+.tobe .ckpt.off{background:#fff;color:var(--ochre);border:2px dashed var(--ochre)}
+.form label{display:block;font-weight:700;color:var(--navy);font-size:13.5px;margin:8px 0 3px}
+.form textarea,.form input{width:100%;padding:7px 9px;border:1px solid var(--line2);border-radius:8px;font-family:inherit;font-size:13.5px;box-sizing:border-box}
+.form textarea{min-height:56px}
+.waffle{display:grid;grid-template-columns:repeat(30,1fr);gap:2px;max-width:520px}
+.waffle i{display:block;aspect-ratio:1;border-radius:2px}
+.mpick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:760px){.mpick{grid-template-columns:1fr}}
+.mpick label{border:2px solid var(--line2);border-radius:10px;padding:8px 10px;background:#fff;font-size:13.5px;cursor:pointer;line-height:1.45}
+.mpick label small{display:block;color:var(--mute);font-size:12px}
+.mpick label.on{border-color:var(--navy2);background:var(--navy-l)}
+.mpick input{display:none}
+.echo{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:760px){.echo{grid-template-columns:1fr 1fr}}
+.echo div{border:2px solid var(--line2);border-radius:10px;padding:10px;font-size:13px;background:var(--paper);transition:.25s;line-height:1.5}
+.echo div b{display:block;color:var(--navy);font-size:14px}
+.echo div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.echo div.blk{border-color:var(--green);background:var(--green-l)}
+.echo div.dim{opacity:.4}
+</style>
+<style>
+.n2{width:100%;border-collapse:collapse;font-size:13.5px}
+.n2 th,.n2 td{border-bottom:1px solid var(--line);padding:6px 6px;text-align:left;vertical-align:middle}
+.n2 th{color:var(--mute);font-weight:500;font-size:12.5px}
+.n2 input,.n2 select{width:100%;padding:5px;border:1px solid var(--line2);border-radius:6px;font-size:13.5px;font-family:inherit;background:#fff;box-sizing:border-box}
+.n2 td.sc{font-weight:900;font-size:16px;text-align:center;width:44px;border-radius:6px}
+.s0{background:#fff;color:var(--mute)}.s1{background:#FBF1D6;color:var(--amber)}.s2{background:#F7DCC9;color:var(--ochre2)}.s3{background:var(--ochre);color:#fff}
+.band{border-radius:12px;padding:14px 16px;color:#fff;font-weight:700}
+.forms{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+@media(max-width:860px){.forms{grid-template-columns:1fr 1fr}}
+.forms div{border-radius:10px;padding:8px;font-size:12.5px;line-height:1.45;border:2px solid var(--line2);background:var(--paper);cursor:pointer}
+.forms div b{display:block;color:var(--navy);font-size:13.5px}
+.forms div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.gates4{display:grid;grid-template-columns:repeat(4,1fr) 1.2fr;gap:8px;align-items:stretch}
+@media(max-width:860px){.gates4{grid-template-columns:1fr 1fr}}
+.gates4 div{border-radius:10px;padding:10px;font-size:13px;border:2px solid var(--line2);background:var(--paper);line-height:1.45}
+.gates4 div b{display:block;color:var(--navy)}
+.gates4 div.p{border-color:var(--green);background:var(--green-l)}
+.gates4 div.f{border-color:var(--ochre);background:var(--ochre-l)}
+.gates4 div.res{color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;border:0}
+.card5{border-left:6px solid var(--ochre);background:#fff;border-radius:8px;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,.08);font-size:14px;margin-top:8px}
+.card5.info{border-color:var(--navy2)}.card5.warning{border-color:var(--amber)}.card5.critical{border-color:var(--ochre)}
+.card5 .ind{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--mute)}
+.chain{display:flex;gap:6px;flex-wrap:wrap}
+.chain div{flex:1;min-width:100px;border-radius:10px;padding:10px 6px;text-align:center;font-size:13px;cursor:pointer;border:2px solid var(--green);background:var(--green-l);user-select:none}
+.chain div b{display:block;color:var(--navy);font-size:14.5px}
+.chain div.off{border:2px dashed var(--ochre);background:#fff;color:var(--ochre);opacity:.8}
+.al{display:grid;grid-template-columns:repeat(19,1fr);gap:4px;max-width:720px}
+.al i{display:block;aspect-ratio:1;border-radius:4px;position:relative}
+.al i.gone{opacity:.12}
+.al i.dash{outline:2px dashed var(--navy2);outline-offset:-2px;background:#fff!important}
+.mock{border:2px solid var(--ochre);border-radius:12px;background:#fff;overflow:hidden}
+.mock .hd{background:var(--ochre);color:#fff;font-weight:700;padding:8px 14px}
+.mock .bd{padding:10px 14px;font-size:14px;line-height:1.8}
+.mock .bd div.hide{display:none}
+.mock .ft{display:flex;gap:8px;padding:0 14px 12px}
+.mock .ft span{border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700}
+.stage4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:860px){.stage4{grid-template-columns:1fr 1fr}}
+.stage4 div{border-radius:10px;padding:10px;border:2px solid var(--line2);background:var(--paper);font-size:13px;line-height:1.5}
+.stage4 div b{display:block;color:var(--navy);font-size:15px}
+.stage4 div.on{border-color:var(--navy2);background:var(--navy-l)}
+.stage4 div.done{border-color:var(--green);background:var(--green-l)}
+.stage4 div.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.swiss{display:flex;gap:6px;flex-wrap:wrap}
+.swiss div{flex:1;min-width:130px;border-radius:10px;padding:10px;font-size:13px;border:2px solid var(--line2);background:var(--paper);line-height:1.5;cursor:pointer}
+.swiss div b{display:block;color:var(--navy)}
+.swiss div.hole{border-color:var(--ochre);background:var(--ochre-l)}
+.swiss div.fix{border-color:var(--green);background:var(--green-l)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W8 臨床決策支援與預警系統</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與草稿">重置進度</button>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W8 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div style="font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px">WEEK 8 · 模型決定「看不看得到」，系統決定「來不來得及」</div>
+  <h1>臨床決策支援與預警系統</h1>
+  <div class="en">Clinical Decision Support &amp; Early Warning Systems</div>
+  <p class="lead">W5 學了「模型準不準」，這週要問：模型上線後，<b>照護有沒有變好</b>？這一頁讓你親手算 NEWS2、用 PPV 與 NNE 估算警示負擔、看資料集偏移怎麼讓模型悄悄變差，最後替北城區域醫院<b>選一個閾值</b>。</p>
+  <div class="chips"><a class="tag" href="../../W08_臨床決策支援與預警系統_Clinical_Decision_Support_and_Early_Warning.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W8）</a><span class="tag o">下週 W9 期中：練習計算敏感度、PPV、NNE</span><span class="tag a">標「教學假設」的數字為示意，不是研究數據</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<section class="part" id="p01" data-t="開場：凌晨的王伯伯">
+  <div class="ph"><span class="num">01</span><div><h2>王伯伯住院第 3 天，凌晨的生命徵象慢慢變差</h2><div class="en">THE DATA WERE THERE · THE SIGNAL WAS LOST</div></div></div>
+  <p class="one">所有數據都在系統裡——為什麼直到早上 6 點才啟動快速應變小組？問題不在「沒有資料」，而在<b>訊號被淹沒</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>拖動時間，看分數、看現場</h3><span class="tag o">拉桿</span><span class="tag gray">NEWS2 走勢為教學示意</span></div>
+    <div class="ctl"><span>時間</span><input type="range" id="ot" min="0" max="4" value="2"><output></output></div>
+    <div class="grid2">
+      <svg viewBox="0 0 380 230" class="chart" id="osvg"></svg>
+      <div><div id="okpi" class="grid2"></div><div class="detail" id="otxt"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p02" data-t="CDS 五個對與六種形式">
+  <div class="ph"><span class="num">02</span><div><h2>把對的知識，在對的時間送到對的人手上</h2><div class="en">FIVE RIGHTS · SIX FORMS OF CDS</div></div></div>
+  <p class="one">Osheroff 等（2007）：在適當時機，提供經過篩選、與個人相關的知識。<b>五個對少一個，CDS 就容易變成噪音。</b></p>
+  <div class="grid5">
+    <div class="kpi"><div class="v" style="font-size:18px">對的資訊</div><div class="l">有實證、可行動，例如「建議抽血培養」</div></div>
+    <div class="kpi"><div class="v" style="font-size:18px">對的人</div><div class="l">醫師、護理師、藥師或病人本人</div></div>
+    <div class="kpi"><div class="v" style="font-size:18px">對的格式</div><div class="l">警示、醫囑套組、儀表板</div></div>
+    <div class="kpi"><div class="v" style="font-size:18px">對的管道</div><div class="l">EHR 畫面、手機、中央監測站</div></div>
+    <div class="kpi"><div class="v" style="font-size:18px">對的時機</div><div class="l">在決策當下，不早也不晚</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>這則警示少了哪一個「對」？</h3><span class="scoreline" id="frscore"></span><span class="tag gray">情境為教學示例</span></div>
+    <div id="frq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>六種形式：由打斷到不打斷</h3><span class="tag gray">點一種看王伯伯的例子</span></div>
+    <div class="forms" id="forms"></div>
+    <div class="detail" id="fmtxt">設計原則：能用「預設選項」或「儀表板」解決的，就不要用「打斷式警示」。</div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>選形式：哪一種最適合？</h3><span class="scoreline" id="fpscore"></span></div>
+    <div id="fpq"></div>
+  </div>
+</section>
+
+<section class="part" id="p03" data-t="兩種引擎與 FDA 四關卡">
+  <div class="ph"><span class="num">03</span><div><h2>規則型 vs 機器學習型；哪些 CDS 不算醫療器材？</h2><div class="en">KNOWLEDGE-BASED vs ML · FDA CDS GUIDANCE 2026</div></div></div>
+  <p class="one">兩者常混合使用：<b>AI 算風險，規則決定「分數多少、通知誰、做什麼」</b>。即時惡化預警多半難以滿足 FDA 條件④。</p>
+  <div class="grid2">
+    <div class="kpi"><div class="v" style="font-size:19px">規則型</div><div class="l">專家寫的「若…則…」｜例：eGFR &lt; 30 → 提醒停用 Metformin｜透明、可稽核；規則越寫越多、彼此衝突</div></div>
+    <div class="kpi o"><div class="v" style="font-size:19px">機器學習型</div><div class="l">從歷史資料學出規律｜例：數十項變數預測 12 小時內惡化｜抓得到複雜模式；可能是黑箱、會隨環境失準</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>過四關：這個產品算不算醫療器材？</h3><span class="tag o">選一個產品</span><span class="tag a">非講義例子的判讀為教學示意，正式判定依主管機關</span></div>
+    <div class="seg" id="fdap" style="display:flex;flex-wrap:wrap;width:fit-content;margin-bottom:10px"></div>
+    <div class="gates4" id="gates4"></div>
+    <div class="detail" id="fdatxt"></div>
+    <p class="note">美國 FDA《臨床決策支援軟體指引》2026-01-06 修訂版（取代 2022 年版），條件文字為重點摘譯。2026 修訂：單一建議也可適用；「時間緊迫」改在條件④判斷。台灣 TFDA 見 W13。</p>
+  </div>
+</section>
+
+<section class="part" id="p04" data-t="CDS Hooks">
+  <div class="ph"><span class="num">04</span><div><h2>CDS 怎麼嵌進電子病歷？HL7 CDS Hooks</h2><div class="en">HOOK = WHEN · CARD = FORMAT · v2.0.1 ON FHIR R4</div></div></div>
+  <p class="one">病歷系統在特定時刻呼叫 CDS 服務，服務回傳「卡片」。<b>hook 決定時機、卡片決定格式</b>——五個對裡的兩個，在標準裡就能設計。</p>
+  <div class="wd">
+    <div class="wh"><h3>模擬一次呼叫：王伯伯的 Metformin</h3><span class="tag o">核心互動</span></div>
+    <div class="grid2">
+      <div>
+        <label style="font-weight:700;color:var(--navy);font-size:14px">hook：在哪個時刻呼叫</label>
+        <div class="seg" id="hk" style="display:flex;flex-wrap:wrap;width:fit-content;margin:6px 0 10px"><button data-h="patient-view">patient-view 打開病歷</button><button data-h="order-select">order-select 選醫囑</button><button class="on" data-h="order-sign">order-sign 簽署醫囑</button></div>
+        <div class="ctl"><span>eGFR（mL/min/1.73m²）</span><input type="range" id="eg" min="10" max="90" value="26"><output></output></div>
+        <div class="tog" id="hkopt"></div>
+        <div id="cardout"></div>
+      </div>
+      <div class="code" id="hkjs"></div>
+    </div>
+    <p class="note">卡片三類：資訊卡（摘要＋指示等級 info／warning／critical）、建議卡（提出具體變更，可一鍵接受）、App 連結卡（開啟網頁或 SMART App，W3）。JSON 為精簡示意，不是完整規格。</p>
+  </div>
+</section>
+
+<section class="part" id="p05" data-t="NEWS2 計算器">
+  <div class="ph"><span class="num">05</span><div><h2>NEWS2：英國國家早期預警分數</h2><div class="en">ROYAL COLLEGE OF PHYSICIANS 2017 · 7 PARAMETERS</div></div></div>
+  <p class="one">六項生理參數＋是否給氧，共七項給分；<b>人工可算、一目了然</b>。總分 0–4 低｜5–6 中：緊急評估｜≥7 高：緊急應變。</p>
+  <div class="wd">
+    <div class="wh"><h3>自己算一次</h3><span class="tag o">核心互動</span><span class="tag gray">SpO₂ 使用量表 1</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" id="n2a">載入王伯伯 02:00</button><button class="btn" id="n2b">載入王伯伯 06:00（示意）</button><button class="btn" id="n2c">全部正常</button></div>
+    <div class="grid2">
+      <table class="n2" id="n2t"></table>
+      <div><div class="band" id="n2band"></div><div class="detail" id="n2txt"></div><svg viewBox="0 0 460 100" class="chart" id="n2svg" style="margin-top:8px"></svg></div>
+    </div>
+    <p class="note">另依 RCP 建議：任一單項得 3 分時，也應由病房醫師緊急評估。量表 2（高碳酸血症病人）與完整臨床回應以 RCP 原文為準。</p>
+  </div>
+</section>
+
+<section class="part" id="p06" data-t="AI 預警與應變系統">
+  <div class="ph"><span class="num">06</span><div><h2>預警是一套「應變系統」，不只是一個模型</h2><div class="en">AFFERENT LIMB · EFFERENT LIMB · FEEDBACK</div></div></div>
+  <p class="one">AI 預警把檢驗、用藥、趨勢一起納入，但<b>更依賴資料品質與本地驗證</b>；模型再準，若沒有人接手，結果就和沒有預警一樣。</p>
+  <div class="grid2">
+    <div class="kpi"><div class="v" style="font-size:19px">評分式 NEWS2／MEWS</div><div class="l">7 項・人工可算｜護理師測量時更新｜透明｜敏感度有限、易漏抓緩慢惡化</div></div>
+    <div class="kpi o"><div class="v" style="font-size:19px">AI 預警 Kaiser AAM／TREWS</div><div class="l">數十至上百項｜每小時或即時自動計算｜需說明主要因子｜鑑別度較高但需本地驗證；資料集偏移、警報過多、黑箱</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>六個環節缺一不可：點一個環節關掉它</h3><span class="tag o">拉桿＋開關</span><span class="tag a">各環節成功率為教學假設</span></div>
+    <div class="chain" id="chain"></div>
+    <div class="grid2" style="margin-top:10px">
+      <div>
+        <div class="ctl"><span>模型敏感度</span><input type="range" id="ks" min="30" max="95" value="80"><output></output></div>
+        <div class="ctl"><span>警示真的被看到</span><input type="range" id="kv" min="20" max="100" value="70"><output></output></div>
+        <div class="ctl"><span>及時到床邊處置</span><input type="range" id="kr" min="20" max="100" value="70"><output></output></div>
+      </div>
+      <div class="grid2" id="kkpi"></div>
+    </div>
+    <div class="detail" id="ktxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p07" data-t="三個成功案例">
+  <div class="ph"><span class="num">07</span><div><h2>Kaiser AAM、TREWS、COMPOSER：成功的都花力氣在模型以外</h2><div class="en">ESCOBAR 2020 · ADAMS 2022 · BOUSSINA 2024</div></div></div>
+  <p class="one">成功關鍵：<b>先過濾、再通知</b>（Kaiser）；<b>前瞻、多院、看病人結果</b>（TREWS）；<b>不確定就不叫</b>（COMPOSER）。</p>
+  <div class="seg" id="csel" style="display:flex;flex-wrap:wrap;width:fit-content;margin-bottom:8px"><button class="on" data-c="0">Kaiser AAM</button><button data-c="1">Johns Hopkins TREWS</button><button data-c="2">UCSD COMPOSER</button></div>
+  <div class="wd">
+    <div class="wh"><h3 id="cth"></h3><span class="tag gray" id="ctag"></span></div>
+    <div class="agent" id="cflow"></div>
+    <div class="grid3" id="ckpi7" style="margin-top:10px"></div>
+    <p class="note" id="cnote"></p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>粗算：每多少位病人，少一位死亡？</h3><span class="tag a">1 ÷ 絕對降幅；三研究族群與設計不同，不能互比</span></div>
+    <svg viewBox="0 0 760 170" class="chart" id="nntsvg"></svg>
+    <p class="note">Kaiser：警示後 30 天死亡率 15.8% vs 20.4%（未調整差 4.6 個百分點）；TREWS：3 小時內確認警示者調整後絕對下降 3.3 個百分點；COMPOSER：院內敗血症死亡率下降 1.9 個百分點（前後比較準實驗設計）。</p>
+  </div>
+</section>
+
+<section class="part" id="p08" data-t="警示疲勞">
+  <div class="ph"><span class="num">08</span><div><h2>警示越多，越沒有人看</h2><div class="en">ALERT FATIGUE · THE VICIOUS CYCLE · SIX STRATEGIES</div></div></div>
+  <p class="one">目標不是「零警示」，而是<b>讓每一則警示都值得處理</b>。打破循環的關鍵：事件後先問「能否改流程」，而不是再加一條警示。</p>
+  <div class="grid3">
+    <div class="kpi o"><div class="v">72–99%</div><div class="l">生理監視器警報為假警報或無須處置（Sendelbach &amp; Funk 2013）</div></div>
+    <div class="kpi o"><div class="v">49–96%</div><div class="l">用藥安全警示被醫師略過（van der Sijs 等 2006）</div></div>
+    <div class="kpi o"><div class="v">＋43%</div><div class="l">COVID-19 初期 24 家醫院每日敗血症警示量；同期住院人數減少 35%（Wong 等 2021）</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>那一晚的 37 則警示：套用策略，看剩下多少</h3><span class="tag o">核心互動</span><span class="tag a">37 則的組成為教學假設</span></div>
+    <div class="tog" id="afs"></div>
+    <div class="al" id="al"></div>
+    <div class="grid4" id="afkpi" style="margin-top:10px"></div>
+    <div class="detail" id="aftxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p09" data-t="PPV 與 NNE">
+  <div class="ph"><span class="num">09</span><div><h2>同一個模型，盛行率越低，假警示越多</h2><div class="en">PPV · NNE = 1 ÷ PPV · ALERTS AT THRESHOLD</div></div></div>
+  <p class="one">同一模型搬到盛行率較低的醫院，PPV 自然下降——<b>這不是模型壞掉，而是要重新選閾值</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>PPV 計算器</h3><span class="tag o">拉桿</span><span class="tag gray">預設＝講義：敏感度 80%、特異度 90%</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>敏感度</span><input type="range" id="ps" min="30" max="99" value="80"><output></output></div>
+        <div class="ctl"><span>特異度</span><input type="range" id="pp" min="50" max="99" value="90"><output></output></div>
+        <div class="ctl"><span>盛行率</span><input type="range" id="pr" min="1" max="30" value="1"><output></output></div>
+        <div class="grid2" id="pkpi"></div>
+      </div>
+      <svg viewBox="0 0 380 250" class="chart" id="psvg"></svg>
+    </div>
+    <div class="conf" id="pconf" style="max-width:none;grid-template-columns:repeat(50,1fr);margin-top:10px"></div>
+    <div class="detail" id="ptxt9"></div>
+  </div>
+</section>
+
+<section class="part" id="p10" data-t="Clickbusters 警示治理">
+  <div class="ph"><span class="num">10</span><div><h2>Vanderbilt Clickbusters：把「定期汰除」變成全院活動</h2><div class="en">McCOY ET AL., JAMIA 2022</div></div></div>
+  <p class="one">一半以上的警示是「修改」而非「刪除」——<b>多數問題出在對象與時機，不是內容</b>。</p>
+  <div class="grid2">
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>檢視 84 則 BPA 的結果</h3><span class="tag gray">約占規則型警示 20%；2020 年兩輪各 3 個月</span></div>
+      <svg viewBox="0 0 360 200" class="chart" id="cbsvg"></svg>
+      <div class="grid2"><div class="kpi g"><div class="v">−15%</div><div class="l">打斷式警示</div></div><div class="kpi g"><div class="v">71,227</div><div class="l">每週少掉的警示數（VUMC 新聞稿）</div></div></div>
+    </div>
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>你來當 Clickbuster：關閉、修改，還是保留？</h3><span class="scoreline" id="cbscore"></span><span class="tag gray">警示為教學示例</span></div>
+      <div id="cbq"></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p11" data-t="資料集偏移">
+  <div class="ph"><span class="num">11</span><div><h2>在 A 醫院準的模型，到 B 醫院為什麼不準？</h2><div class="en">DATASET SHIFT · FINLAYSON ET AL., NEJM 2021</div></div></div>
+  <p class="one">訓練時的世界 ≠ 使用時的世界。最隱微的是<b>行為與實務改變</b>：模型上線後改變了醫師行為，資料就不再是當初學習的樣子。</p>
+  <div class="grid3">
+    <div class="kpi"><div class="v" style="font-size:19px">技術改變</div><div class="l">換檢驗儀器或試劑、EHR 改版、生命徵象改由設備自動上傳</div></div>
+    <div class="kpi"><div class="v" style="font-size:19px">族群與場域改變</div><div class="l">從醫學中心搬到區域醫院、從美國搬到台灣、病人更老更多共病</div></div>
+    <div class="kpi o"><div class="v" style="font-size:19px">行為與實務改變</div><div class="l">新指引、新疾病（COVID）、醫師因警示而提早處置</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>四種統計型態：這是哪一種偏移？</h3><span class="scoreline" id="dsscore"></span></div>
+    <div id="dsq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>標籤偏移實算：惡化事件率從 8% 掉到 4%</h3><span class="tag o">拉桿</span><span class="tag gray">敏感度、特異度固定</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>訓練醫院事件率</span><input type="range" id="ls1" min="2" max="20" value="8"><output></output></div>
+        <div class="ctl"><span>本院事件率</span><input type="range" id="ls2" min="1" max="20" value="4"><output></output></div>
+        <div class="ctl"><span>敏感度／特異度</span><input type="range" id="ls3" min="70" max="95" value="80"><output></output></div>
+      </div>
+      <div class="grid2" id="lskpi"></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p12" data-t="驗證、監測與導入四階段">
+  <div class="ph"><span class="num">12</span><div><h2>上線前本地驗證，上線後持續監測</h2><div class="en">SILENT MODE · MONITORING · FOUR STAGES</div></div></div>
+  <p class="one">「靜默測試」：模型在背景跑、不發警示，先累積本地證據——<b>這一步最常被跳過</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>上線後監測：逐季 AUROC 與警戒線</h3><span class="tag o">拉桿</span><span class="tag gray">AUROC 走勢為教學示意</span></div>
+    <div class="ctl"><span>警戒線（AUROC）</span><input type="range" id="mw" min="0.65" max="0.80" step="0.01" value="0.75"><output></output></div>
+    <svg viewBox="0 0 760 220" class="chart" id="mwsvg"></svg>
+    <div class="detail" id="mwtxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>本地驗證檢核清單</h3></div>
+    <div class="grid4">
+      <div class="kpi"><div class="l">鑑別度</div><div style="font-weight:700">AUROC 是否接近廠商宣稱？（W5）</div></div>
+      <div class="kpi"><div class="l">校準度</div><div style="font-weight:700">預測 10% 的人，實際是否約 10% 發生？</div></div>
+      <div class="kpi"><div class="l">閾值下表現</div><div style="font-weight:700">敏感度、PPV、每日警示量、NNE</div></div>
+      <div class="kpi"><div class="l">次族群</div><div style="font-weight:700">高齡、不同病房、不同性別是否一致？</div></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>導入四階段：進下一關，還是退回？</h3><span class="tag o">判斷練習</span><span class="tag gray">情境與數字為教學示例</span></div>
+    <div class="stage4" id="stg"></div>
+    <div id="stq" style="margin-top:10px"></div>
+  </div>
+</section>
+
+<section class="part" id="p13" data-t="人機協作與介面">
+  <div class="ph"><span class="num">13</span><div><h2>AI 給建議，人做決定——但人會被 AI 影響</h2><div class="en">AUTOMATION BIAS · ALGORITHM AVERSION · INTERFACE</div></div></div>
+  <p class="one">對策不是叫人「不要信 AI」，而是設計讓人<b>能檢查 AI 依據、並保留獨立判斷</b>的環節。</p>
+  <div class="grid2">
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>Dratsch 等（Radiology 2023）</h3><span class="tag gray">27 位放射科醫師判讀乳房攝影</span></div>
+      <div class="seg" id="drs" style="display:flex;width:fit-content;margin-bottom:6px"><button class="on" data-v="0">資淺醫師</button><button data-v="1">資深醫師</button></div>
+      <svg viewBox="0 0 360 210" class="chart" id="drsvg"></svg>
+      <p class="note">AI 建議的正確與否由研究者控制。資深者也會被影響——防偏誤要靠介面與流程，不能只靠經驗。</p>
+    </div>
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>好的預警畫面：勾選要顯示的元素</h3><span class="tag o">開關</span><span class="tag gray">示意畫面（虛構）</span></div>
+      <div class="tog" id="mkopt"></div>
+      <div class="mock"><div class="hd">7B-12　王○○　72 歲　惡化風險：高</div><div class="bd" id="mkbd"></div><div class="ft" id="mkft"></div></div>
+      <div class="detail" id="mktxt"></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>四種協作模式：這個例子屬於哪一種？</h3><span class="scoreline" id="cmscore"></span></div>
+    <div id="cmq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>AI 建議錯了，誰負責？</h3><span class="tag gray">點一個角色</span></div>
+    <div class="tl7" id="resp"></div>
+    <div class="detail" id="resptxt">目前多數制度下，最終臨床決定仍由醫療人員負責；但責任不能只壓在第一線——若醫院沒做本地驗證就上線，制度上已先失職。</div>
+  </div>
+</section>
+
+<section class="part" id="p14" data-t="Epic 敗血症模型與閾值演練">
+  <div class="ph"><span class="num">14</span><div><h2>Epic 敗血症模型與北城區域醫院的閾值</h2><div class="en">WONG ET AL., JAMA INTERN MED 2021 · THRESHOLD EXERCISE</div></div></div>
+  <p class="one">廣泛使用不等於經過驗證。<b>模型的準確度不是產品的固定屬性</b>，而是「模型 × 資料 × 場域 × 流程」的結果。</p>
+  <div class="grid4">
+    <div class="kpi o"><div class="v">0.63</div><div class="l">密西根實測住院層級 AUROC（廠商報告約 0.76–0.83）</div></div>
+    <div class="kpi o"><div class="v">67%</div><div class="l">敗血症病人未被模型標記（敏感度約 33%）</div></div>
+    <div class="kpi"><div class="v">18%</div><div class="l">全部住院病人觸發警示</div></div>
+    <div class="kpi"><div class="v">約 12%</div><div class="l">PPV：每 8 則警示約 1 則為真</div></div>
+  </div>
+  <p class="note">回溯分析 2018–2019 年約 2.8 萬名成人、3.8 萬次住院，以廠商建議閾值（分數 ≥6）評估；敗血症發生於 7% 的住院。模型及時標記、而醫師尚未處置者僅占敗血症病人 7%。Epic 於 2022 年推出需本地訓練的新版模型。</p>
+  <div class="wd">
+    <div class="wh"><h3>原因分析：五個面向</h3><span class="tag gray">點一個面向</span></div>
+    <div class="forms" id="ecause" style="grid-template-columns:repeat(5,1fr)"></div>
+    <div class="detail" id="ectxt">分組 15 分鐘，每組負責一個面向。注意比較基礎：評估時點、敗血症定義、閾值都不同。</div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>三個預警系統：先自己判讀，再對照講義</h3><span class="tag o">點格子切換</span></div>
+    <div class="cmpg" id="cmpg" style="grid-template-columns:170px repeat(5,1fr)"></div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="cmpshow">對照講義判讀</button><span id="cmpmsg" style="font-size:13.5px"></span></div>
+    <p class="note" id="cmpleg"></p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>演練：北城區域醫院該選哪個閾值？</h3><span class="tag o">核心互動</span><span class="tag a">醫院與閾值數據為教學示意</span></div>
+    <p class="hint">450 床，每日約 60 人次入院；惡化事件率 4%；以每 1,000 次住院試算。假設每次住院最多觸發一次警示；每日警示＝警示總數 × 60 ÷ 1,000。</p>
+    <div class="seg" id="thp" style="display:flex;flex-wrap:wrap;width:fit-content;margin-bottom:8px"><button class="on" data-s="80" data-p="75">低閾值（分數 ≥5）</button><button data-s="50" data-p="93">高閾值（分數 ≥8）</button><button data-s="" data-p="">自訂</button></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>敏感度</span><input type="range" id="ts" min="20" max="99" value="80"><output></output></div>
+        <div class="ctl"><span>特異度</span><input type="range" id="tp" min="50" max="99" value="75"><output></output></div>
+        <div class="ctl"><span>惡化事件率</span><input type="range" id="tr" min="1" max="15" value="4"><output></output></div>
+        <div class="ctl"><span>每日入院人次</span><input type="range" id="ta" min="20" max="150" step="5" value="60"><output></output></div>
+      </div>
+      <svg viewBox="0 0 380 230" class="chart" id="thsvg"></svg>
+    </div>
+    <div style="overflow:auto"><table class="itbl" id="tht"></table></div>
+    <div class="detail" id="thtxt"></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>選定閾值後再寫三件事</h3><span class="tag o">小組填寫後複製</span></div>
+    <label>我們選的閾值與理由（夜班 1 人顧 12 床，哪個可行？）</label><textarea id="th-1"></textarea>
+    <label>試辦條件：在什麼條件下開始試辦？</label><textarea id="th-2"></textarea>
+    <label>停用條件：出現什麼情況就暫停或退回？</label><textarea id="th-3"></textarea>
+    <label>升級處理：誰接、多久內、接不到怎麼辦？被漏掉的病人用什麼補位？</label><textarea id="th-4"></textarea>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="thcopy">複製演練答案</button><span id="thmsg" style="font-size:13px;color:var(--green)"></span></div>
+  </div>
+</section>
+
+<section class="part" id="p15" data-t="案例研討：38½ 顆藥">
+  <div class="ph"><span class="num">15</span><div><h2>38½ 顆藥：每道檢查都「通過」，系統卻一起失靈</h2><div class="en">UCSF 2013 · WACHTER, THE DIGITAL DOCTOR (2015)</div></div></div>
+  <p class="one">四道防線都在，卻<b>互相假設「別人已經檢查過」</b>——這不是單一個人的疏失。</p>
+  <div class="grid3">
+    <div class="kpi o"><div class="v">39 倍</div><div class="l">過量倍數（16 歲、38.6 公斤病人，平日每次 1 顆 Septra）</div></div>
+    <div class="kpi"><div class="v">約 16 萬則／月</div><div class="l">UCSF 藥師面對的電腦警示（Wachter）</div></div>
+    <div class="kpi"><div class="v">4 道</div><div class="l">醫師、藥師、機器人、條碼：每道都「通過」</div></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>決策點：你是病安委員會主委</h3></div>
+    <p style="margin:0">要追究哪一個人？還是改哪一個設計？先獨立想 1 分鐘，寫下你的選擇與理由。</p>
+    <textarea id="ucsf-dp" placeholder="我的選擇與理由……"></textarea>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>四道防線：點一道看它為什麼沒攔下，再選一個設計修補</h3><span class="tag o">核心互動</span></div>
+    <div class="swiss" id="swiss"></div>
+    <div class="detail" id="swtxt8">每道防線都有洞（紅）。點一道防線，看洞在哪；再點一次套用修補設計（綠）。</div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>課堂討論：三題擇一深入</h3><span class="tag gray">個人 3 分鐘、小組 8 分鐘、分享 4 分鐘</span></div>
+    <div class="grid3">
+      <div class="kpi"><div class="l">Q1｜CDS 五個對</div><div style="font-weight:700">哪一個「對」最先失守？</div></div>
+      <div class="kpi"><div class="l">Q2｜警示疲勞</div><div style="font-weight:700">只能改一件事：加硬性上限、改單位預設，還是汰除無用警示？為什麼？</div></div>
+      <div class="kpi"><div class="l">Q3｜警示治理</div><div style="font-weight:700">Clickbusters 式汰除，如何避免把這種真正重要的警示也刪掉？</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p16" data-t="課堂討論、名詞卡與測驗">
+  <div class="ph"><span class="num">16</span><div><h2>你單位的警示，有多少是噪音？</h2><div class="en">IN-CLASS DISCUSSION · GLOSSARY · QUIZ</div></div></div>
+  <div class="wd form">
+    <div class="wh"><h3>課堂討論工作單</h3><span class="tag o">分組 15 分鐘</span><span class="tag a">本頁不公布參考答案</span></div>
+    <label>Q1 盤點：最常出現的三種警示？大約多少比例會被直接略過？（憑經驗估計即可）</label><textarea id="dq-1"></textarea>
+    <label>Q2 五個對：挑一種常被略過的警示，它違反了哪一個「對」？怎麼改？</label><textarea id="dq-2"></textarea>
+    <label>Q3 偏移：導入他院開發的預警模型，最可能發生哪一種資料集偏移？</label><textarea id="dq-3"></textarea>
+    <label>Q4 協作：預警被推翻時，系統該記錄什麼？誰該定期看這些紀錄？</label><textarea id="dq-4"></textarea>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn oc" id="dqcopy">複製工作單</button><span id="dqmsg" style="font-size:13px;color:var(--green)"></span></div>
+  </div>
+  <div class="wd"><div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div><div class="cards" id="cards"></div></div>
+  <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
+  <div class="take">
+    <div><b>送得對嗎</b>資訊、人、格式、管道、時機，少了哪一個？</div>
+    <div><b>接得住嗎</b>偵測 → 過濾 → 通知 → 應變 → 回饋，哪一環最弱？</div>
+    <div><b>在這裡準嗎</b>本地驗證、靜默測試、閾值下的警示量與 NNE？</div>
+  </div>
+  <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">好的預警，是讓對的人及時看見</h2><p style="color:var(--mute)">模型決定「看不看得到」，系統決定「來不來得及」。<br>下週 W9 期中評量：個人作答、範圍 W1–W8，可攜帶紙本講義與計算機，不可使用生成式 AI 與網路。</p></div>
+</section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w8-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w8-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w8-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
+function bind(sel){$$(sel).forEach(r=>{r.addEventListener("click",e=>{})})}
+function tipify(root){root.querySelectorAll("[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+function segInit(id,cb){$$(id+" button").forEach(b=>b.onclick=()=>{$$(id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset)})}
+function choiceRows(container,items,opts,scoreEl,noteFn){const r=$(container);let ok=0,dn=0;items.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach((o,i)=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;dn++;const g=i===a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+(why||(noteFn?noteFn(a):""));if(scoreEl)$(scoreEl).textContent=`${ok} / ${items.length}`+(dn===items.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})}
+function bars(svg,data,{max,unit="",dec=1,W=360,H=220,cols}){const L=46,B=H-36,T=22;let g="";const step=max/5;for(let v=0;v<=max+1e-9;v+=step){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v,v<10&&step<1?1:0)}${unit}</text>`}const n=data.length,bw=Math.min(80,(W-L-30)/n-30);data.forEach(([lab,v,c],i)=>{const x=L+20+i*((W-L-30)/n)+((W-L-30)/n-bw)/2-10,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${c||cols[i]}" data-t="${lab}：${fmt(v,dec)}${unit}"/><text x="${x+bw/2}" y="${y-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${c||cols[i]}">${fmt(v,dec)}${unit}</text><text x="${x+bw/2}" y="${B+18}" font-size="12.5" text-anchor="middle">${lab}</text>`});$(svg).innerHTML=g;tipify($(svg))}
+
+
+function copyText(t,msgEl){const done=()=>{$(msgEl).textContent="已複製。";setTimeout(()=>$(msgEl).textContent="",3000)};const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$(msgEl).textContent="無法自動複製，請手動選取文字。"}ta.remove()};try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+function persist(ids,key,cb){const s=LS.get(key,{});ids.forEach(id=>{const e=$("#"+id);if(s[id]!=null)e.value=s[id];const f=()=>{const o={};ids.forEach(k=>o[k]=$("#"+k).value);LS.set(key,o);cb&&cb()};e.addEventListener("input",f);e.addEventListener("change",f)})}
+function rng(id,fn,fmtF){const e=$("#"+id);const o=e.nextElementSibling;const f=()=>{o.textContent=fmtF?fmtF(+e.value):e.value;fn()};e.addEventListener("input",f);o.textContent=fmtF?fmtF(+e.value):e.value}
+function togs(root,items,state,cb){const r=$(root);r.innerHTML="";items.forEach(([k,lab])=>{const l=h("label",{class:state[k]?"on":""},`<input type="checkbox" ${state[k]?"checked":""}>${state[k]?"✓ ":""}${lab}`);l.onclick=e=>{e.preventDefault();state[k]=!state[k];togs(root,items,state,cb);cb()};r.appendChild(l)})}
+const kpi=(v,l,c="")=>`<div class="kpi ${c}"><div class="v">${v}</div><div class="l">${l}</div></div>`;
+
+const SV=k=>k===1?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6.5" fill="${C.navy}"/></svg>`:k===2?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6.5" fill="#fff" stroke="${C.navy}" stroke-width="1.5"/><path d="M8 1.5A6.5 6.5 0 0 1 8 14.5Z" fill="${C.navy}"/></svg>`:k===3?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6" fill="#fff" stroke="${C.navy}" stroke-width="1.5"/></svg>`:"·";
+
+/* 01 opening */
+const OT=["22:00","00:00","02:00","04:00","06:00"],OS=[2,4,6,8,9];
+const OX=["2 分：低風險，例行監測。","4 分：仍在低風險區（0–4），但比兩小時前多了 2 分。","<b>02:00 的現場：</b>呼吸 24 次／分、SpO₂ 93%、心跳 108、收縮壓 102 → <b>NEWS2＝6，已達「緊急評估」</b>。夜班護理師照顧 12 床，當晚全病房已響過 <b style='color:var(--ochre)'>37 次警示</b>。","8 分：已達「緊急應變」（≥7），仍未啟動快速應變小組。","9 分：<b>06:00 才啟動快速應變小組</b>——距離第一次達到緊急評估已過 4 小時。"];
+function opening(){const t=+$("#ot").value;$("#ot").nextElementSibling.textContent=OT[t];const s=$("#osvg"),L=36,R=370,B=200,T=14,X=i=>L+20+i*(R-L-40)/4,Y=v=>B-v/12*(B-T);let g="";
+ [[0,4.5,"#E1EEE6","低 0–4"],[4.5,6.5,"#F5EBD5","中 5–6"],[6.5,12,"#F6E3DA","高 ≥7"]].forEach(([a,b,c,n])=>g+=`<rect x="${L}" y="${Y(b)}" width="${R-L}" height="${Y(a)-Y(b)}" fill="${c}"/><text x="${L+4}" y="${Y(b)+14}" font-size="11" fill="${C.mute}">${n}</text>`);
+ [0,3,6,9,12].forEach(v=>g+=`<text x="${L-5}" y="${Y(v)+4}" font-size="10.5" fill="${C.mute}" text-anchor="end">${v}</text>`);
+ let d="";OS.forEach((v,i)=>d+=(i?"L":"M")+X(i)+","+Y(v));g+=`<path d="${d}" fill="none" stroke="${C.navy}" stroke-width="3"/>`;
+ OS.forEach((v,i)=>{g+=`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===t?8:5}" fill="${i<=t?C.ochre:C.gray}"/><text x="${X(i)}" y="${Y(v)-12}" font-size="13" font-weight="700" text-anchor="middle" fill="${C.navy}">${i<=t?v:""}</text><text x="${X(i)}" y="${B+16}" font-size="11.5" text-anchor="middle">${OT[i]}</text>`});
+ g+=`<line x1="${X(2)}" y1="${T}" x2="${X(2)}" y2="${B}" stroke="${C.amber}" stroke-dasharray="4 4"/><line x1="${X(4)}" y1="${T}" x2="${X(4)}" y2="${B}" stroke="${C.ochre}" stroke-dasharray="4 4"/><text x="${X(4)-4}" y="${T+10}" font-size="11" text-anchor="end" fill="${C.ochre}">快速應變</text>`;
+ s.innerHTML=g;const v=OS[t];$("#okpi").innerHTML=kpi(v,"NEWS2",v>=7?"o":"")+kpi(v>=7?"高":v>=5?"中":"低","風險區",v>=5?"o":"g")+kpi(t>=2?(t-2)*2+" 小時":"—","距首次達緊急評估",t>2?"o":"")+kpi(t===4?"啟動":"未啟動","快速應變小組",t===4?"":"o");$("#otxt").innerHTML=OX[t]}
+$("#ot").addEventListener("input",opening);opening();
+
+/* 02 five rights & forms */
+choiceRows("#frq",[
+ ["病人已經吃了藥，系統才跳出藥物交互作用警示",4,"時機錯：警示要出現在決策當下（開立或簽署時），不早也不晚。"],
+ ["「跌倒風險高」的提醒，跳給正在開處方的主治醫師，而不是照護的護理師",1,"人錯：該採取行動的人沒收到。"],
+ ["惡化高風險只在 EHR 角落顯示小圖示，夜班護理師大多不在電腦前",3,"管道錯：高風險應改用電話或中央監測站。"],
+ ["警示只寫「請注意病人狀況」，沒有說要做什麼",0,"資訊錯：沒有實證、不可行動的資訊只是噪音。"],
+ ["醫囑時把三頁長的 PDF 指引整份彈出來",2,"格式錯：可改成醫囑套組、一鍵建議或資訊按鈕。"]
+],["對的資訊","對的人","對的格式","對的管道","對的時機"],"#frscore");
+const FM=[["警示與提醒","Alerts","條件成立時主動通知","王伯伯：腎功能變差 → 提醒調整劑量","打斷式"],["醫囑套組","Order sets","把最佳實務預先組好","王伯伯：心衰竭入院標準醫囑一鍵開立","嵌入流程"],["文件範本","Templates","引導完整記錄","王伯伯：出院準備評估表必填欄位","嵌入流程"],["風險分數","Risk scores","計算並顯示風險","王伯伯：NEWS2、再入院風險分數","被動顯示"],["儀表板","Dashboards","一次看全病房狀態","王伯伯：護理站依惡化風險排序各床","被動顯示"],["資訊按鈕","Infobuttons","需要時才查","王伯伯：點藥名即顯示腎功能調整建議","需要時查"]];
+let fmI=-1;function drawFm(){$("#forms").innerHTML=FM.map((f,i)=>`<div class="${i===fmI?"on":""}" data-i="${i}"><b>${f[0]}</b>${f[1]}<br><span style="color:var(--mute)">${f[4]}</span></div>`).join("");$$("#forms div").forEach(d=>d.onclick=()=>{fmI=+d.dataset.i;drawFm();const f=FM[fmI];$("#fmtxt").innerHTML=`<b>${f[0]}</b>（${f[4]}）：${f[2]}。<br>${f[3]}。`})}
+drawFm();
+choiceRows("#fpq",[
+ ["心衰竭病人入院，讓醫師一次開齊標準醫囑",1,"把最佳實務預先組好，比事後跳警示有效。"],
+ ["護理站想一眼看出全病房誰最可能惡化",4,"一次看全局、不打斷：儀表板。"],
+ ["醫師想知道這個藥在腎功能差時怎麼調",5,"需要時才查，不需要時不打擾。"],
+ ["簽署可能造成嚴重傷害的醫囑前，必須讓人停下來",0,"真正危險、需要立即注意時，才值得打斷。"],
+ ["確保出院準備評估不漏任何重要欄位",2,"引導完整記錄：文件範本。"]
+],FM.map(f=>f[0]),"#fpscore");
+
+/* 03 FDA gates */
+const GN=["① 不分析影像、訊號或波形","② 顯示、分析或列印醫療資訊","③ 對專業人員提供建議","④ 專業人員能獨立檢視依據"];
+const FP=[["NEWS2 計算器",[1,1,1,1],"輸入與計分規則都看得到 → 多半可過關卡④（講義）。",["只用生命徵象數值","處理病歷資訊","給護理師與醫師","計分規則公開，人可自己驗算"]],
+ ["即時 AI 惡化預警",[1,1,1,0],"時間緊迫、依據不透明 → 多半卡在關卡④，通常要走醫療器材路徑（講義）。",["用病歷數值，不直接讀波形","處理病歷資訊","給專業人員","時間緊迫、模型依據難以獨立檢視"]],
+ ["心電圖波形 AI 判讀",[0,1,1,1],"直接分析訊號／波形，第一關就不過（教學判讀）。",["直接分析心電圖波形","—","—","—"]],
+ ["給病人用的調藥建議 App",[1,1,0,1],"建議對象是病人，不是專業人員（教學判讀）。",["只用檢驗數值","處理醫療資訊","對象是病人本人","—"]],
+ ["腎功能劑量提醒規則",[1,1,1,1],"規則透明（eGFR < 30 → 提醒 Metformin），醫師看得懂為什麼（教學判讀）。",["只用檢驗數值","處理病歷資訊","給開立醫囑的醫師","規則與依據可直接檢視"]]];
+let fdI=0;$("#fdap").innerHTML=FP.map((p,i)=>`<button data-i="${i}" class="${i?"":"on"}">${p[0]}</button>`).join("");segInit("#fdap",d=>{fdI=+d.i;fda()});
+function fda(){const [n,g,why,rs]=FP[fdI];let stop=g.indexOf(0);let h2="";GN.forEach((t,i)=>{const cl=stop>=0&&i>stop?"":g[i]?"p":"f";h2+=`<div class="${cl}"><b>${t}</b>${stop>=0&&i>stop?"（不必再判斷）":(g[i]?"✓ ":"✕ ")+rs[i]}</div>`});const dev=stop>=0;h2+=`<div class="res" style="background:${dev?C.ochre:C.green}">${dev?"任一關不過<br>走醫療器材路徑":"四關全過<br>非醫療器材 CDS"}</div>`;$("#gates4").innerHTML=h2;$("#fdatxt").innerHTML=`<b>${n}</b>：${why}`}
+fda();
+
+/* 04 CDS Hooks */
+let hkH="order-sign";const ho={sug:true,skip:true};
+segInit("#hk",d=>{hkH=d.h;hook()});togs("#hkopt",[["sug","附一鍵改藥建議"],["skip","略過需留理由"]],ho,hook);
+function hook(){const e=+$("#eg").value;$("#eg").nextElementSibling.textContent=e;const hit=e<30&&hkH!=="patient-view";const pv=e<30&&hkH==="patient-view";
+ const ind=hkH==="order-sign"?"critical":"warning";
+ let card="";if(hit)card=`<div class="card5 ${ind}"><div class="ind">indicator: ${ind}｜source: 本院腎功能劑量規則</div><b>eGFR ${e}：Metformin 不建議使用</b><br>建議改用其他降血糖藥，或與腎臟科討論。${ho.sug?`<div style="margin-top:6px"><span class="btn pri" style="pointer-events:none">一鍵改為建議藥物</span></div>`:""}${ho.skip?`<div style="font-size:12.5px;color:var(--mute);margin-top:4px">略過請選理由：已與腎臟科討論／短期使用／其他</div>`:""}</div>`;
+ else if(pv)card=`<div class="card5 info"><div class="ind">indicator: info</div>王伯伯最近 eGFR ${e}：開立經腎排除藥物時請留意。<br><span style="font-size:12.5px;color:var(--mute)">打開病歷時只給資訊卡——真正的建議留到選醫囑時再給。</span></div>`;
+ else card=`<div class="card5" style="border-color:var(--green)"><b style="color:var(--green)">沒有卡片</b>（cards: []）：條件不成立就不打擾。</div>`;
+ $("#cardout").innerHTML=card;
+ const resp=hit?`{"cards":[{
+   "summary":"eGFR ${e}：Metformin 不建議使用",
+   "indicator":"${ind}"${ho.sug?`,
+   "suggestions":[{"label":"改為建議藥物"}]`:""}${ho.skip?`,
+   "overrideReasons":[…]`:""}
+ }]}`:pv?`{"cards":[{"summary":"最近 eGFR ${e}","indicator":"info"}]}`:`{"cards":[]}`;
+ $("#hkjs").innerHTML=`<span class="m">① 電子病歷 → CDS 服務</span>
+POST /cds-services/renal-dose
+{"hook":"<span class="y">${hkH}</span>",
+ "context":{"patientId":"wang-72"${hkH==="patient-view"?"":`,
+   "draftOrders":{… MedicationRequest: <span class="y">Metformin</span> …}`}},
+ "prefetch":{"egfr":{Observation: <span class="y">${e}</span>}}}
+
+<span class="m">② CDS 服務判斷：eGFR &lt; 30 且有 Metformin 醫囑？</span> <span class="${hit?"r":"g"}">${hit?"是":"否"}</span>
+
+<span class="m">③ CDS 服務 → 電子病歷</span>
+<span class="${hit?"r":"g"}">${resp}</span>`}
+$("#eg").addEventListener("input",hook);hook();
+
+/* 05 NEWS2 */
+const NV=LS.get("n2",{rr:24,sp:93,o2:0,sbp:102,hr:108,cv:0,tp:37.0});
+const sRR=v=>v<=8?3:v<=11?1:v<=20?0:v<=24?2:3,sSP=v=>v<=91?3:v<=93?2:v<=95?1:0,sBP=v=>v<=90?3:v<=100?2:v<=110?1:v<=219?0:3,sHR=v=>v<=40?3:v<=50?1:v<=90?0:v<=110?1:v<=130?2:3,sT=v=>v<=35?3:v<=36?1:v<=38?0:v<=39?1:2;
+const NP=[["rr","呼吸（次／分）","num",sRR],["sp","SpO₂（%）","num",sSP],["o2","給氧","sel",v=>v?2:0,["室內空氣","給氧"]],["sbp","收縮壓（mmHg）","num",sBP],["hr","心跳（次／分）","num",sHR],["cv","意識","sel",v=>v?3:0,["清醒","新發混亂等"]],["tp","體溫（°C）","num",sT]];
+function n2build(){$("#n2t").innerHTML=`<tr><th>參數</th><th>數值</th><th>得分</th></tr>`+NP.map(([k,n,t,,o])=>`<tr><td>${n}</td><td>${t==="num"?`<input type="number" id="n2-${k}" step="${k==="tp"?"0.1":"1"}" value="${NV[k]}">`:`<select id="n2-${k}">${o.map((x,i)=>`<option value="${i}" ${+NV[k]===i?"selected":""}>${x}</option>`).join("")}</select>`}</td><td class="sc" id="n2s-${k}"></td></tr>`).join("")+`<tr><td colspan="2" style="text-align:right;font-weight:700">總分</td><td class="sc" id="n2tot" style="font-size:20px"></td></tr>`;NP.forEach(([k])=>$("#n2-"+k).addEventListener("input",()=>{NV[k]=+$("#n2-"+k).value;LS.set("n2",NV);n2()}))}
+function n2(){let tot=0,max=0;const parts=[];NP.forEach(([k,n,,f])=>{const s=f(+NV[k]);tot+=s;max=Math.max(max,s);parts.push([["呼吸","SpO₂","給氧","收縮壓","心跳","意識","體溫"][parts.length],s]);const e=$("#n2s-"+k);e.textContent=s;e.className="sc s"+s});$("#n2tot").textContent=tot;
+ const band=tot>=7?["高：緊急應變",C.ochre,"啟動快速應變小組，持續監測。"]:tot>=5?["中：緊急評估",C.amber,"由具急症處置能力的醫師緊急評估。"]:["低",C.green,"依常規頻率監測；分數上升要提高測量頻率。"];
+ $("#n2band").style.background=band[1];$("#n2band").innerHTML=`NEWS2＝${tot}　${band[0]}`;
+ $("#n2txt").innerHTML=band[2]+(max===3&&tot<5?"<br><span style='color:var(--ochre);font-weight:700'>任一單項 3 分：</span>即使總分不高，也應由病房醫師緊急評估。":"")+`<br><span style="font-size:13px;color:var(--mute)">得分來源：${parts.filter(p=>p[1]).map(p=>p[0]+" "+p[1]).join("＋")||"無"}＝${tot}</span>`;
+ const s=$("#n2svg");let g="",x=6;parts.forEach(([n,v])=>{if(!v)return;const w=v*22;g+=`<rect x="${x}" y="30" width="${w-2}" height="34" rx="4" fill="${v===3?C.ochre:v===2?C.ochre2:C.amber}"/><text x="${x+w/2-1}" y="52" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">${v}</text><text x="${x+w/2-1}" y="80" font-size="10.5" text-anchor="middle">${n}</text>`;x+=w});g+=`<line x1="${6+5*22}" x2="${6+5*22}" y1="18" y2="70" stroke="${C.amber}" stroke-dasharray="3 3"/><text x="${6+5*22}" y="14" font-size="10.5" fill="${C.amber}" text-anchor="middle">5 緊急評估</text><line x1="${6+7*22}" x2="${6+7*22}" y1="18" y2="70" stroke="${C.ochre}" stroke-dasharray="3 3"/><text x="${6+7*22+4}" y="14" font-size="10.5" fill="${C.ochre}">7 緊急應變</text>`;s.innerHTML=g}
+function n2load(o){Object.assign(NV,o);LS.set("n2",NV);n2build();n2()}
+$("#n2a").onclick=()=>n2load({rr:24,sp:93,o2:0,sbp:102,hr:108,cv:0,tp:37.0});$("#n2b").onclick=()=>n2load({rr:25,sp:92,o2:0,sbp:98,hr:112,cv:0,tp:37.4});$("#n2c").onclick=()=>n2load({rr:16,sp:98,o2:0,sbp:128,hr:76,cv:0,tp:36.8});
+n2build();n2();
+
+/* 06 response chain */
+const CH=[["偵測","模型或分數算出高風險"],["篩選","篩掉重複與已處理"],["通知","依角色送到對的人"],["評估","床邊評估"],["處置","處置、RRT 到場"],["回饋","記錄結果、檢討閾值"]];
+const chOn=[1,1,1,1,1,1];
+function drawChain(){$("#chain").innerHTML=CH.map(([a,b],i)=>`<div class="${chOn[i]?"":"off"}" data-i="${i}"><b>${chOn[i]?"":"✕ "}${a}</b>${b}</div>`).join("");$$("#chain div").forEach(d=>d.onclick=()=>{const i=+d.dataset.i;chOn[i]=chOn[i]?0:1;drawChain();chain()})}
+function chain(){const s=+$("#ks").value/100,v=+$("#kv").value/100,r=+$("#kr").value/100;
+ const det=chOn[0]?100*s:0;let vis=v;if(!chOn[1])vis=v*0.5;if(!chOn[2])vis=0;const seen=det*vis;const act=(chOn[3]&&chOn[4])?seen*r:0;
+ $("#kkpi").innerHTML=kpi(fmt(det,0),"被模型抓到（每 100 位惡化病人）")+kpi(fmt(seen,0),"警示真的被對的人看到",seen<det*0.6?"o":"")+kpi(fmt(act,0),"及時得到處置",act<30?"o":"g")+kpi(fmt(100-act,0),"沒有因預警而受益","o");
+ const off=CH.filter((_,i)=>!chOn[i]).map(c=>c[0]);let m=`模型敏感度 ${fmt(s*100,0)}%，但最後只有 <b>${fmt(act,0)}</b> 位及時得到處置（${fmt(s*100,0)}% × ${fmt(vis*100,0)}% × ${fmt((chOn[3]&&chOn[4]?r:0)*100,0)}%）。`;
+ if(!chOn[0])m+="<br><span style='color:var(--ochre);font-weight:700'>沒有偵測：</span>回到靠人工巡視。";
+ if(!chOn[1])m+="<br><span style='color:var(--ochre);font-weight:700'>沒有篩選：</span>重複與已處理的警示淹沒真警示（此處假設被看到的機率減半）。";
+ if(!chOn[2])m+="<br><span style='color:var(--ochre);font-weight:700'>沒有通知：</span>警示停在系統裡——就像那晚的 02:00。";
+ if(!chOn[3]||!chOn[4])m+="<br><span style='color:var(--ochre);font-weight:700'>沒有應變端：</span>模型再準，結果就和沒有預警一樣。";
+ if(!chOn[5])m+="<br><span style='color:var(--amber);font-weight:700'>沒有回饋：</span>今天看不出差別，但閾值不再檢討、資料不再回流，下一季開始悄悄變差。";
+ if(!off.length)m+="<br>試著把「敏感度」拉到 95%，再把「被看到」降到 30%：更準的模型，換不回被淹沒的警示。";$("#ktxt").innerHTML=m}
+drawChain();["ks","kv","kr"].forEach(id=>rng(id,chain,v=>v+"%"));chain();
+
+/* 07 cases */
+const CS=[["Kaiser Permanente AAM：用遠端護理師過濾警示","Advance Alert Monitor，北加州 21 家醫院；Escobar 等，NEJM 2020",[["每小時掃描","EHR"],["預測","12 小時內惡化風險"],["院外專責護理師","審核每一則警示"],["確認後才通知","快速應變小組與主治醫師"]],[["21 家","2016–2019 年分階段導入",""],["15.8% vs 20.4%","警示後 30 天死亡率（導入組 vs 對照組）","o"],["約 16%","調整後死亡率相對下降","g"]],"成功關鍵在「先過濾、再通知」：床邊團隊只接到值得處理的警示。"],
+ ["TREWS：前瞻性多院驗證的敗血症預警","Johns Hopkins；Adams 等，Nature Medicine 2022",[["整合進 EHR","不必另開系統"],["顯示主要影響因子","供醫師判斷"],["醫師須回應","確認或排除"],["5 家醫院","前瞻性部署並追蹤結果"]],[["590,736 人","5 家醫院受監測病人",""],["3.3 個百分點","3 小時內確認警示者，調整後死亡率絕對下降","o"],["18.7%","調整後死亡率相對下降","g"]],"前瞻性、多院、看病人結果——醫療 AI 最該有、卻最少見的證據等級（W12）。"],
+ ["COMPOSER：警示先給護理師，不確定就不叫","UC San Diego 兩個急診；Boussina 等，npj Digital Medicine 2024",[["深度學習模型","每小時預測 4 小時內敗血症"],["資料不像訓練資料？","標為「無法判定」，不硬給分數"],["護理師開病歷時","跳出警示與主要因子"],["護理師三選一","未懷疑感染／已在處置／立即通知醫師"]],[["−1.9 個百分點","院內敗血症死亡率（相對 −17%）","g"],["+5.0 個百分點","敗血症 bundle 遵從率（相對 +10%）","g"],["約 235 則／月","兩院合計警示量；約 55% 通知醫師",""]],"6,217 位成人敗血症病人（2021-01 至 2023-04）；前後比較準實驗設計，非隨機試驗，同期其他改善也可能有貢獻。"]];
+function cases(i){const c=CS[i];$("#cth").textContent=c[0];$("#ctag").textContent=c[1];$("#cflow").innerHTML=c[2].map(([a,b],k)=>`<div class="astep ${k===2?"run":"ok"}"><b>${k+1}. ${a}</b>${b}</div>`).join("");$("#ckpi7").innerHTML=c[3].map(([v,l,cl])=>kpi(v,l,cl)).join("");$("#cnote").textContent=c[4]}
+segInit("#csel",d=>cases(+d.c));cases(0);
+(function(){const D=[["Kaiser AAM（警示後 30 天死亡，未調整）",4.6],["TREWS（3 小時內確認者，調整後）",3.3],["COMPOSER（院內敗血症死亡）",1.9]];const s=$("#nntsvg"),L=300,R=640;let g="";D.forEach(([n,a],i)=>{const nnt=100/a,y=14+i*50,w=(R-L)*nnt/60;g+=`<text x="${L-10}" y="${y+20}" font-size="13" text-anchor="end" font-weight="700" fill="${C.navy}">${n}</text><rect x="${L}" y="${y}" width="${w}" height="30" rx="4" fill="${[C.navy2,C.green,C.amber][i]}"/><text x="${L+w+8}" y="${y+20}" font-size="13" font-weight="700" fill="${C.navy}">約 ${fmt(nnt,0)} 位（降 ${a} 個百分點）</text>`});s.innerHTML=g})();
+
+/* 08 alert fatigue */
+const AC=[["true",1,C.ochre,"真警示（王伯伯）"],["dup",12,"#8FA2C7","重複通知"],["done",8,"#B9B4AA","已在處理"],["low",10,C.amber,"低優先資訊性"],["false",6,"#8FB8A0","假警報／無須處置"]];
+const AS=[["dup","合併與抑制"],["central","中央過濾"],["tier","分級警示"],["thr","依本地資料調閾值"],["retire","定期汰除"],["act","可行動（一鍵醫囑）"]];
+const afs=LS.get("afs",{});
+const cells=[];AC.forEach(([c,n])=>{for(let k=0;k<n;k++)cells.push([c,k])});
+function af(){const st=cells.map(([c,k])=>{if(c==="true")return "keep";if(afs.dup&&c==="dup")return "gone";if(afs.central&&(c==="done"||(c==="false"&&k<3)))return "gone";if(afs.thr&&((c==="low"&&k<3)||(c==="false"&&k>=3)))return "gone";if(afs.retire&&c==="low"&&k>=6)return "gone";if(afs.tier&&c==="low")return "dash";return "keep"});
+ $("#al").innerHTML=cells.map(([c],i)=>{const col=AC.find(a=>a[0]===c)[2];return `<i class="${st[i]==="gone"?"gone":st[i]==="dash"?"dash":""}" style="background:${col}" data-t="${AC.find(a=>a[0]===c)[3]}${st[i]==="gone"?"（已移除）":st[i]==="dash"?"（移到儀表板）":""}"></i>`}).join("");tipify($("#al"));
+ const intr=st.filter(x=>x==="keep").length,dash=st.filter(x=>x==="dash").length;
+ $("#afkpi").innerHTML=kpi(intr,"打斷式警示",intr>15?"o":"g")+kpi(fmt(100/intr,1)+"%","PPV（打斷式中真正要處理的）")+kpi(intr,"NNE：看幾則才抓到王伯伯",intr>15?"o":"g")+kpi(dash,"移到儀表板（不打斷）");
+ const L=AC.map(([,n,c,t])=>`<span style="color:${c};font-weight:700">■</span> ${t} ${n}`).join("　");
+ $("#aftxt").innerHTML=L+`<br>${intr===37?"什麼都不做：37 則裡只有 1 則真的要處理。":intr<=5?"<span style='color:var(--green);font-weight:700'>值得處理的警示終於浮出來了。</span>":"還有很多噪音。試著組合更多策略。"}${afs.act?"<br>王伯伯的警示附上「抽血驗乳酸」一鍵醫囑：看到之後能立刻行動。":""}<br><span style="font-size:13px;color:var(--mute)">持續監測兩個指標：略過率、NNE——兩者都是 CDS 治理委員會該看的。</span>`}
+togs("#afs",AS,afs,()=>{LS.set("afs",afs);af()});af();
+
+/* 09 PPV */
+function ppvF(se,sp,pr){return se*pr/(se*pr+(1-sp)*(1-pr))}
+function ppv(){const se=+$("#ps").value/100,sp=+$("#pp").value/100,pr=+$("#pr").value/100;const P=ppvF(se,sp,pr);const N=1000,pos=N*pr,TP=pos*se,FN=pos-TP,FP=(N-pos)*(1-sp),TN=N-pos-FP;
+ $("#pkpi").innerHTML=kpi(fmt(P*100,1)+"%","PPV","o")+kpi(fmt(1/P,1),"NNE＝1 ÷ PPV")+kpi(fmt(TP+FP,0),"每 1,000 人的警示數")+kpi(fmt(FN,0),"每 1,000 人漏掉","o");
+ const s=$("#psvg"),L=40,R=370,B=215,T=14,X=p=>L+(p-1)/29*(R-L),Y=v=>B-v*(B-T);let g="";[0,.25,.5,.75,1].forEach(v=>g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-5}" y="${Y(v)+4}" font-size="10.5" fill="${C.mute}" text-anchor="end">${v*100}%</text>`);
+ [1,5,10,20,30].forEach(p=>g+=`<text x="${X(p)}" y="${B+15}" font-size="10.5" fill="${C.mute}" text-anchor="middle">${p}%</text>`);g+=`<text x="${(L+R)/2}" y="${B+30}" font-size="11.5" fill="${C.mute}" text-anchor="middle">盛行率</text>`;
+ let d="";for(let p=1;p<=30;p+=.5)d+=(p>1?"L":"M")+X(p)+","+Y(ppvF(se,sp,p/100));g+=`<path d="${d}" fill="none" stroke="${C.navy2}" stroke-width="3"/>`;
+ [1,5,10,20].forEach(p=>{const v=ppvF(.8,.9,p/100);g+=`<circle cx="${X(p)}" cy="${Y(v)}" r="4" fill="none" stroke="${C.gray}" stroke-width="1.5" data-t="講義（80%／90%）盛行率 ${p}%：PPV ${fmt(v*100,1)}%"/>`});
+ g+=`<circle cx="${X(pr*100)}" cy="${Y(P)}" r="7" fill="${C.ochre}"/><text x="${X(pr*100)+10}" y="${Y(P)-8}" font-size="13" font-weight="700" fill="${C.ochre}">${fmt(P*100,1)}%</text>`;s.innerHTML=g;tipify(s);
+ const a=[[TP,C.navy2],[FN,C.ochre],[FP,C.amber],[TN,"#E3DDCF"]];let w="",acc=0,k=0;a.forEach(([v,col])=>{acc+=v;while(k<Math.round(acc)&&k<1000){w+=`<i style="background:${col}"></i>`;k++}});$("#pconf").innerHTML=w;
+ $("#ptxt9").innerHTML=`每格 1 人，共 1,000 人：<span style="color:${C.navy2};font-weight:700">■ 抓到 ${fmt(TP,0)}</span>　<span style="color:${C.ochre};font-weight:700">■ 漏掉 ${fmt(FN,0)}</span>　<span style="color:${C.amber};font-weight:700">■ 假警示 ${fmt(FP,0)}</span>　■ 正確沒叫 ${fmt(TN,0)}<br>盛行率 ${fmt(pr*100,0)}% 時，約每 <b>${fmt(1/P,0)}</b> 則警示才有 1 位真的有事。灰色空心點是講義的四個盛行率（80%／90%）。只看 AUROC 不夠，要看「閾值下的警示量」。`}
+["ps","pp","pr"].forEach(id=>rng(id,ppv,v=>v+"%"));ppv();
+
+/* 10 Clickbusters */
+bars("#cbsvg",[["關閉",10,C.ochre],["修改",42,C.navy2],["保留",32,C.green]],{max:50,unit:" 則",dec:0,W:360,H:200});
+choiceRows("#cbq",[
+ ["同一次住院，每開一次醫囑就跳一次「病人有過敏紀錄」，略過率 98%",1,"內容沒錯，時機與頻率錯：合併與抑制（同次住院只提醒一次）。"],
+ ["針對已停產藥品的提醒，邏輯早已過時，略過率 99%",0,"邏輯過時：關閉。"],
+ ["流感疫苗提醒跳給所有醫師，其實只該給門診初診",1,"對象錯：縮小對象。"],
+ ["劑量超過體重上限的警示，略過率 60%，但曾攔下嚴重過量",2,"略過率高不代表沒用：真正重要的警示要保留，甚至改成硬性上限（見第 15 段）。"],
+ ["重複用藥警示在醫囑簽署後才跳出",1,"時機錯：改在選醫囑時跳出，或改成非打斷式。"]
+],["關閉","修改","保留"],"#cbscore");
+
+/* 11 dataset shift */
+choiceRows("#dsq",[
+ ["模型在醫學中心訓練（平均 58 歲），搬到區域醫院（平均 72 歲）",0,"X 的分布變了：共變數偏移，常造成鑑別度下降。"],
+ ["新治療上市，同樣的數值，惡化風險變低了",1,"X → Y 的關係變了：概念偏移，模型邏輯過時。"],
+ ["本院惡化事件率只有訓練醫院的一半",2,"Y 的盛行率變了：標籤偏移，PPV 下降、校準失準（下方實算）。"],
+ ["訓練用申報碼定義敗血症，本院用臨床準則",3,"Y 的定義不同：效能看似大幅下降，比對出來的準確度不能直接比較。"],
+ ["檢驗科更換乳酸檢測儀器，數值整體偏高",0,"技術改變造成 X 分布改變：共變數偏移。"]
+],["共變數偏移","概念偏移","標籤偏移","標籤定義不同"],"#dsscore");
+function lsh(){const a=+$("#ls1").value/100,b=+$("#ls2").value/100,q=+$("#ls3").value/100;const Pa=ppvF(q,q,a),Pb=ppvF(q,q,b);
+ $("#lskpi").innerHTML=kpi(fmt(Pa*100,1)+"%","訓練醫院 PPV")+kpi(fmt(Pb*100,1)+"%","本院 PPV",Pb<Pa?"o":"g")+kpi(fmt(1/Pa,1)+" → "+fmt(1/Pb,1),"NNE（看幾則抓到 1 位）",Pb<Pa?"o":"")+kpi(fmt(1000*(q*a+(1-q)*(1-a)),0)+" → "+fmt(1000*(q*b+(1-q)*(1-b)),0),"每 1,000 人警示數")}
+rng("ls1",lsh,v=>v+"%");rng("ls2",lsh,v=>v+"%");rng("ls3",lsh,v=>v+"%");lsh();
+
+/* 12 monitoring & stages */
+const MQ=["上線","Q2","Q3","Q4","Q5","Q6"],MA=[0.80,0.79,0.80,0.78,0.71,0.70];
+function mw(){const w=+$("#mw").value;$("#mw").nextElementSibling.textContent=w.toFixed(2);const s=$("#mwsvg"),L=50,R=740,B=190,T=14,X=i=>L+30+i*(R-L-60)/5,Y=v=>B-(v-0.6)/0.25*(B-T);let g="";
+ [0.6,0.65,0.7,0.75,0.8,0.85].forEach(v=>g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-6}" y="${Y(v)+4}" font-size="10.5" fill="${C.mute}" text-anchor="end">${v.toFixed(2)}</text>`);
+ g+=`<rect x="${X(3.5)}" y="${T}" width="${X(5)-X(3.5)+20}" height="${B-T}" fill="${C.ochre}" opacity=".06"/><text x="${X(4.5)}" y="${T+12}" font-size="11" fill="${C.ochre}" text-anchor="middle">換乳酸儀器＋新生命徵象設備</text>`;
+ g+=`<line x1="${L}" x2="${R}" y1="${Y(w)}" y2="${Y(w)}" stroke="${C.ochre}" stroke-width="2" stroke-dasharray="6 4"/><text x="${R}" y="${Y(w)-5}" font-size="11.5" fill="${C.ochre}" text-anchor="end" font-weight="700">警戒線 ${w.toFixed(2)}</text>`;
+ let d="";MA.forEach((v,i)=>d+=(i?"L":"M")+X(i)+","+Y(v));g+=`<path d="${d}" fill="none" stroke="${C.navy2}" stroke-width="3"/>`;
+ const trig=MA.findIndex(v=>v<w);MA.forEach((v,i)=>g+=`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===trig?8:5}" fill="${v<w?C.ochre:C.navy2}"/><text x="${X(i)}" y="${Y(v)-12}" font-size="12.5" font-weight="700" text-anchor="middle">${v.toFixed(2)}</text><text x="${X(i)}" y="${B+16}" font-size="12" text-anchor="middle">${MQ[i]}</text>`);s.innerHTML=g;
+ $("#mwtxt").innerHTML=trig<0?`<span style="color:var(--ochre);font-weight:700">警戒線太低：</span>Q5 掉了將近 0.07 也沒觸發——模型悄悄變差，沒人知道。`:trig<4?`<span style="color:var(--amber);font-weight:700">在 ${MQ[trig]} 就觸發：</span>正常的季度波動也會啟動檢討，委員會會疲於奔命（另一種警示疲勞）。`:`<span style="color:var(--green);font-weight:700">在 Q5 觸發：</span>檢驗科更換乳酸檢測儀器、同季導入新的護理生命徵象設備 → 啟動檢討：重新校準或暫停。`}
+rng("mw",mw,v=>v.toFixed(2));mw();
+const SG=[["離線測試","本院歷史資料上準不準","AUROC、校準、閾值下 PPV","達預設表現","校準偏差且無法重新校準"],["靜默測試","即時資料下準嗎、警示多少","每日警示數、PPV、資料延遲","警示量在人力範圍內","資料延遲或缺漏過多"],["有限試辦","人會用嗎、處置有變嗎","回應時間、處置率、覆寫率","回應達標、無新增傷害","警示造成延誤或過度處置"],["持續監測","長期還有效嗎","上列指標＋病人結果、次族群","持續循環、定期回報","觸發 W15 治理表停用條件"]];
+$("#stg").innerHTML=SG.map(([n,q,l,ok,no])=>`<div><b>${n}</b>${q}<br><span style="color:var(--mute)">看：${l}</span><br><span style="color:var(--green)">✔ ${ok}</span><br><span style="color:var(--ochre)">✖ ${no}</span></div>`).join("");
+choiceRows("#stq",[
+ ["離線測試：本院歷史資料 AUROC 0.79；校準偏高，但重新校準後良好",0,"達預設表現且可重新校準：進入靜默測試。"],
+ ["靜默測試：預估每日 45 則警示，病房人力只能處理約 15 則",1,"警示量超出人力：先調閾值或加中央過濾，再回到靜默測試。"],
+ ["靜默測試：生命徵象上傳平均延遲 3 小時",1,"資料延遲過多：預警會變成「事後通知」，先修資料串接（W3）。"],
+ ["有限試辦：回應時間達標，未發現新增傷害",0,"可以進入持續監測，並定期回報治理委員會。"],
+ ["持續監測：Q5 的 AUROC 跌破預設警戒線",1,"觸發停用或檢討條件：重新校準或暫停。"]
+],["進下一階段","停止或退回"],null);
+$$("#stq .q").forEach((row,i)=>row.querySelectorAll(".btn").forEach(b=>b.addEventListener("click",()=>{const st=$$("#stg div");const map=[0,1,1,2,3];st[map[i]].className=i===0||i===3?"done":"stop"})));
+
+/* 13 human-AI */
+const DR=[[79.7,19.8],[82.3,45.5]];let drI=0;function dr(){bars("#drsvg",[["AI 建議正確",DR[drI][0],C.green],["AI 建議錯誤",DR[drI][1],C.ochre]],{max:100,unit:"%",dec:1,W:360,H:210})}
+segInit("#drs",d=>{drI=+d.v;dr()});dr();
+const MK=[["trend","顯示趨勢"],["fac","說明主要因子"],["act","附建議動作"],["why","推翻需填理由"],["info","揭露模型資訊"]];const mk={trend:false,fac:false,act:false,why:false,info:false};
+function mock(){$("#mkbd").innerHTML=`<div>風險 18%${mk.trend?"（4 小時前 6%）<b style='color:var(--ochre)'> ↑</b>":""}</div><div class="${mk.fac?"":"hide"}">主要因子：呼吸 24 次／分、SpO₂ 93%、近 8 小時尿量減少</div><div class="${mk.act?"":"hide"}">建議：床邊評估、抽血驗乳酸、通知值班醫師</div><div class="${mk.info?"":"hide"}" style="font-size:12.5px;color:var(--mute)">模型：本院驗證 AUROC 0.78｜最近校正 2026/08</div>`;
+ $("#mkft").innerHTML=`<span style="background:var(--ochre);color:#fff">確認並處置</span><span style="background:#EFEAE0">${mk.why?"已評估，暫不處置（需填理由）":"略過"}</span>`;
+ const n=Object.values(mk).filter(Boolean).length;const why={trend:"不只當下分數",fac:"讓人能檢查依據（FDA 條件④）",act:"可行動",why:"資料回流改善模型",info:"驗證與校正日期"};
+ $("#mktxt").innerHTML=`已具備 <b>${n} / 5</b>。`+(n<5?"還缺："+MK.filter(([k])=>!mk[k]).map(([k,t])=>`${t}（${why[k]}）`).join("、"):"<span style='color:var(--green);font-weight:700'>五項齊全。</span>「暫不處置需填理由」不是刁難，而是讓每次推翻都成為改善模型與流程的資料。")}
+togs("#mkopt",MK,mk,mock);mock();
+choiceRows("#cmq",[
+ ["護理站的惡化風險儀表板依分數排序各床",0,"AI 排序，人優先處理高風險者。風險：低分者被忽略。"],
+ ["放射科醫師先自己判讀，再看 AI 的標記",1,"人先判斷再看 AI。風險：自動化偏誤（Dratsch 研究）。"],
+ ["TREWS 的警示需要醫師確認或排除才生效",2,"AI 提建議，人確認才生效。風險：確認流於形式。"],
+ ["IDx-DR 自主判讀糖尿病視網膜病變（W2）",3,"AI 直接產生結果。風險：錯誤無人攔截。"]
+],["AI 先篩（分流）","第二意見","人審核後執行","AI 自主"],"#cmscore");
+const RS=[["開發","開發廠商","揭露訓練資料、適用範圍與限制；模型卡與更新通知"],["核准上線","AI 治理委員會","本地驗證、核准上線、訂定監測指標與停用條件"],["運行","資訊部門","資料串接品質、版本管理、系統異常通報"],["使用","臨床人員","依專業判斷採用或推翻，並記錄理由"],["監測","品質與病安單位","追蹤相關事件、略過率與病人結果"]];
+let rsI=-1;function drawRs(){$("#resp").innerHTML=RS.map((r,i)=>`<button class="${i===rsI?"on":""}" data-i="${i}"><b>${r[0]}</b>${r[1]}</button>`).join("");$$("#resp button").forEach(b=>b.onclick=()=>{rsI=+b.dataset.i;drawRs();$("#resptxt").innerHTML=`<b>${RS[rsI][1]}</b>（${RS[rsI][0]}）：${RS[rsI][2]}。<br><span style="font-size:13px;color:var(--mute)">回饋：事件、略過率與結果回報委員會 → 調整閾值、再訓練或停用（W13 責任、W15 治理）。</span>`})}
+drawRs();
+
+/* 14 Epic + threshold */
+const EC=[["標籤定義","訓練用申報碼定義敗血症；驗證用臨床準則"],["特徵與洩漏","部分輸入（如已開抗生素）反映醫師早已懷疑"],["族群與實務","密西根病人組成、檢驗與記錄習慣不同"],["閾值與部署","未依本地盛行率調閾值，警示量過大"],["透明度","專有模型，醫院難以檢視與改良"]];
+let ecI=-1;function drawEc(){$("#ecause").innerHTML=EC.map((e,i)=>`<div class="${i===ecI?"on":""}" data-i="${i}"><b>${e[0]}</b></div>`).join("");$$("#ecause div").forEach(d=>d.onclick=()=>{ecI=+d.dataset.i;drawEc();$("#ectxt").innerHTML=`<b>${EC[ecI][0]}</b>：${EC[ecI][1]}。<br><span style="font-size:13px;color:var(--mute)">共同教訓：模型的準確度是「模型 × 資料 × 場域 × 流程」的結果。</span>`})}
+drawEc();
+const CR=["Kaiser AAM","Johns Hopkins TREWS","Epic 敗血症模型（2021）"],CCOL=["本地驗證","工作流設計","警示過濾","可解釋性","前瞻成效評估"],CANS=[[1,1,1,2,1],[1,1,2,1,1],[3,2,3,3,3]];
+let cmpS=LS.get("cmp",CR.map(()=>CCOL.map(()=>0))),cmpShow=false;
+function drawCmpg(){let g=`<div></div>`+CCOL.map(c=>`<div class="h">${c}</div>`).join("");CR.forEach((r,i)=>{g+=`<div class="rn">${r}</div>`;CCOL.forEach((_,j)=>{const v=cmpS[i][j],ok=cmpShow&&v===CANS[i][j];g+=`<div style="text-align:center"><button data-i="${i}" data-j="${j}" style="${cmpShow?(ok?"background:var(--green-l)":"background:var(--ochre-l)"):""};width:100%">${SV(v)}</button>${cmpShow?`<div class="ans">講義：${SV(CANS[i][j])}</div>`:""}</div>`})});$("#cmpg").innerHTML=g;
+ $$("#cmpg button").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,j=+b.dataset.j;cmpS[i][j]=(cmpS[i][j]+1)%4;LS.set("cmp",cmpS);drawCmpg()});
+ if(cmpShow){let m=0;CR.forEach((_,i)=>CCOL.forEach((_,j)=>{if(cmpS[i][j]===CANS[i][j])m++}));$("#cmpmsg").innerHTML=`和講義判讀相同 <b>${m} / 15</b> 格。不同處不一定是錯——說得出依據就好。`}}
+$("#cmpleg").innerHTML=`${SV(1)} 明顯具備　${SV(2)} 部分具備　${SV(3)} 不足（教學判讀，依研究發表當時）。成功的兩個系統，都把力氣花在「模型以外」：誰看警示、怎麼回應、如何評估病人結果。`;
+drawCmpg();$("#cmpshow").onclick=()=>{cmpShow=!cmpShow;$("#cmpshow").textContent=cmpShow?"隱藏講義判讀":"對照講義判讀";if(!cmpShow)$("#cmpmsg").textContent="";drawCmpg()};
+function thc(se,sp,r,adm){const pos=Math.round(1000*r),TP=Math.round(pos*se),FN=pos-TP,FP=Math.round((1000-pos)*(1-sp)),al=TP+FP;return {TP,FN,FP,al,ppv:TP/al,daily:al*adm/1000,nne:al/TP}}
+segInit("#thp",d=>{if(d.s){$("#ts").value=d.s;$("#tp").value=d.p;$("#tr").value=4;$("#ta").value=60;["ts","tp","tr","ta"].forEach(id=>$("#"+id).dispatchEvent(new Event("input")))}});
+function th(){const se=+$("#ts").value/100,sp=+$("#tp").value/100,r=+$("#tr").value/100,adm=+$("#ta").value;const cur=thc(se,sp,r,adm),lo=thc(.8,.75,r,adm),hi=thc(.5,.93,r,adm);
+ const row=(n,o,c)=>`<tr${c?" style='background:var(--ochre-l)'":""}><td><b>${n}</b></td><td>${o.TP}</td><td class="${o.FN>15?"bad":""}">${o.FN}</td><td>${o.al}</td><td>${fmt(o.ppv*100,1)}%</td><td class="${o.daily>12?"bad":""}">約 ${fmt(o.daily,1)} 則</td><td>${fmt(o.nne,1)}</td></tr>`;
+ $("#tht").innerHTML=`<tr><th>閾值</th><th>抓到</th><th>漏掉</th><th>警示總數</th><th>PPV</th><th>每日警示</th><th>NNE</th></tr>`+row("低（分數 ≥5）80%／75%",lo)+row("高（分數 ≥8）50%／93%",hi)+row(`目前設定 ${fmt(se*100,0)}%／${fmt(sp*100,0)}%`,cur,true);
+ const s=$("#thsvg"),L=40,R=370,B=190,T=16;const D=[["低閾值",lo],["高閾值",hi],["目前",cur]];const mx=Math.ceil(Math.max(20,...D.map(d=>Math.max(d[1].daily,d[1].FN)))*1.15/5)*5;const Y=v=>B-v/mx*(B-T);let g="";
+ [0,.5,1].forEach(f=>{const v=mx*f;g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-5}" y="${Y(v)+4}" font-size="10.5" fill="${C.mute}" text-anchor="end">${fmt(v,0)}</text>`});
+ D.forEach(([n,o],i)=>{const cx=L+30+i*(R-L-40)/3+40;[[o.daily,C.navy2],[o.FN,C.ochre]].forEach(([v,col],k)=>{const x=cx-34+k*36;g+=`<rect x="${x}" y="${Y(v)}" width="32" height="${B-Y(v)}" fill="${col}" rx="3"/><text x="${x+16}" y="${Y(v)-5}" font-size="12" font-weight="700" text-anchor="middle" fill="${col}">${k?fmt(v,0):fmt(v,1)}</text>`});g+=`<text x="${cx}" y="${B+16}" font-size="12.5" text-anchor="middle" font-weight="700">${n}</text>`});
+ g+=`<rect x="${L}" y="2" width="10" height="10" fill="${C.navy2}"/><text x="${L+14}" y="11" font-size="11.5">每日警示（則）</text><rect x="${L+120}" y="2" width="10" height="10" fill="${C.ochre}"/><text x="${L+134}" y="11" font-size="11.5">每千次住院漏掉（人）</text>`;s.innerHTML=g;
+ $("#thtxt").innerHTML=`低閾值每天約 ${fmt(lo.daily,0)} 則、每千次住院漏 ${lo.FN} 人；高閾值每天約 ${fmt(hi.daily,0)} 則、漏 ${hi.FN} 人——每 1,000 次住院多漏 ${hi.FN-lo.FN} 位，換來每天少 ${fmt(lo.daily-hi.daily,0)} 則警示。<br>沒有標準答案：閾值是臨床、人力與風險的取捨，應由治理委員會依本地資料決定並定期檢討。`}
+["ts","tp","tr"].forEach(id=>rng(id,th,v=>v+"%"));rng("ta",th);th();
+persist(["th-1","th-2","th-3","th-4"],"th");
+$("#thcopy").onclick=()=>{const L=["選定閾值與理由","試辦條件","停用條件","升級處理與補位"];copyText("W8 閾值演練（北城區域醫院）\n"+[1,2,3,4].map(i=>`【${L[i-1]}】\n${$("#th-"+i).value||"（未填）"}`).join("\n\n"),"#thmsg")};
+
+/* 15 UCSF */
+persist(["ucsf-dp"],"ucsf");
+const SW=[["醫囑（醫師）","醫囑畫面以 mg/kg 為單位，醫師未察覺，開成 38½ 顆的劑量","預設單位改為「顆／錠」，畫面直接顯示總顆數"],["警示（醫師與藥師）","系統跳出過量警示，醫師點掉；藥師端也有警示，同樣被略過——每月約 16 萬則警示","汰除無用警示，讓極端過量從「可點掉」變成硬性上限"],["調劑（藥局機器人）","機器人精準備好 38½ 顆：它確保拿對藥，不判斷合不合理","數量異常（例如單次超過 10 顆）時要求人工覆核"],["給藥（條碼）","不熟悉該病房的支援護理師掃描條碼，系統顯示相符，於是給藥——條碼相符被當成劑量正確","給藥畫面顯示顆數並對異常數量提示；建立「覺得怪就停下來問」的文化"]];
+const swS=LS.get("sw",[0,0,0,0]);
+function drawSw(){$("#swiss").innerHTML=SW.map(([n,h,f],i)=>`<div class="${swS[i]===1?"hole":swS[i]===2?"fix":""}" data-i="${i}"><b>${i+1}. ${n}</b>${swS[i]===0?"點一下看它的洞":swS[i]===1?"<span style='color:var(--ochre);font-weight:700'>洞：</span>"+h:"<span style='color:var(--green);font-weight:700'>修補：</span>"+f}</div>`).join("");$$("#swiss div").forEach(d=>d.onclick=()=>{const i=+d.dataset.i;swS[i]=(swS[i]+1)%3;LS.set("sw",swS);drawSw()});
+ const holes=swS.filter(x=>x===1).length,fix=swS.filter(x=>x===2).length;$("#swtxt8").innerHTML=fix?`已套用 <b>${fix}</b> 個修補設計（教學示例）。只要有一道真的在看，38½ 顆就會被攔下——但哪一個最值得先改？這正是討論 Q2。`:holes?`看到 ${holes} 道防線的洞。為什麼都沒攔下：警示太多，點掉成為習慣（警示疲勞）；單位預設 mg/kg，介面不易察覺；過度信任電腦。`:"每道防線都有洞（紅）。點一道防線，看洞在哪；再點一次套用修補設計（綠）。"}
+drawSw();
+
+/* 16 discussion, glossary, quiz */
+const DQ=["dq-1","dq-2","dq-3","dq-4"];persist(DQ,"dq");
+$("#dqcopy").onclick=()=>copyText("W8 課堂討論：你單位的警示，有多少是噪音？\n"+DQ.map((id,i)=>`【Q${i+1}】\n${$("#"+id).value||"（未填）"}`).join("\n\n"),"#dqmsg");
+const GL=[["臨床決策支援","CDS","在決策當下提供篩選過、與病人相關的知識或建議"],["早期預警分數","Early Warning Score","以生命徵象加總評估惡化風險，如 NEWS2"],["快速應變系統","Rapid Response System","偵測惡化並由專責團隊到場處置的機制"],["警示疲勞","Alert Fatigue","警示過多導致減敏感、忽略真警示"],["陽性預測值","PPV","被警示的人中，真正會發生事件的比例"],["每抓到一位要看幾則","NNE","Number Needed to Evaluate＝1 ÷ PPV"],["資料集偏移","Dataset Shift","使用環境的資料與訓練資料分布不同"],["校準度","Calibration","預測機率與實際發生率是否一致"],["靜默測試","Silent mode","模型在背景跑、不發警示，先累積本地證據"],["自動化偏誤","Automation Bias","過度依賴自動化系統的建議"],["演算法厭惡","Algorithm Aversion","看過 AI 錯一次，連正確的警示也忽略"],["CDS Hooks","HL7 CDS Hooks","病歷在特定時刻呼叫 CDS 服務、回傳卡片的標準"]];
+(function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}<small>${b}</small></div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
+mcq("#final",[
+ {q:"下列哪一個不是 CDS 的「五個對」？",o:["對的資訊","對的時機","對的價格","對的管道"],a:2,e:"五個對：資訊、人、格式、管道、時機。"},
+ {q:"王伯伯 02:00 的 NEWS2 為 6 分，屬於哪一級？",o:["低：例行監測","中：緊急評估","高：緊急應變","無法判斷"],a:1,e:"0–4 低、5–6 中（緊急評估）、≥7 高（緊急應變）。"},
+ {q:"敏感度 80%、特異度 90%、盛行率 1% 時，PPV 約為？",o:["7.5%","29.6%","47.1%","80%"],a:0,e:"約每 13 則警示才有 1 位真的有事。"},
+ {q:"NNE（每抓到一位要看幾則警示）怎麼算？",o:["1 ÷ 敏感度","1 ÷ PPV","1 − 特異度","敏感度 × 盛行率"],a:1,e:"PPV 越低，NNE 越大，警示負擔越重。"},
+ {q:"依 FDA 2026 指引，即時 AI 惡化預警多半卡在哪一關？",o:["① 不分析波形","② 顯示醫療資訊","③ 對專業人員","④ 專業人員能獨立檢視依據"],a:3,e:"時間緊迫、依據不透明，通常要走醫療器材路徑。"},
+ {q:"Kaiser AAM 成功的關鍵設計是？",o:["模型 AUROC 最高","院外專責護理師先過濾，確認後才通知","每分鐘更新一次","不需要人審核"],a:1,e:"先過濾、再通知：床邊團隊只接到值得處理的警示。"},
+ {q:"Epic 敗血症模型在密西根的實測 AUROC 約為？",o:["0.63","0.76","0.83","0.95"],a:0,e:"廠商報告約 0.76–0.83；67% 敗血症病人未被標記。"},
+ {q:"「訓練用申報碼、驗證用臨床準則定義敗血症」屬於哪種問題？",o:["共變數偏移","概念偏移","標籤偏移","標籤定義不同"],a:3,e:"定義不同時，比對出來的準確度不能直接比較。"},
+ {q:"「靜默測試」是指？",o:["關掉聲音的警示","模型在背景跑、不發警示，先累積本地證據","只在夜班使用","不告訴醫師模型存在"],a:1,e:"可先估每日警示量與 PPV——這一步最常被跳過。"},
+ {q:"Dratsch 研究中，AI 建議錯誤時，資深醫師的準確率約為？",o:["82%","66%","45.5%","19.8%"],a:2,e:"資深者也會被影響：防偏誤要靠介面與流程。"}
+],"#finalscore");
+
+})();
+</script>
+</body>
+</html>
