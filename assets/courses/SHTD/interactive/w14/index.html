@@ -605,7 +605,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="ph"><span class="num">11</span><div><h2>NASSS：為什麼數位健康科技常被放棄或推不開？</h2><div class="en">GREENHALGH ET AL. 2017 · SEVEN DOMAINS</div></div></div>
   <p class="one">好的科技推不動，多半不是技術問題。<b>複雜面向越多，被放棄或推不開的風險越高</b>，越要先小規模試點。</p>
   <div class="wd">
-    <div class="wh"><h3>為北城醫院的環境式 AI 記錄標複雜度</h3><span class="tag o">你的判斷</span><span class="tag gray">講義第 21 頁的練習；沒有標準答案</span></div>
+    <div class="wh"><h3>為北城醫院的環境式 AI 記錄標複雜度</h3><span class="tag o">你的判斷</span><span class="tag gray">講義第 22 頁的練習；沒有標準答案</span></div>
     <table class="pb" id="nas"></table>
     <div class="grid3" id="naskpi" style="margin-top:10px"></div>
     <div class="detail" id="nastxt"></div>
@@ -633,7 +633,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div class="note">高頻使用者每份病歷省下的時間是低頻者的兩倍以上；文章未提供成本或 ROI。ROI 的使用率要用「實際啟用次數」，不是「授權人數」。</div>
   </div>
   <div class="wd">
-    <div class="wh"><h3>試點三個月後：繼續、調整，還是停？</h3><span class="tag o">拉桿</span><span class="tag a">門檻依講義第 23 頁路線圖；數字為情境推演</span></div>
+    <div class="wh"><h3>試點三個月後：繼續、調整，還是停？</h3><span class="tag o">拉桿</span><span class="tag a">門檻依講義第 24 頁路線圖；數字為情境推演</span></div>
     <div class="grid2">
       <div>
         <div class="ctl"><span>使用率</span><input type="range" id="g1" min="0" max="100" step="1" value="62"><output></output></div>
@@ -662,7 +662,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
       <div class="note">效益與使用率成正比（模型假設）；授權費依合約 40 人全額計價。</div>
     </div>
     <div class="wd" style="margin-top:12px">
-      <div class="wh"><h3>步驟二：Vibe Coding 指令</h3><span class="tag gray">講義第 31 頁</span></div>
+      <div class="wh"><h3>步驟二：Vibe Coding 指令</h3><span class="tag gray">講義第 33 頁</span></div>
       <pre id="prompt" style="white-space:pre-wrap;font-size:12.5px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px;max-height:300px;overflow:auto;margin:0"></pre>
       <div style="margin-top:8px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="prcopy">複製指令</button><span id="prmsg" style="font-size:13px;color:var(--green)"></span></div>
     </div>
@@ -852,7 +852,7 @@ function roiCalc(){const o=cur(),r=prc(o);
  let t=`年成本 ${fmt(r.cost,1)} 萬（授權 ${fmt(r.cost-o.m,1)}${o.active?"，依實際使用人數計價":""} ＋ 維運 ${o.m}）；年效益 ${fmt(r.ben,1)} 萬；年淨效益 <b>${fmt(r.net,1)} 萬</b>。`;
  if(r.net<=0)t+=`<br><span style="color:var(--ochre);font-weight:700">年淨效益 ≤ 0：回收期顯示「無法回收」，不能算出負數年。</span>`;
  if(o.trap)t+=`<br><span style="color:var(--ochre);font-weight:700">⚠ 你把「省下的判讀時間 720 小時 × 時薪 0.25 萬」算成現金了。</span>這筆錢真的會進到醫院帳上嗎？除非省下的時間轉成加診、或減少加班與外包，否則應另列為軟性效益。`;
- if(o.active&&!o.trap)t+=`<br>改成依實際使用人數計價，使用率風險有一部分轉給廠商——低使用率時損失變小（講義第 23 頁的合約建議）。`;
+ if(o.active&&!o.trap)t+=`<br>改成依實際使用人數計價，使用率風險有一部分轉給廠商——低使用率時損失變小（講義第 24 頁的合約建議）。`;
  if(o.y===1)t+=`<br>只算 1 年：一次性建置費全壓在第一年，ROI 通常很難看——ROI 一定要寫明「幾年期」。`;
  $("#rtxt").innerHTML=t;tornado(o,r)}
 function tornado(o,r){const V=[["使用率",x=>Object.assign({},o,{u:Math.min(1,o.u*x)})],["外包判讀節省",x=>Object.assign({},o,{b0:PR.b[0]*x})],["授權費",x=>Object.assign({},o,{lic:PR.lic*(2-x)})],["年維運",x=>Object.assign({},o,{m:PR.m*(2-x)})],["一次性建置",x=>Object.assign({},o,{I:PR.I*(2-x)})]];

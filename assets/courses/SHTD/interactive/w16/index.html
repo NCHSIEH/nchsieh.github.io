@@ -483,7 +483,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="ph"><span class="num">04</span><div><h2>技術成熟不等於可以上市：五種成熟度一起看</h2><div class="en">TECHNOLOGY · CLINICAL EVIDENCE · REGULATORY · MANUFACTURING (MRL) · COMMERCIAL (CRL)</div></div></div>
   <p class="one">TRL 只回答「技術能不能動」。<b>最低的那一根，決定離病床邊還有多遠。</b></p>
   <div class="wd">
-    <div class="wh"><h3>五根柱子：先看四個案例，再評你帶來的產品</h3><span class="tag o">切換＋拉桿</span><span class="tag a">案例高度依講義第 39 頁 ●◐○ 教學判讀換算；製造一欄講義未評</span></div>
+    <div class="wh"><h3>五根柱子：先看四個案例，再評你帶來的產品</h3><span class="tag o">切換＋拉桿</span><span class="tag a">案例高度依講義第 41 頁 ●◐○ 教學判讀換算；製造一欄講義未評</span></div>
     <div class="seg" id="mseg" style="display:flex;flex-wrap:wrap;width:fit-content"><button class="on" data-v="0">IDx-DR</button><button data-v="1">Viz.ai</button><button data-v="2">Pear Therapeutics</button><button data-v="3">Babylon Health</button><button data-v="4">我帶來的產品</button></div>
     <div class="grid2" style="margin-top:10px">
       <div id="mctl"></div>
@@ -825,7 +825,7 @@ function mat(){const v=mI<4?MP[mI][1].map(k=>MV[k]):myM;const lo=Math.min(...v);
  $("#mctl").innerHTML=mI<4?`<div class="kpi"><div class="l">${MP[mI][0]}</div><div style="font-size:14px">${MP[mI][2]}</div></div>`:MN.map((n,i)=>`<div class="ctl"><span>${n}</span><input type="range" min="0" max="100" step="5" value="${myM[i]}" data-i="${i}"><output>${myM[i]}</output></div>`).join("")+`<div class="note">0 = 完全沒有，100 = 已充分具備；可接第 12 段投資人六問。</div>`;
  if(mI===4)$$("#mctl input").forEach(e=>e.oninput=()=>{myM[+e.dataset.i]=+e.value;LS.set("mym",myM);e.nextElementSibling.textContent=e.value;draw()});
  function draw(){const vv=mI<4?v:myM,lo2=Math.min(...vv);bars("#msvg",MN.map((n,i)=>[n.slice(0,2),vv[i],vv[i]===lo2?C.ochre:C.navy]),{max:100,unit:"",dec:0,W:380,H:240});
-  const low=MN.filter((_,i)=>vv[i]===lo2);$("#mtxt").innerHTML=`最短的一根：<b style="color:var(--ochre)">${low.join("、")}</b>。${mI===4?"它決定下一筆資金與時間應該花在哪裡。":"●◐○ 為依公開資料的教學判讀，不是定論。"}<br><span style="font-size:13px;color:var(--mute)">講義第 9 頁的五種成熟度含「製造 MRL」；這裡依第 39 頁案例比較改用「穩定給付」。</span>`}
+  const low=MN.filter((_,i)=>vv[i]===lo2);$("#mtxt").innerHTML=`最短的一根：<b style="color:var(--ochre)">${low.join("、")}</b>。${mI===4?"它決定下一筆資金與時間應該花在哪裡。":"●◐○ 為依公開資料的教學判讀，不是定論。"}<br><span style="font-size:13px;color:var(--mute)">講義第 10 頁的五種成熟度含「製造 MRL」；這裡依第 41 頁案例比較改用「穩定給付」。</span>`}
  draw()}
 segInit("#mseg",d=>{mI=+d.v;mat()});mat();
 
