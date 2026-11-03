@@ -115,7 +115,7 @@ const UNITS = [
  {u:'單元五', t:'產業化與前瞻', s:'成熟度、採購條件與可撤回的投資決策', weeks:[
   {w:16, t:'技術成熟度與產業化路徑', en:'Technology Readiness & Commercialization', d:'TRL 排序、死亡之谷缺口、五種成熟度、需求陳述檢查、FDA 路徑判斷、付費方式誘因試算。', pdf:'W16_技術成熟度與產業化路徑_Technology_Readiness_and_Commercialization.pdf', url:'w16/', lsKey:'shtd-w16-seen', total:15},
   {w:17, t:'前瞻科技趨勢', en:'Emerging Technologies & Health Foresight', d:'成熟度曲線定位、三地平線資源分配、情境軸挑選、五問拆新聞、定序成本 vs 摩爾定律、2035 情境與科技雷達。', pdf:'W17_前瞻科技趨勢_Emerging_Technologies_and_Health_Foresight.pdf', url:'w17/', lsKey:'shtd-w17-seen', total:15},
-  {w:18, t:'期末評量：個案分析', en:'Final Case Analysis', d:'單元三至五綜合評量（課堂進行，不提供互動頁）。', exam:true} ]}
+  {w:18, t:'期末評量：個案分析', en:'Final Case Analysis', d:'期末複習頁（不含考題）：八週重點速覽、四步作答練習、PPV／DiD／ICER 隨機計算練習、判斷題庫、治理與三年路線寫作檢查、公式卡。', exam:true, url:'w18/', lsKey:'shtd-w18-seen', total:10} ]}
 ];
 function prog(w){if(!w.lsKey)return null;try{const v=JSON.parse(localStorage.getItem(w.lsKey)||"[]");return Math.min(1,v.length/w.total)}catch(e){return null}}
 const root=document.getElementById('units');
