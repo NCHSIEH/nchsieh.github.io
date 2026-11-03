@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W10 遠距病人監測與數位療法 · 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+<style>
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.spec{grid-template-columns:1fr}}
+.spec label{display:block;font-weight:700;color:var(--navy);font-size:14px;margin:8px 0 4px}
+.spec select{width:100%;padding:7px;border-radius:8px;border:1px solid var(--line2);background:#fff}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;margin:6px 0}
+.lane .ln{font-weight:700;color:#fff;border-radius:8px;padding:8px;font-size:13px;text-align:center}
+.lane .track{position:relative;height:96px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.ms{position:absolute;top:6px;transform:translateX(-50%);text-align:center;cursor:pointer;width:84px}
+.ms.lo{top:48px}
+.ms .d{width:14px;height:14px;border-radius:50%;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.ms .y{font-size:11px;color:var(--mute);margin-top:2px}
+.ms .n{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2}
+.ms.on .d{box-shadow:0 0 0 3px var(--ochre)}
+.conf{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:420px}
+.conf i{display:block;aspect-ratio:1;border-radius:3px}
+.cell2{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:13.5px;margin-top:10px}
+.cell2 div{padding:8px;border-radius:8px;background:var(--paper);border:1px solid var(--line)}
+.cell2 .h{background:var(--navy-l);font-weight:700;color:var(--navy);text-align:center}
+.agent{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.astep{flex:1;min-width:130px;border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.astep b{display:block;color:var(--navy);font-size:15px}
+.astep.run{border-color:var(--navy2);background:var(--navy-l)}
+.astep.ok{border-color:var(--green);background:var(--green-l)}
+.astep.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.astep.skip{opacity:.45}
+.tree{display:flex;flex-direction:column;gap:8px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.tq.dim{opacity:.4}
+.tq b{color:var(--navy)}
+.tres{border-radius:10px;padding:12px 16px;color:#fff;font-weight:700;font-size:16px}
+.reg{display:grid;grid-template-columns:120px repeat(3,1fr);gap:6px;font-size:13.5px}
+.reg .h{background:var(--navy);color:#fff;font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.reg .rh{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;display:flex;align-items:center}
+.reg .c{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;min-height:54px;color:var(--mute2)}
+.reg .c.open{color:var(--ink);background:#fff;border-color:var(--navy2)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.prin{grid-template-columns:1fr}}
+.prin .pc{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.prin .pc h4{margin:0 0 4px;color:var(--navy);font-size:15px}
+.prin select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff;margin-top:4px;font-size:13px}
+.gen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.gen{grid-template-columns:1fr}}
+.gen .gc2{border:2px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.gen .gc2 h4{margin:0;color:var(--navy)}
+.gen label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;margin:6px 0;cursor:pointer}
+</style>
+<style>
+.code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;background:#1B2A4A;color:#E6EAF2;border-radius:10px;padding:12px 14px;line-height:1.75;white-space:pre-wrap;min-height:90px}
+.code .r{color:#F3A58C}.code .g{color:#9FD8B5}.code .y{color:#F2D38A}.code .m{color:#9AA6BF}
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tog label{display:flex;gap:6px;align-items:center;border:1px solid var(--line2);background:#fff;border-radius:20px;padding:4px 12px;font-size:13.5px;cursor:pointer;user-select:none}
+.tog label.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tog input{display:none}
+.roles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:860px){.roles{grid-template-columns:1fr 1fr}}
+.role{border:2px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--paper);cursor:pointer;font-size:13px;line-height:1.5;transition:.2s}
+.role b{display:block;color:var(--navy);font-size:14.5px}
+.role.on{border-color:var(--ochre);background:var(--ochre-l)}
+.role.dim{opacity:.45}
+.gens3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:760px){.gens3{grid-template-columns:1fr}}
+.gens3 .g3{border-radius:10px;padding:12px;background:var(--paper);border:1px solid var(--line);font-size:13.5px}
+.gens3 .g3 h4{margin:0 0 4px;font-size:16px;color:var(--navy)}
+.gens3 .g3 .who{display:inline-block;margin-top:6px;padding:2px 10px;border-radius:12px;background:var(--navy-l);color:var(--navy);font-weight:700;font-size:12.5px}
+.gens3 .g3.ag{border-color:var(--ochre);background:var(--ochre-l)}
+.gens3 .g3.ag .who{background:var(--ochre);color:#fff}
+.ladder{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}
+.ladder div{border-radius:8px;padding:8px 4px;text-align:center;font-size:12px;background:#EFEAE0;color:var(--mute);border:2px solid transparent;line-height:1.35}
+.ladder div b{display:block;font-size:15px;color:var(--navy)}
+.ladder div.ok{background:var(--green-l)}
+.ladder div.cur{border-color:var(--ochre)}
+.ladder div.over{background:var(--ochre-l)}
+.cmpt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:760px){.cmpt{grid-template-columns:1fr 1fr}}
+.cmpt label{border:2px solid var(--navy2);border-radius:10px;padding:8px 10px;background:var(--navy-l);font-size:13px;cursor:pointer;line-height:1.45}
+.cmpt label b{display:block;color:var(--navy);font-size:15px}
+.cmpt label.off{border-color:var(--line2);background:#fff;opacity:.55;text-decoration:line-through}
+.cmpt input{display:none}
+.itbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.itbl th,.itbl td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+.itbl th{color:var(--mute);font-weight:500;font-size:12.5px}
+.itbl td.bad{color:var(--ochre);font-weight:700}
+.itbl td.good{color:var(--green);font-weight:700}
+.itbl td.mid{color:var(--amber);font-weight:700}
+.orch{display:flex;flex-direction:column;align-items:center;gap:10px}
+.orch .top{background:var(--navy);color:#fff;border-radius:10px;padding:10px 18px;font-weight:700;text-align:center}
+.orch .wk{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%}
+@media(max-width:760px){.orch .wk{grid-template-columns:1fr 1fr}}
+.orch .wk div{border:2px solid var(--line2);border-radius:10px;padding:8px;text-align:center;font-size:13px;cursor:pointer;background:var(--paper)}
+.orch .wk div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.orch .wk div b{display:block;color:var(--navy)}
+.mx{display:grid;grid-template-columns:90px 1fr 1fr;gap:6px;font-size:13px}
+.mx .h{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:6px;text-align:center;display:flex;align-items:center;justify-content:center}
+.mx .c{border-radius:10px;padding:8px;min-height:92px}
+.mx .c h4{margin:0 0 4px;font-size:14px}
+.mx .c span{display:inline-block;background:#fff;border-radius:12px;padding:1px 9px;margin:2px;font-size:12px;border:1px solid var(--line2)}
+.c-auto{background:var(--green-l)}.c-auto h4{color:var(--green)}
+.c-note{background:var(--amber-l)}.c-note h4{color:var(--amber)}
+.c-appr{background:var(--navy-l)}.c-appr h4{color:var(--navy)}
+.c-ban{background:var(--ochre-l)}.c-ban h4{color:var(--ochre)}
+.lanes{display:grid;grid-template-columns:70px repeat(4,1fr);gap:4px;font-size:12.5px}
+.lanes .lh{background:var(--navy);color:#fff;border-radius:6px;padding:6px 4px;text-align:center;font-weight:700}
+.lanes .rh{background:var(--navy-l);color:var(--navy);border-radius:6px;padding:6px 4px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.lanes .cl{background:var(--paper);border:1px solid var(--line);border-radius:6px;min-height:40px;padding:3px;display:flex;flex-direction:column;gap:3px}
+.lanes .cl span{border-radius:5px;padding:3px 6px;background:#fff;border:1px solid var(--line2);line-height:1.3}
+.lanes .cl span.w{background:var(--ochre-l);border-color:var(--ochre);color:var(--ochre);font-weight:700}
+.lanes .cl span.a{background:var(--navy-l);border-color:var(--navy2);color:var(--navy)}
+.lanes .cl span.h{background:var(--green-l);border-color:var(--green);color:var(--green);font-weight:700}
+.steps5{display:flex;gap:8px;flex-wrap:wrap}
+.steps5 button{flex:1;min-width:120px;border:2px solid var(--line2);border-radius:10px;padding:10px 6px;background:#fff;font-size:13.5px;cursor:pointer;font-family:inherit}
+.steps5 button.got{border-color:var(--green);background:var(--green-l);color:var(--green);font-weight:700}
+.steps5 button.bad{border-color:var(--ochre);background:var(--ochre-l)}
+.cmpg{display:grid;grid-template-columns:150px repeat(4,1fr);gap:4px;font-size:13px;align-items:center}
+.cmpg .h{font-weight:700;color:var(--navy);text-align:center;font-size:12.5px}
+.cmpg .rn{font-weight:700;color:var(--navy)}
+.cmpg button{border:1px solid var(--line2);border-radius:8px;background:#fff;padding:6px;font-size:16px;cursor:pointer;font-family:inherit}
+.cmpg .ans{font-size:12px;color:var(--mute);text-align:center}
+.tl7{display:flex;gap:6px;flex-wrap:wrap}
+.tl7 button{flex:1;min-width:92px;border:2px solid var(--line2);border-radius:10px;padding:8px 4px;background:#fff;cursor:pointer;font-family:inherit;font-size:13px}
+.tl7 button b{display:block;font-size:15px;color:var(--navy)}
+.tl7 button.on{border-color:var(--ochre);background:var(--ochre-l)}
+.tobe{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:860px){.tobe{grid-template-columns:1fr 1fr}}
+.tobe .ag{border:2px solid var(--navy2);border-radius:10px;padding:8px;background:var(--navy-l);font-size:12.5px;text-align:center}
+.tobe .ag b{display:block;color:var(--navy);font-size:14px}
+.tobe .ckpt{margin-top:6px;border-radius:8px;padding:5px;font-weight:700;cursor:pointer;background:var(--green);color:#fff;font-size:12.5px}
+.tobe .ckpt.off{background:#fff;color:var(--ochre);border:2px dashed var(--ochre)}
+.form label{display:block;font-weight:700;color:var(--navy);font-size:13.5px;margin:8px 0 3px}
+.form textarea,.form input{width:100%;padding:7px 9px;border:1px solid var(--line2);border-radius:8px;font-family:inherit;font-size:13.5px;box-sizing:border-box}
+.form textarea{min-height:56px}
+.waffle{display:grid;grid-template-columns:repeat(30,1fr);gap:2px;max-width:520px}
+.waffle i{display:block;aspect-ratio:1;border-radius:2px}
+.mpick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:760px){.mpick{grid-template-columns:1fr}}
+.mpick label{border:2px solid var(--line2);border-radius:10px;padding:8px 10px;background:#fff;font-size:13.5px;cursor:pointer;line-height:1.45}
+.mpick label small{display:block;color:var(--mute);font-size:12px}
+.mpick label.on{border-color:var(--navy2);background:var(--navy-l)}
+.mpick input{display:none}
+.echo{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:760px){.echo{grid-template-columns:1fr 1fr}}
+.echo div{border:2px solid var(--line2);border-radius:10px;padding:10px;font-size:13px;background:var(--paper);transition:.25s;line-height:1.5}
+.echo div b{display:block;color:var(--navy);font-size:14px}
+.echo div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.echo div.blk{border-color:var(--green);background:var(--green-l)}
+.echo div.dim{opacity:.4}
+</style>
+<style>
+.timer{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.timer div{flex:1;min-width:90px;border-radius:8px;padding:8px 6px;font-size:12.5px;text-align:center;background:var(--paper);border:2px solid var(--line)}
+.timer div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.timer div.done{border-color:var(--green);background:var(--green-l)}
+.clock{font-family:"JetBrains Mono",monospace;font-size:40px;font-weight:700;color:var(--navy)}
+.chk{width:100%;border-collapse:collapse;font-size:13.5px}
+.chk th,.chk td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertical-align:middle}
+.chk th{color:var(--mute);font-weight:500;font-size:12.5px}
+.chk select,.chk input,.chk textarea{width:100%;padding:4px 6px;border:1px solid var(--line2);border-radius:6px;font-size:13px;background:#fff;font-family:inherit;box-sizing:border-box}
+.chk textarea{min-height:40px}
+.chk td.lt{font-weight:900;white-space:nowrap}
+.lyr{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:860px){.lyr{grid-template-columns:1fr 1fr}}
+.lyr div{border-radius:10px;padding:10px;border:2px solid var(--green);background:var(--green-l);font-size:13px;cursor:pointer;line-height:1.5;user-select:none}
+.lyr div b{display:block;color:var(--navy);font-size:15px}
+.lyr div.off{border:2px dashed var(--ochre);background:#fff;opacity:.85}
+.code{white-space:pre-wrap}
+.lightbadge{display:inline-block;border-radius:12px;padding:1px 10px;font-weight:700;font-size:13px;color:#fff}
+.lb-r{background:var(--ochre)}.lb-y{background:var(--amber)}.lb-n{background:#fff;color:var(--mute);border:1.5px dashed var(--mute)}.lb-g{background:var(--green)}
+.stepflow{display:flex;gap:6px;flex-wrap:wrap}
+.stepflow div{flex:1;min-width:120px;border-radius:10px;padding:10px;border:2px solid var(--line2);background:var(--paper);font-size:13px;cursor:pointer;line-height:1.5}
+.stepflow div b{display:block;color:var(--navy)}
+.stepflow div.on{border-color:var(--ochre);background:var(--ochre-l)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W10 遠距病人監測與數位療法 ★ 實作週</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與草稿">重置進度</button>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W10 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div style="font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px">WEEK 10 · ★ 課堂實作三 · 資料會說話，但要有人在聽</div>
+  <h1>遠距病人監測與數位療法</h1>
+  <div class="en">Remote Patient Monitoring &amp; Digital Therapeutics</div>
+  <p class="lead">遠距監測的成敗，不在「量到什麼」，而在<b>誰在看、多快回應、警示準不準</b>。這一頁先用試驗、制度與給付把框架建起來，再用<b>示範資料</b>比較兩種警示規則，最後到<b>實作三工作台</b>：計時、規則表、固定測例紀錄、容量估算與繳交包。</p>
+  <div class="chips"><a class="tag" href="../../W10_遠距病人監測與數位療法_Remote_Patient_Monitoring_and_Digital_Therapeutics.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W10）</a><span class="tag o">實作三 占學期成績 10%</span><span class="tag a">固定測例 T1–T5、E1–E5 不在本頁公布答案</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<section class="part" id="p01" data-t="開場：週末沒人看">
+  <div class="ph"><span class="num">01</span><div><h2>出院第 9 天：王伯伯的體重悄悄多了 2 公斤</h2><div class="en">THE DATA ARRIVED · NOBODY WAS LOOKING</div></div></div>
+  <p class="one">他每天量、資料每天傳——但週末沒人看。週一早上，他被救護車送回急診。</p>
+  <div class="wd">
+    <div class="wh"><h3>點一天，看那天上傳了什麼</h3><span class="tag gray">合成資料（與 W3 FHIR 範例同一位病人）</span></div>
+    <div class="tl7" id="odays"></div>
+    <div class="grid2" style="margin-top:10px">
+      <svg viewBox="0 0 380 230" class="chart" id="osvg"></svg>
+      <div><div class="grid2" id="okpi"></div><div class="detail" id="otxt"></div></div>
+    </div>
+    <div class="seg" id="wkend" style="display:flex;width:fit-content;margin-top:10px"><button class="on" data-v="0">現況：週末無人值班</button><button data-v="1">假如週末有人看</button></div>
+    <div class="detail" id="wktxt"></div>
+  </div>
+  <div class="grid3">
+    <div class="kpi"><div class="l">問題一</div><div style="font-weight:700">資料其實在週六就出現訊號，為什麼沒人發現？</div></div>
+    <div class="kpi"><div class="l">問題二</div><div style="font-weight:700">如果系統每天發 100 則警示，個管師會看嗎？</div></div>
+    <div class="kpi"><div class="l">問題三</div><div style="font-weight:700">王伯伯不太會用 App，怎麼讓他持續量？</div></div>
+  </div>
+</section>
+
+<section class="part" id="p02" data-t="遠距照護五個名詞">
+  <div class="ph"><span class="num">02</span><div><h2>遠距照護家族：五個常被混用的名詞</h2><div class="en">TELEMEDICINE · RPM · VIRTUAL WARD · HOSPITAL AT HOME · DTx</div></div></div>
+  <p class="one">差別在<b>「傳的是什麼」與「誰在另一端回應」</b>；由上往下，照護強度越來越高。</p>
+  <div class="grid5">
+    <div class="kpi"><div class="v" style="font-size:17px">通訊診察</div><div class="l">傳影像與聲音（同步）｜醫師｜視訊門診</div></div>
+    <div class="kpi"><div class="v" style="font-size:17px">遠距病人監測</div><div class="l">傳生理數據（非同步）｜護理師、個管師｜居家血壓、體重</div></div>
+    <div class="kpi"><div class="v" style="font-size:17px">虛擬病房</div><div class="l">生理數據＋到宅團隊｜團隊 24 小時｜NHS 虛擬病房（W1）</div></div>
+    <div class="kpi"><div class="v" style="font-size:17px">居家醫院</div><div class="l">住院等級到宅照護｜住院團隊｜在宅急症照護（W11）</div></div>
+    <div class="kpi o"><div class="v" style="font-size:17px">數位療法</div><div class="l">軟體本身就是治療｜軟體＋處方醫師｜失眠 CBT App</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>這是哪一種？</h3><span class="scoreline" id="tmscore"></span><span class="tag gray">情境為教學示例</span></div>
+    <div id="tmq"></div>
+  </div>
+</section>
+
+<section class="part" id="p03" data-t="RPM 四層與裝置光譜">
+  <div class="ph"><span class="num">03</span><div><h2>從王伯伯的體重計到個管師的螢幕：四層資料流</h2><div class="en">SENSE · TRANSMIT · ANALYZE · ACT</div></div></div>
+  <p class="one">多數 RPM 失敗卡在<b>第 ④ 層</b>：資料有進來，但沒有人、沒有流程、沒有時限去回應。</p>
+  <div class="wd">
+    <div class="wh"><h3>點一層把它關掉：閉環斷在哪裡？</h3><span class="tag o">開關</span></div>
+    <div class="lyr" id="lyr"></div>
+    <div class="detail" id="lytxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>裝置光譜：越往右上，訊號越早，但越侵入、越貴</h3><span class="tag gray">位置為教學示意；點一個裝置</span></div>
+    <div class="grid2">
+      <svg viewBox="0 0 380 260" class="chart" id="dvsvg"></svg>
+      <div class="detail" id="dvtxt">不是越高科技越好：王伯伯的最佳組合，是「他願意每天用」且「團隊有能力回應」的那一套。</div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p04" data-t="Apple Heart Study">
+  <div class="ph"><span class="num">04</span><div><h2>穿戴裝置擅長「發現」，醫療體系要負責「接住」</h2><div class="en">APPLE HEART STUDY · PEREZ ET AL., NEJM 2019</div></div></div>
+  <p class="one">大規模篩檢會製造大量「需要後續處理的人」——<b>誰來接手，是系統設計問題</b>。</p>
+  <div class="grid4">
+    <div class="kpi"><div class="v">419,297</div><div class="l">參與人數（全美線上招募）</div></div>
+    <div class="kpi o"><div class="v">0.52%</div><div class="l">收到不規則心律通知（約 2,160 人）</div></div>
+    <div class="kpi"><div class="v">約 1／5</div><div class="l">收到通知者寄回心電貼片完成確認</div></div>
+    <div class="kpi g"><div class="v">0.84</div><div class="l">PPV：通知時同步心電貼片確認為心房顫動</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>換成你的醫院：如果 5 萬位會員都戴上手錶</h3><span class="tag o">拉桿</span><span class="tag a">比例沿用研究；族群不同時結果會不同</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>使用人數</span><input type="range" id="ahn" min="5000" max="500000" step="5000" value="50000"><output></output></div>
+        <div class="ctl"><span>通知比例</span><input type="range" id="ahp" min="0.2" max="3" step="0.1" value="0.5"><output></output></div>
+        <div class="ctl"><span>每位接手所需分鐘</span><input type="range" id="ahm" min="10" max="60" step="5" value="20"><output></output></div>
+      </div>
+      <div class="grid2" id="ahkpi"></div>
+    </div>
+    <div class="detail" id="ahtxt"></div>
+    <p class="note">研究參與者以年輕族群為主，65 歲以上僅約 6%；高齡族群的通知比例可能較高。「每位接手所需分鐘」為教學假設。</p>
+  </div>
+</section>
+
+<section class="part" id="p05" data-t="四個心衰竭試驗">
+  <div class="ph"><span class="num">05</span><div><h2>同樣叫「遠距監測」，結果可以完全相反</h2><div class="en">TELE-HF · BEAT-HF · CHAMPION · TIM-HF2</div></div></div>
+  <p class="one">比較的不是設備，而是<b>回應系統</b>：訊號夠早、有人即時看、看到能立刻調藥——三者缺一，監測就只是「收資料」。</p>
+  <div class="seg" id="trsel" style="display:flex;flex-wrap:wrap;width:fit-content;margin-bottom:8px"><button class="on" data-t="0">BEAT-HF（失敗）</button><button data-t="1">TIM-HF2（成功）</button></div>
+  <div class="wd">
+    <div class="wh"><h3 id="trh"></h3><span class="tag gray" id="trtag"></span></div>
+    <div class="grid2"><svg viewBox="0 0 380 220" class="chart" id="trsvg"></svg><div><div class="grid3" id="trkpi"></div><div class="detail" id="trtxt"></div></div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>四個試驗：先自己判讀，再對照講義</h3><span class="tag o">點格子切換</span></div>
+    <div class="cmpg" id="cmpg" style="grid-template-columns:200px repeat(3,1fr) 1.2fr"></div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="cmpshow">對照講義判讀</button><span id="cmpmsg" style="font-size:13.5px"></span></div>
+    <p class="note" id="cmpleg"></p>
+  </div>
+</section>
+
+<section class="part" id="p06" data-t="GUIDE-HF：證據會變">
+  <div class="ph"><span class="num">06</span><div><h2>CHAMPION 之後：GUIDE-HF 告訴我們證據會「變」</h2><div class="en">LINDENFELD ET AL., LANCET 2021 · 1,000 PATIENTS</div></div></div>
+  <p class="one">同一個裝置，換族群、換時代，結果就可能不同——<b>上線前後都要看本地證據</b>（W8、W12）。</p>
+  <div class="wd">
+    <div class="wh"><h3>森林圖：信賴區間有沒有跨過 1？</h3><span class="tag gray">點一列看解讀</span></div>
+    <svg viewBox="0 0 760 210" class="chart" id="fpsvg"></svg>
+    <div class="detail" id="fptxt">點選上方任一列。HR &lt; 1 表示監測組較好；信賴區間跨過 1，代表統計上無法排除「沒有差異」。</div>
+  </div>
+</section>
+
+<section class="part" id="p07" data-t="數位療法：宣稱決定身分">
+  <div class="ph"><span class="num">07</span><div><h2>當軟體本身就是治療</h2><div class="en">WELLNESS APP · SaMD · DIGITAL THERAPEUTICS</div></div></div>
+  <p class="one">判斷關鍵是<b>「宣稱」</b>：同一個 App，說「幫你記錄睡眠」是健康 App，說「治療失眠」就是醫療器材。</p>
+  <div class="grid3">
+    <div class="kpi"><div class="v" style="font-size:18px">一般健康 App</div><div class="l">記錄步數、飲食、睡眠｜不宣稱治療｜不需審查</div></div>
+    <div class="kpi"><div class="v" style="font-size:18px">數位醫療器材 SaMD</div><div class="l">輔助診斷或監測｜心律偵測、RPM 平台｜依風險分級審查</div></div>
+    <div class="kpi o"><div class="v" style="font-size:18px">數位療法 DTx</div><div class="l">軟體本身提供治療｜失眠 CBT、成癮治療｜需臨床試驗證據</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>同一個 App，換一句宣稱</h3><span class="scoreline" id="clscore"></span><span class="tag gray">宣稱句為教學示例</span></div>
+    <div id="clq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>數位療法里程碑：走完一輪炒作週期</h3><span class="tag gray">點一個年份</span></div>
+    <div class="tl7" id="ms"></div>
+    <div class="detail" id="mstxt">數位療法的瓶頸早已不是技術，而是「誰付錢」——這正是 W14 數位健康經濟評估要處理的問題。</div>
+  </div>
+</section>
+
+<section class="part" id="p08" data-t="DiGA、Pear 與 DMHT">
+  <div class="ph"><span class="num">08</span><div><h2>證據是上市的門票，給付才是活下去的條件</h2><div class="en">GERMANY DiGA · PEAR THERAPEUTICS · MEDICARE DMHT</div></div></div>
+  <div class="grid2">
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>德國 DiGA：先給付、再證明</h3><span class="tag gray">2019《數位醫療照護法》</span></div>
+      <div class="stepflow" id="diga"></div>
+      <div class="grid3" style="margin-top:8px"><div class="kpi"><div class="v">約 60 項</div><div class="l">2026 上半年仍在名錄</div></div><div class="kpi"><div class="v" style="font-size:19px">暫時 → 永久</div><div class="l">證明效果才能留下；部分已被除名</div></div><div class="kpi"><div class="v" style="font-size:19px">心理健康</div><div class="l">最大宗：憂鬱、焦慮、失眠</div></div></div>
+      <div class="detail" id="digatxt">點一個步驟。</div>
+    </div>
+    <div class="wd" style="margin:0">
+      <div class="wh"><h3>Pear Therapeutics：有授權、有證據，仍然倒閉</h3><span class="tag gray">2023-04-07 申請破產保護</span></div>
+      <div class="grid3"><div class="kpi"><div class="v">2017</div><div class="l">reSET 獲 FDA 授權</div></div><div class="kpi o"><div class="v">約半數</div><div class="l">處方獲保險給付</div></div><div class="kpi o"><div class="v">2023.4</div><div class="l">申請破產，停止新處方</div></div></div>
+      <p class="hint" style="margin-top:8px">走藥品模式：醫師處方、向保險公司請款；裁員 22% 仍撐不到給付到位。執行長點名的主因：保險可拒付有效的療法（屬其歸因）。</p>
+      <div class="wh" style="margin-top:6px"><h3>兩年後：Medicare 數位心理治療碼（2025-01 生效）</h3></div>
+      <div class="grid3"><div class="kpi"><div class="v" style="font-size:18px">G0552</div><div class="l">器材供應與上手教學（每療程一次）</div></div><div class="kpi"><div class="v" style="font-size:18px">G0553</div><div class="l">每月治療管理：首 20 分鐘</div></div><div class="kpi"><div class="v" style="font-size:18px">G0554</div><div class="l">每月治療管理：每增 20 分鐘</div></div></div>
+      <p class="note">付的是「軟體＋人的管理」，不是只付 App——和 RPM 給付碼同一個邏輯。須為 FDA 510(k) 或 De Novo、屬精神或行為健康治療類別，並在持續的行為健康治療計畫中使用。</p>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p09" data-t="給付與制度">
+  <div class="ph"><span class="num">09</span><div><h2>給付規則，決定了遠距照護的商業模式</h2><div class="en">US RPM CODES 2026 · TAIWAN TELEMEDICINE 2024 · GERMANY G-BA</div></div></div>
+  <p class="one">美國付「人的時間」而不只是「設備」——呼應 TIM-HF2：<b>回應系統才是價值所在</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>美國 RPM 給付碼試算：這個月可以申報哪些碼？</h3><span class="tag o">拉桿</span><span class="tag a">簡化示意；金額與細則以 CMS 公告為準</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>本月有資料的天數</span><input type="range" id="rd" min="0" max="30" value="12"><output></output></div>
+        <div class="ctl"><span>本月臨床管理分鐘</span><input type="range" id="rm" min="0" max="80" step="5" value="15"><output></output></div>
+        <div class="tog" id="ropt"></div>
+      </div>
+      <div id="rcodes"></div>
+    </div>
+    <p class="note">CMS CY2026 醫師費用表新增 99445（2–15 天）與 99470（首 10 分鐘，含一次即時互動），放寬天數與時間門檻。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>台灣《通訊診察治療辦法》2024 修正：可不可以開處方？</h3><span class="scoreline" id="twscore"></span><span class="tag gray">2024-01-22 發布、7-01 施行</span></div>
+    <p class="hint">急性後期、慢性病、長照、家醫、居家醫療、末期、行動不便等 7 類，限「病情穩定的複診病人」開立處方；偏鄉、矯正機關、重大變故、國際醫療可含初診。</p>
+    <div id="twq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>德國心衰竭遠距監測：誰可以收案？</h3><span class="tag o">勾選</span><span class="tag gray">G-BA 2020-12-17 決議；2022-01 起有給付碼</span></div>
+    <div class="tog" id="gba"></div>
+    <div class="detail" id="gbatxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>三國比較：誰付錢？付給誰？依什麼指標付？</h3></div>
+    <div style="overflow:auto"><table class="itbl" id="cmp3"></table></div>
+    <p class="note">綠：已有制度　黃：部分或各自決定　赭紅：缺口（教學判讀）。台灣已有「看診」的法源，但「看資料的時間」多數尚無穩定給付。</p>
+  </div>
+</section>
+
+<section class="part" id="p10" data-t="警示寫法與示範資料">
+  <div class="ph"><span class="num">10</span><div><h2>警示閾值的寫法：絕對值、個人基準、趨勢、組合</h2><div class="en">ABSOLUTE · BASELINE · TREND · COMPOSITE</div></div></div>
+  <p class="one">ESC 心衰竭指引（2021）衛教建議：3 天內體重非預期增加超過 2 公斤應就醫或聯絡團隊。<b>閾值是臨床決策，不是工程參數。</b></p>
+  <div class="grid4">
+    <div class="kpi"><div class="v" style="font-size:18px">絕對值</div><div class="l">血氧 &lt; 90%｜簡單；忽略個人差異</div></div>
+    <div class="kpi"><div class="v" style="font-size:18px">個人基準</div><div class="l">高於收案最初 7 次平均 1 kg｜考慮個人；量測誤差也會觸發</div></div>
+    <div class="kpi"><div class="v" style="font-size:18px">趨勢</div><div class="l">3 日增加 &gt; 2 kg｜較少假警示；漏傳就失效</div></div>
+    <div class="kpi o"><div class="v" style="font-size:18px">組合</div><div class="l">趨勢＋症狀（喘、水腫）｜最準；要能說明原因</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>同一批資料、兩種規則：警示數差多少？</h3><span class="tag o">核心互動</span><span class="tag a">本頁示範資料（30 位 × 30 天，程式產生），不是實作三練習資料</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>規則 A：高於基準</span><input type="range" id="ra" min="0.5" max="3" step="0.1" value="1"><output></output></div>
+        <div class="ctl"><span>規則 B：3 日增加 &gt;</span><input type="range" id="rb" min="1" max="3" step="0.1" value="2"><output></output></div>
+        <div class="tog" id="rbopt"></div>
+        <div style="overflow:auto"><table class="itbl" id="rabt"></table></div>
+      </div>
+      <svg viewBox="0 0 380 260" class="chart" id="rasvg"></svg>
+    </div>
+    <div class="detail" id="ratxt"></div>
+    <p class="note">講義以實作三練習資料計算：規則 A 129 則、規則 B 10 則，差 13 倍；A 只有 19% 來自惡化病人，B 有 60%。本頁用另一份示範資料重現同樣的取捨，數字不同。</p>
+  </div>
+</section>
+
+<section class="part" id="p11" data-t="起始規則表與練習病人">
+  <div class="ph"><span class="num">11</span><div><h2>警示規則表（起始版本）：請各組討論後修改</h2><div class="en">RED · YELLOW · NO DATA · GREEN</div></div></div>
+  <p class="one">資料規則：<b>欄位空白不可當 0；同一天多筆取最後一筆並標示「重複」；沒有資料不等於正常。</b></p>
+  <div class="wd">
+    <div class="wh"><h3>起始規則表（可直接修改，自動儲存）</h3><span class="tag a">教學示意，非臨床指引</span><button class="btn" id="rtreset" style="margin-left:auto">還原起始版本</button></div>
+    <div style="overflow:auto"><table class="chk" id="rtt"></table></div>
+    <label style="display:block;font-weight:700;color:var(--navy);font-size:13.5px;margin:8px 0 3px">修改紀錄：改了哪一條？依據是什麼（指引、文獻或團隊共識）？</label>
+    <textarea id="rt-why" style="width:100%;min-height:50px;padding:8px;border:1px solid var(--line2);border-radius:8px;font-family:inherit;box-sizing:border-box"></textarea>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>暖身：用起始規則判 8 位練習病人</h3><span class="scoreline" id="dmscore"></span><span class="tag a">練習病人為本頁虛構，不是 T1–T5 或 E1–E5</span></div>
+    <div id="dmq"></div>
+  </div>
+</section>
+
+<section class="part" id="p12" data-t="實作三工作台">
+  <div class="ph"><span class="num">12</span><div><h2>★ 實作三：心衰竭居家監測儀表板</h2><div class="en">LAB 3 · 80 MINUTES · VIBE CODING · FIXED TEST CASES</div></div></div>
+  <p class="one">成果標準：<b>個管師 15 秒內知道今天先打給誰、為什麼</b>。兩人一組；一人指揮 AI、一人扮演個管師測試，第 3 步後交換。</p>
+  <div class="wd">
+    <div class="wh"><h3>課堂計時器（80 分鐘）</h3><span class="tag o">開始後自動切換步驟</span></div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div class="clock" id="clk">80:00</div><button class="btn pri" id="clk-go">開始</button><button class="btn" id="clk-rs">歸零</button><span id="clk-ph" style="font-weight:700;color:var(--ochre)"></span></div>
+    <div class="timer" id="phases"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>林個管師（虛構）的早晨</h3></div>
+    <div class="grid3">
+      <div class="kpi"><div class="l">她是誰</div><div style="font-weight:700">護理背景 12 年；負責 60 位出院後居家監測病人；每天 8:00–8:15 看資料、排電話順序；週末無人值班</div></div>
+      <div class="kpi g"><div class="l">她需要</div><div style="font-weight:700">一眼看出誰最危險；知道為什麼被警示；點進去看趨勢；不要被假警示淹沒</div></div>
+      <div class="kpi o"><div class="l">她不需要</div><div style="font-weight:700">60 張一樣大的圖表；看不懂的風險分數；沒有原因的紅燈；登入三個系統</div></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>Vibe Coding 提示範本（第一輪）</h3><span class="tag gray">Claude、ChatGPT、Gemini 皆可</span></div>
+    <div class="code" id="tpl"></div>
+    <div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn" id="tplcopy">複製範本提示</button><button class="btn" id="tplrule">用我修改後的規則表產生提示</button><span id="tplmsg" style="font-size:13px;color:var(--green)"></span></div>
+    <div class="grid2" style="margin-top:10px">
+      <div class="kpi"><div class="l">第二輪以後：常用追加提示</div><div style="font-size:13.5px">「紅燈病人旁加『已處理』勾選，勾選後移到清單下方」／「趨勢圖加上 3 日體重變化長條圖」／「加一個篩選：只看 75 歲以上」／「閾值可在畫面上調整，並顯示調整後的警示數」</div></div>
+      <div class="kpi o"><div class="l">AI 常犯的錯（要查核）</div><div style="font-size:13.5px">「3 日增加」算錯比較對象或含漏傳日／空白欄位當成 0／今日沒上傳判成綠燈／病人數與警示則數混在一起／燈號只用顏色沒有文字</div></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>固定測例紀錄：先手判，再比對儀表板</h3><span class="tag o">填完複製繳交</span><span class="tag a">本頁不公布答案</span><span id="tcprog" class="scoreline"></span></div>
+    <p class="hint">以 2026/10/12 為「今天」。T1–T5 來自練習資料，E1–E5 來自 W10_實作三固定測例.csv。手判與儀表板結果不一致時，寫下是誰錯、怎麼修正。做不出網頁的組：用規則判定結果表逐例填寫，同樣計分。</p>
+    <div style="overflow:auto"><table class="chk" id="tct"></table></div>
+  </div>
+</section>
+
+<section class="part" id="p13" data-t="照護流程與容量">
+  <div class="ph"><span class="num">13</span><div><h2>今天的燈號：誰接、何時處理、接不到怎麼辦？</h2><div class="en">WHO RESPONDS · HOW FAST · CAPACITY</div></div></div>
+  <p class="one">規則再準，沒人接、接不完，系統一樣失效。<b>病人數與警示原因則數要分開算。</b></p>
+  <div class="wd">
+    <div class="wh"><h3>容量估算：晨間 15 分鐘做得完嗎？</h3><span class="tag o">拉桿</span><span class="tag a">每通分鐘數為教學假設；預設燈號數取自講義起始規則結果</span></div>
+    <div class="grid2">
+      <div>
+        <div class="ctl"><span>紅燈病人數</span><input type="range" id="cr" min="0" max="15" value="3"><output></output></div>
+        <div class="ctl"><span>黃燈病人數</span><input type="range" id="cy" min="0" max="30" value="11"><output></output></div>
+        <div class="ctl"><span>無資料病人數</span><input type="range" id="cn" min="0" max="15" value="1"><output></output></div>
+        <div class="ctl"><span>紅燈每位（分）</span><input type="range" id="cmr" min="5" max="30" value="15"><output></output></div>
+        <div class="ctl"><span>黃燈每位（分）</span><input type="range" id="cmy" min="2" max="15" value="5"><output></output></div>
+        <div class="ctl"><span>無資料每位（分）</span><input type="range" id="cmn" min="1" max="10" value="3"><output></output></div>
+        <div class="ctl"><span>可用時間（分）</span><input type="range" id="cav" min="15" max="240" step="15" value="15"><output></output></div>
+      </div>
+      <svg viewBox="0 0 380 260" class="chart" id="capsvg"></svg>
+    </div>
+    <div class="detail" id="captxt"></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>照護流程：各組要回答</h3><span class="tag o">寫完會放進繳交包</span></div>
+    <div class="grid2">
+      <div><label>誰接收：平日、夜間、週末各由誰？</label><textarea id="cf-1"></textarea></div>
+      <div><label>多快處理：紅燈 2 小時內做得到嗎？怎麼排？</label><textarea id="cf-2"></textarea></div>
+      <div><label>接不到：打幾次、何時改聯絡家屬、何時建議就醫？</label><textarea id="cf-3"></textarea></div>
+      <div><label>容量：晨間只有 15 分鐘，你們的解法？</label><textarea id="cf-4"></textarea></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p14" data-t="評分、反思與繳交包">
+  <div class="ph"><span class="num">14</span><div><h2>評分表自評、五重目標反思與繳交包</h2><div class="en">RUBRIC · QUINTUPLE AIM · SUBMISSION</div></div></div>
+  <p class="one">下課前上傳：<b>儀表板或判定結果表＋規則表＋測例紀錄＋AI 使用紀錄</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>評分表自評</h3><span class="scoreline" id="rubsum"></span></div>
+    <div id="rub"></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>回到 W1：用五重目標檢視你的儀表板</h3><span class="tag gray">未完成者課後補填</span></div>
+    <div class="grid2">
+      <div><label>病人體驗：每天量測的負擔如何降低？</label><textarea id="qa-1"></textarea></div>
+      <div><label>族群健康：惡化能提早幾天被發現？規則漏掉了誰？</label><textarea id="qa-2"></textarea></div>
+      <div><label>降低成本：避免一次住院的價值，能否支付設備與人力？</label><textarea id="qa-3"></textarea></div>
+      <div><label>照護者福祉：每天警示數多少？林個管師看得完嗎？</label><textarea id="qa-4"></textarea></div>
+    </div>
+    <label>健康公平：常漏傳的病人是誰？為什麼？系統是否排除了他們？</label><textarea id="qa-5"></textarea>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>AI 使用紀錄與繳交包</h3><span class="tag o">複製後貼進作業</span></div>
+    <div class="grid3">
+      <div><label>組員（指揮 AI／扮演個管師）</label><input id="ai-who"></div>
+      <div><label>使用工具與版本（介面顯示）</label><input id="ai-tool" placeholder="例：Claude"></div>
+      <div><label>提示輪數</label><input id="ai-n" placeholder="例：4 輪"></div>
+    </div>
+    <label>AI 做錯、被你們抓到並修正的地方（至少一處）</label><textarea id="ai-fix"></textarea>
+    <label>個人說明：我能解釋的一個測例結果</label><textarea id="ai-me"></textarea>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn oc" id="subcopy">複製繳交包（規則表＋測例紀錄＋照護流程＋AI 紀錄）</button><span id="submsg" style="font-size:13px;color:var(--green)"></span></div>
+  </div>
+</section>
+
+<section class="part" id="p15" data-t="案例研討：Heart Safe Motherhood">
+  <div class="ph"><span class="num">15</span><div><h2>Heart Safe Motherhood：用簡訊量血壓，接住產後高血壓</h2><div class="en">PENN MEDICINE · HIRSHBERG ET AL., BMJ QUAL SAF 2018</div></div></div>
+  <p class="one">簡單科技（簡訊＋血壓計）配上<b>明確的回應流程</b>，比複雜裝置更容易成功。</p>
+  <div class="grid3">
+    <div class="kpi g"><div class="v">92% vs 44%</div><div class="l">10 天內取得血壓（簡訊組 vs 回診組）</div></div>
+    <div class="kpi g"><div class="v">0% vs 3.9%</div><div class="l">高血壓相關再住院</div></div>
+    <div class="kpi"><div class="v">2.3 萬＋</div><div class="l">使用人數（截至 2024-04）</div></div>
+  </div>
+  <p class="note">單中心隨機試驗 206 人（2016–2017）：簡訊監測 vs 出院後 4–6 天回診量血壓；單中心、未盲化；效果來自「簡訊＋家用血壓計」整套介入；後續分析也顯示種族差距消失。</p>
+  <div class="wd">
+    <div class="wh"><h3>把它放進四層資料流</h3><span class="scoreline" id="hsscore"></span></div>
+    <div id="hsq"></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>決策點：你是產科主任</h3></div>
+    <p style="margin:0">試驗成功了，擴大到全院前，你最擔心哪一個環節？先獨立想 1 分鐘，寫下你的選擇與理由。</p>
+    <textarea id="hs-dp" placeholder="我最擔心的環節與理由……"></textarea>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>課堂討論：三題擇一深入</h3><span class="tag gray">個人 3 分鐘、小組 8 分鐘、分享 4 分鐘</span></div>
+    <div class="grid3">
+      <div class="kpi"><div class="l">Q1｜RPM 資料流</div><div style="font-weight:700">每一層用了什麼？哪一層最省？</div></div>
+      <div class="kpi"><div class="l">Q2｜成敗分水嶺</div><div style="font-weight:700">和 BEAT-HF 比較：為何這個成功、那個失敗？</div></div>
+      <div class="kpi"><div class="l">Q3｜給付與法規</div><div style="font-weight:700">台灣做產後血壓監測，誰付費？用哪一種給付或通訊診察規定？</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="p16" data-t="名詞卡、測驗與回顧">
+  <div class="ph"><span class="num">16</span><div><h2>名詞卡、總測驗與三個問題</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+  <div class="wd"><div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div><div class="cards" id="cards"></div></div>
+  <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
+  <div class="take">
+    <div><b>誰在看</b>第 ④ 層有人、有流程、有時限嗎？週末呢？</div>
+    <div><b>準不準</b>規則有依據嗎？假警示多少？漏了誰？</div>
+    <div><b>誰付錢</b>設備、資料、看資料的時間，各由誰付？</div>
+  </div>
+  <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">資料會說話，但要有人在聽</h2><p style="color:var(--mute)">遠距監測的價值，不在感測器，而在感測器另一端那個「看得到、來得及、做得了」的團隊。<br>下週 W11：智慧醫院、數位孿生與居家醫院——觀察一位病人從「決定住院」到「住進病房」要等多久。保留規則表與測例紀錄，期末個案也會考居家監測警示。</p></div>
+</section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w10-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w10-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w10-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
+function bind(sel){$$(sel).forEach(r=>{r.addEventListener("click",e=>{})})}
+function tipify(root){root.querySelectorAll("[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+function segInit(id,cb){$$(id+" button").forEach(b=>b.onclick=()=>{$$(id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset)})}
+function choiceRows(container,items,opts,scoreEl,noteFn){const r=$(container);let ok=0,dn=0;items.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach((o,i)=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;dn++;const g=i===a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+(why||(noteFn?noteFn(a):""));if(scoreEl)$(scoreEl).textContent=`${ok} / ${items.length}`+(dn===items.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})}
+function bars(svg,data,{max,unit="",dec=1,W=360,H=220,cols}){const L=46,B=H-36,T=22;let g="";const step=max/5;for(let v=0;v<=max+1e-9;v+=step){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v,v<10&&step<1?1:0)}${unit}</text>`}const n=data.length,bw=Math.min(80,(W-L-30)/n-30);data.forEach(([lab,v,c],i)=>{const x=L+20+i*((W-L-30)/n)+((W-L-30)/n-bw)/2-10,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${c||cols[i]}" data-t="${lab}：${fmt(v,dec)}${unit}"/><text x="${x+bw/2}" y="${y-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${c||cols[i]}">${fmt(v,dec)}${unit}</text><text x="${x+bw/2}" y="${B+18}" font-size="12.5" text-anchor="middle">${lab}</text>`});$(svg).innerHTML=g;tipify($(svg))}
+
+
+function copyText(t,msgEl){const done=()=>{$(msgEl).textContent="已複製。";setTimeout(()=>$(msgEl).textContent="",3000)};const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$(msgEl).textContent="無法自動複製，請手動選取文字。"}ta.remove()};try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+function persist(ids,key,cb){const s=LS.get(key,{});ids.forEach(id=>{const e=$("#"+id);if(s[id]!=null)e.value=s[id];const f=()=>{const o={};ids.forEach(k=>o[k]=$("#"+k).value);LS.set(key,o);cb&&cb()};e.addEventListener("input",f);e.addEventListener("change",f)})}
+function rng(id,fn,fmtF){const e=$("#"+id);const o=e.nextElementSibling;const f=()=>{o.textContent=fmtF?fmtF(+e.value):e.value;fn()};e.addEventListener("input",f);o.textContent=fmtF?fmtF(+e.value):e.value}
+function togs(root,items,state,cb){const r=$(root);r.innerHTML="";items.forEach(([k,lab])=>{const l=h("label",{class:state[k]?"on":""},`<input type="checkbox" ${state[k]?"checked":""}>${state[k]?"✓ ":""}${lab}`);l.onclick=e=>{e.preventDefault();state[k]=!state[k];togs(root,items,state,cb);cb()};r.appendChild(l)})}
+const kpi=(v,l,c="")=>`<div class="kpi ${c}"><div class="v">${v}</div><div class="l">${l}</div></div>`;
+
+const SV=k=>k===1?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6.5" fill="${C.navy}"/></svg>`:k===2?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6.5" fill="#fff" stroke="${C.navy}" stroke-width="1.5"/><path d="M8 1.5A6.5 6.5 0 0 1 8 14.5Z" fill="${C.navy}"/></svg>`:k===3?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6" fill="#fff" stroke="${C.navy}" stroke-width="1.5"/></svg>`:"·";
+
+/* 01 opening */
+const OD=["10/08 四","10/09 五","10/10 六","10/11 日","10/12 一"],OW=[70.2,70.4,71.2,71.9,72.5],OB=[131,134,138,143,148],OO=[95,94,94,93,92],OY=[0,0,1,1,2];
+const OX=["週四：這天漏服利尿劑。","週五：一切看起來平穩——這是林個管師週末前最後一次看資料。","週六：體重比前一天多 0.8 kg，喘升到 1 分。資料進來了，但沒人值班。","週日：體重再多 0.7 kg，血氧降到 93%。","週一：比 10/09 多 2.1 kg，喘升到 2、血氧 92%——早上 8:00 打開系統時，王伯伯已被救護車送回急診。"];
+let odI=4;
+function opening(){$("#odays").innerHTML=OD.map((d,i)=>`<button class="${i===odI?"on":""}" data-i="${i}"><b>${d.split(" ")[0]}</b>週${d.split(" ")[1]}</button>`).join("");$$("#odays button").forEach(b=>b.onclick=()=>{odI=+b.dataset.i;opening()});
+ const s=$("#osvg"),L=40,R=370,B=200,T=14,X=i=>L+24+i*(R-L-48)/4,Y=v=>B-(v-69.5)/3.5*(B-T);let g=`<rect x="${X(1.5)}" y="${T}" width="${X(3.5)-X(1.5)}" height="${B-T}" fill="${C.ochre}" opacity=".07"/><text x="${X(2.5)}" y="${T+12}" font-size="11.5" fill="${C.ochre}" text-anchor="middle" font-weight="700">週末無人看</text>`;
+ [70,71,72,73].forEach(v=>g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-5}" y="${Y(v)+4}" font-size="10.5" fill="${C.mute}" text-anchor="end">${v}</text>`);
+ let d="";OW.forEach((v,i)=>d+=(i?"L":"M")+X(i)+","+Y(v));g+=`<path d="${d}" fill="none" stroke="${C.navy}" stroke-width="3"/>`;
+ OW.forEach((v,i)=>g+=`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===odI?8:5}" fill="${i===odI?C.ochre:C.navy2}"/><text x="${X(i)}" y="${Y(v)-12}" font-size="12.5" font-weight="700" text-anchor="middle">${v}</text><text x="${X(i)}" y="${B+16}" font-size="11.5" text-anchor="middle">${OD[i]}</text>`);
+ g+=`<text x="${L}" y="${T-2}" font-size="11" fill="${C.mute}">體重 kg</text>`;s.innerHTML=g;
+ $("#okpi").innerHTML=kpi(OW[odI]+"<small> kg</small>","體重")+kpi(OB[odI],"收縮壓",OB[odI]>=143?"o":"")+kpi(OO[odI]+"%","血氧",OO[odI]<=93?"o":"")+kpi(OY[odI]+"<small> / 3</small>","喘",OY[odI]?"o":"");$("#otxt").innerHTML=OX[odI]}
+opening();
+const WKT=["週六、週日的資料都進來了，但沒有人看；週一早上林個管師打開系統時，王伯伯已經在急診。","週末若有人看：週六喘升到 1 分、週日體重持續上升，就有機會提早電話評估、調整利尿劑。本週實作的目標：讓這筆資料在 10/10 或 10/11 就被正確的人看見，而且<b>不被淹沒在假警示裡</b>。"];
+segInit("#wkend",d=>$("#wktxt").innerHTML=WKT[+d.v]);$("#wktxt").innerHTML=WKT[0];
+
+/* 02 terms */
+choiceRows("#tmq",[
+ ["醫師透過視訊，幫行動不便的長者複診",0,"傳影像與聲音（同步），另一端是醫師：通訊診察。"],
+ ["出院後每天上傳體重與血壓，由個管師判讀與回應",1,"傳生理數據（非同步），另一端是護理師或個管師：RPM。"],
+ ["以遠距監測加上到宅團隊，讓原本需要住院的病人提早回家",2,"生理數據＋到宅團隊，團隊 24 小時：虛擬病房。"],
+ ["急症病人在家接受住院等級照護：點滴、每日醫師訪視",3,"住院等級的到宅照護：居家醫院（W11 在宅急症照護）。"],
+ ["醫師開立失眠認知行為治療 App，作為治療的一部分",4,"軟體本身就是治療：數位療法。"]
+],["通訊診察","遠距病人監測","虛擬病房","居家醫院","數位療法"],"#tmscore");
+
+/* 03 layers + devices */
+const LY=[["① 感測 Sense","藍牙體重計、血壓計、血氧機；同一時間、同一衣著；一鍵量測","量測不可靠：衣著、時間不一，或長者不會操作——後面再聰明也沒用。"],["② 傳輸 Transmit","手機 App 或 4G 閘道器；FHIR Observation（W3）；斷線補傳、時間戳記","資料停在體重計裡；斷線沒有補傳，時間戳記錯亂，「3 日變化」算不出來。"],["③ 分析 Analyze","規則引擎或 AI；個人基準、趨勢、組合條件；紅黃綠分級、說明原因","每個數字都丟給個管師：60 人 × 7 項，每天 420 個數字，看不出誰最危險。"],["④ 行動 Act","個管師電話、調藥、回診；回應時限與值班制度；結果回寫病歷","資料有進來，但沒人、沒流程、沒時限回應——BEAT-HF 與王伯伯的週末。"]];
+const lyOn=[1,1,1,1];
+function lyr(){$("#lyr").innerHTML=LY.map(([n,d],i)=>`<div class="${lyOn[i]?"":"off"}" data-i="${i}"><b>${lyOn[i]?"":"✕ "}${n}</b>${d}</div>`).join("");$$("#lyr div").forEach(e=>e.onclick=()=>{const i=+e.dataset.i;lyOn[i]=lyOn[i]?0:1;lyr()});
+ const off=LY.filter((_,i)=>!lyOn[i]);$("#lytxt").innerHTML=off.length?off.map(x=>`<span style="color:var(--ochre);font-weight:700">${x[0]} 斷了：</span>${x[2]}`).join("<br>"):"<span style='color:var(--green);font-weight:700'>閉環完整：</span>量得到 → 傳得到 → 看得懂 → 有人做，結果回寫病歷。試著關掉一層。"}
+lyr();
+const DV=[["體重計",1,1.2,0,"晚：體液已累積才變化。單獨使用效果不一。"],["血壓計、血氧機",2,2,0,"中：訊號中等；搭配症狀更有用。"],["智慧手錶",3,2.3,0,"心律不整；要充電、配戴；篩檢為主（下一段 Apple Heart Study）。"],["多參數系統",3.6,3,1,"TIM-HF2：體重、血壓、心電圖、血氧＋24 小時中心；有隨機試驗正面證據。"],["植入式肺動脈壓",5,4.5,1,"數週前上升；CHAMPION 心衰竭住院 −28%；但 GUIDE-HF 整體未達顯著（第 06 段）。"]];
+let dvI=-1;function dv(){const s=$("#dvsvg"),L=40,R=360,B=220,T=20,X=v=>L+(v-0.5)/5*(R-L),Y=v=>B-(v-0.5)/4.5*(B-T);let g=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="${C.mute}"/><line x1="${L}" y1="${B}" x2="${L}" y2="${T}" stroke="${C.mute}"/><text x="${R}" y="${B+16}" font-size="11" text-anchor="end" fill="${C.mute}">使用負擔與侵入性 →</text><text x="${L+4}" y="${T-6}" font-size="11" fill="${C.mute}">↑ 訊號越早</text>`;
+ DV.forEach(([n,x,y,f],i)=>g+=`<circle class="dvp" data-i="${i}" cx="${X(x)}" cy="${Y(y)}" r="${i===dvI?11:8}" fill="${f?C.navy2:"#fff"}" stroke="${C.navy2}" stroke-width="2.5" style="cursor:pointer"/><text x="${X(x)+(x>4?-14:14)}" y="${Y(y)+4}" font-size="12.5" font-weight="700" text-anchor="${x>4?"end":"start"}" fill="${C.navy}">${n}</text>`);
+ g+=`<circle cx="${L+14}" cy="${T+14}" r="6" fill="${C.navy2}"/><text x="${L+24}" y="${T+18}" font-size="11">有隨機試驗正面證據</text><circle cx="${L+14}" cy="${T+32}" r="6" fill="#fff" stroke="${C.navy2}" stroke-width="2"/><text x="${L+24}" y="${T+36}" font-size="11">證據不一致或篩檢為主</text>`;s.innerHTML=g;
+ $$("#dvsvg .dvp").forEach(c=>c.onclick=()=>{dvI=+c.dataset.i;dv();$("#dvtxt").innerHTML=`<b>${DV[dvI][0]}</b>：${DV[dvI][4]}<br><span style="font-size:13px;color:var(--mute)">最佳組合是「病人願意每天用」且「團隊有能力回應」的那一套。</span>`})}
+dv();
+
+/* 04 Apple Heart */
+function ah(){const N=+$("#ahn").value,p=+$("#ahp").value/100,m=+$("#ahm").value;const n=N*p,ret=n/5,hr=n*m/60;
+ $("#ahkpi").innerHTML=kpi(fmt(n,0)+"<small> 人</small>","收到不規則心律通知","o")+kpi(fmt(hr,0)+"<small> 小時</small>","全部接手需要的人力")+kpi(fmt(ret,0)+"<small> 人</small>","若只有 1／5 完成確認")+kpi(fmt(n-ret,0)+"<small> 人</small>","帶著通知、卻沒有被接住","o");
+ $("#ahtxt").innerHTML=`${fmt(N,0)} 人使用、${fmt(p*100,1)}% 收到通知 → ${fmt(n,0)} 人需要後續處理；每位 ${m} 分鐘，等於 <b>${fmt(hr/8,0)} 個人工作天</b>。研究中 0.84 的 PPV 是「完成確認的人」裡的比例——沒有接手流程的篩檢，只會增加焦慮與門診負擔。`}
+rng("ahn",ah,v=>fmt(v,0));rng("ahp",ah,v=>v.toFixed(1)+"%");rng("ahm",ah);ah();
+
+/* 05 trials */
+const TR=[["BEAT-HF：有設備、有電話，再入院卻沒有下降","Ong 等，JAMA Intern Med 2016；加州 6 家學術醫療中心；1,437 人",[["180 天再入院",51,49],["30 天再入院",23,22],["180 天死亡",14,16]],[["51% vs 49%","180 天再入院率：無差異","o"],["23% vs 22%","30 天再入院率：無差異","o"],["14% vs 16%","180 天死亡率：無顯著差異",""]],"病人持續使用率隨時間下降；監測警示由電話中心處理，與主治團隊調藥的連結不夠緊密。"],
+ ["TIM-HF2：24 小時遠距醫療中心，降低死亡","Koehler 等，Lancet 2018；德國 1,538 人，追蹤最長 393 天",[["損失天數比例（%）",4.88,6.64],["每年損失天數",17.8,24.2]],[["4.88% vs 6.64%","因心血管住院或死亡損失的天數比例","g"],["HR 0.70","全死因死亡風險降低約 30%","g"],["17.8 vs 24.2 天","每年損失天數","g"]],"每日傳送體重、血壓、心電圖、血氧與自評狀態；中心全年 24 小時由醫師與心衰竭護理師值班，依風險即時調藥、安排住院與衛教。成功關鍵是「回應系統」。"]];
+function trial(i){const t=TR[i];$("#trh").textContent=t[0];$("#trtag").textContent=t[1];$("#trkpi").innerHTML=t[3].map(([v,l,c])=>kpi(`<span style="font-size:18px">${v}</span>`,l,c)).join("");$("#trtxt").textContent=t[4];
+ const s=$("#trsvg"),L=40,R=370,B=180,T=24;const mx=Math.ceil(Math.max(...t[2].flatMap(r=>[r[1],r[2]]))*1.2/5)*5;const Y=v=>B-v/mx*(B-T);let g="";[0,.5,1].forEach(f=>{const v=mx*f;g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-5}" y="${Y(v)+4}" font-size="10.5" fill="${C.mute}" text-anchor="end">${fmt(v,0)}</text>`});
+ const n=t[2].length;t[2].forEach(([lab,a,b],k)=>{const cx=L+(k+.5)*(R-L)/n;[[a,C.ochre,"介入"],[b,C.gray,"對照"]].forEach(([v,col,nm],j)=>{const x=cx-34+j*36;g+=`<rect x="${x}" y="${Y(v)}" width="32" height="${B-Y(v)}" rx="3" fill="${col}" data-t="${lab}｜${nm}：${v}"/><text x="${x+16}" y="${Y(v)-5}" font-size="12" font-weight="700" text-anchor="middle" fill="${col}">${v}</text>`});g+=`<text x="${cx}" y="${B+16}" font-size="12" text-anchor="middle">${lab}</text>`});
+ g+=`<rect x="${L}" y="2" width="10" height="10" fill="${C.ochre}"/><text x="${L+14}" y="11" font-size="11.5">介入組</text><rect x="${L+70}" y="2" width="10" height="10" fill="${C.gray}"/><text x="${L+84}" y="11" font-size="11.5">對照組</text>`;s.innerHTML=g;tipify(s)}
+segInit("#trsel",d=>trial(+d.t));trial(0);
+const CR=["Tele-HF（NEJM 2010）電話語音回報","BEAT-HF（2016）體重、血壓、心跳、症狀","CHAMPION（Lancet 2011）植入式肺動脈壓","TIM-HF2（Lancet 2018）多參數＋24 小時中心"],CCOL=["訊號夠早","有人即時看","能立刻調藥"],CANS=[[3,2,2],[3,2,3],[1,2,1],[2,1,1]],CRES=["✕ 再入院或死亡無差異","✕ 再入院無差異","✓ 心衰竭住院 −28%","✓ 全死因死亡 −30%"];
+let cmpS=LS.get("cmp",CR.map(()=>CCOL.map(()=>0))),cmpShow=false;
+function drawCmpg(){let g=`<div></div>`+CCOL.map(c=>`<div class="h">${c}</div>`).join("")+`<div class="h">結果</div>`;CR.forEach((r,i)=>{g+=`<div class="rn" style="font-size:12.5px">${r}</div>`;CCOL.forEach((_,j)=>{const v=cmpS[i][j],ok=cmpShow&&v===CANS[i][j];g+=`<div style="text-align:center"><button data-i="${i}" data-j="${j}" style="${cmpShow?(ok?"background:var(--green-l)":"background:var(--ochre-l)"):""};width:100%">${SV(v)}</button>${cmpShow?`<div class="ans">講義：${SV(CANS[i][j])}</div>`:""}</div>`});g+=`<div style="font-size:12.5px;font-weight:700;color:${i>1?C.green:C.ochre}">${CRES[i]}</div>`});$("#cmpg").innerHTML=g;
+ $$("#cmpg button").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,j=+b.dataset.j;cmpS[i][j]=(cmpS[i][j]+1)%4;LS.set("cmp",cmpS);drawCmpg()});
+ if(cmpShow){let m=0;CR.forEach((_,i)=>CCOL.forEach((_,j)=>{if(cmpS[i][j]===CANS[i][j])m++}));$("#cmpmsg").innerHTML=`和講義判讀相同 <b>${m} / 12</b> 格。成功的兩個試驗在「能立刻調藥」都是實心。`}}
+$("#cmpleg").innerHTML=`${SV(1)} 具備　${SV(2)} 部分　${SV(3)} 不足（教學判讀，不是原論文分類）｜Tele-HF：介入組約 14% 從未使用系統；CHAMPION 為 550 位病人之隨機對照試驗。`;
+drawCmpg();$("#cmpshow").onclick=()=>{cmpShow=!cmpShow;$("#cmpshow").textContent=cmpShow?"隱藏講義判讀":"對照講義判讀";if(!cmpShow)$("#cmpmsg").textContent="";drawCmpg()};
+
+/* 06 forest */
+const FPD=[["主要終點（整體）",0.88,0.74,1.05,"p＝0.16","信賴區間 0.74–1.05 跨過 1：整體<b>未達顯著</b>——CHAMPION 的成功沒有在更大的試驗中重現。"],["主要終點（疫情前）",0.81,0.66,1.00,"p＝0.05","上限剛好碰到 1.00：接近顯著。約 72% 的追蹤在 2020 年 3 月疫情前。"],["心衰竭住院（疫情前）",0.72,0.57,0.92,"p＝0.007","整段區間都在 1 的左邊：疫情前心衰竭住院減少。但這是<b>事後分析</b>，疫情前後差異的交互作用 p＝0.11，不能當確定結論。"]];
+let fpI=-1;function fp(){const s=$("#fpsvg"),L=230,R=620,lx=v=>L+(Math.log(v)-Math.log(0.5))/(Math.log(1.2)-Math.log(0.5))*(R-L);let g="";
+ [0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2].forEach(v=>g+=`<line x1="${lx(v)}" x2="${lx(v)}" y1="20" y2="170" stroke="${v===1?C.ochre:C.line}" stroke-width="${v===1?2:1}" ${v===1?'stroke-dasharray="5 4"':""}/><text x="${lx(v)}" y="186" font-size="11" text-anchor="middle" fill="${v===1?C.ochre:C.mute}">${v.toFixed(1)}</text>`);
+ g+=`<text x="${lx(0.75)}" y="204" font-size="11.5" text-anchor="middle" fill="${C.green}">← 監測組較好</text><text x="${lx(1)}" y="14" font-size="11.5" text-anchor="middle" fill="${C.ochre}">1.0 無差異</text>`;
+ FPD.forEach(([n,h,lo,hi,p],i)=>{const y=48+i*48;const on=i===fpI;g+=`<g class="fpr" data-i="${i}" style="cursor:pointer"><rect x="0" y="${y-20}" width="760" height="40" fill="${on?C.navy:"#000"}" opacity="${on?.06:0}"/><text x="${L-14}" y="${y+5}" font-size="13" text-anchor="end" font-weight="700" fill="${C.navy}">${n}</text><line x1="${lx(lo)}" x2="${lx(hi)}" y1="${y}" y2="${y}" stroke="${C.navy2}" stroke-width="3"/><rect x="${lx(h)-7}" y="${y-7}" width="14" height="14" fill="${hi<1?C.green:C.navy2}"/><text x="${R+12}" y="${y+5}" font-size="12.5" fill="${C.navy}">HR ${h.toFixed(2)}（${lo.toFixed(2)}–${hi.toFixed(2)}）${p}</text></g>`});
+ s.innerHTML=g;$$("#fpsvg .fpr").forEach(r=>r.onclick=()=>{fpI=+r.dataset.i;fp();$("#fptxt").innerHTML=`<b>${FPD[fpI][0]}</b>：${FPD[fpI][5]}`})}
+fp();
+
+/* 07 DTx */
+choiceRows("#clq",[
+ ["「幫你記錄每晚睡了幾小時」",0,"只記錄、不宣稱治療：一般健康 App。"],
+ ["「以 6 週認知行為治療課程，治療慢性失眠」",2,"宣稱治療疾病：數位療法，需臨床試驗證據。"],
+ ["「偵測心律不整，並通知你就醫」",1,"輔助偵測：數位醫療器材，依風險分級審查。"],
+ ["「判讀居家體重血壓，提醒個管師處理」",1,"RPM 平台：輔助監測的數位醫療器材。"],
+ ["「每天走一萬步，幫你養成好習慣」",0,"一般健康促進：健康 App。"],
+ ["「以遊戲訓練改善兒童 ADHD 的注意力」",2,"宣稱治療：數位療法（EndeavorRx 即為此類）。"]
+],["一般健康 App","數位醫療器材","數位療法"],"#clscore");
+const MS=[["2017","reSET","FDA 授權首個以臨床成效為宣稱的處方數位療法（物質使用障礙）。"],["2019","德國 DVG","《數位醫療照護法》立法：醫師可開立、法定保險給付的 DiGA。"],["2020","EndeavorRx","首個以電玩形式授權的數位療法（兒童 ADHD）。"],["2023","Pear 破產","reSET 開發商申請破產：療效有證據，給付卻跟不上。"],["2025","Medicare DMHT","G0552–G0554 數位心理治療給付碼生效：付「軟體＋人的管理」。"]];
+let msI=-1;function ms(){$("#ms").innerHTML=MS.map((m,i)=>`<button class="${i===msI?"on":""}" data-i="${i}"><b>${m[0]}</b>${m[1]}</button>`).join("");$$("#ms button").forEach(b=>b.onclick=()=>{msI=+b.dataset.i;ms();$("#mstxt").innerHTML=`<b>${MS[msI][0]}　${MS[msI][1]}</b>：${MS[msI][2]}`})}
+ms();
+
+/* 08 DiGA */
+const DG=[["BfArM 快速審查","證明安全、品質與資料保護"],["暫時列名","先給付，病人免費使用（醫師處方或保險公司核准）"],["證明效果","期間內須證明正向照護效果"],["永久列名或除名","證據不足者被除名；定價與實際使用率仍受檢討"]];
+let dgI=-1;function dg(){$("#diga").innerHTML=DG.map((d,i)=>`<div class="${i===dgI?"on":""}" data-i="${i}"><b>${i+1}. ${d[0]}</b>${d[1]}</div>`).join("");$$("#diga div").forEach(e=>e.onclick=()=>{dgI=+e.dataset.i;dg();$("#digatxt").innerHTML=dgI===1?"「先給付、再證明」加速上市——這是 DiGA 和多數國家最不一樣的地方。":dgI===3?"證明效果才能留在名錄；但也引發爭議：證據不足者被除名，定價與使用率受檢討。":`<b>${DG[dgI][0]}</b>：${DG[dgI][1]}。`})}
+dg();
+
+/* 09 payment */
+const ro={first:true,inter:true};
+function rcodes(){const d=+$("#rd").value,m=+$("#rm").value;const C2=[];if(ro.first)C2.push(["99453","裝置設定與病人衛教","一次性","g"]);
+ if(d>=16)C2.push(["99454","每月有資料 16–30 天","設備與資料","g"]);else if(d>=2)C2.push(["99445","每月有資料 2–15 天（2026 新）","設備與資料","g"]);
+ if(!ro.inter&&m>=10)C2.push(["—","管理時間碼需含一次即時互動（電話或視訊）","人的時間","o"]);
+ else if(m>=20){C2.push(["99457","每月臨床管理：首 20 分鐘","人的時間","g"]);const k=Math.floor((m-20)/20);if(k>0)C2.push(["99458 × "+k,"每增 20 分鐘","人的時間","g"])}
+ else if(m>=10)C2.push(["99470","每月臨床管理：首 10 分鐘，含一次即時互動（2026 新）","人的時間","g"]);
+ $("#rcodes").innerHTML=(C2.length?C2.map(([c,t,k,cl])=>`<div class="kpi ${cl==="o"?"o":""}" style="margin-bottom:6px"><div class="v" style="font-size:20px">${c}</div><div class="l">${k}｜${t}</div></div>`).join(""):`<div class="kpi o"><div class="v" style="font-size:18px">沒有可申報的碼</div><div class="l">資料少於 2 天、管理時間少於 10 分鐘</div></div>`)+`<p class="note">上半部付「設備與資料」，下半部付「看資料的人」。${d<2?"資料天數不足：病人沒在量，連設備碼都不能申報。":""}</p>`}
+togs("#ropt",[["first","本月首次收案"],["inter","含一次即時互動"]],ro,rcodes);rng("rd",rcodes);rng("rm",rcodes);rcodes();
+choiceRows("#twq",[
+ ["慢性病照護計畫收案、病情穩定的複診病人，視訊調整降壓藥",0,"7 類之一，且為病情穩定的複診：可以開立處方。"],
+ ["居家醫療照護的病人，第一次就診（初診）就想視訊開藥",1,"居家醫療屬 7 類，限病情穩定的複診病人開立處方。"],
+ ["山地離島偏僻地區的初診病人",0,"偏鄉另依第 2 條適用，可含初診。"],
+ ["長照服務個案，症狀加劇、病情不穩定",1,"限「病情穩定」的複診病人；症狀加劇應安排就醫。"],
+ ["國際醫療照護的初診病人",0,"國際醫療可含初診。"]
+],["可以開處方","不可以開處方"],"#twscore");
+const GB=[["nyha","NYHA II–III"],["ef","LVEF < 40%"],["dev","植入式心臟裝置，或過去一年因心衰竭住院"],["gl","依指引治療、能自行傳輸資料"]];const gb={nyha:true,ef:false,dev:true,gl:true};
+function gba(){const miss=GB.filter(([k])=>!gb[k]).map(x=>x[1]);$("#gbatxt").innerHTML=(miss.length?`<span style="color:var(--ochre);font-weight:700">不符合收案條件</span>（須同時符合）：缺 ${miss.join("、")}。`:`<span style="color:var(--green);font-weight:700">符合收案條件。</span>`)+`<br><span style="font-size:13.5px">分工：主治醫師（PBA）依指引治療、依監測結果調藥與安排就醫；遠距醫療中心（TMZ）收資料、分析、通知，由心臟科資格內科醫師執行，PBA 聯絡不到時可依約暫代。</span>`}
+togs("#gba",GB,gb,gba);gba();
+const C3=[["遠距監測給付",["RPM 專屬給付碼（含人力時間）","g"],["心衰竭遠距監測 2022 起納入法定保險","g"],["以計畫型給付為主（如在宅急症）","m"]],["數位療法",["FDA 授權；給付各保險自決，2025 起 Medicare 有數位心理治療碼","m"],["DiGA 名錄、法定保險給付","g"],["TFDA 醫療器材管理，給付待建立","b"]],["通訊診察",["疫情後放寬，持續延長","m"],["允許，依規範執行","g"],["2024 年擴大為 10 類特殊情形","g"]],["關鍵挑戰",["詐欺與低價值帳單稽核","b"],["證據不足者除名、定價爭議","b"],["看資料的人力與時間無給付","b"]]];
+$("#cmp3").innerHTML=`<tr><th></th><th>美國</th><th>德國</th><th>台灣</th></tr>`+C3.map(([n,...cs])=>`<tr><td><b>${n}</b></td>${cs.map(([t,k])=>`<td style="background:${k==="g"?"var(--green-l)":k==="m"?"var(--amber-l)":"var(--ochre-l)"}">${t}</td>`).join("")}</tr>`).join("");
+
+/* 10 demo data */
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd=mulberry(20261012),gn=()=>(rnd()+rnd()+rnd()+rnd()-2)*0.6;
+const DEMO=[];for(let p=0;p<30;p++){const type=p<4?"det":p<8?"slow":p<11?"miss":"stable";const base=55+rnd()*30;const d0=22+Math.floor(rnd()*5);const rows=[];
+ for(let t=0;t<30;t++){let w=base+gn()*0.6,dy=0;if(type==="det"&&t>=d0){w+=(t-d0+1)*(0.55+0.1*(p%2));dy=t>=d0+4?2:t>=d0+2?1:0}if(type==="slow")w+=t*0.065;const up=!(type==="miss"&&rnd()<0.35)&&!(rnd()<0.03);rows.push(up?{w:Math.round(w*10)/10,dy}:null)}
+ DEMO.push({type,d0,rows})}
+const rbo={comp:false};
+function evalRules(A,B,comp){const res={A:{n:0,pts:new Set(),tp:0,miss:0},B:{n:0,pts:new Set(),tp:0,miss:0}};
+ DEMO.forEach((pt,pi)=>{const first=pt.rows.filter(Boolean).slice(0,7);const bl=first.reduce((a,r)=>a+r.w,0)/first.length;let hitA=false,hitB=false;
+  pt.rows.forEach((r,t)=>{if(!r||t<7)return;const aA=r.w-bl>A;const prev=pt.rows[t-3];const aB=(prev&&r.w-prev.w>B)||(comp&&r.dy>=2);
+   if(aA){res.A.n++;res.A.pts.add(pi);if(pt.type==="det")res.A.tp++;if(pt.type==="det"&&t>=pt.d0)hitA=true}
+   if(aB){res.B.n++;res.B.pts.add(pi);if(pt.type==="det")res.B.tp++;if(pt.type==="det"&&t>=pt.d0)hitB=true}});
+  if(pt.type==="det"){if(!hitA)res.A.miss++;if(!hitB)res.B.miss++}});return res}
+function rab(){const A=+$("#ra").value,B=+$("#rb").value;const r=evalRules(A,B,rbo.comp);const bn=rbo.comp?"規則 B＋喘 ≥ 2":"規則 B";
+ const row=(n,x)=>`<tr><td><b>${n}</b></td><td>${x.n} 則</td><td>${x.pts.size} 位</td><td>${x.tp} 則（${x.n?fmt(x.tp/x.n*100,0):0}%）</td><td class="${x.miss?"bad":"good"}">${x.miss} 位</td></tr>`;
+ $("#rabt").innerHTML=`<tr><th></th><th>30 天警示</th><th>被警示病人</th><th>來自惡化病人</th><th>漏掉的惡化</th></tr>`+row(`規則 A（基準 +${A.toFixed(1)}）`,r.A)+row(`${bn}（3 日 >${B.toFixed(1)}）`,r.B);
+ const s=$("#rasvg"),L=40,R=370,Bt=210,T=24;const mx=Math.max(10,Math.ceil(Math.max(r.A.n,r.B.n)*1.15/10)*10);const Y=v=>Bt-v/mx*(Bt-T);let g="";[0,.5,1].forEach(f=>{const v=mx*f;g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-5}" y="${Y(v)+4}" font-size="10.5" fill="${C.mute}" text-anchor="end">${fmt(v,0)}</text>`});
+ [["規則 A",r.A,C.ochre],[bn,r.B,C.navy2]].forEach(([n,x,col],i)=>{const cx=L+(i+.5)*(R-L)/2,w=80;g+=`<rect x="${cx-w/2}" y="${Y(x.n)}" width="${w}" height="${Bt-Y(x.n)}" fill="${col}" opacity=".35" rx="3"/><rect x="${cx-w/2}" y="${Y(x.tp)}" width="${w}" height="${Bt-Y(x.tp)}" fill="${col}" rx="3"/><text x="${cx}" y="${Y(x.n)-6}" font-size="14" font-weight="700" text-anchor="middle" fill="${col}">${x.n} 則</text><text x="${cx}" y="${Bt+16}" font-size="12.5" text-anchor="middle">${n}</text>`});
+ g+=`<text x="${L}" y="12" font-size="11.5" fill="${C.mute}">深色＝來自惡化病人；淺色＝其餘（假警示）</text>`;s.innerHTML=g;
+ const ratio=r.B.n?r.A.n/r.B.n:0;$("#ratxt").innerHTML=`示範資料：30 位（4 位惡化、4 位體重緩升、3 位常漏傳）。規則 A 每 ${r.A.tp?fmt(r.A.n/r.A.tp,1):"—"} 則警示只有 1 則來自惡化病人${ratio?`；警示數是${bn}的 <b>${fmt(ratio,1)} 倍</b>`:""}。${r.B.miss&&!rbo.comp?`<br>${bn}漏掉 ${r.B.miss} 位：試著打開「加上喘 ≥ 2」——這就是組合規則的價值。`:""}<br><span style="font-size:13px;color:var(--mute)">個管師學會「忽略警示」的那天，就是系統失效的那天。</span>`}
+togs("#rbopt",[["comp","組合：規則 B 加上「喘 ≥ 2」"]],rbo,rab);rng("ra",rab,v=>"+"+v.toFixed(1)+" kg");rng("rb",rab,v=>v.toFixed(1)+" kg");rab();
+
+/* 11 rules table + demo cases */
+const RT0=[["● 紅","3 日體重增加 > 2 kg；喘 ≥ 2 分；血氧 < 90%；收縮壓 < 90 或 > 180；心跳 < 50 或 > 120；最後一次上傳為紅燈、之後失聯","電話評估；聯絡不到依升級流程處理","2 小時內"],["● 黃","單日體重增加 ≥ 1 kg；喘 1 分或水腫；收縮壓 160–180；心跳 100–120；血氧 90–91%；未服利尿劑；連續 2 日以上未上傳","當日電話關懷、提醒量測與服藥","當日"],["◌ 無資料","今日未上傳，且未達紅、黃條件","提醒量測；不可視為正常","當日"],["● 綠","今日已上傳，以上皆未成立","例行檢視","每週"]];
+let RT=LS.get("rt",RT0.map(r=>r.slice()));const LCOL=["var(--ochre)","var(--amber)","var(--mute)","var(--green)"];
+function rtt(){$("#rtt").innerHTML=`<tr><th style="width:70px">燈號</th><th>條件（任一成立）</th><th style="width:22%">建議行動</th><th style="width:90px">回應時限</th></tr>`+RT.map((r,i)=>`<tr><td class="lt" style="color:${LCOL[i]}">${r[0]}</td>${[1,2,3].map(k=>`<td><textarea data-i="${i}" data-k="${k}" style="min-height:${k===1?70:40}px">${esc(r[k])}</textarea></td>`).join("")}</tr>`).join("");$$("#rtt textarea").forEach(t=>t.addEventListener("input",()=>{RT[+t.dataset.i][+t.dataset.k]=t.value;LS.set("rt",RT)}))}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+rtt();$("#rtreset").onclick=()=>{RT=RT0.map(r=>r.slice());LS.set("rt",RT);rtt()};persist(["rt-why"],"rtwhy");
+choiceRows("#dmq",[
+ ["練習病人甲：3 日體重 +2.4 kg，喘 0，其餘正常，今日已上傳",0,"3 日增加 > 2 kg：紅燈，2 小時內電話評估。"],
+ ["練習病人乙：喘 1 分、腳踝水腫，體重穩定",1,"喘 1 分或水腫：黃燈，當日電話關懷。"],
+ ["練習病人丙：血氧 88%，其餘正常",0,"血氧 < 90%：紅燈。"],
+ ["練習病人丁：今天沒上傳；昨天以前都正常",2,"今日未上傳且未達紅黃：無資料——提醒量測，不可視為正常。"],
+ ["練習病人戊：心跳 105，其餘正常",1,"心跳 100–120：黃燈。"],
+ ["練習病人己：單日體重 +0.6 kg，其餘正常，今日已上傳",3,"未達任何條件：綠燈，例行檢視。"],
+ ["練習病人庚：收縮壓 85，其餘正常",0,"收縮壓 < 90：紅燈。"],
+ ["練習病人辛：收縮壓 165，其餘正常",1,"收縮壓 160–180：黃燈。"]
+],["紅","黃","無資料","綠"],"#dmscore");
+
+/* 12 lab */
+const PH=[[0,10,"理解使用者與資料"],[10,20,"設計警示規則"],[20,40,"Vibe Coding"],[40,60,"固定測例"],[60,75,"照護流程與容量"],[75,80,"繳交"]];let tS=null,tI=null,tE=0;
+function drawPh(m){$("#phases").innerHTML=PH.map(([a,b,n])=>`<div class="${m>=b?"done":m>=a?"on":""}"><b>${n}</b><br>${b-a} 分</div>`).join("");const c=PH.find(([a,b])=>m>=a&&m<b);$("#clk-ph").textContent=m>=80?"時間到：繳交！":c?"現在："+c[2]:""}
+function tick(){const e=tE+(tS?(Date.now()-tS)/1000:0),l=Math.max(0,4800-e);$("#clk").textContent=`${String(Math.floor(l/60)).padStart(2,"0")}:${String(Math.floor(l%60)).padStart(2,"0")}`;drawPh(e/60);if(l<=0&&tI){clearInterval(tI);tI=null}}
+$("#clk-go").onclick=()=>{if(tI){tE+=(Date.now()-tS)/1000;tS=null;clearInterval(tI);tI=null;$("#clk-go").textContent="繼續"}else{tS=Date.now();tI=setInterval(tick,500);$("#clk-go").textContent="暫停"}};$("#clk-rs").onclick=()=>{clearInterval(tI);tI=null;tS=null;tE=0;$("#clk-go").textContent="開始";tick()};tick();
+const TPL_HEAD="請扮演醫療資訊工程師，製作「心衰竭居家監測儀表板」，輸出為單一 HTML 檔（JavaScript＋Chart.js）。\n1. 使用者可上傳 CSV（欄位：patient_id, name, age, sex, date, weight_kg, sbp, dbp, hr, spo2,\n   dyspnea_0to3, edema, diuretic_taken, uploaded）；資料只在瀏覽器處理，不得上傳任何伺服器。\n2. 以 2026-10-12 為今天，判定每位病人的燈號，並列出所有觸發原因：\n";
+const TPL_RULE="   紅：3 日體重增加 > 2 kg、喘 ≥ 2、血氧 < 90、收縮壓 < 90 或 > 180、心跳 < 50 或 > 120；\n       或最後一次上傳為紅燈、之後未再上傳（失聯）\n   黃：單日體重增加 ≥ 1 kg、喘 = 1 或水腫、收縮壓 160–180、心跳 100–120、血氧 90–91、\n       未服利尿劑、連續 2 日以上未上傳\n   今日未上傳且未達紅黃：顯示「今日無資料」，不可判為綠；欄位空白不可當 0；\n   同一天多筆取最後一筆並標示「重複」\n";
+const TPL_TAIL="3. 首頁：分流清單，紅燈置頂；頂端顯示各燈號的「病人數」，另顯示今日警示原因「則數」。\n4. 點選病人：顯示近 30 天體重、血壓、血氧趨勢圖，並畫出警示參考線。\n5. 介面全中文、字體 ≥ 16px；燈號同時用顏色＋文字＋圖示（色盲友善）。\n6. 程式碼加註解，並在頁尾顯示「本工具為教學示範，非醫療器材」。";
+$("#tpl").textContent=TPL_HEAD+TPL_RULE+TPL_TAIL;
+$("#tplcopy").onclick=()=>copyText(TPL_HEAD+TPL_RULE+TPL_TAIL,"#tplmsg");
+$("#tplrule").onclick=()=>{const rr=RT.map(r=>`   ${r[0].replace(/[●◌] /,"")}：${r[1]}（行動：${r[2]}；時限：${r[3]}）`).join("\n")+"\n   欄位空白不可當 0；同一天多筆取最後一筆並標示「重複」；沒有資料不等於正常\n";const t=TPL_HEAD+rr+TPL_TAIL;$("#tpl").textContent=t;copyText(t,"#tplmsg")};
+const TC=[["T1","P01 王伯伯","體重 72.5（10/09 為 70.4）；喘 2；血氧 92"],["T2","P33 謝女士","10/06–10/07 喘 2 分；10/08 起完全未上傳"],["T3","P16 陳伯伯","單日體重 +1.3 kg；其餘正常"],["T4","P47 廖伯伯","未服利尿劑；其餘正常"],["T5","P05","30 天體重緩升約 2 kg（首末週平均差約 1.6 kg）；無症狀"],["E1","邊界未達","10/09 70.0 → 10/12 72.0（3 日 +2.0）；單日最多 +0.7"],["E2","邊界超過","10/09 70.0 → 10/12 72.1（3 日 +2.1）"],["E3","缺值","今日已上傳，血氧欄空白；其餘正常"],["E4","同日重複","10/12 兩筆：71.5、70.3（前一日 70.1）"],["E5","資料過期","10/10 起未上傳；之前都正常"]];
+const LT=["","紅","黃","無資料","綠"];const tcS=LS.get("tc",TC.map(()=>({h:"",m:"",d:"",f:""})));
+function tct(){$("#tct").innerHTML=`<tr><th>#</th><th>病人／情境</th><th>關鍵資料（10/12）</th><th style="width:96px">你的判斷</th><th style="width:110px">標示（缺值、重複…）</th><th style="width:96px">儀表板結果</th><th style="width:44px">一致</th><th>不一致時：誰錯、怎麼修正</th></tr>`+TC.map(([id,p,k],i)=>{const s=tcS[i];const same=s.h&&s.d?(s.h===s.d?"✓":"✕"):"";return `<tr><td><b>${id}</b></td><td>${p}</td><td style="font-size:12.5px">${k}</td><td><select data-i="${i}" data-k="h">${LT.map(x=>`<option ${s.h===x?"selected":""}>${x}</option>`).join("")}</select></td><td><input data-i="${i}" data-k="m" value="${esc(s.m)}"></td><td><select data-i="${i}" data-k="d">${LT.map(x=>`<option ${s.d===x?"selected":""}>${x}</option>`).join("")}</select></td><td style="text-align:center;font-weight:900;color:${same==="✓"?C.green:C.ochre}">${same}</td><td><input data-i="${i}" data-k="f" value="${esc(s.f)}"></td></tr>`}).join("");
+ $$("#tct select,#tct input").forEach(e=>e.addEventListener("change",()=>{tcS[+e.dataset.i][e.dataset.k]=e.value;LS.set("tc",tcS);if(e.tagName==="SELECT")tct();tcp()}));tcp()}
+function tcp(){const n=tcS.filter(s=>s.h&&s.d).length;$("#tcprog").textContent=`已完成 ${n} / 10`}
+tct();
+const T5H="提示：T5 用「個人基準 +1 kg」規則會怎麼判？用「3 日趨勢」規則呢？";$("#tct").insertAdjacentHTML("afterend",`<p class="note">${T5H}臨床軟體的品質靠測試案例證明，不靠「看起來能跑」。</p>`);
+
+/* 13 capacity */
+function cap(){const r=+$("#cr").value,y=+$("#cy").value,n=+$("#cn").value,mr=+$("#cmr").value,my=+$("#cmy").value,mn=+$("#cmn").value,av=+$("#cav").value;const tr=r*mr,ty=y*my,tn=n*mn,tot=tr+ty+tn;
+ const s=$("#capsvg"),L=60,R=360,B=220,T=20;const mx=Math.ceil(Math.max(tot,av)*1.15/20)*20;const Y=v=>B-v/mx*(B-T);let g="";[0,.5,1].forEach(f=>{const v=mx*f;g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-5}" y="${Y(v)+4}" font-size="10.5" fill="${C.mute}" text-anchor="end">${fmt(v,0)} 分</text>`});
+ let y0=0;[[tr,C.ochre,`紅 ${r} 位`],[ty,C.amber,`黃 ${y} 位`],[tn,C.gray,`無資料 ${n} 位`]].forEach(([v,col,nm])=>{if(!v)return;g+=`<rect x="${L+30}" y="${Y(y0+v)}" width="90" height="${Y(y0)-Y(y0+v)}" fill="${col}"/><text x="${L+75}" y="${(Y(y0)+Y(y0+v))/2+4}" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">${Y(y0)-Y(y0+v)>16?nm+" "+v+" 分":""}</text>`;y0+=v});
+ g+=`<text x="${L+75}" y="${Y(tot)-6}" font-size="14" font-weight="700" text-anchor="middle">約 ${tot} 分</text><text x="${L+75}" y="${B+16}" font-size="12" text-anchor="middle">需要</text>`;
+ g+=`<rect x="${L+170}" y="${Y(av)}" width="90" height="${B-Y(av)}" fill="${C.navy2}"/><text x="${L+215}" y="${Y(av)-6}" font-size="14" font-weight="700" text-anchor="middle" fill="${C.navy2}">${av} 分</text><text x="${L+215}" y="${B+16}" font-size="12" text-anchor="middle">可用</text>`;s.innerHTML=g;
+ $("#captxt").innerHTML=`紅黃 ${r+y} 位病人、需要約 <b>${tot}</b> 分鐘；可用 ${av} 分鐘——${tot>av?`<span style="color:var(--ochre);font-weight:700">差了約 ${fmt(tot/av,1)} 倍</span>。要排優先順序：紅燈先打、黃燈可分到上午其他時段或交給其他人員；也要回頭檢討規則是否產生太多黃燈。`:`<span style="color:var(--green);font-weight:700">做得完。</span>但週末與夜間誰接？`}<br><span style="font-size:13px;color:var(--mute)">病人數與警示原因則數要分開算：同一位病人可能同時有好幾則原因。</span>`}
+["cr","cy","cn","cmr","cmy","cmn","cav"].forEach(id=>rng(id,cap));cap();
+persist(["cf-1","cf-2","cf-3","cf-4"],"cf");
+
+/* 14 rubric + submission */
+const RB=[["規則與資料處理","每條規則有依據；缺測、失聯、空白、重複都有處理",25],["測試及修正證據","T1–T5、E1–E5 手判與結果並列；判錯處有修正紀錄",30],["資訊呈現與可用性","15 秒內看懂先打給誰；病人數與則數分開；色盲友善",15],["照護流程及風險判斷","誰接、何時、接不到怎麼辦；容量估算合理",20],["個人說明及 AI 紀錄","能解釋一個測例結果；工具、提示與修正處具體",10]];
+const rbS=LS.get("rub",RB.map(()=>-1));
+function rub(){let s=0,n=0;RB.forEach(([,,w],i)=>{if(rbS[i]>=0){s+=w*rbS[i]/2;n++}});$("#rubsum").textContent=n?`自評約 ${fmt(s,0)} / 100（已評 ${n} / 5 項）`:""}
+(function(){const r=$("#rub");RB.forEach(([n,d,w],i)=>{r.innerHTML+=`<div class="q" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><div><b>${n}</b>（${w}%）<div style="font-size:13px;color:var(--mute)">${d}</div></div><div class="seg" data-rb="${i}" style="display:flex">${["未達","部分","達成"].map((t,k)=>`<button data-v="${k}" class="${rbS[i]===k?"on":""}">${t}</button>`).join("")}</div></div>`});$$("[data-rb]").forEach(sg=>sg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sg.querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");rbS[+sg.dataset.rb]=+b.dataset.v;LS.set("rub",rbS);rub()}));rub()})();
+const QA=["qa-1","qa-2","qa-3","qa-4","qa-5"],AI=["ai-who","ai-tool","ai-n","ai-fix","ai-me"];persist(QA,"qa");persist(AI,"ai");
+$("#subcopy").onclick=()=>{const v=id=>$("#"+id).value.trim()||"（未填）";
+ const t=["W10 實作三繳交包","","【一、警示規則表】",...RT.map(r=>`${r[0]}｜條件：${r[1]}｜行動：${r[2]}｜時限：${r[3]}`),"修改紀錄："+v("rt-why"),"","【二、固定測例紀錄】（以 2026/10/12 判定）",...TC.map(([id,p],i)=>{const s=tcS[i];return `${id} ${p}｜手判：${s.h||"—"}${s.m?"（"+s.m+"）":""}｜儀表板：${s.d||"—"}｜${s.h&&s.d?(s.h===s.d?"一致":"不一致"):"未完成"}${s.f?"｜修正："+s.f:""}`}),"","【三、照護流程】","誰接收："+v("cf-1"),"多快處理："+v("cf-2"),"接不到："+v("cf-3"),"容量："+v("cf-4"),"","【四、五重目標反思】",...["病人體驗","族群健康","降低成本","照護者福祉","健康公平"].map((n,i)=>n+"："+v(QA[i])),"","【五、AI 使用紀錄】","組員："+v("ai-who"),"工具："+v("ai-tool"),"提示輪數："+v("ai-n"),"AI 做錯並修正："+v("ai-fix"),"個人說明："+v("ai-me")].join("\n");copyText(t,"#submsg")};
+
+/* 15 Heart Safe Motherhood */
+choiceRows("#hsq",[
+ ["出院時帶回家用血壓計",0,"感測：簡單、便宜的家用血壓計。"],
+ ["每天兩次簡訊提醒，病人回傳血壓數字（不需安裝 App）",1,"傳輸：用簡訊，最省——不需 App、不需藍牙配對。"],
+ ["正常自動回覆，偏高即時通知醫療團隊",2,"分析：簡單的閾值規則，自動分流。"],
+ ["偏高時，醫療團隊依事先定好的流程處理",3,"行動：誰接、怎麼處理事先定好——閉環的關鍵。"]
+],["① 感測","② 傳輸","③ 分析","④ 行動"],"#hsscore");
+persist(["hs-dp"],"hs");
+
+/* 16 glossary + quiz */
+const GL=[["遠距病人監測","RPM","在院外收集生理數據，由醫療團隊遠端判讀與回應"],["虛擬病房","Virtual Ward","以遠距監測與到宅團隊，提供原需住院的照護"],["數位療法","DTx","以實證為基礎、軟體本身提供治療的醫療介入"],["數位健康應用","DiGA","德國可由醫師處方、法定保險給付的數位健康產品"],["陽性預測值","PPV","被警示者中，真正有問題的比例"],["警示疲勞","Alert Fatigue","警示過多導致使用者忽略或關閉警示"],["個人基準","Personal Baseline","以病人自己的穩定期數值作為比較基礎"],["測試案例","Test Case","已知正確答案、用來驗證軟體判斷的資料"]];
+(function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}<small>${b}</small></div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
+mcq("#final",[
+ {q:"多數 RPM 失敗卡在四層資料流的哪一層？",o:["① 感測","② 傳輸","③ 分析","④ 行動"],a:3,e:"資料有進來，但沒有人、沒有流程、沒有時限去回應。"},
+ {q:"TIM-HF2 成功的關鍵是什麼？",o:["用了最新的植入式裝置","24 小時有人看、看到就能處理","病人自己判讀數據","只監測體重"],a:1,e:"回應系統才是價值所在；科技只是把訊號送到對的人手上。"},
+ {q:"BEAT-HF 180 天再入院率 51% vs 49%，結論是？",o:["介入組明顯較好","介入組明顯較差","無差異","無法解讀"],a:2,e:"有設備、有電話，但與主治團隊調藥的連結不夠緊密。"},
+ {q:"GUIDE-HF 整體主要終點 HR 0.88（0.74–1.05），代表？",o:["監測組顯著較好","未達顯著：信賴區間跨過 1","監測組顯著較差","研究無效"],a:1,e:"同一裝置換族群、換時代，結果就可能不同。"},
+ {q:"一個 App 宣稱「治療慢性失眠」，它屬於？",o:["一般健康 App","不需審查的工具","數位療法（醫療器材）","只是資訊網站"],a:2,e:"判斷關鍵是「宣稱」。"},
+ {q:"德國 DiGA 制度最大的特色是？",o:["完全不審查","先給付、再證明","只給付心臟病","由病人自費"],a:1,e:"可暫時列名先給付，期間內須證明正向照護效果。"},
+ {q:"美國 RPM 給付碼 99457 付的是？",o:["裝置設定","每月有資料 16–30 天","每月臨床管理時間首 20 分鐘","硬體費用"],a:2,e:"美國付「看資料的人的時間」。"},
+ {q:"台灣 2024 修正《通訊診察治療辦法》後，特殊情形擴大為幾類？",o:["5 類","7 類","10 類","不限"],a:2,e:"從 5 類擴大到 10 類；處方另有限制。"},
+ {q:"起始規則中，「今日未上傳，且未達紅、黃條件」應顯示為？",o:["綠燈","今日無資料（不可視為正常）","紅燈","不顯示"],a:1,e:"沒有資料不等於正常。"},
+ {q:"Apple Heart Study 給醫療體系最重要的啟示是？",o:["手錶可取代心電圖","穿戴裝置擅長發現，醫療體系要負責接住","篩檢越多越好","年輕人最需要篩檢"],a:1,e:"只有約五分之一寄回貼片完成確認：誰接手是系統設計問題。"}
+],"#finalscore");
+
+})();
+</script>
+</body>
+</html>
