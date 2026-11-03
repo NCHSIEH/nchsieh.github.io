@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W6 生成式 AI 與大型語言模型的臨床應用 · 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+<style>
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.spec{grid-template-columns:1fr}}
+.spec label{display:block;font-weight:700;color:var(--navy);font-size:14px;margin:8px 0 4px}
+.spec select{width:100%;padding:7px;border-radius:8px;border:1px solid var(--line2);background:#fff}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;margin:6px 0}
+.lane .ln{font-weight:700;color:#fff;border-radius:8px;padding:8px;font-size:13px;text-align:center}
+.lane .track{position:relative;height:96px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.ms{position:absolute;top:6px;transform:translateX(-50%);text-align:center;cursor:pointer;width:84px}
+.ms.lo{top:48px}
+.ms .d{width:14px;height:14px;border-radius:50%;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.ms .y{font-size:11px;color:var(--mute);margin-top:2px}
+.ms .n{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2}
+.ms.on .d{box-shadow:0 0 0 3px var(--ochre)}
+.conf{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:420px}
+.conf i{display:block;aspect-ratio:1;border-radius:3px}
+.cell2{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:13.5px;margin-top:10px}
+.cell2 div{padding:8px;border-radius:8px;background:var(--paper);border:1px solid var(--line)}
+.cell2 .h{background:var(--navy-l);font-weight:700;color:var(--navy);text-align:center}
+.agent{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.astep{flex:1;min-width:130px;border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.astep b{display:block;color:var(--navy);font-size:15px}
+.astep.run{border-color:var(--navy2);background:var(--navy-l)}
+.astep.ok{border-color:var(--green);background:var(--green-l)}
+.astep.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.astep.skip{opacity:.45}
+.tree{display:flex;flex-direction:column;gap:8px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.tq.dim{opacity:.4}
+.tq b{color:var(--navy)}
+.tres{border-radius:10px;padding:12px 16px;color:#fff;font-weight:700;font-size:16px}
+.reg{display:grid;grid-template-columns:120px repeat(3,1fr);gap:6px;font-size:13.5px}
+.reg .h{background:var(--navy);color:#fff;font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.reg .rh{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;display:flex;align-items:center}
+.reg .c{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;min-height:54px;color:var(--mute2)}
+.reg .c.open{color:var(--ink);background:#fff;border-color:var(--navy2)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.prin{grid-template-columns:1fr}}
+.prin .pc{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.prin .pc h4{margin:0 0 4px;color:var(--navy);font-size:15px}
+.prin select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff;margin-top:4px;font-size:13px}
+.gen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.gen{grid-template-columns:1fr}}
+.gen .gc2{border:2px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.gen .gc2 h4{margin:0;color:var(--navy)}
+.gen label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;margin:6px 0;cursor:pointer}
+</style>
+<style>
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tog label{display:flex;gap:6px;align-items:center;border:1px solid var(--line2);background:#fff;border-radius:20px;padding:4px 12px;font-size:13.5px;cursor:pointer}
+.tog label.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tog input{display:none}
+.code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;background:#1B2A4A;color:#E6EAF2;border-radius:10px;padding:12px 14px;line-height:1.7;white-space:pre-wrap}
+.dlg{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px;line-height:1.9}
+.dlg div{border-radius:6px;padding:0 6px;transition:background .2s}
+.dlg div.hl{background:#FFE9A8}
+.dlg b{color:var(--mute);font-family:"JetBrains Mono",monospace;font-weight:400;margin-right:6px}
+.tk{display:inline-block;border:1px solid var(--line2);border-radius:6px;padding:2px 8px;margin:2px;font-size:15px;background:#fff}
+.ctx{display:grid;grid-template-columns:repeat(14,1fr);gap:3px}
+.ctx div{font-size:11.5px;text-align:center;padding:6px 2px;border-radius:5px;background:var(--navy-l);color:var(--navy)}
+.ctx div.out{background:#EFEAE0;color:var(--mute2);text-decoration:line-through}
+.chk{width:100%;border-collapse:collapse;font-size:13.5px}
+.chk th,.chk td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertical-align:middle}
+.chk th{color:var(--mute);font-weight:500;font-size:12.5px}
+.chk select,.chk input{width:100%;padding:4px;border:1px solid var(--line2);border-radius:6px;font-size:12.5px;background:#fff;font-family:inherit}
+.soap div{padding:3px 8px;border-radius:6px;margin:2px 0;font-size:14.5px}
+.soap div.red{background:#F6E3DA}
+.soap .ln{color:var(--navy2);font-weight:700;cursor:pointer;text-decoration:underline}
+.layer{display:flex;gap:6px;align-items:stretch}
+.slice{flex:1;border-radius:10px;padding:10px 8px;text-align:center;font-size:13px;cursor:pointer;border:2px solid var(--line2);background:#FBF4E4}
+.slice.off{opacity:.35;background:#fff}
+.slice b{display:block;color:var(--navy);font-size:14px}
+.timer{display:flex;gap:6px;margin-top:8px}
+.timer div{flex:1;border-radius:8px;padding:8px 6px;font-size:12.5px;text-align:center;background:var(--paper);border:2px solid var(--line)}
+.timer div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.timer div.done{border-color:var(--green);background:var(--green-l)}
+.clock{font-family:"JetBrains Mono",monospace;font-size:40px;font-weight:700;color:var(--navy)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W6 生成式 AI 與大型語言模型 ★ 實作週</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與草稿">重置進度</button>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W6 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div style="font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px">WEEK 6 · ★ 課堂實作週 · 讓 AI 執筆，讓人負責</div>
+  <h1>生成式 AI 與大型語言模型的臨床應用</h1>
+  <div class="en">Generative AI &amp; Large Language Models in Clinical Care</div>
+  <p class="lead">生成式 AI 最先改變的，不是診斷，而是「寫字」。這一頁先讓你看見 LLM 為什麼會寫錯（溫度、上下文、RAG 文件庫），再用<b>練習對話</b>練習抓出五種錯誤，最後到<b>實作二</b>：填寫固定草稿查核表、記錄受控比較、產生 AI 使用紀錄。</p>
+  <div class="chips"><a class="tag" href="../../W06_生成式AI與大型語言模型的臨床應用_Generative_AI_and_LLMs_in_Clinical_Care.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W6）</a><span class="tag o">實作二 占學期成績 10%</span><span class="tag a">實作二固定草稿不在本頁公布答案</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<section class="part" id="p01" data-t="開場：AI 代筆">
+  <div class="ph"><span class="num">01</span><div><h2>王伯伯回診的 15 分鐘：醫師的眼睛常停在螢幕上</h2><div class="en">WRITING BEFORE DIAGNOSIS</div></div></div>
+  <p class="one">如果 AI 能代筆：醫師看著病人，AI 產生草稿，醫師審閱簽名。<b>但 AI 若聽錯或多寫，誰發現？誰負責？</b></p>
+  <div class="grid3">
+    <div class="kpi"><div class="v">6–10<small> 份</small></div><div class="l">住院醫師每天病程紀錄</div></div>
+    <div class="kpi"><div class="v">0.5–2<small> 小時</small></div><div class="l">一份完整入院紀錄</div></div>
+    <div class="kpi o"><div class="v">40–50%</div><div class="l">北榮「預估」減少撰寫時間（院方預估，非實測）</div></div>
+  </div>
+</section>
+
+<section class="part" id="p02" data-t="文字接龍與溫度">
+  <div class="ph"><span class="num">02</span><div><h2>LLM 的本質：超大型文字接龍</h2><div class="en">NEXT-TOKEN PREDICTION · TEMPERATURE</div></div></div>
+  <p class="one">LLM 優化的是<b>「像真的」</b>，不是「是真的」：查核永遠不能省。</p>
+  <div class="wd">
+    <div class="wh"><h3>王伯伯近三天體重增加兩公斤，伴隨下肢 ＿＿</h3><span class="tag o">拉溫度、按生成</span><span class="tag a">機率為教學示意</span></div>
+    <div class="grid2">
+      <div>
+        <svg viewBox="0 0 380 200" class="chart" id="nt"></svg>
+        <div class="ctl"><span>溫度 Temperature</span><input type="range" id="tp" min="0.1" max="2" step="0.1" value="1"><output></output></div>
+      </div>
+      <div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" id="gen1">生成 1 次</button><button class="btn" id="gen20">生成 20 次</button><button class="btn" id="genc">清空</button></div>
+        <div class="detail" id="gout" style="min-height:110px"></div>
+        <div id="gsum" style="font-size:13.5px"></div>
+      </div>
+    </div>
+    <p class="note">溫度 T 把機率變成 p<sup>1/T</sup> 再正規化：低溫幾乎都選「水腫」，高溫連「疼痛」「無力」都會出現。臨床文書：低溫度、明確格式、只依提供的內容作答。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>上下文視窗：病歷太長，後面的會讀不到</h3><span class="tag o">拉視窗大小</span></div>
+    <div class="ctl"><span>上下文視窗（行）</span><input type="range" id="cw" min="4" max="14" value="10"><output></output></div>
+    <div class="ctx" id="ctx"></div>
+    <div class="detail" id="ctxtxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p03" data-t="生成式 vs 預測式與提示五要素">
+  <div class="ph"><span class="num">03</span><div><h2>一個寫、一個算；好提示的五要素</h2><div class="en">GENERATIVE vs PREDICTIVE · PROMPT ENGINEERING</div></div></div>
+  <p class="one"><b>依據與限制</b>兩項，直接決定幻覺的多寡。</p>
+  <div class="wd">
+    <div class="wh"><h3>這是預測式（W5）還是生成式（W6）？</h3><span class="tag a">6 題</span><span class="scoreline" id="gpscore"></span></div>
+    <div id="gpq"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>提示五要素檢查器</h3><span class="tag o">輸入或修改提示</span></div>
+    <textarea id="pin" style="width:100%;min-height:90px;padding:10px;border:1px solid var(--line2);border-radius:8px;font-size:14.5px">幫我把這段對話寫成病歷</textarea>
+    <div style="margin:6px 0;display:flex;gap:6px;flex-wrap:wrap"><button class="btn" data-pp="0">模糊提示</button><button class="btn" data-pp="1">結構化提示（五要素）</button></div>
+    <div class="grid5" id="pchk"></div>
+    <div id="prisk" style="margin-top:8px"></div>
+  </div>
+</section>
+
+<section class="part" id="p04" data-t="應用地圖與實證">
+  <div class="ph"><span class="num">04</span><div><h2>臨床應用與實證：成效常和「省一半時間」不同</h2><div class="en">WHO LMM GUIDANCE 2024 · UCLA RCT · PHTI 2025</div></div></div>
+  <p class="one">導入前先問：<b>證據從哪來？成功的定義是什麼？</b>分清數字性質：實測、預估、院方說明。</p>
+  <div class="wd">
+    <div class="wh"><h3>WHO 五大用途：越靠近診斷與病人自主使用，風險越高</h3><span class="tag gray">點選</span></div>
+    <svg viewBox="0 0 760 170" class="chart" id="who"></svg>
+    <div class="detail" id="whotxt"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>UCLA 隨機對照試驗：每份病歷省多少？</h3><span class="tag gray">238 位醫師・14 專科・約 72,000 次門診（NEJM AI 2025）</span></div>
+    <div class="grid2">
+      <svg viewBox="0 0 360 220" class="chart" id="ucla"></svg>
+      <div>
+        <p class="hint">Nabla 組每份由 4:30 降到 3:49（約 41 秒）；對照組由 4:22 降到 4:04（約 18 秒）。相對對照組<b>多省約 23 秒</b>，約 9.5%。換算成一位醫師一年：</p>
+        <div class="ctl"><span>每日病歷份數</span><input type="range" id="uc-n" min="5" max="60" value="25"><output></output></div>
+        <div class="ctl"><span>每年門診日</span><input type="range" id="uc-d" min="100" max="280" step="10" value="220"><output></output></div>
+        <div class="ctl"><span>每份審閱與修改（秒）</span><input type="range" id="uc-r" min="0" max="60" step="5" value="0"><output></output></div>
+        <div class="grid2" id="uckpi"></div>
+      </div>
+    </div>
+    <p class="note">倦怠：兩個 AI 組約改善 7%；DAX 未達統計顯著；偶有臨床上重要的不正確、1 件輕微病安事件。單一醫學中心、約 2–3 個月。審閱秒數為思考實驗假設（試驗的時間已含醫師修改）。</p>
+  </div>
+  <div class="grid2">
+    <div class="wd" style="margin:0"><div class="wh"><h3>AI 回覆病人提問</h3><span class="tag gray">Ayers 2023・195 則論壇提問</span></div><svg viewBox="0 0 360 220" class="chart" id="ayers"></svg><p class="note">比較對象是醫師在論壇的簡短回覆。Garcia 2024（Stanford，162 位）：倦怠與負荷下降，但未節省時間。寫得更暖不代表更對。</p></div>
+    <div class="wd" style="margin:0"><div class="wh"><h3>數字性質判斷</h3><span class="tag a">4 題</span></div><div id="natq"></div></div>
+  </div>
+</section>
+
+<section class="part" id="p05" data-t="RAG 模擬器">
+  <div class="ph"><span class="num">05</span><div><h2>RAG：把閉卷考試改成開書考試</h2><div class="en">RETRIEVAL-AUGMENTED GENERATION · LEWIS ET AL. 2020</div></div></div>
+  <p class="one">RAG 不保證零錯誤，<b>但讓錯誤可以被追查</b>；過期、矛盾的文件會被自信地引用。</p>
+  <div class="wd">
+    <div class="wh"><h3>院內文件庫問答模擬（合成文件）</h3><span class="tag o">核心互動</span></div>
+    <div class="grid2">
+      <div>
+        <label style="font-weight:700;color:var(--navy);font-size:14px;display:block">護理師的問題</label>
+        <select id="rq" style="width:100%;padding:8px;border:1px solid var(--line2);border-radius:8px;margin:6px 0"><option value="0">心衰竭出院衛教要包含哪些項目？</option><option value="1">體重增加多少要提早回診？</option><option value="2">Furosemide 最大劑量是多少？</option></select>
+        <div class="seg" id="rmode" style="display:flex;width:fit-content;margin:6px 0"><button data-m="closed">閉卷（一般 LLM）</button><button class="on" data-m="rag">開書（RAG）</button></div>
+        <label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-top:6px"><input type="checkbox" id="rold" checked> 文件庫仍留著 2023 舊版指引</label>
+        <div style="margin-top:10px;font-size:13px;color:var(--mute)">文件庫</div><div id="rdocs"></div>
+      </div>
+      <div><div class="detail" id="rans" style="margin-top:0;min-height:200px"></div></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="wd" style="margin:0"><div class="wh"><h3>沒有出處的 AI，連參考文獻都會編</h3><span class="tag gray">Bhattacharyya 2023・115 筆</span></div><svg viewBox="0 0 360 200" class="chart" id="refs"></svg><p class="note">2023 年 ChatGPT-3.5；新模型與 RAG 會改善，但出處本身也要點開核對。</p></div>
+    <div class="wd" style="margin:0"><div class="wh"><h3>提示、RAG、還是微調？</h3><span class="tag a">4 題</span></div><div id="ftq"></div></div>
+  </div>
+</section>
+
+<section class="part" id="p06" data-t="五種錯誤練習">
+  <div class="ph"><span class="num">06</span><div><h2>AI 生成病歷的五種常見錯誤</h2><div class="en">FABRICATION · OMISSION · ATTRIBUTION · NEGATION · OVER-INFERENCE</div></div></div>
+  <p class="one">五種錯誤都讀起來很通順：只看文筆抓不到，<b>必須逐句回到原始對話</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>練習對話：李奶奶糖尿病回診（合成，非實作二材料）</h3><span class="tag o">即時回饋</span><span class="scoreline" id="pxscore"></span></div>
+    <div class="grid2">
+      <div class="dlg" id="pxdlg"></div>
+      <div id="pxq"></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>溯源呈現示範：點行號，左邊對應那一行會亮起</h3><span class="tag gray">以練習對話示範；實作二請自己做</span></div>
+    <div class="grid2"><div class="dlg" id="trdlg"></div><div class="soap" id="trsoap"></div></div>
+    <p class="note">沒有［行號］的句子以紅底標示＝可能的幻覺。這只是展示原型，不是串接臨床系統。</p>
+  </div>
+</section>
+
+<section class="part" id="p07" data-t="幻覺率與五道防線">
+  <div class="ph"><span class="num">07</span><div><h2>幻覺有多常見？要設幾道防線？</h2><div class="en">ASGARI 2025 · WHISPER · SWISS CHEESE MODEL</div></div></div>
+  <p class="one">第 ⑤ 道最貴也最容易鬆懈：<b>AI 越準，人越容易沒看就簽</b>（自動化偏誤）。</p>
+  <div class="grid4">
+    <div class="kpi o"><div class="v">1.47%</div><div class="l">幻覺率（191／12,999 句）</div></div>
+    <div class="kpi"><div class="v">3.45%</div><div class="l">遺漏率（1,712／49,590 句）</div></div>
+    <div class="kpi o"><div class="v">44%</div><div class="l">幻覺屬重大（84／191）</div></div>
+    <div class="kpi"><div class="v">約 21%</div><div class="l">重大幻覺出現在計畫 P</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>一份摘要幾句，就可能有一句幻覺？</h3><span class="tag o">拉桿</span></div>
+    <div class="grid2">
+      <div><div class="ctl"><span>每份摘要句數</span><input type="range" id="hs" min="5" max="60" value="25"><output></output></div><div class="ctl"><span>每日份數</span><input type="range" id="hn" min="1" max="40" value="20"><output></output></div><div class="grid2" id="hkpi"></div></div>
+      <svg viewBox="0 0 380 230" class="chart" id="hsvg"></svg>
+    </div>
+    <p class="note">以 1.47% 粗估、假設各句獨立；實際依模型、提示與文件長度而異。審閱時把最多注意力放在 P：藥物、劑量、檢查與回診安排。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>五道防線：關掉一層，看有多少錯誤進入正式病歷</h3><span class="tag o">核心互動</span><span class="tag a">每層攔截率為教學假設</span></div>
+    <div class="layer" id="sw"></div>
+    <div class="ctl" style="margin-top:10px"><span>自動化偏誤（沒看就簽）</span><input type="range" id="ab" min="0" max="90" step="10" value="0"><output></output></div>
+    <div class="grid3" id="swkpi"></div>
+    <div class="detail" id="swtxt"></div>
+  </div>
+  <div class="grid3">
+    <div class="kpi o"><div class="v">約 8／10</div><div class="l">Whisper：一位研究者檢視的轉錄出現幻覺</div></div>
+    <div class="kpi"><div class="v">187<small> 處</small></div><div class="l">逾 13,000 段清晰音檔中的幻覺</div></div>
+    <div class="kpi o"><div class="v">近 40%</div><div class="l">幻覺被評為有害或令人擔憂</div></div>
+  </div>
+  <p class="note">美聯社 2024-10。三個數字來自不同研究者與資料，不能相加或比較。部分醫療產品刪除原始錄音，錯誤無法回頭比對——原始資料是查核的依據。</p>
+</section>
+
+<section class="part" id="p08" data-t="誰負責與隱私">
+  <div class="ph"><span class="num">08</span><div><h2>誰負責？病人資料能不能丟進 ChatGPT？</h2><div class="en">MOFFATT v. AIR CANADA 2024 · DEPLOYMENT &amp; PRIVACY</div></div></div>
+  <p class="one">對外的 AI 回答<b>就是機構的回答</b>。底線：未經機構核准，不把可識別的病人資料貼進任何公用 AI 工具。</p>
+  <div class="wd">
+    <div class="wh"><h3>Air Canada 聊天機器人案</h3></div>
+    <div class="grid4">
+      <div class="kpi"><div class="l">聊天機器人說</div><div style="font-weight:700">親人過世可先買票，90 天內再申請喪親優惠</div></div>
+      <div class="kpi"><div class="l">實際政策</div><div style="font-weight:700">旅程結束後不能再申請</div></div>
+      <div class="kpi"><div class="l">公司主張</div><div style="font-weight:700">機器人是「獨立法律實體」</div></div>
+      <div class="kpi o"><div class="l">仲裁結果（2024-02-14）</div><div style="font-weight:700">駁回；判賠約 650 加幣與利息、規費</div></div>
+    </div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>紅、黃、綠：這樣做可以嗎？</h3><span class="tag a">5 題</span></div>
+    <div id="pvq"></div>
+  </div>
+</section>
+
+<section class="part" id="p09" data-t="實作二：查核表">
+  <div class="ph"><span class="num">09</span><div><h2>★ 實作二：門診對話 → SOAP 病歷</h2><div class="en">LAB 2 · A 固定查核 · B 受控比較 · 溯源 · AI 使用紀錄</div></div></div>
+  <p class="one">評分看判定對不對、有沒有依據；<b>沒找到錯誤不扣分，把正確句判成錯誤會扣分</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>課堂計時器（80 分鐘）</h3><span class="tag o">開始後自動切換</span></div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div class="clock" id="clk">80:00</div><button class="btn pri" id="clk-go">開始</button><button class="btn" id="clk-rs">歸零</button><span id="clk-ph" style="font-weight:700;color:var(--ochre)"></span></div>
+    <div class="timer" id="phases"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>擬真門診對話（合成）：王伯伯心臟內科回診</h3><span class="tag gray">醫＝醫師、王＝王伯伯、女＝女兒</span></div>
+    <div class="dlg" id="labdlg"></div>
+    <p class="note">這段對話刻意埋了幾個陷阱：先別看答案，看看 AI 會不會掉進去。</p>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>步驟一：固定草稿查核表（14 句＋遺漏）</h3><span class="tag o">填完複製繳交</span><span class="tag a">本頁不公布答案</span></div>
+    <p class="hint">逐句回到原始對話判定。嚴重度：照著錯誤內容執行，是否可能改變診斷、用藥或回診安排？是＝重大。數字、時間與原文不符歸為捏造。點「依據行號」欄的行號可在上方對話中標亮。</p>
+    <div style="overflow:auto"><table class="chk" id="labt"></table></div>
+    <div style="margin-top:8px"><b style="color:var(--navy);font-size:14px">遺漏：原文有、草稿沒寫的重要資訊</b><textarea id="lab-om" style="width:100%;min-height:50px;padding:8px;border:1px solid var(--line2);border-radius:8px;margin-top:4px" placeholder="寫出內容與行號，並判定嚴重度"></textarea></div>
+    <div style="margin:10px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn oc" id="labcopy">複製查核表</button><span id="labmsg" style="font-size:13px;color:var(--green)"></span><span id="labprog" style="font-size:13px;color:var(--mute)"></span></div>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>步驟二：受控比較紀錄</h3><span class="tag o">一次只改一件事</span></div>
+    <div class="grid2">
+      <div><label>範本提示（可直接複製）</label><div class="code" id="tpl"></div><button class="btn" id="tplcopy" style="margin-top:6px">複製範本提示</button> <span id="tplmsg" style="font-size:13px;color:var(--green)"></span></div>
+      <div>
+        <label>固定：工具名稱（介面顯示）</label><input id="b-tool" placeholder="例：Claude">
+        <label>執行日期</label><input id="b-date" placeholder="例：2026-03-xx">
+        <label>對照組（模糊提示）結果：掉進哪些陷阱？</label><textarea id="b-vague" placeholder="例：家屬代述寫成病人自述；寫成已調高利尿劑"></textarea>
+        <label>範本提示結果：哪些陷阱避開了？哪一條規則造成差異？</label><textarea id="b-tplr" placeholder="例：規則 3 讓家屬代述被標出；規則 4 讓計畫寫成待決定"></textarea>
+        <label>限制</label><input id="b-lim" value="一次比較只代表本次小樣本觀察，不代表模型已通過驗證；多跑的結果全部保留">
+      </div>
+    </div>
+    <p class="note">固定同一段對話 01–14、同一工具、同一天；只改提示。兩份原始輸出全文都保留，不挑最好的一次。沒有工具時用教師提供的成對輸出。</p>
+  </div>
+  <div class="wd form">
+    <div class="wh"><h3>AI 使用紀錄與繳交包</h3><span class="tag o">複製後貼進作業</span></div>
+    <div class="grid3">
+      <div><label>組別／成員</label><input id="s-team"></div>
+      <div><label>溯源呈現方式</label><select id="s-trace"><option>網頁原型（行號可點擊）</option><option>標註文件（句子旁寫行號）</option></select></div>
+      <div><label>未提供的設定</label><input id="s-na" value="溫度：介面未提供"></div>
+    </div>
+    <label>人工修訂（改了什麼、依據哪一行）</label><textarea id="s-edit" placeholder="例：第 13 句依［13］改為「待決定」"></textarea>
+    <div style="margin:10px 0"><button class="btn oc" id="s-copy">複製繳交包</button> <span id="s-msg" style="font-size:13px;color:var(--green)"></span></div>
+    <div class="code" id="s-out"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>評分規準自我檢核</h3><span class="tag a">每項 0–2：未達／部分／達成</span></div>
+    <div id="rub"></div>
+    <div class="kpi" style="margin-top:10px"><div class="l">預估實作二得分（占學期 10%）</div><div class="v" id="rubv">0 / 100</div></div>
+  </div>
+</section>
+
+<section class="part" id="p10" data-t="案例研討：Tessa">
+  <div class="ph"><span class="num">10</span><div><h2>案例研討：Tessa 聊天機器人加上生成式 AI 之後</h2><div class="en">NEDA · NPR 2023-06-08</div></div></div>
+  <p class="one">同一個名字、同一個介面，底層從規則式換成生成式，<b>風險型態就完全不同</b>；變更管理是防線的一部分。</p>
+  <div class="wd">
+    <div class="wh"><h3>時間軸</h3></div>
+    <div id="tstl"></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>決策點：規則式版本有研究支持，升級成生成式後，還能沿用那份證據嗎？</h3><span class="tag a">先選再看</span></div>
+    <div id="tsq"></div>
+    <div id="tsres" style="display:none">
+      <div class="grid3" style="margin-top:10px"><div class="kpi"><div class="v">逾 20 年</div><div class="l">同期被關閉的人工熱線</div></div><div class="kpi o"><div class="v">&lt; 24 小時</div><div class="l">收到截圖到下架</div></div><div class="kpi"><div class="v">1 次升級</div><div class="l">從規則式變生成式，證據不再適用</div></div></div>
+      <div class="grid2" style="margin-top:10px"><div class="okmsg"><b>原本做對的</b><br>▪ 原版本邊界明確：只用專家預寫內容<br>▪ 有研究團隊參與設計<br>▪ 發現問題後快速下架</div><div class="warn" style="margin-top:8px"><b>出問題的地方</b><br>▪ 廠商變更未經機構審核<br>▪ 以 AI 取代人工熱線，服務定位混淆<br>▪ 高風險族群上線前缺少紅隊測試</div></div>
+    </div>
+  </div>
+  <div class="wd"><div class="wh"><h3>課堂討論（三題擇一）</h3></div><ol style="margin:0;padding-left:20px;font-size:15px"><li><b>錯誤類型：</b>Tessa 改成生成式後，五種錯誤類型中最可能出現哪幾種？</li><li><b>五道防線：</b>哪一道本來可以攔下這次事件？（用第 07 段的防線圖試試）</li><li><b>誰負責：</b>醫院導入 AI 衛教機器人，合約要寫進哪些「變更須通知與重審」條款？</li></ol></div>
+</section>
+
+<section class="part" id="p11" data-t="名詞卡、測驗與回顧">
+  <div class="ph"><span class="num">11</span><div><h2>名詞卡、總測驗與三個問題</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+  <div class="wd"><div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div><div class="cards" id="cards"></div></div>
+  <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
+  <div class="take">
+    <div><b>依據在哪</b>AI 寫的每一句，能回到原始資料或文件嗎？</div>
+    <div><b>錯在哪裡</b>捏造、遺漏、歸屬、否定、過度推論，最常在 P？</div>
+    <div><b>誰來把關</b>五道防線設了哪幾道？審閱的人會不會沒看就簽？</div>
+  </div>
+  <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">讓 AI 執筆，讓人負責</h2><p style="color:var(--mute)">能找出錯誤的人，才是醫療 AI 時代真正稀缺的專業。<br>下週 W7：AI Agent 與臨床流程自動化——課前想一個單位裡最繁瑣、最常出錯的跨部門流程。</p></div>
+</section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w6-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w6-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w6-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
+function bind(sel){$$(sel).forEach(r=>{r.addEventListener("click",e=>{})})}
+function tipify(root){root.querySelectorAll("[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+function segInit(id,cb){$$(id+" button").forEach(b=>b.onclick=()=>{$$(id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset)})}
+function choiceRows(container,items,opts,scoreEl,noteFn){const r=$(container);let ok=0,dn=0;items.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach((o,i)=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;dn++;const g=i===a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+(why||(noteFn?noteFn(a):""));if(scoreEl)$(scoreEl).textContent=`${ok} / ${items.length}`+(dn===items.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})}
+function bars(svg,data,{max,unit="",dec=1,W=360,H=220,cols}){const L=46,B=H-36,T=22;let g="";const step=max/5;for(let v=0;v<=max+1e-9;v+=step){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v,v<10&&step<1?1:0)}${unit}</text>`}const n=data.length,bw=Math.min(80,(W-L-30)/n-30);data.forEach(([lab,v,c],i)=>{const x=L+20+i*((W-L-30)/n)+((W-L-30)/n-bw)/2-10,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${c||cols[i]}" data-t="${lab}：${fmt(v,dec)}${unit}"/><text x="${x+bw/2}" y="${y-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${c||cols[i]}">${fmt(v,dec)}${unit}</text><text x="${x+bw/2}" y="${B+18}" font-size="12.5" text-anchor="middle">${lab}</text>`});$(svg).innerHTML=g;tipify($(svg))}
+
+
+function copyText(t,msgEl){const done=()=>{$(msgEl).textContent="已複製。";setTimeout(()=>$(msgEl).textContent="",3000)};const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$(msgEl).textContent="無法自動複製，請手動選取文字。"}ta.remove()};try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+function persist(ids,key,cb){const s=LS.get(key,{});ids.forEach(id=>{const e=$("#"+id);if(s[id]!=null)e.value=s[id];const f=()=>{const o={};ids.forEach(k=>o[k]=$("#"+k).value);LS.set(key,o);cb&&cb()};e.addEventListener("input",f);e.addEventListener("change",f)})}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* 02 next token */
+const TK=[["水腫",0.82],["無力",0.09],["疼痛",0.05],["其他",0.04]];
+function dist(T){const w=TK.map(([,p])=>Math.pow(p,1/T));const s=w.reduce((a,b)=>a+b,0);return w.map(x=>x/s)}
+let gens=[];function nt(){const T=+$("#tp").value;$("#tp").nextElementSibling.textContent=T.toFixed(1);const d=dist(T);const s=$("#nt"),L=60,R=360;let g="";TK.forEach(([n],i)=>{const y=14+i*44,w=(R-L)*d[i];g+=`<text x="${L-8}" y="${y+20}" font-size="14" text-anchor="end" font-weight="700" fill="${C.navy}">${n}</text><rect x="${L}" y="${y}" width="${R-L}" height="28" rx="4" fill="#EFEAE0"/><rect x="${L}" y="${y}" width="${w}" height="28" rx="4" fill="${i?C.navy2:C.ochre}"/><text x="${L+Math.max(w,0)+6>R-40?R-6:L+w+6}" y="${y+19}" font-size="13" font-weight="700" fill="${L+w+6>R-40?"#fff":C.navy}" text-anchor="${L+w+6>R-40?"end":"start"}">${(d[i]*100).toFixed(0)}%</text>`});s.innerHTML=g;sum()}
+function sample(){const d=dist(+$("#tp").value);let r=Math.random(),k=0;while(k<d.length-1&&r>d[k]){r-=d[k];k++}return TK[k][0]}
+function sum(){$("#gout").innerHTML=gens.map(t=>`<span class="tk" style="${t==="水腫"?"":"border-color:"+C.ochre+";color:"+C.ochre}">伴隨下肢${t}</span>`).join("")||"按「生成」看模型接出什麼。";const c={};gens.forEach(t=>c[t]=(c[t]||0)+1);$("#gsum").innerHTML=gens.length?`共 ${gens.length} 次：`+Object.entries(c).map(([k,v])=>`${k} ${v}`).join("、")+(gens.some(t=>t!=="水腫")?`<br><span style="color:${C.ochre}">出現了「水腫」以外的接法：聽起來合理，不等於事實正確。</span>`:""):""}
+$("#tp").oninput=nt;$("#gen1").onclick=()=>{gens.push(sample());sum()};$("#gen20").onclick=()=>{for(let i=0;i<20;i++)gens.push(sample());sum()};$("#genc").onclick=()=>{gens=[];sum()};nt();
+function ctx(){const w=+$("#cw").value;$("#cw").nextElementSibling.textContent=w+" 行";$("#ctx").innerHTML=Array.from({length:14},(_,i)=>`<div class="${i>=w?"out":""}">${String(i+1).padStart(2,"0")}</div>`).join("");$("#ctxtxt").innerHTML=w>=14?"整段 14 行都讀得到。":`第 ${w+1}–14 行讀不到：${w<14?"<b style='color:var(--ochre)'>第 14 行「三天內體重多超過兩公斤就要先回來」會被漏掉</b>——":""}${w<12?"連抽血計畫（12–13 行）也讀不到。":""}<br><span style="color:var(--mute);font-size:13px">太長會漏讀；重要資訊放前面或分段。實際截斷方式依產品而異，這裡以「讀前面幾行」示意。</span>`}
+$("#cw").oninput=ctx;ctx();
+
+/* 03 */
+choiceRows("#gpq",[["再入院風險 0.32",0,"預測式：輸出一個分數，用 AUROC、校準評估（W5）。"],["門診對話 → SOAP 草稿",1,"生成式：輸出新內容，常需人工評閱正確性、完整性、安全性。"],["敗血症早期預警",0,"預測式。"],["回覆病人入口網站留言的草稿",1,"生成式：中高風險、直達病人。"],["胸部 X 光肺炎判讀機率",0,"預測式（分類）。"],["把衛教單改寫成白話",1,"生成式：數字與醫囑必須由醫療人員確認（W4）。"]],["預測式","生成式"],"#gpscore");
+const PP=["幫我把這段對話寫成病歷",`你是心臟內科門診的病歷文書助理。
+任務：把下方門診對話整理成 SOAP 病歷草稿（繁體中文）。
+依據：只能使用對話中出現的資訊，每句後面用［行號］標註來源。
+格式：分 S、O、A、P 四段。
+限制：沒提到的寫「未提及」，不可推測或補寫正常值；家屬說的寫「家屬代述」；「考慮中」寫「待決定」。`];
+const PE=[["角色",/你是|擔任|角色/],["任務",/任務|整理成|寫成|產生/],["依據",/只能使用|依據|行號|出處/],["格式",/S、O、A、P|SOAP.*段|格式|四段/],["限制",/未提及|不可|不得|禁止/]];
+function pchk(){const t=$("#pin").value;const r=PE.map(([n,re])=>[n,re.test(t)]);$("#pchk").innerHTML=r.map(([n,ok])=>`<div class="kpi" style="text-align:center;border-top:4px solid ${ok?C.green:C.ochre}"><div style="font-weight:900;color:var(--navy)">${n}</div><div class="l">${ok?"✓ 有":"✕ 缺"}</div></div>`).join("");const miss=r.filter(x=>!x[1]).map(x=>x[0]);const risk=[];if(miss.includes("依據"))risk.push("看不出每句來源，無法逐句核對");if(miss.includes("限制"))risk.push("可能自行補上「理學檢查正常」等沒做的事；家屬的話記成病人自述");if(miss.includes("格式"))risk.push("格式每次不同，難以比較");$("#prisk").innerHTML=risk.length?`<div class="warn"><b>可能的問題：</b><br>${risk.map(x=>"✕ "+x).join("<br>")}</div>`:`<div class="okmsg">五要素齊全。依據與限制兩項，直接決定幻覺的多寡。</div>`}
+$("#pin").oninput=pchk;$$("[data-pp]").forEach(b=>b.onclick=()=>{$("#pin").value=PP[+b.dataset.pp];pchk()});pchk();
+
+/* 04 */
+const WHO5=[["行政文書","記錄與摘要就診內容","相對低（本週重點）",C.green],["研究與藥物開發","找出候選化合物","依用途而定",C.gray],["醫護教育訓練","模擬病人對話練習","中","#D9A441"],["病人自主使用","查詢症狀與治療資訊","高",C.ochre],["診斷與臨床照護","回答病人書面提問","高",C.ochre]];
+(function(){const s=$("#who");let g=`<defs><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#E1EEE6"/><stop offset="1" stop-color="#F6E3DA"/></linearGradient></defs><rect x="20" y="120" width="720" height="14" rx="7" fill="url(#rg)"/><text x="20" y="156" font-size="12" fill="${C.green}">風險較低</text><text x="740" y="156" font-size="12" fill="${C.ochre}" text-anchor="end">越靠近診斷與病人自主使用，風險越高、驗證越嚴</text>`;WHO5.forEach(([n,,,c],i)=>{const x=20+i*146;g+=`<g class="wh5" data-i="${i}" style="cursor:pointer"><rect x="${x}" y="20" width="136" height="80" rx="10" fill="#fff" stroke="${c}" stroke-width="2.5"/><text x="${x+68}" y="66" font-size="14.5" text-anchor="middle" font-weight="700" fill="${C.navy}">${n}</text></g>`});s.innerHTML=g;s.querySelectorAll(".wh5").forEach(e=>e.onclick=()=>{const w=WHO5[+e.dataset.i];$("#whotxt").innerHTML=`<b>${w[0]}</b>：例如${w[1]}；風險：<b>${w[2]}</b>`});$("#whotxt").innerHTML="WHO 2024 年 1 月大型多模態模型指引，提出 40 多項建議。多數醫院從低中風險、內部使用開始，累積信任後才擴大到直接面對病人。點選任一用途。"})();
+bars("#ucla",[["對照組",18,C.gray],["Nabla 組",41,C.navy2]],{max:50,unit:" 秒",dec:0});
+function uc(){const n=+$("#uc-n").value,d=+$("#uc-d").value,r=+$("#uc-r").value;$("#uc-n").nextElementSibling.textContent=n+" 份";$("#uc-d").nextElementSibling.textContent=d+" 天";$("#uc-r").nextElementSibling.textContent=r+" 秒";const net=23-r,yr=net*n*d/3600;$("#uckpi").innerHTML=`<div class="kpi ${net>0?"g":"o"}"><div class="l">每份淨省</div><div class="v">${net} <small>秒</small></div></div><div class="kpi ${yr>0?"g":"o"}"><div class="l">一年約</div><div class="v">${yr.toFixed(1)} <small>小時</small></div></div><div class="kpi" style="grid-column:span 2"><div class="l">對照「省一半時間」的宣傳</div><div class="v" style="font-size:18px">每份病歷約 4 分半，一半＝約 135 秒；試驗多省約 23 秒</div></div>`}
+["#uc-n","#uc-d","#uc-r"].forEach(id=>$(id).oninput=uc);uc();
+(function(){const s=$("#ayers"),L=46,B=180,T=20;let g="";[0,25,50,75,100].forEach(v=>{const y=B-v/100*(B-T);g+=`<line x1="${L}" x2="350" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v}%</text>`});[["品質良好以上",22.1,78.5],["具同理心以上",4.6,45.1]].forEach(([n,a,b],i)=>{const x=L+30+i*150;[[a,C.gray,"醫師"],[b,C.navy2,"ChatGPT"]].forEach(([v,c,l],k)=>{const y=B-v/100*(B-T);g+=`<rect x="${x+k*54}" y="${y}" width="48" height="${B-y}" rx="3" fill="${c}" data-t="${n}・${l}：${v}%"/><text x="${x+k*54+24}" y="${y-6}" font-size="13" font-weight="700" text-anchor="middle" fill="${c}">${v}%</text>`});g+=`<text x="${x+51}" y="${B+18}" font-size="12.5" text-anchor="middle">${n}</text>`});g+=`<rect x="80" y="202" width="12" height="12" fill="${C.gray}"/><text x="97" y="212" font-size="12">醫師</text><rect x="160" y="202" width="12" height="12" fill="${C.navy2}"/><text x="177" y="212" font-size="12">ChatGPT</text>`;s.innerHTML=g;tipify(s)})();
+choiceRows("#natq",[["臺大 ICD-10 編碼預測：全碼 86.67%、主診斷 82%",0,"實測（開源 LLM 以院內資料微調）。"],["北榮智慧病歷助手：減少 40–50% 撰寫時間",1,"預估：不是實測結果。"],["高醫 KMU Genie：護理紀錄撰寫時間縮短",2,"院方說明。"],["UCLA：Nabla 每份少約 41 秒",0,"隨機對照試驗實測。"]],["實測","預估","院方說明"]);
+
+/* 05 RAG */
+const DOCS=[{id:"A",n:"《心衰竭照護指引》2026 版 第 4 頁",old:false,t:{0:"出院衛教應包含：每日量體重、限鈉飲食、用藥與漏服處理、惡化徵象與聯絡方式。",1:"三天內體重增加超過 2 公斤應提早回診或聯絡個管師。"}},{id:"B",n:"《心衰竭照護指引》2023 版 第 3 頁（舊版）",old:true,t:{0:"出院衛教應包含：每日量體重、限水 1,000 mL。",1:"一週內體重增加超過 3 公斤應回診。"}},{id:"C",n:"《出院準備作業 SOP》第 2 頁",old:false,t:{0:"出院前以回授法確認病人與家屬理解。"}}];
+let rm="rag";function rag(){const q=+$("#rq").value,old=$("#rold").checked;$("#rdocs").innerHTML=DOCS.filter(d=>!d.old||old).map(d=>`<div style="font-size:13px;padding:4px 8px;margin:3px 0;border-radius:6px;background:${d.old?"#FBF4E4":"#fff"};border:1px solid var(--line)">${d.old?"⚠ ":"📄 "}${d.n}</div>`).join("");
+ let html="";if(rm==="closed"){html=[`<b>閉卷回答：</b>心衰竭出院衛教通常包括飲食、運動、用藥與症狀監測，建議每日飲水不超過 1,500 mL。<br><span style="color:var(--ochre)">出處：沒有，無法查核。「1,500 mL」是模型自己補的數字。</span>`,`<b>閉卷回答：</b>一般建議體重一週增加 2–3 公斤時應就醫。<br><span style="color:var(--ochre)">出處：沒有。和院內規則（三天、2 公斤）不一致，但聽起來很合理。</span>`,`<b>閉卷回答：</b>Furosemide 每日最大劑量通常為 600 mg。<br><span style="color:var(--ochre)">出處：沒有。不會時傾向編一個像樣的答案——劑量問題最危險。</span>`][q]}
+ else{const hits=DOCS.filter(d=>(!d.old||old)&&d.t[q]);if(!hits.length)html=`<b>RAG 回答：</b>文件庫中沒有這個問題的內容，請查閱藥品仿單或詢問藥師。<br><span style="color:var(--green)">找不到時回答「文件中沒有」——這是好行為。</span>`;else{const conflict=hits.some(d=>d.old)&&hits.some(d=>!d.old);html=`<b>RAG 回答：</b><ul style="margin:6px 0;padding-left:18px">${hits.map(d=>`<li>${d.t[q]}<br><span style="font-size:12.5px;color:${d.old?C.ochre:C.navy2}">出處：${d.n}</span></li>`).join("")}</ul>`+(conflict?`<div class="warn"><b>新舊指引同時被引用、互相矛盾。</b>RAG 會自信地引用過期文件——文件庫要維護：指引改版就更新文件庫，不必重新訓練模型。取消勾選「舊版」再問一次。</div>`:`<div class="okmsg">每句都有出處，可點開核對。</div>`)}}
+ $("#rans").innerHTML=html}
+$("#rq").onchange=rag;$("#rold").onchange=rag;segInit("#rmode",d=>{rm=d.m;rag()});rag();
+bars("#refs",[["編造（不存在）",47,C.ochre],["真實但內容不符",46,"#D9A441"],["真實且正確",7,C.green]],{max:60,unit:"%",dec:0});
+choiceRows("#ftq",[["要求 AI 固定用 SOAP 四段、語氣中性",0,"提示工程：格式、語氣、規則；成本最低。"],["回答要依院內最新版照護流程，指引常改版",1,"RAG：院內知識、常改版內容；出處可查。"],["讓模型學會醫院特有的 ICD-10 編碼方式",2,"微調：特定任務、特定用語；成本高（例：臺大 ICD 編碼）。"],["AI 不知道本院的出院衛教規定",1,"問題出在不知道，用 RAG；出在不會做，才考慮微調。"]],["提示工程","RAG","微調"]);
+
+/* 06 practice */
+const PX=["醫：李奶奶，最近血糖還好嗎？","李：早上大概 150 左右。","兒：她晚上常常偷吃餅乾。","醫：有沒有手腳麻？","李：沒有，腳不會麻。","醫：HbA1c 這次 8.1%。","醫：Metformin 可能要加量，下次看數字再決定。","醫：三個月後回診。"];
+const PXD=[["病人自述早上血糖約 150［02］",-1,"正確：與［02］相符。"],["病人自述晚上常吃餅乾［03］",2,"歸屬錯誤：是兒子說的，應寫「家屬代述」。"],["主訴手腳麻木［04–05］",3,"否定錯誤：原文是「沒有，腳不會麻」→ 否認手腳麻。"],["足部檢查：雙足感覺正常",0,"捏造：對話中沒有做足部檢查，也沒有行號。"],["已調高 Metformin 劑量［07］",4,"過度推論：醫師說「下次看數字再決定」→ 待決定。"],["一個月後回診［08］",0,"捏造：數字、時間與原文不符歸為捏造；原文是三個月。"]];
+const ET=["捏造","遺漏","歸屬錯誤","否定錯誤","過度推論","正確"];
+(function(){$("#pxdlg").innerHTML=PX.map((l,i)=>`<div id="px${i+1}"><b>${String(i+1).padStart(2,"0")}</b>${l}</div>`).join("");const r=$("#pxq");let ok=0,dn=0;PXD.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:5px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;const ans=a<0?5:a;ET.forEach((e,k)=>{if(k===1)return;const b=h("button",{class:"btn",style:"padding:4px 10px;font-size:13px"},e);b.onclick=()=>{if(d)return;d=true;dn++;const g=k===ans;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)[...box.children].find(x=>x.textContent===ET[ans]).style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=why;$("#pxscore").textContent=`${ok} / ${PXD.length}`+(dn===PXD.length?"　✓ 還有一處遺漏：草稿沒寫「HbA1c 8.1%」［06］":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})})();
+(function(){$("#trdlg").innerHTML=PX.map((l,i)=>`<div id="tr${i+1}"><b>${String(i+1).padStart(2,"0")}</b>${l}</div>`).join("");const S=[["S","早上血糖約 150［02］；家屬代述晚上常吃餅乾［03］；否認手腳麻［05］"],["O","HbA1c 8.1%［06］；足部檢查正常"],["A","第二型糖尿病控制不佳"],["P","Metformin 待下次數字再決定［07］；三個月後回診［08］"]];$("#trsoap").innerHTML=S.map(([k,t])=>t.split("；").map(sn=>{const has=/［\d/.test(sn);return `<div class="${has?"":"red"}"><b>${k}</b>　${sn.replace(/［(\d+)］/g,(m,n)=>`<span class="ln" data-l="${+n}">［${n}］</span>`)}${has?"":"　<span style='color:var(--ochre);font-size:12px'>← 沒有行號</span>"}</div>`}).join("")).join("");$$("#trsoap .ln").forEach(e=>e.onclick=()=>{$$("#trdlg div").forEach(x=>x.classList.remove("hl"));$("#tr"+e.dataset.l).classList.add("hl")})})();
+
+/* 07 hallucination */
+function hs(){const n=+$("#hs").value,d=+$("#hn").value;$("#hs").nextElementSibling.textContent=n+" 句";$("#hn").nextElementSibling.textContent=d+" 份";const p1=1-Math.pow(1-0.0147,n),exp=0.0147*n*d,maj=exp*0.44;$("#hkpi").innerHTML=`<div class="kpi o"><div class="l">一份至少一句幻覺</div><div class="v">${(p1*100).toFixed(0)}%</div></div><div class="kpi"><div class="l">平均每幾份一句</div><div class="v">${(1/(0.0147*n)).toFixed(1)}<small> 份</small></div></div><div class="kpi"><div class="l">每天預期幻覺句</div><div class="v">${exp.toFixed(1)}</div></div><div class="kpi o"><div class="l">其中重大</div><div class="v">${maj.toFixed(1)}</div></div>`;
+ const s=$("#hsvg"),L=40,R=370,B=190,T=14;const X=v=>L+(v-5)/55*(R-L),Y=v=>B-v*(B-T);let g="";[0,.25,.5,.75,1].forEach(v=>g+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" fill="${C.mute}" text-anchor="end">${v*100}%</text>`);let dd="";for(let k=5;k<=60;k++)dd+=(k>5?"L":"M")+X(k)+","+Y(1-Math.pow(1-0.0147,k));g+=`<path d="${dd}" fill="none" stroke="${C.ochre}" stroke-width="3"/><circle cx="${X(n)}" cy="${Y(p1)}" r="7" fill="${C.ochre}"/><text x="${(L+R)/2}" y="${B+30}" font-size="12" fill="${C.mute}" text-anchor="middle">每份摘要句數</text><text x="${L+6}" y="${T+12}" font-size="12" fill="${C.ochre}" font-weight="700">至少一句幻覺的機率</text>`;[10,20,30,40,50,60].forEach(v=>g+=`<text x="${X(v)}" y="${B+14}" font-size="11" fill="${C.mute}" text-anchor="middle">${v}</text>`);s.innerHTML=g}
+["#hs","#hn"].forEach(id=>$(id).oninput=hs);hs();
+const SW=[["① 提示限制","只依原始資料；未提及寫「未提及」",0.4],["② 依據與出處","RAG 或逐句標註行號",0.3],["③ 結構化輸出","固定欄位，方便比對",0.15],["④ 自動檢核","程式檢查數字、藥名、否定詞",0.3],["⑤ 人工審閱","醫師逐句確認，簽名負責",0.8]];const swOn=[1,1,1,1,1];
+function sw(){const r=$("#sw");r.innerHTML="";SW.forEach(([n,d,c],i)=>{const e=h("div",{class:"slice"+(swOn[i]?"":" off")},`<b>${n}</b>${d}<div style="margin-top:4px;color:var(--ochre);font-weight:700">攔下 ${Math.round(c*100)}%</div>`);e.onclick=()=>{swOn[i]=1-swOn[i];sw()};r.appendChild(e)});const ab=+$("#ab").value/100;$("#ab").nextElementSibling.textContent=Math.round(ab*100)+"%";
+ const base=1000*0.0147*25/25*25;let left=36.75;const start=left;SW.forEach(([,,c],i)=>{if(!swOn[i])return;const eff=i===4?c*(1-ab):c;left*=1-eff});
+ $("#swkpi").innerHTML=`<div class="kpi"><div class="l">每 100 份摘要（25 句）原始幻覺句</div><div class="v">${start.toFixed(1)}</div></div><div class="kpi ${left>3?"o":"g"}"><div class="l">進入正式病歷</div><div class="v">${left.toFixed(1)}</div></div><div class="kpi"><div class="l">其中重大（44%）</div><div class="v">${(left*0.44).toFixed(1)}</div></div>`;
+ const off=SW.filter((x,i)=>!swOn[i]).map(x=>x[0]);$("#swtxt").innerHTML=(off.length?`關掉了：${off.join("、")}。`:"五道防線都開著。")+(ab>=0.5&&swOn[4]?`<br><b style="color:var(--ochre)">自動化偏誤 ${Math.round(ab*100)}%：</b>人工審閱名存實亡——AI 越準，人越容易沒看就簽。`:"")+`<br><span style="color:var(--mute);font-size:13px">每一層都有洞，疊起來才擋得住。＋稽核紀錄：保留原始錄音或逐字稿、AI 版本、醫師修改處，出事時才查得到哪一層失守。原始幻覺句以 Asgari 1.47% 估算；各層攔截率為教學假設。</span>`}
+$("#ab").oninput=sw;sw();
+
+/* 08 privacy */
+choiceRows("#pvq",[["把王伯伯的門診對話（含姓名）貼進免費版 ChatGPT 整理病歷",0,"紅燈：資料送到廠商雲端，可能用於訓練；最常見的違規來源。"],["用醫院簽約的企業版，處理去識別化的行政文書",1,"黃燈：依合約不用於訓練；審查合約與資料駐留。"],["院內地端部署的模型產生含個資的病歷草稿",2,"綠燈：資料不離開醫院網路；需算力與維運人力（例：北榮地端部署）。"],["把合成的練習對話貼進免費版工具做實作二",2,"可以：合成資料不含病人資料（實作二規範：不輸入任何真實病人資料）。"],["把同事的會議錄音（含病人討論）上傳到免費轉錄網站",0,"紅燈：未經機構核准，不把可識別的病人資料放進任何公用 AI 工具。"]],["紅：不可","黃：限去識別化","綠：可"]);
+
+/* 09 lab */
+const PH=[[0,5,"暖身"],[5,30,"A 固定查核"],[30,50,"B 受控比較"],[50,60,"溯源呈現"],[60,75,"討論"],[75,80,"繳交"]];let tS=null,tI=null,tE=0;
+function drawPh(m){$("#phases").innerHTML=PH.map(([a,b,n])=>`<div class="${m>=b?"done":m>=a?"on":""}"><b>${n}</b><br>${b-a} 分</div>`).join("");const c=PH.find(([a,b])=>m>=a&&m<b);$("#clk-ph").textContent=m>=80?"時間到：繳交！":c?"現在："+c[2]:""}
+function tick(){const e=tE+(tS?(Date.now()-tS)/1000:0),l=Math.max(0,4800-e);$("#clk").textContent=`${String(Math.floor(l/60)).padStart(2,"0")}:${String(Math.floor(l%60)).padStart(2,"0")}`;drawPh(e/60);if(l<=0&&tI){clearInterval(tI);tI=null}}
+$("#clk-go").onclick=()=>{if(tI){tE+=(Date.now()-tS)/1000;tS=null;clearInterval(tI);tI=null;$("#clk-go").textContent="繼續"}else{tS=Date.now();tI=setInterval(tick,500);$("#clk-go").textContent="暫停"}};$("#clk-rs").onclick=()=>{clearInterval(tI);tI=null;tS=null;tE=0;$("#clk-go").textContent="開始";tick()};tick();
+const LD=["醫：王伯伯，這兩週還好嗎？","王：還可以啦，就是晚上比較喘。","女：醫師，他這三天體重多了快兩公斤，腳也比較腫。","醫：晚上睡覺要墊幾個枕頭？","王：兩個，不然躺平會喘。","醫：有胸痛嗎？","王：沒有，胸口不會痛。","女：他上禮拜喝喜酒，還偷吃很多鹹的。","醫：Furosemide 有每天吃嗎？","王：有啦……有時候忘記。","醫：血壓 148/92，體重 74.5 公斤。","醫：我先抽血看腎功能和 NT-proBNP，","醫：利尿劑可能要調整，看報告再決定。","醫：兩週後回診，三天內體重多超過兩公斤就要先回來。"];
+$("#labdlg").innerHTML=LD.map((l,i)=>`<div id="ld${i+1}"><b>${String(i+1).padStart(2,"0")}</b>${l}</div>`).join("");
+const LS14=[["S","病人自述夜間較喘［02］"],["S","病人自述三天內體重增加近 2 公斤、下肢較腫［03］"],["S","需墊兩個枕頭，躺平會喘［05］"],["S","主訴胸痛［06–07］"],["S","家屬代述上週喝喜酒後吃得較鹹［08］"],["S","規則服用 Furosemide［10］"],["O","血壓 148/92 mmHg、體重 74.5 kg［11］"],["O","心跳每分鐘 88 次［11］"],["O","雙下肢凹陷性水腫 2+"],["O","肺部聽診：未提及"],["A","急性心衰竭惡化"],["P","抽血：腎功能、NT-proBNP［12］"],["P","已調高 Furosemide 劑量［13］"],["P","一週後回診［14］"]];
+const labS=LS.get("lab",LS14.map(()=>({j:"",l:"",t:"",f:"",s:""})));
+$("#labt").innerHTML=`<tr><th>#</th><th>段</th><th>AI 草稿句子</th><th style="width:110px">判定</th><th style="width:80px">依據行號</th><th style="width:110px">錯誤類型</th><th>改正為</th><th style="width:80px">嚴重度</th></tr>`+LS14.map(([sec,t],i)=>`<tr><td>${i+1}</td><td>${sec}</td><td>${esc(t)}</td><td><select data-i="${i}" data-k="j"><option value=""></option><option>正確</option><option>錯誤</option><option>無法確認</option></select></td><td><input data-i="${i}" data-k="l" placeholder="例：07"></td><td><select data-i="${i}" data-k="t"><option value=""></option><option>捏造</option><option>歸屬</option><option>否定</option><option>過度推論</option></select></td><td><input data-i="${i}" data-k="f"></td><td><select data-i="${i}" data-k="s"><option value=""></option><option>重大</option><option>輕微</option></select></td></tr>`).join("");
+$$("#labt [data-k]").forEach(e=>{e.value=labS[+e.dataset.i][e.dataset.k]||"";const f=()=>{labS[+e.dataset.i][e.dataset.k]=e.value;LS.set("lab",labS);labProg();if(e.dataset.k==="l"){const n=parseInt(e.value,10);$$("#labdlg div").forEach(x=>x.classList.remove("hl"));if(n>=1&&n<=14)$("#ld"+n).classList.add("hl")}};e.addEventListener("input",f);e.addEventListener("change",f);if(e.dataset.k==="l")e.addEventListener("focus",f)});
+persist(["lab-om"],"labom");
+function labProg(){const d=labS.filter(x=>x.j).length;$("#labprog").textContent=`已判定 ${d} / 14 句`+(d===14?"　✓":"");if($("#s-out"))subOut()}labProg();
+$("#labcopy").onclick=()=>{const t="【實作二 步驟一：固定草稿查核表】\n#｜段｜草稿句子｜判定｜依據行號｜錯誤類型｜改正為｜嚴重度\n"+LS14.map(([sec,s],i)=>{const r=labS[i];return `${i+1}｜${sec}｜${s}｜${r.j||"（未判定）"}｜${r.l}｜${r.t}｜${r.f}｜${r.s}`}).join("\n")+`\n遺漏：${$("#lab-om").value||"（未填）"}`;copyText(t,"#labmsg")};
+const TPL=`你是心臟內科門診的病歷文書助理。
+任務：把下方門診對話整理成 SOAP 病歷草稿（繁體中文）。
+規則：
+1. 只能使用對話中出現的資訊，每句後面用［行號］標註來源，例如［03］。
+2. 對話中沒有的內容一律寫「未提及」，不可推測、不可補寫正常值。
+3. 區分說話者：家屬說的要寫「家屬代述」。
+4. 醫師「考慮中」的計畫要寫「待決定」，不可寫成已執行。
+輸出：S、O、A、P 四段，最後列出「需醫師確認的項目」。
+對話：
+${LD.map((l,i)=>String(i+1).padStart(2,"0")+" "+l).join("\n")}`;
+$("#tpl").textContent=TPL;$("#tplcopy").onclick=()=>copyText(TPL,"#tplmsg");
+const SF=["b-tool","b-date","b-vague","b-tplr","b-lim","s-team","s-trace","s-na","s-edit"];persist(SF,"sub",subOut);
+function subOut(){const v=id=>$("#"+id).value.trim()||"（未填）";const d=labS.filter(x=>x.j).length;$("#s-out").textContent=`【實作二繳交包】${v("s-team")}
+A 固定查核：已判定 ${d}／14 句（查核表另附）
+B 受控比較
+  固定：同一段對話 01–14、工具 ${v("b-tool")}、日期 ${v("b-date")}
+  只改：提示（模糊提示 vs 範本提示）
+  模糊提示結果：${v("b-vague")}
+  範本提示結果：${v("b-tplr")}
+  限制：${v("b-lim")}
+溯源呈現：${v("s-trace")}（展示原型，非串接臨床系統）
+
+【AI 使用紀錄】
+工具與模型：${v("b-tool")}（介面有顯示才寫模型名稱）
+日期與提示：${v("b-date")}；附件一：模糊提示；附件二：範本提示
+輸入與輸出：附件三、四：兩份原始輸出全文
+人工修訂：${v("s-edit")}
+未提供的設定：${v("s-na")}
+責任：最終內容由本組負責`}
+subOut();$("#s-copy").onclick=()=>copyText($("#s-out").textContent,"#s-msg");
+const RB=[["查核正確與理由","固定草稿判定正確、引用行號；找出遺漏；類型與嚴重度合理",40],["受控比較設計","同輸入、只換提示；能說明差異來自哪一條規則",20],["比較證據與紀錄","兩份原始輸出、提示、日期、工具齊全；不挑最好的一次",20],["溯源呈現","網頁或標註文件能逐句對回行號；標明展示原型",10],["個人說明","能口頭解釋自己的一個判定或比較結果",10]];const rbS=LS.get("rub",[0,0,0,0,0]);
+(function(){const r=$("#rub");RB.forEach(([n,d,w],i)=>{r.innerHTML+=`<div class="q" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><div><b>${n}</b>（${w}%）<div style="font-size:13px;color:var(--mute)">${d}</div></div><div class="seg" data-rb="${i}" style="display:flex">${["未達","部分","達成"].map((t,k)=>`<button data-v="${k}" class="${rbS[i]===k?"on":""}">${t}</button>`).join("")}</div></div>`});$$("[data-rb]").forEach(sg=>sg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sg.querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");rbS[+sg.dataset.rb]=+b.dataset.v;LS.set("rub",rbS);rub()}));rub()})();
+function rub(){$("#rubv").textContent=`${RB.reduce((a,r,i)=>a+r[2]*rbS[i]/2,0)} / 100`}
+
+/* 10 Tessa */
+(function(){const T=[["研發","華盛頓大學團隊以 NEDA 經費開發；原為規則式，只用有限的預寫回應"],["升級","營運廠商 Cass「系統升級」，加入生成式 AI 功能；NEDA 表示未被告知"],["2023-03","NEDA 宣布轉向 AI 輔助，Tessa 作為全自動資源；同期關閉運作逾 20 年的人工熱線"],["2023-05-30","使用者公開截圖：Tessa 給出減重建議；NEDA 不到 24 小時下架"]];$("#tstl").innerHTML=T.map(([d,t],i)=>`<div style="display:grid;grid-template-columns:110px 1fr;gap:10px;margin:6px 0"><span class="tag ${i===3?"o":""}" style="text-align:center">${d}</span><span style="font-size:14.5px">${t}</span></div>`).join("")})();
+mcq("#tsq",[{q:"",o:["可以，名字和介面都一樣","不行：底層從規則式變生成式，錯誤型態不同，證據要重新評估","只要沒有客訴就可以","看廠商怎麼說"],a:1,e:"同 W2 Nuance 案：每一代的風險不同。廠商變更未經機構審核，是這次事件的關鍵。"}]);$("#tsq").addEventListener("click",()=>{if($("#tsq .opt.ok"))$("#tsres").style.display="block"});
+
+/* 11 */
+const GL=[["大型語言模型","LLM","以大量文字訓練、能生成文字的 AI 模型"],["上下文視窗","Context window","模型一次能處理的內容長度上限"],["溫度","Temperature","回答的隨機程度；病歷用低溫求一致"],["環境式臨床記錄","Ambient AI scribe","在背景聆聽看診對話並產生病歷草稿"],["檢索增強生成","RAG","先檢索指定文件，再依文件內容生成回答"],["幻覺","Hallucination","生成看似合理、實際錯誤或無根據的內容"],["自動化偏誤","Automation bias","過度信任自動化系統而疏於查核"],["受控比較","Controlled comparison","一次只改一件事（例如提示），其他條件固定"]];
+(function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}<small>${b}</small></div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
+mcq("#final",[
+ {q:"LLM 為什麼會寫出「聽起來合理但錯誤」的內容？",o:["它在查資料庫時查錯","它依語言規律預測最可能的下一個 Token，優化的是像真的","網路太慢","病歷太短"],a:1,e:"不是查資料庫；所以查核永遠不能省。"},
+ {q:"臨床文書最適合的溫度設定？",o:["高溫，比較有創意","低溫，求一致","隨機","不需要設定"],a:1,e:"衛教標語可稍高，病歷用低溫。"},
+ {q:"提示五要素中，直接決定幻覺多寡的是？",o:["角色與任務","依據與限制","格式與角色","任務與格式"],a:1,e:"只能使用對話中的資訊、每句標行號；沒提到寫「未提及」。"},
+ {q:"UCLA 試驗「省時 9.5%」的正確解讀？",o:["省一半時間","相對對照組多省約 23 秒／份","每天省 2 小時","完全不用寫病歷"],a:1,e:"不能寫成「省一半時間」。"},
+ {q:"護理師問 AI 院內最新出院衛教規定，最適合？",o:["微調","RAG","提高溫度","不給出處"],a:1,e:"院內知識、常改版：RAG；但文件庫要維護，過期文件會被自信地引用。"},
+ {q:"女兒說「他偷吃鹹的」，草稿寫「病人自述吃得較鹹」，屬於？",o:["捏造","遺漏","歸屬錯誤","否定錯誤"],a:2,e:"家屬代述要標明。"},
+ {q:"醫師說「考慮調藥，看報告再決定」，草稿寫「已調高利尿劑」，屬於？",o:["過度推論","否定錯誤","歸屬錯誤","正確"],a:0,e:"「考慮」與「已執行」要分清，寫「待決定」。"},
+ {q:"Asgari 2025 重大幻覺最多出現在 SOAP 的哪一段？",o:["S","O","A","P"],a:3,e:"約 21%；審閱時把注意力放在藥物、劑量、檢查與回診安排。"},
+ {q:"五道防線中最貴也最容易鬆懈的是？",o:["提示限制","自動檢核","人工審閱","結構化輸出"],a:2,e:"自動化偏誤：AI 越準，人越容易沒看就簽。"},
+ {q:"Air Canada 案告訴醫院什麼？",o:["機器人自己負責","對外的 AI 回答就是機構的回答","不用審閱","只有廠商負責"],a:1,e:"衛教機器人、回覆草稿也一樣：第 ⑤ 道人工審閱＋稽核紀錄。"}],"#finalscore");
+})();
+</script>
+</body>
+</html>
