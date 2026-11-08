@@ -85,12 +85,14 @@
     <div class="ph"><span class="num">09</span><div><h2>你的第一個流程：六個運算子</h2><div class="en">RETRIEVE → SET ROLE → SPLIT → TREE → APPLY → PERFORMANCE</div></div></div>
     <p class="one">第 ⑤ 步最容易接錯：Apply Model 需要「兩個」輸入——模型從 Decision Tree 來、資料從 Split Data 的測試那條線來。Decision Tree 輸出的是「模型」不是預測值。</p>
     <div class="wd"><div class="wh"><h3>自己接線、按 Ctrl+Enter 執行</h3><span class="tag amber">核心互動</span></div><p class="hint">點畫布上任一條連線＝「滑鼠中鍵看中間結果」。資料為 300 筆仿 Titanic 結構的模擬乘客。</p><div id="w-flow"></div></div>
+    <div class="wd"><div class="wh"><h3>真實資料跑一次：Titanic 891 位乘客</h3><span class="tag blue">Titanic 891 位乘客</span></div><p class="hint">AI Studio 範例資料的完整真實版。選欄位、處理缺值、設深度與切分比例，決策樹在瀏覽器裡真的訓練；右邊同步產生對應的 Python。</p><div id="w-titanic"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="子流程與資料型別">
     <div class="ph"><span class="num">10</span><div><h2>三個一定要弄懂的機制</h2><div class="en">ROLE · SUBPROCESS · DATA TYPE</div></div></div>
     <p class="one">Cross Validation、Optimize Parameters、Loop 都是容器：雙擊進入內層畫布，裡面再放訓練與測試的流程——巢狀關係是畫出來的，比 cross_val_score() 更看得見在做什麼。</p>
     <div class="wd"><div class="wh"><h3>Cross Validation 子流程＝cross_val_score()</h3><span class="tag amber">核心互動</span></div><div id="w-cv"></div></div>
+    <div class="wd"><div class="wh"><h3>一次切分有多不可靠？60 次切分 vs 10 折交叉驗證</h3><span class="tag blue">Titanic 891 位乘客</span></div><p class="hint">同一個決策樹，換 60 種隨機切分各算一次測試準確率，再和 10 折交叉驗證比較。</p><div id="w-cvreal"></div></div>
     <div class="wd"><div class="wh"><h3>型別不對，運算子就灰掉</h3><span class="tag amber">互動</span></div><div id="w-type"></div></div>
   </section>
 
@@ -156,5 +158,7 @@
 <script src="../assets/ml.js"></script>
 <script src="aisa.js"></script>
 <script src="aisb.js"></script>
+<script src="aistitanic.js"></script>
+<script src="aisc.js"></script>
 </body>
 </html>

@@ -104,6 +104,7 @@
     <div style="font-size:13px;margin:-4px 0 6px"><a href="../dify/#p09">Dify 端的長照七節點流程見 Dify 實作手冊互動頁 →</a></div>
     <p class="one">Dify 端完全不用改——它已經是一個可被呼叫的 API；n8n 端只需一個 HTTP Request 節點，就能把整套專業判斷變成流水線的一站。最常見的整合失敗：下拉選項的值對不上。</p>
     <div class="wd"><div class="wh"><h3>批次模擬：8 筆虛構個案</h3><span class="tag amber">核心互動</span></div><p class="hint">依講義設定，也可以故意拔掉某一項看會出什麼錯。本頁依 M9 加上一條規則：Dify 回傳「無法判定／需人工覆核」的個案不寫回額度，改發通知給督導。</p><div id="w-batch"></div></div>
+    <div class="wd"><div class="wh"><h3>放大到 500 筆：Batch Size、Wait 與 Retry 怎麼設？</h3><span class="tag blue">500 筆個案 × 模型速率上限</span></div><p class="hint">事件模擬：每份評估約 4,500–7,500 tokens，模型有每分鐘 token 與次數上限（免費額度沿用 Dify 頁的假設）。調整 Loop Over Items、Wait 與 Retry On Fail，看多少筆會失敗、要跑多久。</p><div id="w-rate"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="術語、測驗與回顧">
@@ -117,5 +118,6 @@
 <script src="../assets/common.js"></script>
 <script src="n8na.js"></script>
 <script src="n8nb.js"></script>
+<script src="n8nc.js"></script>
 </body>
 </html>
