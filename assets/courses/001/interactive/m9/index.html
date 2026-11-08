@@ -76,6 +76,7 @@
     <div class="ph"><span class="num">08</span><div><h2>公平性的三種定義，與不可能定理</h2><div class="en">DEMOGRAPHIC PARITY · EQUAL OPPORTUNITY · PREDICTIVE PARITY</div></div></div>
     <p class="one">盛行率不同時，除非模型完美預測，三種定義無法同時滿足（Kleinberg, 2016）。這不是演算法不夠好，是數學上的必然。所以「這個模型公平嗎」不是技術問題，是價值選擇。</p>
     <div class="wd"><div class="wh"><h3>再入院風險模型：A 群盛行率 20%、B 群 10%，各 1,000 人</h3><span class="tag amber">核心互動</span></div><p class="hint">選一種公平定義，系統替你調整 B 群的選出人數；或自己拉。模型的命中曲線為示意，數字對應講義例子。</p><div id="w-fair"></div></div>
+    <div class="wd"><div class="wh"><h3>真實資料：COMPAS 再犯風險分數的公平性爭議</h3><span class="tag blue">COMPAS 5,278 人（ProPublica 2016）</span></div><p class="hint">美國法院使用的再犯風險工具。ProPublica 公開的佛州資料（依其篩選條件，非裔與白人被告）。移動門檻，看兩種公平定義各說了什麼。</p><div id="w-compas"></div></div>
     <div class="wd"><div class="wh"><h3>這個場景該優先哪一種？</h3><span class="tag amber">練習</span></div><div id="w-fairpick"></div></div>
   </section>
 
@@ -83,6 +84,7 @@
     <div class="ph"><span class="num">09</span><div><h2>子群體稽核：交付前一定要做的一張表</h2><div class="en">SUBGROUP AUDIT</div></div></div>
     <p class="one">整體 AUC 0.842 看起來不錯，但 80 歲以上只有 0.771、非都會區只有 0.782——而這兩群往往正是最需要這個模型的人。這張表不難做，但很少人做。</p>
     <div class="wd"><div class="wh"><h3>拆到子群體看</h3><span class="tag amber">核心互動</span></div><div id="w-audit"></div></div>
+    <div class="wd"><div class="wh"><h3>放大到 24 個子群體：最差的那組是真的差嗎？</h3><span class="tag blue">12,000 位病人 × 24 個子群體</span></div><p class="hint">性別 × 年齡層 × 地區。比較「模型對每群都一樣好」與「對某一群真的較差」兩種情境下，點估計和信賴區間各告訴你什麼。</p><div id="w-subaudit"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="公平性的處理手段">
@@ -101,6 +103,7 @@
     <div class="ph"><span class="num">12</span><div><h2>SHAP：怎麼用、以及不能怎麼用</h2><div class="en">CONTRIBUTION, NOT CAUSATION</div></div></div>
     <p class="one">SHAP 只回答「在這個模型裡，哪些欄位把這一筆的分數推高或拉低」，它不回答「改變這個欄位會不會改變真實世界的結果」。不能拿來說「讓他不獨居就會降低風險」。</p>
     <div class="wd"><div class="wh"><h3>瀑布圖：這一位病人為什麼被判高風險</h3><span class="tag amber">核心互動</span></div><p class="hint">取消勾選某個因素＝假設這筆資料沒有該因素時的示意貢獻（真實 SHAP 值會隨其他特徵與參照資料集改變）。</p><div id="w-shap"></div></div>
+    <div class="wd"><div class="wh"><h3>重要性不是因果：代理特徵與相關特徵</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">與 M4、M5 同一份資料（多加一個「前一年急診次數」）。我們知道資料是怎麼產生的，所以能檢查模型給的重要性對不對。勾選或取消欄位，即時重訓並計算置換重要性。</p><div id="w-perm"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="Grad-CAM">
@@ -159,5 +162,6 @@
 <script src="../assets/common.js"></script>
 <script src="m9a.js"></script>
 <script src="m9b.js"></script>
+<script src="m9c.js"></script>
 </body>
 </html>
