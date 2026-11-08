@@ -59,6 +59,7 @@
     <p class="one">沒有唯一正確答案，但有三個判準：手肘看趨勢、Silhouette 看品質、業務可解釋性拍板。</p>
     <div class="wd"><div class="wh"><h3>手肘法、Silhouette 與 Davies-Bouldin</h3><span class="tag amber">核心互動</span></div><p class="hint">點選 K，看分群結果與每一點的 Silhouette。</p><div id="w-k"></div></div>
     <div class="wd"><div class="wh"><h3>手算一個點的 Silhouette</h3></div><div id="w-sil"></div></div>
+    <div class="wd"><div class="wh"><h3>真實資料的手肘沒那麼明顯</h3><span class="tag blue">600 位社區長者資料集</span></div><p class="hint">9 個健康欄位、四種型態彼此重疊。從 K = 2 算到 8，看手肘法與 Silhouette 會不會給你明確答案。</p><div id="w-elbow"></div></div>
     <div id="q04"></div>
   </section>
 
@@ -91,6 +92,7 @@
       <div><b>④ 對應到行動</b>兩群處置一樣 → 分開就沒有意義</div>
     </div>
     <div class="wd"><div class="wh"><h3>群組剖析與命名工作台</h3><span class="tag amber">核心互動</span></div><p class="hint">對 4 個特徵的模擬病人資料跑 K-Means，讀剖析圖替每群命名、寫下行動。</p><div id="w-profile"></div></div>
+    <div class="wd"><div class="wh"><h3>長者健康分群工作台</h3><span class="tag blue">600 位社區長者資料集</span></div><p class="hint">換 K、換放進分群的欄位，看熱圖、PCA 投影與每群的建議行動怎麼變。試試「只看心理社會」和「全部 9 個」的差別。</p><div id="w-elder"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="異常偵測">
@@ -106,6 +108,7 @@
     <p class="one">PCA 不是「刪掉欄位」，而是「換一組座標軸」，再丟掉變異小的那些軸。為什麼要降維：看得見、算得動、避開維度詛咒。</p>
     <div class="wd"><div class="wh"><h3>自己轉座標軸，找變異最大的方向</h3><span class="tag amber">核心互動</span></div><p class="hint">轉動投影方向，看投影後的變異多大；再按「PCA 最佳解」。</p><div id="w-pca"></div></div>
     <div class="wd"><div class="wh"><h3>要保留幾個主成分</h3><span class="tag amber">互動</span></div><div id="w-scree"></div></div>
+    <div class="wd"><div class="wh"><h3>讀懂主成分：載荷與雙標圖</h3><span class="tag blue">600 位社區長者資料集</span></div><p class="hint">主成分沒有名字——看它由哪些欄位組成，再替它取名。切換 PC1／PC2，再用「對答案」看四種型態落在哪裡。</p><div id="w-loading"></div></div>
     <div class="wd"><div class="wh"><h3>維度詛咒：點和點越來越一樣遠</h3></div><div id="w-curse"></div></div>
   </section>
 
@@ -141,5 +144,6 @@
 <script src="../assets/ml.js"></script>
 <script src="m3a.js"></script>
 <script src="m3b.js"></script>
+<script src="m3c.js"></script>
 </body>
 </html>
