@@ -75,6 +75,7 @@
     <p class="one">把問題與所有段落都轉成向量，挑距離最近的幾段餵給 LLM——所以查詢「血糖控制」召得回「糖尿病照護指引」，即使那份文件裡沒有這四個字。這就是 M8「知識檢索節點」的全部原理。</p>
     <div class="wd"><div class="wh"><h3>語意空間與 RAG 召回</h3><span class="tag amber">核心互動</span></div><p class="hint">選一個查詢，調整 Top-K 與 Score 閾值（實務是幾百到幾千維，這裡畫成二維示意）。</p><div id="w-emb"></div></div>
     <div class="wd"><div class="wh"><h3>餘弦相似度手算</h3><span class="tag amber">互動</span></div><p class="hint">預設為講義的 4 維示範向量；可以拖動段落 A 的數值。</p><div id="w-cos"></div></div>
+    <div class="wd"><div class="wh"><h3>從 600 句衛教語料，自己學出詞向量</h3><span class="tag blue">600 句衛教語料</span></div><p class="hint">每個詞的向量只來自「它周圍出現哪些詞」（共現次數 + PPMI 加權），在瀏覽器裡即時計算。看看「摔倒」和「跌倒」會不會自己靠在一起。</p><div id="w-ppmi"></div></div>
   </section>
 
   <section class="part" id="p08" data-t="預訓練、微調、推論">
@@ -88,12 +89,14 @@
     <div class="ph"><span class="num">09</span><div><h2>推論參數：Temperature 與 Top-p</h2><div class="en">SAMPLING · NUCLEUS</div></div></div>
     <p class="one">它在調「下一個 token 的機率分布」：溫度低 → 分布尖銳、幾乎總選最高的；溫度高 → 分布拉平、什麼都可能被選中。醫療應用一律用低溫（0–0.3）。</p>
     <div class="wd"><div class="wh"><h3>「這位病人的病情⋯」下一個詞</h3><span class="tag amber">核心互動</span></div><div id="w-temp"></div></div>
+    <div class="wd"><div class="wh"><h3>在瀏覽器裡訓練一個迷你語言模型</h3><span class="tag blue">600 句衛教語料</span></div><p class="hint">n-gram 語言模型：數「前面是這幾個詞時，下一個詞出現幾次」。原理和大型語言模型一樣都是預測下一個詞，只是看的前文很短。</p><div id="w-lm"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="幻覺的成因">
     <div class="ph"><span class="num">10</span><div><h2>幻覺：為什麼它不是 bug</h2><div class="en">HALLUCINATION</div></div></div>
     <p class="one">它挑的是「最像下一個字的東西」，不是「事實上正確的東西」。你不可能用提示詞「關掉」幻覺——只能用 RAG 提供事實、用程式碼接管數值、用人工覆核把關。這正是 M8 整個模組在做的事。</p>
     <div class="wd"><div class="wh"><h3>「病人的血糖值為 ___」</h3><span class="tag amber">核心互動</span></div><div id="w-hall"></div></div>
+    <div class="wd"><div class="wh"><h3>同一個問題問 5 次：自我一致性能抓幻覺嗎？</h3><span class="tag blue">600 句衛教語料</span></div><p class="hint">用上面的 3-gram 模型，每個開頭各生成 5 次，算 5 個答案彼此用詞的重疊程度（Jaccard）。其中兩個詞語料裡完全沒有。</p><div id="w-self"></div></div>
     <div class="wd"><div class="wh"><h3>醫療幻覺的四個樣態</h3><span class="tag amber">練習</span></div><div id="w-htype"></div></div>
   </section>
 
@@ -156,5 +159,6 @@
 <script src="../assets/ml.js"></script>
 <script src="m7a.js"></script>
 <script src="m7b.js"></script>
+<script src="m7c.js"></script>
 </body>
 </html>
