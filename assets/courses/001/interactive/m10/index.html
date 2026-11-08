@@ -46,6 +46,7 @@
     <div class="ph"><span class="num">03</span><div><h2>為什麼你該學這個</h2><div class="en">QUALITATIVE, NOT QUANTITATIVE</div></div></div>
     <p class="one">對工程師，價值在「快」，是量的改變；對健康照護背景的你，價值在「能不能」，是質的改變。風險是不知道自己不知道什麼——所以「怎麼驗證」比「怎麼生成」更重要。</p>
     <div class="wd"><div class="wh"><h3>資料科學工作流中，哪些環節可以 Vibe Code？</h3><span class="tag amber">練習</span></div><div id="w-where"></div></div>
+    <div class="wd"><div class="wh"><h3>真實研究：覺得變快，實際變慢</h3><span class="tag blue">METR 2025：16 位開發者 × 246 個任務</span></div><p class="hint">METR 在 2025 年做的隨機對照實驗。先猜，再看結果。</p><div id="w-metr"></div></div>
     <div class="wd"><div class="wh"><h3>與課程其他模組的關係</h3></div><div id="w-link"></div></div>
   </section>
 
@@ -98,6 +99,7 @@
     <div class="ph"><span class="num">11</span><div><h2>★ ④ 迭代修正與 ⑤ 本機測試</h2><div class="en">DESCRIBE THE SYMPTOM · TEST ALL 21 COMBINATIONS</div></div></div>
     <p class="one">描述現象，不要下指令：描述現象讓 AI 自己找原因，它會修正根源；直接下指令它只會改表面。7 個等級 × 3 種身分別＝21 種組合，點一點只要三分鐘，會抓到大部分錯誤。</p>
     <div class="wd"><div class="wh"><h3>長照給付試算器：AI 做出來的各版本</h3><span class="tag amber">核心互動</span></div><p class="hint">第一版藏著幾個錯。先自己操作，再按「跑 21 種組合」對照講義的額度表。</p><div id="w-calc"></div></div>
+    <div class="wd"><div class="wh"><h3>放大測試：AI 改了五版的 eGFR 函式</h3><span class="tag blue">8 個手寫測試 ＋ 10,000 組隨機輸入</span></div><p class="hint">CKD-EPI 2021 公式。每一版都在瀏覽器裡真的跑一萬組隨機病人，和參考實作比對；看手寫測試抓得到哪些錯。</p><div id="w-egfr"></div></div>
     <div class="wd"><div class="wh"><h3>哪一句是好的修正 Prompt？</h3><span class="tag amber">練習</span></div><div id="w-phrase"></div></div>
   </section>
 
@@ -111,6 +113,7 @@
     <div class="ph"><span class="num">13</span><div><h2>⑥ 推上 GitHub：三個指令與三個檢查</h2><div class="en">ADD · COMMIT · PUSH</div></div></div>
     <p class="one">之後每次改完只要三行：git add . → git commit -m "說明" → git push。上傳前三個檢查：.gitignore 有沒有排除 node_modules、程式碼裡有沒有 API 金鑰、有沒有夾帶真實個案資料。</p>
     <div class="wd"><div class="wh"><h3>Git 模擬器</h3><span class="tag amber">核心互動</span></div><p class="hint">先設定 .gitignore，再依序按指令。推上公開儲存庫的東西，刪掉也還在歷史紀錄裡。</p><div id="w-git"></div></div>
+    <div class="wd"><div class="wh"><h3>推上去之前：掃描整個專案的金鑰</h3><span class="tag blue">TaskFlow 專案 100 多個檔案</span></div><p class="hint">專案裡藏了幾組 AI「先寫死方便測試」的金鑰，也有測試用的假金鑰。選掃描規則、設定 .gitignore，看哪些會被推上 GitHub。</p><div id="w-secret"></div></div>
   </section>
 
   <section class="part" id="p14" data-t="⑦ 雲端部署">
@@ -168,5 +171,6 @@
 <script src="../assets/common.js"></script>
 <script src="m10a.js"></script>
 <script src="m10b.js"></script>
+<script src="m10c.js"></script>
 </body>
 </html>
