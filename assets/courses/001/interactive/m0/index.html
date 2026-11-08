@@ -71,6 +71,7 @@
     <div class="wd"><div class="wh"><h3>資料型態 × 問題型態：定位你的題目</h3><span class="tag amber">互動</span></div><div id="w-quad"></div></div>
     <div class="wd"><div class="wh"><h3>應用場景 × 技術矩陣</h3></div><p class="hint">點一列看這個場景主要用到哪些技術、對應本課哪幾週。</p><div id="w-matrix"></div></div>
     <div class="wd"><div class="wh"><h3>相關不等於因果</h3><span class="tag amber">互動</span></div><div id="w-conf"></div></div>
+    <div class="wd"><div class="wh"><h3>真實資料：腎結石兩種療法的辛普森悖論</h3><span class="tag blue">700 位病人（BMJ 1986）</span></div><p class="hint">Charig 等人 1986 年發表的腎結石治療資料。先看整體成功率，再依結石大小分開看。</p><div id="w-simpson"></div></div>
     <div class="wd"><div class="wh"><h3>三個真實的失敗教訓</h3></div><div id="w-fail"></div></div>
     <div id="q05"></div>
   </section>
@@ -89,6 +90,7 @@
     <p class="one">最常被低估的是第一步——界定錯了，後五步做得再漂亮也沒有價值。會用到資料統計量的步驟，一律先切分再做。</p>
     <div class="wd"><div class="wh"><h3>六個步驟：產出與最常見的錯誤</h3></div><div id="w-six"></div></div>
     <div class="wd"><div class="wh"><h3>先補值再切分，測試集就偷看了答案</h3><span class="tag amber">互動</span></div><p class="hint">改血糖數字或點「分組」切換訓練／測試，看兩種順序補出來的值差多少。</p><div id="w-impute"></div></div>
+    <div class="wd"><div class="wh"><h3>放大來看：純雜訊也能考 80 分</h3><span class="tag blue">100 位 × 最多 5,000 個隨機特徵</span></div><p class="hint">特徵全是隨機數字、標籤是丟銅板。比較「先用全部資料篩特徵再交叉驗證」和「每一折內才篩」——在瀏覽器裡真的跑。</p><div id="w-leakbig"></div></div>
     <div class="wd"><div class="wh"><h3>時間都花在哪裡</h3></div><div id="w-time"></div></div>
     <div class="wrong"><b>這一步做錯會怎樣：</b>先用整份資料補值或正規化再切分，測試集的資訊就滲進訓練——分數偏樂觀，上線遇到真正的新病人就掉下來。</div>
   </section>
@@ -107,6 +109,7 @@
     <div class="concept" style="grid-template-columns:repeat(5,1fr)"><div><b>Retrieve</b>拖曳資料集 → ② 蒐集資料</div><div><b>Set Role</b>mpg 設為 label → ③</div><div><b>Split Data</b>0.8／0.2 切分 → ⑤</div><div><b>Linear Regression＋Apply Model</b>訓練並套用到測試集 → ⑤</div><div><b>Performance</b>RMSE 與 squared correlation → ⑤</div></div>
     <div class="wd"><div class="wh"><h3>自己畫迴歸線</h3><span class="tag amber">核心互動</span></div><p class="hint">拖動截距與斜率，讓 RMSE 越小越好；再按「最小平方法」看答案。</p><div id="w-fit"></div></div>
     <div class="wd"><div class="wh"><h3>切分、訓練、評估</h3></div><p class="hint">調整訓練比例、換一組隨機切分，或模擬「Split Data 兩個輸出接反」。</p><div id="w-split"></div></div>
+    <div class="wd"><div class="wh"><h3>換成真實資料：Auto MPG 392 輛車</h3><span class="tag blue">Auto MPG（UCI）392 輛車</span></div><p class="hint">AI Studio 範例用的經典資料集的完整版（1970–1982 年車款）。換橫軸看哪個欄位最能解釋油耗，再和多元迴歸比較。</p><div id="w-mpgreal"></div></div>
     <div class="wd"><div class="wh"><h3>流程組裝：把 Operator 排成正確順序</h3></div><div id="w-proc"></div></div>
     <div class="wrong"><b>這一步做錯會怎樣：</b>Split Data 兩個輸出接反，模型只用 20% 訓練；最後節點沒連到 res 埠就看不到結果。連錯線不會報錯，但結果會錯。</div>
   </section>
@@ -138,5 +141,8 @@
 <script src="../assets/common.js"></script>
 <script src="m0a.js"></script>
 <script src="m0b.js"></script>
+<script src="../assets/ml.js"></script>
+<script src="m0mpg.js"></script>
+<script src="m0c.js"></script>
 </body>
 </html>
