@@ -61,6 +61,7 @@
     <p class="one">醫學文獻出現頻率最高的模型：輸出機率、係數可轉成勝算比（OR）。它幾乎永遠應該是你的第一個正式模型。</p>
     <div class="wd"><div class="wh"><h3>Sigmoid：把任意數字壓成機率</h3><span class="tag amber">互動</span></div><div id="w-sig"></div></div>
     <div class="wd"><div class="wh"><h3>係數 → 勝算比</h3><span class="tag amber">互動</span></div><div id="w-or"></div></div>
+    <div class="wd"><div class="wh"><h3>模型為什麼說這位病人高風險？</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">1,400 次出院訓練 Logistic 迴歸，預測另外 600 次。點一位病人，看每個欄位把他的風險往上推或往下拉多少。</p><div id="w-why"></div></div>
     <div class="wd"><div class="wh"><h3>其他分類器速覽</h3></div><div id="w-others"></div></div>
   </section>
 
@@ -89,6 +90,7 @@
     <p class="one">模型輸出機率，門檻才決定判成哪一類。0.5 只是軟體預設，不是自然法則——這是本單元最重要的一句話。</p>
     <div class="wd"><div class="wh"><h3>一條曲線＝全部門檻</h3><span class="tag amber">核心互動</span></div><p class="hint">拉門檻，ROC 與 PR 上的點同步移動。ROC 選模型，PR 定門檻。</p><div id="w-roc"></div></div>
     <div class="wd"><div class="wh"><h3>用期望成本選門檻</h3><span class="tag amber">互動</span></div><p class="hint">代價比＝漏掉一個再入院等於幾次無效追蹤。這是臨床與管理的判斷，不是資料科學家自己決定的。</p><div id="w-cost"></div></div>
+    <div class="wd"><div class="wh"><h3>追蹤名額有限：前幾 % 能抓到幾成再入院？</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">實務上常見的問法不是「門檻設多少」，而是「我們只追得動多少人」。拉動名額，看抓到的比例與效率。</p><div id="w-cap"></div></div>
     <div class="wd"><div class="wh"><h3>機率校準：說 70% 就真的是 70% 嗎</h3></div><div id="w-calib"></div></div>
   </section>
 
@@ -133,6 +135,7 @@
     <div class="ph"><span class="num">13</span><div><h2>模型比較與選擇</h2><div class="en">THE BIG COMPARISON</div></div></div>
     <p class="one">沒有永遠的冠軍，只有適不適合你的場域。實務流程：Logistic 建基準 → 樹看結構 → 森林／提升拚效能 → 依可解釋性需求決定部署。</p>
     <div class="wd"><div class="wh"><h3>你的情況適合誰？</h3><span class="tag amber">互動</span></div><p class="hint">勾選你的需求，看哪些模型同時符合。</p><div id="w-pick"></div></div>
+    <div class="wd"><div class="wh"><h3>四個模型同場比較</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">勾選模型，瀏覽器會用同一份訓練集真的訓練一次，再在同一份測試集上比 ROC、AUC 與實務指標。</p><div id="w-arena"></div></div>
   </section>
 
   <section class="part" id="p14" data-t="實作、作業與回顧">
@@ -149,5 +152,6 @@
 <script src="../assets/ml.js"></script>
 <script src="m22a.js"></script>
 <script src="m22b.js"></script>
+<script src="m22c.js"></script>
 </body>
 </html>

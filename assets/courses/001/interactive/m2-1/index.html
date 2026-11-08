@@ -51,6 +51,7 @@
     <div class="ph"><span class="num">03</span><div><h2>簡單線性迴歸：最小平方法手算</h2><div class="en">SIMPLE LINEAR REGRESSION · OLS</div></div></div>
     <p class="one">找一條線讓「殘差平方和」最小。取平方是為了正負不抵消，且大誤差被加重懲罰。公式看過就忘，算過一遍會記得為什麼。</p>
     <div class="wd"><div class="wh"><h3>五位病人：以年齡預測住院天數</h3><span class="tag amber">核心互動</span></div><p class="hint">直接改表格數字，係數、殘差、R² 會即時重算。右側可以切換「殘差」與「R² 方塊」兩種視角。</p><div id="w-ols"></div></div>
+    <div class="wd"><div class="wh"><h3>拖動直線，找最小的殘差平方和</h3><span class="tag blue">500 位病人資料集</span></div><p class="hint">40 位病人。自己轉動直線讓 SSE 變小，再按「讓電腦自己下山」看梯度下降怎麼一步步找到同一個答案。</p><div id="w-sse"></div></div>
     <div class="wd"><div class="wh"><h3>用模型預測：小心外插</h3></div><div id="w-extrap"></div></div>
     <div id="q03"></div>
   </section>
@@ -86,6 +87,7 @@
     </div>
     <div class="wd"><div class="wh"><h3>為什麼控制嚴重度後，年齡係數變小</h3><span class="tag amber">互動</span></div><div id="w-net"></div></div>
     <div class="wd"><div class="wh"><h3>共線性：重抽 40 次的係數</h3><span class="tag amber">互動</span></div><p class="hint">拉高身高與體重的相關，看係數在 0 的兩側擺盪——但 R² 幾乎不動。</p><div id="w-coll"></div></div>
+    <div class="wd"><div class="wh"><h3>多元迴歸實驗台：哪些欄位真的有用？</h3><span class="tag blue">500 位病人資料集</span></div><p class="hint">350 人訓練、150 人測試。點欄位放進或拿出模型，看係數、信賴區間與測試 RMSE 怎麼變；或按「逐步加入」看電腦怎麼挑。</p><div id="w-lab21"></div></div>
     <div class="wrong"><b>這一步做錯會怎樣：</b>在共線性下解讀個別係數，係數正負可能只是抽樣的偶然；變數數不同的模型直接比 R²，永遠會選到最複雜的那個。</div>
   </section>
 
@@ -93,6 +95,7 @@
     <div class="ph"><span class="num">07</span><div><h2>評估指標</h2><div class="en">MAE · MSE · RMSE · MAPE</div></div></div>
     <p class="one">兩個模型的 MAE 完全一樣，其中一個卻明顯比較危險。任何誤差指標都要附基準線——沒有比較對象的 RMSE 是沒有意義的數字。</p>
     <div class="wd"><div class="wh"><h3>同樣的 MAE，不同的 RMSE</h3><span class="tag amber">互動</span></div><p class="hint">改模型 B 最後一筆的預測，看 MAE 與 RMSE 怎麼分道揚鑣。</p><div id="w-metric"></div></div>
+    <div class="wd"><div class="wh"><h3>大誤差落在誰身上？</h3><span class="tag blue">500 位病人資料集</span></div><p class="hint">用實驗台的完整模型預測 150 位測試病人。拉動門檻，看大誤差的人有什麼共同點。</p><div id="w-err21"></div></div>
     <div id="q07"></div>
   </section>
 
@@ -158,5 +161,6 @@
 <script src="../assets/ml.js"></script>
 <script src="m21a.js"></script>
 <script src="m21b.js"></script>
+<script src="m21c.js"></script>
 </body>
 </html>
