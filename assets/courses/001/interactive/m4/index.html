@@ -71,6 +71,7 @@
     <p class="one">梯度提升把「調樣本權重」改成「擬合前面的殘差」。學習率與棵數是一組交易：學習率減半，棵數大致要加倍；實務上固定小學習率，用早停決定棵數。</p>
     <div class="wd"><div class="wh"><h3>一棵一棵擬合殘差</h3><span class="tag amber">核心互動</span></div><p class="hint">每棵都是淺樹。調學習率與棵數，看訓練誤差、驗證誤差與早停點。</p><div id="w-gb"></div></div>
     <div class="wd"><div class="wh"><h3>三種長樹方式</h3></div><div id="w-grow"></div></div>
+    <div class="wd"><div class="wh"><h3>梯度提升一棵一棵長出來</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">在你的瀏覽器裡真的訓練 GBDT：每棵樹擬合前面的殘差。換學習率與樹的深度，找出驗證損失開始回升的早停點。</p><div id="w-gbreal"></div></div>
   </section>
 
   <section class="part" id="p07" data-t="投票與 Stacking">
@@ -90,6 +91,7 @@
     <div class="ph"><span class="num">09</span><div><h2>異常有三種型態</h2><div class="en">POINT · CONTEXTUAL · COLLECTIVE</div></div></div>
     <p class="one">多數人只想到「點異常」，但臨床上情境異常與集體異常往往更重要，也更難抓。先分辨你要抓的是哪一種。</p>
     <div class="wd"><div class="wh"><h3>連續 120 小時的體溫：三種偵測規則各抓到什麼</h3><span class="tag amber">核心互動</span></div><div id="w-types"></div></div>
+    <div class="wd"><div class="wh"><h3>ICU 72 小時生命徵象回放</h3><span class="tag blue">432 筆 × 3 項生命徵象</span></div><p class="hint">一位病人 72 小時、每 10 分鐘一筆的心跳、血氧、呼吸。裡面藏了四件事——換偵測方法，看誰抓到、誰漏掉、誰亂響。</p><div id="w-icu"></div></div>
     <div class="wd"><div class="wh"><h3>異常偵測方法分類</h3></div><div id="w-adtax"></div></div>
   </section>
 
@@ -119,6 +121,7 @@
     <p class="one">Apriori 的核心定理：{A,B} 不頻繁，{A,B,C} 一定也不頻繁。FP-Growth 把交易壓成前綴樹，只掃資料庫兩次——品項多或交易量大一律用它。</p>
     <div class="wd"><div class="wh"><h3>Apriori 逐層剪枝</h3><span class="tag amber">互動</span></div><p class="hint">用上一節的 10 筆交易，調整最小支持度。</p><div id="w-apriori"></div></div>
     <div class="wd"><div class="wh"><h3>「一筆交易」是什麼？</h3><span class="tag amber">練習</span></div><div id="w-unit"></div></div>
+    <div class="wd"><div class="wh"><h3>1,200 張處方：挖出真正有意義的用藥組合</h3><span class="tag blue">1,200 張處方 × 15 種藥</span></div><p class="hint">調整 support 與 confidence 門檻，切換排序方式；點任一條規則（散布圖或表格），看它在臨床上代表什麼。</p><div id="w-rx"></div></div>
     <div class="note warn"><b>三個常見誤用：</b>① 把關聯當成因果　② 支持度門檻設得太低（起點：support ≥ 0.01、lift ≥ 1.2，規則控制在幾十條）　③ 忽略品項粒度（品項名、成分、ATC 分類，結果完全不同——要跟臨床討論）。</div>
   </section>
 
@@ -174,5 +177,6 @@
 <script src="../assets/ml.js"></script>
 <script src="m4a.js"></script>
 <script src="m4b.js"></script>
+<script src="m4c.js"></script>
 </body>
 </html>
