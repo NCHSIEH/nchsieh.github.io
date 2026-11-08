@@ -95,6 +95,7 @@
     <div class="ph"><span class="num">10</span><div><h2>完整解讀一次分類結果</h2><div class="en">異常事件通報：是否為「用藥相關」</div></div></div>
     <p class="one">準確率 93.7% 看起來很好，但全部猜「否」也有 92%。真正該看的是 Recall——漏掉的那幾筆才是風險所在。而係數表才是說服臨床單位的關鍵。</p>
     <div class="wd"><div class="wh"><h3>混淆矩陣、指標與模型看重的詞</h3><span class="tag amber">互動</span></div><div id="w-cm"></div></div>
+    <div class="wd"><div class="wh"><h3>放大到 600 筆：五類通報分類器</h3><span class="tag blue">600 筆異常事件通報</span></div><p class="hint">用藥、跌倒、管路、檢驗、其他。前 420 筆訓練、後 180 筆測試，Naive Bayes 在瀏覽器裡即時重訓。通報含套語、否定句與少量標註錯誤，跟真實資料一樣。</p><div id="w-inc"></div></div>
   </section>
 
   <section class="part" id="p11" data-t="主題模型 NMF">
@@ -107,6 +108,7 @@
     <div class="ph"><span class="num">12</span><div><h2>情感分析：三種做法在同一句話上的差異</h2><div class="en">LEXICON · ML · ASPECT-BASED SENTIMENT</div></div></div>
     <p class="one">病人滿意度的開放題，用整句情感分析幾乎沒有價值——一句話裡通常同時誇跟罵。要做的是「面向情感分析」：分別看每一個面向的好惡。</p>
     <div class="wd"><div class="wh"><h3>整句 vs 面向</h3><span class="tag amber">核心互動</span></div><div id="w-senti"></div></div>
+    <div class="wd"><div class="wh"><h3>一整年的留言：面向情感找出整體分數看不到的事</h3><span class="tag blue">1,200 則滿意度留言 × 6 個面向</span></div><p class="hint">每月 100 則。7–9 月停車場施工、10 月新叫號系統上線——看整句情感與面向情感誰看得出來。</p><div id="w-aspect"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="NER 與去識別化">
@@ -125,6 +127,7 @@
     <div class="ph"><span class="num">15</span><div><h2>文件相似度與分群</h2><div class="en">COSINE SIMILARITY · M8 知識檢索的原型</div></div></div>
     <p class="one">把每份文件轉成 TF-IDF 向量，兩兩算餘弦相似度——不需要任何標籤就能把紀錄整理出結構。M8 的知識檢索概念完全一樣，只是改用嵌入向量。</p>
     <div class="wd"><div class="wh"><h3>五筆護理紀錄的相似度矩陣＋檢索</h3><span class="tag amber">核心互動</span></div><div id="w-sim"></div></div>
+    <div class="wd"><div class="wh"><h3>240 則衛教問答：輸入問題，TF-IDF 幫你找</h3><span class="tag blue">240 則衛教問答 × 6 類</span></div><p class="hint">用字元 bigram 的 TF-IDF 加 cosine 相似度。可以自己打字查詢，也可以點範例；這就是 M8 知識檢索（RAG）的最早版本。</p><div id="w-faq"></div></div>
   </section>
 
   <section class="part" id="p16" data-t="標註品質 Kappa">
@@ -169,5 +172,6 @@
 <script src="../assets/ml.js"></script>
 <script src="m6a.js"></script>
 <script src="m6b.js"></script>
+<script src="m6c.js"></script>
 </body>
 </html>
