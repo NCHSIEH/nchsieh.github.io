@@ -73,12 +73,14 @@
     <div class="ph"><span class="num">07</span><div><h2>RAG 四步與切塊大小</h2><div class="en">CHUNK · EMBED · RETRIEVE · GENERATE</div></div></div>
     <p class="one">品質瓶頸幾乎都在第 ③ 步：LLM 只看得到「被召回的那幾段」。召回錯了，生成再厲害也沒用——這也是為什麼一直改 Prompt 常常沒有效果。</p>
     <div class="wd"><div class="wh"><h3>切塊模擬器：「CMS 第 4 級每月給付額度是多少？」</h3><span class="tag amber">核心互動</span></div><p class="hint">示範文件為依講義數字編寫的簡短給付基準（以衛福部最新公告為準）；字數按比例縮小。</p><div id="w-chunk"></div></div>
+    <div class="wd"><div class="wh"><h3>切塊實驗：8 種切法 × 40 題測試問題</h3><span class="tag blue">長照手冊 × 40 題</span></div><p class="hint">依長照 2.0 給付基準編寫的簡化手冊（教學用，實際以主管機關公告為準）。每種切法都真的用 BM25 檢索 Top-3，檢查拿回的段落裡有沒有完整答案。</p><div id="w-chunkexp"></div></div>
   </section>
 
   <section class="part" id="p08" data-t="Top-K、閾值、Rerank">
     <div class="ph"><span class="num">08</span><div><h2>召回設定：Top-K、相似度閾值、Rerank</h2><div class="en">RETRIEVAL SETTINGS · HYBRID SEARCH</div></div></div>
     <p class="one">Top-K 與閾值是「且」的關係：要進 Prompt，必須同時過閾值、又排進前 K。實務起點：Top-K 3–5、閾值 0.5；法規條號、藥名用混合檢索。</p>
     <div class="wd"><div class="wh"><h3>20 個候選段落</h3><span class="tag amber">核心互動</span></div><p class="hint">★ 是真正含有答案的段落。</p><div id="w-topk"></div></div>
+    <div class="wd"><div class="wh"><h3>檢索評測台：40 題逐題看召回</h3><span class="tag blue">長照手冊 × 40 題</span></div><p class="hint">每題都有標準答案段落。調 Top-K、相似度閾值，打開查詢改寫，Recall@K 與 MRR 即時重算——上線前就該這樣測。</p><div id="w-ragbench"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="Agentic RAG">
@@ -130,6 +132,7 @@
     <div class="ph"><span class="num">16</span><div><h2>Human-in-the-Loop：三段式權責分工</h2><div class="en">FRONTLINE · AI SYSTEM · SUPERVISOR</div></div></div>
     <p class="one">AI 站在中間，但送出與拍板都在人手上。系統的定位是「把人的注意力放到對的地方」，不是「代替人做決定」。</p>
     <div class="wd"><div class="wh"><h3>居服員 ISBAR 通報：一則現場觀察走完三段</h3><span class="tag amber">互動</span></div><div id="w-hitl"></div></div>
+    <div class="wd"><div class="wh"><h3>一個月 600 則通報：AI 分流 × 主管複核量</h3><span class="tag blue">600 則居服員 ISBAR 通報</span></div><p class="hint">每則通報有 AI 風險分數。分數過門檻就立即通知主管，其餘依分數排序，主管每天複核前幾則，剩下的週末批次看。</p><div id="w-triage"></div></div>
   </section>
 
   <section class="part" id="p17" data-t="期末專題">
@@ -164,5 +167,7 @@
 <script src="../assets/ml.js"></script>
 <script src="m8a.js"></script>
 <script src="m8b.js"></script>
+<script src="m8kb.js"></script>
+<script src="m8c.js"></script>
 </body>
 </html>
