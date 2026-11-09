@@ -48,4 +48,24 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 03 節：Ni8mare 漏洞與版本檢查（2026-11-09 新增）
+     ==================================================================== */
+  (function n8nver() {
+    const box = $('#w-n8nver'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));    const ck = (label, get, set) => { const i = h('input', { type: 'checkbox' }); i.checked = get(); i.onchange = () => { set(i.checked); draw(); }; return h('label', { style: { display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '14px', margin: '4px 0', cursor: 'pointer' } }, i, h('span', null, label)); };
+    let v = 'old'; const G = { pub: true, cred: true }; const res = h('div');
+    function draw() {
+      res.innerHTML = '';
+      let lvl, cls, msg;
+      if (v === 'old') { lvl = G.pub ? '緊急' : '高'; cls = 'bad'; msg = '1.121.0 以前的自架版本有 Ni8mare（CVE-2026-21858）：不用登入，透過對外的 Form／Webhook 就能接管。' + (G.pub ? '你的入口對外開放，等於門沒鎖——今天就更新，並先把對外連線關掉。' : '沒有對外開放降低了被掃到的機會，但同一台機器上的其他人或程式仍可能利用，還是要更新。'); }
+      else if (v === 'v1') { lvl = '中'; cls = ''; msg = 'Ni8mare 已修，但同期還有 CVE-2026-21877、CVE-2025-68613 等高分漏洞在後續小版本才修。更新到 1.x 最新小版本，或照講義改用 2.x。'; }
+      else { lvl = G.pub ? '中' : '低'; cls = G.pub ? '' : 'good'; msg = '上述漏洞都已修。' + (v === 'v3' ? '3.0 自架只支援 Docker、移除 Function 等舊節點，舊教學步驟可能失效；10/27 是測試版，課堂建議等 12 月正式版。' : '') + (G.pub ? '對外開放時仍要加帳號保護、限制來源，並訂閱安全公告。' : ''); }
+      res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('風險等級', lvl, cls), kpi('被接管時外洩', G.cred ? '所有 API 金鑰' : '流程與資料', G.cred ? 'bad' : '')));
+      res.append(note(msg + (G.cred ? ' Credentials 裡存著你串接的所有服務金鑰，被接管就要全部作廢重發。' : '')));
+    }
+    box.append(seg([['old', '1.120 以前'], ['v1', '1.121 以後的 1.x'], ['v2', '2.x'], ['v3', '3.0 測試版']], () => v, x => v = x, draw), ck('Webhook／Form／Chat 連結可以從網際網路連到', () => G.pub, x => G.pub = x), ck('Credentials 存了 OpenAI、Gemini、Google 等金鑰', () => G.cred, x => G.cred = x), res); draw();
+  })();
 })();

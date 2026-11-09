@@ -94,4 +94,29 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 03 節：試算表列數上限（英國 PHE 2020 漏報事件）（2026-11-09 新增）
+     ==================================================================== */
+  (function rowlimit() {
+    const box = $('#w-rowlimit'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));    const nf = v => Math.round(v).toLocaleString('en-US');    const ck = (label, get, set) => { const i = h('input', { type: 'checkbox' }); i.checked = get(); i.onchange = () => { set(i.checked); draw(); }; return h('label', { style: { display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '14px', margin: '4px 0', cursor: 'pointer' } }, i, h('span', null, label)); };
+    const LIM = { xls: ['舊版 .xls 範本', 65536], xlsx: ['新版 .xlsx', 1048576], flow: ['AI Studio／Python 讀 CSV', Infinity] };
+    let f = 'xls', rows = 80000; const G = { chk: false }; const res = h('div');
+    function draw() {
+      res.innerHTML = '';
+      const lim = LIM[f][1], got = Math.min(rows, lim - 1), lost = rows - got, bars = h('div');
+      res.append(lab(LIM[f][0] + '：收到 vs 實際匯入（第 1 列是欄位名稱）'), bars);
+      U.hbars(bars, [{ label: '收到', value: rows, color: '#9aa3ad' }, { label: '匯入', value: got, color: lost ? C.bad : C.good }], { w: 760, lw: 60, rowH: 30, max: rows * 1.05, fmt: v => nf(v) + ' 列' });
+      const found = lost > 0 && G.chk;
+      res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('被截掉', nf(lost) + ' 列', lost ? 'bad' : 'good'), kpi('有沒有人發現', lost === 0 ? '沒有遺漏' : found ? '當場發現' : '沒有', lost && !found ? 'bad' : 'good')));
+      let msg;
+      if (lost === 0) msg = f === 'flow' ? '直接讀 CSV 沒有 65,536 或 1,048,576 列的上限；流程每一步都看得到，換一份資料重跑即可。' : '這次沒超過上限——但下週資料變多就可能超過，而且不會有人提醒你。';
+      else if (found) msg = `Statistics 顯示匯入 ${nf(got)} 筆，和檢驗所說的 ${nf(rows)} 筆對不上，當場就知道少了 ${nf(lost)} 筆。英國那次只要做這個比對就會發現。`;
+      else msg = `${nf(lost)} 列沒有任何錯誤訊息就消失了。英國 2020 年的情況更糟：每位個案在範本裡佔好幾列，一份 .xls 只裝得下約 1,400 例，9/25–10/2 共 15,841 例陽性沒進入接觸者追蹤。`;
+      res.append(note(msg));
+    }
+    box.append(h('div', { class: 'row' }, seg([['xls', '.xls（上限 65,536 列）'], ['xlsx', '.xlsx（上限 1,048,576 列）'], ['flow', 'AI Studio／Python']], () => f, v => f = v, draw), U.slider('檢驗所傳來的資料列數', 10000, 1500000, 5000, () => rows, v => rows = +v, draw, v => nf(+v) + ' 列')), ck('匯入後用 Statistics 比對筆數（M1 第 10 頁的習慣）', () => G.chk, v => G.chk = v), res); draw();
+  })();
 })();
