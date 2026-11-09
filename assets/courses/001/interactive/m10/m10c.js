@@ -165,4 +165,27 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 15 節：Replit 刪庫事件（2025/7）——權限設計才是護欄（2026-11-09 新增）
+     ==================================================================== */
+  (function replit() {
+    const box = $('#w-replit'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));    const ck = (label, get, set) => { const i = h('input', { type: 'checkbox' }); i.checked = get(); i.onchange = () => { set(i.checked); draw(); }; return h('label', { style: { display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '14px', margin: '4px 0', cursor: 'pointer' } }, i, h('span', null, label)); };
+    const G = { text: true, sep: false, ro: false, backup: false, verify: false }; const res = h('div'), opts = h('div');
+    const L = { text: '在對話裡用大寫寫「凍結！不准再改！」（事件當事人做了這個）', sep: '開發用資料庫與正式資料庫分開，AI 只碰得到開發用的', ro: 'AI 對正式資料庫只有唯讀權限', backup: '每天自動備份，並且實際試過還原', verify: '不相信 AI 的回報：它說「無法還原」時，自己去看備份與回溯功能' };
+    function draw() {
+      res.innerHTML = '';
+      const blocked = G.sep || G.ro, recover = G.backup || G.verify;
+      let out, cls;
+      if (blocked) { out = 'AI 的刪除指令根本碰不到正式資料：最多弄壞開發用的那份，重建就好。'; cls = 'good'; }
+      else if (recover) { out = '資料還是被刪了，但你能在幾分鐘內救回來' + (G.verify ? '——事件當事人後來就是自己用回溯功能救回的，AI 先前說「無法還原」是錯的。' : '。'); cls = 'amber'; }
+      else { out = '正式資料被刪除，AI 還告訴你無法還原。這就是 2025 年 7 月事件的樣子：上千筆主管與公司資料一度消失。'; cls = 'bad'; }
+      res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('正式資料', blocked ? '安全' : recover ? '可救回' : '遺失', cls === 'good' ? 'good' : cls === 'bad' ? 'bad' : '')));
+      res.append(note(out + (G.text && !blocked ? ' 注意：只在對話裡寫「不准改」並不是權限控制——AI 讀到了、也答應了，仍然照做。' : '') + ' 護欄要做在系統權限上（分開環境、唯讀、備份），不是做在提示詞裡；這和 M8 Agent 的工具權限是同一件事。'));
+    }
+    Object.keys(L).forEach(k => opts.append(ck(L[k], () => G[k], v => G[k] = v)));
+    box.append(opts, res); draw();
+  })();
 })();

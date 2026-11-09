@@ -171,4 +171,28 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 12 節：Air Canada 聊天機器人判決（Moffatt v. Air Canada, 2024 BCCRT 149）（2026-11-09 新增）
+     ==================================================================== */
+  (function aircan() {
+    const box = $('#w-aircan'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));    const ck = (label, get, set) => { const i = h('input', { type: 'checkbox' }); i.checked = get(); i.onchange = () => { set(i.checked); draw(); }; return h('label', { style: { display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '14px', margin: '4px 0', cursor: 'pointer' } }, i, h('span', null, label)); };
+    const G = { kb: false, quote: false, refuse: false, hitl: false }; const res = h('div'), opts = h('div');
+    const L = { kb: '規則與金額只從知識庫找（RAG），不讓模型憑記憶回答', quote: '回答逐字引用條文並附來源連結', refuse: '知識庫找不到或相似度低於閾值時，回答「無法確認」並轉人工', hitl: '涉及金錢、資格的回答，送出前由專人確認（Human Input 節點）' };
+    function draw() {
+      res.innerHTML = '';
+      const n = Object.values(G).filter(Boolean).length;
+      let ans, verdict, cls;
+      if (!G.kb) { ans = '「可以，您可以在購票後 90 天內申請退還差價。」（模型憑印象編出來的規定）'; verdict = '這就是 Air Canada 機器人的回答。仲裁庭認定公司沒有盡合理注意確保機器人正確，判賠 650.88 加幣差價，加利息與規費共 812.02 加幣。'; cls = 'bad'; }
+      else if (!G.refuse && !G.quote) { ans = '「依規定……喪親優惠需在購票前申請……」（有查知識庫，但沒附來源，召回錯段落時仍可能說錯）'; verdict = '比較好，但使用者無法核對；召回到舊版或錯的段落時，錯誤一樣會被當成公司的說法。'; cls = 'amber'; }
+      else { ans = '「依《喪親優惠規定》第 3 條：需於購票前提出申請，不受理事後申請。（附連結）」' + (G.refuse ? '；找不到時改回「這題我無法確認，已為您轉給客服」' : ''); verdict = G.hitl ? '答案可追溯、找不到會轉人工、涉及金錢的回答有人把關——出事時你拿得出「已盡合理注意」的證據（Tracing 紀錄＋確認紀錄）。' : '答案可追溯；再加上人工確認，高風險回答才有完整的責任鏈。'; cls = G.hitl ? 'good' : 'amber'; }
+      res.append(h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: '#fff' } }, h('div', { style: { fontSize: '12.5px', color: 'var(--muted)' } }, '使用者：我祖母過世了，喪親優惠可以先買全票、之後再申請退差價嗎？'), h('div', { style: { marginTop: '6px' } }, h('b', null, '機器人：'), ans)));
+      res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('已做到的防護', n + ' / 4', cls === 'good' ? 'good' : cls === 'bad' ? 'bad' : ''), kpi('出事時站不站得住', cls === 'good' ? '有證據' : cls === 'bad' ? '站不住' : '勉強')));
+      res.append(note(verdict + ' 換成長照給付機器人也一樣：額度、資格說錯了，責任在部署的機構，不在模型——這就是「數字不生成」與 HITL 的理由。'));
+    }
+    Object.keys(L).forEach(k => opts.append(ck(L[k], () => G[k], v => G[k] = v)));
+    box.append(opts, res); draw();
+  })();
 })();

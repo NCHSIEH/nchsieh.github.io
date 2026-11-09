@@ -147,4 +147,24 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 06 節：脈搏血氧計膚色偏誤（Sjoding et al., NEJM 2020）（2026-11-09 新增）
+     ==================================================================== */
+  (function spo2() {
+    const box = $('#w-spo2'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));
+    const D = { um: ['密西根大學世代（10,789 組配對）', 11.7, 3.6], mc: ['多中心世代（37,308 組配對）', 17.0, 6.2] };
+    let co = 'um', n = 1000; const res = h('div');
+    function draw() {
+      res.innerHTML = '';
+      const [name, b, w] = D[co], mb = Math.round(n * b / 100), mw = Math.round(n * w / 100), bars = h('div');
+      res.append(lab(name + '：讀數 92–96% 時，實際 SaO₂ < 88% 的比例'), bars);
+      U.hbars(bars, [{ label: '黑人病人', value: b, color: C.bad }, { label: '白人病人', value: w, color: '#9aa3ad' }], { w: 760, lw: 90, rowH: 32, max: 22, fmt: v => v.toFixed(1) + '%' });
+      res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi(`黑人病人 ${fmt(n, 0)} 位中被漏掉`, fmt(mb, 0), 'bad'), kpi(`白人病人 ${fmt(n, 0)} 位中被漏掉`, fmt(mw, 0)), kpi('倍數', (b / w).toFixed(1) + ' 倍')));
+      res.append(note(`同樣顯示「正常」的讀數，每 ${fmt(n, 0)} 位黑人病人約有 ${mb} 位其實血氧已經偏低，白人約 ${mw} 位。如果你的預警模型或「是否需要給氧」的標籤用的是這個讀數，模型會在黑人病人身上系統性低估風險——整體準確度看不出來，必須把誤差拆到子群體才看得到。這是量測偏誤：問題不在演算法，在輸入資料的量測工具。FDA 於 2025 年 1 月發布指引草案，要求血氧計用更多元膚色的受試者驗證。`));
+    }
+    box.append(h('div', { class: 'row' }, seg([['um', '密西根大學世代'], ['mc', '多中心世代']], () => co, v => co = v, draw), U.slider('每群病人數', 100, 5000, 100, () => n, v => n = v, draw, v => fmt(+v, 0) + ' 位')), res); draw();
+  })();
 })();
