@@ -204,4 +204,30 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 07 節：eGFR（CKD‑EPI 2021）——真實的對數線性迴歸（2026-11-09 新增）
+     ==================================================================== */
+  (function egfr() {
+    const box = $('#w-egfr'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));
+    let age = 60, scr = 1.0, fem = true; const res = h('div');
+    function draw() {
+      res.innerHTML = '';
+      const k = fem ? 0.7 : 0.9, a = fem ? -0.241 : -0.302, r = scr / k;
+      const F = [['常數 142', 142], [`min(Scr/κ,1)^${a}`, Math.pow(Math.min(r, 1), a)], ['max(Scr/κ,1)^−1.200', Math.pow(Math.max(r, 1), -1.2)], [`0.9938^${age}（年齡）`, Math.pow(0.9938, age)], ['女性 ×1.012', fem ? 1.012 : 1]];
+      const e = F.reduce((p, f) => p * f[1], 1);
+      const stage = e >= 90 ? 'G1 正常或偏高' : e >= 60 ? 'G2 輕度下降' : e >= 45 ? 'G3a 輕到中度' : e >= 30 ? 'G3b 中到重度' : e >= 15 ? 'G4 重度' : 'G5 腎衰竭';
+      res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('eGFR（mL/min/1.73m²）', e.toFixed(1), e < 60 ? 'bad' : ''), kpi('KDIGO 分期', stage), kpi('多 10 歲會變成', (e * Math.pow(0.9938, 10)).toFixed(1))));
+      const tb = h('table', { class: 'dt' }, h('tr', null, h('th', null, '公式的一項'), h('th', null, '乘數'), h('th', null, 'ln(乘數)＝線性迴歸的一項'), h('th', null, '對 eGFR 的影響')));
+      F.forEach(([n, v], i) => tb.append(h('tr', null, h('td', null, n), h('td', { class: 'mono' }, v.toFixed(4)), h('td', { class: 'mono' }, Math.log(v).toFixed(4)), h('td', null, i === 0 ? '起點' : v === 1 ? '不影響（=1）' : (v < 1 ? '↓ ' : '↑ ') + Math.abs((v - 1) * 100).toFixed(1) + '%'))));
+      tb.append(h('tr', null, h('td', null, h('b', null, '相乘／相加')), h('td', { class: 'mono' }, e.toFixed(1)), h('td', { class: 'mono' }, Math.log(e).toFixed(4) + ' → e^ = ' + e.toFixed(1)), h('td')));
+      res.append(tb);
+      const worst = F.slice(1).reduce((m, f) => f[1] < m[1] ? f : m, ['', 9]);
+      res.append(note(`這位 ${age} 歲${fem ? '女性' : '男性'}、肌酸酐 ${scr.toFixed(2)} mg/dL，eGFR ＝ ${e.toFixed(1)}。把 eGFR 拉下最多的是「${worst[0]}」（乘以 ${worst[1].toFixed(3)}）。右邊一欄全部相加就是 ln(eGFR)——這就是對 y 取對數的線性迴歸：年齡係數 ln0.9938 ＝ −0.0062，所以每多 1 歲約少 0.62%。肌酸酐${r <= 1 ? '低於' : '高於'}轉折點 κ=${k}，${r <= 1 ? '用的是平緩的斜率 ' + a : '改用陡峭的斜率 −1.200'}——同一個變數，切點前後斜率不同，就是分段（spline）特徵。`));
+    }
+    box.append(h('div', { class: 'row' }, slider('年齡', 18, 95, 1, () => age, v => age = v, draw, v => v + ' 歲'), slider('血清肌酸酐', 0.4, 4, 0.05, () => scr, v => scr = v, draw, v => (+v).toFixed(2) + ' mg/dL'), seg([['f', '女性'], ['m', '男性']], () => fem ? 'f' : 'm', v => fem = v === 'f', draw)), res); draw();
+    function slider(...a) { return U.slider(...a); }
+  })();
 })();

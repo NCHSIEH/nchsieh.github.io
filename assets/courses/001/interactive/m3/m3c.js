@@ -170,4 +170,33 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 08 節：成人糖尿病五群（Ahlqvist et al., 2018）（2026-11-09 新增）
+     剖析方向依論文描述以 ↑／↓／— 表示，非原始數值
+     ==================================================================== */
+  (function ahlqvist() {
+    const box = $('#w-ahl'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));
+    const V = ['GAD 抗體', '診斷年齡', 'BMI', 'HbA1c', 'β 細胞功能', '胰島素阻抗'];
+    const K = [
+      ['SAID', '嚴重自體免疫型', 577, ['＋', '↓', '↓', '↑', '↓', '—'], '幾乎等同第 1 型與成人潛伏自體免疫糖尿病（LADA）：GAD 抗體陽性、發病早、胰島素不足。', '酮酸中毒風險高，需早用胰島素'],
+      ['SIDD', '嚴重胰島素不足型', 1575, ['−', '↓', '↓', '↑', '↓', '—'], '和 SAID 很像，但 GAD 抗體陰性；發病年齡較輕、血糖控制差、胰島素分泌低。', '視網膜病變風險最高'],
+      ['SIRD', '嚴重胰島素阻抗型', 1373, ['−', '↑', '↑', '—', '↑', '↑'], '肥胖且胰島素阻抗嚴重；胰島素分泌不差，所以早期血糖看起來「還好」。', '腎臟病變風險最高——卻與其他群接受相似治療'],
+      ['MOD', '輕度肥胖相關型', 1942, ['−', '↓', '↑', '—', '—', '—'], '肥胖、發病較年輕，但沒有嚴重的胰島素阻抗。', '併發症風險相對低'],
+      ['MARD', '輕度年齡相關型', 3513, ['−', '↑', '—', '—', '—', '—'], '最大群：發病年齡最高，代謝異常輕微。', '併發症風險相對低']];
+    let sel = 2; const res = h('div');
+    function draw() {
+      res.innerHTML = '';
+      const total = K.reduce((s, k) => s + k[2], 0), bars = h('div');
+      res.append(lab('各群人數（用上方按鈕切換群）'), bars);
+      U.hbars(bars, K.map((k, i) => ({ label: k[0], value: k[2], color: i === sel ? C.accent : '#b8c2cc' })), { w: 760, lw: 70, rowH: 28, max: 4300, fmt: v => fmt(v, 0) + '（' + (v / total * 100).toFixed(0) + '%）' });
+      const [code, name, n, prof, desc, risk] = K[sel];
+      const pc = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: '6px', marginTop: '8px' } }, ...V.map((v, i) => { const s = prof[i]; const c = s === '↑' || s === '＋' ? 'var(--bad-soft)' : s === '↓' ? 'var(--blue-soft)' : '#f1efe9'; return h('div', { style: { background: c, borderRadius: '8px', padding: '8px 6px', textAlign: 'center' } }, h('div', { style: { fontSize: '12px', color: 'var(--muted)' } }, v), h('div', { style: { fontSize: '20px', fontWeight: 700 } }, s)); }));
+      res.append(h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: '#fff' } }, h('b', null, `${code}　${name}（${fmt(n, 0)} 人）`), pc, h('div', { style: { fontSize: '14px', marginTop: '8px' } }, desc), h('span', { class: 'tag amber', style: { marginTop: '6px' } }, '追蹤結果：' + risk)));
+      res.append(note(`演算法只給了編號；「${name}」這個名字，是研究者看了上面這排剖析（相對整體偏高 ↑、偏低 ↓）之後取的——就是本節「看群大小 → 看剖析 → 命名」的流程。這個研究在另外三個世代重跑得到相似的群，是很好的分群示範；但後續研究也發現，直接用診斷年齡、BMI 等連續變數預測病程，效果不輸分群（Dennis et al., 2019）。K-Means 一定會給你 K 群，群是不是「真的存在」，要靠外部資料與臨床結果來檢驗。`));
+    }
+    box.append(h('div', { class: 'row' }, seg(K.map((k, i) => [String(i), k[0]]), () => String(sel), v => sel = +v, draw)), res); draw();
+  })();
 })();

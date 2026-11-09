@@ -151,4 +151,28 @@
     }
     box.append(out); draw(); run();
   })();
+  /* ====================================================================
+     第 08 節：Epic 敗血症模型外部驗證（Wong et al., JAMA IM 2021）（2026-11-09 新增）
+     ==================================================================== */
+  (function epic() {
+    const box = $('#w-epic'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));
+    const N = 38455, SE = 0.33, SP = 0.83; let prev = 2552 / N * 100; const res = h('div');
+    function draw() {
+      res.innerHTML = '';
+      const P = Math.round(N * prev / 100), Ng = N - P, TP = Math.round(P * SE), FN = P - TP, TN = Math.round(Ng * SP), FP = Ng - TN;
+      const ppv = TP / (TP + FP), npv = TN / (TN + FN), alerts = (TP + FP) / N, perAlert = (TP + FP) / TP;
+      const cell = (t, v, bg) => h('div', { style: { background: bg, borderRadius: '8px', padding: '10px', textAlign: 'center' } }, h('div', { style: { fontSize: '12.5px', color: 'var(--muted)' } }, t), h('div', { class: 'mono', style: { fontSize: '20px', fontWeight: 700 } }, fmt(v, 0)));
+      res.append(h('div', { class: 'grid2', style: { alignItems: 'start', marginTop: '10px' } },
+        h('div', null, h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' } }, cell('真陽性 TP（抓到）', TP, 'var(--good-soft)'), cell('偽陰性 FN（漏掉）', FN, 'var(--bad-soft)'), cell('偽陽性 FP（誤報）', FP, 'var(--amber-soft)'), cell('真陰性 TN', TN, '#f1efe9')), h('div', { style: { fontSize: '12.5px', color: 'var(--muted)', marginTop: '6px' } }, `共 ${fmt(N, 0)} 次住院；敗血症 ${fmt(P, 0)} 次（盛行率 ${prev.toFixed(1)}%）`)),
+        h('div', { class: 'kpi' }, kpi('PPV（警示是真的）', (ppv * 100).toFixed(1) + '%', ppv < 0.2 ? 'bad' : ''), kpi('NPV', (npv * 100).toFixed(1) + '%'), kpi('被警示的住院比例', (alerts * 100).toFixed(1) + '%'), kpi('幾個警示才有 1 個真的', perAlert.toFixed(1)), kpi('漏掉的敗血症', fmt(FN, 0), 'bad'))));
+      const real = Math.abs(prev - 2552 / N * 100) < 0.05;
+      res.append(note(real
+        ? `這就是論文的結果：在 7% 的盛行率下，PPV 只有 ${(ppv * 100).toFixed(0)}%、${(alerts * 100).toFixed(0)}% 的住院都被警示，但仍漏掉 ${fmt(FN, 0)} 位（67%）敗血症病人。原廠宣稱的 AUC 0.76–0.83 在這家醫院只剩 0.63——內部驗證的分數不能直接搬到別家醫院。`
+        : `同一個模型（敏感度、特異度不變），盛行率改成 ${prev.toFixed(1)}% 時，PPV 變成 ${(ppv * 100).toFixed(1)}%，每 ${perAlert.toFixed(1)} 個警示才有 1 個是真的，被警示的住院比例 ${(alerts * 100).toFixed(1)}%。盛行率越低，誤報越佔多數——換到一家病人組成不同的醫院，就算模型完全一樣，使用者感受到的「準不準」也會完全不同。`));
+    }
+    box.append(h('div', { class: 'row' }, U.slider('敗血症盛行率', 1, 30, 0.1, () => prev, v => prev = v, draw, v => (+v).toFixed(1) + '%'), h('button', { class: 'btn', onclick: () => { prev = 2552 / N * 100; box.querySelector('input[type=range]').value = prev; box.querySelector('.val').textContent = prev.toFixed(1) + '%'; draw(); } }, '回到論文的 6.6%')), res); draw();
+  })();
 })();
