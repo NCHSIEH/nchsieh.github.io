@@ -254,4 +254,25 @@
     const st = h('style', null, '@media (max-width:700px){.featgrid{grid-template-columns:1fr !important}}');
     box.append(st, out); refresh(true);
   })();
+  /* ====================================================================
+     第 19 節：糖尿病視網膜病變 AI 從論文到診間（Gulshan 2016；IDx-DR 2018；Beede 2020）（2026-11-09 新增）
+     ==================================================================== */
+  (function dr() {
+    const box = $('#w-dr'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));
+    const ST = { paper: ['論文回溯資料（Gulshan, JAMA 2016，EyePACS‑1）', 0.903, 0.981], fda: ['FDA 前瞻性試驗（IDx‑DR 2018，900 人）', 0.872, 0.907] };
+    let st = 'fda', prev = 15, ung = 21; const res = h('div');
+    function draw() {
+      res.innerHTML = '';
+      const [name, se, sp] = ST[st], N = 1000, UG = Math.round(N * ung / 100), G = N - UG, P = Math.round(G * prev / 100), Ng = G - P;
+      const TP = Math.round(P * se), FN = P - TP, TN = Math.round(Ng * sp), FP = Ng - TN;
+      res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('照片不能判讀（要另外安排）', fmt(UG, 0), UG > 100 ? 'bad' : ''), kpi('抓到的病變', fmt(TP, 0), 'good'), kpi('漏掉的病變', fmt(FN, 0), 'bad'), kpi('誤報（多轉診）', fmt(FP, 0)), kpi('轉診中真的有病變', (TP / Math.max(1, TP + FP) * 100).toFixed(0) + '%')));
+      const bars = h('div'); res.append(bars);
+      U.hbars(bars, [{ label: '不能判讀', value: UG, color: C.amber }, { label: '真陽性', value: TP, color: C.good }, { label: '偽陰性', value: FN, color: C.bad }, { label: '偽陽性', value: FP, color: '#9aa3ad' }, { label: '真陰性', value: TN, color: '#c9d3dc' }], { w: 760, lw: 80, rowH: 26, max: N * 1.1 });
+      res.append(note(`採用「${name}」的敏感度 ${(se * 100).toFixed(1)}%、特異度 ${(sp * 100).toFixed(1)}%。1,000 人裡有 ${UG} 人的照片${ung ? '品質不足' : ''}——泰國 11 家診所的實地研究中，這個比例超過五分之一，原因多是光線與瞳孔，和模型本身無關。這 ${UG} 人沒有得到 AI 的答案，仍要轉給眼科或重拍。${st === 'paper' ? '把階段切到 FDA 前瞻性試驗，特異度從 98% 掉到 91%，誤報會明顯增加——前瞻性、在基層實拍的數字才接近你上線後會看到的樣子。' : '切到論文回溯資料，數字會好看很多；但那是在整理好的資料集上，不是在你的診所。'}`));
+    }
+    box.append(h('div', { class: 'row' }, seg([['paper', '論文回溯'], ['fda', 'FDA 前瞻試驗']], () => st, v => st = v, draw), U.slider('病變盛行率', 2, 40, 1, () => prev, v => prev = v, draw, v => v + '%'), U.slider('照片不能判讀', 0, 40, 1, () => ung, v => ung = v, draw, v => v + '%')), res); draw();
+  })();
 })();

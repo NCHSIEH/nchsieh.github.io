@@ -224,4 +224,25 @@
     const pb = h('div', { class: 'row', style: { gap: '6px', flexWrap: 'wrap', marginBottom: '8px' } }, lab('試試：'), ...PRE.map(([t, k]) => { const b = h('button', { class: 'btn sm' }, t); b.onclick = () => { q = t; intent = k; inp.value = t; draw(); }; return b; }));
     box.append(pb, h('div', { class: 'row', style: { gap: '10px', flexWrap: 'wrap', marginBottom: '10px', alignItems: 'center' } }, inp, check('同義詞擴充（摔倒→跌倒、刀口→傷口…）', () => syn, v => syn = v, draw)), out); draw();
   })();
+  /* ====================================================================
+     第 01 節：台灣病人安全通報系統（TPR）2024 年第 3 季數字（2026-11-09 新增）
+     ==================================================================== */
+  (function tpr() {
+    const box = $('#w-tpr'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));
+    const TOT = 19500, MED = 7495, FALL = 4540, OTH = TOT - MED - FALL; let mins = 3, rev = 100; const res = h('div');
+    function draw() {
+      res.innerHTML = '';
+      const bars = h('div'); res.append(lab('2024 年第 3 季通報類別（件）'), bars);
+      U.hbars(bars, [{ label: '藥物事件', value: MED, color: C.accent }, { label: '跌倒事件', value: FALL, color: C.blue }, { label: '其他類別', value: OTH, color: '#9aa3ad' }], { w: 760, lw: 90, rowH: 28, max: 9000, fmt: v => fmt(v, 0) + '（' + (v / TOT * 100).toFixed(1) + '%）' });
+      const n = Math.round(TOT * rev / 100), hrs = n * mins / 60, fte = hrs / (8 * 65);
+      res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('要人工讀的件數', fmt(n, 0)), kpi('一季總工時', fmt(hrs, 0) + ' 小時'), kpi('約等於全職人力', fte.toFixed(1) + ' 人', fte >= 1 ? 'bad' : 'good')));
+      res.append(note(rev === 100
+        ? `全部用人讀，每件 ${mins} 分鐘，一季就要 ${fmt(hrs, 0)} 小時，約 ${fte.toFixed(1)} 位全職人員整季只做這件事（以一季 65 個工作天、每天 8 小時估算）。把「需要人工複核的比例」往左拉：如果先用文字分類把明顯歸類正確的件數排除，只讓人看可疑的那部分，工時就跟著下降。`
+        : `先用文字探勘分流，只讓人讀 ${rev}% 的通報（${fmt(n, 0)} 件），一季約 ${fmt(hrs, 0)} 小時、${fte.toFixed(1)} 位全職人力。文字探勘不是取代人，而是把人的時間留給真的需要判斷的那幾件——但前提是分流模型的漏判率要先驗證過（M2-2 的混淆矩陣）。TPR 也提醒：自願通報的數字只代表收案情況，不代表醫療現況。`));
+    }
+    box.append(h('div', { class: 'row' }, U.slider('每件讀幾分鐘', 1, 10, 0.5, () => mins, v => mins = v, draw, v => v + ' 分鐘'), U.slider('需要人工複核的比例', 5, 100, 5, () => rev, v => rev = v, draw, v => v + '%')), res); draw();
+  })();
 })();
