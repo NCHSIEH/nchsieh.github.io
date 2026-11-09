@@ -108,6 +108,7 @@ const MODULES = [
 const EXTRAS = [
   { code:'補充', title:'RapidMiner AI Studio 入門與 Python 對照', en:'AI Studio × Python', desc:'九步驟與 pandas／scikit-learn 1:1 對照、可搜尋的運算子對照表、授權與安裝檢核、Set Role 練習、六個運算子接線模擬（含中間結果）、Cross Validation 子流程、Execute Python、錯誤訊息排除。', tools:'Set Role · Apply Model · Cross Validation · Execute Python', status:'live', url:'ais/', pdf:null, key:'ais',
     subs:[{code:'S.1 ★',title:'九步驟 1:1 對照',url:'ais/#p01'},{code:'S.2',title:'授權與安裝',url:'ais/#p05'},{code:'S.3',title:'第一個流程',url:'ais/#p09'},{code:'S.4',title:'Execute Python',url:'ais/#p14'}] },
+  { code:'補充', title:'AI Studio 範例與資料對照表', en:'Repository Map', desc:'依講義 M0–M7 列出每個實作用到的流程檔（.rmp）、在 AI Studio Repository 的資料夾、使用的資料集，並標出要改路徑、要裝擴充套件、使用內建 Samples 的範例；另附講義未用到的延伸範例。', tools:'Repository · .rmp · 資料集 · 擴充套件', status:'live', url:'../補充教材._AI_Studio_範例與資料對照表/補充教材._AI_Studio_範例與資料對照表.pdf', pdf:null, key:null, doc:true },
   { code:'補充', title:'Dify 實作手冊：九個範例與長照 3.0 專案', en:'Dify Handbook', desc:'只收 M8 沒講的操作細節：免費額度試算、Temperature 與 Max Tokens、JSON 模式防呆、### 分段與混合檢索、長照 3.0 七節點流程模擬（含人為確認）、外籍看護排他條款、找出真實的失敗。', tools:'JSON 防呆 · 混合檢索 · 排他條款 · 人為確認', status:'live', url:'dify/', pdf:null, key:'dify',
     subs:[{code:'H.1',title:'環境與參數',url:'dify/#p01'},{code:'H.2',title:'JSON 與知識庫',url:'dify/#p05'},{code:'H.3 ★',title:'長照 3.0 七節點',url:'dify/#p09'},{code:'H.4',title:'找錯與六個檢查',url:'dify/#p11'}] },
   { code:'補充', title:'n8n 入門與 AI Agent 實作', en:'n8n & Agents', desc:'Windows 安裝指令產生器、Expression 練習場、每日天氣提醒模擬、AI Agent 插槽、Docker 連 Ollama、多工具 Agent 對話測試、$fromAI() 產生器、n8n × Dify 長照 3.0 批次評估模擬。', tools:'Docker · Expression · AI Agent · $fromAI · Dify API', status:'live', url:'n8n/', pdf:null, key:'n8n',
@@ -120,14 +121,14 @@ function progressOf(key){ if(!key) return null; const done=Store.get(key+':done'
 function card(m){
   const live=m.status==='live';
   const c=h('article',{class:'card'+(live?' live':''),'data-tag':m.tag||''},
-    h('span',{class:'status'}, live? h('span',{class:'tag good'},'互動版') : h('span',{class:'tag gray'},'建置中')),
+    h('span',{class:'status'}, m.doc? h('span',{class:'tag blue'},'PDF') : live? h('span',{class:'tag good'},'互動版') : h('span',{class:'tag gray'},'建置中')),
     h('div',{class:'code'},m.code), h('h3',null,m.title), h('div',{class:'en'},m.en||''),
     h('p',{class:'desc'},m.desc||''),
     m.tools? h('div',{class:'tools',html:'<b>工具</b>　'+m.tools}):null);
   const p=progressOf(m.key); if(live&&p!=null){ c.append(h('div',{class:'prog',title:'你的完成度'},h('i',{style:{width:(p*100).toFixed(0)+'%'}}))); }
   if(m.subs&&m.subs.length){ const sb=h('div',{class:'subs'}); m.subs.forEach(s=>{ const on=!!(s.url&&(live||s.status==='live')); sb.append(on? h('a',{class:'sub on',href:s.url},h('span',{class:'c'},s.code),s.title) : h('div',{class:'sub off',title:'預留入口'},h('span',{class:'c'},s.code),s.title,h('span',{class:'tag gray',style:{marginLeft:'auto',fontSize:'11px'}},'預留'))); }); c.append(sb); }
   const acts=h('div',{class:'acts'});
-  acts.append(live? h('a',{class:'btn primary',href:m.url},m.code==='M2'?'進入 M2-1 迴歸 →':'進入互動單元 →') : h('button',{class:'btn',disabled:true},'互動版建置中'));
+  acts.append(m.doc? h('a',{class:'btn primary',href:m.url,target:'_blank',rel:'noopener'},'開啟對照表（PDF）→') : live? h('a',{class:'btn primary',href:m.url},m.code==='M2'?'進入 M2-1 迴歸 →':'進入互動單元 →') : h('button',{class:'btn',disabled:true},'互動版建置中'));
   if(m.code==='M2') acts.append(h('a',{class:'btn',href:'m2-2/'},'M2-2 分類 →'));
   if(m.pdf) acts.append(h('a',{class:'btn',href:m.pdf,target:'_blank',rel:'noopener'},'PDF 講義'));
   c.append(acts); return c;
