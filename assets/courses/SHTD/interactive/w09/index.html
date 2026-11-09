@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W09 期中複習（W1–W8）· 互動學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F0E6; --paper:#FBF8F1; --card:#FFFFFF; --line:#E3DBCB; --line2:#D2C7B2;
+  --navy:#1B2A4A; --navy2:#2E4470; --navy-l:#E6EAF2;
+  --ochre:#B5442A; --ochre2:#D0623F; --ochre-l:#F6E3DA;
+  --green:#3D7A5A; --green-l:#E1EEE6; --amber:#B7832F; --amber-l:#F5EBD5;
+  --ink:#1F2430; --mute:#6B6F7B; --mute2:#9A9CA4;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--navy2)}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;color:var(--navy);margin:0}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.topbar .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px}
+.brand .dot{background:var(--ochre);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.5px}
+.topbar .meta{color:#C9D0DE;font-size:13px}
+.topbar .sp{flex:1}
+.pbar{width:140px;height:6px;background:#3A4C72;border-radius:4px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ochre2);transition:width .4s}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:28px;padding:0 20px}
+.side{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 60px);overflow:auto;padding:22px 0}
+.side .mh{font-size:12px;color:var(--mute);letter-spacing:1px;margin-bottom:8px}
+.side a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;line-height:1.4}
+.side a .n{color:var(--mute2);font-weight:700;min-width:20px}
+.side a:hover{background:var(--paper)}
+.side a.on{background:var(--navy-l);color:var(--navy);font-weight:700}
+.side a.done .n{color:var(--green)}
+main{padding:26px 0 80px;min-width:0}
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:34px 36px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:36px;top:0;width:64px;height:5px;background:var(--ochre)}
+.hero .code{font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px}
+.hero h1{font-size:34px;margin:8px 0 2px}
+.hero .en{color:var(--mute);font-size:15px;letter-spacing:.5px}
+.hero .lead{max-width:780px;margin:16px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:20px;background:var(--navy-l);color:var(--navy);font-weight:500}
+.tag.o{background:var(--ochre-l);color:var(--ochre)}
+.tag.g{background:var(--green-l);color:var(--green)}
+.tag.a{background:var(--amber-l);color:#8A5F17}
+.tag.gray{background:#ECE8DF;color:var(--mute)}
+.part{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ph .num{font-family:"Noto Serif TC",serif;font-size:30px;font-weight:900;color:var(--ochre);line-height:1}
+.ph h2{font-size:24px;line-height:1.35}
+.ph .en{font-size:12.5px;color:var(--mute);letter-spacing:1.2px;margin-top:2px}
+.one{background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;margin:12px 0 14px;font-size:15.5px}
+.one b{color:#FFD3C2}
+.wd{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:14px 0}
+.wh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.wh h3{font-size:18px}
+.hint{color:var(--mute);font-size:14px;margin:0 0 12px}
+.note{font-size:13px;color:var(--mute);border-left:3px solid var(--line2);padding-left:10px;margin-top:12px}
+.note.as{border-color:var(--amber);background:var(--amber-l);color:#6E4E15;padding:6px 10px;border-radius:0 6px 6px 0}
+.src{font-size:12px;color:var(--mute2);margin-top:8px}
+.btn{border:1px solid var(--line2);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:8px;transition:.15s}
+.btn:hover{border-color:var(--navy2)}
+.btn.on,.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.oc{background:var(--ochre);color:#fff;border-color:var(--ochre)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;border-right:1px solid var(--line2)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--navy);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.side{display:none}.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr}.hero h1{font-size:26px}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:500;color:var(--mute)}
+.kpi .l{font-size:13px;color:var(--mute)}
+.kpi.o .v{color:var(--ochre)}
+.kpi.g .v{color:var(--green)}
+.ctl{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ctl output{font-weight:700;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ochre)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line2);background:var(--paper);border-radius:9px;padding:9px 12px;margin:6px 0;font-size:14.5px}
+.opt:hover{border-color:var(--navy2)}
+.opt.ok{background:var(--green-l);border-color:var(--green);color:#1F4D36}
+.opt.no{background:var(--ochre-l);border-color:var(--ochre);color:#7A2A17}
+.fb{margin-top:8px;font-size:14px;padding:8px 12px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-l);color:#1F4D36}
+.fb.no{background:var(--ochre-l);color:#7A2A17}
+.q{border-top:1px dashed var(--line);padding:12px 0}
+.q:first-child{border-top:0;padding-top:0}
+.q .qt{font-weight:700;margin-bottom:4px}
+svg text{font-family:"Noto Sans TC",sans-serif}
+.chart{width:100%;height:auto;display:block}
+.tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:50;max-width:260px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.fstep{border:2px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer;position:relative;min-height:140px;transition:.2s}
+.fstep .t{font-weight:900;color:var(--navy);font-size:17px}
+.fstep .s{font-size:13.5px;margin-top:6px}
+.fstep .x{position:absolute;right:10px;top:8px;font-weight:900;font-size:18px}
+.fstep.bad{border-color:var(--ochre);background:#FCF1EC}
+.fstep.bad .x{color:var(--ochre)}
+.fstep.good{border-color:var(--green);background:#EEF6F1}
+.fstep.good .x{color:var(--green)}
+.fstep.sel{box-shadow:0 0 0 4px rgba(27,42,74,.15)}
+.loopbar{margin-top:10px;border:2px dashed var(--line2);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--mute);text-align:center}
+.loopbar.on{border-color:var(--green);color:var(--green);font-weight:700}
+.detail{margin-top:12px;background:var(--navy-l);border-radius:10px;padding:12px 16px;font-size:14.5px;min-height:56px}
+/* person */
+.person{display:grid;grid-template-columns:140px 1fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.person{grid-template-columns:1fr}}
+.avatar{width:130px;height:130px;border-radius:50%;background:var(--navy-l);display:flex;align-items:center;justify-content:center}
+.facts li{margin:2px 0}
+.facts{padding-left:18px;margin:6px 0;font-size:14.5px}
+/* layer stack */
+.stack{display:flex;flex-direction:column-reverse;gap:6px}
+.layer{display:grid;grid-template-columns:44px 1fr;align-items:center;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.2s;overflow:hidden}
+.layer .ln{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.layer .lc{padding:10px 14px;background:var(--paper)}
+.layer .lc b{color:var(--navy)}
+.layer.sel{border-color:var(--ochre)}
+.layer .lc .ex{font-size:13.5px;color:var(--mute)}
+/* map grid */
+.mapg{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;font-size:13.5px}
+.mapg .h{font-weight:700;color:var(--navy);text-align:center;padding:6px;background:var(--navy-l);border-radius:8px}
+.mapg .rh{font-weight:700;color:#fff;background:var(--navy2);border-radius:8px;padding:8px;display:flex;align-items:center}
+.mapg .c{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;min-height:56px;cursor:pointer;transition:.15s}
+.mapg .c:hover{border-color:var(--navy2)}
+.mapg .c.hit{border-color:var(--green);background:var(--green-l)}
+.mapg .c.miss{border-color:var(--ochre);background:var(--ochre-l)}
+.mapg .c.pick{border-color:var(--navy);background:var(--navy-l)}
+/* stakeholders */
+.sh-wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:center}
+@media(max-width:860px){.sh-wrap{grid-template-columns:1fr}}
+.shcard{background:var(--paper);border-radius:10px;padding:14px 16px;border:1px solid var(--line);min-height:150px}
+.plus{color:var(--green);font-weight:700}.minus{color:var(--ochre);font-weight:700}
+/* aims */
+.aimcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.aimcard h4{margin:0 0 6px;color:var(--navy);font-size:15px}
+.aimcard select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff}
+.aimcard .res{font-size:13px;margin-top:6px;min-height:40px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tlc{border-radius:10px;padding:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer}
+.tlc.on{border-color:var(--ochre)}
+.tlc .y{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--ochre)}
+.dots{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.dots span{font-size:12px;padding:1px 8px;border-radius:12px;background:#ECE8DF;color:var(--mute)}
+.dots span.in{background:var(--navy);color:#fff}
+.dots span.new{background:var(--ochre);color:#fff}
+/* lhs */
+.lhs{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:center}
+@media(max-width:860px){.lhs{grid-template-columns:1fr}}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gate{border-radius:10px;padding:10px;color:#fff;font-weight:700;text-align:center;font-size:14px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,6% 50%)}
+.gslot{min-height:120px;border:2px dashed var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.gslot.pass{background:#F2F8F4}.gslot.fail{background:#FCF3EF}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.gcard b{color:var(--navy)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pool .gc{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 12px;font-size:13.5px;cursor:pointer}
+.pool .gc.sel{background:var(--navy);color:#fff}
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:5px 14px}
+.tabs button.on{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabp{display:none}.tabp.on{display:block}
+/* sim table */
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mute);font-weight:500;font-size:13px}
+.cmp td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.aimrow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+.aimrow .an{font-weight:700;color:var(--navy);font-size:14px}
+.aimrow .an small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.bars3 .b{display:grid;grid-template-columns:72px 1fr 110px;gap:8px;align-items:center;font-size:13px;margin:2px 0}
+.bars3 .track{background:#EFEAE0;border-radius:4px;height:14px;overflow:hidden}
+.bars3 .fill{height:100%;border-radius:4px;transition:width .35s}
+.bars3 .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.warn{background:var(--ochre-l);color:#7A2A17;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+.okmsg{background:var(--green-l);color:#1F4D36;border-radius:8px;padding:8px 12px;font-size:14px;margin-top:8px}
+details.adv{margin-top:10px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--paper)}
+details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14px}
+/* form */
+.form label{display:block;font-weight:700;color:var(--navy);margin:10px 0 4px;font-size:14px}
+.form select,.form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.form textarea{min-height:60px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px}
+.out dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.out dt{color:var(--mute)}
+.out dd{margin:0;font-weight:500}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:860px){.cards{grid-template-columns:1fr 1fr}}
+.fc{perspective:800px;height:130px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center}
+.fc .f{background:var(--navy);color:#fff;font-weight:700;font-size:17px;flex-direction:column}
+.fc .f small{font-weight:400;color:#C9D0DE;font-size:12px}
+.fc .bk{background:var(--paper);border:1px solid var(--line);transform:rotateY(180deg);font-size:13.5px}
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
+.take b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:#FFD3C2;margin-bottom:4px}
+.closing{margin-top:30px;text-align:center;padding:30px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.closing h2{font-size:26px}
+.rtm-legend{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.rtm-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.scoreline{font-weight:700;color:var(--navy)}
+</style>
+<style>
+.rst{border:1px solid #4A5C82;background:transparent;color:#C9D0DE;border-radius:6px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.rst:hover{border-color:#fff;color:#fff}
+.rst.warn{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.spec{grid-template-columns:1fr}}
+.spec label{display:block;font-weight:700;color:var(--navy);font-size:14px;margin:8px 0 4px}
+.spec select{width:100%;padding:7px;border-radius:8px;border:1px solid var(--line2);background:#fff}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;margin:6px 0}
+.lane .ln{font-weight:700;color:#fff;border-radius:8px;padding:8px;font-size:13px;text-align:center}
+.lane .track{position:relative;height:96px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.ms{position:absolute;top:6px;transform:translateX(-50%);text-align:center;cursor:pointer;width:84px}
+.ms.lo{top:48px}
+.ms .d{width:14px;height:14px;border-radius:50%;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.ms .y{font-size:11px;color:var(--mute);margin-top:2px}
+.ms .n{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2}
+.ms.on .d{box-shadow:0 0 0 3px var(--ochre)}
+.conf{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:420px}
+.conf i{display:block;aspect-ratio:1;border-radius:3px}
+.cell2{display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;font-size:13.5px;margin-top:10px}
+.cell2 div{padding:8px;border-radius:8px;background:var(--paper);border:1px solid var(--line)}
+.cell2 .h{background:var(--navy-l);font-weight:700;color:var(--navy);text-align:center}
+.agent{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.astep{flex:1;min-width:130px;border:2px solid var(--line2);border-radius:10px;padding:10px;background:var(--paper);font-size:13.5px;transition:.25s}
+.astep b{display:block;color:var(--navy);font-size:15px}
+.astep.run{border-color:var(--navy2);background:var(--navy-l)}
+.astep.ok{border-color:var(--green);background:var(--green-l)}
+.astep.stop{border-color:var(--ochre);background:var(--ochre-l)}
+.astep.skip{opacity:.45}
+.tree{display:flex;flex-direction:column;gap:8px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.tq.dim{opacity:.4}
+.tq b{color:var(--navy)}
+.tres{border-radius:10px;padding:12px 16px;color:#fff;font-weight:700;font-size:16px}
+.reg{display:grid;grid-template-columns:120px repeat(3,1fr);gap:6px;font-size:13.5px}
+.reg .h{background:var(--navy);color:#fff;font-weight:700;border-radius:8px;padding:8px;text-align:center}
+.reg .rh{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:8px;display:flex;align-items:center}
+.reg .c{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;min-height:54px;color:var(--mute2)}
+.reg .c.open{color:var(--ink);background:#fff;border-color:var(--navy2)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.prin{grid-template-columns:1fr}}
+.prin .pc{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.prin .pc h4{margin:0 0 4px;color:var(--navy);font-size:15px}
+.prin select{width:100%;padding:6px;border-radius:7px;border:1px solid var(--line2);background:#fff;margin-top:4px;font-size:13px}
+.gen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.gen{grid-template-columns:1fr}}
+.gen .gc2{border:2px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.gen .gc2 h4{margin:0;color:var(--navy)}
+.gen label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;margin:6px 0;cursor:pointer}
+</style>
+<style>
+.code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;background:#1B2A4A;color:#E6EAF2;border-radius:10px;padding:12px 14px;line-height:1.75;white-space:pre-wrap;min-height:90px}
+.code .r{color:#F3A58C}.code .g{color:#9FD8B5}.code .y{color:#F2D38A}.code .m{color:#9AA6BF}
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tog label{display:flex;gap:6px;align-items:center;border:1px solid var(--line2);background:#fff;border-radius:20px;padding:4px 12px;font-size:13.5px;cursor:pointer;user-select:none}
+.tog label.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tog input{display:none}
+.roles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:860px){.roles{grid-template-columns:1fr 1fr}}
+.role{border:2px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--paper);cursor:pointer;font-size:13px;line-height:1.5;transition:.2s}
+.role b{display:block;color:var(--navy);font-size:14.5px}
+.role.on{border-color:var(--ochre);background:var(--ochre-l)}
+.role.dim{opacity:.45}
+.gens3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:760px){.gens3{grid-template-columns:1fr}}
+.gens3 .g3{border-radius:10px;padding:12px;background:var(--paper);border:1px solid var(--line);font-size:13.5px}
+.gens3 .g3 h4{margin:0 0 4px;font-size:16px;color:var(--navy)}
+.gens3 .g3 .who{display:inline-block;margin-top:6px;padding:2px 10px;border-radius:12px;background:var(--navy-l);color:var(--navy);font-weight:700;font-size:12.5px}
+.gens3 .g3.ag{border-color:var(--ochre);background:var(--ochre-l)}
+.gens3 .g3.ag .who{background:var(--ochre);color:#fff}
+.ladder{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}
+.ladder div{border-radius:8px;padding:8px 4px;text-align:center;font-size:12px;background:#EFEAE0;color:var(--mute);border:2px solid transparent;line-height:1.35}
+.ladder div b{display:block;font-size:15px;color:var(--navy)}
+.ladder div.ok{background:var(--green-l)}
+.ladder div.cur{border-color:var(--ochre)}
+.ladder div.over{background:var(--ochre-l)}
+.cmpt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:760px){.cmpt{grid-template-columns:1fr 1fr}}
+.cmpt label{border:2px solid var(--navy2);border-radius:10px;padding:8px 10px;background:var(--navy-l);font-size:13px;cursor:pointer;line-height:1.45}
+.cmpt label b{display:block;color:var(--navy);font-size:15px}
+.cmpt label.off{border-color:var(--line2);background:#fff;opacity:.55;text-decoration:line-through}
+.cmpt input{display:none}
+.itbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.itbl th,.itbl td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+.itbl th{color:var(--mute);font-weight:500;font-size:12.5px}
+.itbl td.bad{color:var(--ochre);font-weight:700}
+.itbl td.good{color:var(--green);font-weight:700}
+.itbl td.mid{color:var(--amber);font-weight:700}
+.orch{display:flex;flex-direction:column;align-items:center;gap:10px}
+.orch .top{background:var(--navy);color:#fff;border-radius:10px;padding:10px 18px;font-weight:700;text-align:center}
+.orch .wk{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%}
+@media(max-width:760px){.orch .wk{grid-template-columns:1fr 1fr}}
+.orch .wk div{border:2px solid var(--line2);border-radius:10px;padding:8px;text-align:center;font-size:13px;cursor:pointer;background:var(--paper)}
+.orch .wk div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.orch .wk div b{display:block;color:var(--navy)}
+.mx{display:grid;grid-template-columns:90px 1fr 1fr;gap:6px;font-size:13px}
+.mx .h{background:var(--navy-l);color:var(--navy);font-weight:700;border-radius:8px;padding:6px;text-align:center;display:flex;align-items:center;justify-content:center}
+.mx .c{border-radius:10px;padding:8px;min-height:92px}
+.mx .c h4{margin:0 0 4px;font-size:14px}
+.mx .c span{display:inline-block;background:#fff;border-radius:12px;padding:1px 9px;margin:2px;font-size:12px;border:1px solid var(--line2)}
+.c-auto{background:var(--green-l)}.c-auto h4{color:var(--green)}
+.c-note{background:var(--amber-l)}.c-note h4{color:var(--amber)}
+.c-appr{background:var(--navy-l)}.c-appr h4{color:var(--navy)}
+.c-ban{background:var(--ochre-l)}.c-ban h4{color:var(--ochre)}
+.lanes{display:grid;grid-template-columns:70px repeat(4,1fr);gap:4px;font-size:12.5px}
+.lanes .lh{background:var(--navy);color:#fff;border-radius:6px;padding:6px 4px;text-align:center;font-weight:700}
+.lanes .rh{background:var(--navy-l);color:var(--navy);border-radius:6px;padding:6px 4px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.lanes .cl{background:var(--paper);border:1px solid var(--line);border-radius:6px;min-height:40px;padding:3px;display:flex;flex-direction:column;gap:3px}
+.lanes .cl span{border-radius:5px;padding:3px 6px;background:#fff;border:1px solid var(--line2);line-height:1.3}
+.lanes .cl span.w{background:var(--ochre-l);border-color:var(--ochre);color:var(--ochre);font-weight:700}
+.lanes .cl span.a{background:var(--navy-l);border-color:var(--navy2);color:var(--navy)}
+.lanes .cl span.h{background:var(--green-l);border-color:var(--green);color:var(--green);font-weight:700}
+.steps5{display:flex;gap:8px;flex-wrap:wrap}
+.steps5 button{flex:1;min-width:120px;border:2px solid var(--line2);border-radius:10px;padding:10px 6px;background:#fff;font-size:13.5px;cursor:pointer;font-family:inherit}
+.steps5 button.got{border-color:var(--green);background:var(--green-l);color:var(--green);font-weight:700}
+.steps5 button.bad{border-color:var(--ochre);background:var(--ochre-l)}
+.cmpg{display:grid;grid-template-columns:150px repeat(4,1fr);gap:4px;font-size:13px;align-items:center}
+.cmpg .h{font-weight:700;color:var(--navy);text-align:center;font-size:12.5px}
+.cmpg .rn{font-weight:700;color:var(--navy)}
+.cmpg button{border:1px solid var(--line2);border-radius:8px;background:#fff;padding:6px;font-size:16px;cursor:pointer;font-family:inherit}
+.cmpg .ans{font-size:12px;color:var(--mute);text-align:center}
+.tl7{display:flex;gap:6px;flex-wrap:wrap}
+.tl7 button{flex:1;min-width:92px;border:2px solid var(--line2);border-radius:10px;padding:8px 4px;background:#fff;cursor:pointer;font-family:inherit;font-size:13px}
+.tl7 button b{display:block;font-size:15px;color:var(--navy)}
+.tl7 button.on{border-color:var(--ochre);background:var(--ochre-l)}
+.tobe{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:860px){.tobe{grid-template-columns:1fr 1fr}}
+.tobe .ag{border:2px solid var(--navy2);border-radius:10px;padding:8px;background:var(--navy-l);font-size:12.5px;text-align:center}
+.tobe .ag b{display:block;color:var(--navy);font-size:14px}
+.tobe .ckpt{margin-top:6px;border-radius:8px;padding:5px;font-weight:700;cursor:pointer;background:var(--green);color:#fff;font-size:12.5px}
+.tobe .ckpt.off{background:#fff;color:var(--ochre);border:2px dashed var(--ochre)}
+.form label{display:block;font-weight:700;color:var(--navy);font-size:13.5px;margin:8px 0 3px}
+.form textarea,.form input{width:100%;padding:7px 9px;border:1px solid var(--line2);border-radius:8px;font-family:inherit;font-size:13.5px;box-sizing:border-box}
+.form textarea{min-height:56px}
+.waffle{display:grid;grid-template-columns:repeat(30,1fr);gap:2px;max-width:520px}
+.waffle i{display:block;aspect-ratio:1;border-radius:2px}
+.mpick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:760px){.mpick{grid-template-columns:1fr}}
+.mpick label{border:2px solid var(--line2);border-radius:10px;padding:8px 10px;background:#fff;font-size:13.5px;cursor:pointer;line-height:1.45}
+.mpick label small{display:block;color:var(--mute);font-size:12px}
+.mpick label.on{border-color:var(--navy2);background:var(--navy-l)}
+.mpick input{display:none}
+.echo{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:760px){.echo{grid-template-columns:1fr 1fr}}
+.echo div{border:2px solid var(--line2);border-radius:10px;padding:10px;font-size:13px;background:var(--paper);transition:.25s;line-height:1.5}
+.echo div b{display:block;color:var(--navy);font-size:14px}
+.echo div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.echo div.blk{border-color:var(--green);background:var(--green-l)}
+.echo div.dim{opacity:.4}
+</style>
+<style>
+.forms{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+@media(max-width:860px){.forms{grid-template-columns:1fr 1fr!important}}
+.forms div{border-radius:10px;padding:8px;font-size:12.5px;line-height:1.45;border:2px solid var(--line2);background:var(--paper);cursor:pointer}
+.forms div b{display:block;color:var(--navy);font-size:13.5px}
+.forms div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.imdrf{display:grid;grid-template-columns:130px repeat(3,1fr);gap:5px;font-size:13px}
+.imdrf .h{background:var(--navy);color:#fff;border-radius:8px;padding:8px;text-align:center;font-weight:700;line-height:1.35}
+.imdrf .rh{background:var(--navy-l);color:var(--navy);border-radius:8px;padding:8px;font-weight:700;display:flex;align-items:center}
+.imdrf .c{border-radius:8px;padding:14px 6px;text-align:center;font-size:22px;font-weight:900;cursor:pointer;border:3px solid transparent;color:#fff}
+.imdrf .c.on{border-color:var(--ink)}
+.cv1{background:#7FA68E}.cv2{background:var(--amber)}.cv3{background:var(--ochre2)}.cv4{background:var(--ochre)}
+.wiz{display:flex;flex-direction:column;gap:8px}
+.wiz .wq{border:2px solid var(--line2);border-radius:10px;padding:10px 12px;background:var(--paper)}
+.wiz .wq.dim{opacity:.4}
+.wiz .wq b{color:var(--navy)}
+.wiz .wq .yn{display:flex;gap:6px;margin-top:6px}
+.wiz .wq .yn button{border:1.5px solid var(--line2);border-radius:8px;padding:4px 14px;background:#fff;cursor:pointer;font-family:inherit}
+.wiz .wq .yn button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec5{display:flex;gap:4px}
+.spec5 div{flex:1;border-radius:8px;padding:10px 6px;text-align:center;font-size:12.5px;border:2px solid var(--line2);background:var(--paper);cursor:pointer;line-height:1.4}
+.spec5 div b{display:block;color:var(--navy);font-size:13.5px}
+.spec5 div.on{border-color:var(--ochre);background:var(--ochre-l)}
+.mcard{border:2px solid var(--navy);border-radius:12px;overflow:hidden;background:#fff}
+.mcard .hd{background:var(--navy);color:#fff;font-weight:700;padding:8px 14px}
+.mcard .row{display:grid;grid-template-columns:120px 1fr;border-top:1px solid var(--line);font-size:13.5px;cursor:pointer}
+.mcard .row div{padding:7px 10px}
+.mcard .row div:first-child{background:var(--navy-l);color:var(--navy);font-weight:700}
+.mcard .row.mk div:last-child{background:#FFE9A8}
+.mcard .row.bad div:last-child{background:var(--ochre-l)}
+.mcard .row.miss div:last-child{background:var(--ochre-l);outline:2px dashed var(--ochre);outline-offset:-2px}
+.mcard .row.ok div:last-child{background:var(--green-l)}
+.pb{width:100%;border-collapse:collapse;font-size:13.5px}
+.pb th,.pb td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertical-align:top}
+.pb th{color:var(--mute);font-weight:500;font-size:12.5px}
+.pb td.f{font-weight:700;color:var(--navy);white-space:nowrap}
+.pb textarea,.pb select,.pb input{width:100%;padding:4px 6px;border:1px solid var(--line2);border-radius:6px;font-size:13px;font-family:inherit;box-sizing:border-box;background:#fff}
+.pb textarea{min-height:46px}
+.gatebox{border-radius:12px;padding:14px 16px;color:#fff;font-weight:900;font-size:20px;text-align:center}
+.gatebox small{display:block;font-size:13px;font-weight:500;opacity:.9;margin-top:4px}
+.hcok{background:var(--green-l)!important}.hcno{background:var(--ochre-l)!important}
+#hc input{text-align:right}
+.rgrid{display:grid;grid-template-columns:28px 1fr 1fr;grid-template-rows:1fr 1fr 24px;gap:6px;height:260px}
+.rgrid .c{border-radius:10px;padding:10px;cursor:pointer;border:3px solid transparent;font-size:13px;line-height:1.4;color:#fff}
+.rgrid .c b{display:block;font-size:17px}
+.rgrid .c.on{border-color:var(--ink)}
+.rgrid .ax{font-size:12px;color:var(--mute);display:flex;align-items:center;justify-content:center}
+.mcell{border-radius:10px;padding:10px;border:2px solid var(--line2);background:var(--paper);font-size:13px;line-height:1.45}
+.mcell b{display:block;color:var(--navy)}
+.mcell .big{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}
+.mcell.al{border-color:var(--ochre);background:var(--ochre-l)}
+.raci td.x{cursor:pointer;text-align:center;font-weight:900;font-size:15px;user-select:none}
+.raci td.x.R{background:#DCE6F5;color:var(--navy)}.raci td.x.A{background:var(--ochre-l);color:var(--ochre)}.raci td.x.C{background:var(--green-l);color:var(--green)}.raci td.x.I{background:#EEE;color:var(--mute)}
+.raci tr.bad td.f{color:var(--ochre)}
+.trl{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;align-items:end;height:200px}
+.trl div{border-radius:8px 8px 0 0;cursor:pointer;color:#fff;font-size:12px;padding:6px 4px;line-height:1.35;border:3px solid transparent;display:flex;flex-direction:column;justify-content:flex-start}
+.trl div b{font-size:16px}
+.trl div.on{border-color:var(--ink)}
+.trlax{display:grid;grid-template-columns:3fr 3fr 3fr;gap:4px;margin-top:4px;font-size:12.5px;text-align:center;font-weight:700}
+.trlax div{border-radius:6px;padding:3px}
+.sc4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;min-height:260px}
+.sc4 div{border-radius:10px;padding:12px;cursor:pointer;border:3px solid transparent;color:#fff;font-size:13px;line-height:1.45}
+.sc4 div b{display:block;font-size:17px;margin-bottom:4px}
+.sc4 div.on{border-color:var(--ink)}
+.hcok{background:var(--green-l)!important}.hcno{background:var(--ochre-l)!important}
+.form input{width:100%;padding:6px 8px;border:1px solid var(--line2);border-radius:6px;font-family:inherit;box-sizing:border-box}
+@media print{body.pfm *{visibility:hidden!important}body.pfm #fmwrap,body.pfm #fmwrap *{visibility:visible!important}body.pfm #fmwrap{position:absolute;left:0;top:0;width:100%}body.pfm #prt{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">SHTD</span>互動學習站</a>
+  <span class="meta">/ W09 期中複習</span>
+  <span class="sp"></span>
+  <span class="meta" id="ptxt">完成 0 / 0</span><div class="pbar"><i id="pbar"></i></div>
+  <button class="rst" id="rst" title="清除本週的閱讀進度、測驗結果與草稿">重置進度</button>
+</div></div>
+
+<div class="layout">
+<nav class="side" id="side"><div class="mh">W09 · 段落導覽</div></nav>
+<main>
+<header class="hero">
+  <div style="font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px">WEEK 9 · 期中複習（不含考題）</div>
+  <h1>期中複習：W1–W8</h1>
+  <div class="en">Midterm Review · Units 1–2</div>
+  <p class="lead">這一頁是考前練習用的：八週重點速覽、四步作答練習、敏感度／PPV／NNE 與盛行率的隨機計算練習（每按一次換一組數字）、資料品質與互通層級判斷、生成式 AI 草稿查核、Agent 權限矩陣，以及判斷題庫與公式卡。<b>本頁不含期中考題與個案</b>；所有練習情境都是另外設計的。</p>
+  <div class="chips"><span class="tag o">期中評量：學期成績 20%</span><span class="tag a">練習情境皆為虛構，與期中個案無關</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
+</header>
+
+<section class="part" id="p01" data-t="期中形式與自評">
+  <div class="ph"><span class="num">01</span><div><h2>期中形式，與你的弱點在哪一週</h2><div class="en">FORMAT · RUBRIC · SELF-CHECK</div></div></div>
+  <p class="one">期中不考背誦，考的是<b>「把框架用在一個新情境」</b>：個人作答，閱讀一份擬真醫院個案後回答 5 題。</p>
+  <div class="grid4">
+    <div class="kpi o"><div class="v">20%</div><div class="l">學期成績比重</div></div>
+    <div class="kpi"><div class="v">5<small> 題</small></div><div class="l">範圍 W1–W8；核心能力 C1 趨勢洞察、C2 技術應用、C3 實證評估</div></div>
+    <div class="kpi g"><div class="v" style="font-size:18px">可以帶</div><div class="l">紙本講義與筆記、計算機</div></div>
+    <div class="kpi o"><div class="v" style="font-size:18px">不可以</div><div class="l">生成式 AI、上網</div></div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>好答案的四個構面</h3><span class="tag gray">點一個構面</span></div>
+    <div class="forms" id="rub"></div>
+    <div class="detail" id="rubtxt">只引用框架、不連結個案數據，很難拿到高分。</div>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>自評：每一週你有多少把握？</h3><span class="tag o">拉桿</span><span class="tag gray">最弱的兩週會排在最前面，並附互動頁連結</span></div>
+    <div class="grid2"><div id="selfc"></div><div><svg viewBox="0 0 380 260" class="chart" id="selfsvg"></svg></div></div>
+    <div class="detail" id="selftxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p02" data-t="八週重點速覽">
+  <div class="ph"><span class="num">02</span><div><h2>W1–W8 重點速覽</h2><div class="en">FROM EACH WEEK'S SUMMARY SLIDE</div></div></div>
+  <p class="one">作答時先問：<b>這一題要用哪一週的框架？</b>每週一頁重點回顧，加上一個「帶走的問題」。</p>
+  <div class="tl7" id="wk"></div>
+  <div class="wd" style="margin-top:10px">
+    <div class="wh"><h3 id="wkh"></h3><a class="tag" id="wklink" href="#" style="text-decoration:none">開啟該週互動頁 →</a></div>
+    <table class="pb" id="wkt"></table>
+    <div class="detail" id="wkq"></div>
+  </div>
+</section>
+
+<section class="part" id="p03" data-t="四步作答練習">
+  <div class="ph"><span class="num">03</span><div><h2>四步作答：框架 → 證據 → 判斷 → 建議</h2><div class="en">FRAMEWORK · EVIDENCE · JUDGEMENT · ACTION</div></div></div>
+  <p class="one">條列作答即可，不需長篇。<b>同一句「不建議」，有框架、有數據、有條件與停止點</b>，才是好答案。</p>
+  <div class="wd form">
+    <div class="wh"><h3>練習題：東湖醫院要不要直接啟用 EHR 內建的跌倒風險模型？</h3><span class="tag a">虛構練習題，不是考題</span></div>
+    <div class="kpi"><div class="l">練習資料</div><div style="font-size:14px">廠商簡報 AUROC 0.80（美國資料）｜院內回溯 6 個月 AUROC 0.66｜依預設閾值，每個病房每天約 9 則警示｜試用病房護理師直接關閉警示的比例 70%｜警示只跳出在護理站電腦，不會顯示在行動裝置｜尚未指定負責人</div></div>
+    <div class="grid2" style="margin-top:10px">
+      <div><label>① 框架（用哪一週的哪個工具？）</label><textarea id="a4-1"></textarea></div>
+      <div><label>② 證據（引用上面的哪些數字？）</label><textarea id="a4-2"></textarea></div>
+      <div><label>③ 判斷（表態＋取捨）</label><textarea id="a4-3"></textarea></div>
+      <div><label>④ 建議（負責人、指標、時程、停止點）</label><textarea id="a4-4"></textarea></div>
+    </div>
+    <div style="margin-top:8px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="a4ck">自我檢查寫法</button><button class="btn" id="a4ex">看一份示範</button></div>
+    <div class="detail" id="a4txt"></div>
+  </div>
+</section>
+
+<section class="part" id="p04" data-t="計算一：混淆矩陣">
+  <div class="ph"><span class="num">04</span><div><h2>計算一：敏感度、特異度、PPV、NPV、NNE</h2><div class="en">W5 · W8 · CONFUSION MATRIX</div></div></div>
+  <p class="one">百分比取至小數點後一位；先把<b>2×2 表</b>畫出來，再算。PPV 的分母是「被標記的人」，不是全部病人。</p>
+  <div class="wd form">
+    <div class="wh"><h3 id="c1h">練習情境</h3><button class="btn" id="c1new">換一組數字</button></div>
+    <div class="detail" id="c1q" style="margin-top:0"></div>
+    <div class="grid3">
+      <div><label>(a) 敏感度（%）</label><input id="c1-a"></div><div><label>(b) 特異度（%）</label><input id="c1-b"></div><div><label>(c) PPV（%）</label><input id="c1-c"></div>
+      <div><label>(d) NPV（%）</label><input id="c1-d"></div><div><label>(e) NNE（每抓到 1 位要看幾則）</label><input id="c1-e"></div><div><label>(f) 平均每天警示數（則）</label><input id="c1-f"></div>
+    </div>
+    <div style="margin-top:8px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="c1ck">核對並看算式</button><span id="c1msg" style="font-weight:700"></span></div>
+    <div class="grid2" id="c1sol" style="display:none;margin-top:10px"><div><svg viewBox="0 0 360 230" class="chart" id="c1svg"></svg></div><div class="detail" id="c1txt" style="margin-top:0"></div></div>
+  </div>
+</section>
+
+<section class="part" id="p05" data-t="計算二：盛行率與 PPV">
+  <div class="ph"><span class="num">05</span><div><h2>計算二：同一個模型，盛行率一變，PPV 就變</h2><div class="en">W5 · W8 · PREVALENCE · ALERT FATIGUE</div></div></div>
+  <p class="one">敏感度與特異度不變，<b>事件越少，PPV 越低、NNE 越高</b>——這就是警示疲勞的數學。</p>
+  <div class="wd form">
+    <div class="wh"><h3 id="c2h">練習情境</h3><button class="btn" id="c2new">換一組數字</button></div>
+    <div class="detail" id="c2q" style="margin-top:0"></div>
+    <div class="grid3"><div><label>(a) 廠商資料的 PPV（%）</label><input id="c2-a"></div><div><label>(b) 本院的 PPV（%）</label><input id="c2-b"></div><div><label>(c) 本院 NNE</label><input id="c2-c"></div></div>
+    <div style="margin-top:8px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="c2ck">核對並看算式</button><span id="c2msg" style="font-weight:700"></span></div>
+    <div class="grid2" id="c2sol" style="display:none;margin-top:10px"><div><svg viewBox="0 0 360 220" class="chart" id="c2svg"></svg></div><div class="detail" id="c2txt" style="margin-top:0"></div></div>
+  </div>
+</section>
+
+<section class="part" id="p06" data-t="互通層級與資料品質">
+  <div class="ph"><span class="num">06</span><div><h2>資料互通卡在哪一層？資料品質出了哪種問題？</h2><div class="en">W3 · FOUNDATIONAL / STRUCTURAL / SEMANTIC / ORGANISATIONAL · CONFORMANCE / COMPLETENESS / PLAUSIBILITY</div></div></div>
+  <p class="one">互通四層級：<b>能傳 → 格式對 → 意義對 → 治理對</b>；資料品質三方向（Kahn 2016）：<b>符合性、完整性、合理性</b>。</p>
+  <div class="wd"><div class="wh"><h3>這個情況卡在哪一層？</h3><span class="scoreline" id="ioscore"></span><span class="tag a">虛構練習情境</span></div><div id="ioq"></div></div>
+  <div class="wd"><div class="wh"><h3>這是哪一種資料品質問題？</h3><span class="scoreline" id="dqscore"></span><span class="tag a">虛構練習情境</span></div><div id="dqq"></div>
+  <div class="note">接著問：這個問題會讓 AI 或規則怎麼誤判？——缺值可能被當成「沒事」，不合理的值可能誤觸警示。</div></div>
+</section>
+
+<section class="part" id="p07" data-t="生成式 AI 草稿查核">
+  <div class="ph"><span class="num">07</span><div><h2>生成式 AI 草稿查核：逐句回到原始資料</h2><div class="en">W6 · FABRICATION · OMISSION · ATTRIBUTION · NEGATION · OVER-INFERENCE</div></div></div>
+  <p class="one">五種錯誤都<b>讀起來很通順</b>：只看文筆抓不到，必須逐句對照原始對話。</p>
+  <div class="wd">
+    <div class="wh"><h3>練習：張阿姨的氣喘回診，AI 草擬的門診紀錄</h3><span class="tag a">虛構練習，不是考題</span><span class="scoreline" id="gdscore"></span></div>
+    <div class="kpi"><div class="l">原始對話（摘要）</div><div style="font-size:14px">張阿姨，62 歲。近兩週夜裡咳醒兩次，「沒有發燒」。兒子說「她最近常忘記用吸入劑」。醫師聽診：右下肺有喘鳴音。醫師：「先把吸入劑用法教一次，兩週後再看要不要加藥。」病人表示家裡養了一隻貓，最近搬來同住。</div></div>
+    <div id="gdq" style="margin-top:10px"></div>
+  </div>
+  <div class="wd"><div class="wh"><h3>五道防線：哪一道最能攔下這個錯？</h3><span class="scoreline" id="dfscore"></span></div><div id="dfq"></div>
+  <div class="note">第 ⑤ 道人工審閱最貴也最容易鬆懈：AI 越準，人越容易沒看就簽（自動化偏誤）。</div></div>
+</section>
+
+<section class="part" id="p08" data-t="Agent 權限與 CDS 五個對">
+  <div class="ph"><span class="num">08</span><div><h2>人在哪個環節？警示送對了嗎？</h2><div class="en">W7 DECISION-RIGHTS MATRIX · W8 CDS FIVE RIGHTS</div></div></div>
+  <p class="one">用兩個問題決定 AI 可以自己做到哪裡：<b>影響大不大？做錯能不能撤回？</b></p>
+  <div class="wd">
+    <div class="wh"><h3>決策權限矩陣</h3><span class="tag gray">點一格看例子</span></div>
+    <div class="grid2"><div class="rgrid" id="rg"></div><div class="detail" id="rgtxt" style="margin-top:0"></div></div>
+  </div>
+  <div class="wd"><div class="wh"><h3>這個動作，AI 可以做到哪裡？</h3><span class="scoreline" id="agscore"></span><span class="tag a">虛構練習情境</span></div><div id="agq"></div></div>
+  <div class="wd"><div class="wh"><h3>CDS 五個對：這個設計錯在哪一個「對」？</h3><span class="scoreline" id="frscore"></span></div><div id="frq"></div></div>
+</section>
+
+<section class="part" id="p09" data-t="判斷題庫">
+  <div class="ph"><span class="num">09</span><div><h2>判斷題庫：W1–W8 隨機 12 題</h2><div class="en">MIXED QUESTION BANK · RANDOM DRAW</div></div></div>
+  <p class="one">每次抽 12 題；答錯的題目會列在下方，附<b>該回去看哪一週</b>。</p>
+  <div class="wd">
+    <div class="wh"><h3>本輪題目</h3><span class="scoreline" id="qbscore"></span><button class="btn" id="qbnew">再抽 12 題</button></div>
+    <div id="qb"></div>
+    <div class="detail" id="qbtxt"></div>
+  </div>
+</section>
+
+<section class="part" id="p10" data-t="公式卡與考前清單">
+  <div class="ph"><span class="num">10</span><div><h2>公式卡與考前清單</h2><div class="en">FORMULA CARD · CHECKLIST</div></div></div>
+  <p class="one">可以帶紙本講義與筆記：<b>把這張公式卡印出來</b>，夾進講義。</p>
+  <div class="wd" id="fmwrap">
+    <div class="wh"><h3>公式卡</h3><button class="btn oc" id="prt">列印本頁公式卡</button></div>
+    <table class="pb" id="fm"></table>
+  </div>
+  <div class="wd">
+    <div class="wh"><h3>考前清單</h3><span class="tag o">勾選</span></div>
+    <div class="tog" id="ck"></div>
+    <div class="detail" id="cktxt"></div>
+    <div style="margin-top:8px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="allcopy">複製本頁所有練習與自評</button><span id="allmsg" style="font-size:13px;color:var(--green)"></span></div>
+  </div>
+  <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">框架 → 證據 → 判斷 → 建議</h2><p style="color:var(--mute)">每一題都先想：用哪一週的框架？引用哪個數字？表態是什麼？誰負責、看什麼指標、什麼時候停？</p></div>
+</section>
+
+</main>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const C={navy:"#1B2A4A",navy2:"#2E4470",ochre:"#B5442A",ochre2:"#D0623F",green:"#3D7A5A",amber:"#B7832F",mute:"#6B6F7B",line:"#E3DBCB",paper:"#FBF8F1",gray:"#9A9CA4"};
+const LS={get(k,d){try{const v=localStorage.getItem("shtd-w09-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("shtd-w09-"+k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString("zh-TW",{maximumFractionDigits:d,minimumFractionDigits:d});
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+"px";tip.style.top=(e.clientY+14)+"px"}
+function hideTip(){tip.style.opacity=0}
+function h(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e}
+
+/* ---------- sidebar & progress ---------- */
+const parts=$$(".part"), side=$("#side"), seen=new Set(LS.get("seen",[]));
+parts.forEach(p=>{const a=h("a",{href:"#"+p.id},`<span class="n">${p.querySelector(".num").textContent}</span><span>${p.dataset.t}</span>`);a.dataset.id=p.id;side.appendChild(a)});
+function prog(){$("#ptxt").textContent=`完成 ${seen.size} / ${parts.length}`;$("#pbar").style.width=(seen.size/parts.length*100)+"%";$$(".side a").forEach(a=>a.classList.toggle("done",seen.has(a.dataset.id)))}
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){seen.add(en.target.id);LS.set("seen",[...seen]);prog();$$(".side a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});
+parts.forEach(p=>io.observe(p));prog();
+
+/* ---------- generic MCQ ---------- */
+function mcq(container,items,scoreEl){
+  const root=typeof container==="string"?$(container):container;let right=0,done=0;
+  items.forEach((it,qi)=>{
+    const q=h("div",{class:"q"});
+    if(it.q)q.appendChild(h("div",{class:"qt"},(items.length>1?(qi+1)+". ":"")+it.q));
+    const fb=h("div",{class:"fb"});let answered=false;
+    it.o.forEach((o,oi)=>{const b=h("button",{class:"opt"},o);b.onclick=()=>{
+      if(answered)return;answered=true;done++;const ok=oi===it.a;if(ok)right++;
+      b.classList.add(ok?"ok":"no");if(!ok)q.querySelectorAll(".opt")[it.a].classList.add("ok");
+      fb.className="fb show "+(ok?"ok":"no");fb.innerHTML=(ok?"<b>答對了。</b>":"<b>再想想。</b>")+it.e;
+      if(scoreEl)$(scoreEl).textContent=`${right} / ${items.length}`+(done===items.length?"　✓ 完成":"");
+    };q.appendChild(b)});
+    q.appendChild(fb);root.appendChild(q);
+  });
+}
+
+
+(function(){const b=$("#rst");let t=null;b.onclick=()=>{if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="確定重置？";t=setTimeout(()=>{b.classList.remove("warn");b.textContent="重置進度"},3000);return}clearTimeout(t);try{Object.keys(localStorage).filter(k=>k.indexOf("shtd-w09-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="";location.reload()}})();
+function bind(sel){$$(sel).forEach(r=>{r.addEventListener("click",e=>{})})}
+function tipify(root){root.querySelectorAll("[data-t]").forEach(r=>{r.onmousemove=e=>showTip(e,r.dataset.t);r.onmouseleave=hideTip})}
+function segInit(id,cb){$$(id+" button").forEach(b=>b.onclick=()=>{$$(id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset)})}
+function choiceRows(container,items,opts,scoreEl,noteFn){const r=$(container);let ok=0,dn=0;items.forEach(([t,a,why])=>{const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},t));const box=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;opts.forEach((o,i)=>{const b=h("button",{class:"btn"},o);b.onclick=()=>{if(d)return;d=true;dn++;const g=i===a;if(g)ok++;b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)box.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+(why||(noteFn?noteFn(a):""));if(scoreEl)$(scoreEl).textContent=`${ok} / ${items.length}`+(dn===items.length?"　✓":"")};box.appendChild(b)});row.appendChild(box);row.appendChild(fb);r.appendChild(row)})}
+function bars(svg,data,{max,unit="",dec=1,W=360,H=220,cols}){const L=46,B=H-36,T=22;let g="";const step=max/5;for(let v=0;v<=max+1e-9;v+=step){const y=B-v/max*(B-T);g+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${C.line}"/><text x="${L-6}" y="${y+4}" font-size="11" fill="${C.mute}" text-anchor="end">${fmt(v,v<10&&step<1?1:0)}${unit}</text>`}const n=data.length,bw=Math.min(80,(W-L-30)/n-30);data.forEach(([lab,v,c],i)=>{const x=L+20+i*((W-L-30)/n)+((W-L-30)/n-bw)/2-10,y=B-v/max*(B-T);g+=`<rect x="${x}" y="${y}" width="${bw}" height="${B-y}" rx="3" fill="${c||cols[i]}" data-t="${lab}：${fmt(v,dec)}${unit}"/><text x="${x+bw/2}" y="${y-7}" font-size="14" font-weight="700" text-anchor="middle" fill="${c||cols[i]}">${fmt(v,dec)}${unit}</text><text x="${x+bw/2}" y="${B+18}" font-size="12.5" text-anchor="middle">${lab}</text>`});$(svg).innerHTML=g;tipify($(svg))}
+
+
+function copyText(t,msgEl){const done=()=>{$(msgEl).textContent="已複製。";setTimeout(()=>$(msgEl).textContent="",3000)};const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$(msgEl).textContent="無法自動複製，請手動選取文字。"}ta.remove()};try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+function persist(ids,key,cb){const s=LS.get(key,{});ids.forEach(id=>{const e=$("#"+id);if(s[id]!=null)e.value=s[id];const f=()=>{const o={};ids.forEach(k=>o[k]=$("#"+k).value);LS.set(key,o);cb&&cb()};e.addEventListener("input",f);e.addEventListener("change",f)})}
+function rng(id,fn,fmtF){const e=$("#"+id);const o=e.nextElementSibling;const f=()=>{o.textContent=fmtF?fmtF(+e.value):e.value;fn()};e.addEventListener("input",f);o.textContent=fmtF?fmtF(+e.value):e.value}
+function togs(root,items,state,cb){const r=$(root);r.innerHTML="";items.forEach(([k,lab])=>{const l=h("label",{class:state[k]?"on":""},`<input type="checkbox" ${state[k]?"checked":""}>${state[k]?"✓ ":""}${lab}`);l.onclick=e=>{e.preventDefault();state[k]=!state[k];togs(root,items,state,cb);cb()};r.appendChild(l)})}
+const kpi=(v,l,c="")=>`<div class="kpi ${c}"><div class="v">${v}</div><div class="l">${l}</div></div>`;
+
+const SV=k=>k===1?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6.5" fill="${C.navy}"/></svg>`:k===2?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6.5" fill="#fff" stroke="${C.navy}" stroke-width="1.5"/><path d="M8 1.5A6.5 6.5 0 0 1 8 14.5Z" fill="${C.navy}"/></svg>`:k===3?`<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px"><circle cx="8" cy="8" r="6" fill="#fff" stroke="${C.navy}" stroke-width="1.5"/></svg>`:"·";
+
+const SUM={"7": {"rows": [["Agent 是什麼", "大腦＋工具＋記憶＋規劃；從「給建議」走向「去執行」"], ["設計選擇", "能用工作流就不用 Agent；多代理人要守最小權限"], ["互通標準", "FHIR 管資料、MCP 管工具連接、A2A 管 Agent 對話"], ["實測", "電子病歷任務成功率約七成——人類把關不可少"], ["人機協作", "依影響程度與可否撤回，決定人在迴圈中、上或外"], ["失敗處理", "停止、重試上限、人工接手與操作紀錄，上線前就要寫好"], ["流程再造", "先再造再自動化；台灣出院銜接長照已從 51 天縮到 4 天"]], "q": "你單位的哪個流程，應該先「再造」，而不是直接「自動化」？"}, "8": {"rows": [["CDS", "五個對：資訊、人、格式、管道、時機；警示只是六種形式之一"], ["法規", "FDA 2026 年指引四條件；即時預警多半仍屬醫療器材"], ["早期預警", "NEWS2 透明簡單；AI 預警較準但更依賴資料與驗證"], ["系統觀", "偵測 → 過濾 → 通知 → 應變 → 回饋，缺一環就失效"], ["警示疲勞", "盛行率低則 PPV 低；看閾值下的警示量與 NNE"], ["資料集偏移", "技術、族群場域、行為改變；上線前本地驗證、上線後持續監測"], ["人機協作", "防自動化偏誤：顯示依據、可推翻、留理由"]], "q": "你的醫院若要買 AI 預警，第一個要請廠商拿出的證據是什麼？"}, "1": {"rows": [["定位", "為誰解決什麼問題？資料如何變成有人負責的行動？"], ["價值", "與什麼方案相比？結果、成本、負擔與公平如何量測？"], ["證據與回饋", "哪些已證實、哪些是假設？何時調整、更新或停用？"]], "q": "分四關判斷：技術可行、流程可用、病人受益、經濟可承擔——前一關成立，不代表後一關成立。"}, "2": {"rows": [["用途與能力", "它為誰、在什麼場景，產生什麼判斷或動作？"], ["證據與風險", "研究支持哪個結果？換族群或流程後還缺什麼？"], ["許可與採用", "哪個機關作決定？誰支付、回應警示及持續監測？"]], "q": "未知可以保留，但下一步要能查證。"}, "3": {"rows": [["卡在哪裡", "傳遞、格式、意義、治理，可能同時存在多個卡點。"], ["資料能否用", "核對病人、項目、單位、時間、來源、版本與用途。"], ["下一步做什麼", "先補最影響照護的缺口，寫出責任與驗收方式。"]], "q": "每個判斷都要有資料證據，也要說清楚仍然不知道的事。"}, "4": {"rows": [["為誰設計", "誰在什麼情境卡住？使用者不只病人。"], ["為何會做", "缺能力、機會還是動機？選對應的介入與 BCT。"], ["怎麼驗證", "四類測試＋代理測試查核 AI 產出；正式導入前要讓目標使用者試用。"]], "q": "你做的工具，王伯伯明天早上真的會用嗎？"}, "5": {"rows": [["怎麼來", "訓練資料代表誰？標籤怎麼定義？有沒有洩漏或捷徑？"], ["準不準", "在本院資料上，鑑別力與校準度各如何？盛行率是多少？"], ["能不能用", "閾值對應多少工作量？誰接手、做什麼、誰監測？"]], "q": "模型標記了王伯伯，誰會接到通知？他們會做什麼？"}, "6": {"rows": [["依據在哪", "AI 寫的每一句，能回到原始資料或文件嗎？"], ["錯在哪裡", "捏造、遺漏、歸屬、否定、過度推論，最常在 P？"], ["誰來把關", "五道防線設了哪幾道？審閱的人會不會沒看就簽？"]], "q": "你的醫院明天導入 AI 代筆，你會先設哪一道防線？"}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const WT={1:"智慧醫療的範疇與價值框架",2:"智慧醫療科技演進與國際趨勢",3:"醫療資料互通與數位成熟度",4:"使用者中心設計與健康行為改變",5:"醫療 AI 方法論與模型生命週期",6:"生成式 AI 與大型語言模型的臨床應用",7:"AI Agent 與臨床流程自動化",8:"臨床決策支援與預警系統"};
+const WURL=w=>`../w0${w}/`;
+const num=s=>{const x=parseFloat(String(s).replace(/[,，%％次則人\s]/g,"").replace("−","-"));return isNaN(x)?null:x};
+const rnd=(a,b,st=1)=>a+Math.floor(Math.random()*((b-a)/st+1))*st;
+function mark(ids,ans,tol){let ok=0;ids.forEach((id,i)=>{const e=$("#"+id),x=num(e.value);const g=x!=null&&Math.abs(x-ans[i])<=(tol[i]??0.11);e.classList.remove("hcok","hcno");if(e.value.trim())e.classList.add(g?"hcok":"hcno");if(g)ok++});return ok}
+function clear(ids){ids.forEach(id=>{$("#"+id).value="";$("#"+id).classList.remove("hcok","hcno")})}
+
+/* 01 rubric + self */
+const RB=[["① 框架運用","正確選用並說明為何適用","有引用但說明不足","未用框架或用錯"],["② 證據連結","引用個案的具體數據支持論點","提到個案但未用數據","只有一般性陳述"],["③ 判斷與取捨","指出利弊並明確表態","有表態但未談取捨","未表態或自相矛盾"],["④ 可行性","具體：有負責人、指標或時程","方向正確但不具體","建議空泛或不可行"]];
+let rbI=-1;function rub(){$("#rub").innerHTML=RB.map((r,i)=>`<div class="${i===rbI?"on":""}" data-i="${i}"><b>${r[0]}</b>${r[1]}</div>`).join("");$$("#rub div").forEach(d=>d.onclick=()=>{rbI=+d.dataset.i;rub();const r=RB[rbI];$("#rubtxt").innerHTML=`<b>${r[0]}</b><br><span style="color:var(--green);font-weight:700">好</span>：${r[1]}<br><span style="color:var(--amber);font-weight:700">普通</span>：${r[2]}<br><span style="color:var(--ochre);font-weight:700">待加強</span>：${r[3]}`})}rub();
+const sc=LS.get("self",{});
+function self(){const ws=Object.keys(WT).map(Number);$("#selfc").innerHTML=ws.map(w=>`<div class="ctl"><span>W${w} ${WT[w].slice(0,8)}</span><input type="range" min="0" max="100" step="5" value="${sc[w]??50}" data-w="${w}"><output>${sc[w]??50}</output></div>`).join("");
+ $$("#selfc input").forEach(e=>e.oninput=()=>{sc[e.dataset.w]=+e.value;LS.set("self",sc);e.nextElementSibling.textContent=e.value;draw()});draw()}
+function draw(){const ws=Object.keys(WT).map(Number),v=ws.map(w=>sc[w]??50);const lo=[...ws].sort((a,b)=>(sc[a]??50)-(sc[b]??50)).slice(0,2);
+ bars("#selfsvg",ws.map((w,i)=>["W"+w,v[i],lo.includes(w)?C.ochre:C.navy]),{max:100,unit:"",dec:0,W:380,H:260});
+ $("#selftxt").innerHTML=`最沒把握的兩週：${lo.map(w=>`<a href="${WURL(w)}" style="color:var(--ochre);font-weight:700">W${w} ${WT[w]}</a>`).join("、")}。先回去看那兩週的互動頁與講義的回顧頁，再做下面的計算與題庫。`}
+self();
+
+/* 02 weekly summary */
+let wkI=0;const WKS=Object.keys(WT).map(Number);
+function wk(){$("#wk").innerHTML=WKS.map((w,i)=>`<button class="${i===wkI?"on":""}" data-i="${i}"><b>W${w}</b>${WT[w].slice(0,6)}</button>`).join("");$$("#wk button").forEach(b=>b.onclick=()=>{wkI=+b.dataset.i;wk()});
+ const w=WKS[wkI],d=SUM[w];$("#wkh").textContent=`W${w}　${WT[w]}`;$("#wklink").href=WURL(w);$("#wkt").innerHTML=`<tr><th style="width:130px">${w<=6?"要問的面向":"主題"}</th><th>${w<=6?"問題／判斷":"一句話重點"}</th></tr>`+d.rows.map(r=>`<tr><td class="f">${r[0]}</td><td>${r[1]}</td></tr>`).join("");$("#wkq").innerHTML=d.q?`<b>${w<=6&&!/[？?]$/.test(d.q)?"本週提醒":"帶走一個問題"}：</b>${d.q}`:""}
+wk();
+
+/* 03 four-step answer */
+persist(["a4-1","a4-2","a4-3","a4-4"],"a4");
+$("#a4ck").onclick=()=>{const v=id=>$("#"+id).value;const r=[];
+ const f=v("a4-1"),e=v("a4-2"),j=v("a4-3"),a=v("a4-4");
+ r.push([/W\d|本地驗證|偏移|AUROC|PPV|警示疲勞|五個對|閾值|校準|NNE/.test(f),"① 框架：寫出用哪一週的哪個工具（例：W8 本地驗證、資料集偏移；W8 五個對）"]);
+ const nums=(e.match(/\d+(\.\d+)?/g)||[]).filter(x=>["0.80","0.66","9","70","6"].includes(x));r.push([nums.length>=2,`② 證據：引用練習資料的具體數字（目前引用 ${nums.length} 個）；並分清「廠商簡報」與院內數據`]);
+ r.push([/(啟用|暫緩|條件|不建議|建議|停止|上線)/.test(j)&&/(但|然而|取捨|代價|風險|前提|雖然|換取)/.test(j),"③ 判斷：明確表態，並寫出取捨或前提"]);
+ r.push([/(負責人|主任|護理長|資訊|委員會|醫師|護理部)/.test(a),"④ 可行性：有具名角色"]);r.push([/\d/.test(a)&&/(月|週|季|年)/.test(a),"④ 可行性：有指標門檻或時程"]);r.push([/(停止|暫停|不上線|退回|降級|不再)/.test(a),"④ 可行性：有停止點"]);
+ const ok=r.filter(x=>x[0]).length;$("#a4txt").innerHTML=`${ok} / ${r.length} 項到位。<br>`+r.map(([g,t])=>`<span style="color:${g?C.green:C.ochre};font-weight:700">${g?"✓":"✕"}</span> ${t}`).join("<br>")+"<br><span style='font-size:13px;color:var(--mute)'>這是寫法的自我檢查，不是評分；內容是否正確仍要自己判斷。</span>"};
+$("#a4ex").onclick=()=>{$("#a4txt").innerHTML=`<b>示範（練習題，非考題）</b><br>① 框架：W8 本地驗證與資料集偏移；W8 警示疲勞（PPV、警示量）；W8 CDS 五個對（管道、時機）。<br>② 證據：AUROC 廠商 0.80 → 院內 0.66；每病房每天約 9 則警示；70% 被直接關閉；警示只在護理站電腦。<br>③ 判斷：<b>暫緩直接啟用</b>——鑑別力明顯下降、警示已被忽略；取捨是延後可能的效益，換取不加重警示疲勞。<br>④ 建議：由護理部指定一位臨床負責人、資訊室指定模型負責人；以本院資料重新校準後靜默測試 3 個月；每月看 AUROC、每日警示數與關閉率；AUROC 仍 &lt; 0.70 就不上線；警示改送到負責護理師的行動裝置。`};
+
+/* 04 calc 1: confusion matrix */
+let C1=null;function c1new(){const D=rnd(60,180,30),N=rnd(20,60,5)*D,E=Math.round(N*rnd(2,8)/100),TP=Math.round(E*rnd(50,85)/100),FP=Math.round((N-E)*rnd(8,25)/100);C1={D,N,E,TP,FP};
+ $("#c1h").textContent="練習情境：西河醫院住院跌倒預測（虛構）";
+ $("#c1q").innerHTML=`回溯 <b>${D}</b> 天、共 <b>${fmt(N,0)}</b> 個住院日；其中 <b>${E}</b> 個住院日發生跌倒。模型對 <b>${fmt(TP+FP,0)}</b> 個住院日發出警示，其中 <b>${TP}</b> 個當天真的跌倒。`;
+ clear(["c1-a","c1-b","c1-c","c1-d","c1-e","c1-f"]);$("#c1sol").style.display="none";$("#c1msg").textContent=""}
+$("#c1new").onclick=c1new;c1new();
+$("#c1ck").onclick=()=>{const {D,N,E,TP,FP}=C1;const FN=E-TP,TN=N-E-FP,F=TP+FP;const ans=[TP/E*100,TN/(N-E)*100,TP/F*100,TN/(TN+FN)*100,F/TP,F/D];
+ const ok=mark(["c1-a","c1-b","c1-c","c1-d","c1-e","c1-f"],ans,[0.11,0.11,0.11,0.11,0.11,0.11]);$("#c1msg").textContent=`${ok} / 6`;$("#c1msg").style.color=ok===6?C.green:C.navy;$("#c1sol").style.display="grid";
+ const W=360,H=230,L=96,T=34,cw=128,ch=80;let g=`<text x="${L+cw}" y="16" font-size="12" text-anchor="middle" font-weight="700" fill="${C.navy}">實際</text><text x="${L+cw/2}" y="${T-6}" font-size="11.5" text-anchor="middle">跌倒</text><text x="${L+cw*1.5}" y="${T-6}" font-size="11.5" text-anchor="middle">未跌倒</text><text x="${L-8}" y="${T+ch/2+4}" font-size="11.5" text-anchor="end">有警示</text><text x="${L-8}" y="${T+ch*1.5+4}" font-size="11.5" text-anchor="end">無警示</text>`;
+ [[TP,"真陽性",C.green,0,0],[FP,"偽陽性",C.ochre,1,0],[FN,"偽陰性（漏掉）",C.ochre,0,1],[TN,"真陰性",C.gray,1,1]].forEach(([v,n,c,x,y])=>{g+=`<rect x="${L+x*cw}" y="${T+y*ch}" width="${cw-4}" height="${ch-4}" rx="6" fill="${c}" opacity=".9"/><text x="${L+x*cw+cw/2-2}" y="${T+y*ch+36}" font-size="20" font-weight="900" fill="#fff" text-anchor="middle">${fmt(v,0)}</text><text x="${L+x*cw+cw/2-2}" y="${T+y*ch+58}" font-size="11.5" fill="#fff" text-anchor="middle">${n}</text>`});
+ $("#c1svg").innerHTML=g;
+ $("#c1txt").innerHTML=`(a) 敏感度 ＝ TP ÷（TP＋FN）＝ ${TP} ÷ ${E} ＝ <b>${fmt(ans[0],1)}%</b><br>(b) 特異度 ＝ TN ÷（TN＋FP）＝ ${fmt(TN,0)} ÷ ${fmt(N-E,0)} ＝ <b>${fmt(ans[1],1)}%</b><br>(c) PPV ＝ TP ÷ 警示數 ＝ ${TP} ÷ ${fmt(F,0)} ＝ <b>${fmt(ans[2],1)}%</b><br>(d) NPV ＝ TN ÷（TN＋FN）＝ ${fmt(TN,0)} ÷ ${fmt(TN+FN,0)} ＝ <b>${fmt(ans[3],1)}%</b><br>(e) NNE ＝ 警示數 ÷ TP ＝ <b>${fmt(ans[4],1)}</b><br>(f) 每天警示 ＝ ${fmt(F,0)} ÷ ${D} 天 ＝ <b>${fmt(ans[5],1)} 則</b><br><span style="font-size:13px;color:var(--mute)">特異度高、PPV 仍可能很低——因為事件很少。接著問：每天這麼多則，誰接、做什麼（W5、W8）？</span>`};
+
+/* 05 calc 2: prevalence */
+let C2=null;function c2new(){const se=rnd(70,90),sp=rnd(80,95),p0=rnd(12,25),p1=rnd(2,8);C2={se,sp,p0,p1};
+ $("#c2h").textContent="練習情境：南港醫院敗血症預警（虛構）";
+ $("#c2q").innerHTML=`廠商說：敏感度 <b>${se}%</b>、特異度 <b>${sp}%</b>，在事件率 <b>${p0}%</b> 的醫學中心驗證。本院病人較輕，事件率約 <b>${p1}%</b>。假設敏感度、特異度不變（教學簡化），以每 1,000 位病人計算。`;
+ clear(["c2-a","c2-b","c2-c"]);$("#c2sol").style.display="none";$("#c2msg").textContent=""}
+$("#c2new").onclick=c2new;c2new();
+const ppv=(se,sp,p)=>se*p/(se*p+(1-sp)*(1-p));
+$("#c2ck").onclick=()=>{const {se,sp,p0,p1}=C2;const a=ppv(se/100,sp/100,p0/100)*100,b=ppv(se/100,sp/100,p1/100)*100;const ans=[a,b,100/b];
+ const ok=mark(["c2-a","c2-b","c2-c"],ans,[0.15,0.15,0.11]);$("#c2msg").textContent=`${ok} / 3`;$("#c2msg").style.color=ok===3?C.green:C.navy;$("#c2sol").style.display="grid";
+ bars("#c2svg",[[`廠商（${p0}%）`,a,C.gray],[`本院（${p1}%）`,b,C.ochre]],{max:100,unit:"%",dec:1,W:360,H:220});
+ const e1=10*p1,tp=e1*se/100,fp=(1000-e1)*(1-sp/100);
+ $("#c2txt").innerHTML=`每 1,000 人、事件率 ${p1}%：事件 ${fmt(e1,0)} 人 → 抓到 ${fmt(tp,1)}（× ${se}%）；未發生 ${fmt(1000-e1,0)} 人 → 誤報 ${fmt(fp,1)}（× ${100-sp}%）。<br>(b) PPV ＝ ${fmt(tp,1)} ÷（${fmt(tp,1)}＋${fmt(fp,1)}）＝ <b>${fmt(b,1)}%</b>；(a) 同法以 ${p0}% 計 ＝ <b>${fmt(a,1)}%</b><br>(c) NNE ＝ 1 ÷ ${fmt(b,1)}% ＝ <b>${fmt(100/b,1)}</b>：每抓到 1 位要看約 ${fmt(100/b,0)} 則警示。<br><span style="font-size:13px;color:var(--mute)">實際上換了場域，敏感度與特異度也常一起變（資料集偏移，W8）——所以要在本院資料上驗證，而不是只換盛行率重算。</span>`};
+
+/* 06 interoperability + data quality */
+choiceRows("#ioq",[
+ ["兩家院所只能用 USB 隨身碟搬檔交換影像報告",0,"基礎（能傳）都還沒穩定建立。"],
+ ["雙方都送 HL7 訊息，但欄位順序不同，接收端無法拆解",1,"結構（格式對）：機器拆不開。"],
+ ["都用 FHIR 傳檢驗結果，但檢驗項目用各院自訂代碼，對不起來",2,"語意（意義對）：需要 LOINC 等標準代碼。"],
+ ["技術都通了，但沒有資料使用協議、沒有病人同意流程",3,"組織（治理對）：誰能用、為何用、誰負責。"],
+ ["對方傳來的過敏紀錄寫「盤尼西林過敏」，本院系統用 SNOMED CT 代碼，無法自動比對",2,"語意。"],
+ ["居家量測資料由個人手機傳到醫院，但沒有人被指派要看",3,"組織：流程與責任沒有建立。"]
+],["① 基礎","② 結構","③ 語意","④ 組織"],"#ioscore");
+choiceRows("#dqq",[
+ ["血氧欄位填的是文字「九十八」而不是數值",0,"符合性：欄位與格式沒有照規則。"],
+ ["診斷欄位用院內自訂碼，不是約定的 ICD-10",0,"符合性。"],
+ ["每天應有一次血壓量測，連續三天沒有紀錄",1,"完整性：需要的資料缺了。"],
+ ["出院摘要缺用藥清單",1,"完整性。"],
+ ["心跳 0 次／分，但病人當天在門診走動",2,"合理性：數值不可信，需回查輸入或裝置。"],
+ ["量測時間早於病人的出生日期",2,"合理性：時間不可信。"]
+],["符合性","完整性","合理性"],"#dqscore");
+
+/* 07 GenAI draft check */
+choiceRows("#gdq",[
+ ["「近兩週夜間咳嗽、咳醒兩次。」",0,"正確：與原始對話一致。"],
+ ["「病人有發燒。」",4,"否定錯誤：原話是「沒有發燒」。"],
+ ["「病人自述常忘記使用吸入劑。」",3,"歸屬錯誤：是兒子說的，不是病人自述。"],
+ ["「雙側肺部聽診正常。」",1,"捏造：醫師聽到右下肺有喘鳴音；這句不是原始資料。"],
+ ["「已加開口服類固醇。」",5,"過度推論：醫師說「兩週後再看要不要加藥」。"],
+ ["（紀錄中沒有提到家中新養的貓）",2,"遺漏：可能的過敏原，對氣喘控制很重要。"]
+],["正確","捏造","遺漏","歸屬錯誤","否定錯誤","過度推論"],"#gdscore");
+choiceRows("#dfq",[
+ ["AI 自己補了一段沒做過的檢查結果",0,"① 提示限制：只依原始資料，未提及寫「未提及」。"],
+ ["無法判斷某句話出自哪一段對話",1,"② 依據與出處：RAG 或逐句標註行號。"],
+ ["每份草稿格式都不同，難以比對",2,"③ 結構化輸出：固定欄位。"],
+ ["劑量數字被改了、否定詞被漏掉",3,"④ 自動檢核：程式檢查數字、藥名、否定詞。"],
+ ["前四道都沒攔下的臨床判斷錯誤",4,"⑤ 人工審閱：醫師逐句確認、簽名負責。"]
+],["① 提示限制","② 依據與出處","③ 結構化輸出","④ 自動檢核","⑤ 人工審閱"],"#dfscore");
+
+/* 08 decision rights + five rights */
+const RG=[[0,0,"自動執行","影響小 × 可撤回","整理文件、預填表單｜人在迴圈外：定期抽查",C.green],[0,1,"執行後通知","影響小 × 難撤回","寄出衛教簡訊｜人在迴圈上：即時監看、可喊停",C.amber],[1,0,"人核准後執行","影響大 × 可撤回","送出長照轉介｜人在迴圈中：每次行動前核准",C.navy2],[1,1,"禁止 AI 執行","影響大 × 難撤回","變更處方、告知預後",C.ochre]];
+let rgI=-1;function rg(){let g=`<div class="ax" style="grid-row:1/3;writing-mode:vertical-rl">影響 ↓（小 → 大）</div>`;RG.forEach(([r,c,n,k,e,col],i)=>g+=`<div class="c ${i===rgI?"on":""}" data-i="${i}" style="grid-row:${r+1};grid-column:${c+2};background:${col}"><b>${n}</b>${k}</div>`);g+=`<div></div><div class="ax" style="grid-column:2/4">可否撤回 →（可撤回 → 難撤回）</div>`;$("#rg").innerHTML=g;
+ $$("#rg .c").forEach(d=>d.onclick=()=>{rgI=+d.dataset.i;rg()});$("#rgtxt").innerHTML=rgI<0?"點一格。這張矩陣要在導入前由臨床、資訊、法務一起訂定（W7）。":`<b>${RG[rgI][2]}</b>（${RG[rgI][3]}）<br>例：${RG[rgI][4]}。<br><span style="font-size:13px;color:var(--mute)">同一個 Agent 可以混用：排程「在迴圈上」、用藥「在迴圈中」——依每個動作分別設定。</span>`}rg();
+choiceRows("#agq",[
+ ["把門診病歷整理成摘要給醫師參考",0,"影響小、可撤回：自動執行，定期抽查。"],
+ ["寄出一般衛教簡訊給病人",1,"送出就收不回：執行後通知，人在迴圈上。"],
+ ["為病人送出居家護理轉介",2,"影響大、可撤回：人核准後執行。"],
+ ["依檢驗值自動調整抗凝血藥劑量",3,"影響大、難撤回：禁止 AI 執行。"],
+ ["自動預約下次回診時段（可改期）",0,"影響小、可撤回。"],
+ ["以 AI 語音告知病人檢查結果與預後",3,"禁止 AI 執行。"]
+],["自動執行","執行後通知","人核准後執行","禁止 AI 執行"],"#agscore");
+choiceRows("#frq",[
+ ["給醫師的提醒寫成一整段 300 字的說明",2,"格式不對：要一眼看懂、可直接採取行動。"],
+ ["警示送到值班主治醫師，但實際要處理的是負責護理師",1,"人不對。"],
+ ["警示只出現在護理站電腦，護理師多在病房走動",3,"管道不對：要到使用者會看的地方。"],
+ ["出院後三天才提醒「出院前應衛教」",4,"時機不對。"],
+ ["提醒內容引用已經改版的舊指引",0,"資訊不對：知識要正確、即時。"]
+],["資訊","人","格式","管道","時機"],"#frscore");
+
+/* 09 question bank */
+const QB=[
+ [1,"Quintuple Aim 比 Quadruple Aim 多了哪一項？",["病人體驗","醫療工作者福祉","健康公平","每人醫療成本"],2,"2022 年 Quintuple Aim 明列健康公平。"],
+ [1,"評估一項智慧醫療方案的「價值」，第一個要問的是？",["用了什麼 AI","與什麼方案相比","廠商規模","價格最低"],1,"價值是比較出來的：結果、成本、負擔與公平。"],
+ [1,"同一項「節省」，常見的陷阱是？",["算得太精確","只是把工作或費用轉移給別人","沒有用 AI","太便宜"],1,"先辨識使用者、受益者、付款者與承擔風險者。"],
+ [1,"學習型健康照護體系的核心是？",["一次導入、永久使用","日常經驗結合研究證據，持續監測、驗證後再調整","只看研究","只看廠商報告"],1,"何時調整、更新或停用，要事先想好。"],
+ [2,"生成模型最典型的失誤是？",["規則衝突","編造、遺漏、偏差","分布改變","硬體故障"],1,"規則式：規則衝突；學習式：分布改變；生成：編造、遺漏。"],
+ [2,"評估一項 AI 產品，第一步應先辨認？",["它的輸出與可執行的動作","它的品牌","它的介面顏色","它的價格"],0,"先辨認輸出與動作，再決定驗證與監督方式。"],
+ [2,"「換族群或換流程後」最需要追問的是？",["介面是否好看","研究支持的結果在新場景還缺什麼證據","售價","版本號"],1,"證據與風險。"],
+ [3,"互通四層級由下到上是？",["基礎 → 結構 → 語意 → 組織","語意 → 結構 → 基礎 → 組織","組織 → 語意 → 結構 → 基礎","結構 → 基礎 → 組織 → 語意"],0,"能傳 → 格式對 → 意義對 → 治理對。"],
+ [3,"LOINC、SNOMED CT 主要解決哪一層？",["基礎","結構","語意","組織"],2,"代碼一致，雙方理解相同。"],
+ [3,"Kahn 等（2016）資料品質三方向是？",["符合性、完整性、合理性","速度、規模、多樣性","正確、即時、便宜","鑑別、校準、效用"],0,"符合性、完整性、合理性。"],
+ [3,"EMRAM 是在評估什麼？",["病人滿意度","醫院電子病歷數位成熟度（0–7 階）","AI 準確度","財務"],1,"醫院數位化走到哪一階。"],
+ [4,"COM-B 的三個要素是？",["能力、機會、動機","成本、結果、效益","資料、模型、介面","法規、給付、證據"],0,"先診斷缺哪一塊，再選介入，而不是一律加強衛教。"],
+ [4,"病人「知道要量體重，但體重計放在櫃子裡拿不到」，缺的是？",["能力","機會","動機","知識"],1,"物理機會：體重計放在浴室。"],
+ [4,"同學互換試用，結果可以寫成？",["使用者研究","代理測試","臨床試驗","上市後監測"],1,"同學不是目標使用者；正式導入前要讓目標使用者試用。"],
+ [4,"四類測試包含？",["正常、邊界、缺值、不合理輸入","單元、整合、壓力、回歸","α、β、γ、δ","前、中、後、追蹤"],0,"W4 實作一的四類測試。"],
+ [5,"AUROC 衡量的是？",["校準度","鑑別力：把有事與沒事的人排開的能力","PPV","成本"],1,"高 AUROC 不代表預測機率準（校準）。"],
+ [5,"模型預測平均風險 30%，實際發生 15%，這是哪方面的問題？",["鑑別力","校準度","敏感度","互通"],1,"高估風險：要以本院資料重新校準。"],
+ [5,"訓練資料中混入了「只有結果發生後才會有」的變數，這叫？",["過度擬合","資料洩漏","捷徑學習","校準"],1,"驗證時看起來很準，上線就失準。"],
+ [5,"閾值調低，通常會？",["敏感度升、警示量增加","敏感度降、警示量減少","兩者都不變","PPV 一定升"],0,"閾值要對應人力與介入成本。"],
+ [6,"AI 把家屬說的話寫成「病人自述」，是哪一種錯誤？",["捏造","遺漏","歸屬錯誤","否定錯誤"],2,"五種錯誤都讀起來很通順。"],
+ [6,"RAG 的主要作用是？",["讓 AI 更有創意","依院內文件回答並附出處","加快打字","取代醫師"],1,"依據與出處是第 ② 道防線。"],
+ [6,"五道防線中最貴、也最容易鬆懈的是？",["提示限制","結構化輸出","自動檢核","人工審閱"],3,"AI 越準，人越容易沒看就簽（自動化偏誤）。"],
+ [7,"能用固定工作流完成的事，該不該改用 Agent？",["一定要","能用工作流就不用 Agent","看廠商","看預算"],1,"多代理人也要守最小權限。"],
+ [7,"FHIR、MCP、A2A 分別負責？",["資料、工具連接、Agent 對話","工具、資料、介面","介面、資料、工具","都是資料標準"],0,"W7 互通標準。"],
+ [7,"「先再造再自動化」的意思是？",["先買系統","先改流程，再讓 AI 接手","先裁員","先寫程式"],1,"台灣出院銜接長照從 51 天縮到 4 天，靠的是流程再造。"],
+ [7,"Agent 上線前一定要寫好的是？",["行銷計畫","停止、重試上限、人工接手與操作紀錄","介面配色","版本號"],1,"失敗處理。"],
+ [8,"CDS 五個對是？",["資訊、人、格式、管道、時機","成本、效益、風險、證據、法規","速度、規模、精準、彈性、價格","病人、家屬、醫師、護理、藥師"],0,"警示只是 CDS 的六種形式之一。"],
+ [8,"盛行率很低時，即使特異度很高，PPV 會？",["很高","可能很低","等於敏感度","不變"],1,"看閾值下的警示量與 NNE。"],
+ [8,"資料集偏移的三個常見來源是？",["技術、族群場域、行為改變","價格、品牌、版本","介面、顏色、字型","醫師、護理、藥師"],0,"上線前本地驗證，上線後持續監測。"],
+ [8,"防止自動化偏誤的介面設計是？",["隱藏依據","顯示依據、可推翻、留理由","自動執行","只給分數"],1,"人機協作。"],
+ [8,"預警系統「偵測 → 過濾 → 通知 → 應變 → 回饋」少了應變，會？",["更準","警示發出但沒人處理，整個系統失效","省錢","不影響"],1,"缺一環就失效。"],
+ [8,"NEWS2 與 AI 預警相比的優點是？",["一定更準","透明簡單","不需要資料","不需要驗證"],1,"AI 預警較準但更依賴資料與驗證。"]
+];
+let qbSet=[];function qbDraw(){const idx=QB.map((_,i)=>i).sort(()=>Math.random()-0.5).slice(0,12).sort((a,b)=>QB[a][0]-QB[b][0]);qbSet=idx;const box=$("#qb");box.innerHTML="";let ok=0,dn=0;const wrong=[];
+ idx.forEach(i=>{const [w,q,o,a,e]=QB[i];const row=h("div",{class:"q"});row.appendChild(h("div",{class:"qt"},`<span class="tag gray" style="margin-right:6px">W${w}</span>${q}`));const bx=h("div",{style:"display:flex;gap:6px;flex-wrap:wrap"});const fb=h("div",{class:"fb"});let d=false;
+  o.forEach((t,k)=>{const b=h("button",{class:"btn"},t);b.onclick=()=>{if(d)return;d=true;dn++;const g=k===a;if(g)ok++;else wrong.push(w);b.style.background=g?"#E1EEE6":"#F6E3DA";if(!g)bx.children[a].style.background="#E1EEE6";fb.className="fb show "+(g?"ok":"no");fb.innerHTML=(g?"<b>正確。</b>":"<b>再想想。</b>")+e;$("#qbscore").textContent=`${ok} / ${idx.length}`+(dn===idx.length?"　✓":"");
+   if(dn===idx.length){const ws=[...new Set(wrong)].sort((x,y)=>x-y);const hist=LS.get("qbh",[]);hist.push(ok);LS.set("qbh",hist.slice(-10));$("#qbtxt").innerHTML=ws.length?`答錯的題目來自：${ws.map(x=>`<a href="${WURL(x)}" style="color:var(--ochre);font-weight:700">W${x}</a>`).join("、")}——回去看那幾週的互動頁。<br>近幾輪成績：${hist.slice(-10).join("、")}（每輪 12 題）`:`全對。近幾輪成績：${hist.slice(-10).join("、")}`}};bx.appendChild(b)});
+  row.appendChild(bx);row.appendChild(fb);box.appendChild(row)});$("#qbscore").textContent=`0 / ${idx.length}`;$("#qbtxt").textContent=`題庫共 ${QB.length} 題，每輪隨機抽 12 題。`}
+$("#qbnew").onclick=qbDraw;qbDraw();
+
+/* 10 formula card + checklist */
+const FM=[["敏感度","TP ÷（TP＋FN）：真的有事的人，抓到多少","W5"],["特異度","TN ÷（TN＋FP）：沒事的人，正確放過多少","W5"],["PPV","TP ÷（TP＋FP）：被標記的人，真的有事的比例","W5、W8"],["NPV","TN ÷（TN＋FN）","W5"],["NNE","1 ÷ PPV＝警示數 ÷ TP：每抓到 1 位要看幾則","W8"],["每日警示量","警示總數 ÷ 天數；再除以處理人數","W5、W8"],["盛行率與 PPV","PPV ＝ Se×p ÷〔Se×p＋（1−Sp）×（1−p）〕","W5、W8"],["校準","平均預測風險 vs 實際發生率；差距大要重新校準","W5"],["AUROC","鑑別力：0.5＝亂猜，1＝完美；不等於校準","W5"],["互通四層級","基礎（能傳）→ 結構（格式對）→ 語意（意義對）→ 組織（治理對）","W3"],["資料品質","符合性、完整性、合理性","W3"],["五道防線","提示限制、依據與出處、結構化輸出、自動檢核、人工審閱","W6"],["決策權限矩陣","影響 × 可否撤回 → 自動／通知／核准／禁止","W7"],["CDS 五個對","資訊、人、格式、管道、時機","W8"]];
+$("#fm").innerHTML=`<tr><th style="width:150px">名稱</th><th>算式或要點</th><th style="width:90px">出處</th></tr>`+FM.map(f=>`<tr><td class="f">${f[0]}</td><td>${f[1]}</td><td>${f[2]}</td></tr>`).join("");
+$("#prt").onclick=()=>{document.body.classList.add("pfm");setTimeout(()=>{window.print();setTimeout(()=>document.body.classList.remove("pfm"),500)},50)};
+const CK=[["pp","紙本講義與筆記（W1–W8）"],["calc","計算機"],["fm","這張公式卡"],["sum","複習過各週講義的回顧頁"],["cm","練過一次 2×2 表：敏感度、PPV、NNE（第 04 段）"],["rule","知道不可使用生成式 AI 與網路"],["four","作答用四步：框架 → 證據 → 判斷 → 建議"]];
+const ckS=LS.get("ck",{});function ck(){LS.set("ck",ckS);const n=CK.filter(([k])=>ckS[k]).length;$("#cktxt").innerHTML=n===CK.length?"<span style='color:var(--green);font-weight:700'>全部準備好了。</span>":`已完成 ${n} / ${CK.length}。`}togs("#ck",CK,ckS,ck);ck();
+$("#allcopy").onclick=()=>{const v=id=>$("#"+id).value.trim()||"（未填）";copyText(["W09 期中複習：我的練習紀錄",`【自評】${Object.keys(WT).map(w=>`W${w} ${sc[w]??50}`).join("｜")}`,"【四步作答練習】",`① ${v("a4-1")}`,`② ${v("a4-2")}`,`③ ${v("a4-3")}`,`④ ${v("a4-4")}`,`【題庫近幾輪】${LS.get("qbh",[]).join("、")||"—"}`].join("\n"),"#allmsg")};
+
+})();
+</script>
+</body>
+</html>
