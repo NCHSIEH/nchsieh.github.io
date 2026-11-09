@@ -127,4 +127,44 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     ④ 第 05 節：醫療 AI 進臨床（2026-11-09 新增）
+        美國 FDA AI‑Enabled Medical Device List（2026/9 更新，決定日至 2026/6/29）
+        台灣衛福部三大 AI 中心（2024/10 成立）
+     ==================================================================== */
+  (function clinic() {
+    const box = $('#w-clinic'); if (!box) return;
+    let view = 'us', stage = 0; const out = h('div');
+    const YR = [['1995–2014 年均', 1.8], ['2023 年', 226], ['2024 年', 235], ['2025 年', 335], ['2026 上半年', 181]];
+    const TW = [
+      ['取證', '臨床 AI 取證驗證中心', '4 家醫學中心', '這個模型在台灣病人身上準不準、安不安全？',
+        '衛福部的比喻：食藥署是 AI 的「監理站」，這裡是「驗車中心」。用具台灣人群代表性的跨院資料替廠商做外部驗證；聯邦學習讓模型到各院受測，原始資料不必搬出醫院。首批實測包括眼底影像判讀糖尿病視網膜病變、心電圖預測一年內猝死、斷層影像辨識腸穿孔。',
+        'W5 外部驗證：不同來源的資料才算數'],
+      ['落地', '負責任 AI 執行中心', '10 家醫院', '醫師為什麼要相信它？出問題誰負責？',
+        '處理自主、當責、透明、公平、安全、永續、隱私七類倫理風險；院內訂 AI 臨床使用管理辦法，揭露訓練資料來源、臨床準確度與可解釋性，並以美國 HTI‑1 的透明性指標（外部驗證、公平性評估、上線後持續監測）為原則。',
+        'M9：子群體檢核、可解釋性、模型卡'],
+      ['給付', 'AI 影響性研究中心', '5 家醫院', '用了它，病人真的比較好嗎？值得健保付錢嗎？',
+        '對已取證的 AI 醫材設計有對照組的臨床試驗，比較「用」與「不用」的實際效益，結果提供衛福部與健保署作為是否納入健保給付、如何定價的依據。',
+        'M0：相關 ≠ 因果；要有對照才看得出效益']];
+    function draw() {
+      out.innerHTML = '';
+      out.append(h('div', { class: 'row' }, seg([['us', '美國：FDA 授權了多少'], ['tw', '台灣：取證 → 落地 → 給付']], () => view, v => view = v, draw)));
+      if (view === 'us') {
+        out.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('累計授權（1995–2026/6）', '1,614 項'), kpi('放射科占比', '76%'), kpi('經 510(k) 等同性審查', '96%', 'bad'), kpi('LLM 生成式 AI 醫材', '0 項')));
+        const bars = h('div'); out.append(sub('每年授權數（項）'), bars);
+        U.hbars(bars, YR.map(([l, v], i) => ({ label: l, value: v, color: i === 4 ? C.amber || '#b7791f' : i === 0 ? '#9aa3ad' : C.accent })), { w: 820, lw: 120, rowH: 30 });
+        const r = (226 + 235 + 335) / 3;
+        out.append(note(`1995–2014 年平均每年不到 2 項，2023–2025 年平均每年 ${r.toFixed(0)} 項，是原來的 ${Math.round(r / 1.8)} 倍；2026 上半年已有 181 項，全年可望再創新高。但 96% 是用「與既有器材實質等同」的 510(k) 途徑上市，不需要前瞻性臨床試驗——核准多，不代表證明了對病人有效。至 2026/9 仍沒有任何以 LLM 生成內容為核心功能的醫材獲准，FDA 表示將開始標註含基礎模型的器材。`));
+      } else {
+        const row = h('div', { class: 'grid3', style: { marginTop: '10px' } });
+        TW.forEach(([k, name, n, q], i) => { const on = i === stage; const c = h('div', { style: { border: '1.5px solid ' + (on ? 'var(--accent)' : 'var(--line)'), background: on ? 'var(--accent-soft)' : '#fff', borderRadius: '10px', padding: '10px 12px', cursor: 'pointer' } }, h('div', { class: 'mono', style: { fontWeight: 700, color: 'var(--accent-ink)' } }, `第 ${i + 1} 關・${k}`), h('b', null, name), h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, n), h('div', { style: { fontSize: '13.5px', marginTop: '6px' } }, '「' + q + '」')); c.onclick = () => { stage = i; draw(); }; row.append(c); });
+        const [k, name, , , d, m] = TW[stage];
+        out.append(row, h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: 'var(--paper)' } }, h('b', null, name + '在做什麼'), h('div', { style: { fontSize: '14px', margin: '4px 0 6px' } }, d), h('span', { class: 'tag' }, '本課對應：' + m)));
+        out.append(note('三關回答的是三個不同的問題：準不準（取證）、信不信得過（落地）、有沒有幫助（給付）。一個 AI 可以過了第一關卻卡在第三關——這正是美國 FDA 數字「核准多、證據少」的另一面。2024/10 成立，30 家醫院提案、16 家醫院 19 案入選。'));
+      }
+      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 新聞稿、iThome 報導。講義 M0 第 40–41 頁。'));
+    }
+    box.append(out); draw();
+  })();
 })();
+
