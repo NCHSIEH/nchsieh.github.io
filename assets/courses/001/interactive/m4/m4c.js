@@ -194,4 +194,33 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 06 節：表格資料選模型（Grinsztajn 2022；TabPFN, Nature 2025；TabPFN-2.5, 2025/11）（2026-11-09 新增）
+     ==================================================================== */
+  (function tabsel() {
+    const box = $('#w-tabsel'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));
+    let lg = 3, feat = 20, explain = 'some', gpu = 'no'; const res = h('div');
+    const nOf = v => Math.round(Math.pow(10, v));
+    function draw() {
+      res.innerHTML = '';
+      const n = nOf(lg), rows = [];
+      rows.push(['Logistic 迴歸（正則化）', 'good', '永遠要做的基準：可解釋、係數可報告勝算比；若它已經夠好，就不必更複雜（M2-2）']);
+      rows.push(['GBDT（XGBoost／LightGBM／AI Studio 的 GBT）', 'good', n >= 1000 ? '約 1 萬筆上下的表格資料，樹模型在 45 個資料集的大規模比較中仍勝過深度學習；成熟、快、AI Studio 內建' : '樣本少時容易過擬合，要調小學習率、限制深度並用交叉驗證；仍是必比的強基準']);
+      const pfnOK = n <= 50000 && feat <= 2000, pfnV2 = n <= 10000 && feat <= 500;
+      rows.push(['TabPFN（表格基礎模型）', pfnOK ? (gpu === 'yes' ? 'good' : 'amber') : 'bad',
+        !pfnOK ? `超出設計範圍（TabPFN‑2.5 為 5 萬筆、2,000 欄以內）——這個規模先用 GBDT` :
+        (pfnV2 ? '正是它的主場：1 萬筆、500 欄以內，論文中 2.8 秒勝過調參 4 小時的基準集成' : '在 TabPFN‑2.5 的範圍內（5 萬筆、2,000 欄），原廠報告與調參 4 小時的 AutoGluon 相當') +
+        (gpu === 'yes' ? '；有 GPU 可在本機跑，資料不必上雲' : '；沒有 GPU 時本機會很慢，雲端 API 又要評估資料能不能出院——醫療資料這點常是關卡')]);
+      rows.push(['深度學習 MLP', n >= 100000 ? 'amber' : 'bad', n >= 100000 ? '資料量很大時才有機會追上；仍要和 GBDT 在同一切分下比較（M5）' : '在這個規模的表格資料上很少贏過樹模型，不建議當主力']);
+      if (explain === 'must') rows.forEach(r => { if (/TabPFN|MLP|GBDT/.test(r[0])) r[2] += '。需要逐筆解釋時，要額外配 SHAP 並給臨床人員看得懂的說明（M9）'; });
+      const col = { good: 'var(--good-soft)', amber: 'var(--amber-soft)', bad: 'var(--bad-soft)' }, tag = { good: '建議比較', amber: '可試，注意條件', bad: '不建議' };
+      res.append(h('div', { style: { display: 'grid', gap: '6px', marginTop: '10px' } }, ...rows.map(([m, c, why]) => h('div', { style: { background: col[c], borderRadius: '8px', padding: '8px 12px' } }, h('b', null, m), h('span', { class: 'tag gray', style: { marginLeft: '8px' } }, tag[c]), h('div', { style: { fontSize: '13.5px', marginTop: '2px' } }, why)))));
+      res.append(note(`你的條件：${fmt(n, 0)} 筆 × ${feat} 欄。不管選哪個模型，評估規則都一樣——同一切分、同一指標、先贏過 Logistic 這個最簡單的基準；新方法是「多一個值得比較的對手」，不是跳過比較的理由。${explain === 'must' ? '你勾了「每筆都要能解釋」：Logistic 的係數最直接，其餘模型要靠 SHAP 等事後解釋。' : ''}`));
+    }
+    box.append(h('div', { class: 'row' }, U.slider('樣本數', 2, 5.3, 0.1, () => lg, v => lg = v, draw, v => fmt(nOf(+v), 0) + ' 筆'), U.slider('欄位數', 5, 3000, 5, () => feat, v => feat = v, draw, v => v + ' 欄')),
+      h('div', { class: 'row', style: { marginTop: '6px' } }, lab('逐筆解釋'), seg([['some', '整體說得清楚就好'], ['must', '每筆都要能解釋']], () => explain, v => explain = v, draw), lab('GPU'), seg([['no', '沒有'], ['yes', '有']], () => gpu, v => gpu = v, draw)), res); draw();
+  })();
 })();
