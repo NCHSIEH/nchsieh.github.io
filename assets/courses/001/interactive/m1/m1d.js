@@ -264,4 +264,55 @@
     }
     box.append(out); draw();
   })();
+  /* ====================================================================
+     第 02 節：民國年日期（2026-11-09 新增，對應講義 M1 第 12 頁）
+     ==================================================================== */
+  (function roc() {
+    const box = $('#w-roc'); if (!box) return;
+    const lab = t => h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, t);
+    const note = msg => h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg);
+    let val = '1150301', mode = 'text'; const out = h('div');
+    const SAMPLES = ['1150301', '990215', '1131225', '1000101', '1141007', '980630'];
+    function parseROC(raw) {
+      const s = String(raw).trim(); let m;
+      if ((m = s.match(/^(\d{2,3})[\/\-.](\d{1,2})[\/\-.](\d{1,2})$/)) || (m = s.match(/^(\d{2,3})年(\d{1,2})月(\d{1,2})日?$/))) return { y: +m[1] + 1911, mo: +m[2], d: +m[3], how: '分隔符號切開：年 ' + m[1] + ' ＋ 1911' };
+      if (/^\d{7}$/.test(s)) return { y: +s.slice(0, 3) + 1911, mo: +s.slice(3, 5), d: +s.slice(5, 7), how: '7 碼：前 3 碼 ' + s.slice(0, 3) + ' ＋ 1911' };
+      if (/^\d{6}$/.test(s)) return { y: +s.slice(0, 2) + 1911, mo: +s.slice(2, 4), d: +s.slice(4, 6), how: '6 碼：前 2 碼 ' + s.slice(0, 2) + ' ＋ 1911' };
+      if (/^\d{5}$/.test(s)) return { y: +s.slice(0, 3) + 1911, mo: +s.slice(3, 5), d: null, how: '5 碼年月：前 3 碼 ' + s.slice(0, 3) + ' ＋ 1911' };
+      if (/^\d{4}$/.test(s)) return { y: +s.slice(0, 2) + 1911, mo: +s.slice(2, 4), d: null, how: '4 碼年月：前 2 碼 ' + s.slice(0, 2) + ' ＋ 1911' };
+      return null;
+    }
+    const ok = r => r && r.mo >= 1 && r.mo <= 12 && (r.d === null || (r.d >= 1 && r.d <= new Date(r.y, r.mo, 0).getDate()));
+    const iso = r => r.y + '-' + String(r.mo).padStart(2, '0') + (r.d === null ? '' : '-' + String(r.d).padStart(2, '0'));
+    function naive(s) {
+      s = String(s).trim();
+      if (/^\d+$/.test(s)) return ['integer', fmt(+s, 0), '一個很大的整數，不是日期；拿來相減會得到沒有意義的數字'];
+      if (/^\d{2,3}[\/\-.]\d{1,2}[\/\-.]\d{1,2}$/.test(s)) { const p = s.split(/[\/\-.]/); return ['date（誤判）', String(+p[0]).padStart(4, '0') + '-' + p[1].padStart(2, '0') + '-' + p[2].padStart(2, '0'), '被當成西元 ' + (+p[0]) + ' 年——算年齡會多出一千九百多歲'] }
+      return ['polynominal', s, '純文字，不能排序、不能算天數'];
+    }
+    function draw() {
+      out.innerHTML = '';
+      const inp = h('input', { type: 'text', value: val, style: { width: '220px', fontFamily: 'var(--mono)' } });
+      inp.oninput = () => { val = inp.value; res(); };
+      const r1 = h('div'); out.append(h('div', { class: 'row' }, lab('民國年日期'), inp), r1);
+      function res() {
+        r1.innerHTML = ''; const nv = naive(val), r = parseROC(val), good = ok(r);
+        r1.append(h('div', { class: 'grid2', style: { marginTop: '10px' } },
+          h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff' } }, h('div', { class: 'mono', style: { color: 'var(--bad)', fontWeight: 700 } }, '✗ 直接讀進來'), h('div', null, '型態：', h('b', null, nv[0])), h('div', { class: 'mono', style: { fontSize: '18px', margin: '4px 0' } }, nv[1]), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, nv[2])),
+          h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff' } }, h('div', { class: 'mono', style: { color: 'var(--good)', fontWeight: 700 } }, '✓ 正確轉換'), good ? [h('div', null, '型態：', h('b', null, 'date')), h('div', { class: 'mono', style: { fontSize: '18px', margin: '4px 0' } }, iso(r)), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, r.how + (r.d === null ? '；只有年月，日要另外決定（通常補 01 或只做月層級分析）' : ''))] : h('div', { style: { fontSize: '13.5px', color: 'var(--bad)', marginTop: '6px' } }, '無法轉成合理日期——這筆要標記出來人工檢查，不能硬轉'))));
+      }
+      res();
+      const list = h('div', { style: { marginTop: '14px' } });
+      out.append(h('div', { class: 'row', style: { marginTop: '14px' } }, lab('六筆就診日排序方式'), seg([['text', '當文字排序'], ['date', '轉成日期再排序']], () => mode, v => mode = v, draw)), list);
+      const rows = SAMPLES.map(s => ({ s, r: parseROC(s) }));
+      rows.sort((a, b) => mode === 'text' ? (a.s < b.s ? -1 : 1) : (iso(a.r) < iso(b.r) ? -1 : 1));
+      const inv = rows.some((x, i) => i && iso(x.r) < iso(rows[i - 1].r));
+      list.append(h('div', { style: { display: 'flex', gap: '6px', flexWrap: 'wrap' } }, ...rows.map((x, i) => h('div', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '6px 10px', background: (i && iso(x.r) < iso(rows[i - 1].r)) ? 'var(--bad-soft)' : '#fff', fontFamily: 'var(--mono)', fontSize: '13px' } }, (i + 1) + '. ' + x.s, h('div', { style: { color: 'var(--muted)' } }, iso(x.r))))));
+      const firstOld = rows.findIndex(x => x.r.y < 2011);
+      out.append(note(mode === 'text'
+        ? `當文字排序時，比的是第一個字元：「1」排在「9」前面，所以 7 碼的民國 100 年以後（${rows.filter(x => x.s.length === 7).length} 筆）全排在 6 碼的民國 9x 年（${rows.filter(x => x.s.length === 6).length} 筆）前面——紅底那筆開始，時間順序就倒了。依「最近一次就診」或「前一次就診」做特徵時，會整個抓錯。`
+        : `轉成日期後才是真正的時間順序：最早 ${iso(rows[0].r)}、最晚 ${iso(rows[rows.length - 1].r)}。在 AI Studio 是 Generate Attributes 算出西元年月日字串，再用 Nominal to Date（格式 yyyyMMdd）轉型；轉完一定接 Statistics 看最早、最晚日期合不合理。`));
+    }
+    box.append(out); draw();
+  })();
 })();

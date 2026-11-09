@@ -79,9 +79,11 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
     <div class="ph"><span class="num">02</span><div><h2>資料存取與匯入</h2><div class="en">ACCESSING DATA · 最常見的三個坑</div></div></div>
     <p class="one">一半以上的下游問題，是在讀檔這一步種下的。匯入後立刻接 Statistics，看「筆數、欄位數、每欄型態、極值」四件事。</p>
     <div class="grid2">
-      <div class="wd"><div class="wh"><h3>坑 1｜編碼：Big5 與 UTF-8</h3></div><p class="hint">選檔案實際的編碼與讀取時設定的編碼。台灣政府開放資料常為 Big5。</p><div id="w-enc"></div></div>
+      <div class="wd"><div class="wh"><h3>坑 1｜編碼：Big5 與 UTF-8</h3></div><p class="hint">選檔案實際的編碼與讀取時設定的編碼。台灣政府開放資料 UTF-8 與 Big5 並存（規範優先 UTF-8）。</p><div id="w-enc"></div></div>
       <div class="wd"><div class="wh"><h3>坑 2｜型態誤判</h3></div><p class="hint">切換「有沒有在 meta data 逐欄確認型態」，看 Statistics 變成什麼樣。</p><div id="w-type"></div></div>
     </div>
+    <div class="wd"><div class="wh"><h3>坑 2 延伸｜民國年日期</h3><span class="tag blue">台灣資料特有</span></div>
+      <p class="hint">輸入一個民國年日期（例：1150301、990215、115/03/01、115年3月1日、11503），看「直接讀」和「正確轉換」差在哪；再按下方切換文字排序與日期排序。</p><div id="w-roc"></div></div>
     <div class="wd"><div class="wh"><h3>實例｜FHIR JSON 攤平成一列</h3><span class="tag blue">醫院資料越來越常是 JSON</span></div>
       <p class="hint">按「攤平」把巢狀 JSON 變成長表一列；再試試丟掉單位與 LOINC 代碼會發生什麼。</p><div id="w-fhir"></div></div>
     <div id="q02"></div>
