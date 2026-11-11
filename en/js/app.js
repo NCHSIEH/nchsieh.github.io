@@ -387,10 +387,24 @@
     document.querySelectorAll(".view-tab").forEach((t) => {
       t.classList.toggle("active", t.dataset.view === viewName);
     });
-    document.getElementById("trainerView").style.display = viewName === "trainer" ? "block" : "none";
-    document.getElementById("catalogView")?.classList.toggle("active", viewName === "catalog");
-    document.getElementById("sourcesView")?.classList.toggle("active", viewName === "sources");
-    document.getElementById("studioView")?.classList.toggle("active", viewName === "studio");
+    const trainerEl = document.getElementById("trainerView");
+    const catalogEl = document.getElementById("catalogView");
+    const sourcesEl = document.getElementById("sourcesView");
+    const studioEl = document.getElementById("studioView");
+
+    if (trainerEl) trainerEl.style.display = viewName === "trainer" ? "block" : "none";
+    if (catalogEl) {
+      catalogEl.classList.toggle("active", viewName === "catalog");
+      catalogEl.style.display = viewName === "catalog" ? "flex" : "none";
+    }
+    if (sourcesEl) {
+      sourcesEl.classList.toggle("active", viewName === "sources");
+      sourcesEl.style.display = viewName === "sources" ? "flex" : "none";
+    }
+    if (studioEl) {
+      studioEl.classList.toggle("active", viewName === "studio");
+      studioEl.style.display = viewName === "studio" ? "flex" : "none";
+    }
     if (viewName === "catalog") {
       renderCatalogWall();
     }
