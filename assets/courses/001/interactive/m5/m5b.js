@@ -64,7 +64,7 @@
     $('#w-params').append(ctl, out); draw();
   })();
   (function () {
-    const Z = [['SimpleCNN', .1, .9, '★ 教學、基準線、小型任務'], ['SqueezeNet', 1.2, 5, '★ 邊緣裝置、行動端部署'], ['Xception', 22.9, 88, '效率與準確度兼顧'], ['ResNet50', 25.6, 98, '★ 醫學影像遷移學習的預設起點'], ['VGG16', 138, 528, '通用特徵抽取；但太肥'], ['VGG19', 144, 549, '表徵略強，過擬合風險也升高']];
+    const Z = [['SimpleCNN', .55, 2.2, '★ 教學、基準線、小型任務'], ['SqueezeNet', 1.2, 5, '★ 邊緣裝置、行動端部署'], ['Xception', 22.9, 88, '效率與準確度兼顧'], ['ResNet50', 25.6, 98, '★ 醫學影像遷移學習的預設起點'], ['VGG16', 138, 528, '通用特徵抽取；但太肥'], ['VGG19', 144, 549, '表徵略強，過擬合風險也升高']];
     const b = h('div'), sv = U.svgBox(b, 640, 230), x = U.scale(Math.log10(.5), Math.log10(800), 110, 620);
     [1, 10, 100, 600].forEach(t => { U.s('line', { x1: x(Math.log10(t)), x2: x(Math.log10(t)), y1: 8, y2: 200, class: 'grid' }, sv); U.s('text', { x: x(Math.log10(t)), y: 218, 'text-anchor': 'middle', text: t + ' MB' }, sv); });
     Z.forEach(([n, p, mb], i) => { const y = 22 + i * 31; U.s('text', { x: 104, y: y + 4, 'text-anchor': 'end', text: n, style: 'font-weight:600' }, sv); U.s('rect', { x: 110, y: y - 9, width: x(Math.log10(mb)) - 110, height: 18, fill: n === 'ResNet50' ? C.accent : n === 'SqueezeNet' ? C.blue : n === 'SimpleCNN' ? C.amber : '#b0b7be', rx: 3 }, sv); U.s('text', { x: x(Math.log10(mb)) + 5, y: y + 4, text: `${mb < 1 ? '< 1' : mb} MB · ${p}M 參數`, style: 'font-size:11px' }, sv); });

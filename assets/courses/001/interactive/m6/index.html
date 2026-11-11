@@ -22,6 +22,16 @@
     <h1>NLP 與文字探勘：讓電腦讀懂文字</h1>
     <p class="lead">護理與健康領域最有價值的資料多半是文字：病歷、交班紀錄、問卷開放題、衛教諮詢。這一頁裡的斷詞器、TF-IDF、否定偵測、主題模型、去識別化都是真的在你的瀏覽器裡跑——可以輸入自己的句子試試看。</p>
     <div class="chips"><span class="tag">手算例：四篇病歷 TF-IDF、Naive Bayes 垃圾信、Cohen's Kappa</span><span class="tag amber">隨堂 Lab：W12 上課前繳交（不另計分）</span><span class="tag gray">所有文本皆為虛構</span></div>
+      <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>說明 NLP 三個時代的取捨，並對照文字探勘七步流程與 M1 的差別　<a href="#p01">第 01 節</a>、<a href="#p02">第 02 節</a></li>
+        <li>用 jieba 斷詞，找出被切碎的醫護術語，並建立自訂詞典　<a href="#p03">第 03 節</a></li>
+        <li>解釋 DTM 與 TF-IDF，並做前處理對分類效果的對照實驗　<a href="#p04">第 04 節</a>、<a href="#p05">第 05 節</a></li>
+        <li>手算 Naive Bayes，並用 NMF 找主題、說明主題數怎麼選　<a href="#p09">第 09 節</a>、<a href="#p11">第 11 節</a></li>
+        <li>辨認醫療文本的四種特殊挑戰，並說明去識別化為什麼要先做　<a href="#p13">第 13 節</a>、<a href="#p17">第 17 節</a></li>
+      </ol>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M1 的資料清理與特徵工程、M2-2 的分類評估（Recall、F1）。</span>
+    </div>
   </header>
 
   <section class="part" id="p01" data-t="NLP 的三個時代">
@@ -34,7 +44,7 @@
       <div><b>★ 實務：三者並用</b>規則式當安全網、模型抓委婉表達、人工覆核當最後一層</div>
     </div>
     <div class="wd"><div class="wh"><h3>規則式的極限：用關鍵字找「跌倒相關」通報</h3><span class="tag amber">核心互動</span></div><p class="hint">勾選關鍵字，看八筆虛構通報哪些被抓到、哪些漏掉、哪些誤報。</p><div id="w-rule"></div></div>
-    <div class="wd"><div class="wh"><h3>真實數字：台灣病安通報每季近 2 萬件</h3><span class="tag blue">TPR 2024 年第 3 季</span></div><p class="hint">TPR 2024 年第 3 季收案 19,500 件。調整「每件讀幾分鐘」與「要人工複核的比例」，算算一季要花多少人力——這就是文字探勘要解決的問題。對應講義 M6 第 4 頁。</p><div id="w-tpr"></div></div>
+    <div class="wd"><div class="wh"><h3>真實數字：台灣病安通報每季近 2 萬件</h3><span class="tag blue">TPR 2024 年第 3 季</span></div><p class="hint">TPR 2024 年第 3 季收案 19,500 件。調整「每件讀幾分鐘」與「要人工複核的比例」，算算一季要花多少人力——這就是文字探勘要解決的問題。對應講義 M6 第 5 頁。</p><div id="w-tpr"></div></div>
   </section>
 
   <section class="part" id="p02" data-t="七步流程與前處理">

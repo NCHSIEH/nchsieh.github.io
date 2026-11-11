@@ -140,24 +140,24 @@
     <div class="wd"><div class="wh"><h3>MNIST CNN：每一層的尺寸與參數量</h3><span class="tag amber">核心互動</span></div><div id="w-flow"></div></div>
   </section>
 
-  <section class="part" id="p15" data-t="經典架構與參數">
-    <div class="ph"><span class="num">15</span><div><h2>經典 CNN 架構與設計理由</h2><div class="en">SIMPLECNN · VGG · SQUEEZENET · XCEPTION</div></div></div>
+  <section class="part" id="p15" data-t="遷移學習">
+    <div class="ph"><span class="num">15</span><div><h2>遷移學習：不要從零開始訓練</h2><div class="en">FEATURE EXTRACTION · PARTIAL / FULL FINE-TUNING</div></div></div>
+    <p class="one">淺層學到的邊緣偵測器在自然影像與醫學影像上是通用的。資料量越少、與預訓練領域越相近 → 凍結越多層。醫學影像資料通常很少，多半停在特徵抽取或部分微調。</p>
+    <div class="wd"><div class="wh"><h3>該凍結幾層？</h3><span class="tag amber">核心互動</span></div><div id="w-tl"></div></div>
+  </section>
+
+  <section class="part" id="p16" data-t="經典架構與參數">
+    <div class="ph"><span class="num">16</span><div><h2>經典 CNN 架構與設計理由</h2><div class="en">SIMPLECNN · VGG · SQUEEZENET · XCEPTION</div></div></div>
     <p class="one">每個架構都在解決前一代留下的問題。VGG：堆疊 3×3 取代大卷積核；SqueezeNet／Xception：把參數變少，塞得進裝置。</p>
     <div class="wd"><div class="wh"><h3>四種設計的參數量計算</h3><span class="tag amber">核心互動</span></div><div id="w-params"></div></div>
     <div class="wd"><div class="wh"><h3>六個架構：大小 vs 用途</h3></div><div id="w-zoo"></div></div>
   </section>
 
-  <section class="part" id="p16" data-t="ResNet 與演進">
-    <div class="ph"><span class="num">16</span><div><h2>ResNet：殘差連接解決了什麼</h2><div class="en">RESIDUAL CONNECTION · x + F(x)</div></div></div>
+  <section class="part" id="p17" data-t="ResNet 與演進">
+    <div class="ph"><span class="num">17</span><div><h2>ResNet：殘差連接解決了什麼</h2><div class="en">RESIDUAL CONNECTION · x + F(x)</div></div></div>
     <p class="one">網路太深時梯度傳不回前層，56 層反而比 20 層差（退化，不是過擬合）。殘差捷徑讓梯度可以直達前層，從此網路可做到上百層。</p>
     <div class="wd"><div class="wh"><h3>梯度傳回第一層還剩多少</h3><span class="tag amber">核心互動</span></div><div id="w-res"></div></div>
     <div class="wd"><div class="wh"><h3>架構設計思想的演進</h3></div><div id="w-evo"></div></div>
-  </section>
-
-  <section class="part" id="p17" data-t="遷移學習">
-    <div class="ph"><span class="num">17</span><div><h2>遷移學習：不要從零開始訓練</h2><div class="en">FEATURE EXTRACTION · PARTIAL / FULL FINE-TUNING</div></div></div>
-    <p class="one">淺層學到的邊緣偵測器在自然影像與醫學影像上是通用的。資料量越少、與預訓練領域越相近 → 凍結越多層。醫學影像資料通常很少，多半停在特徵抽取或部分微調。</p>
-    <div class="wd"><div class="wh"><h3>該凍結幾層？</h3><span class="tag amber">核心互動</span></div><div id="w-tl"></div></div>
   </section>
 
   <section class="part" id="p18" data-t="什麼時候不該用">
