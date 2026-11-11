@@ -1,0 +1,19 @@
+{
+  "name": "EarFlow 英語聽力破壁訓練",
+  "short_name": "EarFlow",
+  "description": "專為「能讀能講、但聽不懂母語快語速與連音」設計的 iPad / iPhone 微單元英語聽力訓練系統",
+  "start_url": "/en/",
+  "scope": "/en/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230f172a'/%3E%3Ccircle cx='90' cy='90' r='58' fill='none' stroke='%2338bdf8' stroke-width='10' stroke-dasharray='260 100' stroke-linecap='round'/%3E%3Cpath d='M72 65v50l44-25z' fill='%2338bdf8'/%3E%3C/svg%3E",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
