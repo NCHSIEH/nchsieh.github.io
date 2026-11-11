@@ -50,6 +50,7 @@
     renderCategories();
     renderUnitList();
     renderCurrentUnit();
+    renderCatalogWall();
     renderPrecuratedSources();
     updateStatsUI();
     initAudioABPlayer();
@@ -387,13 +388,30 @@
       t.classList.toggle("active", t.dataset.view === viewName);
     });
     document.getElementById("trainerView").style.display = viewName === "trainer" ? "block" : "none";
-    document.getElementById("sourcesView").classList.toggle("active", viewName === "sources");
-    document.getElementById("studioView").classList.toggle("active", viewName === "studio");
+    document.getElementById("catalogView")?.classList.toggle("active", viewName === "catalog");
+    document.getElementById("sourcesView")?.classList.toggle("active", viewName === "sources");
+    document.getElementById("studioView")?.classList.toggle("active", viewName === "studio");
+    if (viewName === "catalog") {
+      renderCatalogWall();
+    }
   }
 
   function getCurrentUnit() {
     return state.units.find((u) => u.id === state.currentUnitId) || state.units[0];
   }
+
+  const SHORT_CAT_LABELS = {
+    all: "📚 全部課程",
+    meeting: "💼 會議英語",
+    academic: "🎓 學術研討",
+    reduction: "⚡ 連音急救",
+    smalltalk: "☕ 社交閒聊",
+    travel: "✈️ 機場交通",
+    dining: "🍽️ 餐廳飯店",
+    medical: "🏥 醫療看診",
+    shopping: "🛒 購物客服",
+    custom: "⭐ 自選收藏"
+  };
 
   function renderCategories() {
     const container = document.getElementById("categoryScroll");
@@ -403,10 +421,15 @@
       const count = cat.id === "all"
         ? state.units.length
         : state.units.filter((u) => u.category === cat.id).length;
+      if (cat.id === "custom" && count === 0) return;
+
       const btn = document.createElement("button");
       btn.className = `cat-pill ${state.currentCategory === cat.id ? "active" : ""}`;
-      const baseName = cat.name.replace(/\s*\(\d+\)$/, "");
-      btn.textContent = `${baseName} (${count})`;
+      const shortName = SHORT_CAT_LABELS[cat.id] || cat.name.replace(/\s*\(\d+\)$/, "");
+      btn.innerHTML = `
+        <span class="cat-name-text">${escapeHtml(shortName)}</span>
+        <span class="cat-count-badge">${count}</span>
+      `;
       btn.onclick = () => {
         state.currentCategory = cat.id;
         renderCategories();
@@ -414,6 +437,104 @@
       };
       container.appendChild(btn);
     });
+  }
+
+  function renderCatalogWall() {
+    const grid = document.getElementById("catalogThemeGrid");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    const cats = (window.EARFLOW_CATEGORIES || []).filter((c) => c.id !== "all");
+    cats.forEach((cat) => {
+      const catUnits = state.units.filter((u) => u.category === cat.id);
+      if (!catUnits.length) return;
+
+      const themeCard = document.createElement("div");
+      themeCard.className = "catalog-theme-card";
+
+      const unitButtonsHtml = catUnits.map((u) => {
+        const isCurrent = u.id === state.currentUnitId;
+        const comp = state.stats.compScores[u.id];
+        const compBadge = comp ? ` · ✅ 已練 (${escapeHtml(comp)})` : "";
+        return `
+          <button class="catalog-unit-btn ${isCurrent ? "current" : ""}" data-unit-id="${escapeHtml(u.id)}">
+            <span class="u-title">${escapeHtml(u.title)}${compBadge}</span>
+            <span class="u-focus">${escapeHtml(u.focus)}</span>
+          </button>
+        `;
+      }).join("");
+
+      themeCard.innerHTML = `
+        <div class="catalog-theme-header">
+          <h4>${escapeHtml(cat.name)}</h4>
+          <span class="unit-duration">${catUnits.length} 單元</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:7px;">
+          ${unitButtonsHtml}
+        </div>
+      `;
+      grid.appendChild(themeCard);
+    });
+
+    grid.onclick = (e) => {
+      const btn = e.target.closest("[data-unit-id]");
+      if (!btn) return;
+      const uId = btn.dataset.unitId;
+      const targetUnit = state.units.find((u) => u.id === uId);
+      if (targetUnit) {
+        state.currentCategory = targetUnit.category;
+        renderCategories();
+      }
+      selectUnit(uId);
+      switchTopView("trainer");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  }
+
+  function renderQuickCourseSwitcher(currentUnit) {
+    const catSelect = document.getElementById("quickCategorySelect");
+    const unitSelect = document.getElementById("quickUnitSelect");
+    if (!catSelect || !unitSelect || !currentUnit) return;
+
+    const cats = (window.EARFLOW_CATEGORIES || []).filter((c) => {
+      if (c.id === "all") return true;
+      return state.units.some((u) => u.category === c.id);
+    });
+
+    const activeCatForDropdown = state.currentCategory === "all" ? currentUnit.category : state.currentCategory;
+
+    catSelect.innerHTML = cats.map((c) => {
+      const count = c.id === "all"
+        ? state.units.length
+        : state.units.filter((u) => u.category === c.id).length;
+      const baseName = c.name.replace(/\s*\(\d+\)$/, "");
+      return `<option value="${escapeHtml(c.id)}" ${c.id === activeCatForDropdown ? "selected" : ""}>${escapeHtml(baseName)} (${count})</option>`;
+    }).join("");
+
+    const unitsInScope = activeCatForDropdown === "all"
+      ? state.units
+      : state.units.filter((u) => u.category === activeCatForDropdown);
+
+    unitSelect.innerHTML = unitsInScope.map((u) => {
+      return `<option value="${escapeHtml(u.id)}" ${u.id === currentUnit.id ? "selected" : ""}>${escapeHtml(u.title)}</option>`;
+    }).join("");
+
+    catSelect.onchange = () => {
+      const pickedCat = catSelect.value;
+      state.currentCategory = pickedCat;
+      renderCategories();
+      renderUnitList();
+      const pool = pickedCat === "all" ? state.units : state.units.filter((u) => u.category === pickedCat);
+      if (pool.length > 0) {
+        selectUnit(pool[0].id);
+      }
+    };
+
+    unitSelect.onchange = () => {
+      if (unitSelect.value) {
+        selectUnit(unitSelect.value);
+      }
+    };
   }
 
   function renderUnitList() {
@@ -469,6 +590,8 @@
     document.getElementById("unitCategoryBadge").textContent = unit.categoryName;
     document.getElementById("unitTitle").textContent = unit.title;
     document.getElementById("unitFocus").textContent = `🎯 破壁焦點（${unit.duration}）：${unit.focus}`;
+
+    renderQuickCourseSwitcher(unit);
 
     document.querySelectorAll(".step-btn").forEach((btn) => {
       const stg = Number(btn.dataset.stage);
@@ -1021,12 +1144,19 @@
   }
 
   function bindGlobalEvents() {
-    // 3-Tab View Switching (Trainer / Pre-curated Sources / Studio)
+    // 3-Tab View Switching (Trainer / Catalog / Pre-curated Sources / Studio)
     document.querySelectorAll(".view-tab").forEach((tab) => {
       tab.onclick = () => {
         switchTopView(tab.dataset.view);
       };
     });
+
+    const openCatalogBtn = document.getElementById("openCatalogBtn");
+    if (openCatalogBtn) {
+      openCatalogBtn.onclick = () => {
+        switchTopView("catalog");
+      };
+    }
 
     document.querySelectorAll(".step-btn").forEach((btn) => {
       btn.onclick = () => {

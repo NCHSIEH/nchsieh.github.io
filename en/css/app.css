@@ -182,30 +182,48 @@ html, body {
   color: var(--text-muted);
 }
 
-/* Category Filter Pills */
+/* Category Filter Grid in Sidebar (Never clips buttons!) */
 .category-scroll {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
-  overflow-x: auto;
-  padding: 12px 16px 8px;
-  scrollbar-width: none;
+  padding: 8px 14px 10px;
   flex-shrink: 0;
-}
-.category-scroll::-webkit-scrollbar {
-  display: none;
+  border-bottom: 1px solid var(--border);
 }
 
 .cat-pill {
-  white-space: nowrap;
-  padding: 7px 13px;
-  border-radius: 999px;
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--bg-main);
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.cat-pill .cat-name-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cat-pill .cat-count-badge {
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .cat-pill.active {
@@ -213,7 +231,15 @@ html, body {
   color: #0f172a;
   border-color: var(--accent);
 }
+.cat-pill.active .cat-count-badge {
+  background: rgba(15, 23, 42, 0.2);
+  color: inherit;
+}
 body.theme-light .cat-pill.active {
+  color: #fff;
+}
+body.theme-light .cat-pill.active .cat-count-badge {
+  background: rgba(255, 255, 255, 0.25);
   color: #fff;
 }
 
@@ -977,6 +1003,108 @@ body.theme-light .primary-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+/* Quick Course Switcher Bar inside Unit Banner */
+.quick-switcher-bar {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 210px 1fr auto;
+  gap: 8px;
+  padding-bottom: 12px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed var(--border);
+  align-items: center;
+}
+
+.quick-select {
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-main);
+  color: var(--text-main);
+  padding: 0 10px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  width: 100%;
+}
+
+/* Visual Course Catalog Wall (選課總覽) */
+.catalog-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 16px;
+}
+
+.catalog-theme-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.catalog-theme-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.catalog-theme-header h4 {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.catalog-unit-btn {
+  width: 100%;
+  text-align: left;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 10px 12px;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.catalog-unit-btn:hover, .catalog-unit-btn:active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.catalog-unit-btn.current {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 0 var(--accent);
+  background: var(--accent-soft);
+}
+
+.catalog-unit-btn .u-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.catalog-unit-btn .u-focus {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 720px) {
+  .quick-switcher-bar {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Pre-curated Authentic Sources Catalog Grid */

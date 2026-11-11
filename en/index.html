@@ -48,8 +48,8 @@
         </div>
       </div>
 
-      <div style="padding: 10px 14px 2px;">
-        <input id="unitSearchInput" class="studio-input" type="search" placeholder="🔍 搜尋 32+ 單元（如：會議、機場、看診、退貨...）" style="height:36px; font-size:0.8rem;">
+      <div style="padding: 10px 14px 4px;">
+        <input id="unitSearchInput" class="studio-input" type="search" placeholder="🔍 搜尋課程（如：會議、機場、退貨）" style="height:36px; font-size:0.8rem;">
       </div>
       <div id="categoryScroll" class="category-scroll"></div>
       <div id="unitList" class="unit-list"></div>
@@ -64,21 +64,25 @@
           <div class="view-tabs">
             <button class="view-tab active" data-view="trainer">
               <span>🎧</span>
-              <span>3分鐘單元</span>
+              <span>目前訓練</span>
+            </button>
+            <button class="view-tab" data-view="catalog">
+              <span>🗂️</span>
+              <span>選課總覽 (32)</span>
             </button>
             <button class="view-tab" data-view="sources">
               <span>📚</span>
-              <span>預選教材來源</span>
+              <span>預選語料 (12)</span>
             </button>
             <button class="view-tab" data-view="studio">
               <span>✂️</span>
-              <span>自動截取 / 自訂</span>
+              <span>自訂截取</span>
             </button>
           </div>
         </div>
 
         <div class="voice-controls-top">
-          <select id="voiceSelect" class="studio-input" style="height:38px; max-width:200px; font-size:0.8rem;" title="選擇 iPad/iPhone 語音引擎">
+          <select id="voiceSelect" class="studio-input" style="height:38px; max-width:190px; font-size:0.8rem;" title="選擇 iPad/iPhone 語音引擎">
             <option value="">系統最佳母語發音</option>
           </select>
         </div>
@@ -86,8 +90,15 @@
 
       <!-- VIEW 1: 3-Minute Unit Trainer -->
       <section id="trainerView">
-        <!-- Unit Info Banner -->
+        <!-- Unit Info Banner with Direct 2-Step Course Switcher -->
         <div class="unit-banner">
+          <div class="quick-switcher-bar">
+            <select id="quickCategorySelect" class="quick-select" title="選擇課程主題分類"></select>
+            <select id="quickUnitSelect" class="quick-select" title="直接切換單元"></select>
+            <button id="openCatalogBtn" class="secondary-btn" style="height:40px; padding:0 12px; font-size:0.8rem; white-space:nowrap;">
+              🗂️ 全部主題牆
+            </button>
+          </div>
           <div class="unit-banner-info">
             <span id="unitCategoryBadge" class="unit-focus-pill">💼 會議英語專區</span>
             <h2 id="unitTitle">Meeting 01</h2>
@@ -130,6 +141,15 @@
 
         <!-- Interactive Sentences Container -->
         <div id="sentencesContainer" class="sentences-container"></div>
+      </section>
+
+      <!-- VIEW 1.5: Visual Course Catalog Wall (8 大主題 · 32 單元直覺選課牆) -->
+      <section id="catalogView" class="studio-panel">
+        <div class="studio-card">
+          <h3>🗂️ 8 大實戰場景・32 堂 3 分鐘破壁課程總覽</h3>
+          <p>點擊任一單元即可直接開始訓練（左欄亦可透過兩欄式主題按鈕或頂部下拉選單快速切換）：</p>
+          <div id="catalogThemeGrid" class="catalog-theme-grid"></div>
+        </div>
       </section>
 
       <!-- VIEW 2: Pre-Curated Authentic Sources Library (預先找好的精選教材來源) -->
