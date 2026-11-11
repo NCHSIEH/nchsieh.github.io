@@ -212,4 +212,35 @@
     }
     box.append(h('div', { class: 'row' }, seg([['tl', 'TAIDE 怎麼換底模'], ['ev', 'AIEC 在地化評測']], () => view, v => view = v, draw)), res); draw();
   })();
+  /* ====================================================================
+     第 16 節：找出 AI 草稿裡的錯（2026-11-11 新增；虛構對話與草稿）
+     ==================================================================== */
+  (function scribe() {
+    const box = $('#w-scribe'); if (!box) return;
+    const TR = ['病人：右膝痛兩週了，上下樓梯更痛。', '病人：我對盤尼西林會起疹子。', '病人：我太太也有類似的膝痛。', '醫師：血壓 142/88，先不調藥，兩週後回診。', '醫師：止痛藥痛的時候才吃，少爬樓梯。'];
+    const DR = [['主訴：左膝疼痛兩週，上下樓梯加劇。', '左右弄錯：對話是「右膝」', true], ['血壓 142/88 mmHg，暫不調整藥物，兩週後回診。', '', false], ['過敏史：無。', '與對話矛盾，也是遺漏：病人說對盤尼西林會起疹子', true], ['家族史：病人的母親有類似膝痛。', '人物弄錯：對話是「我太太」', true], ['計畫：止痛藥必要時使用（PRN），建議減少爬樓梯。', '', false]];
+    const picked = new Set(); let checked = false;
+    const out = h('div');
+    function draw() {
+      out.innerHTML = '';
+      out.append(h('div', { class: 'grid2' },
+        h('div', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '10px 12px', background: '#fff' } }, h('b', null, '看診對話（虛構）'), ...TR.map(t => h('div', { style: { fontSize: '14px', margin: '4px 0' } }, t))),
+        h('div', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '10px 12px', background: '#fff' } }, h('b', null, 'AI 草稿——點你覺得有問題的句子'), ...DR.map(([t, why, bad], i) => {
+          const on = picked.has(i); let bg = on ? '#fff4d6' : '#f6f8fa', bd = on ? '#d9a400' : 'var(--line)';
+          if (checked) { if (bad && on) { bg = '#e3f4e6'; bd = '#2f9e44'; } else if (bad) { bg = '#fde8e8'; bd = '#c0392b'; } else if (on) { bg = '#fff0e0'; bd = '#e8590c'; } }
+          return h('div', { style: { margin: '6px 0' } },
+            h('button', { class: 'btn', style: { display: 'block', width: '100%', textAlign: 'left', background: bg, border: '1px solid ' + bd, padding: '6px 10px', borderRadius: '6px', cursor: checked ? 'default' : 'pointer', fontSize: '14px' }, onclick: () => { if (checked) return; on ? picked.delete(i) : picked.add(i); draw(); } }, t),
+            checked && (bad || on) ? h('div', { style: { fontSize: '13px', color: 'var(--muted)', margin: '2px 4px' } }, bad ? (on ? '找到了：' : '漏掉了：') + why : '這句其實是對的（誤報）') : null);
+        }))));
+      const bar = h('div', { class: 'row', style: { marginTop: '10px' } },
+        h('button', { class: 'btn', onclick: () => { checked = true; draw(); } }, '檢查答案'),
+        h('button', { class: 'btn sm', onclick: () => { picked.clear(); checked = false; draw(); } }, '重來'));
+      out.append(bar);
+      if (checked) {
+        const hit = DR.filter(([, , b], i) => b && picked.has(i)).length, miss = DR.filter(([, , b], i) => b && !picked.has(i)).length, fa = DR.filter(([, , b], i) => !b && picked.has(i)).length;
+        out.append(h('div', { class: 'note' + (miss ? ' warn' : ''), style: { marginTop: '10px' } }, h('b', null, '結果：'), `找到 ${hit} 個、漏掉 ${miss} 個、誤報 ${fa} 個。草稿看起來流暢、格式完整，錯誤卻藏在細節裡：左右、人物、遺漏。這就是為什麼試驗作者說需要醫師主動監督，而不是被動接受；你的專題只要有 AI 生成的內容給人看，流程裡就要有人工覆核這一步。`));
+      }
+    }
+    box.append(out); draw();
+  })();
 })();

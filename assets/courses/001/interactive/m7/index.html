@@ -22,6 +22,16 @@
     <h1>生成式 AI 基礎：從 Transformer 到 LLM</h1>
     <p class="lead">這一週不碰工具，只弄懂原理。搞清楚 LLM 到底在做什麼，下三週在 Dify 裡設定的每一個欄位——Top-K、Temperature、上下文長度、模型選擇——你才知道自己在設什麼。每個概念都做成可以動手調的小實驗：拉溫度看機率分布變形、算一次衛教機器人的月成本、看上下文怎麼被塞爆。</p>
     <div class="chips"><span class="tag">手算例：月成本估算、餘弦相似度</span><span class="tag amber">隨堂 Lab：W13 上課前繳交（不另計分）</span><span class="tag gray">模型機率與向量皆為示意</span></div>
+      <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>說明生成式與判別式的差別，並判斷一個醫療場景該用哪一類模型　<a href="#p02">第 02 節</a></li>
+        <li>估算 token 數與月成本，說明 token 與上下文上限的關係　<a href="#p04">第 04 節</a></li>
+        <li>說明 Attention 的作用與代價，區分三種架構，並說明 RAG 為什麼要用兩種模型　<a href="#p05">第 05 節</a>、<a href="#p06">第 06 節</a>、<a href="#p07">第 07 節</a></li>
+        <li>依成本與風險在提示詞、RAG、微調之間選擇，並用 Temperature 穩定用詞　<a href="#p08">第 08 節</a>、<a href="#p09">第 09 節</a>、<a href="#p10">第 10 節</a></li>
+        <li>用 10 題測試集評測雲端與本地模型，並辨認醫療場域的四條紅線　<a href="#p12">第 12 節</a>、<a href="#p16">第 16 節</a>、<a href="#p17">第 17 節</a></li>
+      </ol>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M6 的詞袋與 TF-IDF（對照 Embedding）、M0 的 AI 基本概念。</span>
+    </div>
   </header>
 
   <section class="part" id="p01" data-t="技術演進">
@@ -112,7 +122,7 @@
     <p class="one">這一節決定的不是效能，是資料會不會離開你的機構。★ 課程鐵則：真實病歷、個案紀錄、諮商記錄一律不得送進雲端 API。</p>
     <div class="wd"><div class="wh"><h3>我的電腦跑得動多大的模型？</h3><span class="tag amber">核心互動</span></div><div id="w-ram"></div></div>
     <div class="wd"><div class="wh"><h3>Ollama 十分鐘上手</h3><span class="tag">本模組唯一必做的環境建置</span></div><div id="w-ollama"></div></div>
-    <div class="wd"><div class="wh"><h3>台灣的繁中模型與在地評測：TAIDE × AIEC</h3><span class="tag blue">國科會・數位部 AIEC</span></div><p class="hint">切換兩個視角：TAIDE 怎麼一路換底模型，以及數位部 AIEC 的在地化評測結果。對應講義 M7 第 53 頁。</p><div id="w-taide"></div></div>
+    <div class="wd"><div class="wh"><h3>台灣的繁中模型與在地評測：TAIDE × AIEC</h3><span class="tag blue">國科會・數位部 AIEC</span></div><p class="hint">切換兩個視角：TAIDE 怎麼一路換底模型，以及數位部 AIEC 的在地化評測結果。對應講義 M7 第 55 頁。</p><div id="w-taide"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="Hugging Face 與 AI Studio">
@@ -137,6 +147,7 @@
     <div class="ph"><span class="num">16</span><div><h2>生成式 AI 在醫療場域的四條紅線</h2><div class="en">ETHICS · BRIDGE TO M8</div></div></div>
     <p class="one">不得提供診斷、不得提供處方與劑量、不得使用真實個案資料、輸出必須標示 AI 生成與免責。這四條在期末專題屬於「不符即扣分」項目。</p>
     <div class="wd"><div class="wh"><h3>你的衛教機器人該怎麼回應？</h3><span class="tag amber">練習</span></div><div id="w-red"></div></div>
+        <div class="wd"><div class="wh"><h3>找出 AI 草稿裡的錯</h3><span class="tag amber">練習</span></div><p class="hint">依據：UCLA 的環境語音病歷隨機試驗（NEJM AI 2025；講義 M7 第 49 頁）。醫師回報草稿偶爾有臨床上有意義的錯誤，多為遺漏與人物、左右弄錯。以下對話與草稿為虛構。</p><div id="w-scribe"></div></div>
     <div class="wd"><div class="wh"><h3>M7 的概念在 M8 變成什麼</h3></div><div id="w-bridge"></div></div>
   </section>
 
