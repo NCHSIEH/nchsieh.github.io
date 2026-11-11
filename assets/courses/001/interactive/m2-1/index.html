@@ -22,6 +22,16 @@
     <h1>迴歸：預測連續數值</h1>
     <p class="lead">從一條直線開始，到你知道什麼時候該懷疑這條直線。每一節都有可以動手的工具：親手算最小平方法、拉多項式次數看過擬合、調 λ 看係數被韁繩拉住。</p>
     <div class="chips"><span class="tag">手算例：五位病人的年齡與住院天數</span><span class="tag amber">AI Studio：University Admission · Car Sales · Car Purchasing</span><span class="tag gray">圖表為教學用模擬資料</span></div>
+    <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>讀懂迴歸輸出（R²、係數、p 值），並說明 R² 為什麼要跟基準線比　<a href="#p04">第 04 節</a></li>
+        <li>用殘差圖判斷模型形式對不對，先看殘差圖再看 R²　<a href="#p05">第 05 節</a></li>
+        <li>解釋多元迴歸係數是「其他不變下的淨效果」，並看出共線性讓它不可信　<a href="#p06">第 06 節</a></li>
+        <li>用訓練／驗證／測試與交叉驗證判斷分數可不可信，辨認過擬合　<a href="#p09">第 09 節</a></li>
+        <li>在 AI Studio 做五輪漸進改良，每輪和常數基準比較，MAE 與 RMSE 併報　<a href="#p13">第 13 節</a></li>
+      </ol>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M1 的遺失值與離群值處理、縮放與資料洩漏。</span>
+    </div>
   </header>
 
   <section class="part" id="p01" data-t="迴歸 101">
@@ -104,7 +114,7 @@
     <p class="one">違反假設不會報錯，模型照樣給數字——只是 p 值、信賴區間、預測區間都不能信了。醫療資料最常違反等變異與共線性。</p>
     <div class="wd"><div class="wh"><h3>五個假設：檢查、後果、處理</h3></div><div id="w-assume"></div></div>
     <div class="wd"><div class="wh"><h3>右偏資料取對數，與係數的百分比解讀</h3><span class="tag amber">互動</span></div><div id="w-log"></div></div>
-    <div class="wd"><div class="wh"><h3>真實公式：eGFR 是對數線性迴歸</h3><span class="tag blue">CKD‑EPI 2021（NEJM）</span></div><p class="hint">調年齡、肌酸酐與性別。每一項都是「乘數」，取 ln 之後就是線性迴歸的一項；看哪一項把 eGFR 拉下來最多。對應講義 M2-1 第 39 頁。</p><div id="w-egfr"></div></div>
+    <div class="wd"><div class="wh"><h3>真實公式：eGFR 是對數線性迴歸</h3><span class="tag blue">CKD‑EPI 2021（NEJM）</span></div><p class="hint">調年齡、肌酸酐與性別。每一項都是「乘數」，取 ln 之後就是線性迴歸的一項；看哪一項把 eGFR 拉下來最多。對應講義 M2-1 第 40 頁。</p><div id="w-egfr"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="過擬合與偏誤-變異">

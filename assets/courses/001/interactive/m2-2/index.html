@@ -22,6 +22,16 @@
     <h1>分類：從 k-NN 到集成方法</h1>
     <p class="lead">本課程份量最重的單元：五種演算法、完整評估體系、不平衡處理、集成方法。每一節都用同一個情境——出院準備服務的風險分層——並讓你親手調門檻、k 值、樹的深度與森林的大小。</p>
     <div class="chips"><span class="tag">貫穿案例：30 天非計畫性再入院（盛行率約 6%）</span><span class="tag amber">AI Studio：Loan Risk 六步 · HR Churn · 自動模型選擇</span><span class="tag gray">圖表為教學用模擬資料</span></div>
+    <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>把「預測再入院」寫成清楚的目標定義：時間窗、事件、分母、預測時點　<a href="#p02">第 02 節</a></li>
+        <li>手算混淆矩陣六指標，並說明盛行率改變時 PPV、NPV 為什麼要重算　<a href="#p07">第 07 節</a></li>
+        <li>用 ROC／PR、期望成本與校準選門檻，說明 0.5 只是軟體預設　<a href="#p08">第 08 節</a></li>
+        <li>處理類別不平衡：取樣只在訓練集做，並用分層 CV 回報平均 ± 標準差　<a href="#p09">第 09 節</a>、<a href="#p10">第 10 節</a></li>
+        <li>比較 Logistic、樹、森林與提升，並用勝算比與印出的樹向臨床人員解釋　<a href="#p13">第 13 節</a></li>
+      </ol>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M2-1 的迴歸建模流程與評估、M1 的資料洩漏。</span>
+    </div>
   </header>
 
   <section class="part" id="p01" data-t="分類 101 與案例">
@@ -92,7 +102,7 @@
     <div class="wd"><div class="wh"><h3>用期望成本選門檻</h3><span class="tag amber">互動</span></div><p class="hint">代價比＝漏掉一個再入院等於幾次無效追蹤。這是臨床與管理的判斷，不是資料科學家自己決定的。</p><div id="w-cost"></div></div>
     <div class="wd"><div class="wh"><h3>追蹤名額有限：前幾 % 能抓到幾成再入院？</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">實務上常見的問法不是「門檻設多少」，而是「我們只追得動多少人」。拉動名額，看抓到的比例與效率。</p><div id="w-cap"></div></div>
     <div class="wd"><div class="wh"><h3>機率校準：說 70% 就真的是 70% 嗎</h3></div><div id="w-calib"></div></div>
-    <div class="wd"><div class="wh"><h3>真實案例：Epic 敗血症模型的外部驗證</h3><span class="tag blue">JAMA IM 2021・38,455 次住院</span></div><p class="hint">用論文報告的敏感度 33%、特異度 83%，重建 38,455 次住院的混淆矩陣；再拉動盛行率，看同一個模型換到別家醫院時 PPV 和警示量怎麼變。對應講義 M2-2 第 64 頁。</p><div id="w-epic"></div></div>
+    <div class="wd"><div class="wh"><h3>真實案例：Epic 敗血症模型的外部驗證</h3><span class="tag blue">JAMA IM 2021・38,455 次住院</span></div><p class="hint">用論文報告的敏感度 33%、特異度 83%，重建 38,455 次住院的混淆矩陣；再拉動盛行率，看同一個模型換到別家醫院時 PPV 和警示量怎麼變。對應講義 M2-2 第 65 頁。</p><div id="w-epic"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="類別不平衡">
