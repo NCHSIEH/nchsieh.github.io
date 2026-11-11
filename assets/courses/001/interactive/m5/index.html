@@ -22,6 +22,16 @@
     <h1>深度學習：從神經網路到 CNN</h1>
     <p class="lead">兩週弄清楚三件事：神經網路到底在算什麼、Layers 怎麼設計、以及最重要的——什麼時候「不該」用深度學習。頁面裡的神經網路都是真的在你的瀏覽器裡訓練：加隱藏神經元看邊界變彎、調學習率看它發散、把網路加大看它開始背答案。</p>
     <div class="chips"><span class="tag">手算例：三特徵前向傳播、5×5 卷積</span><span class="tag amber">作業二：深度學習分類器設計（15%，W12 繳交）</span><span class="tag gray">圖表為教學用模擬資料</span></div>
+    <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>手算前向傳播，說明激活函數與梯度下降各在做什麼　<a href="#p03">第 03 節</a>、<a href="#p04">第 04 節</a>、<a href="#p05">第 05 節</a></li>
+        <li>依任務設定輸出層；從 Loss 曲線判斷過擬合並依順序處理　<a href="#p06">第 06 節</a>、<a href="#p10">第 10 節</a>、<a href="#p11">第 11 節</a></li>
+        <li>手算卷積並算輸出尺寸，說明 CNN 為什麼比全連接省參數　<a href="#p13">第 13 節</a>、<a href="#p14">第 14 節</a></li>
+        <li>說明遷移學習與 Fine-tune，並依參數量與用途比較經典架構　<a href="#p15">第 15 節</a>、<a href="#p16">第 16 節</a>、<a href="#p17">第 17 節</a></li>
+        <li>判斷何時不該用深度學習：表格小資料先建基準，影像要外部驗證　<a href="#p18">第 18 節</a>、<a href="#p19">第 19 節</a></li>
+      </ol>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M2-2 的 Logistic 迴歸與交叉驗證、M4 的梯度提升樹基準線。</span>
+    </div>
   </header>
 
   <section class="part" id="p01" data-t="誰決定特徵">
@@ -162,7 +172,7 @@
     <p class="one">最值得警惕的失敗：模型準確率很高，學到的卻是「錯的東西」。某肺炎模型原院 AUC 0.93、外院明顯下降——它學的是攜帶式 X 光機的標記（Zech et al., 2018）。</p>
     <div class="wd"><div class="wh"><h3>捷徑學習模擬：院內 vs 外院</h3><span class="tag amber">核心互動</span></div><div id="w-short"></div></div>
     <div class="wd"><div class="wh"><h3>這種資料增強可以嗎？</h3><span class="tag amber">練習</span></div><div id="w-aug"></div></div>
-    <div class="wd"><div class="wh"><h3>真實案例：糖尿病視網膜病變 AI，從論文到診間</h3><span class="tag blue">JAMA 2016・FDA 2018・CHI 2020</span></div><p class="hint">選一個階段的敏感度與特異度，再設定盛行率與「照片品質不足」的比例，看 1,000 位糖尿病人篩檢後各有多少人被抓到、漏掉、誤報、或因照片不能判讀而要另外安排。對應講義 M5 第 63 頁。</p><div id="w-dr"></div></div>
+    <div class="wd"><div class="wh"><h3>真實案例：糖尿病視網膜病變 AI，從論文到診間</h3><span class="tag blue">JAMA 2016・FDA 2018・CHI 2020</span></div><p class="hint">選一個階段的敏感度與特異度，再設定盛行率與「照片品質不足」的比例，看 1,000 位糖尿病人篩檢後各有多少人被抓到、漏掉、誤報、或因照片不能判讀而要另外安排。對應講義 M5 第 64 頁。</p><div id="w-dr"></div></div>
   </section>
 
   <section class="part" id="p20" data-t="自動化與模型的一生">
