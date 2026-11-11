@@ -167,4 +167,37 @@
     }
     box.append(h('div', { class: 'row' }, seg([['um', '密西根大學世代'], ['mc', '多中心世代']], () => co, v => co = v, draw), U.slider('每群病人數', 100, 5000, 100, () => n, v => n = v, draw, v => fmt(+v, 0) + ' 位')), res); draw();
   })();
+
+  /* 第 17 節：衛福部生成式 AI 指引情境判斷（2026-11 新增，虛構情境，教學用判斷） */
+  (function moh() {
+    const box = $('#w-moh'); if (!box) return;
+    const RISK = ['基礎模型', '資料來源', '輸出結果（幻覺）', '資安攻擊', '使用者依賴', '服務中斷'];
+    const DISC = ['主動告知對方是 AI，並提醒可能出錯', '錄音錄影前先告知，拒絕即停止', '要求供應商揭露模型名稱、版本與更新通知機制', '指引尚未涵蓋：自己把人工確認節點寫進流程'];
+    const SC = [
+      { n: '院內衛教 Chatbot', t: '醫院網站上的 AI 衛教助理，直接回答民眾的用藥與飲食問題。', r: [2, 4], d: 0, why: 'AI 直接與民眾對話，指引要求主動揭露是 AI、提醒可能出錯；最直接的風險是答錯（幻覺），以及民眾把它當成醫師的意見。' },
+      { n: '診間錄音寫病歷', t: '門診時錄音，AI 自動整理成病歷草稿，醫師確認後存檔。', r: [2, 3, 4], d: 1, why: '錄音錄影必須先告知、拒絕即停止；草稿可能漏寫或寫錯（M7 的隨機試驗也看到），錄音資料外送要顧資安，醫師最終確認並負責。' },
+      { n: '換了底層模型', t: '護理站使用的 AI 摘要工具，供應商通知舊型號下個月停用，改用新型號。', r: [0, 5], d: 2, why: '模型會下架，換了就是新系統：指引允許要求供應商揭露模型名稱與版本、更新通知機制；服務中斷與模型更換是這個情境最直接的風險。重測請見 M8。' },
+      { n: '會自己排程的 Agent', t: '一個 AI Agent 能自己查床位、呼叫排程工具，並把出院準備任務寫進清單。', r: [2, 3, 4], d: 3, why: '具自主決策特性的 Agent 系統尚未納入指引範圍，不代表沒有風險：要自己把人工確認節點寫進流程（M8 的 HITL）。' }
+    ];
+    let k = 0; const R = new Set(); let D = -1;
+    const sw = h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '8px 0' } }), body = h('div'), res = h('div');
+    function draw() {
+      sw.innerHTML = '';
+      SC.forEach((s, i) => sw.append(h('button', { class: 'btn' + (i === k ? ' primary' : ''), onclick: () => { k = i; R.clear(); D = -1; draw(); } }, s.n)));
+      body.innerHTML = '';
+      body.append(h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', background: '#fff' } }, SC[k].t));
+      body.append(h('div', { style: { margin: '10px 0 4px', fontWeight: 700 } }, '① 最直接碰到哪幾類風險？（可複選）'));
+      const rl = h('div'); RISK.forEach((t, i) => rl.append(check(t, () => R.has(i), v => { v ? R.add(i) : R.delete(i); }, draw))); body.append(rl);
+      body.append(h('div', { style: { margin: '10px 0 4px', fontWeight: 700 } }, '② 最該做哪一項揭露或把關？'));
+      body.append(seg(DISC.map((t, i) => [i, t]), () => D, v => D = v, draw));
+      res.innerHTML = '';
+      if (!R.size && D < 0) return;
+      const key = SC[k].r, hit = key.filter(i => R.has(i)).length, extra = [...R].filter(i => !key.includes(i)).length;
+      const ok = D === SC[k].d;
+      res.append(h('div', { class: 'note' + (ok && hit === key.length ? ' good' : ''), style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'),
+        `風險：建議至少看 ${key.map(i => RISK[i]).join('、')}（你勾中 ${hit} / ${key.length}` + (extra ? `，另外多勾 ${extra} 項，不一定錯，要能說出理由` : '') + '）。' + (D < 0 ? '' : ok ? ' 揭露／把關選得對。' : `　揭露／把關：這個情境建議的是「${DISC[SC[k].d]}」。`) + ' ' + SC[k].why));
+    }
+    box.append(sw, body, res); draw();
+  })();
+
 })();

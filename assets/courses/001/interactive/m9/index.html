@@ -22,6 +22,15 @@
     <h1>醫療 AI 的倫理、偏誤與可解釋性</h1>
     <p class="lead">前八個模組教你「做得出來」。這一個模組問三個不同的問題：這樣做對嗎？對誰不公平？出事了誰負責？這一頁把標籤偏誤、代理變數、公平性的不可能定理、子群體稽核、SHAP 與自動化偏誤都做成可以自己調、自己看數字的模擬，最後附發表前檢核清單與模型卡產生器。</p>
     <div class="chips"><span class="tag">W10 講前半（偏誤與公平性）・W16 講後半（責任與檢核）</span><span class="tag amber">四條紅線屬「不符即扣分」</span><span class="tag gray">模擬資料皆為虛構；法規為 2026 年 9 月概況，非法律意見</span></div>
+      <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>說出偏誤進入系統的六個環節，並說明刪掉敏感欄位為什麼不夠　<a href="#p05">第 05 節</a>、<a href="#p06">第 06 節</a>、<a href="#p07">第 07 節</a></li>
+        <li>依場景選一種公平性定義，並說明三種定義為何不能同時滿足　<a href="#p08">第 08 節</a></li>
+        <li>做子群體稽核，用 SHAP、Grad-CAM 檢查模型，並誠實說明限制　<a href="#p09">第 09 節</a>、<a href="#p12">第 12 節</a>、<a href="#p13">第 13 節</a>、<a href="#p14">第 14 節</a></li>
+        <li>判斷 AI 介入層級與自動化偏誤，並寫出模型卡　<a href="#p15">第 15 節</a>、<a href="#p16">第 16 節</a>、<a href="#p18">第 18 節</a></li>
+        <li>對照四類法規與衛福部指引，用發表前檢核清單逐項確認　<a href="#p17">第 17 節</a>、<a href="#p19">第 19 節</a></li>
+      </ol>
+      <div style="font-size:13px;color:var(--muted)">需要先會：M5 的捷徑學習與 CNN 概念、M2-2 的混淆矩陣與召回率／精確率。</div></div>
   </header>
 
   <section class="part" id="p01" data-t="定位與三種失敗">
@@ -64,7 +73,7 @@
     <p class="one">多數人只想到選擇偏誤，但標籤偏誤往往最隱蔽也最嚴重——標籤是「你以為的正確答案」，如果它本身就有偏，模型只會忠實地把偏誤學起來並放大。</p>
     <div class="wd"><div class="wh"><h3>這是哪一種偏誤？</h3><span class="tag amber">練習</span></div><div id="w-btype"></div></div>
     <div class="wd"><div class="wh"><h3>具體檢查動作</h3></div><div id="w-bcheck"></div></div>
-  <div class="wd"><div class="wh"><h3>真實案例：脈搏血氧計的膚色偏誤</h3><span class="tag blue">NEJM 2020・約 4.8 萬組配對</span></div><p class="hint">血氧計顯示 92–96%（看起來正常）時，實際動脈血氧低於 88% 的比例。切換兩個世代，再設定每群各有多少病人落在這個讀數範圍，看各漏掉幾位隱性低血氧的人。對應講義 M9 第 14 頁。</p><div id="w-spo2"></div></div>
+  <div class="wd"><div class="wh"><h3>真實案例：脈搏血氧計的膚色偏誤</h3><span class="tag blue">NEJM 2020・約 4.8 萬組配對</span></div><p class="hint">血氧計顯示 92–96%（看起來正常）時，實際動脈血氧低於 88% 的比例。切換兩個世代，再設定每群各有多少病人落在這個讀數範圍，看各漏掉幾位隱性低血氧的人。對應講義 M9 第 15 頁。</p><div id="w-spo2"></div></div>
   </section>
 
   <section class="part" id="p07" data-t="代理變數">
@@ -136,6 +145,7 @@
     <p class="one">六個問題的處方全部都在 M7、M8 教過了——這不是新的技術挑戰，是「你有沒有把學過的護欄真的裝上去」。全部用公開或虛構資料，就能避開絕大多數法規問題，同時仍能完整練習方法。</p>
     <div class="wd"><div class="wh"><h3>問題 → 處方</h3><span class="tag amber">練習</span></div><div id="w-genai"></div></div>
     <div class="wd"><div class="wh"><h3>四類法規要求</h3><span class="tag amber">互動</span></div><div id="w-law"></div></div>
+    <div class="wd"><div class="wh"><h3>衛福部生成式 AI 指引：這個情境碰到哪幾類風險？</h3><span class="tag amber">情境判斷</span><span class="tag gray">虛構情境</span></div><p class="hint">選一個情境，勾出你認為最直接碰到的風險類別，再選一項最該做的揭露或把關。指引屬參考性質，這裡是教學用判斷，沒有唯一答案。對應講義 M9 第 43 頁。</p><div id="w-moh"></div></div>
     <div class="wd"><div class="wh"><h3>迷思還是事實？</h3><span class="tag amber">練習</span></div><div id="w-myth"></div></div>
   </section>
 
