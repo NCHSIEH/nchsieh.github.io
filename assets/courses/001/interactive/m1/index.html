@@ -60,6 +60,16 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
     <h1>資料工程：從原始資料到可建模</h1>
     <p class="lead">模型選錯還可以換，資料處理錯了，後面全部都是錯的。每一節都有一個可以動手的工具，並標出「這一步做錯會怎樣」。</p>
     <div class="chips"><span class="tag">貫穿資料：門診整合模擬資料 765 筆 · 300 位病人</span><span class="tag amber">AI Studio Module 1–10</span><span class="tag gray">教學用模擬資料，非真實病人資料</span></div>
+    <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>做 Join 前後比對筆數，並說明一對多為什麼會讓筆數暴增而不報錯　<a href="#p05">第 05 節</a></li>
+        <li>判斷遺失值是 MCAR、MAR 還是 MNAR，並選出處理方式　<a href="#p06">第 06 節</a></li>
+        <li>面對極端值，在保留、標記、修正、移除之間做決定並說出理由　<a href="#p07">第 07 節</a></li>
+        <li>說出哪些演算法需要縮放，且縮放參數只從訓練集計算　<a href="#p10">第 10 節</a></li>
+        <li>逐欄判斷預測當下拿不到的欄位，避開五種資料洩漏　<a href="#p12">第 12 節</a></li>
+      </ol>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M0 的專案流程（先補值再切分）與 AI Studio 基本操作。</span>
+    </div>
   </header>
 
   <!-- ============ P01 ============ -->
@@ -85,7 +95,7 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
     <div class="wd"><div class="wh"><h3>坑 2 延伸｜民國年日期</h3><span class="tag blue">台灣資料特有</span></div>
       <p class="hint">輸入一個民國年日期（例：1150301、990215、115/03/01、115年3月1日、11503），看「直接讀」和「正確轉換」差在哪；再按下方切換文字排序與日期排序。</p><div id="w-roc"></div></div>
     <div class="wd"><div class="wh"><h3>實例｜FHIR JSON 攤平成一列</h3><span class="tag blue">醫院資料越來越常是 JSON</span></div>
-      <p class="hint">按「攤平」把巢狀 JSON 變成長表一列；再試試丟掉單位與 LOINC 代碼會發生什麼。</p><div id="w-fhir"></div></div>
+      <p class="hint">按「攤平」把巢狀 JSON 變成長表一列；再試試丟掉單位與 LOINC 代碼會發生什麼。（2026/6 衛福部已完成 5,050 筆臺灣版 LOINC 對照表，跨院對齊檢驗項目靠的就是這種代碼。）</p><div id="w-fhir"></div></div>
     <div id="q02"></div>
   </section>
 

@@ -162,7 +162,7 @@
         out.append(row, h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: 'var(--paper)' } }, h('b', null, name + '在做什麼'), h('div', { style: { fontSize: '14px', margin: '4px 0 6px' } }, d), h('span', { class: 'tag' }, '本課對應：' + m)));
         out.append(note('三關回答的是三個不同的問題：準不準（取證）、信不信得過（落地）、有沒有幫助（給付）。一個 AI 可以過了第一關卻卡在第三關——這正是美國 FDA 數字「核准多、證據少」的另一面。2024/10 成立，30 家醫院提案、16 家醫院 19 案入選。'));
       }
-      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 新聞稿、iThome 報導。講義 M0 第 40–41 頁。'));
+      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 新聞稿、iThome 報導。講義 M0 第 41–42 頁。'));
     }
     box.append(out); draw();
   })();
