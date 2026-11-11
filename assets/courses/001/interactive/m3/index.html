@@ -22,6 +22,16 @@
     <h1>非監督式學習：分群與降維</h1>
     <p class="lead">沒有標準答案的學習。問的不是「會怎樣」，而是「這裡面有什麼結構」。每一節都可以親手跑演算法：一步步看 K-Means 收斂、切樹狀圖、調 DBSCAN 的半徑、轉動 PCA 的座標軸。</p>
     <div class="chips"><span class="tag">手算例：六位病人 K=2、五點樹狀圖</span><span class="tag amber">作業一：Mall Customer 顧客分群（15%）</span><span class="tag gray">圖表為教學用模擬資料</span></div>
+    <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>說明為什麼分群前一定要縮放，並用自己的實驗數字佐證　<a href="#p02">第 02 節</a></li>
+        <li>手算 K-Means，並用手肘、Silhouette、業務三個判準決定 K　<a href="#p03">第 03 節</a>、<a href="#p04">第 04 節</a></li>
+        <li>依資料形狀選 K-Means、階層式或 DBSCAN，並調 eps 與 min_samples　<a href="#p05">第 05 節</a>、<a href="#p06">第 06 節</a>、<a href="#p07">第 07 節</a></li>
+        <li>為每一群命名並對應不同行動；兩群行動相同就該合併　<a href="#p08">第 08 節</a></li>
+        <li>用 Isolation Forest 找離群個案；用 PCA 降維並說明它的限制　<a href="#p09">第 09 節</a>、<a href="#p10">第 10 節</a></li>
+      </ol>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M1 的縮放、M0 的資料科學專案完整流程。</span>
+    </div>
   </header>
 
   <section class="part" id="p01" data-t="非監督式學習 101">
