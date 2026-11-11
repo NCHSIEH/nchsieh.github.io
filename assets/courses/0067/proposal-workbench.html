@@ -267,6 +267,7 @@ body::before{background:var(--panel)}
 <button id="menu" type="button" aria-expanded="false" aria-controls="side-nav">步驟</button>
 <div class="brand">研究計畫書工作台<small>研究方法論 · 6.0</small></div>
 <div id="who"></div>
+<a id="hublink" class="oneclick" href="research-workbench.html" title="回研究計畫整合台：看整體路線與三個工作台的進度" style="text-decoration:none;border:1px solid #b3c3d3;background:transparent;color:#e8eef4">🧭 整合台</a>
 <div class="prog" id="prog"><i></i><span id="progt"></span></div>
 <button type="button" id="oneclick" class="oneclick">一鍵匯入範例</button>
 <label class="vh" for="sy">我卡在哪裡</label><select id="sy"></select>
@@ -301,11 +302,43 @@ body::before{background:var(--panel)}
     clearTimeout(saveT);
     saveT = setTimeout(function () {
       S.meta.updated = new Date().toLocaleString('zh-TW', { hour12: false });
+      markSample();
       try { localStorage.setItem(LS, JSON.stringify(S)); saveOK = true; } catch (e) { saveOK = false; }
+      writeSum();
       var st = document.getElementById('saved');
       if (st) st.textContent = saveOK ? '已存在這台電腦的瀏覽器 · ' + S.meta.updated : '無法存到瀏覽器，請用「匯出備份」保存';
       paintNav();
     }, 300);
+  }
+
+  // ---------- 整合台銜接：範例標記與進度摘要 ----------
+  var SAMPLE_KEYS = ['f', 'objs', 'vars', 'bias', 'risks', 'kpi', 'gantt'];
+  function sampleOf(pid) {
+    if (!PRESETS || !PRESETS[pid]) return false;
+    var p = PRESETS[pid][1]();
+    return SAMPLE_KEYS.every(function (k) { return JSON.stringify(S[k]) === JSON.stringify(p[k]); });
+  }
+  function markSample() {
+    try {
+      if (S.meta.preset === undefined) S.meta.preset = Object.keys(PRESETS).filter(sampleOf)[0] || '';
+      S.meta.sample = (S.meta.preset && sampleOf(S.meta.preset)) ? S.meta.preset : '';
+    } catch (e) {}
+  }
+  function sameAsSample() {
+    if (!S.meta.preset || !PRESETS[S.meta.preset]) return [0, 0];
+    var p = PRESETS[S.meta.preset][1](), ks = Object.keys(p.f).filter(function (k) { return String(p.f[k] || '').trim(); });
+    return [ks.filter(function (k) { return S.f[k] === p.f[k]; }).length, ks.length];
+  }
+  function writeSum() {
+    try {
+      var same = sameAsSample();
+      var steps = STEPS.map(function (st) { var d = stepDone(st); return { id: st.id, code: st.code, name: st.name, pct: d ? 100 : Math.min(95, Math.round(stepPart(st) * 100)) }; });
+      localStorage.setItem('rw.sum.proposal', JSON.stringify({
+        tool: 'proposal', title: v('m10_title'), rq: v('m3_rq'), fmt: S.meta.fmt, fmtName: FMT[S.meta.fmt], type: S.meta.type, typeName: S.meta.type ? typeName(S.meta.type) : '', type2: S.meta.type2 || '',
+        steps: steps, done: steps.filter(function (x) { return x.pct === 100; }).length, pct: Math.round(steps.reduce(function (a, x) { return a + x.pct; }, 0) / steps.length),
+        sameN: same[0], sameTotal: same[1], sample: S.meta.sample || '', sampleLabel: (S.meta.sample && PRESETS[S.meta.sample]) ? PRESETS[S.meta.sample][0] : '', updated: new Date().toISOString()
+      }));
+    } catch (e) {}
   }
 
   // ---------- 小工具 ----------
@@ -820,7 +853,7 @@ body::before{background:var(--panel)}
     var pick = null;
     $$('.preset').forEach(function (b) { b.addEventListener('click', function () { pick = b.dataset.p; $$('.preset').forEach(function (x) { x.classList.toggle('on', x === b); }); $('#loadq-t').textContent = '確定以「' + PRESETS[pick][0] + '」取代目前的草稿？'; $('#loadq-c').hidden = false; }); });
     $('#loadq-n').addEventListener('click', function () { $('#loadq-c').hidden = true; pick = null; $$('.preset').forEach(function (x) { x.classList.remove('on'); }); });
-    $('#loadq-y').addEventListener('click', function () { if (!pick) return; S = PRESETS[pick][1](); save(); go('s1'); });
+    $('#loadq-y').addEventListener('click', function () { if (!pick) return; S = PRESETS[pick][1](); S.meta.preset = pick; save(); go('s1'); });
   }
 
   // ---------- 檢核與匯出 ----------
@@ -1300,6 +1333,15 @@ body::before{background:var(--panel)}
       go(target); sy.value = '';
     });
     $('#oneclick').addEventListener('click', function () { go('setup'); var d = $('#demo'); if (d) { d.scrollIntoView({ block: 'center' }); flash(d); } });
+    // 支援網址參數 ?fmt=f1&type=C&type2=E&step=m5（整合台直達）；套用後清掉參數
+    try {
+      var sp = new URLSearchParams(window.location.search), q, hit = false;
+      if ((q = sp.get('fmt')) && FMT[q]) { S.meta.fmt = q; hit = true; }
+      if ((q = sp.get('type')) && TYP[q]) { S.meta.type = q; hit = true; }
+      if (sp.has('type2')) { q = sp.get('type2'); S.meta.type2 = TYP[q] ? q + ' ' + TYP[q].name : ''; hit = true; }
+      if ((q = sp.get('step')) && STEP[q]) { S.meta.step = q; hit = true; }
+      if (hit) history.replaceState(null, '', window.location.pathname);
+    } catch (e) {}
     go(STEP[S.meta.step] ? S.meta.step : 'setup', true);
     var st = $('#saved'); if (st) st.textContent = S.meta.updated ? '已存在這台電腦的瀏覽器 · ' + S.meta.updated : '草稿會自動存在這台電腦的瀏覽器';
   }

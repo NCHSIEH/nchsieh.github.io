@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研究計畫整合台｜研究方法論</title>
+<meta name="description" content="研究方法論課程：先定路線，再依路線圖使用研究計畫書、量性研究設計、質性研究設計三個工作台，完成完整的研究計畫書；含三邊進度總覽、方法內容帶入計畫書、一致性檢查與全案備份。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231f3a5f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='56' font-weight='600' fill='%23fff' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<style>/* 研究計畫整合台：沿用三個工作台的學院藍主題 */
+:root{
+  --brand:#1f3a5f; --brand-deep:#142943; --brand-tint:rgba(31,58,95,.07); --on-brand:#fff;
+  --accent:#9c7538; --accent-tint:rgba(156,117,56,.13);
+  --ink:#1c242e; --muted:#4d5865; --faint:#737f8b; --line:#e2ded4; --line-strong:#c9c3b5;
+  --bg:#f7f4ed; --card:#fff; --field:#fffdf8; --bad:#9b2c2c; --bad-tint:rgba(155,44,44,.07); --ok:#1f6b4a; --ok-tint:rgba(31,107,74,.10);
+  --bar-ink:#e8eef4; --bar-dim:#b3c3d3;
+  --c-p:#1f3a5f; --c-q:#2f6f8f; --c-l:#8a5a2b;
+  --serif:"Noto Serif TC","Noto Serif",Georgia,serif;
+  --sans:"Noto Sans TC","Noto Sans","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --brand:#7aa7d9; --brand-deep:#0a111c; --brand-tint:rgba(122,167,217,.12); --on-brand:#0b1220;
+  --accent:#d4a960; --accent-tint:rgba(212,169,96,.15);
+  --ink:#e6edf5; --muted:#a3b1c2; --faint:#7d8b9c; --line:#263243; --line-strong:#3a4859;
+  --bg:#0d1420; --card:#131c29; --field:#0f1723; --bad:#f19a9a; --bad-tint:rgba(241,154,154,.09); --ok:#7fd1a8; --ok-tint:rgba(127,209,168,.12);
+  --c-p:#7aa7d9; --c-q:#6fc0dc; --c-l:#d9a66a; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.7}
+h1,h2,h3,h4{font-family:var(--serif);margin:0;line-height:1.35;text-wrap:balance}
+p{margin:0}
+a{color:var(--brand)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:0;z-index:20;background:var(--brand-deep);color:var(--bar-ink)}
+.top-in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:11px 18px}
+.brand{font-family:var(--serif);font-weight:700;font-size:17px}
+.brand small{font-family:var(--sans);font-weight:400;color:var(--bar-dim);font-size:13px;margin-left:8px}
+.top nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{color:var(--bar-ink);text-decoration:none;font-size:13.5px;border:1px solid transparent;border-radius:7px;padding:3px 10px}
+.top nav a:hover{border-color:var(--bar-dim)}
+main{max-width:1120px;margin:0 auto;padding:26px 18px 60px;display:grid;gap:26px}
+.lead h1{font-size:clamp(24px,3.2vw,32px)}
+.lead p{color:var(--muted);margin-top:8px;max-width:46em}
+section>h2{font-size:21px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+section>h2 .n{flex:none;background:var(--brand);color:var(--on-brand);font-family:var(--sans);font-size:13px;font-weight:700;border-radius:7px;padding:2px 9px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.fine{font-size:13.5px;color:var(--faint)}
+.btn{display:inline-block;border:1px solid var(--brand);background:var(--brand);color:var(--on-brand);border-radius:9px;padding:6px 15px;font-size:14.5px;font-weight:700;text-decoration:none}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent;color:var(--brand)}
+.btn.small{padding:3px 11px;font-size:13.5px}
+.btn.warn{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.file{position:relative;overflow:hidden}.btn.file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.row-btn{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* 三個工作台狀態 */
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tool{border-top:4px solid var(--tc);display:grid;gap:8px;align-content:start}
+.tool.p{--tc:var(--c-p)} .tool.q{--tc:var(--c-q)} .tool.l{--tc:var(--c-l)}
+.tool h3{font-size:17px}
+.tool .role{font-size:13.5px;color:var(--muted)}
+.tool .st{font-size:14px}
+.tool .st b{color:var(--tc)}
+.tool.off{opacity:.62}
+.bar{height:7px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:calc(var(--p,0)*1%);background:var(--tc,var(--brand));border-radius:4px}
+.tagx{display:inline-block;font-size:12.5px;font-weight:700;border-radius:5px;padding:1px 7px;background:var(--accent-tint);color:var(--accent)}
+.tagx.bad{background:var(--bad-tint);color:var(--bad)} .tagx.ok{background:var(--ok-tint);color:var(--ok)}
+
+/* 定路線 */
+.qa{padding:14px 0;border-top:1px dashed var(--line)}
+.qa:first-child{border-top:0;padding-top:0}
+.qa h3{font-size:16.5px;margin-bottom:9px}
+.qa h3 small{font-family:var(--sans);font-weight:400;color:var(--faint);font-size:13px;margin-left:6px}
+.opts{display:grid;gap:7px}
+.opts.c2{grid-template-columns:repeat(2,minmax(0,1fr))} .opts.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.opt{text-align:left;background:var(--field);border:1px solid var(--line-strong);border-radius:9px;padding:8px 12px;color:var(--ink);font-size:14.5px;display:flex;gap:10px;align-items:baseline}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-tint);box-shadow:inset 0 0 0 1px var(--brand)}
+.opt b{flex:none;color:var(--brand);min-width:1.2em}
+.opt span small{display:block;color:var(--faint);font-size:13px}
+.route{display:grid;gap:12px}
+.route dl{margin:0;display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:6px 14px;font-size:14.5px}
+.route dt{color:var(--faint)} .route dd{margin:0}
+.route dd b{color:var(--brand)}
+.note{background:var(--accent-tint);border-radius:9px;padding:9px 13px;font-size:14px}
+.note.bad{background:var(--bad-tint)}
+
+/* 路線圖 */
+.map{display:grid;gap:10px;counter-reset:r}
+.stage{display:grid;grid-template-columns:42px minmax(0,1fr);gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stage .no{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;background:var(--line);color:var(--muted)}
+.stage.done .no{background:var(--ok);color:#fff}
+.stage.next{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-tint)}
+.stage.next .no{background:var(--accent);color:#fff}
+.stage h3{font-size:16.5px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.stage .why{color:var(--muted);font-size:14px;margin-top:2px}
+.parts{display:grid;gap:7px;margin-top:10px}
+.part{display:grid;grid-template-columns:minmax(0,23em) minmax(60px,1fr) 3.2em auto;gap:12px;align-items:center;font-size:14px}
+.part .who{font-weight:700;color:var(--tc)}
+.part.p{--tc:var(--c-p)} .part.q{--tc:var(--c-q)} .part.l{--tc:var(--c-l)}
+.part .pc{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+footer{max-width:1120px;margin:0 auto;padding:0 18px 40px;color:var(--faint);font-size:13px}
+@media (max-width:820px){
+  .tools{grid-template-columns:1fr} .opts.c2,.opts.c3{grid-template-columns:1fr}
+  .part{grid-template-columns:minmax(0,1fr) 3.2em auto} .part .bar{display:none}
+  .route dl{grid-template-columns:1fr;gap:0 0} .route dt{margin-top:6px}
+  .stage{grid-template-columns:1fr} 
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+<div class="brand">研究計畫整合台<small>研究方法論</small></div>
+<nav aria-label="三個工作台"><a href="proposal-workbench.html">計畫書工作台</a><a href="quant-workbench.html">量性工作台</a><a href="qual-workbench.html">質性工作台</a></nav>
+</div></header>
+<main>
+<div class="lead"><h1>從一個想法，走到一份完整的研究計畫書</h1>
+<p>先在這裡定出路線，再依路線圖到三個工作台填寫。這一頁會告訴你現在做到哪裡、下一步去哪裡。</p></div>
+<section aria-labelledby="h-tools"><h2 id="h-tools">三個工作台的現況</h2><div class="tools" id="tools"></div></section>
+<section aria-labelledby="h-wiz"><h2 id="h-wiz"><span class="n">第一步</span>定路線</h2><div id="wizard"></div></section>
+<section aria-labelledby="h-map" id="mapsec" hidden><h2 id="h-map"><span class="n">第二步</span>照路線圖完成</h2><div id="map"></div></section>
+<section aria-labelledby="h-bk"><h2 id="h-bk">全案備份</h2><div class="card">
+<p>把三個工作台的草稿和這一頁的路線打包成一個檔案。換電腦、換瀏覽器或清除瀏覽資料之前，先下載一份。</p>
+<div class="row-btn" style="margin-top:10px"><button type="button" class="btn small" id="bkout">下載全案備份（.json）</button>
+<label class="btn small ghost file">從備份還原<input type="file" id="bkin" accept=".json,application/json"></label></div>
+<div id="bkmsg" style="margin-top:10px"></div></div></section>
+</main>
+<footer>草稿只存在這台電腦的這個瀏覽器，不會上傳。進度在各工作台存檔時同步到這一頁。</footer>
+
+<script>window.RW_DATA={"pk": [["A", "我想做出一個系統／工具，並證明好用", "系統開發與評估"], ["B", "我想用資料訓練 AI 模型來預測或分類", "AI 模型建置"], ["C", "我想證明導入某介入後，結果變好", "介入成效研究"], ["D", "我想自己發問卷，了解現況或影響因素", "問卷調查"], ["E", "我想深入了解經驗、需求或「為什麼」", "質性研究"], ["F", "我想請專家形成共識，訂出指標", "德菲法與指標建構"], ["G", "我想整理某領域所有研究，看做到哪", "系統性／範域回顧"], ["H", "我想用現成資料庫找關聯或風險", "次級資料研究"]], "quant": {"rct": {"short": "① 平行組間 RCT"}, "between": {"short": "② 組間比較／A-B 實驗"}, "within_prepost": {"short": "③ 組內單組前後測"}, "within_cross": {"short": "④ 組內交叉對抗平衡"}, "mixed_rct": {"short": "⑤ 混合設計（RCT×前後測）"}, "mixed_matched": {"short": "⑥ 混合設計（配對×前後測）"}, "quasi_did": {"short": "⑦ 準實驗（雙重差分 DiD）"}, "quasi_its": {"short": "⑧ 準實驗（中斷時間序列 ITS）"}, "corr": {"short": "⑨ 觀察性相關與迴歸"}, "anova3": {"short": "⑩ 三組以上比較 ANOVA"}, "scale_dev": {"short": "⑪ 量表發展與信效度"}}, "qual": {"qual_thematic": {"short": "① 質性描述與主題分析"}, "phenomenology_ipa": {"short": "② 現象學（Colaizzi／IPA）"}, "grounded_theory": {"short": "③ 紮根理論（三階編碼）"}, "case_study": {"short": "④ 質性個案研究法"}, "ethnography_obs": {"short": "⑤ 民族誌與參與觀察"}, "narrative_inquiry": {"short": "⑥ 敘事研究（生命故事）"}, "fgd_study": {"short": "⑦ 焦點團體訪談（FGD）"}, "fgd_delphi": {"short": "⑧ FGD ＋ 德懷術共識"}, "mixed_explanatory": {"short": "⑨ 混合方法研究（Joint Display）"}}};</script>
+<script>/* 研究計畫整合台（2026-11-11，第一期）：定路線、路線圖、全案備份。
+   只讀三個工作台寫在 localStorage 的進度摘要（rw.sum.*）；草稿本體仍由各工作台自己管理。 */
+(function(){
+'use strict';
+var DATA = window.RW_DATA;
+var K = { p:'pw60.v1', q:'qw2x.v1', l:'qual_wb_3x.v2', hub:'rw.hub.v1', sp:'rw.sum.proposal', sq:'rw.sum.quant', sl:'rw.sum.qual' };
+var PAGE = { p:'proposal-workbench.html', q:'quant-workbench.html', l:'qual-workbench.html' };
+var TOOL = { p:'研究計畫書工作台', q:'量性研究設計工作台', l:'質性研究設計工作台' };
+var SHORT = { p:'計畫書', q:'量性', l:'質性' };
+var FMT = { f1:['碩士論文計畫書','學位論文口試用'], f2:['國科會專題研究計畫（CM03）','申請研究經費'], f3:['其他計畫','院內、部會、基金會'] };
+
+/* 每一型：用哪個方法工作台、Q3 的問法與選項、報告規範、對應講義 */
+var TYPES = {
+  A:{ tool:'q', mix:'l', ask:'系統做出來之後，打算怎麼評估？', lec:'0.1、9.7、9.6',
+      guide:'設計科學研究（Hevner et al., 2004；Peffers et al., 2007）；可用性結果依 ISO/IEC 25062',
+      opts:[['within_prepost','同一批使用者，使用前後各測一次','可用性分數、任務時間的前後變化'],['between','新舊兩版各找一組人比較','A/B 比較'],['within_cross','同一批人輪流用新舊兩版','兩版順序要對抗平衡']] },
+  B:{ tool:'', lec:'9.5、8.4', guide:'TRIPOD+AI（2024）；偏誤風險自評用 PROBAST+AI（2025）',
+      self:'方法寫在計畫書工作台 M5 的「B 型」小節清單：資料來源與切分、標籤定義、防止資料洩漏、驗證方式（內部／外部）、區辨力與校準、公平性。' },
+  C:{ tool:'q', mix:'l', ask:'你的場域允許怎麼分組、能測幾次？', lec:'2.1、2.6、9.4',
+      guide:'隨機分派用 CONSORT 2025；非隨機用 TREND',
+      opts:[['rct','可以把個人隨機分兩組，結束時比一次','平行隨機對照試驗'],['mixed_rct','可以隨機分組，而且前、中、後測多次','組別 × 時間的混合設計'],
+            ['mixed_matched','不能隨機，但能一對一配對條件相近的人，前後各測','配對對照 × 前後測'],['quasi_did','只能整個機構或病房一起導入，另有同期未導入的場域可對照','雙重差分（案例 Q 的設計）'],
+            ['quasi_its','全院一次上線、沒有對照場域，但有導入前後多期例行資料','中斷時間序列'],['within_prepost','只有一組人，介入前後各測一次','單組前後測；因果推論最弱，限制要寫清楚'],
+            ['within_cross','同一批人輪流接受兩種條件','限效果短暫、可逆的介入'],
+            ['anova3','要比三種以上的方案，每人只接受一種','單因子 ANOVA＋事後比較']] },
+  D:{ tool:'q', mix:'l', ask:'問卷收回來，主要想回答哪一種問題？', lec:'4.1–4.3、2.2',
+      guide:'STROBE（橫斷研究）；線上問卷加 CHERRIES；量表發展依 COSMIN',
+      opts:[['corr','了解現況，並找出哪些因素和結果有關','相關與多元迴歸'],['between','比較兩個既有群體的差異','組間比較'],['anova3','比較三個以上群體的差異','單因子 ANOVA＋事後比較'],
+            ['scale_dev','現成量表不合用，要自己發展一份並檢驗信效度','量表發展：EFA → CFA → 信效度；講義 2.2A']] },
+  E:{ tool:'l', mix:'q', ask:'你最想得到哪一種發現？', lec:'3.1',
+      guide:'訪談與焦點團體用 COREQ（32 項）；其他質性設計用 SRQR（21 項）',
+      opts:[['qual_thematic','跨受訪者反覆出現的共同主題','質性描述與主題分析；碩論最常用'],['phenomenology_ipa','某種處境「身在其中是什麼感受」','現象學'],
+            ['grounded_theory','一段行動或互動歷程的解釋模型','紮根理論'],['case_study','一個機構、專案或事件的來龍去脈','個案研究'],
+            ['ethnography_obs','現場實際怎麼做（不只是怎麼說）','民族誌與參與觀察'],['narrative_inquiry','個人完整的生命故事與轉折','敘事研究'],
+            ['fgd_study','一群人討論時激盪出的觀點與分歧','焦點團體']] },
+  F:{ tool:'l', fixed:'fgd_delphi', lec:'3.1', guide:'CREDES（德菲法報告規範）；焦點團體階段用 COREQ',
+      self:'設計固定為「文獻草案 → 專家焦點團體 → 德菲法多回合共識」。共識判準（重要性與一致性兩道門檻）要在第一回合之前寫定。' },
+  G:{ tool:'', lec:'5.1、5.2', guide:'PRISMA 2020；範域回顧用 PRISMA-ScR；計畫書階段用 PRISMA-P',
+      self:'方法寫在計畫書工作台 M5 的「G 型」小節清單：問題框架（PICO／PCC）、完整檢索式與資料庫、納入排除條件、雙人篩選、偏誤風險評估工具、綜整方式。' },
+  H:{ tool:'', lec:'9.1、9.3、8.3', guide:'STROBE；例行蒐集之健康資料加 RECORD',
+      self:'方法寫在計畫書工作台 M5 的「H 型」小節清單：資料庫與申請程序、世代定義與指標日、暴露與結果的代碼定義、干擾因子處理、不死時間等偏誤的防範。' }
+};
+var MIXTXT = {
+  l:['量性結果出來之後，再訪談幾位參與者，解釋「為什麼」','解釋性序列混合設計（量 → 質）；講義 3.2','mixed_explanatory','E'],
+  q:['訪談之後，再發問卷看發現能否推到更多人','探索性序列混合設計（質 → 量）；講義 3.2','corr','D']
+};
+
+function get(k){ try{ var r = localStorage.getItem(k); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function has(k){ try{ return localStorage.getItem(k) !== null; }catch(e){ return false; } }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function $(s){ return document.querySelector(s); }
+function dname(t, id){ var d = (t==='q'?DATA.quant:DATA.qual)[id]; return d ? d.short.replace(/^[①-⑨]\s*/,'') : ''; }
+function tname(c){ var p = DATA.pk.filter(function(x){ return x[0]===c; })[0]; return p ? p[2] : ''; }
+
+var H0 = function(){ return { fmt:'', type:'', pick:'', mix:null, done:false }; };
+var H = Object.assign(H0(), get(K.hub) || {});
+function saveH(){ try{ localStorage.setItem(K.hub, JSON.stringify(H)); }catch(e){} }
+
+/* 由問答推出路線 */
+function route(){
+  var T = TYPES[H.type]; if(!T) return null;
+  var r = { T:T, q:'', l:'', type2:'' };
+  var main = T.fixed || H.pick;
+  if(T.tool==='q') r.q = main; else if(T.tool==='l') r.l = main;
+  if(T.mix && H.mix){ var m = MIXTXT[T.mix]; if(T.mix==='l') r.l = m[2]; else r.q = m[2]; r.type2 = m[3]; }
+  return r;
+}
+function complete(){
+  var T = TYPES[H.type];
+  return !!(H.fmt && T && (!T.opts || H.pick) && (!T.mix || H.mix !== null));
+}
+function url(t, o){
+  var q = Object.keys(o||{}).map(function(k){ return k + '=' + encodeURIComponent(o[k]); }).join('&');
+  return PAGE[t] + (q ? '?' + q : '');
+}
+
+/* 三邊進度摘要 */
+function sums(){
+  var S = {};
+  [['p',K.p,K.sp],['q',K.q,K.sq],['l',K.l,K.sl]].forEach(function(x){
+    var s = get(x[2]), raw = has(x[1]);
+    S[x[0]] = { raw:raw, sum:s, live: !!(s && !s.sample), steps:{} };
+    if(s && s.steps) s.steps.forEach(function(st){ S[x[0]].steps[st.id] = st; });
+  });
+  return S;
+}
+function pctOf(S, t, ids){
+  if(!S[t].live) return 0;
+  var v = ids.map(function(id){ return S[t].steps[id] ? S[t].steps[id].pct : 0; });
+  return Math.round(v.reduce(function(a,b){ return a+b; },0) / v.length);
+}
+
+/* ---------- 畫面：三個工作台 ---------- */
+function toolsHTML(S, r){
+  var role = { p:'把整份計畫書寫成段落：構想一頁表、M1–M10、檢核與 Word 匯出', q:'把量性方法想清楚：假設、變項、分組、樣本數、分析計畫', l:'把質性方法想清楚：取徑、抽樣、訪綱、編碼、可信性' };
+  return ['p','q','l'].map(function(t){
+    var x = S[t], s = x.sum, need = t==='p' || !r || (t==='q' ? !!r.q : !!r.l), st, pct = 0, extra = '';
+    if(!x.raw && !s) st = '尚未開始';
+    else if(!s) st = '已有草稿<br><span class="fine">開啟一次這個工作台，進度就會同步到這裡</span>';
+    else if(s.sample){ st = '<span class="tagx">範例內容</span> ' + esc(s.sampleLabel || '') + '<br><span class="fine">還沒改成你自己的研究，進度不計入</span>'; }
+    else {
+      pct = s.pct;
+      st = (s.title ? '<b>' + esc(s.title) + '</b><br>' : '') +
+           (t==='p' ? esc(s.fmtName||'') + (s.typeName ? '・主型 ' + esc(s.typeName) : '') + '<br>已完成 ' + s.done + ' / ' + s.steps.length + ' 步'
+                    : esc((s.designName||'').replace(/^[①-⑨]\s*/,'')) + '<br>六步驟平均完成 ' + s.pct + '%');
+      if(s.sameN && s.sameTotal && s.sameN / s.sameTotal >= 0.3) st += '<br><span class="tagx bad">還有 ' + s.sameN + ' 個欄位是範例原文</span>';
+      extra = '<span class="fine">最後更新 ' + new Date(s.updated).toLocaleString('zh-TW',{hour12:false}) + '</span>';
+    }
+    return '<div class="card tool ' + t + (need?'':' off') + '"><h3>' + TOOL[t] + '</h3><p class="role">' + role[t] + '</p>' +
+      (need ? '' : '<p><span class="tagx">這條路線用不到</span></p>') +
+      '<div class="bar"><i style="--p:' + pct + '"></i></div><p class="st">' + st + '</p>' + extra +
+      '<div class="row-btn"><a class="btn small ghost" href="' + PAGE[t] + '">開啟</a></div></div>';
+  }).join('');
+}
+
+/* ---------- 畫面：定路線 ---------- */
+function opt(group, val, on, a, b, small){
+  return '<button type="button" class="opt" data-g="' + group + '" data-v="' + esc(val) + '" aria-pressed="' + (on?'true':'false') + '">' +
+    (a ? '<b>' + esc(a) + '</b>' : '') + '<span>' + esc(b) + (small ? '<small>' + esc(small) + '</small>' : '') + '</span></button>';
+}
+function wizardHTML(){
+  var T = TYPES[H.type], h = '<div class="card">';
+  h += '<div class="qa"><h3>① 這份計畫書要交到哪裡？</h3><div class="opts c3">' +
+    Object.keys(FMT).map(function(k){ return opt('fmt', k, H.fmt===k, '', FMT[k][0], FMT[k][1]); }).join('') + '</div></div>';
+  h += '<div class="qa"><h3>② 你的研究最像哪一句？<small>選最主要的一個；代號 A–H 與講義 0.1、計畫書工作台相同</small></h3><div class="opts c2">' +
+    DATA.pk.map(function(p){ return opt('type', p[0], H.type===p[0], p[0], p[1], p[2]); }).join('') + '</div></div>';
+  if(T && T.opts){
+    h += '<div class="qa"><h3>③ ' + esc(T.ask) + '</h3><div class="opts">' +
+      T.opts.map(function(o){ return opt('pick', o[0], H.pick===o[0], '', o[1], o[2]); }).join('') + '</div></div>';
+  } else if(T){
+    h += '<div class="qa"><h3>③ 這一型的方法怎麼走</h3><p class="note">' + esc(T.self) + '</p></div>';
+  }
+  if(T && T.mix && (!T.opts || H.pick)){
+    var m = MIXTXT[T.mix];
+    h += '<div class="qa"><h3>④ 要不要再接一段？<small>碩士論文加第二段，規模要做小</small></h3><div class="opts c2">' +
+      opt('mix', '0', H.mix===false, '', '不用，只做主型', '') + opt('mix', '1', H.mix===true, '', m[0], m[1]) + '</div></div>';
+  }
+  h += '<div class="qa row-btn"><button type="button" class="btn" id="ok"' + (complete()?'':' disabled style="opacity:.45;cursor:not-allowed"') + '>確定路線</button>' +
+    (complete() ? '' : '<span class="fine">每一題都選好，才能確定路線</span>') + '</div></div>';
+  return h;
+}
+function routeHTML(S){
+  var r = route(), T = r.T;
+  var guides = [T.guide]; if(r.type2==='E') guides.push('質性階段用 COREQ'); if(r.type2==='D') guides.push('問卷階段用 STROBE'); if(r.type2) guides.push('整合報告用 GRAMMS');
+  var h = '<div class="card route"><dl>' +
+    '<dt>計畫格式</dt><dd><b>' + esc(FMT[H.fmt][0]) + '</b></dd>' +
+    '<dt>主型</dt><dd><b>' + H.type + ' ' + esc(tname(H.type)) + '</b>' + (r.type2 ? '，後接 <b>' + r.type2 + ' ' + esc(tname(r.type2)) + '</b>' : '') + '</dd>' +
+    (r.q ? '<dt>量性設計</dt><dd><b>' + esc(dname('q', r.q)) + '</b></dd>' : '') +
+    (r.l ? '<dt>質性設計</dt><dd><b>' + esc(dname('l', r.l)) + '</b></dd>' : '') +
+    '<dt>報告規範</dt><dd>' + esc(guides.join('；')) + '</dd>' +
+    '<dt>先讀講義</dt><dd>' + esc(T.lec) + (r.type2 ? '、3.2' : '') + '；計畫書寫法見 6.0</dd></dl>';
+  if(!T.tool) h += '<p class="note">' + esc(T.self) + '</p>';
+  /* 路線與工作台現況不一致時，給「套用」連結 */
+  var acts = [], ps = S.p.sum, t2 = r.type2;
+  var pDiff = !ps || ps.fmt !== H.fmt || ps.type !== H.type || ((ps.type2||'').charAt(0) !== t2);
+  if(pDiff) acts.push('<a class="btn small" href="' + url('p', {fmt:H.fmt, type:H.type, type2:t2, step:'setup'}) + '">把格式與主型套用到計畫書工作台</a>');
+  [['q', r.q], ['l', r.l]].forEach(function(x){
+    if(!x[1]) return;
+    var s = S[x[0]].sum, same = s && !s.sample && s.design === x[1];
+    if(!same){
+      acts.push('<a class="btn small" href="' + url(x[0], {design:x[1], step:'s1'}) + '">以「' + esc(dname(x[0], x[1])) + '」開始' + SHORT[x[0]] + '設計</a>');
+      if(!S[x[0]].live) acts.push('<a class="btn small ghost" href="' + url(x[0], {preset:x[1], step:'readme'}) + '">先看這個設計的完整範例</a>');
+    }
+  });
+  if(acts.length) h += '<div><p class="fine" style="margin-bottom:6px">工作台目前的設定和這條路線不同。按下後只會改「格式、主型、設計」的選擇，不會動到你寫的內容；工作台裡若還是沒改過的範例，會先清成空白。</p><div class="row-btn">' + acts.join('') + '</div></div>';
+  h += '<div class="row-btn"><button type="button" class="btn small ghost" id="redo">重新選路線</button></div></div>';
+  return h;
+}
+
+/* ---------- 畫面：路線圖 ---------- */
+function stages(r){
+  var T = r.T, A = [];
+  function P(t, ids, label, step){ return { t:t, ids:ids, label:label, step:step || ids[0] }; }
+  A.push({ t:'構想一頁表', why:'九格各一句話。哪一格寫不出來，就是現在要去問、去查的地方。', parts:[P('p',['s1'],'S1 構想一頁表')] });
+  A.push({ t:'問題意識與文獻缺口', why:'先說清楚「為什麼要做」與「別人還沒回答什麼」，研究問題才有依據。講義 6.1、5.1。', parts:[P('p',['m1'],'M1 問題意識與重要性'), P('p',['m2'],'M2 文獻回顧與研究缺口')] });
+  var s3 = { t:'研究問題與假設', why:'先在方法工作台把問題想清楚，再回計畫書寫成 M3。兩邊的研究問題要是同一句。', parts:[] };
+  if(r.q) s3.parts.push(P('q',['s1'],'步驟① 研究問題、假設與因果'));
+  if(r.l) s3.parts.push(P('l',['s1'],'步驟① 研究問題、現象與取徑'));
+  s3.parts.push(P('p',['m3'],'M3 目的、問題與假設'));
+  if(!T.tool) s3.why = '把缺口收斂成一個可回答的問題；每個目的都要對得到一種分析。';
+  A.push(s3);
+  if(r.q || r.l){
+    var s4 = { t:'方法設計', why:'對象或變項怎麼界定、怎麼分組或抽樣、要多少人、怎麼收資料。這一段決定計畫書 M4、M5 的內容。', parts:[] };
+    if(r.q) s4.parts.push(P('q',['s2','s3','s4'],'步驟②–④ 變項、分組與偏誤、樣本數'));
+    if(r.l) s4.parts.push(P('l',['s2','s3'],'步驟②–③ 抽樣與飽和、訪綱與田野筆記'));
+    A.push(s4);
+    var s5 = { t:'分析設計', why:'分析要在收資料之前寫定：每個目的配一種分析，前提檢查與備案一併決定。這一段決定計畫書 M6。', parts:[] };
+    if(r.q) s5.parts.push(P('q',['s5','s6'],'步驟⑤–⑥ 資料清理與前提、推論統計與解讀'));
+    if(r.l) s5.parts.push(P('l',['s4','s5','s6'],'步驟④–⑥ 編碼、可信性與倫理、結果呈現'));
+    A.push(s5);
+    A.push({ t:'寫成計畫書第三章', why:'把方法工作台的內容寫成段落。方法細節以方法工作台為準，計畫書不另外發明一套。', parts:[P('p',['m4'],'M4 研究架構與變項'), P('p',['m5'],'M5 研究方法'), P('p',['m6'],'M6 資料分析計畫')] });
+  } else {
+    A.push({ t:'研究方法與分析計畫', why:T.self + '講義 ' + T.lec + '。', parts:[P('p',['m4'],'M4 研究架構與變項'), P('p',['m5'],'M5 研究方法（' + H.type + ' 型）'), P('p',['m6'],'M6 資料分析計畫')] });
+  }
+  A.push({ t:'倫理、時程與預期貢獻', why:'送哪一種審查、怎麼取得同意、做不做得完、卡住時的備案。講義 7.1。', parts:[P('p',['m7'],'M7 倫理、IRB 與資料治理'), P('p',['m8'],'M8 時程、可行性與風險'), P('p',['m9'],'M9 預期成果與貢獻')] });
+  A.push({ t:'題目、摘要與參考文獻', why:'最後才定稿。題目與摘要要和前面各節的設計、樣本數一致。', parts:[P('p',['m10'],'M10 題目、摘要與參考文獻')] });
+  var last = { t:'總檢核與匯出', why:(r.q || r.l ? '先在方法工作台跑方法學檢核，再到' : '到') + '計畫書工作台看一頁地圖、匯出 Word。', parts:[], final:true };
+  if(r.q) last.parts.push({ t:'q', ids:[], label:'步驟⑦ 方法學檢核', step:'review' });
+  if(r.l) last.parts.push({ t:'l', ids:[], label:'步驟⑦ 報告規範檢核', step:'review' });
+  last.parts.push({ t:'p', ids:[], label:'一頁地圖、一致性檢查與匯出', step:'review' });
+  A.push(last);
+  return A;
+}
+function mapHTML(S){
+  var r = route(), A = stages(r), nextSet = false, allDone = true, h = '';
+  var html = A.map(function(st, i){
+    var pcs = st.parts.map(function(p){ return p.ids.length ? pctOf(S, p.t, p.ids) : null; });
+    var real = pcs.filter(function(x){ return x !== null; });
+    var done = st.final ? false : real.every(function(x){ return x === 100; });
+    if(!st.final && !done) allDone = false;
+    var next = false;
+    if(!nextSet && ((!st.final && !done) || (st.final && allDone))){ next = true; nextSet = true; }
+    return '<div class="stage' + (done?' done':'') + (next?' next':'') + '"><div class="no">' + (done ? '✓' : (i+1)) + '</div><div>' +
+      '<h3>' + esc(st.t) + (next ? ' <span class="tagx">建議下一步</span>' : '') + '</h3><p class="why">' + esc(st.why) + '</p><div class="parts">' +
+      st.parts.map(function(p, j){
+        var pc = pcs[j];
+        return '<div class="part ' + p.t + '"><span><span class="who">' + SHORT[p.t] + '</span>　' + esc(p.label) + '</span>' +
+          '<div class="bar"><i style="--p:' + (pc||0) + '"></i></div><span class="pc">' + (pc === null ? '' : pc + '%') + '</span>' +
+          '<a class="btn small' + (next && (pc === null || pc < 100) ? '' : ' ghost') + '" href="' + url(p.t, {step:p.step}) + '">' + (pc === 100 ? '查看' : '前往') + '</a></div>';
+      }).join('') + '</div></div></div>';
+  }).join('');
+  /* 輕量一致性提醒：題目 */
+  var titles = ['p','q','l'].filter(function(t){ return S[t].live && S[t].sum.title && (t==='p' || (t==='q'?r.q:r.l)); }).map(function(t){ return [t, S[t].sum.title.trim()]; });
+  var diff = titles.some(function(x){ return x[1] !== titles[0][1]; });
+  if(diff) h += '<p class="note bad" style="margin-bottom:10px"><b>題目不一致：</b>' + titles.map(function(x){ return SHORT[x[0]] + '「' + esc(x[1]) + '」'; }).join('；') + '。定稿前請統一。</p>';
+  return h + '<div class="map">' + html + '</div>';
+}
+
+/* ---------- 全案備份 ---------- */
+var BK = [K.p, K.q, K.l, K.hub, K.sp, K.sq, K.sl], pending = null;
+function exportAll(){
+  var o = { app:'research-workbench-bundle', version:1, exported:new Date().toISOString(), data:{} };
+  BK.forEach(function(k){ try{ var r = localStorage.getItem(k); if(r !== null) o.data[k] = r; }catch(e){} });
+  var a = document.createElement('a'), d = new Date(), pad = function(n){ return (n<10?'0':'') + n; };
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(o)], {type:'application/json'}));
+  a.download = '研究計畫全案備份_' + d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function readBundle(file){
+  var fr = new FileReader();
+  fr.onload = function(){
+    var msg = $('#bkmsg'), o;
+    try{ o = JSON.parse(fr.result); if(o.app !== 'research-workbench-bundle' || !o.data) throw 0; }
+    catch(e){ msg.innerHTML = '<p class="note bad">這不是整合台的全案備份檔。單一工作台的備份，請到該工作台自己的「匯入備份」。</p>'; return; }
+    pending = o;
+    var parts = [[K.p,'計畫書'],[K.q,'量性'],[K.l,'質性']].filter(function(x){ return o.data[x[0]]; }).map(function(x){ return x[1]; });
+    msg.innerHTML = '<div class="note"><p>備份時間 ' + esc(new Date(o.exported).toLocaleString('zh-TW',{hour12:false})) + '，內含' + (parts.length ? parts.join('、') + '工作台的草稿' : '路線設定，沒有草稿') + '。<b>還原會蓋掉這個瀏覽器裡同一工作台目前的草稿。</b></p>' +
+      '<div class="confirm"><button type="button" class="btn small warn" id="bkyes">確定還原</button><button type="button" class="btn small ghost" id="bkno">取消</button></div></div>';
+    $('#bkyes').onclick = function(){
+      Object.keys(pending.data).forEach(function(k){ if(BK.indexOf(k) >= 0){ try{ localStorage.setItem(k, pending.data[k]); }catch(e){} } });
+      pending = null; H = Object.assign(H0(), get(K.hub) || {});
+      render(); $('#bkmsg').innerHTML = '<p class="note">已還原。</p>';
+    };
+    $('#bkno').onclick = function(){ pending = null; msg.innerHTML = ''; };
+  };
+  fr.readAsText(file);
+}
+
+/* ---------- 組裝 ---------- */
+function render(){
+  var S = sums(), r = H.done ? route() : null;
+  $('#tools').innerHTML = toolsHTML(S, r);
+  $('#wizard').innerHTML = H.done && r ? routeHTML(S) : wizardHTML();
+  $('#mapsec').hidden = !(H.done && r);
+  if(H.done && r) $('#map').innerHTML = mapHTML(S);
+  var ok = $('#ok'); if(ok) ok.onclick = function(){ if(!complete()) return; H.done = true; saveH(); render(); $('#mapsec').scrollIntoView({behavior:'smooth', block:'start'}); };
+  var redo = $('#redo'); if(redo) redo.onclick = function(){ H.done = false; saveH(); render(); };
+}
+document.addEventListener('click', function(e){
+  var b = e.target.closest('.opt'); if(!b) return;
+  var g = b.dataset.g, v = b.dataset.v;
+  if(g === 'fmt') H.fmt = v;
+  else if(g === 'type'){ if(H.type !== v){ H.type = v; H.pick = ''; H.mix = null; } }
+  else if(g === 'pick') H.pick = v;
+  else if(g === 'mix') H.mix = v === '1';
+  saveH(); render();
+});
+$('#bkout').onclick = exportAll;
+$('#bkin').onchange = function(){ if(this.files[0]) readBundle(this.files[0]); this.value = ''; };
+window.addEventListener('storage', render);
+document.addEventListener('visibilitychange', function(){ if(!document.hidden) render(); });
+window.addEventListener('pageshow', function(e){ if(e.persisted) render(); });
+window.RW_HUB = { state:function(){ return H; }, route:route, stages:stages };
+render();
+})();
+</script>
+</body>
+</html>

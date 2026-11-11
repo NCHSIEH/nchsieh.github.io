@@ -268,6 +268,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 <button id="menu" type="button" aria-expanded="false" aria-controls="side-nav">步驟</button>
 <div class="brand">量性研究設計工作台<small>研究方法論 · 2.1–2.7</small></div>
 <div id="who"></div>
+<a id="hublink" class="oneclick" href="research-workbench.html" title="回研究計畫整合台：看整體路線與三個工作台的進度" style="text-decoration:none;border:1px solid #b3c3d3;background:transparent;color:#e8eef4">🧭 整合台</a>
 <div class="prog" id="prog"><i></i><span id="progt"></span></div>
 <button type="button" id="btn_readme" class="oneclick" style="border-color:var(--brand);background:var(--brand-soft);color:var(--brand-deep)">📖 11種設計 README 總覽</button>
 <button type="button" id="oneclick" class="oneclick">⚡ 一鍵匯入目前設計範例</button>
@@ -4182,9 +4183,42 @@ function load(){
     });
   }catch(e){ return defState(); }
 }
+/* ---- 整合台銜接：範例標記與進度摘要 ---- */
+function sampleOf(pid){
+  const p = PRESETS[pid];
+  if(!p || !p.data) return false;
+  return Object.keys(p.data).every(k=>JSON.stringify(S[k])===JSON.stringify(p.data[k]));
+}
+function markSample(){
+  if(S._preset===undefined) S._preset = Object.keys(PRESETS).find(sampleOf) || "";
+  S._sample = (S._preset && sampleOf(S._preset)) ? S._preset : "";
+}
+function sameAsSample(){
+  const p = PRESETS[S._preset];
+  if(!p || !p.data) return [0,0];
+  const ks = Object.keys(p.data).filter(k=>/^s\d_/.test(k));
+  return [ks.filter(k=>JSON.stringify(S[k])===JSON.stringify(p.data[k])).length, ks.length];
+}
+function writeSum(){
+  try{
+    const ds = DESIGNS[S.design] || {};
+    const core = STEPS.filter(x=>/^s\d$/.test(x.id));
+    const same = sameAsSample();
+    const steps = core.map(x=>({id:x.id, code:x.code, name:x.name, pct:stepPct(x)}));
+    localStorage.setItem("rw.sum.quant", JSON.stringify({
+      tool:"quant", title:S.title||"", design:S.design||"", designName:ds.short||ds.name||"", guideline:ds.guideline||"",
+      steps:steps, pct:Math.round(steps.reduce((a,x)=>a+x.pct,0)/steps.length),
+      sameN:same[0], sameTotal:same[1], sample:S._sample||"", sampleLabel:(S._sample && PRESETS[S._sample]) ? PRESETS[S._sample].label : "",
+      updated:new Date().toISOString()
+    }));
+  }catch(e){}
+}
+
 function save(){
   try{
+    markSample();
     localStorage.setItem(KEY, JSON.stringify(S));
+    writeSum();
     const el = document.getElementById("saved");
     if(el){
       const d = new Date();
@@ -4226,6 +4260,7 @@ function applyPreset(pid, silent){
   }
   const d = JSON.parse(JSON.stringify(p.data));
   Object.keys(d).forEach(k=>{ S[k] = d[k]; });
+  S._preset = pid;
   S.chk = {}; S.gate = {};
   Object.keys(MODS).forEach(m=>{
     (MODS[m].must||[]).forEach((_,i)=>{ S.chk[m+"_"+i]=true; });
@@ -6645,14 +6680,21 @@ function render(){
   bindEvents();
 }
 
-// 支援網址參數 ?preset=rct&step=setup 直接匯入範例或切換頁籤
+// 支援網址參數 ?preset=…&design=…&step=…（整合台直達）；套用後清掉參數，避免重新整理時再次覆蓋草稿
 try{
   const sp = new URLSearchParams(window.location.search);
-  const qp = sp.get("preset");
-  const qs = sp.get("step");
+  const qp = sp.get("preset"), qd = sp.get("design"), qs = sp.get("step");
   if(qp && PRESETS[qp]) applyPreset(qp, true);
-  if(qs && STEPS.some(x=>x.id===qs)){ S.step = qs; save(); }
+  if(qd && DESIGNS[qd] && S.design !== qd){
+    // 目前若是未改寫的範例，換設計時一併清成空白，免得範例文字掛在另一種設計下
+    const untouched = S._preset ? sampleOf(S._preset) : !!Object.keys(PRESETS).find(sampleOf);
+    if(untouched){ const st = S.step; S = defState(); S.step = st; S._preset = ""; }
+    S.design = qd;
+  }
+  if(qs && STEPS.some(x=>x.id===qs)) S.step = qs;
+  if(qp || qd || qs) history.replaceState(null, "", window.location.pathname);
 }catch(e){}
+save();
 
 // 暴露測試與外部呼叫介面
 window.QW_APP = {getState:()=>S, applyPreset, issues, calcSampleSize, calcStatLab, fullDocText};
