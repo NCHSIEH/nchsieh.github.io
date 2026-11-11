@@ -22,6 +22,15 @@
     <h1>Dify 實作手冊：九個範例與長照 3.0 專案</h1>
     <p class="lead">M8 講義教你「為什麼」，這份手冊教你「怎麼做」。這一頁只收手冊獨有、M8 沒講的操作細節（觀念部分各節附 M8 連結），做成可以操作的模擬：免費額度夠不夠用、JSON 為什麼解析失敗、分隔符切塊、混合檢索怎麼算分，以及長照 3.0 七節點流程——包含程式碼節點的防呆、外籍看護排他條款，和一份要你親手找錯的「真實的失敗」。</p>
     <div class="chips"><span class="tag">搭配 M8 互動頁一起使用</span><span class="tag amber">本頁依 M8 原則修正了原 PDF 的幾處設計（見 P12）</span><span class="tag gray">模擬器為教學示意，非 Dify 實際執行；個案皆為虛構</span></div>
+  <div class="note" id="outcomes"><b>學完這份手冊，你要能做到</b>
+    <ol style="margin:6px 0 4px 1.3em;padding:0">
+      <li>完成環境建置，並知道免費額度的實際限制　<a href="#p01">第 01 節</a></li>
+      <li>做出 Ex1–Ex5 五種應用型態，並說明 Workflow 與 Agent 的差別　<a href="#p02">第 02 節</a></li>
+      <li>依節點任務選模型，調整 Temperature 與 Max Tokens，讓輸出變成可讀的 JSON　<a href="#p03">第 03 節</a>、<a href="#p04">第 04 節</a>、<a href="#p05">第 05 節</a></li>
+      <li>接上工具與知識庫：說明分隔符切塊與三種檢索策略　<a href="#p06">第 06 節</a>、<a href="#p07">第 07 節</a></li>
+      <li>組出長照 3.0 的 Chatflow，並用三層防呆與六個檢查讓它可信　<a href="#p08">第 08 節</a>、<a href="#p09">第 09 節</a>、<a href="#p10">第 10 節</a>、<a href="#p11">第 11 節</a>、<a href="#p12">第 12 節</a></li>
+    </ol>
+  </div>
   </header>
 
   <section class="part" id="p01" data-t="環境與免費額度">
@@ -109,7 +118,7 @@
     <div class="wd"><div class="wh"><h3>六個檢查</h3><span class="tag">可勾選進度</span></div><div id="w-six"></div></div>
     <div class="wd"><div class="wh"><h3>依 M8、M9 原則的修正（講義 PDF 已於 2026-11-08 同步修正，下列「原 PDF」指舊版）</h3></div><div id="w-diff"></div></div>
     <div class="wd"><div class="wh"><h3>程式碼節點回歸測試：200 筆各式各樣的 LLM 輸出</h3><span class="tag blue">200 筆測試案例</span></div><p class="hint">模擬 LLM 1 可能吐出的九種輸出（正常、包程式碼區塊、字串、被截斷、漏欄位…），把同一批案例同時丟給原 PDF 寫法與修正版程式碼節點，逐筆比對金額。</p><div id="w-regress"></div></div>
-  <div class="wd"><div class="wh"><h3>自架版本檢查：從你的版本升到最新要注意什麼</h3><span class="tag blue">Dify Releases 2026</span></div><p class="hint">選你目前自架的 Dify 版本，列出到 v1.18（2026/10/23）之間的重要變更。對應講義 Dify 手冊第 49 頁。</p><div id="w-difyver"></div></div>
+  <div class="wd"><div class="wh"><h3>自架版本檢查：從你的版本升到最新要注意什麼</h3><span class="tag blue">Dify Releases 2026</span></div><p class="hint">選你目前自架的 Dify 版本，列出到 v1.18（2026/10/23）之間的重要變更。對應講義 Dify 手冊第 50 頁。</p><div id="w-difyver"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="術語、測驗與回顧">

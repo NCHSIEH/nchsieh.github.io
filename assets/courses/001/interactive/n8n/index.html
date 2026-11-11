@@ -22,6 +22,15 @@
     <h1>n8n 入門與 AI Agent 實作</h1>
     <p class="lead">從沒用過 n8n，到自己動手做出一個會查資料、會用工具的 AI Agent，最後把 M8 的長照 3.0 Chatflow 接進 n8n，變成每天自動跑的批次產線。這一頁把安裝指令、Expression 取值、If 判斷、Agent 的子節點、$fromAI() 與批次呼叫 Dify 都做成可以自己操作的模擬。</p>
     <div class="chips"><span class="tag">兩個動手範例：每日天氣提醒、多工具 AI Agent</span><span class="tag amber">★ n8n × Dify 長照 3.0 批次評估</span><span class="tag gray">Agent 迴圈、四段式提示、n8n vs Dify 選型等觀念見 M8；模擬器為教學示意</span></div>
+  <div class="note" id="outcomes"><b>學完這份講義，你要能做到</b>
+    <ol style="margin:6px 0 4px 1.3em;padding:0">
+      <li>在 Windows 上用 Docker 跑起 n8n，並說出它的定位與六個核心概念　<a href="#p01">第 01 節</a>、<a href="#p02">第 02 節</a>、<a href="#p03">第 03 節</a></li>
+      <li>看懂編輯器、節點與資料流，會用 Expression　<a href="#p04">第 04 節</a>、<a href="#p05">第 05 節</a></li>
+      <li>完成範例一：Trigger → 抓資料 → 判斷 → 輸出　<a href="#p06">第 06 節</a></li>
+      <li>做出多工具 AI Agent，用 $fromAI() 把任意 API 變成工具　<a href="#p07">第 07 節</a>、<a href="#p08">第 08 節</a>、<a href="#p09">第 09 節</a>、<a href="#p10">第 10 節</a></li>
+      <li>用 Executions 除錯、正確發布；能把 Dify 長照 3.0 接進 n8n　<a href="#p11">第 11 節</a>、<a href="#p12">第 12 節</a></li>
+    </ol>
+  </div>
   </header>
 
   <section class="part" id="p01" data-t="n8n 是什麼">
@@ -46,7 +55,7 @@
     <div class="ph"><span class="num">03</span><div><h2>安裝常見問題與日常操作</h2><div class="en">TROUBLESHOOTING</div></div></div>
     <p class="one">卡關時的通則：先看 Docker Desktop 的 Containers 分頁確認容器狀態，再點該容器的 Logs 看錯誤訊息——九成問題在這裡就能定位。停止容器不會刪掉資料；資料存在 volume 裡，更新版本後 workflow 與憑證都會保留。</p>
     <div class="wd"><div class="wh"><h3>症狀 → 處方</h3><span class="tag amber">練習</span></div><div id="w-fix"></div></div>
-  <div class="wd"><div class="wh"><h3>真實案例：你的 n8n 有沒有 Ni8mare 漏洞？</h3><span class="tag blue">CVE-2026-21858・CVSS 10</span></div><p class="hint">選你自架的 n8n 版本與使用方式，看風險等級與該做什麼。對應講義 n8n 入門第 18 頁。</p><div id="w-n8nver"></div></div>
+  <div class="wd"><div class="wh"><h3>真實案例：你的 n8n 有沒有 Ni8mare 漏洞？</h3><span class="tag blue">CVE-2026-21858・CVSS 10</span></div><p class="hint">選你自架的 n8n 版本與使用方式，看風險等級與該做什麼。對應講義 n8n 入門第 19 頁。</p><div id="w-n8nver"></div></div>
   </section>
 
   <section class="part" id="p04" data-t="介面與節點">

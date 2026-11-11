@@ -80,10 +80,10 @@
       res.innerHTML = '';
       const L = R.filter(r => r[0] > v), sec = L.filter(r => r[3] === '安全').length, act = L.filter(r => r[3] === '要處理' || r[3] === '行為改變').length;
       res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('落後的版本', L.length + ' 個', L.length > 2 ? 'bad' : L.length ? '' : 'good'), kpi('錯過的安全修補', sec + ' 個', sec ? 'bad' : 'good'), kpi('升級後要手動處理', act + ' 項', act ? 'bad' : 'good')));
-      if (!L.length) { res.append(note('已是 v1.18。之後仍要追 Release Notes：每一兩個月一個新版本，中間還有多次修補版。')); return; }
+      if (!L.length) { res.append(note('已是這個工具涵蓋的最新版 v1.18；官方已出到 v1.19 以上，升級前仍要讀 Release Notes：每一兩個月一個新版本，中間還有多次修補版。')); return; }
       const tb = h('table', { class: 'dt' }, h('tr', null, h('th', null, '版本'), h('th', null, '時間'), h('th', null, '類型'), h('th', null, '內容')));
       L.forEach(r => tb.append(h('tr', null, h('td', { class: 'mono' }, 'v' + r[1]), h('td', null, r[2]), h('td', null, h('b', { style: { color: TC[r[3]] } }, r[3])), h('td', null, r[4]))));
-      res.append(tb, note('升級前讀每一版的 Upgrade 段落、備份 .env 與 volumes；用 git checkout 指定版本再 docker compose pull，不要追 main。升完用第 45 頁的三個測試指令重跑' + (L.some(r => r[0] === 17) ? '，並把知識庫文件重新匯入。' : '。') + ' 放病歷或長照評估資料的自架系統，錯過安全修補就是帶著已公開的漏洞上線。'));
+      res.append(tb, note('升級前讀每一版的 Upgrade 段落、備份 .env 與 volumes；用 git checkout 指定版本再 docker compose pull，不要追 main。升完用第 46 頁的三個測試指令重跑' + (L.some(r => r[0] === 17) ? '，並把知識庫文件重新匯入。' : '。') + ' 放病歷或長照評估資料的自架系統，錯過安全修補就是帶著已公開的漏洞上線。'));
     }
     box.append(h('div', { class: 'row' }, lab('你目前的版本：'), seg([[12, 'v1.12 以前'], [13, '1.13'], [14, '1.14'], [15, '1.15'], [16, '1.16'], [17, '1.17'], [18, '1.18']], () => v, x => v = x, draw)), res); draw();
   })();
