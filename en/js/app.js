@@ -400,9 +400,13 @@
     if (!container) return;
     container.innerHTML = "";
     (window.EARFLOW_CATEGORIES || []).forEach((cat) => {
+      const count = cat.id === "all"
+        ? state.units.length
+        : state.units.filter((u) => u.category === cat.id).length;
       const btn = document.createElement("button");
       btn.className = `cat-pill ${state.currentCategory === cat.id ? "active" : ""}`;
-      btn.textContent = cat.name;
+      const baseName = cat.name.replace(/\s*\(\d+\)$/, "");
+      btn.textContent = `${baseName} (${count})`;
       btn.onclick = () => {
         state.currentCategory = cat.id;
         renderCategories();
@@ -417,9 +421,15 @@
     if (!container) return;
     container.innerHTML = "";
 
-    const filtered = state.units.filter(
-      (u) => state.currentCategory === "all" || u.category === state.currentCategory
-    );
+    const searchQuery = (document.getElementById("unitSearchInput")?.value || "").trim().toLowerCase();
+
+    const filtered = state.units.filter((u) => {
+      const matchCat = state.currentCategory === "all" || u.category === state.currentCategory;
+      if (!matchCat) return false;
+      if (!searchQuery) return true;
+      const hay = `${u.title} ${u.focus} ${u.categoryName}`.toLowerCase();
+      return hay.includes(searchQuery);
+    });
 
     filtered.forEach((unit) => {
       const card = document.createElement("div");
@@ -524,6 +534,27 @@
 
       container.appendChild(card);
     });
+
+    // Bottom Unit Progression Bar for effortless iPad/iPhone navigation
+    const currentIdx = state.units.findIndex((u) => u.id === unit.id);
+    const prevUnit = currentIdx > 0 ? state.units[currentIdx - 1] : null;
+    const nextUnit = currentIdx >= 0 && currentIdx < state.units.length - 1 ? state.units[currentIdx + 1] : null;
+
+    const navFooter = document.createElement("div");
+    navFooter.className = "unit-banner";
+    navFooter.style.margin = "8px 0 18px";
+    navFooter.innerHTML = `
+      <div style="display:flex; flex-wrap:wrap; gap:10px; width:100%; justify-content:space-between; align-items:center;">
+        <div>
+          ${prevUnit ? `<button class="secondary-btn" data-action="goto-unit" data-unit-id="${escapeHtml(prevUnit.id)}">⬅️ 上一單元</button>` : `<span></span>`}
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          ${state.currentStage < 4 ? `<button class="secondary-btn" data-action="next-stage">進階至 Stage ${state.currentStage + 1} ➔</button>` : ""}
+          ${nextUnit ? `<button class="primary-btn" data-action="goto-unit" data-unit-id="${escapeHtml(nextUnit.id)}">下一單元：${escapeHtml(nextUnit.title.slice(0, 18))}... ➔</button>` : ""}
+        </div>
+      </div>
+    `;
+    container.appendChild(navFooter);
 
     bindSentenceCardEvents(container, unit);
   }
@@ -722,6 +753,20 @@
 
         case "compare-voice":
           compareNativeAndUserAudio(idx);
+          break;
+
+        case "next-stage":
+          state.currentStage = Math.min(4, state.currentStage + 1);
+          renderCurrentUnit();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          break;
+
+        case "goto-unit":
+          if (target.dataset.unitId) {
+            state.currentStage = 1;
+            selectUnit(target.dataset.unitId);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
           break;
       }
     };
@@ -1063,6 +1108,13 @@
 
     const themeBtn = document.getElementById("themeToggleBtn");
     if (themeBtn) themeBtn.onclick = toggleTheme;
+
+    const searchInput = document.getElementById("unitSearchInput");
+    if (searchInput) {
+      searchInput.oninput = () => {
+        renderUnitList();
+      };
+    }
 
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
     const backdrop = document.getElementById("sidebarBackdrop");
