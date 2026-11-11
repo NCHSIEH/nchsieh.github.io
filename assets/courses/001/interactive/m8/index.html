@@ -22,6 +22,15 @@
     <h1>Dify 應用開發：從 Chatbot 到 Agent</h1>
     <p class="lead">把模型變成能用的系統。三週走完 Chatbot → RAG 知識庫 → Agent，以台灣長照 3.0 為實例，最後交付你自己的期末專題。這一頁把 Dify 裡最容易出錯的環節做成模擬器：切塊怎麼把給付表切散、Top-K 與閾值怎麼篩段落、程式碼節點沒接上時金額怎麼亂跳、Agent 的思考迴圈怎麼失控。</p>
     <div class="chips"><span class="tag">實例：長照給付試算 Chatflow（七步）</span><span class="tag amber">期末專題：構想書 W15（10%）＋ Demo W16（20%）</span><span class="tag gray">模擬器為教學示意，非 Dify 實際執行</span></div>
+      <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>依流程由誰決定，在 Chatbot、Workflow、Chatflow、Agent 之間選型　<a href="#p02">第 02 節</a></li>
+        <li>寫出四段式 System Prompt，並用四個手法抑制幻覺　<a href="#p05">第 05 節</a>、<a href="#p06">第 06 節</a></li>
+        <li>設定切塊與召回參數，並用 Tracing 判斷 RAG 是哪一種失效　<a href="#p07">第 07 節</a>、<a href="#p08">第 08 節</a>、<a href="#p10">第 10 節</a>、<a href="#p13">第 13 節</a></li>
+        <li>做出「檢索＋LLM＋程式碼」流程：數字不生成，並用三個測試個案驗證　<a href="#p11">第 11 節</a>、<a href="#p12">第 12 節</a></li>
+        <li>為 Agent 設工具、迭代上限與失敗分支，並把人工確認寫進專題流程　<a href="#p14">第 14 節</a>、<a href="#p15">第 15 節</a>、<a href="#p16">第 16 節</a>、<a href="#p17">第 17 節</a></li>
+      </ol>
+      <div style="font-size:13px;color:var(--muted)">需要先會：M7 的 Embedding 與 RAG 概念、提示詞四層次與四條紅線。</div></div>
   </header>
 
   <section class="part" id="p01" data-t="Dify 是什麼">
@@ -49,6 +58,7 @@
     <p class="one">課堂用雲端版最快；專題若處理健康資料，本地部署（Docker＋Ollama）不是選項而是必要條件。System Prompt 每次呼叫都重送；召回段落是唯一會隨設定放大的部分。</p>
     <div class="wd"><div class="wh"><h3>一次 RAG 對話的 Token 組成</h3><span class="tag amber">互動</span></div><div id="w-cost"></div></div>
     <div class="wd"><div class="wh"><h3>雲端 vs 本地、金鑰規範</h3></div><div id="w-env"></div></div>
+    <div class="wd"><div class="wh"><h3>模型會下架：換了模型，要重測什麼？</h3><span class="tag amber">互動</span><span class="tag gray">虛構示意</span></div><p class="hint">供應商會公告關閉舊型號，你的應用得換一個新模型。切換模型，看同樣三個測試個案的結果有什麼變化，再勾選你上線前會做的檢查。對應講義 M8 第 28 頁。</p><div id="w-swap"></div></div>
   </section>
 
   <section class="part" id="p05" data-t="System Prompt 四段式">
@@ -107,7 +117,8 @@
     <p class="one">連線決定「順序」，變數綁定才決定「內容」。最常見的失敗：變數沒綁 → 下游收到空值 → LLM 沒有資料可用 → 開始自由發揮——看起來像幻覺，其實是接線問題。</p>
     <div class="wd"><div class="wh"><h3>Step 5 程式碼節點：輸入什麼、輸出什麼</h3><span class="tag amber">核心互動</span></div><p class="hint">左邊是講義的 Python；右邊用同一條規則即時解析你輸入的 LLM 輸出文字。</p><div id="w-code"></div></div>
     <div class="wd"><div class="wh"><h3>變數綁定對照</h3></div><div id="w-bind"></div></div>
-  <div class="wd"><div class="wh"><h3>真實案例：聊天機器人說錯了，誰負責？（Air Canada 案）</h3><span class="tag blue">2024 BCCRT 149</span></div><p class="hint">勾選你的機器人做到哪些防護，看同一個問題（「喪親優惠可以事後申請嗎？」）會得到什麼回答，以及出事時機構站不站得住。對應講義 M8 第 46 頁。</p><div id="w-aircan"></div></div>
+  <div class="wd"><div class="wh"><h3>真實案例：聊天機器人說錯了，誰負責？（Air Canada 案）</h3><span class="tag blue">2024 BCCRT 149</span></div><p class="hint">勾選你的機器人做到哪些防護，看同一個問題（「喪親優惠可以事後申請嗎？」）會得到什麼回答，以及出事時機構站不站得住。對應講義 M8 第 49 頁。</p><div id="w-aircan"></div></div>
+  <div class="wd"><div class="wh"><h3>正面案例：LLM 只當介面，數字由演算法算（UpDoc）</h3><span class="tag blue">與 Air Canada 成對</span><span class="tag gray">數字為示意</span></div><p class="hint">同一個問題問五次：讓 LLM 直接回答金額，與金額由程式查表、LLM 只負責說明，差在哪？對應講義 M8 第 50 頁。</p><div id="w-updoc"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="除錯決策樹">

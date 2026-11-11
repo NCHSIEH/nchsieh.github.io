@@ -195,4 +195,56 @@
     Object.keys(L).forEach(k => opts.append(ck(L[k], () => G[k], v => G[k] = v)));
     box.append(opts, res); draw();
   })();
+
+  /* 第 04 節：模型下架，換模型重測（2026-11 新增，虛構示意） */
+  (function swap() {
+    const box = $('#w-swap'); if (!box) return;
+    let model = 'old'; const G = { rerun: false, cmp: false, fab: false, prompt: false };
+    const R = {
+      old: [['A 正常路徑', '等級與金額由程式碼節點查表；說明照知識庫改寫。', 'good'], ['B 資訊不足', '列出還需要的評估項目，不給等級。', 'good'], ['C 範圍外', '「查無相關資料，建議洽詢承辦單位。」', 'good']],
+      new: [['A 正常路徑', '等級與金額與舊版相同（查表）；但說明多了一句「另可申請輔具補助」——知識庫裡沒有這條。', 'amber'], ['B 資訊不足', '直接判定一個等級（硬猜），沒有列出缺少的資訊。', 'bad'], ['C 範圍外', '條列了國民年金的申請條件（模型憑印象編的）。', 'bad']]
+    };
+    const out = h('div'), res = h('div'), sw = h('div', { style: { display: 'flex', gap: '8px', margin: '8px 0' } });
+    const L = { rerun: '換模型後，重跑三個測試個案', cmp: '比對等級與金額是否與舊版一致', fab: '檢查有沒有新冒出來的數字或條件', prompt: '結果不同時，先調 Prompt 再重測，而不是假設行為一樣' };
+    function draw() {
+      sw.innerHTML = '';
+      [['old', '舊型號（即將下架）'], ['new', '新型號（供應商建議的替代）']].forEach(([k, t]) => sw.append(h('button', { class: 'btn' + (model === k ? ' on' : ''), style: { padding: '6px 12px', border: '1.5px solid ' + (model === k ? 'var(--accent)' : 'var(--line)'), borderRadius: '8px', background: model === k ? 'var(--accent)' : '#fff', color: model === k ? '#fff' : 'inherit', cursor: 'pointer' }, onclick: () => { model = k; draw(); } }, t)));
+      out.innerHTML = '';
+      R[model].forEach(([n, t, c]) => out.append(h('div', { style: { border: '1px solid var(--line)', borderLeft: '4px solid var(--' + (c === 'good' ? 'good' : c === 'bad' ? 'bad' : 'amber') + ', #c80)', borderRadius: '8px', padding: '8px 12px', marginTop: '6px', background: '#fff' } }, h('b', null, n + '：'), t)));
+      res.innerHTML = '';
+      const n = Object.values(G).filter(Boolean).length;
+      let msg;
+      if (n === 0) msg = '只改模型名稱就上線：新型號下的 B、C 兩案已經退步，而你不會知道。';
+      else if (n < 4) msg = `做了 ${n} / 4 項。` + (G.rerun ? '重跑之後' : '沒有重跑，就看不到差異；重跑之後') + '，還要比對等級與金額、檢查有沒有編造，結果不同就調 Prompt 再測。';
+      else msg = '四項都做了：這就是「換模型＝換一個新系統：重測通過才算數」。切到新型號可以看到，需要重測的正是 B、C 兩案。';
+      res.append(h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), msg));
+    }
+    const opts = h('div'); Object.keys(L).forEach(k => opts.append(check(L[k], () => G[k], v => G[k] = v, draw)));
+    box.append(sw, out, h('div', { style: { marginTop: '8px' } }, opts), res); draw();
+  })();
+
+  /* 第 12 節：UpDoc 正面案例，數字由鎖定的演算法算（2026-11 新增，數字為示意） */
+  (function updoc() {
+    const box = $('#w-updoc'); if (!box) return;
+    let mode = 'llm'; let runs = [];
+    const table = [10020];
+    const res = h('div'), sw = h('div', { style: { display: 'flex', gap: '8px', margin: '8px 0' } });
+    function run() {
+      runs = [];
+      for (let i = 0; i < 5; i++) runs.push(mode === 'llm' ? [10020, 9800, 10200, 10020, 9600][Math.floor(Math.random() * 5)] : 10020);
+      draw();
+    }
+    function draw() {
+      sw.innerHTML = '';
+      [['llm', 'LLM 直接回答金額'], ['lock', '程式查表算金額，LLM 只說明']].forEach(([k, t]) => sw.append(h('button', { style: { padding: '6px 12px', border: '1.5px solid ' + (mode === k ? 'var(--accent)' : 'var(--line)'), borderRadius: '8px', background: mode === k ? 'var(--accent)' : '#fff', color: mode === k ? '#fff' : 'inherit', cursor: 'pointer' }, onclick: () => { mode = k; runs = []; draw(); } }, t)));
+      sw.append(h('button', { style: { padding: '6px 12px', border: '1.5px solid var(--line)', borderRadius: '8px', background: '#fff', cursor: 'pointer' }, onclick: run }, '同一個問題問 5 次'));
+      res.innerHTML = '';
+      if (!runs.length) { res.append(h('div', { class: 'note' }, '問題：「長照 2 級每月給付額度是多少？」按右邊的按鈕，看五次回答。')); return; }
+      const same = runs.every(x => x === runs[0]);
+      res.append(h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } }, ...runs.map((x, i) => h('div', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '6px 12px', background: '#fff' } }, '第 ' + (i + 1) + ' 次：' + x.toLocaleString() + ' 元'))));
+      res.append(h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'), same ? (mode === 'lock' ? '五次都一樣——金額來自查表，不來自語言模型；LLM 只負責把結果說清楚。這就是 UpDoc 能過關的結構：審查的是鎖定的演算法，不是對話。' : '這次剛好五次一樣，再按一次——LLM 生成的數字不保證每次相同。') : '五次不同：LLM 直接生成的數字不穩定。Air Canada 的機器人錯在這裡；公司要為它說的話負責。'));
+    }
+    box.append(sw, res); draw();
+  })();
+
 })();

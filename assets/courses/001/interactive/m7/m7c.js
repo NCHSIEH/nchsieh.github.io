@@ -198,16 +198,16 @@
     const kpi = (k, v, cls) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v' + (cls ? ' ' + cls : '') }, v));
     let view = 'tl'; const res = h('div');
     const TL = [['2024/4', 'TAIDE‑LX‑7B（底模 Llama 2）', '可商用；另有學研用 13B'], ['2024/4–5', 'Llama3‑TAIDE‑LX‑8B（底模 Llama 3）', 'Llama 3 釋出後 4 天完成訓練，表現勝過 Llama 2 底的 13B'], ['2025/2', 'TAIDE 8B（底模 Llama 3.1）', '可商用；研發肺癌、乳癌、大腸癌衛教詢答等應用'], ['2025', 'Gemma‑3‑TAIDE‑12b（底模 Gemma 3）', '參加 AIEC 在地化評測']];
-    const EV = [['IBM granite‑3.3‑8b', 90], ['Llama‑3.1‑8B', 84], ['Gemma‑3‑TAIDE‑12b', 84]];
+    const EV = [['台灣價值觀', 84], ['學測社會', 58.78], ['學測國文', 54.49]];
     function draw() {
       res.innerHTML = '';
       if (view === 'tl') {
         res.append(h('div', { style: { display: 'grid', gap: '6px', marginTop: '10px' } }, ...TL.map(([d, m, x]) => h('div', { style: { display: 'grid', gridTemplateColumns: '90px 1fr', gap: '10px', border: '1px solid var(--line)', borderRadius: '8px', padding: '8px 12px', background: '#fff' } }, h('div', { class: 'mono', style: { color: 'var(--accent-ink)', fontWeight: 700 } }, d), h('div', null, h('b', null, m), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, x))))));
         res.append(note('TAIDE 沒有從零預訓練，而是每當有更好的開源底模（Llama 2 → 3 → 3.1 → Gemma 3），就用繁中與台灣資料做持續預訓練與微調——這正是本模組「預訓練 → 微調 → 推論」三階段的真實版本。底模換了，授權條款也跟著換，使用前一定要看模型卡。'));
       } else {
-        const bars = h('div'); res.append(lab('AIEC 小模型在地化評測（2025 年，20 款受測；顯示前段三款）'), bars);
-        U.hbars(bars, EV.map(([l, v], i) => ({ label: l, value: v, color: /TAIDE/.test(l) ? C.accent : '#9aa3ad' })), { w: 760, lw: 160, rowH: 30, max: 100, fmt: v => v + '%' });
-        res.append(note('評測題目來自「臺灣價值觀」題庫、高中學測國文與社會。在地化表現最好的是 IBM 的 granite‑3.3‑8b（90%），以台灣資料微調的 Gemma‑3‑TAIDE‑12b 與 Llama‑3.1‑8B 同為 84%——「本土訓練」不保證分數最高，評測也會定期更新。選模型時：先查最新一期評測，再用自己專題的 10 題測試集實測（Take‑Home 任務一）。'));
+        const bars = h('div'); res.append(lab('AIEC 2026/5 小模型組（13B 以下）：Gemma‑3‑TAIDE‑12b 的三項分數'), bars);
+        U.hbars(bars, EV.map(([l, v], i) => ({ label: l, value: v, color: C.accent })), { w: 760, lw: 160, rowH: 30, max: 100, fmt: v => v + '%' });
+        res.append(note('三項指標：臺灣價值觀題組、近五年高中學測國文與社會。TAIDE 在小模型組的台灣價值觀 84%，學測國文 54.49%、社會 58.78%（數字引自 2026/5 的新聞報導所述 AIEC 官網資料）。語言能力不等於在地理解：同一輪裡，部分模型學科分數很高、價值觀卻只有 40–60%。AIEC 現在每月第一週星期五公布一次（最新為 2026/11/6 的 10 月結果），選模型時先查官網最新一期，再用自己專題的 10 題測試集實測（Take‑Home 任務一）。'));
       }
     }
     box.append(h('div', { class: 'row' }, seg([['tl', 'TAIDE 怎麼換底模'], ['ev', 'AIEC 在地化評測']], () => view, v => view = v, draw)), res); draw();
