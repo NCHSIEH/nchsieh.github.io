@@ -102,6 +102,26 @@ section>h2 .n{flex:none;background:var(--brand);color:var(--on-brand);font-famil
 .part.p{--tc:var(--c-p)} .part.q{--tc:var(--c-q)} .part.l{--tc:var(--c-l)}
 .part .pc{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
 .confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+/* 帶入、檢查、匯出 */
+.bring{display:grid;gap:8px;margin-top:12px}
+.bi{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--field)}
+.bi.same{opacity:.7}
+.bi label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.bi input{margin-top:6px;width:17px;height:17px;flex:none;accent-color:var(--brand)}
+.bi small,.tog small{display:block;color:var(--faint);font-size:13px}
+.bi details{margin:4px 0 0 27px;font-size:14px}
+.bi summary{cursor:pointer;color:var(--brand);font-size:13.5px}
+.pv{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 11px;margin-top:6px;line-height:1.75}
+.pv.old{border-style:dashed;color:var(--muted)}
+.ck{display:grid;gap:8px;margin-top:12px}
+.ci{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px 10px;border-radius:9px;font-size:14.5px}
+.ci.bad{background:var(--bad-tint)}
+.ci p{color:var(--muted);font-size:14px}
+.ci .mk{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;background:var(--ok);color:#fff}
+.ci.bad .mk{background:var(--bad)}
+.okl summary{cursor:pointer;color:var(--muted);font-size:14px;padding:4px 0}
+.tog{display:flex;gap:10px;align-items:flex-start;margin-top:12px;cursor:pointer}
+.tog input{margin-top:6px;width:17px;height:17px;flex:none;accent-color:var(--brand)}
 footer{max-width:1120px;margin:0 auto;padding:0 18px 40px;color:var(--faint);font-size:13px}
 @media (max-width:820px){
   .tools{grid-template-columns:1fr} .opts.c2,.opts.c3{grid-template-columns:1fr}
@@ -122,6 +142,9 @@ footer{max-width:1120px;margin:0 auto;padding:0 18px 40px;color:var(--faint);fon
 <section aria-labelledby="h-tools"><h2 id="h-tools">三個工作台的現況</h2><div class="tools" id="tools"></div></section>
 <section aria-labelledby="h-wiz"><h2 id="h-wiz"><span class="n">第一步</span>定路線</h2><div id="wizard"></div></section>
 <section aria-labelledby="h-map" id="mapsec" hidden><h2 id="h-map"><span class="n">第二步</span>照路線圖完成</h2><div id="map"></div></section>
+<section aria-labelledby="h-br" id="bringsec" hidden><h2 id="h-br"><span class="n">第三步</span>把方法內容帶進計畫書</h2><div id="bringbox"></div></section>
+<section aria-labelledby="h-ck" id="cksec" hidden><h2 id="h-ck"><span class="n">第四步</span>一致性檢查</h2><div id="ckbox"></div></section>
+<section aria-labelledby="h-ex" id="exsec" hidden><h2 id="h-ex"><span class="n">第五步</span>匯出完整計畫書</h2><div id="exbox"></div></section>
 <section aria-labelledby="h-bk"><h2 id="h-bk">全案備份</h2><div class="card">
 <p>把三個工作台的草稿和這一頁的路線打包成一個檔案。換電腦、換瀏覽器或清除瀏覽資料之前，先下載一份。</p>
 <div class="row-btn" style="margin-top:10px"><button type="button" class="btn small" id="bkout">下載全案備份（.json）</button>
@@ -360,7 +383,7 @@ function mapHTML(S){
 }
 
 /* ---------- 全案備份 ---------- */
-var BK = [K.p, K.q, K.l, K.hub, K.sp, K.sq, K.sl], pending = null;
+var BK = [K.p, K.q, K.l, K.hub, K.sp, K.sq, K.sl, 'rw.appx'], pending = null;
 function exportAll(){
   var o = { app:'research-workbench-bundle', version:1, exported:new Date().toISOString(), data:{} };
   BK.forEach(function(k){ try{ var r = localStorage.getItem(k); if(r !== null) o.data[k] = r; }catch(e){} });
@@ -389,6 +412,262 @@ function readBundle(file){
   fr.readAsText(file);
 }
 
+/* ================= 第二期：把方法內容帶進計畫書、一致性檢查；第三期：匯出 ================= */
+function tx(s){ return String(s==null?'':s).trim(); }
+/* 工作台範例與引導文字裡的教學標記（白話說明、講義頁碼、口試提示）不進計畫書 */
+function clean(s){
+  return tx(s).split('\n').filter(function(l){ return !/^\s*💡/.test(l); }).join('\n')
+    .replace(/📌?\s*【論文正式寫法範本】\s*/g,'').replace(/【論文正式寫法範本[^】]*】\s*/g,'').replace(/[（(][^（）()]*@[^）)]*[）)]/g,'')
+    .replace(/(依據|參照|參考|對應|見)?\s*@\s?\d+(?:\.\d+)?[A-Z]?(?:\s*(?:第\s*[\d–\-、,，\s]+張|[sS]\d+(?:[–\-]\d+)?(?:[、,，]\s*[sS]?\d+(?:[–\-]\d+)?)*|Part\s*\d+|Section\s*\d+|全份))*\s*[，,、；]?/g,'')
+    .replace(/[（(]\s*[）)]/g,'')
+    .replace(/[（(]見?\s*講義[^）)]*[）)]/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]️?/gu,'')
+    .replace(/[ \t]+\n/g,'\n').replace(/\n{2,}/g,'\n').trim();
+}
+function rows(a, from){ return (Array.isArray(a)?a:[]).filter(function(r){ return Array.isArray(r) && r.slice(from||0).some(function(c){ return tx(c).length > 1; }); }); }
+function sect(pairs){ return pairs.map(function(p){ return [p[0], clean(p[1])]; }).filter(function(p){ return p[1]; }).map(function(p){ return (p[0] ? '【' + p[0] + '】' : '') + p[1]; }).join('\n'); }
+function strip(s, re){ return clean(s).replace(re,'').trim(); }
+function dot(s){ s = tx(s); return s && !/[。．.！？!?；;]$/.test(s) ? s + '。' : s; }
+function splitPop(t){
+  var site = [], incl = [], inIncl = false;
+  clean(t).split('\n').forEach(function(l){
+    if(/^[\s・•\-－*①-⑨\d.、]*(納入|排除|收案|納排)/.test(l)) inIncl = true;
+    else if(/^[\s・•\-－*]*(目標母體|抽樣架構|母體|場域|研究對象|樣本)/.test(l)) inIncl = false;
+    (inIncl ? incl : site).push(l);
+  });
+  return [site.join('\n'), incl.join('\n')];
+}
+function roleOf(t){
+  t = tx(t);
+  if(/調節|moderator/i.test(t)) return '干擾';
+  if(/中介|mediator|（M）|^M\b/i.test(t)) return '中介';
+  if(/混淆|控制|共變|Z/.test(t)) return '控制';
+  if(/DV|依變|結果/.test(t)) return '依變項';
+  if(/IV|自變|預測|暴露|介入/.test(t)) return '自變項';
+  return '探索';
+}
+function rejectText(a){
+  return rows(a,1).slice(1).map(function(r){
+    var nm = strip(r[0], /^替代(候選)?(設計|取徑)\s*[A-Z]?\s*[:：]?\s*/), why = strip(r[2], /^【?(不採|排除)理由】?\s*[:：]?\s*/), fix = strip(r[3], /^口試防禦\s*[:：]\s*/);
+    if(!nm && !why) return '';
+    return '不採「' + (nm || tx(r[0])) + '」：' + dot(why) + (fix && !/口試/.test(r[3]) ? '本研究的處理：' + dot(fix) : '');
+  }).filter(Boolean).join('\n');
+}
+function adoptText(a){
+  var r = rows(a,1)[0]; if(!r) return '';
+  var why = strip(r[2], /^【?採用理由】?\s*[:：]?\s*/), fix = /口試/.test(r[3]) ? '' : clean(r[3]);
+  return [why ? '採用理由：' + dot(why) : '', fix ? dot(fix) : ''].filter(Boolean).join('');
+}
+
+/* 量性工作台 → 計畫書欄位 */
+function fromQuant(Q, name){
+  var V = rows(Q.s2_vars).filter(function(r){ return tx(r[0]).length > 1; }), pop = splitPop(Q.s4_pop), o = { f:{}, src:{} };
+  function F(k, t, src){ t = tx(t); if(t){ o.f[k] = t; o.src[k] = src; } }
+  F('m3_rq', clean(Q.s1_rq), '步驟① 1.1 研究問題');
+  F('m4_frame', sect([['變項設計原則', Q.s2_principle], ['因果機制與替代解釋', rows(Q.s1_causal,1).map(function(r){ return strip(r[0], /^[①-⑨]\s*/) + '：' + clean(r[1]); }).join('\n')], ['混淆變項與中介變項', Q.s1_zm]]), '步驟① 1.4–1.5、步驟② 2.2');
+  var des = sect([['', adoptText(Q.s1_reject)], ['分組與順序機制', Q.s3_assign], ['對照設計與盲法', Q.s3_blinding]]);
+  if(des) F('m5_design', '本研究採' + name + '。\n' + des, '步驟① 1.6、步驟③ 3.1–3.2');
+  F('m5_reject', rejectText(Q.s1_reject), '步驟① 1.6 候選設計取捨');
+  F('m5_site', pop[0], '步驟④ 4.1 母體與抽樣架構');
+  F('m5_incl', pop[1], '步驟④ 4.1 納入與排除條件');
+  F('m5_sample', sect([['抽樣方法', Q.s4_sampling], ['樣本數推算', Q.s4_power]]), '步驟④ 4.2–4.3');
+  F('m5_tool', sect([['測量工具', V.map(function(r){ return clean(r[0]) + '：' + [clean(r[4]), clean(r[2])].filter(Boolean).join('；'); }).join('\n')], ['信度', Q.s2_rel], ['效度', Q.s2_val]]), '步驟② 2.1、2.3–2.4');
+  F('m6_common', sect([['分析單位與資料結構', Q.s5_layout], ['資料清理與缺失值', Q.s5_clean], ['前提檢查與替代方案', Q.s5_assump], ['多重比較與敏感度分析', Q.s6_mult]]), '步驟⑤ 5.1–5.2、5.4，步驟⑥ 6.2');
+  F('m9_limd', clean(Q.s3_ext), '步驟③ 3.4 效度權衡與推論界限');
+  o.vars = V.map(function(r){ return { name:clean(r[0]), role:roleOf(r[1]), concept:'', oper:clean(r[3]), tool:clean(r[4]), scale:clean(r[2]), time:clean(r[5]), rel:'' }; });
+  o.bias = rows(Q.s3_bias,1).filter(function(r){ return tx(r[2]); }).map(function(r){ return { name:clean(r[0]), why:clean(r[1]), fix:clean(r[2]) }; });
+  o.objs = rows(Q.s6_sap,1).map(function(r){ return { hyp:clean(r[0]), analysis:clean(r[2]) + (tx(r[1]) ? '（' + clean(r[1]) + '）' : ''), crit:clean(r[3]), sens:clean(r[4]) }; });
+  return o;
+}
+/* 質性工作台 → 計畫書欄位 */
+function fromQual(L, name){
+  var G = rows(L.s2_vars,1), o = { f:{}, src:{} };
+  function F(k, t, src){ t = tx(t); if(t){ o.f[k] = t; o.src[k] = src; } }
+  F('m3_rq', clean(L.s1_rq), '步驟① 1.1 核心研究問題');
+  F('m4_frame', sect([['探究焦點', rows(L.s1_causal,1).map(function(r){ return strip(r[0], /^[①-⑨]\s*/) + '：' + clean(r[1]); }).join('\n')], ['研究者前理解與立場', L.s1_zm]]), '步驟① 1.4–1.5');
+  var des = sect([['', adoptText(L.s1_reject)], ['認識論立場與方法學定位', L.s1_h0h1]]);
+  if(des) F('m5_design', '本研究採' + name + '。\n' + des, '步驟① 1.3、1.6');
+  F('m5_reject', rejectText(L.s1_reject), '步驟① 1.6 候選取徑取捨');
+  F('m5_site', clean(L.s2_principle), '步驟② 2.2 場域進入與招募');
+  F('m5_incl', G.filter(function(r){ return tx(r[2]); }).map(function(r){ return clean(r[0]) + '：' + clean(r[2]); }).join('\n'), '步驟② 2.1 抽樣表');
+  F('m5_sample', sect([['抽樣策略與人數', G.map(function(r){ return clean(r[0]) + '：' + [clean(r[1]), clean(r[3])].filter(Boolean).join('，'); }).join('\n')], ['樣本量依據（資訊力）', L.s2_rel], ['飽和判準', L.s2_val]]), '步驟② 2.1、2.3–2.4');
+  F('m5_tool', sect([['訪談大綱', rows(L.s3_bias,1).map(function(r){ return strip(r[0], /^[①-⑨]\s*/) + '：' + clean(r[1]).replace(/\n/g,' '); }).join('\n')]]), '步驟③ 3.3 訪談大綱');
+  F('m5_flow', sect([['資料蒐集程序', L.s3_assign], ['團隊分工與訪談後簡報', L.s3_blinding], ['觀察紀錄與三角檢證', L.s3_ext]]), '步驟③ 3.1–3.2、3.4');
+  F('m6_qual', sect([['逐字稿與匿名', L.s4_pop], ['分析步驟', L.s4_sampling], ['編碼簿與雙人編碼', L.s4_scenarios], ['可信性四準則', L.s5_layout], ['研究者反思性', L.s5_clean]]), '步驟④ 4.1–4.2、4.4，步驟⑤ 5.1–5.2');
+  F('m7_consent', clean(L.s5_desc), '步驟⑤ 5.3 倫理審查與知情同意');
+  F('m7_coi', clean(L.s5_assump), '步驟⑤ 5.4 生成式 AI 使用聲明');
+  return o;
+}
+var PLAB = { m3_rq:['M3','主要研究問題','m3'], m4_frame:['M4','研究架構說明','m4'], m5_design:['M5','3.1 研究設計','m5'], m5_reject:['M5','3.1 不採之設計','m5'], m5_site:['M5','3.2 場域與對象','m5'],
+  m5_incl:['M5','3.2 納入與排除條件','m5'], m5_sample:['M5','3.3 抽樣與樣本數','m5'], m5_tool:['M5','3.4 研究工具','m5'], m5_flow:['M5','3.5 資料蒐集流程','m5'], m6_common:['M6','共通設定','m6'],
+  m6_qual:['M6','質性分析','m6'], m7_consent:['M7','知情同意','m7'], m7_coi:['M7','利益衝突與生成式 AI','m7'], m9_limd:['M9','研究限制：設計本身','m9'] };
+var PORDER = ['m3_rq','m4_frame','m5_design','m5_reject','m5_site','m5_incl','m5_sample','m5_tool','m5_flow','m6_common','m6_qual','m7_consent','m7_coi','m9_limd'];
+
+/* 組出「帶入清單」：每一項含來源、建議文字、計畫書現況 */
+function plan(S, r){
+  var Q = (r.q && S.q.live) ? get(K.q) : null, L = (r.l && S.l.live) ? get(K.l) : null, P = get(K.p) || {}, pf = P.f || {};
+  var a = Q ? fromQuant(Q, dname('q', Q.design)) : null, b = L ? fromQual(L, dname('l', L.design)) : null, items = [];
+  if(!a && !b) return { items:[], Q:Q, L:L, P:P };
+  var first = r.type2 === 'D' ? 'l' : 'q';   /* 探索性序列：質性在前 */
+  PORDER.forEach(function(k){
+    var parts = []; if(a && a.f[k]) parts.push(['q', a.f[k], a.src[k]]); if(b && b.f[k]) parts.push(['l', b.f[k], b.src[k]]);
+    if(!parts.length) return;
+    if(parts.length === 2 && first === 'l') parts.reverse();
+    var text = parts.length === 1 ? parts[0][1]
+      : k === 'm3_rq' ? parts.map(function(p){ return SHORT[p[0]] + '階段：' + p[1]; }).join('\n')
+      : parts.map(function(p, i){ return '（' + '一二'[i] + '）' + SHORT[p[0]] + '階段\n' + p[1]; }).join('\n');
+    var cur = tx(pf[k]);
+    items.push({ kind:'f', key:k, text:text, cur:cur, state: !cur ? 'empty' : (cur === text ? 'same' : 'diff'), src: parts.map(function(p){ return SHORT[p[0]] + ' ' + p[2]; }).join('；') });
+  });
+  if(a){
+    var pv = (P.vars||[]).filter(function(x){ return tx(x.name); }), pb = (P.bias||[]).filter(function(x){ return tx(x.name); }), po = (P.objs||[]);
+    if(a.vars.length){
+      var addV = a.vars.filter(function(x){ return !pv.some(function(y){ return same(x.name, y.name); }); });
+      items.push({ kind:'vars', key:'vars', rows:addV, all:a.vars, state: !pv.length ? 'empty' : (addV.length ? 'part' : 'same'), src:'量性 步驟② 2.1 變項表',
+        text: (pv.length ? addV : a.vars).map(function(x){ return x.name + '（' + x.role + '）：' + x.oper; }).join('\n') });
+    }
+    if(a.bias.length){
+      var addB = a.bias.filter(function(x){ return !pb.some(function(y){ return same(x.name, y.name); }); });
+      items.push({ kind:'bias', key:'bias', rows:addB, all:a.bias, state: !pb.length ? 'empty' : (addB.length ? 'part' : 'same'), src:'量性 步驟③ 3.3 偏誤控制表',
+        text: (pb.length ? addB : a.bias).map(function(x){ return x.name + '：' + x.fix; }).join('\n') });
+    }
+    if(a.objs.length){
+      var need = a.objs.filter(function(x, i){ var o = po[i]; return !o || !tx(o.analysis) || !tx(o.hyp); }).length;
+      items.push({ kind:'objs', key:'objs', all:a.objs, state: need ? (po.some(function(o){ return tx(o.text) || tx(o.analysis); }) ? 'part' : 'empty') : 'same', src:'量性 步驟⑥ 6.1 統計分析計畫表',
+        text: a.objs.map(function(x, i){ return (i+1) + '. ' + x.hyp + '\n　分析：' + x.analysis + (x.crit ? '\n　效應量與判準：' + x.crit : ''); }).join('\n') });
+    }
+  }
+  return { items:items, Q:Q, L:L, P:P, a:a, b:b };
+}
+function same(x, y){ x = tx(x).replace(/[（(].*$/,'').replace(/\s/g,''); y = tx(y).replace(/[（(].*$/,'').replace(/\s/g,''); return !!x && !!y && (x === y || x.indexOf(y) >= 0 || y.indexOf(x) >= 0); }
+
+var pick2 = {};   /* 使用者對「計畫書已有不同內容」的勾選 */
+function TLAB(it){ return it.kind === 'f' ? PLAB[it.key][0] + '｜' + PLAB[it.key][1] : it.kind === 'vars' ? 'M4｜變項定義表' : it.kind === 'bias' ? 'M5｜3.7 偏差來源與因應' : 'M3、M6｜假設與分析方法對照'; }
+function bringHTML(S, r, pl){
+  if(!(r.q || r.l)) return '';
+  var need = [r.q ? 'q' : '', r.l ? 'l' : ''].filter(Boolean), notReady = need.filter(function(t){ return !S[t].live; });
+  var h = '';
+  if(!pl.items.length){
+    return '<div class="card"><p>' + need.map(function(t){ return TOOL[t]; }).join('、') + '還沒有你自己的內容可以帶入。先照路線圖完成方法設計與分析設計，再回到這裡。</p></div>';
+  }
+  if(notReady.length) h += '<p class="note" style="margin-bottom:10px">' + notReady.map(function(t){ return TOOL[t]; }).join('、') + '還沒有你自己的內容，下面只列得出另一邊的項目。</p>';
+  var n = 0, sameH = '', sameN = 0;
+  h += '<div class="card"><p>方法工作台寫好的內容，整理成計畫書的段落與表格。<b>空白的欄位預設勾選；計畫書已經有內容的欄位，要你自己勾才會取代。</b>教學用的白話說明、講義頁碼不會帶過去。</p><div class="bring">';
+  pl.items.forEach(function(it, i){
+    var on = it.state === 'empty' || it.state === 'part' || (it.state === 'diff' && pick2[it.key]);
+    if(pick2[it.key] === false) on = false;
+    if(it.state !== 'same' && on) n++;
+    var tag = it.state === 'empty' ? '<span class="tagx">計畫書這格空白</span>' : it.state === 'same' ? '<span class="tagx ok">已一致</span>'
+      : it.state === 'part' ? '<span class="tagx">' + (it.kind === 'objs' ? '只補空白格，不覆蓋' : '補上計畫書缺少的 ' + it.rows.length + ' 列') + '</span>' : '<span class="tagx bad">計畫書已有不同內容</span>';
+    var one = '<div class="bi' + (it.state === 'same' ? ' same' : '') + '"><label><input type="checkbox" data-bk="' + it.key + '"' + (on ? ' checked' : '') + (it.state === 'same' ? ' disabled' : '') + '>' +
+      '<span><b>' + esc(TLAB(it)) + '</b> ' + tag + '<small>來源：' + esc(it.src) + '</small></span></label>' +
+      '<details><summary>看內容' + (it.state === 'diff' ? '（對照計畫書現有文字）' : '') + '</summary><div class="pv">' + esc(it.text).replace(/\n/g,'<br>') + '</div>' +
+      (it.state === 'diff' ? '<p class="fine">計畫書現有：</p><div class="pv old">' + esc(it.cur).replace(/\n/g,'<br>') + '</div>' : '') + '</details></div>';
+    if(it.state === 'same'){ sameH += one; sameN++; } else h += one;
+  });
+  if(sameN) h += '<details class="okl"><summary>已一致的 ' + sameN + ' 項</summary><div class="bring">' + sameH + '</div></details>';
+  if(sameN === pl.items.length) h += '<p class="note">方法工作台的內容都已經在計畫書裡。方法工作台之後有改動，這裡會再列出來。</p>';
+  h += '</div><div class="row-btn" style="margin-top:12px"><button type="button" class="btn" id="bring"' + (n ? '' : ' disabled style="opacity:.45;cursor:not-allowed"') + '>把勾選的 ' + n + ' 項寫入計畫書工作台</button>' +
+    (has('rw.undo.p') ? '<button type="button" class="btn small ghost" id="undo">復原上一次帶入</button>' : '') + '<span id="bringmsg" class="fine"></span></div>' +
+    '<p class="fine" style="margin-top:8px">計畫書沒有對應來源的欄位（如量性研究的 3.5 資料蒐集流程、M7 審查與去識別、M8 時程）要在計畫書工作台自己寫。帶入後請到計畫書工作台通讀一次，把段落改成你自己的語氣。</p></div>';
+  return h;
+}
+function applyBring(S, r){
+  var pl = plan(S, r), P = pl.P, done = 0;
+  try{ localStorage.setItem('rw.undo.p', JSON.stringify({ at:new Date().toISOString(), raw:localStorage.getItem(K.p) })); }catch(e){}
+  if(!P.meta) P.meta = { fmt:H.fmt || 'f1', type:H.type || '', type2:'', step:'setup', updated:'' };
+  P.f = P.f || {}; P.ck = P.ck || {};
+  pl.items.forEach(function(it){
+    var box = document.querySelector('input[data-bk="' + it.key + '"]'); if(!box || !box.checked || it.state === 'same') return;
+    if(it.kind === 'f') P.f[it.key] = it.text;
+    else if(it.kind === 'vars' || it.kind === 'bias'){
+      var keep = (P[it.kind]||[]).filter(function(x){ return tx(x.name); });
+      P[it.kind] = keep.concat(keep.length ? it.rows : it.all);
+    } else {
+      var po = (P.objs||[]).slice();
+      it.all.forEach(function(x, i){
+        var o = po[i] || (po[i] = { verb:'檢驗', text:'', hyp:'', analysis:'', crit:'', sens:'', exp:'' });
+        ['hyp','analysis','crit','sens'].forEach(function(k){ if(!tx(o[k])) o[k] = x[k]; });
+        if(!tx(o.text)) o.text = x.hyp.replace(/^H\d+[a-z]?\s*[（(]?[^：:）)]*[）)]?\s*[:：]\s*/,'');
+      });
+      P.objs = po;
+    }
+    done++;
+  });
+  P.meta.preset = P.meta.preset || '';
+  try{ localStorage.setItem(K.p, JSON.stringify(P)); }catch(e){ return 0; }
+  pick2 = {};
+  return done;
+}
+
+/* ---------- 一致性檢查 ---------- */
+function nums(t){ var m = tx(t).match(/\d[\d,]*\s*(?=人|名|位)/g) || []; return m.map(function(x){ return x.replace(/[,\s]/g,''); }).filter(function(x, i, a){ return +x >= 5 && a.indexOf(x) === i; }); }
+function checks(S, r, pl){
+  var C = [], P = pl.P || {}, pf = P.f || {}, Q = pl.Q, L = pl.L;
+  function add(ok, t, d, tool, step){ C.push({ ok:ok, t:t, d:d, tool:tool, step:step }); }
+  var titles = [['p', tx(pf.m10_title)], ['q', Q ? tx(Q.title) : ''], ['l', L ? tx(L.title) : '']].filter(function(x){ return x[1]; });
+  if(titles.length > 1){ var td = titles.some(function(x){ return x[1] !== titles[0][1]; });
+    add(!td, '題目', td ? titles.map(function(x){ return SHORT[x[0]] + '「' + x[1] + '」'; }).join('；') + '。定稿前統一成同一個題目。' : '三邊題目相同。', 'p', 'm10'); }
+  var ps = S.p.sum;
+  if(ps && !ps.sample){
+    if(ps.type) add(ps.type === H.type, '主型', ps.type === H.type ? '計畫書主型與路線相同。' : '路線是 ' + H.type + ' 型，計畫書工作台選的是 ' + ps.type + ' 型。', 'p', 'setup');
+    if(ps.fmt) add(ps.fmt === H.fmt, '計畫格式', ps.fmt === H.fmt ? '計畫書格式與路線相同。' : '路線是「' + FMT[H.fmt][0] + '」，計畫書工作台選的是「' + (ps.fmtName||'') + '」。匯出時以計畫書工作台為準。', 'p', 'setup');
+  }
+  [['q', r.q, Q], ['l', r.l, L]].forEach(function(x){ if(x[1] && x[2]){ var ok = x[2].design === x[1];
+    add(ok, SHORT[x[0]] + '設計', ok ? '工作台的設計與路線相同。' : '路線是「' + dname(x[0], x[1]) + '」，工作台目前是「' + dname(x[0], x[2].design) + '」。確認要用哪一個，再回上面改路線或改工作台。', x[0], 'setup'); } });
+  var rq = pl.items.filter(function(i){ return i.key === 'm3_rq'; })[0];
+  if(rq && rq.cur) add(rq.state === 'same', '研究問題', rq.state === 'same' ? '計畫書與方法工作台的研究問題相同。' : '計畫書 M3 的研究問題和方法工作台步驟①寫的不同。兩邊應是同一句。', 'p', 'm3');
+  if(tx(pf.m3_rq) && tx(pf.m3_rq).length > 60 && !/\n/.test(tx(pf.m3_rq))) add(false, '研究問題長度', '計畫書 M3 的主要研究問題有 ' + tx(pf.m3_rq).length + ' 字。計畫書工作台的要求是單一語句、60 字內，請濃縮。', 'p', 'm3');
+  if(pl.a){
+    var pv = (P.vars||[]).filter(function(x){ return tx(x.name); });
+    if(pv.length){ var miss = pl.a.vars.filter(function(x){ return !pv.some(function(y){ return same(x.name, y.name); }); }).map(function(x){ return x.name; });
+      add(!miss.length, '變項', miss.length ? '量性工作台有、計畫書變項表沒有：' + miss.join('、') + '。' : '量性工作台的 ' + pl.a.vars.length + ' 個變項都在計畫書變項表裡。', 'p', 'm4'); }
+    var po = (P.objs||[]).filter(function(o){ return tx(o.text); });
+    if(po.length && pl.a.objs.length){
+      var noAna = po.filter(function(o){ return !tx(o.analysis); }).length;
+      add(po.length === pl.a.objs.length && !noAna, '假設與分析', po.length !== pl.a.objs.length ? '計畫書有 ' + po.length + ' 個研究目的，量性分析計畫表有 ' + pl.a.objs.length + ' 列。每個目的都要對得到一種分析。'
+        : noAna ? '計畫書有 ' + noAna + ' 個研究目的還沒有寫分析方法。' : '每個研究目的都有對應的分析方法。', 'p', 'm6'); }
+    var nq = nums(Q.s4_power), np = nums(pf.m5_sample), na = nums(pf.m10_abs);
+    if(nq.length && np.length){ var hit = nq.some(function(x){ return np.indexOf(x) >= 0; });
+      add(hit, '樣本數', hit ? '計畫書 3.3 的人數與量性工作台的樣本數推算對得上。' : '量性工作台樣本數推算出現的人數是 ' + nq.join('、') + '；計畫書 3.3 寫的是 ' + np.join('、') + '。請核對。', 'p', 'm5'); }
+    if(nq.length && na.length){ var hit2 = nq.some(function(x){ return na.indexOf(x) >= 0; });
+      if(!hit2) add(false, '摘要的人數', '摘要寫的人數（' + na.join('、') + '）在量性工作台的樣本數推算裡找不到。請核對。', 'p', 'm10'); }
+  }
+  var stale = pl.items.filter(function(i){ return i.state === 'diff' && i.key !== 'm3_rq'; });
+  if(pl.items.length) add(!stale.length, '方法內容同步', stale.length ? '計畫書有 ' + stale.length + ' 個欄位和方法工作台現在的內容不同：' + stale.map(function(i){ return PLAB[i.key][1]; }).join('、') + '。若是方法工作台後來改過，到上面「帶入」重新勾選；若是你在計畫書裡刻意改寫，可以不理會。' : '計畫書裡來自方法工作台的欄位都是最新的。', '', '');
+  ['p','q','l'].forEach(function(t){ var s = S[t].sum; if(!s || (t !== 'p' && !(t === 'q' ? r.q : r.l))) return;
+    if(s.sample) add(false, SHORT[t] + '工作台仍是範例', '裡面是「' + (s.sampleLabel||'範例') + '」的原文，還沒改成你的研究。', t, t === 'p' ? 's1' : 's1');
+    else if(s.sameN && s.sameTotal && s.sameN / s.sameTotal >= 0.3) add(false, SHORT[t] + '工作台殘留範例文字', '還有 ' + s.sameN + ' 個欄位和範例一字不差。交出去之前要全部改寫。', t, t === 'p' ? 's1' : 's1'); });
+  return C;
+}
+function checksHTML(C){
+  if(!C.length) return '<div class="card"><p>三個工作台都有內容之後，這裡會列出題目、研究問題、變項、樣本數、設計是否一致。</p></div>';
+  var bad = C.filter(function(c){ return !c.ok; }), ok = C.filter(function(c){ return c.ok; });
+  var h = '<div class="card"><p><b>' + (bad.length ? '有 ' + bad.length + ' 項要處理' : '全部一致') + '</b>，共檢查 ' + C.length + ' 項。</p><div class="ck">';
+  bad.forEach(function(c){ h += '<div class="ci bad"><span class="mk">!</span><div><b>' + esc(c.t) + '</b><p>' + esc(c.d) + '</p></div>' + (c.tool ? '<a class="btn small ghost" href="' + url(c.tool, {step:c.step}) + '">去改</a>' : '<span></span>') + '</div>'; });
+  if(ok.length) h += '<details class="okl"><summary>已一致的 ' + ok.length + ' 項</summary>' + ok.map(function(c){ return '<div class="ci"><span class="mk">✓</span><div><b>' + esc(c.t) + '</b><p>' + esc(c.d) + '</p></div><span></span></div>'; }).join('') + '</details>';
+  return h + '</div></div>';
+}
+
+/* ---------- 匯出 ---------- */
+function appx(){ var a = get('rw.appx'); return a || { on:true }; }
+function exportHTML(S, r, C){
+  var bad = C.filter(function(c){ return !c.ok; }).length, A = appx(), tools = [r.q && S.q.live ? 'q' : '', r.l && S.l.live ? 'l' : ''].filter(Boolean);
+  var h = '<div class="card">';
+  h += '<p>完整的計畫書由計畫書工作台匯出成 Word：封面、摘要、目錄、各章節、表與圖自動編號，依你選的格式排版。</p>';
+  if(tools.length){
+    h += '<label class="tog"><input type="checkbox" id="appxon"' + (A.on ? ' checked' : '') + '><span><b>附上方法工作台的明細表（附錄）</b><small>' +
+      tools.map(function(t){ return t === 'q' ? '量性：變項操作型定義、因果解釋與排除、候選設計取捨、偏誤控制、統計分析計畫、樣本數推算與情境' : '質性：抽樣架構、訪談大綱、候選取徑取捨、資訊力與飽和判準、編碼簿、可信性四準則'; }).join('；') +
+      '。匯出當下直接讀方法工作台的最新內容。</small></span></label>';
+  }
+  if(bad) h += '<p class="note bad" style="margin-top:10px">一致性檢查還有 ' + bad + ' 項沒處理。建議先處理再匯出。</p>';
+  h += '<div class="row-btn" style="margin-top:12px">';
+  if(r.q) h += '<a class="btn small ghost" href="' + url('q', {step:'review'}) + '">量性：步驟⑦ 方法學檢核</a>';
+  if(r.l) h += '<a class="btn small ghost" href="' + url('l', {step:'review'}) + '">質性：步驟⑦ 報告規範檢核</a>';
+  h += '<a class="btn" href="' + url('p', {step:'review'}) + '">到計畫書工作台匯出 Word</a></div>';
+  h += '<p class="fine" style="margin-top:8px">計畫書工作台的最後一步另可匯出 IRB 送審文件。方法工作台各自的 Word 與 CSV 匯出仍可單獨使用。</p></div>';
+  return h;
+}
+
 /* ---------- 組裝 ---------- */
 function render(){
   var S = sums(), r = H.done ? route() : null;
@@ -396,9 +675,21 @@ function render(){
   $('#wizard').innerHTML = H.done && r ? routeHTML(S) : wizardHTML();
   $('#mapsec').hidden = !(H.done && r);
   if(H.done && r) $('#map').innerHTML = mapHTML(S);
+  ['#bringsec','#cksec','#exsec'].forEach(function(id){ $(id).hidden = !(H.done && r); });
+  if(H.done && r){
+    var pl = plan(S, r), C = checks(S, r, pl);
+    $('#bringsec').hidden = !(r.q || r.l);
+    $('#bringbox').innerHTML = bringHTML(S, r, pl);
+    $('#ckbox').innerHTML = checksHTML(C);
+    $('#exbox').innerHTML = exportHTML(S, r, C);
+    var bb = $('#bring'); if(bb) bb.onclick = function(){ var n = applyBring(S, r); render(); var m = $('#bringmsg'); if(m) m.innerHTML = n ? '已寫入 ' + n + ' 項。<a href="' + url('p', {step:'m5'}) + '">到計畫書工作台看結果</a>（開啟一次，上面路線圖的進度就會更新）' : '沒有寫入任何項目。'; };
+    var ud = $('#undo'); if(ud) ud.onclick = function(){ var u = get('rw.undo.p'); if(!u) return; try{ if(u.raw === null) localStorage.removeItem(K.p); else localStorage.setItem(K.p, u.raw); localStorage.removeItem('rw.undo.p'); }catch(e){} render(); var m = $('#bringmsg'); if(m) m.textContent = '已復原到帶入之前。'; };
+    var ax = $('#appxon'); if(ax) ax.onchange = function(){ try{ localStorage.setItem('rw.appx', JSON.stringify({ on:this.checked })); }catch(e){} };
+  }
   var ok = $('#ok'); if(ok) ok.onclick = function(){ if(!complete()) return; H.done = true; saveH(); render(); $('#mapsec').scrollIntoView({behavior:'smooth', block:'start'}); };
   var redo = $('#redo'); if(redo) redo.onclick = function(){ H.done = false; saveH(); render(); };
 }
+document.addEventListener('change', function(e){ var c = e.target; if(c && c.dataset && c.dataset.bk){ pick2[c.dataset.bk] = c.checked; var S = sums(), r = route(); if(r){ var keep = Array.prototype.map.call(document.querySelectorAll('.bi details'), function(d){ return d.open; }); $('#bringbox').innerHTML = bringHTML(S, r, plan(S, r)); Array.prototype.forEach.call(document.querySelectorAll('.bi details'), function(d, i){ d.open = !!keep[i]; }); var bb = $('#bring'); if(bb) bb.onclick = function(){ var n = applyBring(S, r); render(); var m = $('#bringmsg'); if(m) m.innerHTML = n ? '已寫入 ' + n + ' 項。<a href="' + url('p', {step:'m5'}) + '">到計畫書工作台看結果</a>（開啟一次，上面路線圖的進度就會更新）' : '沒有寫入任何項目。'; }; } } });
 document.addEventListener('click', function(e){
   var b = e.target.closest('.opt'); if(!b) return;
   var g = b.dataset.g, v = b.dataset.v;
@@ -413,7 +704,7 @@ $('#bkin').onchange = function(){ if(this.files[0]) readBundle(this.files[0]); t
 window.addEventListener('storage', render);
 document.addEventListener('visibilitychange', function(){ if(!document.hidden) render(); });
 window.addEventListener('pageshow', function(e){ if(e.persisted) render(); });
-window.RW_HUB = { state:function(){ return H; }, route:route, stages:stages };
+window.RW_HUB = { state:function(){ return H; }, route:route, stages:stages, plan:function(){ return plan(sums(), route()); }, checks:function(){ var S = sums(), r = route(); return checks(S, r, plan(S, r)); } };
 render();
 })();
 </script>

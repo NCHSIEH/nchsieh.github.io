@@ -866,7 +866,7 @@ body::before{background:var(--panel)}
     h += '<section class="card"><h3>送審前七件事</h3><ul class="must">' + DATA.ck.map(function (c, i) { var id = 'ck-seven-' + i; return '<li><label><input type="checkbox" id="' + id + '" data-ck="' + id + '"' + (S.ck[id] ? ' checked' : '') + '><span><b>' + esc(c[0]) + '</b>　' + esc(c[1]) + '</span></label></li>'; }).join('') + '</ul></section>';
     h += '<section class="card export"><h3>匯出</h3>' +
       '<div class="exp-grid">' +
-      '<div class="exp"><h4>研究計畫書（Word）</h4><p>依第 0 步選的格式「' + esc(FMT[S.meta.fmt]) + '」排版：封面、中英文摘要、目錄、表目錄、圖目錄、各章節與頁碼；表與圖自動編號（碩論依章：表 2-1、圖 3-1），研究架構圖與研究流程圖依你填的變項表與甘特表自動畫出。A4、邊界 2.5 公分、標楷體＋Times New Roman 12 號、1.5 倍行高。</p><button type="button" class="btn" id="exdoc">下載研究計畫書</button></div>' +
+      '<div class="exp"><h4>研究計畫書（Word）</h4><p>依第 0 步選的格式「' + esc(FMT[S.meta.fmt]) + '」排版：封面、中英文摘要、目錄、表目錄、圖目錄、各章節與頁碼；表與圖自動編號（碩論依章：表 2-1、圖 3-1），研究架構圖與研究流程圖依你填的變項表與甘特表自動畫出。A4、邊界 2.5 公分、標楷體＋Times New Roman 12 號、1.5 倍行高。</p><button type="button" class="btn" id="exdoc">下載研究計畫書</button><p class="fine">在研究計畫整合台勾選「附上方法工作台的明細表」時，量性／質性工作台的明細表會放在附錄。</p></div>' +
       '<div class="exp"><h4>IRB 送審文件（Word）</h4><p>一份檔案含：送審文件檢核表、計畫中文摘要、新案申請書內容、受試者同意書（人體研究法第 14 條九項）、計畫主持人聲明、招募說明與研究工具清單。依臺大醫院研究倫理委員會新案送審文件清單整理，屬練習稿。</p><button type="button" class="btn" id="exirb">下載 IRB 送審文件</button></div>' +
       '</div><div class="ex-btns"><button type="button" class="btn ghost" id="excopy">複製計畫書全文</button>' +
       '<button type="button" class="btn ghost" id="exjson">下載備份（.json）</button><label class="btn ghost file">匯入備份<input type="file" id="imjson" accept=".json,application/json"></label></div>' +
@@ -953,6 +953,53 @@ body::before{background:var(--panel)}
     return B.filter(function (b) { return b.kind === k && b.id; }).map(function (b) { return { t: b.full, lvl: 1, id: b.id }; });
   }
   var LISTT = { toc: '目　錄', lot: '表 目 錄', lof: '圖 目 錄' };
+  // ---------- 整合台第三期：方法工作台明細表（附錄） ----------
+  function rwGet(k) { try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
+  function rwClean(x) {
+    return String(x == null ? '' : x).split('\n').filter(function (l) { return !/^\s*💡/.test(l); }).join('\n')
+      .replace(/📌?\s*【論文正式寫法範本】\s*/g, '').replace(/【論文正式寫法範本[^】]*】\s*/g,'').replace(/[（(][^（）()]*@[^）)]*[）)]/g,'')
+    .replace(/(依據|參照|參考|對應|見)?\s*@\s?\d+(?:\.\d+)?[A-Z]?(?:\s*(?:第\s*[\d–\-、,，\s]+張|[sS]\d+(?:[–\-]\d+)?(?:[、,，]\s*[sS]?\d+(?:[–\-]\d+)?)*|Part\s*\d+|Section\s*\d+|全份))*\s*[，,、；]?/g,'')
+    .replace(/[（(]\s*[）)]/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]️?/gu, '')
+      .replace(/[ \t]+\n/g, '\n').replace(/\n{2,}/g, '\n').trim();
+  }
+  function rwRows(a) { return (Array.isArray(a) ? a : []).filter(function (r) { return Array.isArray(r) && r.some(function (c) { return String(c || '').trim().length > 1; }); }).map(function (r) { return r.map(rwClean); }); }
+  function rwPara(t) { t = rwClean(t); return t ? t.split('\n').map(function (x) { return { p: x, ind: true }; }) : []; }
+  function rwTb(cap, head, a, w) { var rs = rwRows(a); return rs.length ? tb(cap, T(head, rs.map(function (r) { return head.map(function (_, i) { return r[i] || ''; }); }), w)) : []; }
+  function rwSec(t, body) { return body.length ? [{ h: 2, t: t }].concat(body) : []; }
+  function rwAppendix(start) {
+    var on = rwGet('rw.appx'); if (on && on.on === false) return [];
+    var hub = rwGet('rw.hub.v1') || {}, sq = rwGet('rw.sum.quant'), sl = rwGet('rw.sum.qual');
+    var useQ = true, useL = true;
+    if (hub.done && hub.type) {   // 依整合台路線決定要附哪一邊
+      var T0 = { A: 'q', C: 'q', D: 'q', E: 'l', F: 'l' }[hub.type] || '';
+      useQ = T0 === 'q' || (T0 === 'l' && !!hub.mix); useL = T0 === 'l' || (T0 === 'q' && !!hub.mix);
+    }
+    var Q = useQ && sq && !sq.sample ? rwGet('qw2x.v1') : null, L = useL && sl && !sl.sample ? rwGet('qual_wb_3x.v2') : null;
+    var CN = '一二三四五六七八九十', n = start, out = [];
+    function head(t) { return [{ pb: true }, { h: 1, t: '附錄' + CN.charAt(n++ - 1) + '　' + t }]; }
+    var QN = { rct: '平行隨機對照試驗', between: '組間比較', within_prepost: '單組前後測', within_cross: '交叉對抗平衡', mixed_rct: '混合設計（隨機分組×前後測）', mixed_matched: '混合設計（配對×前後測）', quasi_did: '準實驗（雙重差分）', quasi_its: '準實驗（中斷時間序列）', corr: '觀察性相關與迴歸', anova3: '三組以上比較', scale_dev: '量表發展' };
+    if (Q) {
+      var b = [].concat(
+        rwSec('一、變項操作型定義', rwTb('變項操作型定義與測量', ['變項', '角色', '型態與尺度', '操作型定義、計分與單位', '工具或資料來源', '測量時點'], Q.s2_vars, [1.2, 0.9, 1, 2.2, 1.3, 1.1])),
+        rwSec('二、因果解釋與排除', rwTb('因果方向與替代解釋之處理', ['因果方向', '本研究的機制說明或排除做法'], Q.s1_causal, [1, 3])),
+        rwSec('三、候選研究設計取捨', rwTb('候選研究設計之比較', ['候選設計', '若採用的優點', '採用或不採用的理由', '本研究的補強做法'], Q.s1_reject, [1.1, 1.2, 1.5, 1.4])),
+        rwSec('四、偏誤與混淆控制', rwTb('潛在偏誤與控制措施', ['威脅來源', '未控制時的扭曲方向', '本研究的設計或統計防線'], Q.s3_bias, [1, 1.4, 2])),
+        rwSec('五、統計分析計畫', rwTb('研究假設與統計分析計畫', ['假設', '自變項 × 依變項', '統計檢定與替代方案', '效應量與 95% CI', '共變項與多重比較'], Q.s6_sap, [1.2, 1.2, 1.3, 1.2, 1.1])),
+        rwSec('六、樣本數推算', rwPara(Q.s4_power).concat(rwPara(Q.s4_scenarios))));
+      if (b.length) out = out.concat(head('量性研究設計明細' + (QN[Q.design] ? '（' + QN[Q.design] + '）' : '')), b);
+    }
+    if (L) {
+      var c = [].concat(
+        rwSec('一、立意抽樣架構', rwTb('立意抽樣架構', ['分層或次群體', '抽樣策略', '納入與排除條件', '預計人數', '抽樣目的'], L.s2_vars, [1.1, 1, 1.6, 0.9, 1.4])),
+        rwSec('二、訪談大綱', rwTb('半結構訪談大綱', ['階段與題目定位', '主問題與追問', '設計意圖'], L.s3_bias, [1, 2.4, 1.3])),
+        rwSec('三、候選研究取徑取捨', rwTb('候選質性研究取徑之比較', ['候選取徑', '若採用的優點', '採用或不採用的理由', '本研究的定位'], L.s1_reject, [1.1, 1.2, 1.5, 1.4])),
+        rwSec('四、樣本量依據與飽和判準', rwPara(L.s2_rel).concat(rwPara(L.s2_val))),
+        rwSec('五、編碼簿與雙人編碼', rwPara(L.s4_scenarios)),
+        rwSec('六、可信性四準則之落實', rwPara(L.s5_layout)));
+      if (c.length) out = out.concat(head('質性研究設計明細'), c);
+    }
+    return out;
+  }
   function proposalBlocks() {
     var f = S.meta.fmt, B = [], E = S.meta.type === 'E';
     if (f === 'f1') {
@@ -973,6 +1020,7 @@ body::before{background:var(--panel)}
         [{ h: 2, t: '第五節　可行性與風險' }], para('m8_feas'), tb('風險與對策', riskT()), [{ pb: true }, { h: 1, t: '參考文獻' }], refs(),
         [{ pb: true }, { h: 1, t: '附錄一　文獻檢索策略' }, { h: 2, t: '一、結構化檢索問題' }], para('m2_pico'), [{ h: 2, t: '二、資料庫與檢索式' }], para('m2_search'),
         [{ pb: true }, { h: 1, t: '附錄二　研究構想一頁表' }], tb('研究構想一頁表', T(['項目', '內容'], DATA.gr.map(function (g, i) { return [g[0], v('s1_' + (i + 1))]; }), [1, 3.5])));
+      B = B.concat(rwAppendix(3));
       return numberBlocks(B, true);
     } else if (f === 'f2') {
       B = cat(cover('國科會專題研究計畫　研究計畫內容（CM03）'), [{ h: 1, t: '研究計畫中文摘要（CM02）' }], para('m10_abs'), [{ p: '關鍵詞：' + val('m10_kw') }, { pb: true }],
@@ -998,6 +1046,7 @@ body::before{background:var(--panel)}
         tb('績效指標', T(['指標名稱', '計算方式與資料來源', '基準值', '目標值與期限'], S.kpi.filter(function (k) { return k.name.trim(); }).map(function (k) { return [k.name, k.calc, k.base, k.goal]; }), [1, 2, 1.2, 1.6])),
         [{ h: 1, t: '六、風險管理' }], tb('風險與對策', riskT()), [{ pb: true }, { h: 1, t: '參考資料' }], refs());
     }
+    B = B.concat(rwAppendix(f === 'f2' ? 2 : 1));
     return numberBlocks(B, false);
   }
   function irbBlocks() {
