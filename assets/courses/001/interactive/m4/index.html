@@ -22,6 +22,16 @@
     <h1>進階監督式學習：集成、異常、關聯與時間序列</h1>
     <p class="lead">M2 教你把單一模型做好；這一週處理四件單一模型做不到的事：把模型組起來、找出沒有標籤的異常、挖出隱藏的關聯、處理有時間的資料。每一節都能親手操作：讓三個模型錯得不一樣、逐輪看 AdaBoost 調權重、拖動門檻算總代價、看隨機切分怎麼讓時間序列「偷看未來」。</p>
     <div class="chips"><span class="tag">手算例：AdaBoost 三輪、10 筆處方的 lift</span><span class="tag amber">隨堂 Lab：W8 上課前繳交（不另計分）</span><span class="tag gray">圖表為教學用模擬資料</span></div>
+    <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
+      <ol style="margin:6px 0 4px 1.3em;padding:0">
+        <li>診斷偏差或變異，選對 Bagging、Boosting 或 Stacking　<a href="#p02">第 02 節</a>、<a href="#p04">第 04 節</a></li>
+        <li>說明 Stacking 為何要用 out-of-fold 預測，並評估集成的可解釋性代價　<a href="#p07">第 07 節</a>、<a href="#p08">第 08 節</a></li>
+        <li>依異常型態選偵測方法，並用每天能覆核的筆數設門檻　<a href="#p09">第 09 節</a>、<a href="#p10">第 10 節</a>、<a href="#p11">第 11 節</a></li>
+        <li>用 support、confidence、lift 判讀規則，辨認 lift 陷阱　<a href="#p12">第 12 節</a>、<a href="#p13">第 13 節</a></li>
+        <li>時間序列用 walk-forward 驗證並先贏過基準線；機率要檢查校準　<a href="#p14">第 14 節</a>、<a href="#p16">第 16 節</a></li>
+      </ol>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M2-2 的混淆矩陣與交叉驗證、M1 的資料洩漏。</span>
+    </div>
   </header>
 
   <section class="part" id="p01" data-t="四大主題選用地圖">
@@ -72,7 +82,7 @@
     <div class="wd"><div class="wh"><h3>一棵一棵擬合殘差</h3><span class="tag amber">核心互動</span></div><p class="hint">每棵都是淺樹。調學習率與棵數，看訓練誤差、驗證誤差與早停點。</p><div id="w-gb"></div></div>
     <div class="wd"><div class="wh"><h3>三種長樹方式</h3></div><div id="w-grow"></div></div>
     <div class="wd"><div class="wh"><h3>梯度提升一棵一棵長出來</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">在你的瀏覽器裡真的訓練 GBDT：每棵樹擬合前面的殘差。換學習率與樹的深度，找出驗證損失開始回升的早停點。</p><div id="w-gbreal"></div></div>
-    <div class="wd"><div class="wh"><h3>表格資料該選誰：GBDT、Logistic，還是 2025 年的 TabPFN？</h3><span class="tag blue">NeurIPS 2022・Nature 2025</span></div><p class="hint">依你的專題條件調整：樣本數、欄位數、要不要逐筆解釋、有沒有 GPU。看建議的基準組合與理由。對應講義 M4 第 21 頁。</p><div id="w-tabsel"></div></div>
+    <div class="wd"><div class="wh"><h3>表格資料該選誰：GBDT、Logistic，還是 2025 年的 TabPFN？</h3><span class="tag blue">NeurIPS 2022・Nature 2025</span></div><p class="hint">依你的專題條件調整：樣本數、欄位數、要不要逐筆解釋、有沒有 GPU。看建議的基準組合與理由。對應講義 M4 第 22 頁。</p><div id="w-tabsel"></div></div>
   </section>
 
   <section class="part" id="p07" data-t="投票與 Stacking">
