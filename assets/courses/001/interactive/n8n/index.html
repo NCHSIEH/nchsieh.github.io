@@ -35,6 +35,7 @@
 
   <section class="part" id="p01" data-t="n8n 是什麼">
     <div class="ph"><span class="num">01</span><div><h2>n8n 是什麼：六個核心概念</h2><div class="en">NODE · WORKFLOW · TRIGGER · CREDENTIAL · EXECUTION · EXPRESSION</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 4–8 頁（PART 01）</p>
     <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p19">工具全景與 n8n／Dify 選型見 M8 第 19 節 →</a></div>
     <p class="one">一個「用畫的」自動化平台：把不同服務串接起來，中間可以放邏輯判斷，也可以放一顆會思考的 AI Agent。共同骨架：Trigger（什麼時候）→ 抓資料或接收事件 → 判斷／處理 → 輸出或通知。</p>
     <div class="concept">
@@ -42,10 +43,12 @@
       <div><b>n8n 不是</b>不是資料庫；不是專門的 LLM 應用平台（RAG 不如 Dify 精緻）；自架版不是零維運</div>
     </div>
     <div class="wd"><div class="wh"><h3>這個症狀，跟哪個概念有關？</h3><span class="tag amber">練習</span></div><div id="w-concept"></div></div>
+    <div class="wd"><div class="wh"><h3>Chain vs Agent：什麼時候用哪個</h3><span class="tag amber">互動</span></div><div id="w-chainagent"></div></div>
   </section>
 
   <section class="part" id="p02" data-t="Windows 安裝">
     <div class="ph"><span class="num">02</span><div><h2>Windows 安裝全流程：WSL2 → Docker Desktop → n8n</h2><div class="en">SELF-HOSTED · COMMUNITY EDITION</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 10–15、17 頁（PART 02）</p>
     <p class="one">只想先看看長什麼樣子 → 用 Cloud 免費試用；打算做專題、或會處理機構／健康資料 → 自架，資料不出自己的電腦。不需要安裝 Node.js，也不需要會用 Linux。</p>
     <div class="wd"><div class="wh"><h3>安裝檢核（每一步都有驗證方式）</h3><span class="tag">可勾選進度</span></div><div id="w-install"></div></div>
     <div class="wd"><div class="wh"><h3>啟動指令產生器</h3><span class="tag amber">核心互動</span></div><p class="hint">拿掉某個參數，看會出什麼事。</p><div id="w-cmd"></div></div>
@@ -53,6 +56,7 @@
 
   <section class="part" id="p03" data-t="安裝問題排除">
     <div class="ph"><span class="num">03</span><div><h2>安裝常見問題與日常操作</h2><div class="en">TROUBLESHOOTING</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 16、18–19 頁</p>
     <p class="one">卡關時的通則：先看 Docker Desktop 的 Containers 分頁確認容器狀態，再點該容器的 Logs 看錯誤訊息——九成問題在這裡就能定位。停止容器不會刪掉資料；資料存在 volume 裡，更新版本後 workflow 與憑證都會保留。</p>
     <div class="wd"><div class="wh"><h3>症狀 → 處方</h3><span class="tag amber">練習</span></div><div id="w-fix"></div></div>
   <div class="wd"><div class="wh"><h3>真實案例：你的 n8n 有沒有 Ni8mare 漏洞？</h3><span class="tag blue">CVE-2026-21858・CVSS 10</span></div><p class="hint">選你自架的 n8n 版本與使用方式，看風險等級與該做什麼。對應講義 n8n 入門第 19 頁。</p><div id="w-n8nver"></div></div>
@@ -60,12 +64,14 @@
 
   <section class="part" id="p04" data-t="介面與節點">
     <div class="ph"><span class="num">04</span><div><h2>編輯器介面與核心節點</h2><div class="en">CANVAS · NDV · TRIGGER vs ACTION · CORE / APP / AI NODES</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 21–26 頁（PART 03）</p>
     <p class="one">每個工作流程一定要有至少一個 Trigger 節點（藥丸狀），它決定「什麼時候」開始；後面的節點都在回答「該做什麼」。新手策略：先想能不能用現成節點兜出來，真的兜不出來才用 Code 節點。</p>
     <div class="wd"><div class="wh"><h3>這個需求用哪個節點？</h3><span class="tag amber">練習</span></div><div id="w-nodes"></div></div>
   </section>
 
   <section class="part" id="p05" data-t="資料流與 Expression">
     <div class="ph"><span class="num">05</span><div><h2>資料怎麼在節點之間流動：Item 與 Expression</h2><div class="en">EVERY NODE RUNS ONCE PER ITEM</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 28–30 頁（PART 04）</p>
     <p class="one">每個節點輸出的都是一個陣列，裡面是一筆一筆的 item；節點會對每一筆 item 各執行一次——上一步輸出 10 筆，下一個 HTTP Request 就被呼叫 10 次。看到中括號 [ ]，取值就要加索引。</p>
     <div class="wd"><div class="wh"><h3>Expression 練習場</h3><span class="tag amber">核心互動</span></div><p class="hint">左邊是上一個節點（Open-Meteo）的輸出；在右邊輸入表達式，看算出來的值（支援 $json 的欄位與陣列取值）。</p><div id="w-expr"></div></div>
     <div class="wd"><div class="wh"><h3>Item 心智模型</h3><span class="tag amber">互動</span></div><div id="w-items"></div></div>
@@ -73,37 +79,45 @@
 
   <section class="part" id="p06" data-t="範例一：每日天氣提醒">
     <div class="ph"><span class="num">06</span><div><h2>★ 範例一：每日天氣提醒</h2><div class="en">SCHEDULE → HTTP REQUEST → IF → SET</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 32–39 頁（PART 05）</p>
     <p class="one">不需要任何帳號、任何金鑰，人人都能做完。做完你會擁有「定時 → 抓資料 → 判斷 → 輸出」這個萬用骨架。Schedule Trigger 只有在 workflow 已發布（Publish）時才會真的定時執行。</p>
     <div class="wd"><div class="wh"><h3>工作流程模擬：照講義設定，也故意設錯看看</h3><span class="tag amber">核心互動</span></div><p class="hint">API 回傳數值為示範；實際每天不同，結構固定。</p><div id="w-weather"></div></div>
   </section>
 
   <section class="part" id="p07" data-t="AI Agent 節點">
     <div class="ph"><span class="num">07</span><div><h2>AI Agent 節點：root node＋三種 sub node</h2><div class="en">CHAT MODEL · MEMORY · TOOLS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 41–47 頁（PART 06）</p>
     <div style="font-size:13px;margin:-4px 0 6px"><a href="../m8/#p14">Agent 思考迴圈與 Chain／Agent 選型見 M8 第 14 節 →</a></div>
     <p class="one">官方規定：AI Agent 至少要連接一個 Chat Model 與一個 Tool 才能執行；Memory 選填。1.82 版起 AI Agent 統一為 Tools Agent——看到教學要你「選擇 Agent Type」，那是舊版教學。能用 Basic LLM Chain 說清楚的任務，用 Chain 更穩定。</p>
     <div class="wd"><div class="wh"><h3>把插槽接起來</h3><span class="tag amber">核心互動</span></div><div id="w-agent"></div></div>
+    <div class="wd"><div class="wh"><h3>Tools 的四種主要類型</h3></div><div id="w-tooltypes"></div></div>
+    <div class="wd"><div class="wh"><h3>寫好 Tool Description 的四個原則</h3><span class="tag amber">互動</span></div><div id="w-tooldesc"></div></div>
   </section>
 
   <section class="part" id="p08" data-t="Credential 與 Ollama">
     <div class="ph"><span class="num">08</span><div><h2>Credential 設定與本機模型</h2><div class="en">NEVER TYPE KEYS INTO NODE PARAMETERS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 49–52 頁（PART 07）</p>
     <p class="one">金鑰一定要走 Credential：建立一次、多個節點共用，匯出 workflow 的 JSON 不含金鑰。Docker 版 n8n 要連本機 Ollama，Base URL 要填 host.docker.internal——容器內的 localhost 指的是容器自己。</p>
     <div class="wd"><div class="wh"><h3>Docker 裡的 n8n 連得到 Ollama 嗎？</h3><span class="tag amber">互動</span></div><div id="w-ollama"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="範例二：多工具 Agent">
     <div class="ph"><span class="num">09</span><div><h2>★ 範例二：多工具 AI Agent Chatbot</h2><div class="en">CHAT TRIGGER · GEMINI · SIMPLE MEMORY · WIKIPEDIA · get_weather</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 54–60、62–66 頁（PART 08）</p>
     <p class="one">Agent 不用你的工具時，九成不是模型笨，而是 Description 寫得不夠清楚。照講義 Step 7 的五句話測試：它要會自己挑對工具、記得上一句、不亂用工具、查不到時誠實說。</p>
     <div class="wd"><div class="wh"><h3>測試對話（模擬）</h3><span class="tag amber">核心互動</span></div><p class="hint">切換設定再送出同一句話，比較 Agent 的行為。工具回傳與座標為示意。</p><div id="w-chat"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="$fromAI()">
     <div class="ph"><span class="num">10</span><div><h2>$fromAI()：讓 Agent 自己決定要傳什麼參數</h2><div class="en">ANY PUBLIC API → A TOOL IN TEN MINUTES</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 61 頁</p>
     <p class="one">這些不是「取值」而是「提示」：Agent 依上下文自己想出該填的值，找不到線索時甚至會反問使用者。只在「連接到 AI Agent 的 Tool 節點」裡有效；key 只能用英數字、底線、連字號。</p>
     <div class="wd"><div class="wh"><h3>$fromAI() 產生器</h3><span class="tag amber">互動</span></div><div id="w-fromai"></div></div>
   </section>
 
   <section class="part" id="p11" data-t="除錯與上線">
     <div class="ph"><span class="num">11</span><div><h2>除錯、Executions 與正式上線</h2><div class="en">TEST URL vs PRODUCTION URL · PUBLISH</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 68–71 頁（PART 09）</p>
     <p class="one">除錯三步驟：看 Executions 列表 → 點開失敗節點讀錯誤訊息 → 對照前一步的輸出。很多錯誤其實是「上一步給的資料長相，跟這一步想要的不一樣」。忘記按 Publish，是最常見的「明明做好卻沒動」。</p>
     <div class="wd"><div class="wh"><h3>錯誤訊息 → 處方</h3><span class="tag amber">練習</span></div><div id="w-debug"></div></div>
     <div class="wd"><div class="wh"><h3>上線前檢查清單</h3><span class="tag">可勾選</span></div><div id="w-launch"></div></div>
@@ -111,14 +125,17 @@
 
   <section class="part" id="p12" data-t="★ n8n × Dify 批次評估">
     <div class="ph"><span class="num">12</span><div><h2>★ 實作：n8n × Dify 長照 3.0 批次評估</h2><div class="en">SCHEDULE → SHEETS → LOOP → HTTP (DIFY) → WRITE BACK → NOTIFY</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 73–84 頁（PART 10、11）</p>
     <div style="font-size:13px;margin:-4px 0 6px"><a href="../dify/#p09">Dify 端的長照七節點流程見 Dify 實作手冊互動頁 →</a></div>
     <p class="one">Dify 端完全不用改——它已經是一個可被呼叫的 API；n8n 端只需一個 HTTP Request 節點，就能把整套專業判斷變成流水線的一站。最常見的整合失敗：下拉選項的值對不上。</p>
     <div class="wd"><div class="wh"><h3>批次模擬：8 筆虛構個案</h3><span class="tag amber">核心互動</span></div><p class="hint">依講義設定，也可以故意拔掉某一項看會出什麼錯。本頁依 M9 加上一條規則：Dify 回傳「無法判定／需人工覆核」的個案不寫回額度，改發通知給督導。</p><div id="w-batch"></div></div>
     <div class="wd"><div class="wh"><h3>放大到 500 筆：Batch Size、Wait 與 Retry 怎麼設？</h3><span class="tag blue">500 筆個案 × 模型速率上限</span></div><p class="hint">事件模擬：每份評估約 4,500–7,500 tokens，模型有每分鐘 token 與次數上限（免費額度沿用 Dify 頁的假設）。調整 Loop Over Items、Wait 與 Retry On Fail，看多少筆會失敗、要跑多久。</p><div id="w-rate"></div></div>
+    <div class="wd"><div class="wh"><h3>n8n vs Dify：全面對照與情境選擇</h3><span class="tag amber">互動</span></div><div id="w-nvd"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">13</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義（n8n 補充教材）：第 85–92 頁</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>重點回顧</h3></div><div id="w-review"></div></div>
@@ -126,8 +143,10 @@
 </main>
 </div>
 <script src="../assets/common.js"></script>
+<script src="../assets/case.js"></script>
 <script src="n8na.js"></script>
 <script src="n8nb.js"></script>
 <script src="n8nc.js"></script>
+<script src="n8ne.js"></script>
 </body>
 </html>
