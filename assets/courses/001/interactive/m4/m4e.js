@@ -63,4 +63,11 @@
     ['Lazer et al. Science 2014（作者單位頁）', 'https://www.networkscienceinstitute.org/publications/the-parable-of-google-flu-traps-in-big-data-analysis-2'],
     ['BigDATAwire 報導', 'https://bigdatawire.com/2014/03/14/google_s_flu_analytics_fail_highlights_big_data_s_shortcomings'],
     ['TIME 報導', 'https://time.com/23782/google-flu-trends-big-data-problems']]);
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-div', '實算：每個成員 65% 準，多數決能到多少？', '彼此獨立時：1 個 65.0%、5 個 76.5%、11 個 85.1%、25 個 94.0%；完全相關時，再多成員都還是 65%。增益全部來自「錯得不一樣」。（二項分布實算；講義 M4 第 11 頁）');
+  addNote('w-boot', '實際抽一次：', '10 筆有放回抽 10 次，抽到 #4、#10、#9、#3、#6、#10、#8、#10、#2、#10——#1、#5、#7 一次都沒抽到（30%，成為這棵樹的袋外樣本），#10 被抽 4 次。理論值 n=10 為 34.9%，n→∞ 為 1/e ≈ 36.8%。（講義 M4 第 16 頁）');
+  addNote('w-ask', '把答案換算成門檻：', '例：漏報一次的代價約 200、誤報一次約 3（相對單位）→ 最佳門檻 ＝ 誤報 ÷（誤報＋漏報）＝ 3 ÷ 203 ≈ 1.5%。漏報很貴時門檻會低得出乎意料，再用「一天能承受幾次誤報」檢查可不可行；前提是機率要先校準。（講義 M4 第 67 頁）');
 })();
