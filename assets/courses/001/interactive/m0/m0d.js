@@ -78,4 +78,9 @@
     ad.parentNode.append(h('p', { class: 'ai' }, h('b', null, '來源連結（2026/11/13 查核可開啟）：'), ...LINKS.flatMap(([t, u], i) => [i ? '　' : '', h('a', { href: u, target: '_blank', rel: 'noopener' }, t)])));
     ad.parentNode.append(h('p', { class: 'ai' }, 'STAT 等付費牆與無法開啟的報導未列。報導為第三方整理，數字以 AMA 與 AI Index 原始報告為準。'));
   }
+  if (window.CaseLinks) CaseLinks('w-fail', [
+    ['Obermeyer et al., Science 2019（全文 PDF）', 'https://www.ftc.gov/system/files/documents/public_events/1548288/privacycon-2020-ziad_obermeyer.pdf'],
+    ['Zech et al., PLOS Med 2018（arXiv 全文）', 'https://arxiv.org/pdf/1807.00431v2.pdf'],
+    ['Wong et al., JAMA Intern Med 2021', 'https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/2781307']
+  ], '講義 M0 第 46 頁。');
 })();
