@@ -63,4 +63,10 @@
   CaseLinks('w-readmit', [
     ['Kansagara et al. JAMA 2011（PDF，機構轉載）', 'https://mmcri.org/deptPages/core/downloads/jama_101911_1.pdf'],
     ['News-Medical 報導', 'https://www.news-medical.net/news/20111019/Many-hospital-readmission-risk-prediction-tools-have-poor-discriminative-ability.aspx']]);
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-calib', '在 AI Studio 做出校準圖：', '① Apply Model 在驗證資料上拿到 confidence → ② Discretize 分成 10 組 → ③ Aggregate 每組算平均預測與實際發生率 → ④ 畫散布圖和對角線比，偏下＝高估。只拿來排序時失真無妨；要對病人說「您的風險是 70%」就必須先校準。（講義 M2-2 第 61 頁）');
+  addNote('w-printtree', '帶人數讀葉節點：', '路徑一 57%（13／23 人，95% 區間約 37%–74%）；路徑三 33%（9／27 人，約 19%–52%）；路徑二 8%（2／26 人，約 2%–24%）。8% 看似很低，但只有 26 人，區間寬到 24%——葉節點太小時調大 minimal leaf size，或在名單標註「證據有限」。（講義 M2-2 第 93 頁）');
 })();
