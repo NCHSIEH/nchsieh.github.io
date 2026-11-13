@@ -1,0 +1,17 @@
+{
+  "name": "GovIT Review Studio｜AI 專案審查與評鑑助理",
+  "short_name": "專案審查助理",
+  "description": "政府資訊系統採購／建置案的專業審查、建議書評選、IV&V稽核與招標文件修正工作台",
+  "start_url": "/review/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230f172a'/%3E%3Crect x='36' y='28' width='108' height='124' rx='14' fill='none' stroke='%2338bdf8' stroke-width='10'/%3E%3Cpath d='M58 64h64M58 90h64M58 116h40' stroke='%23f8fafc' stroke-width='10' stroke-linecap='round'/%3E%3Ccircle cx='126' cy='124' r='22' fill='%2310b981'/%3E%3Cpath d='M116 124l7 7 14-14' fill='none' stroke='%230f172a' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}

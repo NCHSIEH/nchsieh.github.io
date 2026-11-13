@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>GovIT Review Studio｜AI 專案審查與評鑑助理 (政府IT採購／建置案專業審查工作台)</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="專案審查助理">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230f172a'/%3E%3Crect x='36' y='28' width='108' height='124' rx='14' fill='none' stroke='%2338bdf8' stroke-width='10'/%3E%3Cpath d='M58 64h64M58 90h64M58 116h40' stroke='%23f8fafc' stroke-width='10' stroke-linecap='round'/%3E%3Ccircle cx='126' cy='124' r='22' fill='%2310b981'/%3E%3Cpath d='M116 124l7 7 14-14' fill='none' stroke='%230f172a' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="css/app.css?v=20261113v1">
+</head>
+<body>
+  <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+  <div class="app-shell">
+    <!-- Left Sidebar: Multi-Case Manager & Skill Quick Stats -->
+    <aside id="sidebar" class="sidebar">
+      <div class="brand-header">
+        <div class="brand-title">
+          <div class="brand-logo">審</div>
+          <div class="brand-text">
+            <h1>AI 專案審查與評鑑助理</h1>
+            <p>政府IT採購 · 建議書評選 · IV&amp;V · RFP修正</p>
+          </div>
+        </div>
+        <button id="themeToggleBtn" class="icon-btn" title="切換深色/淺色模式">🌗</button>
+      </div>
+
+      <div class="sidebar-stats">
+        <div class="stat-chip">
+          <span id="statFindingsCount" class="stat-val">0 項</span>
+          <span class="stat-lbl">核心意見</span>
+        </div>
+        <div class="stat-chip">
+          <span id="statTrapsCount" class="stat-val">0 處</span>
+          <span class="stat-lbl">邏輯陷阱</span>
+        </div>
+        <div class="stat-chip">
+          <span id="statChecklistRate" class="stat-val">0/12</span>
+          <span class="stat-lbl">快篩完成</span>
+        </div>
+      </div>
+
+      <div class="sidebar-actions">
+        <button id="newCaseBtn" class="btn btn-primary" style="flex:1;">＋ 新增空白審查案</button>
+        <button id="resetDemoBtn" class="btn btn-secondary btn-sm" title="載入4種審查模式完整範例案件">載入範例</button>
+      </div>
+
+      <div class="case-list-header">
+        <span>📂 審查案件列表 (<span id="caseTotalCount">0</span>)</span>
+        <button id="exportJsonBtn" class="btn btn-secondary btn-sm" style="padding:2px 7px; font-size:0.68rem;" title="匯出全部案件 JSON 備份">備份</button>
+      </div>
+
+      <div id="caseList" class="case-list"></div>
+
+      <div class="sidebar-footer">
+        <span>Skill: <code>it-procurement-review v2</code></span>
+        <label style="cursor:pointer; color:var(--accent); font-weight:600;">
+          匯入JSON
+          <input id="importJsonInput" type="file" accept=".json" style="display:none;">
+        </label>
+      </div>
+    </aside>
+
+    <!-- Main Stage -->
+    <main class="main-stage">
+      <!-- Top Navigation Bar -->
+      <header class="top-nav">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <button id="mobileMenuBtn" class="icon-btn mobile-menu-btn" title="開啟案件列表">☰</button>
+          <div class="view-tabs" id="mainViewTabs">
+            <button class="view-tab active" data-view="setup">
+              <span>📋</span>
+              <span>1. 案件與檢核清單</span>
+            </button>
+            <button class="view-tab" data-view="scanner">
+              <span>🔍</span>
+              <span>2. 文件解析・驗算・掃描判讀</span>
+              <span id="tabBadgeTraps" class="tab-count-pill">0</span>
+            </button>
+            <button class="view-tab" data-view="workbench">
+              <span>✍️</span>
+              <span>3. 意見組裝與根因歸納</span>
+              <span id="tabBadgeFindings" class="tab-count-pill">0</span>
+            </button>
+            <button class="view-tab" data-view="prompt">
+              <span>🤖</span>
+              <span>4. AI 深度審查 Prompt</span>
+            </button>
+            <button class="view-tab" data-view="export">
+              <span>📄</span>
+              <span>5. 報告預覽・序位・匯出</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button id="quickWordExportBtn" class="btn btn-secondary btn-sm" title="一鍵下載無框線規範 Word 檔">📝 下載 Word</button>
+          <button id="quickPrintPdfBtn" class="btn btn-primary btn-sm" title="列印或另存顧問級 PDF 審查報告">🖨️ 列印 / PDF</button>
+        </div>
+      </header>
+
+      <!-- Core Mindset Banner from SKILL.md -->
+      <div class="mindset-banner">
+        <div>
+          <strong>💡 核心審查心態（反向推演・抓出邏輯斷點・歸納根本問題）</strong>
+          <p>逐條核對「有沒有寫到」只能抓表面缺漏；每次審查先反向推演：「若完全照計畫書執行，真能達成宣稱效益嗎？中間有無未交代斷點、矛盾數字或經不起追問的假設？」多個零散發現若指向同一根本問題，應歸納成 3～5 項主題。</p>
+        </div>
+        <span id="activeModePill" class="mode-badge mode-proposal" style="flex-shrink:0; font-size:0.78rem; padding:5px 12px;">⚖️ 評選審查</span>
+      </div>
+
+      <!-- =====================================================================
+           VIEW 1: 案件基本設定 ＆ 十大原則 / A~E必查 / 12項快篩
+      ====================================================================== -->
+      <section id="view-setup" class="workspace-view active">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">🎯 步驟一：確認審查角色與任務模式</h2>
+              <p class="card-subtitle">不同審查角色關注的深層問題與預設輸出格式不同，切換模式會自動調整檢核重點與報告結構：</p>
+            </div>
+            <button id="deleteCaseBtn" class="btn btn-rose btn-sm">🗑️ 刪除此案</button>
+          </div>
+
+          <div id="roleSelectorGrid" class="role-grid"></div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label class="form-label">機關名稱</label>
+              <input id="inpAgencyName" class="studio-input" type="text" placeholder="例：數位發展部 / 某某市政府資訊處">
+            </div>
+            <div class="form-group">
+              <label class="form-label">計畫／採購標案名稱</label>
+              <input id="inpProjectName" class="studio-input" type="text" placeholder="例：115年度智慧院區資料整合中台建置案">
+            </div>
+            <div class="form-group">
+              <label class="form-label">案號／標案編號</label>
+              <input id="inpCaseNumber" class="studio-input" type="text" placeholder="例：115-IT-0428">
+            </div>
+            <div class="form-group">
+              <label class="form-label">審查對象（廠商名稱／子計畫／招標文件）</label>
+              <input id="inpTargetVendor" class="studio-input" type="text" placeholder="例：宏遠雲端科技股份有限公司（投標廠商A）">
+            </div>
+            <div class="form-group">
+              <label class="form-label">預算金額（元）</label>
+              <input id="inpBudgetAmount" class="studio-input" type="number" step="1000" placeholder="例：24500000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">審查頁碼範圍</label>
+              <input id="inpPageRange" class="studio-input" type="text" placeholder="例：P.1 - P.218（含附件一～三）">
+            </div>
+            <div class="form-group">
+              <label class="form-label">審查日期</label>
+              <input id="inpReviewDate" class="studio-input" type="date">
+            </div>
+            <div class="form-group">
+              <label class="form-label">審查委員姓名（選填，用於簽名欄）</label>
+              <input id="inpReviewerName" class="studio-input" type="text" placeholder="留空則於報告顯示簽名底線">
+            </div>
+            <div class="form-group">
+              <label class="form-label">預設報告輸出格式</label>
+              <select id="selOutputFormat" class="studio-select">
+                <option value="oral">格式二：評選會議宣讀版（3~5主題＋請廠商說明，評選預設優先）</option>
+                <option value="written">格式一：書面審查意見（逐條三段式：標題／審查意見／備註）</option>
+                <option value="rfp_diff">招標文件修正對照版（標題＋位置＋修正前／後粗體＋一句理由）</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-grid-2">
+          <!-- Left: 10 Principles & Proposal A-E Deep Checklists -->
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">🧭 十大審查原則（深度邏輯檢核框架）</h3>
+                  <p class="card-subtitle">勾選本案發現疑慮的原則，或點「＋轉意見」直接建立該主題的審查卡片：</p>
+                </div>
+              </div>
+              <div id="principlesChecklist" class="checklist-group"></div>
+            </div>
+
+            <div class="card" id="proposalDeepCheckCard">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">⚖️ 評選審查（服務建議書）A～E 必查深層陷阱</h3>
+                  <p class="card-subtitle">實務上最常出現且表面不易察覺的問題，逐項對照招標文件與建議書：</p>
+                </div>
+              </div>
+              <div id="proposalDeepChecklist" class="checklist-group"></div>
+            </div>
+          </div>
+
+          <!-- Right: 12-Item Pre-Review Quick Checklist -->
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">✅ 審查前 12 項快速檢查清單（完審把關）</h3>
+                  <p class="card-subtitle">定稿前逐一確認是否已完成交叉查證、算術驗算與根因歸納：</p>
+                </div>
+                <button id="checkAllQuick12Btn" class="btn btn-secondary btn-sm">全選 / 重設</button>
+              </div>
+              <div id="quick12Checklist" class="checklist-group"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           VIEW 2: 文件解析・報價算術驗算・掃描照片判讀台
+      ====================================================================== -->
+      <section id="view-scanner" class="workspace-view">
+        <div class="panel-grid-2">
+          <!-- Left Column: Document Text Input & Automated Trap Scanner -->
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">📄 待審計畫書／建議書／招標文件內容匯入與陷阱掃描</h3>
+                  <p class="card-subtitle">貼上文件文字或匯入檔案（支援 .txt / .md / .csv / .docx），自動偵測承諾落差、廠牌綁定、EOS過期版本與邏輯陷阱：</p>
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <label class="btn btn-secondary btn-sm" style="cursor:pointer;">
+                    📂 匯入文件檔
+                    <input id="docFileInput" type="file" accept=".txt,.md,.csv,.json,.docx" style="display:none;">
+                  </label>
+                  <button id="runTrapScanBtn" class="btn btn-primary btn-sm">🔍 立即深層掃描</button>
+                </div>
+              </div>
+
+              <textarea id="inpDocText" class="studio-textarea" style="min-height:210px;" placeholder="在此貼上計畫書、服務建議書或招標文件之文字摘錄（包含時程、保固、SLA、資料遷移、軟硬體規格、KPI、罰則等章節）..."></textarea>
+
+              <div style="margin-top:14px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <strong style="font-size:0.88rem;">🚨 自動偵測之邏輯漏洞與合規風險 (<span id="trapResultCount">0</span>)</strong>
+                  <span style="font-size:0.74rem; color:var(--text-muted);">點擊「＋轉為審查意見」可直接送入工作台</span>
+                </div>
+                <div id="trapResultsContainer" class="trap-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Arithmetic Verifier & Scanned Photo Loupe -->
+          <div>
+            <!-- Arithmetic & Budget Table Verifier -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">🧮 報價單價 × 數量自動驗算 ＆ 經費結構檢核</h3>
+                  <p class="card-subtitle">SKILL規範：「數字（單價×數量、小計、總價）一律實際驗算；檢視『1式』籠統報價、科目錯置與前段付款比例」</p>
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <button id="addBudgetRowBtn" class="btn btn-secondary btn-sm">＋ 新增項目</button>
+                  <button id="budgetAnomalyToFindingBtn" class="btn btn-amber btn-sm">⚡ 將經費異常轉為審查意見</button>
+                </div>
+              </div>
+
+              <div id="budgetSummaryAlerts" style="margin-bottom:10px;"></div>
+
+              <div class="data-table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>項目名稱</th>
+                      <th>預算科目</th>
+                      <th>單價</th>
+                      <th>數量</th>
+                      <th>單位</th>
+                      <th>表列小計</th>
+                      <th>實際驗算</th>
+                      <th>付款節點/備註</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="budgetTableBody"></tbody>
+                </table>
+              </div>
+
+              <details style="margin-top:10px; font-size:0.78rem; color:var(--text-secondary);">
+                <summary style="cursor:pointer; font-weight:600; color:var(--accent);">📋 批次貼上報價明細（支援從 Excel / 表格複製貼上）</summary>
+                <div style="margin-top:8px; display:flex; gap:8px;">
+                  <textarea id="batchBudgetTextarea" class="studio-textarea" style="min-height:68px; font-size:0.76rem;" placeholder="每行一筆，格式：項目名稱 [Tab或逗號] 單價 [Tab] 數量 [Tab] 表列小計&#10;範例：雲端伺服器建置, 150000, 4, 600000"></textarea>
+                  <button id="parseBatchBudgetBtn" class="btn btn-secondary btn-sm" style="align-self:flex-end;">解析匯入</button>
+                </div>
+              </details>
+            </div>
+
+            <!-- Scanned Photo PDF / Phone Photo Loupe & Dual-Page Splitter -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">📸 掃描照片型文件：旋轉・切左右頁・放大核對原圖</h3>
+                  <p class="card-subtitle">針對手機翻拍無文字層、雙頁合一或旋轉之掃描件，先旋轉、切左右頁並放大核對金額/日期/數量：</p>
+                </div>
+                <label class="btn btn-primary btn-sm" style="cursor:pointer;">
+                  🖼️ 載入掃描圖片
+                  <input id="scanImageInput" type="file" accept="image/*" style="display:none;">
+                </label>
+              </div>
+
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+                <button id="scanRotLeftBtn" class="btn btn-secondary btn-sm">↺ 左轉 90°</button>
+                <button id="scanRotRightBtn" class="btn btn-secondary btn-sm">↻ 右轉 90°</button>
+                <button id="scanSplitFullBtn" class="btn btn-secondary btn-sm">📄 全頁</button>
+                <button id="scanSplitLeftBtn" class="btn btn-secondary btn-sm">⬅️ 切左半頁</button>
+                <button id="scanSplitRightBtn" class="btn btn-secondary btn-sm">➡️ 切右半頁</button>
+                <button id="scanZoomInBtn" class="btn btn-secondary btn-sm">🔍 放大 +50%</button>
+                <button id="scanZoomOutBtn" class="btn btn-secondary btn-sm">🔍 縮小 -50%</button>
+                <button id="scanContrastBtn" class="btn btn-secondary btn-sm">◐ 高對比銳化</button>
+              </div>
+
+              <div id="scanViewerStage" class="scan-viewer-stage">
+                <div id="scanEmptyHint" style="text-align:center; color:var(--text-muted); font-size:0.82rem; padding:24px;">
+                  尚未載入掃描圖片。<br>上傳手機翻拍或掃描頁後，可在此旋轉、切左右頁並放大核對關鍵數字（金額、日期、數量、時限）。
+                </div>
+                <canvas id="scanCanvas" style="display:none;"></canvas>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; flex-wrap:wrap; gap:8px;">
+                <span id="scanStatusText" style="font-size:0.75rem; color:var(--text-muted);">等待載入掃描頁</span>
+                <div style="display:flex; gap:6px;">
+                  <button id="insertScanNoteBtn" class="btn btn-secondary btn-sm" title="於意見加註以掃描判讀為準">＋插入「以掃描判讀為準」註記</button>
+                  <button id="insertMissingPageBtn" class="btn btn-rose btn-sm" title="新增附件漏拍或缺頁之審查提醒">＋新增「掃描缺頁／附件漏拍」意見</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           VIEW 3: 審查意見組裝與根因歸納工作台
+      ====================================================================== -->
+      <section id="view-workbench" class="workspace-view">
+        <!-- Overall Positive Summary Card -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">🌟 壹、整體意見（正反並陳——先具體肯定對齊需求的亮點）</h3>
+              <p class="card-subtitle">SKILL規範：「先具體肯定對齊需求的亮點，再列待補強事項，避免報告流於單向批評或單向稱讚」</p>
+            </div>
+          </div>
+          <textarea id="inpOverallPositive" class="studio-textarea" style="min-height:76px;" placeholder="請輸入對本計畫／服務建議書對齊需求亮點之具體肯定敘述..."></textarea>
+        </div>
+
+        <!-- Findings Workbench (Mode: proposal / requirement / ivv) -->
+        <div id="findingsWorkbenchSection" class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">🧩 貳、核心審查意見組裝與根因歸納（建議歸納為 3～5 個根本問題主題）</h3>
+              <p class="card-subtitle">勾選多張零散問題卡片可一鍵「合併歸納為同一根本問題」；每張卡片即時檢核標題結論性、頁碼標註與中立語氣：</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button id="mergeSelectedFindingsBtn" class="btn btn-emerald btn-sm">🔗 合併勾選卡片為同一主題</button>
+              <button id="addFindingBtn" class="btn btn-primary btn-sm">＋ 新增審查意見主題</button>
+            </div>
+          </div>
+
+          <div id="findingsListContainer"></div>
+        </div>
+
+        <!-- RFP Diff Workbench (Shown prominently when mode === rfp or outputFormat === rfp_diff) -->
+        <div id="rfpDiffWorkbenchSection" class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">📝 招標文件（需求說明書／評選須知）修正前後對照表</h3>
+              <p class="card-subtitle">SKILL規範：「盡量保留原條文，只修正文字敘述、補實語意、消除前後矛盾；修正後文字中的增修處用 **粗體** 標出」</p>
+            </div>
+            <button id="addRfpDiffBtn" class="btn btn-primary btn-sm">＋ 新增條文修正對照</button>
+          </div>
+
+          <div id="rfpDiffListContainer"></div>
+        </div>
+
+        <!-- Review Conclusion Box -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">🏁 參、審查結論與議約前應承諾事項</h3>
+              <p class="card-subtitle">勾選審查結論，並具體載明哪些項目應於議約前承諾或列為修正後可行之必要條件：</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">審查結論標記</label>
+              <select id="selConclusion" class="studio-select">
+                <option value="feasible">■ 可行（無重大邏輯斷點，依計畫推動）</option>
+                <option value="conditional">■ 修正後可行（須補充說明或於議約前書面承諾）</option>
+                <option value="infeasible">■ 不可行（存在重大架構衝突、法規違反或嚴重不可行風險）</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">修正方向／議約前應承諾事項／不可行理由</label>
+              <textarea id="inpConclusionNote" class="studio-textarea" style="min-height:70px;" placeholder="例：建議請廠商針對保固起算點、7×24 SLA、資料遷移平行驗證及一式報價拆解於簡報詢答具體承諾，並列為議約前書面確認條件。"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           VIEW 4: AI 深度審查 Prompt 產生器 ＆ AI 回覆智慧解析匯入
+      ====================================================================== -->
+      <section id="view-prompt" class="workspace-view">
+        <div class="panel-grid-equal">
+          <!-- Left: Generated Skill Prompt -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">🤖 一鍵產生 `it-procurement-review v2` 專業審查 Prompt</h3>
+                <p class="card-subtitle">已自動封裝：本案背景、十大審查原則、預掃描發現之邏輯陷阱、算術驗算差額與固定輸出格式指令</p>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button id="refreshPromptBtn" class="btn btn-secondary btn-sm">🔄 重新整理</button>
+                <button id="copyPromptBtn" class="btn btn-primary btn-sm">📋 一鍵複製 Prompt</button>
+              </div>
+            </div>
+            <textarea id="generatedPromptTextarea" class="studio-textarea" style="min-height:460px; font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:0.79rem;" readonly></textarea>
+          </div>
+
+          <!-- Right: Paste AI Output to Auto-Parse into Workbench -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">📥 貼回 AI 審查結果 → 自動解析為工作台卡片</h3>
+                <p class="card-subtitle">將複製的 Prompt 貼到 Claude / ChatGPT / Gemini 執行後，把 AI 產出的審查意見貼在下方，即可一鍵匯入工作台進行微調與匯出 Word/PDF：</p>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button id="parseAiAppendBtn" class="btn btn-secondary btn-sm">＋ 附加至現有意見</button>
+                <button id="parseAiReplaceBtn" class="btn btn-primary btn-sm">⚡ 解析並覆蓋現有意見</button>
+              </div>
+            </div>
+            <textarea id="aiResponseInput" class="studio-textarea" style="min-height:460px; font-size:0.82rem;" placeholder="請將 AI 回傳的審查意見（格式一逐條版、格式二宣讀版、或招標文件修正對照版）貼在此處，再點擊右上角「解析」按鈕..."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           VIEW 5: 報告預覽・評選計分與序位試算・Word/PDF 匯出
+      ====================================================================== -->
+      <section id="view-export" class="workspace-view">
+        <!-- Control Bar (Hidden when printing) -->
+        <div class="card no-print">
+          <div class="card-header" style="margin-bottom:10px; padding-bottom:8px;">
+            <div>
+              <h3 class="card-title">📄 審查報告即時排版預覽 ＆ 專業匯出</h3>
+              <p class="card-subtitle">Word 匯出嚴格遵循 SKILL.md：「精簡只寫重點、絕不使用段落框線做分隔線（改用字級、粗細、留白分層）、不用表格切割審查意見」</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <select id="exportFormatQuickSwitch" class="studio-select" style="width:auto; font-weight:700;">
+                <option value="oral">切換預覽：格式二【評選會議宣讀版】</option>
+                <option value="written">切換預覽：格式一【書面審查意見（逐條）】</option>
+                <option value="rfp_diff">切換預覽：【招標文件修正前後對照版】</option>
+              </select>
+              <button id="copyReportTextBtn" class="btn btn-secondary">📋 複製純文字</button>
+              <button id="downloadWordBtn" class="btn btn-emerald">📝 下載 Word (.doc)</button>
+              <button id="printPdfBtn" class="btn btn-primary">🖨️ 列印 / 另存顧問級 PDF</button>
+            </div>
+          </div>
+
+          <!-- Optional Vendor Scoring & Rank Method (序位法) Calculator -->
+          <details id="scoringCalculatorDetails" style="margin-top:8px;">
+            <summary style="cursor:pointer; font-weight:700; font-size:0.86rem; color:var(--accent);">
+              📊 展開「評選配分與序位法試算表」（標準配分：需求契合30 / 期程品保10 / 執行能力20 / 經費合理20 / 需求掌握15 / 政策加分5）
+            </summary>
+            <div style="margin-top:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:0.78rem; color:var(--text-secondary);">可依招標文件實際配分評分，系統自動加總並換算序位：</span>
+                <button id="addVendorBtn" class="btn btn-secondary btn-sm">＋ 新增投標廠商</button>
+              </div>
+              <div class="data-table-wrap">
+                <table class="data-table" id="vendorScoringTable"></table>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Paper Preview Container -->
+        <div id="reportPreviewContainer"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastMsg" style="position:fixed; bottom:24px; right:24px; background:#0284c7; color:#fff; padding:10px 18px; border-radius:10px; font-size:0.84rem; font-weight:700; box-shadow:0 10px 25px rgba(0,0,0,0.4); opacity:0; pointer-events:none; transition:opacity 0.2s ease; z-index:9999;"></div>
+
+  <script src="js/data.js?v=20261113v1"></script>
+  <script src="js/scanner.js?v=20261113v1"></script>
+  <script src="js/exporter.js?v=20261113v1"></script>
+  <script src="js/app.js?v=20261113v1"></script>
+</body>
+</html>
