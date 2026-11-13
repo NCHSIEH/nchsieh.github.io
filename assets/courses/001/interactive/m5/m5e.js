@@ -72,4 +72,11 @@
   CaseLinks('w-aiecg', [
     ['Lin et al. Nature Medicine 2024（原始論文）', 'https://www.nature.com/articles/s41591-024-02961-4'],
     ['HCPLive 報導', 'https://hcplive.com/view/ai-electrocardiogram-alert-intervention-reduces-all-cause-mortality']]);
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-conv', '實算第一層權重數：', '224×224 彩色影像展平後接 1,000 個神經元：224×224×3×1,000 ＝ 150,528,000 個權重；一層 3×3、64 個濾鏡的卷積：3×3×3×64 ＝ 1,728 個，相差約 87,000 倍（不含偏差項）。（講義 M5 第 34 頁）');
+  addNote('w-short', '真實數字（Zech 2018）：', '同院測試 AUC 0.931，換到 Indiana 外院只剩 0.815；而 CNN 直接認出影像來自哪家醫院的準確度高達 99.95%（NIH）與 99.98%（Mount Sinai）——模型學會的是醫院與機器的線索。（講義 M5 第 63 頁）');
+  addNote('w-search', '同樣試 9 次：', '3×3 網格在重要參數上只試到 3 個值，另外 6 次花在不重要的參數；隨機搜尋 9 次在重要參數上試到 9 個不同的值（Bergstra & Bengio 2012）。（講義 M5 第 68 頁）');
 })();
