@@ -54,8 +54,34 @@
       note: '本節為 2026 年 7 月查證之工具現況；此領域變動快，以官方文件為準。' }
   ], src: '講義 M8 第 96 頁。' });
 
+  CaseW($('#w-nogen'), { tabs: [
+    { id: 'w', label: '為什麼／怎麼做／怎麼驗證', cards: [
+      ['為什麼', '給付金額、藥物劑量、風險分數這類數字，是幻覺傷害最大的地方：看起來就像正確答案，沒有徵兆告訴你是編的；使用者不會去查證每個數字，尤其在急迫的臨床情境。', '規則'],
+      ['怎麼做', '數字一律來自「檢索」或「工具計算」，不可由 LLM 生成。Dify：知識庫召回原文、Code 節點計算、或串查表 API；Prompt 明確禁止「自行計算或推估任何金額與劑量」。', '做法'],
+      ['怎麼驗證', '同一個問題問五次，看數字會不會變，會變的就是生成的；輸出強制標註來源段落讓使用者核對。這是專題驗收檢查項目之一。', '驗收']],
+      note: '課程範例：CMS Workflow - case assessment-01.yml 示範如何把「判定」與「查表」分開處理。' },
+    { id: 'q', label: '判斷', quiz: [
+      { t: '同一個問題問五次，LLM 給的金額每次略有不同。這代表什麼？', o: ['數字是生成的，應改由檢索或程式計算', '再把 Temperature 調低就解決了'], a: 0, w: '會變的數字就是生成的；規則是數字不由 LLM 生成。' }] }
+  ], src: '講義 M8 第 48 頁。' });
+
+  CaseW($('#w-tracefive'), { tabs: [
+    { id: 't', label: '五個欄位', cards: [
+      ['節點執行順序', '看流程實際走了哪條路。走了沒預期的分支 → 條件設錯。', ''],
+      ['各節點輸入／輸出', '看變數有沒有正確傳遞。下游收到空值 → 變數綁定錯誤。', ''],
+      ['召回結果', '看召回了哪幾段、分數多少。正確段落沒被召回 → 調切塊或閾值。', ''],
+      ['Agent 的思考過程', 'Thought → Call Tool → Observation。沒有調用工具 → 工具描述太模糊。', ''],
+      ['Token 消耗與耗時', '看哪個節點最貴、最慢。單一節點暴增 → 檢查 Top-K 或 Prompt 長度。', '']],
+      note: '期末專題要求附上 Tracing 截圖，展示 Agent 某次測試的完整軌跡（Thought → Call Tool → Output → Final Answer）。' },
+    { id: 'q', label: '判斷', quiz: [
+      { t: 'Tracing 顯示下游節點收到空值。最先該懷疑什麼？', o: ['變數綁定錯誤', '切塊大小太大'], a: 0, w: '下游收到空值是變數綁定錯誤的典型徵兆。' }] }
+  ], src: '講義 M8 第 72 頁。' });
+
   CaseLinks('w-aircan', [
     ['裁決全文（BC Civil Resolution Tribunal）', 'https://decisions.civilresolutionbc.ca/crt/crtd/en/525448/1/document.do'],
     ['McCarthy Tétrault 案例評析', 'https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot']
   ], '案號 Moffatt v. Air Canada, 2024 BCCRT 149；2024/2/14 裁決。');
+  CaseLinks('w-updoc', [
+    ['Innolitics：UpDoc 清了什麼（2026/6/25）', 'https://innolitics.com/articles/updoc-fda-cleared-ai-agent/'],
+    ['HLTH：UpDoc 發表首件 FDA 核准的病人端 LLM（2026/7/2）', 'https://hlth.com/insights/news/updoc-debuts-first-fda-cleared-patient-facing-clinical-llm-for-insulin-management']
+  ], 'FDA 510(k) K253281，2025/12/23 核准；公開報導指出劑量決定仍在確定性演算法內，LLM 只負責對話介面。');
 })();

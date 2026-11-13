@@ -40,4 +40,12 @@
       ['② 你的領域知識是稀缺的', '會寫程式的人很多，看得懂護理紀錄又會分析的人很少。「這個標籤實際上怎麼產生的」只有你問得出來。', ''],
       ['③ 誠實比聰明重要', '主動揭露限制、承認不確定、說得出模型對誰不準。被過度宣稱的模型，傷害遠大於一個誠實的爛模型。', '']] }
   ], src: '講義 M9 第 49 頁。' });
+  CaseLinks('w-label', [
+    ['Science 2019 摘要（UC Berkeley CHMI）', 'https://chmi.berkeley.edu/news/dissecting-racial-bias-in-an-algorithm-used-to-manage-the-health-of-populations'],
+    ['論文全文 PDF（Obermeyer 等，FTC 存檔）', 'https://www.ftc.gov/system/files/documents/public_events/1548288/privacycon-2020-ziad_obermeyer.pdf']
+  ], 'Obermeyer et al., Science 366:447–453（2019）；演算法以醫療花費當作健康需求的代理。');
+  CaseLinks('w-watson', [
+    ['STAT News：Watson 建議不安全且不正確的治療（2018/7/25，STAT+ 訂閱）', 'https://www.statnews.com/2018/07/25/ibm-watson-recommended-unsafe-incorrect-treatments/'],
+    ['Healthcare Dive 摘要', 'https://www.healthcaredive.com/news/stat-ibms-watson-gave-unsafe-and-incorrect-cancer-treatment-advice']
+  ], '報導指出問題主要來自以少量「合成」個案訓練；STAT 稱無病人因此死亡。');
 })();

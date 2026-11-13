@@ -162,7 +162,8 @@
         out.append(row, h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: 'var(--paper)' } }, h('b', null, name + '在做什麼'), h('div', { style: { fontSize: '14px', margin: '4px 0 6px' } }, d), h('span', { class: 'tag' }, '本課對應：' + m)));
         out.append(note('三關回答的是三個不同的問題：準不準（取證）、信不信得過（落地）、有沒有幫助（給付）。一個 AI 可以過了第一關卻卡在第三關——這正是美國 FDA 數字「核准多、證據少」的另一面。2024/10 成立，30 家醫院提案、16 家醫院 19 案入選。'));
       }
-      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 新聞稿、iThome 報導。講義 M0 第 41、43 頁。'));
+      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 三大 AI 中心啟動記者會新聞稿（30 家醫院提 48 案、16 家 19 案入選）；2025/7/24 取證驗證中心聯合啟動大會（首批四項實測）。講義 M0 第 41、43 頁。'));
+      out.append(h('p', { class: 'ai' }, h('b', null, '來源連結（2026/11/13 查核可開啟）：'), h('a', { href: 'https://www.mohw.gov.tw/cp-16-80155-1.html', target: '_blank', rel: 'noopener' }, '衛福部：三大 AI 中心啟動記者會（2024/10/7）'), '　', h('a', { href: 'https://www.mohw.gov.tw/cp-16-83193-1.html', target: '_blank', rel: 'noopener' }, '衛福部：臨床 AI 取證驗證中心聯合啟動大會（2025/7/24）'), '　', h('a', { href: 'https://aicenter.mohw.gov.tw/', target: '_blank', rel: 'noopener' }, '臺灣智慧醫療三大中心官網')));
     }
     box.append(out); draw();
   })();

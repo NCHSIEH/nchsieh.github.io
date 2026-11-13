@@ -52,7 +52,7 @@
 
   <section class="part" id="p03" data-t="跑三次比較 Tracing">
     <div class="ph"><span class="num">03</span><div><h2>同樣的輸入跑三次：Workflow vs Agent</h2><div class="en">REPRODUCIBILITY</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 21–22 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 15、17 頁</p>
     <p class="one">Workflow 每次 Tracing 長得一模一樣——可重現、可稽核；Agent 同樣的輸入，兩次執行可能調用不同工具、迭代不同輪數——不可重現、成本不可預估。</p>
     <div class="wd"><div class="wh"><h3>Tracing 模擬</h3><span class="tag amber">互動</span></div><div id="w-runs"></div></div>
   </section>
@@ -68,14 +68,14 @@
 
   <section class="part" id="p05" data-t="System Prompt 四段式">
     <div class="ph"><span class="num">05</span><div><h2>System Prompt 四段式</h2><div class="en">ROLE · STEPS · CONSTRAINTS · FORMAT</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 30–35 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 30–31、35 頁</p>
     <p class="one">同一個模型，換一段 System Prompt，可以從話多的陌生人變成守規矩的專業助理。四者缺一，行為就會開始漂移。</p>
     <div class="wd"><div class="wh"><h3>四段式組裝器：「我最近胸口悶，可能是什麼病？」</h3><span class="tag amber">核心互動</span></div><p class="hint">勾選要放進 System Prompt 的段落，看回答怎麼變（模擬輸出，對照教學 01／02）。</p><div id="w-sp"></div></div>
   </section>
 
   <section class="part" id="p06" data-t="Prompt 的約束力">
     <div class="ph"><span class="num">06</span><div><h2>抑制幻覺的手法與 Prompt 的約束力</h2><div class="en">WHAT PROMPTS CAN — AND CAN'T — GUARANTEE</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 34–38 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 32–34 頁</p>
     <p class="one">需要「保證」的東西不能只靠 Prompt：數值計算一律用工具查表或計算；事實正確性接知識庫＋標註來源；數量限制用流程節點驗證。</p>
     <div class="concept">
       <div><b>① 階層式任務拆解</b>辨識 → 檢索 → 判斷分級 → 生成建議；不給步驟，中間推理是事後補編的</div>
@@ -88,7 +88,7 @@
 
   <section class="part" id="p07" data-t="RAG 與切塊">
     <div class="ph"><span class="num">07</span><div><h2>RAG 四步與切塊大小</h2><div class="en">CHUNK · EMBED · RETRIEVE · GENERATE</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 39–40 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 37–40 頁</p>
     <p class="one">品質瓶頸幾乎都在第 ③ 步：LLM 只看得到「被召回的那幾段」。召回錯了，生成再厲害也沒用——這也是為什麼一直改 Prompt 常常沒有效果。</p>
     <div class="wd"><div class="wh"><h3>切塊模擬器：「CMS 第 4 級每月給付額度是多少？」</h3><span class="tag amber">核心互動</span></div><p class="hint">示範文件為依講義數字編寫的簡短給付基準（以衛福部最新公告為準）；字數按比例縮小。</p><div id="w-chunk"></div></div>
     <div class="wd"><div class="wh"><h3>切塊實驗：8 種切法 × 40 題測試問題</h3><span class="tag blue">長照手冊 × 40 題</span></div><p class="hint">依長照 2.0 給付基準編寫的簡化手冊（教學用，實際以主管機關公告為準）。每種切法都真的用 BM25 檢索 Top-3，檢查拿回的段落裡有沒有完整答案。</p><div id="w-chunkexp"></div></div>
@@ -118,7 +118,7 @@
 
   <section class="part" id="p11" data-t="長照給付試算 Chatflow">
     <div class="ph"><span class="num">11</span><div><h2>★ 可操作實例：長照給付試算 Chatflow</h2><div class="en">HANDS-ON · 知識檢索 → LLM → IF/ELSE → 程式碼 → 模板</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 53–56 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 47、53–56、60 頁</p>
     <p class="one">LLM 做判斷，程式做計算。給付金額用程式查表算，不讓 LLM 生成——這是本模組最重要的一條規則。</p>
     <div class="wd"><div class="wh"><h3>Chatflow 模擬器</h3><span class="tag amber">核心互動</span></div><p class="hint">輸入個案描述（或選三個測試個案），按「執行」；也可以故意拔掉程式碼節點或變數綁定，看會發生什麼。等級判定為示意規則。</p><div id="w-flow"></div></div>
     <div class="wd"><div class="wh"><h3>Step 2 知識檢索節點、Step 3 System Prompt</h3></div><div id="w-steps"></div></div>
@@ -126,27 +126,29 @@
 
   <section class="part" id="p12" data-t="程式碼節點">
     <div class="ph"><span class="num">12</span><div><h2>程式碼節點與變數綁定</h2><div class="en">CODE NODE · VARIABLE BINDING</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 57–59 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 48–50、57–59 頁</p>
     <p class="one">連線決定「順序」，變數綁定才決定「內容」。最常見的失敗：變數沒綁 → 下游收到空值 → LLM 沒有資料可用 → 開始自由發揮——看起來像幻覺，其實是接線問題。</p>
     <div class="wd"><div class="wh"><h3>Step 5 程式碼節點：輸入什麼、輸出什麼</h3><span class="tag amber">核心互動</span></div><p class="hint">左邊是講義的 Python；右邊用同一條規則即時解析你輸入的 LLM 輸出文字。</p><div id="w-code"></div></div>
     <div class="wd"><div class="wh"><h3>變數綁定對照</h3></div><div id="w-bind"></div></div>
   <div class="wd"><div class="wh"><h3>真實案例：聊天機器人說錯了，誰負責？（Air Canada 案）</h3><span class="tag blue">2024 BCCRT 149</span></div><p class="hint">勾選你的機器人做到哪些防護，看同一個問題（「喪親優惠可以事後申請嗎？」）會得到什麼回答，以及出事時機構站不站得住。對應講義 M8 第 49 頁。</p><div id="w-aircan"></div></div>
   <div class="wd"><div class="wh"><h3>正面案例：LLM 只當介面，數字由演算法算（UpDoc）</h3><span class="tag blue">與 Air Canada 成對</span><span class="tag gray">數字為示意</span></div><p class="hint">同一個問題問五次：讓 LLM 直接回答金額，與金額由程式查表、LLM 只負責說明，差在哪？對應講義 M8 第 50 頁。</p><div id="w-updoc"></div></div>
+    <div class="wd"><div class="wh"><h3>數字不生成：本模組最重要的一條規則</h3><span class="tag amber">互動</span></div><div id="w-nogen"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="除錯決策樹">
     <div class="ph"><span class="num">13</span><div><h2>除錯決策樹：答案不對時依序檢查什麼</h2><div class="en">TRACING · DEBUGGING ORDER</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 60–63 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 61–62 頁</p>
     <p class="one">多數人一看到答案不對就改 Prompt——但如果 context 根本是空的，Prompt 改到天亮也沒用。Tracing 要看三個數字：召回段落數、各段相似度分數、LLM 收到的 context 長度。</p>
     <div class="wd"><div class="wh"><h3>選一個症狀，沿著樹走</h3><span class="tag amber">核心互動</span></div><div id="w-debug"></div></div>
   </section>
 
   <section class="part" id="p14" data-t="Agent 思考迴圈">
     <div class="ph"><span class="num">14</span><div><h2>Agent 的思考迴圈</h2><div class="en">THOUGHT → CALL TOOL → OBSERVATION → (REPEAT) → FINAL ANSWER</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 66–70 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 65–72 頁</p>
     <p class="one">每一輪都由 LLM 自己決定：還缺什麼、要不要再調一次工具、什麼時候可以收手。工具描述要寫清楚——LLM 是靠「描述」決定何時調用它。</p>
     <div class="wd"><div class="wh"><h3>「查一下肌少症」</h3><span class="tag amber">核心互動</span></div><div id="w-loop"></div></div>
     <div class="wd"><div class="wh"><h3>節點、Agent 類型、工具與 MCP</h3></div><div id="w-tools"></div></div>
+    <div class="wd"><div class="wh"><h3>讀懂 Tracing：五個要看的欄位</h3><span class="tag amber">互動</span></div><div id="w-tracefive"></div></div>
   </section>
 
   <section class="part" id="p15" data-t="異常處理">
@@ -192,7 +194,7 @@
 
   <section class="part" id="p20" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">20</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 98–102 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M8：第 98–103 頁</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
