@@ -57,4 +57,10 @@
 
   CaseLinks('w-sepsis', [['Seymour et al. JAMA 2019（PDF，匹茲堡大學）', 'https://www.dbmi.pitt.edu/wp-content/uploads/2022/09/Derivation-Validation-and-Potential-Treatment-Implications-of-Novel-Clinical-Phenotypes-for-Sepsis.pdf']],
     '28 天死亡率取自 HealthDay 摘要，該報導與 PMC 論文頁無法穩定開啟，未列連結；請以論文為準。');
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-ahl', '五群各有多少人（8,980 人）：', 'SAID 自體免疫 577、SIDD 胰島素嚴重不足 1,575（視網膜病變風險最高）、SIRD 胰島素嚴重阻抗 1,373（腎臟病變風險最高）、MOD 輕度肥胖相關 1,942、MARD 輕度年齡相關 3,513（約 39%）。演算法只給編號，名字是研究者看完剖析後取的。（講義 M3 第 41 頁）');
+  addNote('w-prep3', '用一份顧客資料走一遍（示意）：', 'CustomerID → 移除；年齡 → Z-Score；年收入（右偏）→ 先處理極端值再 Z-Score；刷卡金額與刷卡次數 r = 0.9 → 擇一保留；性別 → 0／1；居住地區 5 類 → One-Hot 成 5 欄。順序：去留 → 編碼 → 處理極端值 → 縮放。（講義 M3 第 13 頁）');
 })();
