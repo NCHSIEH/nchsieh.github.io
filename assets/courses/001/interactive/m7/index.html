@@ -36,12 +36,14 @@
 
   <section class="part" id="p01" data-t="技術演進">
     <div class="ph"><span class="num">01</span><div><h2>技術演進：從一篇論文到會做事的 Agent</h2><div class="en">2017 → 2026</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 4–6 頁</p>
     <p class="one">2017 年的技術突破到 2022 年 ChatGPT 才讓大眾感受到；2023 年之後每一年的主題都在往「能做事」移動。每次突破都會解決舊問題、同時製造新問題——目前這一輪的新問題，就是你們要處理的。</p>
     <div class="wd"><div class="wh"><h3>點年份看那一年發生什麼</h3><span class="tag amber">互動</span></div><div id="w-timeline"></div></div>
   </section>
 
   <section class="part" id="p02" data-t="生成式 vs 判別式">
     <div class="ph"><span class="num">02</span><div><h2>生成式與判別式：學的東西完全不同</h2><div class="en">P(y|x) vs P(x)</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 8–10 頁（PART 01）</p>
     <p class="one">判別式回答「是哪一類」，生成式產生「一個新的東西」。這也是為什麼生成式模型會「編」——它本來就是設計來產生新內容的，產生沒見過的文字是正常運作，不是故障。</p>
     <div class="wd"><div class="wh"><h3>同一份資料：學分界線 vs 學分布</h3><span class="tag amber">核心互動</span></div><div id="w-gvd"></div></div>
     <div class="wd"><div class="wh"><h3>這個醫療場景該用哪一類？</h3><span class="tag amber">練習</span></div><div id="w-scene"></div></div>
@@ -49,6 +51,7 @@
 
   <section class="part" id="p03" data-t="四種生成式架構">
     <div class="ph"><span class="num">03</span><div><h2>四種生成式架構</h2><div class="en">GAN · VAE · DIFFUSION · TRANSFORMER</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 11–13 頁</p>
     <p class="one">另外三種在影像與科學資料上仍是主流，但所有主流 LLM 的底層都是 Transformer——本課程接下來全部聚焦在它。</p>
     <div class="concept">
       <div><b>GAN</b>生成器造假、鑑別器抓假，對抗變強。多用於局部影像修補與合成訓練資料</div>
@@ -57,10 +60,12 @@
       <div><b>★ Transformer</b>注意力機制、預測下一個 token。所有主流 LLM 的底層</div>
     </div>
     <div class="wd"><div class="wh"><h3>Diffusion 的直覺：從雜訊一步步還原</h3><span class="tag amber">互動</span></div><div id="w-diff"></div></div>
+    <div class="wd"><div class="wh"><h3>護理與健康科技的六個可行切入點</h3><span class="tag blue">講義第 12 頁</span></div><div id="w-entry"></div></div>
   </section>
 
   <section class="part" id="p04" data-t="Token 與成本">
     <div class="ph"><span class="num">04</span><div><h2>Token：模型眼中的文字</h2><div class="en">TOKENIZATION · 計費 · 上下文上限</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 15–17 頁（PART 02）</p>
     <p class="one">模型看不到「字」，只看到編號。這件事同時決定了你的帳單（輸入、輸出分開計價）、上下文上限，以及它為什麼數不清字數。</p>
     <div class="wd"><div class="wh"><h3>Token 切切看（示意 tokenizer）</h3><span class="tag amber">互動</span></div><p class="hint">每個模型有自己的 tokenizer，切法各家不同；這裡用簡化規則示範。</p><div id="w-token"></div></div>
     <div class="wd"><div class="wh"><h3>算一次帳：衛教問答機器人的月成本</h3><span class="tag amber">核心互動</span></div><p class="hint">預設為講義數值；費率隨模型與時間變動，此處只示範算法。</p><div id="w-cost"></div></div>
@@ -68,6 +73,7 @@
 
   <section class="part" id="p05" data-t="Attention">
     <div class="ph"><span class="num">05</span><div><h2>Attention：一句話說完它在做什麼</h2><div class="en">ATTENTION IS ALL YOU NEED</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 19–21 頁（PART 03）</p>
     <p class="one">對句子中每一個詞算一個權重，權重高＝關聯強。舊做法（RNN）一個字一個字讀，讀到「他」時前面的「病人」已經模糊；Attention 一次看全部，距離多遠都不衰減。代價：計算量隨長度平方成長。</p>
     <div class="wd"><div class="wh"><h3>「他」指的是誰？</h3><span class="tag amber">核心互動</span></div><p class="hint">點任一個字，看它把注意力放在哪裡（講義的示意權重）。</p><div id="w-attn"></div></div>
     <div class="wd"><div class="wh"><h3>為什麼上下文有上限：長度的平方</h3><span class="tag amber">互動</span></div><div id="w-quad"></div></div>
@@ -75,6 +81,7 @@
 
   <section class="part" id="p06" data-t="三種 Transformer">
     <div class="ph"><span class="num">06</span><div><h2>三種 Transformer 架構</h2><div class="en">ENCODER-ONLY · DECODER-ONLY · ENCODER-DECODER</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 22–25 頁</p>
     <p class="one">嵌入用 Encoder-only（把文字變向量）、生成用 Decoder-only（產生答案）——這是兩件不同的事，所以 Dify 的知識庫設定裡「嵌入模型」與「LLM」是兩個分開的下拉選單。</p>
     <div class="wd"><div class="wh"><h3>誰看得到誰：注意力遮罩</h3><span class="tag amber">互動</span></div><div id="w-mask"></div></div>
     <div class="wd"><div class="wh"><h3>這件事交給哪一種？</h3><span class="tag amber">練習</span></div><div id="w-arch3"></div></div>
@@ -82,6 +89,7 @@
 
   <section class="part" id="p07" data-t="Embedding">
     <div class="ph"><span class="num">07</span><div><h2>Embedding：語意的數學表示</h2><div class="en">SEMANTIC SPACE · COSINE SIMILARITY · RAG 召回</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 27–29 頁（PART 04）</p>
     <p class="one">把問題與所有段落都轉成向量，挑距離最近的幾段餵給 LLM——所以查詢「血糖控制」召得回「糖尿病照護指引」，即使那份文件裡沒有這四個字。這就是 M8「知識檢索節點」的全部原理。</p>
     <div class="wd"><div class="wh"><h3>語意空間與 RAG 召回</h3><span class="tag amber">核心互動</span></div><p class="hint">選一個查詢，調整 Top-K 與 Score 閾值（實務是幾百到幾千維，這裡畫成二維示意）。</p><div id="w-emb"></div></div>
     <div class="wd"><div class="wh"><h3>餘弦相似度手算</h3><span class="tag amber">互動</span></div><p class="hint">預設為講義的 4 維示範向量；可以拖動段落 A 的數值。</p><div id="w-cos"></div></div>
@@ -90,20 +98,25 @@
 
   <section class="part" id="p08" data-t="預訓練、微調、推論">
     <div class="ph"><span class="num">08</span><div><h2>預訓練、微調、推論，與「讓模型懂你的領域」</h2><div class="en">PRETRAINING · FINE-TUNING · INFERENCE · RAG</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 31–34 頁（PART 05）</p>
     <p class="one">三者成本相差約十個數量級。M8 的 Dify 只做第 ③ 階段——能換模型、改提示詞、接知識庫，但改不了模型本身。決策順序：先試提示詞 → 不夠加 RAG → 還不夠才考慮微調。</p>
     <div class="wd"><div class="wh"><h3>三個階段的成本量級</h3></div><div id="w-stage"></div></div>
     <div class="wd"><div class="wh"><h3>該用提示詞、RAG 還是微調？</h3><span class="tag amber">練習</span></div><div id="w-route"></div></div>
+    <div class="wd"><div class="wh"><h3>微調的五種方式</h3><span class="tag blue">講義第 32 頁</span></div><div id="w-ft5"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="Temperature 與 Top-p">
     <div class="ph"><span class="num">09</span><div><h2>推論參數：Temperature 與 Top-p</h2><div class="en">SAMPLING · NUCLEUS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 36–37、39 頁（PART 06 前段）</p>
     <p class="one">它在調「下一個 token 的機率分布」：溫度低 → 分布尖銳、幾乎總選最高的；溫度高 → 分布拉平、什麼都可能被選中。醫療應用一律用低溫（0–0.3）。</p>
     <div class="wd"><div class="wh"><h3>「這位病人的病情⋯」下一個詞</h3><span class="tag amber">核心互動</span></div><div id="w-temp"></div></div>
     <div class="wd"><div class="wh"><h3>在瀏覽器裡訓練一個迷你語言模型</h3><span class="tag blue">600 句衛教語料</span></div><p class="hint">n-gram 語言模型：數「前面是這幾個詞時，下一個詞出現幾次」。原理和大型語言模型一樣都是預測下一個詞，只是看的前文很短。</p><div id="w-lm"></div></div>
+    <div class="wd"><div class="wh"><h3>其他常見推論參數：醫療建議值與調錯後果</h3><span class="tag blue">講義第 37 頁</span></div><div id="w-params"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="幻覺的成因">
     <div class="ph"><span class="num">10</span><div><h2>幻覺：為什麼它不是 bug</h2><div class="en">HALLUCINATION</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 38、40–42 頁</p>
     <p class="one">它挑的是「最像下一個字的東西」，不是「事實上正確的東西」。你不可能用提示詞「關掉」幻覺——只能用 RAG 提供事實、用程式碼接管數值、用人工覆核把關。這正是 M8 整個模組在做的事。</p>
     <div class="wd"><div class="wh"><h3>「病人的血糖值為 ___」</h3><span class="tag amber">核心互動</span></div><div id="w-hall"></div></div>
     <div class="wd"><div class="wh"><h3>同一個問題問 5 次：自我一致性能抓幻覺嗎？</h3><span class="tag blue">600 句衛教語料</span></div><p class="hint">用上面的 3-gram 模型，每個開頭各生成 5 次，算 5 個答案彼此用詞的重疊程度（Jaccard）。其中兩個詞語料裡完全沒有。</p><div id="w-self"></div></div>
@@ -113,13 +126,16 @@
 
   <section class="part" id="p11" data-t="模型選型與推理模型">
     <div class="ph"><span class="num">11</span><div><h2>模型規模、選型與推理模型</h2><div class="en">PARAMETERS · CONTEXT · REASONING · MULTIMODAL</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 44–50 頁（PART 07）</p>
     <p class="one">選模型真正該問的四個問題裡，沒有一個是「哪個模型在排行榜上最強」。推理模型會先想再答：思考過程可以被檢視，但成本高 5–20 倍，也不保證結論正確。</p>
     <div class="wd"><div class="wh"><h3>選模型的四道關卡</h3><span class="tag amber">核心互動</span></div><div id="w-pick"></div></div>
     <div class="wd"><div class="wh"><h3>什麼任務值得用推理模型</h3><span class="tag amber">練習</span></div><div id="w-reason"></div></div>
+    <div class="wd"><div class="wh"><h3>環境語音病歷的隨機試驗：效益不如宣傳一致</h3><span class="tag blue">講義第 50 頁</span></div><div id="w-ambient"></div></div>
   </section>
 
   <section class="part" id="p12" data-t="部署：雲端 vs 本地">
     <div class="ph"><span class="num">12</span><div><h2>模型跑在哪裡：雲端 vs 本地</h2><div class="en">CLOUD API · OLLAMA · PRIVATE CLOUD</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 52–56 頁（PART 08）</p>
     <p class="one">這一節決定的不是效能，是資料會不會離開你的機構。★ 課程鐵則：真實病歷、個案紀錄、諮商記錄一律不得送進雲端 API。</p>
     <div class="wd"><div class="wh"><h3>我的電腦跑得動多大的模型？</h3><span class="tag amber">核心互動</span></div><div id="w-ram"></div></div>
     <div class="wd"><div class="wh"><h3>Ollama 十分鐘上手</h3><span class="tag">本模組唯一必做的環境建置</span></div><div id="w-ollama"></div></div>
@@ -128,32 +144,38 @@
 
   <section class="part" id="p13" data-t="Hugging Face 與 AI Studio">
     <div class="ph"><span class="num">13</span><div><h2>Hugging Face 與 AI Studio 生成式範例</h2><div class="en">MODEL HUB · GGUF · HANDS-ON</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 58–60 頁（PART 09）</p>
     <p class="one">Hugging Face 是找模型的第一站：看任務標籤、看模型卡（訓練資料、預期用途、已知限制）——授權條款一定要看。Ollama 下載的就是量化（GGUF）版本，所以筆電也跑得動。</p>
     <div class="wd"><div class="wh"><h3>課堂實作</h3><span class="tag">可勾選進度</span></div><div id="w-labs"></div></div>
   </section>
 
   <section class="part" id="p14" data-t="提示詞四層次">
     <div class="ph"><span class="num">14</span><div><h2>提示詞的四個層次</h2><div class="en">PROMPTING FUNDAMENTALS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 62–64 頁（PART 10）</p>
     <p class="one">多數人停在層次 1–2，然後抱怨「AI 不好用」——差別不在模型，在你給了多少約束。層次 3 是「可以放進系統」與「不行」的分界線；層次 4 就是 M8 的四段式 System Prompt。</p>
     <div class="wd"><div class="wh"><h3>一層一層加上約束</h3><span class="tag amber">核心互動</span></div><p class="hint">需求：向 70 歲高血壓長者說明飲食注意事項。右邊是講義的節錄輸出。</p><div id="w-prompt"></div></div>
   </section>
 
   <section class="part" id="p15" data-t="上下文工程">
     <div class="ph"><span class="num">15</span><div><h2>上下文工程：這 5,000 個 token 怎麼分配</h2><div class="en">CONTEXT ENGINEERING · LOST IN THE MIDDLE · RERANK</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 65–66 頁</p>
     <p class="one">System Prompt、召回段落、對話歷史、工具結果都在搶同一個空間。放在正中間的資訊最容易被忽略（Liu et al., 2023）——重要的東西放頭尾；召回段落要精不要多。</p>
     <div class="wd"><div class="wh"><h3>上下文預算模擬器</h3><span class="tag amber">核心互動</span></div><div id="w-ctx"></div></div>
   </section>
 
   <section class="part" id="p16" data-t="四條紅線">
     <div class="ph"><span class="num">16</span><div><h2>生成式 AI 在醫療場域的四條紅線</h2><div class="en">ETHICS · BRIDGE TO M8</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 68–70 頁（PART 11）</p>
     <p class="one">不得提供診斷、不得提供處方與劑量、不得使用真實個案資料、輸出必須標示 AI 生成與免責。這四條在期末專題屬於「不符即扣分」項目。</p>
     <div class="wd"><div class="wh"><h3>你的衛教機器人該怎麼回應？</h3><span class="tag amber">練習</span></div><div id="w-red"></div></div>
         <div class="wd"><div class="wh"><h3>找出 AI 草稿裡的錯</h3><span class="tag amber">練習</span></div><p class="hint">依據：UCLA 的環境語音病歷隨機試驗（NEJM AI 2025；講義 M7 第 50 頁）。醫師回報草稿偶爾有臨床上有意義的錯誤，多為遺漏與人物、左右弄錯。以下對話與草稿為虛構。</p><div id="w-scribe"></div></div>
     <div class="wd"><div class="wh"><h3>M7 的概念在 M8 變成什麼</h3></div><div id="w-bridge"></div></div>
+    <div class="wd"><div class="wh"><h3>還有兩個容易忽略的問題</h3><span class="tag blue">講義第 69 頁</span></div><div id="w-two"></div></div>
   </section>
 
   <section class="part" id="p17" data-t="隨堂 Lab">
     <div class="ph"><span class="num">17</span><div><h2>Take-Home：M7 隨堂 Lab</h2><div class="en">W13 上課前繳交 · 不另計分</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 71–73 頁</p>
     <p class="one">任務一：建立自己的模型評測基準（40%）；任務二：幻覺觀察（30%）；任務三：Ollama 本地部署（30%）。不得使用任何真實病歷或個案資料，違者本次作業不計分。</p>
     <div class="wd"><div class="wh"><h3>任務一：10 題評測表（雲端 vs 本地）</h3><span class="tag amber">可填寫、可下載</span></div><div id="w-bench"></div></div>
     <div class="wd"><div class="wh"><h3>任務二：幻覺觀察紀錄（3 題 × 5 次）</h3><span class="tag amber">可填寫、可下載</span></div><div id="w-hlog"></div></div>
@@ -162,6 +184,7 @@
 
   <section class="part" id="p18" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">18</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 74–79 頁</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
@@ -175,5 +198,6 @@
 <script src="m7b.js"></script>
 <script src="m7c.js"></script>
 <script src="m7case.js"></script>
+<script src="m7e.js"></script>
 </body>
 </html>

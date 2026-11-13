@@ -36,6 +36,7 @@
 
   <section class="part" id="p01" data-t="誰決定特徵">
     <div class="ph"><span class="num">01</span><div><h2>深度學習到底是什麼：誰決定特徵</h2><div class="en">FEATURE ENGINEERING vs REPRESENTATION LEARNING</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 6–7 頁（PART 01）</p>
     <p class="one">深度學習不是「更厲害的模型」，而是「把特徵工程交給模型」。這既是威力（影像、語音人根本想不出特徵），也是代價（你不知道它學到了什麼）。</p>
     <div class="concept">
       <div><b>傳統 ML（M1–M4）</b>特徵由「你」決定：病灶大小、密度、邊緣清晰度……想出欄位，模型才有東西可學</div>
@@ -44,22 +45,26 @@
       <div><b>★ 專門工具，不是萬用升級</b>影像、語音、長文本 → 壓倒性優勢；表格資料（醫護領域的絕大多數）→ 樹模型長期領先</div>
     </div>
     <div class="wd"><div class="wh"><h3>這份資料，深度學習有優勢嗎？</h3><span class="tag amber">練習</span></div><div id="w-type"></div></div>
+    <div class="wd"><div class="wh"><h3>三個必須先建立的觀念</h3><span class="tag blue">講義第 7 頁</span></div><div id="w-three"></div></div>
   </section>
 
   <section class="part" id="p02" data-t="一堆邏輯斯迴歸">
     <div class="ph"><span class="num">02</span><div><h2>神經網路＝一堆邏輯斯迴歸串起來</h2><div class="en">FROM LOGISTIC REGRESSION TO A NEURAL NETWORK</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 9–10 頁</p>
     <p class="one">單一神經元＝加權求和＋激活函數＝一個邏輯斯迴歸；隱藏層＝好幾個並排、各自學不同的特徵組合；輸出層＝再一個邏輯斯迴歸。M2-2 學過的東西沒有白學。</p>
     <div class="wd"><div class="wh"><h3>加隱藏神經元，看邊界怎麼彎</h3><span class="tag amber">核心互動</span></div><p class="hint">網路在瀏覽器裡即時訓練。0 個隱藏神經元＝邏輯斯迴歸。</p><div id="w-nn"></div></div>
   </section>
 
   <section class="part" id="p03" data-t="前向傳播手算">
     <div class="ph"><span class="num">03</span><div><h2>前向傳播：完整手算一次</h2><div class="en">FORWARD PROPAGATION · 三個特徵預測 30 天再入院</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 11 頁</p>
     <p class="one">每個神經元只做兩件事：① 加權求和（輸入 × 權重 ＋ 偏差）② 通過激活函數。複雜的不是單一步驟，是「有幾百萬個權重要調」。</p>
     <div class="wd"><div class="wh"><h3>3 → 2（ReLU）→ 1（Sigmoid）</h3><span class="tag amber">核心互動</span></div><p class="hint">預設為講義數值；拖動輸入或權重，看每一步怎麼變。</p><div id="w-fwd"></div></div>
   </section>
 
   <section class="part" id="p04" data-t="激活函數">
     <div class="ph"><span class="num">04</span><div><h2>激活函數：非線性從哪裡來</h2><div class="en">SIGMOID · TANH · RELU · LEAKY RELU</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 12、22–23 頁</p>
     <p class="one">線性疊線性還是線性：沒有非線性，100 層和 1 層效果完全一樣。激活函數是深度學習能「深」下去的存在前提。</p>
     <div class="wd"><div class="wh"><h3>四個函數與它們的導數</h3><span class="tag amber">互動</span></div><div id="w-act"></div></div>
     <div class="wd"><div class="wh"><h3>梯度消失：導數一層一層連乘</h3><span class="tag amber">互動</span></div><div id="w-vanish"></div></div>
@@ -67,6 +72,7 @@
 
   <section class="part" id="p05" data-t="梯度下降與優化器">
     <div class="ph"><span class="num">05</span><div><h2>訓練在做什麼：梯度下降與優化器</h2><div class="en">GRADIENT DESCENT · BACKPROPAGATION · ADAM</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 13–15 頁</p>
     <p class="one">梯度下降＝站在損失曲面上往下坡最陡的方向走一步，步伐就是學習率；反向傳播＝用連鎖律把輸出的誤差一層層往回傳，算出每個權重該調多少。Loss 亂跳時，第一個該懷疑的就是學習率。</p>
     <div class="wd"><div class="wh"><h3>學習率選錯會發生什麼</h3><span class="tag amber">核心互動</span></div><div id="w-gd"></div></div>
     <div class="wd"><div class="wh"><h3>SGD、Momentum、Adam 走的路不一樣</h3><span class="tag amber">互動</span></div><p class="hint">一個細長的損失谷：橫向很平、縱向很陡。</p><div id="w-opt"></div></div>
@@ -74,6 +80,7 @@
 
   <section class="part" id="p06" data-t="層堆疊與輸出層">
     <div class="ph"><span class="num">06</span><div><h2>Layers 設計：層堆疊與輸出層</h2><div class="en">DENSE · RELU · DROPOUT · OUTPUT LAYER</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 17–20 頁（PART 03 前段）</p>
     <p class="one">在 AI Studio 設計網路就是拖拉這些層。小型表格資料最實用的檢查：參數量不要超過樣本數——1,000 筆資料配 50 萬參數，那不是在學習，是在背答案。</p>
     <div class="wd"><div class="wh"><h3>疊一個網路，算參數量</h3><span class="tag amber">核心互動</span></div><div id="w-arch"></div></div>
     <div class="wd"><div class="wh"><h3>輸出層：Softmax 還是 Sigmoid？</h3><span class="tag amber">互動</span></div><p class="hint">三個輸出神經元的原始分數（logit）。多分類用 Softmax（加總＝1）；多標籤用 Sigmoid（各自獨立）。</p><div id="w-softmax"></div></div>
@@ -82,31 +89,37 @@
 
   <section class="part" id="p07" data-t="標準化與初始化">
     <div class="ph"><span class="num">07</span><div><h2>訓練前必做：標準化與權重初始化</h2><div class="en">STANDARDIZATION · WEIGHT INITIALIZATION · VANISHING / EXPLODING</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 21 頁</p>
     <p class="one">神經網路對輸入尺度極度敏感，標準化不是可選項；權重不能全設 0——所有神經元會算出一模一樣的東西，永遠學不出不同的特徵。</p>
     <div class="wd"><div class="wh"><h3>同一個網路、四種起跑方式</h3><span class="tag amber">核心互動</span></div><div id="w-init"></div></div>
   </section>
 
   <section class="part" id="p08" data-t="表格資料的嵌入層">
     <div class="ph"><span class="num">08</span><div><h2>表格資料的嵌入層</h2><div class="en">EMBEDDING · 深度學習在表格資料上少數的真正優勢</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 24–25 頁</p>
     <p class="one">診斷碼有上萬種：One-Hot 會維度爆炸，而且 I10（高血壓）與 I11 的距離跟 I10 與 S72（股骨骨折）一模一樣。嵌入層把類別變成「有距離關係的連續向量」。</p>
     <div class="wd"><div class="wh"><h3>One-Hot 距離 vs 嵌入距離</h3><span class="tag amber">互動</span></div><p class="hint">點兩個診斷碼比較距離。嵌入位置為示意（實務上是模型學出來的 32 維向量，此處投影到 2 維）。</p><div id="w-emb"></div></div>
     <div class="wd"><div class="wh"><h3>嵌入層真的學出來：24 個診斷碼自己分群</h3><span class="tag blue">3,000 次住院 × 24 個診斷碼</span></div><p class="hint">模型只看每個碼的病人「30 天再入院」與「住院超過 14 天」，在瀏覽器裡即時訓練 2 維嵌入。顏色（器官系統）是事後上的，模型不知道。</p><div id="w-embreal"></div></div>
+    <div class="wd"><div class="wh"><h3>表格資料上，深度學習什麼時候真的有機會</h3><span class="tag blue">講義第 25 頁</span></div><div id="w-tabdl"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="Epoch、Batch、Iteration">
     <div class="ph"><span class="num">09</span><div><h2>Epoch、Batch、Iteration</h2><div class="en">三個最常搞混的詞</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 27 頁（PART 04 前段）</p>
     <p class="one">Batch＝一次送進網路的樣本數；Iteration＝權重更新一次；Epoch＝整個訓練集掃過一遍。小批次雜訊多但泛化較好，大批次穩定但可能收斂到較差的解。</p>
     <div class="wd"><div class="wh"><h3>算一算更新幾次</h3><span class="tag amber">互動</span></div><div id="w-ebi"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="讀懂 Loss 曲線">
     <div class="ph"><span class="num">10</span><div><h2>讀懂 Loss 曲線：四種樣態與處方</h2><div class="en">HEALTHY · OVERFITTING · UNDERFITTING · UNSTABLE</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 28 頁</p>
     <p class="one">訓練深度學習模型時，你有 80% 的時間在看這張圖。學會判讀它，比記住任何演算法細節都重要。</p>
     <div class="wd"><div class="wh"><h3>判讀練習：這是哪一種？</h3><span class="tag amber">練習</span></div><div id="w-lossq"></div></div>
   </section>
 
   <section class="part" id="p11" data-t="對付過擬合">
     <div class="ph"><span class="num">11</span><div><h2>對付過擬合的六招</h2><div class="en">EARLY STOPPING · CAPACITY · DROPOUT · L2</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 29 頁</p>
     <p class="one">動手順序很重要：先開早停（免費）→ 再減少模型容量（最根本）→ 才加 Dropout 與正則化（要調參）。</p>
     <div class="wd"><div class="wh"><h3>過擬合實驗室：80 筆資料、你決定網路</h3><span class="tag amber">核心互動</span></div><p class="hint">按「訓練」後網路在瀏覽器中跑 300 個 epoch（約 1–2 秒）。</p><div id="w-ovf"></div></div>
     <div class="wd"><div class="wh"><h3>放大到真實規模：MLP 會贏 Logistic 嗎？</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">與 M4 梯度提升同一份資料。選訓練筆數、網路大小、正則化，按訓練跑 120 個 epoch（約 1–3 秒），右邊會留下每次實驗的紀錄。</p><div id="w-mlp2k"></div></div>
@@ -122,18 +135,21 @@
 
   <section class="part" id="p12" data-t="H2O 與 AI Studio">
     <div class="ph"><span class="num">12</span><div><h2>AI Studio 的三種實作與 H2O 參數</h2><div class="en">NEURAL NET · H2O DEEP LEARNING · DL4J</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 30–32 頁</p>
     <p class="one">W8 用 H2O 建立直覺（表格資料），W9 用 DL4J 做 CNN（MNIST 影像）。H2O 會自動標準化、用平均數補缺值——但別讓自動化替你做決定。</p>
     <div class="wd"><div class="wh"><h3>H2O 參數逐項解釋</h3><span class="tag">點參數展開</span></div><div id="w-h2o"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="卷積運算手算">
     <div class="ph"><span class="num">13</span><div><h2>卷積運算：一步一步算給你看</h2><div class="en">CONVOLUTION · KERNEL · STRIDE · PADDING</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 34–35 頁（PART 05 前段）</p>
     <p class="one">全連接網路處理影像有三個問題：參數爆炸、丟失空間結構、沒有平移不變性。卷積一次解決：權重共享、局部連接、滑動視窗。卷積核的數值不是你設的，是模型學出來的。</p>
     <div class="wd"><div class="wh"><h3>5×5 影像 × 3×3 卷積核</h3><span class="tag amber">核心互動</span></div><p class="hint">點輸入格子切換明暗；點輸出格子看它怎麼算出來的。</p><div id="w-conv"></div></div>
   </section>
 
   <section class="part" id="p14" data-t="池化與 CNN 流程">
     <div class="ph"><span class="num">14</span><div><h2>池化與 CNN 完整流程</h2><div class="en">POOLING · FLATTEN · 層級特徵</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 36–38 頁</p>
     <p class="one">池化把特徵圖縮小、提供平移不變性、擴大感受野；CNN 由「卷積→池化」交替，空間尺寸逐步縮小、通道數逐步增加，最後展平交給全連接層決定。</p>
     <div class="wd"><div class="wh"><h3>最大池化 vs 平均池化</h3><span class="tag amber">互動</span></div><div id="w-pool"></div></div>
     <div class="wd"><div class="wh"><h3>自己畫一張圖，看 6 個卷積核各看到什麼</h3><span class="tag amber">核心互動</span></div><p class="hint">在畫布上用滑鼠或手指畫，或點範例。每個核：卷積＋ReLU（26×26）→ 2×2 最大池化（13×13）。</p><div id="w-featmap"></div></div>
@@ -142,12 +158,14 @@
 
   <section class="part" id="p15" data-t="遷移學習">
     <div class="ph"><span class="num">15</span><div><h2>遷移學習：不要從零開始訓練</h2><div class="en">FEATURE EXTRACTION · PARTIAL / FULL FINE-TUNING</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 40–43 頁（PART 06）</p>
     <p class="one">淺層學到的邊緣偵測器在自然影像與醫學影像上是通用的。資料量越少、與預訓練領域越相近 → 凍結越多層。醫學影像資料通常很少，多半停在特徵抽取或部分微調。</p>
     <div class="wd"><div class="wh"><h3>該凍結幾層？</h3><span class="tag amber">核心互動</span></div><div id="w-tl"></div></div>
   </section>
 
   <section class="part" id="p16" data-t="經典架構與參數">
     <div class="ph"><span class="num">16</span><div><h2>經典 CNN 架構與設計理由</h2><div class="en">SIMPLECNN · VGG · SQUEEZENET · XCEPTION</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 45–48、50–51 頁（PART 07 前段）</p>
     <p class="one">每個架構都在解決前一代留下的問題。VGG：堆疊 3×3 取代大卷積核；SqueezeNet／Xception：把參數變少，塞得進裝置。</p>
     <div class="wd"><div class="wh"><h3>四種設計的參數量計算</h3><span class="tag amber">核心互動</span></div><div id="w-params"></div></div>
     <div class="wd"><div class="wh"><h3>六個架構：大小 vs 用途</h3></div><div id="w-zoo"></div></div>
@@ -155,13 +173,16 @@
 
   <section class="part" id="p17" data-t="ResNet 與演進">
     <div class="ph"><span class="num">17</span><div><h2>ResNet：殘差連接解決了什麼</h2><div class="en">RESIDUAL CONNECTION · x + F(x)</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 49、52–55 頁</p>
     <p class="one">網路太深時梯度傳不回前層，56 層反而比 20 層差（退化，不是過擬合）。殘差捷徑讓梯度可以直達前層，從此網路可做到上百層。</p>
     <div class="wd"><div class="wh"><h3>梯度傳回第一層還剩多少</h3><span class="tag amber">核心互動</span></div><div id="w-res"></div></div>
     <div class="wd"><div class="wh"><h3>架構設計思想的演進</h3></div><div id="w-evo"></div></div>
+    <div class="wd"><div class="wh"><h3>四大架構家族、選用對照與自編碼器</h3><span class="tag blue">講義第 53、54、55 頁</span></div><div id="w-families"></div></div>
   </section>
 
   <section class="part" id="p18" data-t="什麼時候不該用">
     <div class="ph"><span class="num">18</span><div><h2>★ 什麼時候不該用深度學習</h2><div class="en">WHEN NOT TO USE DEEP LEARNING · 本模組最重要的一節</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 58–60 頁（PART 08）</p>
     <p class="one">深度學習不是「比較高級的機器學習」，是「處理非結構化資料的專門工具」。用在表格資料上輸給 XGBoost，不是調參技術不好，是工具本來就選錯了。</p>
     <div class="wd"><div class="wh"><h3>四道關卡</h3><span class="tag amber">核心互動</span></div><div id="w-gate"></div></div>
     <div class="wd"><div class="wh"><h3>同一個問題，該用什麼工具</h3><span class="tag amber">練習</span></div><div id="w-cases"></div></div>
@@ -169,15 +190,18 @@
 
   <section class="part" id="p19" data-t="醫學影像的挑戰">
     <div class="ph"><span class="num">19</span><div><h2>醫學影像的六個挑戰與捷徑學習</h2><div class="en">SHORTCUT LEARNING · EXTERNAL VALIDATION · AUGMENTATION</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 62–66 頁（PART 09）</p>
     <p class="one">最值得警惕的失敗：模型準確率很高，學到的卻是「錯的東西」。某肺炎模型原院 AUC 0.93、外院明顯下降——它學的是攜帶式 X 光機的標記（Zech et al., 2018）。</p>
     <div class="wd"><div class="wh"><h3>捷徑學習模擬：院內 vs 外院</h3><span class="tag amber">核心互動</span></div><div id="w-short"></div></div>
     <div class="wd"><div class="wh"><h3>這種資料增強可以嗎？</h3><span class="tag amber">練習</span></div><div id="w-aug"></div></div>
     <div class="wd"><div class="wh"><h3>真實案例：糖尿病視網膜病變 AI，從論文到診間</h3><span class="tag blue">JAMA 2016・FDA 2018・CHI 2020</span></div><p class="hint">選一個階段的敏感度與特異度，再設定盛行率與「照片品質不足」的比例，看 1,000 位糖尿病人篩檢後各有多少人被抓到、漏掉、誤報、或因照片不能判讀而要另外安排。對應講義 M5 第 64 頁。</p><div id="w-dr"></div></div>
     <div class="wd"><div class="wh"><h3>心電圖 AI 的隨機試驗：15,965 位住院病人</h3><span class="tag blue">Nature Medicine 2024</span></div><p class="hint">從設計、誰受益到判斷題，分清楚「模型準不準」與「病人有沒有變好」。對應講義 M5 第 65 頁。</p><div id="w-aiecg"></div></div>
+    <div class="wd"><div class="wh"><h3>醫學影像深度學習的六個特殊挑戰</h3><span class="tag blue">講義第 62 頁</span></div><div id="w-six"></div></div>
   </section>
 
   <section class="part" id="p20" data-t="自動化與模型的一生">
     <div class="ph"><span class="num">20</span><div><h2>自動化、模型的一生與十個常見錯誤</h2><div class="en">HYPERPARAMETER SEARCH · DATA DRIFT · TOP-10 MISTAKES</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 68–74 頁（PART 10）</p>
     <p class="one">讓工具幫你試參數，你把時間花在判斷上。多數專題只做到「訓練」；真正決定系統存活的是上線後的監測與再訓練——那需要的是人與流程。</p>
     <div class="wd"><div class="wh"><h3>網格搜尋 vs 隨機搜尋：同樣 9 次預算</h3><span class="tag amber">互動</span></div><div id="w-search"></div></div>
     <div class="wd"><div class="wh"><h3>上線後：模型會安靜地變差</h3><span class="tag amber">互動</span></div><div id="w-drift"></div></div>
@@ -186,6 +210,7 @@
 
   <section class="part" id="p21" data-t="實作與作業二">
     <div class="ph"><span class="num">21</span><div><h2>AI Studio 實作與作業二</h2><div class="en">HANDS-ON LABS · ASSIGNMENT 2（15%）</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 56、70、75–78 頁（實作與作業）</p>
     <p class="one">作業二：深度學習分類器設計。W8 發布、W12 繳交。任務三（判斷與論述）分數最重。不得使用任何真實醫療影像或病歷資料。</p>
     <div class="wd"><div class="wh"><h3>四個實作</h3><span class="tag">可勾選進度</span></div><div id="w-labs"></div></div>
     <div class="wd"><div class="wh"><h3>任務一紀錄表：基準線＋五組網路</h3><span class="tag amber">可填寫、可下載</span></div><p class="hint">Pima Indians Diabetes。填入訓練與驗證分數，自動算差距並標出過擬合與最佳模型。</p><div id="w-t1"></div></div>
@@ -194,6 +219,7 @@
 
   <section class="part" id="p22" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">22</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 79–85 頁（回顧、術語）</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
@@ -207,5 +233,6 @@
 <script src="m5b.js"></script>
 <script src="m5c.js"></script>
 <script src="m5case.js"></script>
+<script src="m5e.js"></script>
 </body>
 </html>
