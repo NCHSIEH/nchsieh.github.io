@@ -162,9 +162,60 @@
         out.append(row, h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: 'var(--paper)' } }, h('b', null, name + '在做什麼'), h('div', { style: { fontSize: '14px', margin: '4px 0 6px' } }, d), h('span', { class: 'tag' }, '本課對應：' + m)));
         out.append(note('三關回答的是三個不同的問題：準不準（取證）、信不信得過（落地）、有沒有幫助（給付）。一個 AI 可以過了第一關卻卡在第三關——這正是美國 FDA 數字「核准多、證據少」的另一面。2024/10 成立，30 家醫院提案、16 家醫院 19 案入選。'));
       }
-      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 新聞稿、iThome 報導。講義 M0 第 41–42 頁。'));
+      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 新聞稿、iThome 報導。講義 M0 第 41、43 頁。'));
+    }
+    box.append(out); draw();
+  })();
+
+  /* ====================================================================
+     第 05 節：誰在用、證據多少、健保署糖尿病風險 AI（2026-11-13 新增）
+     ==================================================================== */
+  (function adopt() {
+    const box = $('#w-adopt'); if (!box) return;
+    const out = h('div'); let view = 'use', stage = 0, shown = {};
+    const USE = [['2023 年', 38], ['2026 年', 81]];
+    const TOP = [['整理醫學文獻與照護標準', 39], ['寫出院指示／照護計畫／病程紀錄', 30]];
+    const EV = [['用考試式題目評估（近半數，圖以 50 示意）', 50], ['使用真實臨床資料', 5], ['有臨床研究的 FDA 醫材中，依據隨機試驗', 2.4]];
+    const DM = [
+      ['界定問題', '三高慢性病人口逾 850 萬、糖尿病約 320 萬人。目標不是「預測得準」，而是分級照護：誰該留在診所、誰該轉到醫院。', '講義 PART 10：為誰預測什麼、預測後做什麼'],
+      ['蒐集資料', '去識別化的健保資料：性別、年齡、ICD‑10 診斷碼、檢驗檢查等。原則是「資料不離署」，存取金鑰由健保署掌控。', 'M1：資料來源、納入排除、去識別化'],
+      ['建立模型', '以糖尿病併發症嚴重度指數（DCSI）為架構，輸出紅、黃、綠燈風險分級，並預測視網膜、腦血管、腎病變等共病風險。', 'W5：分類與決策門檻'],
+      ['驗證', '40 家診所場域驗證：北部 7、中部 29、南部 4，含都會型與偏鄉型。', 'W5 外部驗證；M9 子群體檢核'],
+      ['溝通部署', '2026/3 起，醫師在家醫大平台看分級；民眾在健康存摺 App 用 Gemini 驅動的衛教助理（需本人授權）。', 'M8：衛教助理；M9：人在迴路'],
+      ['成效', '官方公布：單一病例評估時間由 20 分鐘縮到 25 秒。血糖控制與併發症是否改善，尚未見到公布的數字。', 'M0：上線 ≠ 證明有效']];
+    const Q = [['單一病例評估由 20 分鐘縮到 25 秒', '效率', '省下的是醫師的時間。它沒有告訴你病人後來有沒有比較好。'],
+      ['寫病歷時間最多減少 83%', '效率', '同樣是時間。而且是部分醫療體系醫師的自述，隨機試驗的結果沒有這麼一致（見 M7）。'],
+      ['用了 AI 分級的病人，三年後洗腎比例較低', '對病人有幫助', '這才是結果指標，而且要有對照組才能下結論。目前這個案子還沒有公布這類數字。']];
+    function draw() {
+      out.innerHTML = '';
+      out.append(h('div', { class: 'row' }, seg([['use', '誰在用'], ['ev', '證據有多少'], ['dm', '台灣案例：糖尿病風險 AI'], ['q', '判斷：效率還是效益？']], () => view, v => view = v, draw)));
+      if (view === 'use') {
+        out.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('專業上使用 AI 的美國醫師', '81%'), kpi('2023 年', '38%'), kpi('平均用途數', '1.1 → 2.3 項'), kpi('擔心技能流失（程度不一）', '88%', 'bad')));
+        const a = h('div'), b = h('div'); out.append(sub('使用 AI 的醫師比例（%）'), a, sub('2026 年最常見的兩種用途（%）'), b);
+        U.hbars(a, USE.map(([l, v], i) => ({ label: l, value: v, color: i ? C.accent : '#9aa3ad' })), { w: 820, lw: 120, rowH: 30, max: 100 });
+        U.hbars(b, TOP.map(([l, v]) => ({ label: l, value: v, color: C.accent })), { w: 820, lw: 260, rowH: 30, max: 100 });
+        out.append(note('三年內使用比例翻倍，但最常見的用途是整理文獻與寫文件，不是診斷。76% 的醫師認為 AI 有助於照顧病人，85% 希望參與導入決策——工具進來得很快，醫師要的是決定怎麼用的權利。'));
+      } else if (view === 'ev') {
+        const a = h('div'); out.append(sub('臨床 AI 的證據基礎（%）'), a);
+        U.hbars(a, EV.map(([l, v], i) => ({ label: l, value: v, color: i ? (C.amber || '#b7791f') : '#9aa3ad' })), { w: 820, lw: 300, rowH: 30, max: 100 });
+        out.append(note('AI Index 2026 回顧 500 多篇臨床 AI 研究：近半數是用考試式題目評估，只有 5% 用真實臨床資料；有臨床研究的 FDA 授權 AI 醫材中，只有 2.4% 依據隨機試驗。另一方面，健康相關的 Google 搜尋有 84–92% 會出現 AI 生成摘要——民眾拿到的 AI 答案，受到的把關比醫材更少。'));
+      } else if (view === 'dm') {
+        const row = h('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '10px' } });
+        DM.forEach(([k], i) => { const b = h('button', { class: 'btn' + (i === stage ? ' primary' : '') }, `${i + 1} ${k}`); b.onclick = () => { stage = i; draw(); }; row.append(b); });
+        const [k, d, m] = DM[stage];
+        out.append(row, h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: 'var(--paper)' } }, h('b', null, k), h('div', { style: { fontSize: '14px', margin: '4px 0 6px' } }, d), h('span', { class: 'tag' }, '本課對應：' + m)));
+        out.append(note('健保署、Google、國衛院與北醫 2024 年中起合作。這個案子把講義的專案流程走了一遍；最後一格「成效」目前只有效率數字，這正是下一個分頁要你判斷的事。'));
+      } else {
+        Q.forEach(([t, ans, why], i) => {
+          const r = h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '8px' } }, h('div', { style: { fontSize: '14.5px', marginBottom: '6px' } }, '「' + t + '」'));
+          if (shown[i] === undefined) { ['效率', '對病人有幫助'].forEach(o => { const b = h('button', { class: 'btn', style: { marginRight: '6px' } }, o); b.onclick = () => { shown[i] = o; draw(); }; r.append(b); }); }
+          else r.append(h('div', { style: { fontSize: '14px' } }, h('b', { style: { color: shown[i] === ans ? 'var(--accent-ink)' : '#b42318' } }, (shown[i] === ans ? '對。' : '再想想。') + '這是「' + ans + '」。'), why));
+          out.append(r);
+        });
+        if (Object.keys(shown).length === Q.length) out.append(note('效率數字容易量、也最先被公布；效益要等時間、要有對照。看到 AI 成果報導時，先問它量的是哪一種。'));
+      }
+      out.append(h('p', { class: 'ai' }, '資料：AMA 2026 Physician Survey on Augmented Intelligence（2026/3，1,692 位醫師）；Stanford AI Index 2026 第 6 章；健保署與 Google 2026/3/4 發表（iThome、CIO Taiwan、科技新報報導）。最後一題的「三年後洗腎比例」為假設情境。講義 M0 第 42、44 頁。'));
     }
     box.append(out); draw();
   })();
 })();
-
