@@ -36,6 +36,7 @@
 
   <section class="part" id="p01" data-t="四大主題選用地圖">
     <div class="ph"><span class="num">01</span><div><h2>為什麼要有這一週</h2><div class="en">FOUR CEILINGS OF A SINGLE MODEL</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 4–6 頁</p>
     <p class="one">四個主題的共同點：不是「換一個更強的模型」，而是「換一種看資料的角度」。先問「我手上的問題長什麼樣」，再決定往哪一支走。</p>
     <div class="concept">
       <div><b>① 集成方法</b>有標註、想更準：已經有模型，想再榨出幾個百分點，或單一模型不穩定</div>
@@ -44,10 +45,12 @@
       <div><b>④ 時間序列</b>資料有時間順序：人次與耗用量預測。★ 切分方式與前三者完全不同</div>
     </div>
     <div class="wd"><div class="wh"><h3>這個問題該走哪一支？</h3><span class="tag amber">練習</span></div><p class="hint">八個醫療場域的情境，替每一題選一條支線。</p><div id="w-map"></div></div>
+    <div class="wd"><div class="wh"><h3>單一模型的四個天花板</h3><span class="tag blue">講義第 4、5 頁</span></div><div id="w-ceil"></div></div>
   </section>
 
   <section class="part" id="p02" data-t="偏誤—變異分解">
     <div class="ph"><span class="num">02</span><div><h2>偏誤—變異分解：為什麼集成有效</h2><div class="en">BIAS–VARIANCE DECOMPOSITION</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 8–9 頁（PART 01 前段）</p>
     <p class="one">偏誤＝模型太簡單、怎麼抽樣都畫成同一條錯的線；變異＝模型太複雜、換一批資料就長得完全不同。集成的目標：保留彈性，但把抖動平均掉。</p>
     <div class="wd"><div class="wh"><h3>六次抽樣、六個模型、一個平均</h3><span class="tag amber">核心互動</span></div><p class="hint">調整模型複雜度，看細線（各次抽樣的模型）散得多開，以及把它們平均之後離真相多近。</p><div id="w-bv"></div></div>
     <div class="wd"><div class="wh"><h3>先診斷再開藥</h3><span class="tag amber">練習</span></div><p class="hint">看訓練與測試分數（含交叉驗證的 ±），判斷症狀。</p><div id="w-diag"></div></div>
@@ -55,6 +58,7 @@
 
   <section class="part" id="p03" data-t="多樣性原理">
     <div class="ph"><span class="num">03</span><div><h2>集成的前提：成員必須「錯得不一樣」</h2><div class="en">DIVERSITY</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 10–12 頁（PART 01 後段）</p>
     <p class="one">集成能不能變強，取決於成員錯得夠不夠不一樣。三個都 70% 的模型，若錯在同樣的題目，多數決還是 70%；錯在不同題目，可以變 100%。</p>
     <div class="wd"><div class="wh"><h3>三個模型、十題考卷</h3><span class="tag amber">核心互動</span></div><p class="hint">點格子切換 ○／✕，讓三個模型錯在不同的題目，看多數決的結果。</p><div id="w-div"></div></div>
     <div class="wd"><div class="wh"><h3>成員數與相關性：集成能好到哪裡</h3><span class="tag amber">互動</span></div><p class="hint">每個成員準確率 p、彼此錯誤的相關程度 ρ；模擬 2,000 筆多數決的結果。</p><div id="w-corr"></div></div>
@@ -63,6 +67,7 @@
 
   <section class="part" id="p04" data-t="集成分類與 Bagging">
     <div class="ph"><span class="num">04</span><div><h2>集成方法分類與 Bagging 家族</h2><div class="en">TAXONOMY · BAGGING · RANDOM FOREST · EXTRA TREES</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 14–16 頁（PART 02 前段）</p>
     <p class="one">分辨三大家族只要問一句：「第 N 個模型訓練時，需不需要知道前 N−1 個的結果？」不需要＝平行；需要＝序列；只用它們的預測值＝Stacking。</p>
     <div class="wd"><div class="wh"><h3>把方法放進正確的家族</h3><span class="tag amber">練習</span></div><div id="w-tax"></div></div>
     <div class="wd"><div class="wh"><h3>Bootstrap：那 36.8% 是怎麼來的</h3><span class="tag amber">互動</span></div><p class="hint">有放回地抽 n 次，看有多少筆從沒被抽到（袋外樣本 OOB）。</p><div id="w-boot"></div></div>
@@ -71,6 +76,7 @@
 
   <section class="part" id="p05" data-t="AdaBoost 手算">
     <div class="ph"><span class="num">05</span><div><h2>Boosting：AdaBoost 實際跑三輪</h2><div class="en">ADAPTIVE BOOSTING · 權重怎麼變</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 17–18 頁</p>
     <p class="one">每一輪做兩件事：訓練一個弱分類器、把它分錯的樣本權重調高。越準的分類器票數越重；但被反覆放大的樣本若其實標錯了，AdaBoost 就會越陷越深。</p>
     <div class="wd"><div class="wh"><h3>10 筆樣本的三輪手算</h3><span class="tag amber">核心互動</span></div><p class="hint">預設為講義的例子（分錯 {1,2,3}、{4,5,6}、{7,8}）。也可以點樣本改變每一輪分錯哪些，數字會即時重算。</p><div id="w-ada"></div></div>
     <div class="wd"><div class="wh"><h3>決策樁一輪一輪疊起來</h3><span class="tag amber">互動</span></div><p class="hint">每一輪只用一刀（決策樁）。點的大小＝目前的樣本權重。</p><div id="w-adamap"></div></div>
@@ -78,6 +84,7 @@
 
   <section class="part" id="p06" data-t="梯度提升與 GBDT">
     <div class="ph"><span class="num">06</span><div><h2>梯度提升與 GBDT 三大實作</h2><div class="en">GRADIENT BOOSTING · XGBOOST · LIGHTGBM · CATBOOST</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 19–23 頁</p>
     <p class="one">梯度提升把「調樣本權重」改成「擬合前面的殘差」。學習率與棵數是一組交易：學習率減半，棵數大致要加倍；實務上固定小學習率，用早停決定棵數。</p>
     <div class="wd"><div class="wh"><h3>一棵一棵擬合殘差</h3><span class="tag amber">核心互動</span></div><p class="hint">每棵都是淺樹。調學習率與棵數，看訓練誤差、驗證誤差與早停點。</p><div id="w-gb"></div></div>
     <div class="wd"><div class="wh"><h3>三種長樹方式</h3></div><div id="w-grow"></div></div>
@@ -87,6 +94,7 @@
 
   <section class="part" id="p07" data-t="投票與 Stacking">
     <div class="ph"><span class="num">07</span><div><h2>投票與 Stacking：組合異質模型</h2><div class="en">HARD / SOFT VOTING · STACKING · OUT-OF-FOLD</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 24–26 頁</p>
     <p class="one">只要成員能輸出（可比較的）機率，優先用軟投票；Stacking 組合潛力最高，但第一層的預測必須用交叉驗證的 out-of-fold 值，否則嚴重洩漏。</p>
     <div class="wd"><div class="wh"><h3>硬投票 vs 軟投票：同一位病人，相反的結論</h3><span class="tag amber">互動</span></div><div id="w-vote"></div></div>
     <div class="wd"><div class="wh"><h3>Stacking 的洩漏實驗</h3><span class="tag amber">核心互動</span></div><p class="hint">第一層：1-NN 與邏輯斯迴歸；第二層：邏輯斯迴歸。比較用「訓練時的預測」與「out-of-fold 預測」餵第二層。</p><div id="w-stack"></div></div>
@@ -94,20 +102,24 @@
 
   <section class="part" id="p08" data-t="集成的代價">
     <div class="ph"><span class="num">08</span><div><h2>集成的代價：什麼時候不該用</h2><div class="en">WHEN NOT TO ENSEMBLE</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 27–29 頁</p>
     <p class="one">集成是工具不是目標。可解釋性下降、訓練與預測成本上升；單一模型夠好、或資料本身有問題時，集成救不了你。</p>
     <div class="wd"><div class="wh"><h3>這 0.01 值得嗎？決策小幫手</h3><span class="tag amber">互動</span></div><div id="w-worth"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="異常的三種型態">
     <div class="ph"><span class="num">09</span><div><h2>異常有三種型態</h2><div class="en">POINT · CONTEXTUAL · COLLECTIVE</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 31–33、41 頁（PART 03 前段）</p>
     <p class="one">多數人只想到「點異常」，但臨床上情境異常與集體異常往往更重要，也更難抓。先分辨你要抓的是哪一種。</p>
     <div class="wd"><div class="wh"><h3>連續 120 小時的體溫：三種偵測規則各抓到什麼</h3><span class="tag amber">核心互動</span></div><div id="w-types"></div></div>
     <div class="wd"><div class="wh"><h3>ICU 72 小時生命徵象回放</h3><span class="tag blue">432 筆 × 3 項生命徵象</span></div><p class="hint">一位病人 72 小時、每 10 分鐘一筆的心跳、血氧、呼吸。裡面藏了四件事——換偵測方法，看誰抓到、誰漏掉、誰亂響。</p><div id="w-icu"></div></div>
     <div class="wd"><div class="wh"><h3>異常偵測方法分類</h3></div><div id="w-adtax"></div></div>
+    <div class="wd"><div class="wh"><h3>異常偵測的三個實務原則</h3><span class="tag blue">講義第 41 頁</span></div><div id="w-adprinc"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="統計法與 LOF">
     <div class="ph"><span class="num">10</span><div><h2>統計法三種門檻與 LOF</h2><div class="en">3σ · IQR · MAD · LOCAL OUTLIER FACTOR</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 34–37 頁</p>
     <p class="one">統計法最好解釋、可稽核，是醫療場域的首選起點；但 μ 與 σ 會被離群值拉走。資料由密度不同的群體組成時，要用「跟鄰居比」的 LOF。</p>
     <div class="wd"><div class="wh"><h3>病房 30 天日均給藥次數：三種門檻</h3><span class="tag amber">核心互動</span></div><p class="hint">加入一筆極端值，看哪一種門檻被拉走。</p><div id="w-stat"></div></div>
     <div class="wd"><div class="wh"><h3>全域距離 vs LOF</h3><span class="tag amber">互動</span></div><p class="hint">密集群旁邊的 A 與稀疏群裡的 B，離最近鄰的距離差不多。</p><div id="w-lof"></div></div>
@@ -115,6 +127,7 @@
 
   <section class="part" id="p11" data-t="無標籤怎麼評估">
     <div class="ph"><span class="num">11</span><div><h2>Isolation Forest 與無標籤評估</h2><div class="en">PRECISION@N · 注入異常 · 穩定性 · 人力門檻</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 38–40 頁</p>
     <p class="one">異常偵測最大的困難不是演算法，而是「你怎麼知道抓對了」。把它定位成「幫人縮小檢視範圍的工具」，門檻由人力可負荷量決定。</p>
     <div class="wd"><div class="wh"><h3>門檻由人力決定：每天能覆核幾筆？</h3><span class="tag amber">核心互動</span></div><div id="w-cap"></div></div>
     <div class="wd"><div class="wh"><h3>穩定性檢查：contamination 0.01 / 0.05 / 0.10</h3><span class="tag amber">互動</span></div><div id="w-stab"></div></div>
@@ -122,6 +135,7 @@
 
   <section class="part" id="p12" data-t="關聯規則三指標">
     <div class="ph"><span class="num">12</span><div><h2>關聯規則三指標與 lift 陷阱</h2><div class="en">SUPPORT · CONFIDENCE · LIFT</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 44–46 頁（PART 04 前段）</p>
     <p class="one">support 管「值不值得看」、lift 管「是不是真的有關」、confidence 管「實際上多可靠」。只看 confidence 排序，會把負相關當成重要發現。</p>
     <div class="wd"><div class="wh"><h3>10 筆處方交易：自己算五個指標</h3><span class="tag amber">核心互動</span></div><p class="hint">點格子可增減藥品；選一條規則 A → B。</p><div id="w-rule"></div></div>
     <div class="wd"><div class="wh"><h3>依 confidence 排序 vs 依 lift 排序</h3><span class="tag amber">互動</span></div><div id="w-rank"></div></div>
@@ -129,15 +143,18 @@
 
   <section class="part" id="p13" data-t="Apriori 與醫療應用">
     <div class="ph"><span class="num">13</span><div><h2>頻繁項目集演算法與醫療應用</h2><div class="en">APRIORI · FP-GROWTH · 共病與處方</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 47–49 頁</p>
     <p class="one">Apriori 的核心定理：{A,B} 不頻繁，{A,B,C} 一定也不頻繁。FP-Growth 把交易壓成前綴樹，只掃資料庫兩次——品項多或交易量大一律用它。</p>
     <div class="wd"><div class="wh"><h3>Apriori 逐層剪枝</h3><span class="tag amber">互動</span></div><p class="hint">用上一節的 10 筆交易，調整最小支持度。</p><div id="w-apriori"></div></div>
     <div class="wd"><div class="wh"><h3>「一筆交易」是什麼？</h3><span class="tag amber">練習</span></div><div id="w-unit"></div></div>
     <div class="wd"><div class="wh"><h3>1,200 張處方：挖出真正有意義的用藥組合</h3><span class="tag blue">1,200 張處方 × 15 種藥</span></div><p class="hint">調整 support 與 confidence 門檻，切換排序方式；點任一條規則（散布圖或表格），看它在臨床上代表什麼。</p><div id="w-rx"></div></div>
     <div class="note warn"><b>三個常見誤用：</b>① 把關聯當成因果　② 支持度門檻設得太低（起點：support ≥ 0.01、lift ≥ 1.2，規則控制在幾十條）　③ 忽略品項粒度（品項名、成分、ATC 分類，結果完全不同——要跟臨床討論）。</div>
+    <div class="wd"><div class="wh"><h3>關聯規則：六個醫護應用與三個常見誤用</h3><span class="tag blue">講義第 48、49 頁</span></div><div id="w-armis"></div></div>
   </section>
 
   <section class="part" id="p14" data-t="時間序列切分">
     <div class="ph"><span class="num">14</span><div><h2>時間序列最容易犯的錯：切分方式</h2><div class="en">TIME-BASED SPLIT · WALK-FORWARD</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 52–54 頁（PART 05 前段）</p>
     <p class="one">資料有時間順序，M2 用的隨機切分一律不能用。訓練集裡有未來的資料，驗證分數就會漂亮得離譜，上線之後才發現全是假的。</p>
     <div class="wd"><div class="wh"><h3>同一份資料、兩種切法、兩個完全不同的分數</h3><span class="tag amber">核心互動</span></div><div id="w-split"></div></div>
     <div class="wd"><div class="wh"><h3>Walk-forward 滾動驗證</h3><span class="tag amber">互動</span></div><div id="w-wf"></div></div>
@@ -145,20 +162,24 @@
 
   <section class="part" id="p15" data-t="滯後特徵與分解">
     <div class="ph"><span class="num">15</span><div><h2>滯後特徵與時間序列分解</h2><div class="en">LAG FEATURES · DECOMPOSITION · BASELINES</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 55–59 頁</p>
     <p class="one">建好滯後特徵，時間序列就變成一張普通的表格，M2 的模型都能用。但你的複雜模型如果贏不過「明天＝今天」或「這週三＝上週三」，那就別用了。</p>
     <div class="wd"><div class="wh"><h3>急診每日人次：建特徵、比基準線</h3><span class="tag amber">核心互動</span></div><p class="hint">勾選要用的特徵，以前 80 天訓練、後 40 天測試（依時間切）。</p><div id="w-lag"></div></div>
     <div class="wd"><div class="wh"><h3>觀測值 ＝ 趨勢 ＋ 季節性 ＋ 殘差</h3><span class="tag amber">互動</span></div><div id="w-decomp"></div></div>
     <div class="wd"><div class="wh"><h3>Google 流感趨勢：資料很多，卻連續高估</h3><span class="tag blue">Science 2014</span></div><p class="hint">看 108 週中 100 週高估的數字、三個原因，再判斷基準線與監測怎麼做。對應講義 M4 第 59 頁。</p><div id="w-gft"></div></div>
+    <div class="wd"><div class="wh"><h3>時間序列：五個差異與三個實務提醒</h3><span class="tag blue">講義第 54、58 頁</span></div><div id="w-tsfive"></div></div>
   </section>
 
   <section class="part" id="p16" data-t="機率校準">
     <div class="ph"><span class="num">16</span><div><h2>機率校準：模型說 70% 的時候，真的有 70% 嗎</h2><div class="en">CALIBRATION · PLATT SCALING · ISOTONIC</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 62–64 頁（PART 06 前段）</p>
     <p class="one">沒校準的機率只能拿來「排序」，不能當成真實機率解讀。要把分數跟臨床門檻比對（「超過 20% 就介入」）、或做軟投票，就必須先校準。</p>
     <div class="wd"><div class="wh"><h3>校準曲線與 Platt Scaling</h3><span class="tag amber">核心互動</span></div><p class="hint">選一種模型性格，看校準曲線；再在獨立的校準集上做 Platt Scaling。</p><div id="w-cal"></div></div>
   </section>
 
   <section class="part" id="p17" data-t="代價敏感學習">
     <div class="ph"><span class="num">17</span><div><h2>代價敏感學習：錯在哪一邊，代價不同</h2><div class="en">COST-SENSITIVE LEARNING · 敗血症早期預警</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 65–67 頁</p>
     <p class="one">1000 位病人中 20 位敗血症。準確率 97.3% 的模型漏掉 12 位；準確率 85.8% 的模型只漏 2 位，總代價只有三分之一。</p>
     <div class="wd"><div class="wh"><h3>拖動門檻，算總代價</h3><span class="tag amber">核心互動</span></div><div id="w-cost"></div></div>
     <div class="wd"><div class="wh"><h3>怎麼把「代價」問出來：跟臨床討論的四個問題</h3></div><div id="w-ask"></div></div>
@@ -166,12 +187,14 @@
 
   <section class="part" id="p18" data-t="AI Studio 實作">
     <div class="ph"><span class="num">18</span><div><h2>AI Studio 實作：四個主題各一個範例</h2><div class="en">HANDS-ON LABS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 29、42、50、60、68 頁（各實作與範例總覽）</p>
     <p class="one">範例皆在 Repository（未複製）：3. Outlier and Ensemble、6. Association Rules、4. Case Studies。</p>
     <div class="wd"><div class="wh"><h3>四個實作</h3><span class="tag">可勾選進度</span></div><div id="w-labs"></div></div>
   </section>
 
   <section class="part" id="p19" data-t="隨堂 Lab 作業">
     <div class="ph"><span class="num">19</span><div><h2>Take-Home：M4 隨堂 Lab</h2><div class="en">W8 上課前繳交 · 不另計分</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 69–70 頁</p>
     <p class="one">三個任務：集成比較（40%）、異常偵測與門檻（30%）、關聯規則與 lift 陷阱（30%）。PDF 一份，含流程截圖與結果表。</p>
     <div class="wd"><div class="wh"><h3>任務一紀錄表：五種方法的平均與標準差</h3><span class="tag amber">可填寫、可下載</span></div><p class="hint">把 AI Studio 10-fold CV 的結果填進來，自動畫圖並判斷誰改善了平均、誰改善了標準差。</p><div id="w-t1"></div></div>
     <div class="wd"><div class="wh"><h3>三個任務檢查清單</h3></div><div id="w-tasks"></div></div>
@@ -179,6 +202,7 @@
 
   <section class="part" id="p20" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">20</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M4：第 71–77 頁（回顧、術語）</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
@@ -192,5 +216,6 @@
 <script src="m4b.js"></script>
 <script src="m4c.js"></script>
 <script src="m4case.js"></script>
+<script src="m4e.js"></script>
 </body>
 </html>

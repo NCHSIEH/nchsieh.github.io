@@ -39,3 +39,12 @@
     box.append(out); draw();
   };
 })();
+
+/* 來源連結列：CaseLinks('w-xxx', [[文字, 網址],...], 備註)（2026-11-13）；只放確認連得到的網址 */
+window.CaseLinks = function (id, links, extra) {
+  const b = document.getElementById(id); if (!b || !b.parentNode) return;
+  const p = U.h('p', { class: 'ai' }, U.h('b', null, '來源連結（2026/11/13 查核可開啟）：'),
+    ...links.flatMap(([t, u], i) => [i ? '　' : '', U.h('a', { href: u, target: '_blank', rel: 'noopener' }, t)]));
+  b.parentNode.append(p);
+  if (extra) b.parentNode.append(U.h('p', { class: 'ai' }, extra));
+};

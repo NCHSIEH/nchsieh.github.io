@@ -36,6 +36,7 @@
 
   <section class="part" id="p01" data-t="分類 101 與案例">
     <div class="ph"><span class="num">01</span><div><h2>分類 101 與貫穿案例</h2><div class="en">CLASSIFICATION BASICS · 出院準備服務的風險分層</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 6–8 頁（PART 01）</p>
     <p class="one">分類預測的是「屬於哪一類」。但好的分類器給你的不只是類別——還有機率。醫療場域幾乎都應該用 Soft 分類。</p>
     <div class="concept">
       <div><b>情境</b>個管師人力只夠追蹤兩成出院病人，要建 30 天再入院風險模型</div>
@@ -48,6 +49,7 @@
 
   <section class="part" id="p02" data-t="定義目標變數">
     <div class="ph"><span class="num">02</span><div><h2>定義目標變數</h2><div class="en">DEFINING THE TARGET · 最容易被輕忽的一步</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 10–13、15–17 頁（PART 02、03）</p>
     <p class="one">「預測再入院」聽起來很明確，實際動手至少要做四個決定。目標定義寫不清楚的專案，做出來的模型無法被任何人使用。</p>
     <div class="concept">
       <div><b>時間窗</b>14、30 還是 90 天？窗越短事件越少（更不平衡）</div>
@@ -61,6 +63,7 @@
 
   <section class="part" id="p03" data-t="k-NN">
     <div class="ph"><span class="num">03</span><div><h2>k-NN：最直覺的分類器</h2><div class="en">k-NEAREST NEIGHBORS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 19–26 頁（PART 04）</p>
     <p class="one">它只是把訓練資料背起來，新個案來時看最像的 k 個鄰居怎麼樣。第一步忘了正規化，整個模型就只看值域最大的那個特徵。</p>
     <div class="wd"><div class="wh"><h3>手算：P6 會不會再入院？</h3><span class="tag amber">互動</span></div><p class="hint">切換 k 與是否正規化，看最近鄰居與投票結果怎麼變。</p><div id="w-knnhand"></div></div>
     <div class="wd"><div class="wh"><h3>k 值如何改變決策邊界</h3><span class="tag amber">核心互動</span></div><p class="hint">k 小 → 邊界破碎、記住雜訊；k 大 → 邊界平滑、可能欠擬合。看訓練與測試正確率怎麼分岔。</p><div id="w-knnmap"></div></div>
@@ -68,6 +71,7 @@
 
   <section class="part" id="p04" data-t="Logistic 迴歸">
     <div class="ph"><span class="num">04</span><div><h2>Logistic 迴歸</h2><div class="en">LOGISTIC REGRESSION · SIGMOID · 勝算比</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 28–34、39–44 頁（PART 05 及 SVM、LDA、神經網路等）</p>
     <p class="one">醫學文獻出現頻率最高的模型：輸出機率、係數可轉成勝算比（OR）。它幾乎永遠應該是你的第一個正式模型。</p>
     <div class="wd"><div class="wh"><h3>Sigmoid：把任意數字壓成機率</h3><span class="tag amber">互動</span></div><div id="w-sig"></div></div>
     <div class="wd"><div class="wh"><h3>係數 → 勝算比</h3><span class="tag amber">互動</span></div><div id="w-or"></div></div>
@@ -77,12 +81,14 @@
 
   <section class="part" id="p05" data-t="Naive Bayes">
     <div class="ph"><span class="num">05</span><div><h2>Naive Bayes</h2><div class="en">單純貝氏</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 36–38 頁（PART 06 前段）</p>
     <p class="one">它假設特徵彼此獨立——明知是錯的。但這個假設讓它快得離譜，而且只要「哪一類分數較高」的排序對了就夠用。</p>
     <div class="wd"><div class="wh"><h3>手算：發燒＋咳嗽，是流感嗎？</h3><span class="tag amber">互動</span></div><p class="hint">調整先驗與條件機率，看後驗怎麼變；試試把先驗調高到 30%。</p><div id="w-nb"></div></div>
   </section>
 
   <section class="part" id="p06" data-t="混淆矩陣家族">
     <div class="ph"><span class="num">06</span><div><h2>混淆矩陣家族</h2><div class="en">THE CONFUSION MATRIX FAMILY · 整個單元最重要的一節</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 47–48、51–52 頁（PART 07）</p>
     <p class="one">六個指標全部來自同一張 2×2 表，但回答完全不同的問題。不平衡時，Accuracy 可能輸給「什麼都不做」。</p>
     <div class="wd"><div class="wh"><h3>1,000 位病人的混淆矩陣</h3><span class="tag amber">核心互動</span></div><p class="hint">拉門檻，看四格與六個指標同步變化；注意「全判不會」的 Accuracy 基準。</p><div id="w-cm"></div></div>
     <div class="wd"><div class="wh"><h3>機器學習 × 醫學用語對照</h3></div><div id="w-terms"></div></div>
@@ -90,6 +96,7 @@
 
   <section class="part" id="p07" data-t="盛行率陷阱">
     <div class="ph"><span class="num">07</span><div><h2>盛行率陷阱</h2><div class="en">PREVALENCE · 同一個模型，兩種結論</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 49–50 頁（PART 07 盛行率）</p>
     <p class="one">敏感度與特異度是模型的性質；PPV 與 NPV 隨部署場域的盛行率大幅變動。醫院驗證良好的模型直接推到社區，會製造大量無謂的複檢。</p>
     <div class="wd"><div class="wh"><h3>每 1,000 人裡，誰被喊陽性？</h3><span class="tag amber">核心互動</span></div><div id="w-prev"></div></div>
     <div class="wrong"><b>這一步做錯會怎樣：</b>醫院驗證時 PPV 66.7%，搬到盛行率 1% 的社區篩檢只剩 15.4%——誤報是真陽性的 5 倍。專題涉及篩檢者，必須說明目標場域的盛行率。</div>
@@ -97,6 +104,7 @@
 
   <section class="part" id="p08" data-t="ROC、PR 與門檻">
     <div class="ph"><span class="num">08</span><div><h2>ROC、PR 曲線與門檻</h2><div class="en">ROC · PR · THRESHOLD · COST · CALIBRATION</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 54–66 頁（PART 08）</p>
     <p class="one">模型輸出機率，門檻才決定判成哪一類。0.5 只是軟體預設，不是自然法則——這是本單元最重要的一句話。</p>
     <div class="wd"><div class="wh"><h3>一條曲線＝全部門檻</h3><span class="tag amber">核心互動</span></div><p class="hint">拉門檻，ROC 與 PR 上的點同步移動。ROC 選模型，PR 定門檻。</p><div id="w-roc"></div></div>
     <div class="wd"><div class="wh"><h3>用期望成本選門檻</h3><span class="tag amber">互動</span></div><p class="hint">代價比＝漏掉一個再入院等於幾次無效追蹤。這是臨床與管理的判斷，不是資料科學家自己決定的。</p><div id="w-cost"></div></div>
@@ -104,18 +112,22 @@
     <div class="wd"><div class="wh"><h3>機率校準：說 70% 就真的是 70% 嗎</h3></div><div id="w-calib"></div></div>
     <div class="wd"><div class="wh"><h3>真實案例：Epic 敗血症模型的外部驗證</h3><span class="tag blue">JAMA IM 2021・38,455 次住院</span></div><p class="hint">用論文報告的敏感度 33%、特異度 83%，重建 38,455 次住院的混淆矩陣；再拉動盛行率，看同一個模型換到別家醫院時 PPV 和警示量怎麼變。對應講義 M2-2 第 65 頁。</p><div id="w-epic"></div></div>
     <div class="wd"><div class="wh"><h3>再入院預測模型的現實：整體 AUC 為什麼不高</h3><span class="tag blue">JAMA 2011 系統性回顧</span></div><p class="hint">26 個已驗證模型的 AUC 範圍、為什麼不準，以及同一個 AUC 放在不同用途的結論。對應講義 M2-2 第 66 頁。</p><div id="w-readmit"></div></div>
+    <div class="wd"><div class="wh"><h3>Brier 分數、淨效益，與內部／外部驗證</h3><span class="tag blue">講義第 63、64 頁</span></div><div id="w-valid"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="類別不平衡">
     <div class="ph"><span class="num">09</span><div><h2>類別不平衡</h2><div class="en">IMBALANCED DATA · 五種處理與三個鐵則</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 68–74 頁（PART 09）</p>
     <p class="one">醫療的重要事件幾乎都是少數類。你要找的人，正好是資料裡最稀少的人。永遠先試調門檻，其次類別權重。</p>
     <div class="wd"><div class="wh"><h3>五種處理在資料上的差別</h3><span class="tag amber">互動</span></div><div id="w-imb"></div></div>
     <div class="wd"><div class="wh"><h3>類別權重 vs 只調門檻</h3><span class="tag amber">互動</span></div><p class="hint">權重改變「訓練出來的模型」，門檻只改變「怎麼用這個模型」。兩者可以並用。</p><div id="w-weight"></div></div>
     <div class="note warn"><b>三個鐵則（作業必查）：</b>① 取樣只能在訓練集做（放進 CV 的訓練子流程）　② 測試集維持原始分布　③ 不平衡時不用 Accuracy 當主指標，改看 Recall、Precision、PR-AUC，並附類別比例。</div>
+    <div class="wd"><div class="wh"><h3>不平衡處理的三個鐵則</h3><span class="tag blue">講義第 71 頁</span></div><div id="w-iron"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="交叉驗證">
     <div class="ph"><span class="num">10</span><div><h2>交叉驗證</h2><div class="en">STRATIFIED CV · NESTED CV · LEARNING CURVE</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 76–84 頁（PART 10）</p>
     <p class="one">單次切分的分數換一次亂數種子就變了。交叉驗證給你平均值，還附贈標準差：「5-fold stratified CV：AUC 0.81 ± 0.03」。</p>
     <div class="concept">
       <div><b>k-fold</b>切 k 份輪流驗證，每筆都在折外評估一次</div>
@@ -125,10 +137,12 @@
     </div>
     <div class="wd"><div class="wh"><h3>不分層時，某一折可能一個陽性都沒有</h3><span class="tag amber">互動</span></div><div id="w-strat"></div></div>
     <div class="wd"><div class="wh"><h3>學習曲線：資料夠了嗎？</h3></div><div id="w-lc"></div></div>
+    <div class="wd"><div class="wh"><h3>切分與驗證的五個檢查</h3><span class="tag blue">講義第 81 頁</span></div><div id="w-five"></div></div>
   </section>
 
   <section class="part" id="p11" data-t="決策樹">
     <div class="ph"><span class="num">11</span><div><h2>決策樹</h2><div class="en">DECISION TREES · GINI · 剪枝</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 86–95 頁（PART 11）</p>
     <p class="one">一連串是／否問題把資料逐層切開。它是醫療場域最受歡迎的模型——因為可以整棵印出來。</p>
     <div class="wd"><div class="wh"><h3>Gini 手算：兩個候選切點選哪個？</h3><span class="tag amber">互動</span></div><div id="w-gini"></div></div>
     <div class="wd"><div class="wh"><h3>深度旋鈕：又是那條過擬合曲線</h3><span class="tag amber">核心互動</span></div><div id="w-depth"></div></div>
@@ -137,6 +151,7 @@
 
   <section class="part" id="p12" data-t="集成方法">
     <div class="ph"><span class="num">12</span><div><h2>集成方法</h2><div class="en">VOTING · BAGGING · RANDOM FOREST · BOOSTING</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 97–107 頁（PART 12）</p>
     <p class="one">一群各自不完美、但錯得不一樣的模型，投票的結果比任何單一成員更可靠。Bagging 治「不穩」，Boosting 治「學不夠」。</p>
     <div class="wd"><div class="wh"><h3>為什麼投票有效</h3><span class="tag amber">互動</span></div><div id="w-vote"></div></div>
     <div class="wd"><div class="wh"><h3>森林越大，邊界越平滑</h3><span class="tag amber">核心互動</span></div><div id="w-rf"></div></div>
@@ -145,6 +160,7 @@
 
   <section class="part" id="p13" data-t="模型比較與選擇">
     <div class="ph"><span class="num">13</span><div><h2>模型比較與選擇</h2><div class="en">THE BIG COMPARISON</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 109–110 頁（PART 13）</p>
     <p class="one">沒有永遠的冠軍，只有適不適合你的場域。實務流程：Logistic 建基準 → 樹看結構 → 森林／提升拚效能 → 依可解釋性需求決定部署。</p>
     <div class="wd"><div class="wh"><h3>你的情況適合誰？</h3><span class="tag amber">互動</span></div><p class="hint">勾選你的需求，看哪些模型同時符合。</p><div id="w-pick"></div></div>
     <div class="wd"><div class="wh"><h3>四個模型同場比較</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">勾選模型，瀏覽器會用同一份訓練集真的訓練一次，再在同一份測試集上比 ROC、AUC 與實務指標。</p><div id="w-arena"></div></div>
@@ -152,11 +168,13 @@
 
   <section class="part" id="p14" data-t="實作、作業與回顧">
     <div class="ph"><span class="num">14</span><div><h2>實作、作業與回顧</h2><div class="en">HANDS-ON · TAKE-HOME · REVIEW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 112–138 頁（PART 14、15、術語、回顧）</p>
     <div class="wd"><div class="wh"><h3>Loan Risk 六步紀錄表</h3><span class="tag amber">可填寫、可下載</span></div><p class="hint">依序執行 Ref 5.1–5.6，每步記錄四個指標，看哪一步提升最多。</p><div id="w-loan"></div></div>
     <div class="wd"><div class="wh"><h3>作業任務（分類篇）</h3></div><div id="w-tasks"></div></div>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>分類篇重點回顧</h3></div><div id="w-review"></div></div>
+    <div class="wd"><div class="wh"><h3>案例收尾：出院風險分層的最終設計</h3><span class="tag blue">講義第 119 頁</span></div><div id="w-design"></div></div>
   </section>
 </main>
 </div>
@@ -167,5 +185,6 @@
 <script src="m22b.js"></script>
 <script src="m22c.js"></script>
 <script src="m22case.js"></script>
+<script src="m22e.js"></script>
 </body>
 </html>

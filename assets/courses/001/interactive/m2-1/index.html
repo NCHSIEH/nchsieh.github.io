@@ -36,6 +36,7 @@
 
   <section class="part" id="p01" data-t="迴歸 101">
     <div class="ph"><span class="num">01</span><div><h2>迴歸 101</h2><div class="en">REGRESSION BASICS · 三種目標與工作流程</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 5–8 頁（PART 01）</p>
     <p class="one">迴歸做一件事：用已知的欄位，預測一個連續的數值——住院天數、醫療費用、血糖值。</p>
     <div class="concept">
       <div><b>預測 Prediction</b>新個案的數值會是多少？只在乎準不準</div>
@@ -44,10 +45,12 @@
     </div>
     <div class="wd"><div class="wh"><h3>同一條迴歸線的三種用途</h3><span class="tag amber">互動</span></div><p class="hint">切換用途，看你在問模型什麼問題——問題不同，該檢查的東西也不同。</p><div id="w-uses"></div></div>
     <div class="wd"><div class="wh"><h3>迴歸建模工作流程</h3></div><div id="w-flow"></div></div>
+    <div class="wd"><div class="wh"><h3>迴歸的三種目標與家族</h3><span class="tag blue">講義第 5、7 頁</span></div><div id="w-targets"></div></div>
   </section>
 
   <section class="part" id="p02" data-t="迴歸的 EDA">
     <div class="ph"><span class="num">02</span><div><h2>迴歸的 EDA</h2><div class="en">EDA FOR REGRESSION · 三個必看</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 10–11 頁（PART 02）</p>
     <p class="one">建模前先看目標的分布、特徵與目標的關係、特徵之間的相關。EDA 的產出不是圖，而是一張待辦清單。</p>
     <div class="concept">
       <div><b>① 目標的分布</b>右偏 → 先取對數；雙峰 → 可能混了兩個母體</div>
@@ -59,6 +62,7 @@
 
   <section class="part" id="p03" data-t="最小平方法手算">
     <div class="ph"><span class="num">03</span><div><h2>簡單線性迴歸：最小平方法手算</h2><div class="en">SIMPLE LINEAR REGRESSION · OLS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 13–17 頁（PART 03 前半）</p>
     <p class="one">找一條線讓「殘差平方和」最小。取平方是為了正負不抵消，且大誤差被加重懲罰。公式看過就忘，算過一遍會記得為什麼。</p>
     <div class="wd"><div class="wh"><h3>五位病人：以年齡預測住院天數</h3><span class="tag amber">核心互動</span></div><p class="hint">直接改表格數字，係數、殘差、R² 會即時重算。右側可以切換「殘差」與「R² 方塊」兩種視角。</p><div id="w-ols"></div></div>
     <div class="wd"><div class="wh"><h3>拖動直線，找最小的殘差平方和</h3><span class="tag blue">500 位病人資料集</span></div><p class="hint">40 位病人。自己轉動直線讓 SSE 變小，再按「讓電腦自己下山」看梯度下降怎麼一步步找到同一個答案。</p><div id="w-sse"></div></div>
@@ -68,6 +72,7 @@
 
   <section class="part" id="p04" data-t="讀懂模型輸出">
     <div class="ph"><span class="num">04</span><div><h2>讀懂模型輸出</h2><div class="en">R² · F 檢定 · t 檢定 · 信賴區間</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 18–20 頁（PART 03 後半）</p>
     <p class="one">看區間不看點估計。統計顯著（p &lt; 0.05）與臨床重要（效果夠大）是兩回事——樣本夠大時，微不足道的效果也會顯著。</p>
     <div class="concept">
       <div><b>F 檢定（整體）</b>整個模型是否比「只用平均值」好？顯著不代表每個變數都有用</div>
@@ -80,6 +85,7 @@
 
   <section class="part" id="p05" data-t="殘差圖">
     <div class="ph"><span class="num">05</span><div><h2>殘差圖：模型的健康檢查</h2><div class="en">RESIDUAL PLOTS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 22–24 頁（PART 04）</p>
     <p class="one">R² 告訴你擬合多緊，殘差圖告訴你哪裡出錯。看圖順序：先殘差圖（形式對不對），再 R²（解釋力夠不夠）。</p>
     <div class="wd"><div class="wh"><h3>四種殘差形狀，四種診斷</h3><span class="tag amber">互動</span></div><div id="w-resid"></div></div>
     <div class="wd"><div class="wh"><h3>直線硬配曲線：劑量-反應</h3></div><p class="hint">切換線性與二次模型，看殘差圖與 R² 怎麼變。</p><div id="w-dose"></div></div>
@@ -88,6 +94,7 @@
 
   <section class="part" id="p06" data-t="多元迴歸與共線性">
     <div class="ph"><span class="num">06</span><div><h2>多元迴歸與共線性</h2><div class="en">MULTIPLE REGRESSION · COLLINEARITY</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 26–30 頁（PART 05）</p>
     <p class="one">加入更多變數，係數就從「總效果」變成「其他不變下的淨效果」。但若兩個變數講的是同一件事，係數會不穩甚至翻正負。</p>
     <div class="concept">
       <div><b>係數：總效果 → 淨效果</b>給定其他納入變數後的條件關聯</div>
@@ -103,6 +110,7 @@
 
   <section class="part" id="p07" data-t="評估指標">
     <div class="ph"><span class="num">07</span><div><h2>評估指標</h2><div class="en">MAE · MSE · RMSE · MAPE</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 32–33 頁（PART 06）</p>
     <p class="one">兩個模型的 MAE 完全一樣，其中一個卻明顯比較危險。任何誤差指標都要附基準線——沒有比較對象的 RMSE 是沒有意義的數字。</p>
     <div class="wd"><div class="wh"><h3>同樣的 MAE，不同的 RMSE</h3><span class="tag amber">互動</span></div><p class="hint">改模型 B 最後一筆的預測，看 MAE 與 RMSE 怎麼分道揚鑣。</p><div id="w-metric"></div></div>
     <div class="wd"><div class="wh"><h3>大誤差落在誰身上？</h3><span class="tag blue">500 位病人資料集</span></div><p class="hint">用實驗台的完整模型預測 150 位測試病人。拉動門檻，看大誤差的人有什麼共同點。</p><div id="w-err21"></div></div>
@@ -111,6 +119,7 @@
 
   <section class="part" id="p08" data-t="五個假設與對數轉換">
     <div class="ph"><span class="num">08</span><div><h2>線性迴歸的五個假設</h2><div class="en">THE FIVE ASSUMPTIONS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 35–41 頁（PART 07）</p>
     <p class="one">違反假設不會報錯，模型照樣給數字——只是 p 值、信賴區間、預測區間都不能信了。醫療資料最常違反等變異與共線性。</p>
     <div class="wd"><div class="wh"><h3>五個假設：檢查、後果、處理</h3></div><div id="w-assume"></div></div>
     <div class="wd"><div class="wh"><h3>右偏資料取對數，與係數的百分比解讀</h3><span class="tag amber">互動</span></div><div id="w-log"></div></div>
@@ -120,14 +129,17 @@
 
   <section class="part" id="p09" data-t="過擬合與偏誤-變異">
     <div class="ph"><span class="num">09</span><div><h2>過擬合與偏誤-變異取捨</h2><div class="en">OVERFITTING · BIAS-VARIANCE</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 43–50 頁（PART 08）</p>
     <p class="one">訓練集上的分數是「它記住了多少」，測試集上的分數才是「它學會了多少」。</p>
     <div class="wd"><div class="wh"><h3>多項式次數實驗</h3><span class="tag amber">核心互動</span></div><p class="hint">拉次數滑桿：曲線、訓練與測試 RMSE 同步更新；右側是整條「複雜度曲線」。</p><div id="w-poly"></div></div>
     <div class="wd"><div class="wh"><h3>交叉驗證：讓每一筆都當過一次驗證資料</h3></div><div id="w-cv"></div></div>
     <div class="wrong"><b>這一步做錯會怎樣：</b>先對全部資料縮放或填補再切分，測試集的資訊已滲入訓練——分數虛高，部署後大幅下滑，而且不會有任何錯誤訊息。</div>
+    <div class="wd"><div class="wh"><h3>三份資料的正確用法，與「順序反了」的洩漏</h3><span class="tag blue">講義第 46、47、50 頁</span></div><div id="w-split3"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="迴歸的特徵工程">
     <div class="ph"><span class="num">10</span><div><h2>迴歸的特徵工程</h2><div class="en">POLYNOMIAL · INTERACTION · DUMMY · BINNING</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 52–56 頁（PART 09）</p>
     <p class="one">模型只能學到你給它的形狀。關係是彎的就給它彎的項，有交互作用就給它乘積項。這些都還是「線性迴歸」——線性指的是對係數線性。</p>
     <div class="wd"><div class="wh"><h3>虛擬變數與參照組</h3><span class="tag amber">互動</span></div><p class="hint">換參照組：係數全部改變，但每一組的預測完全相同。</p><div id="w-dummy"></div></div>
     <div class="wd"><div class="wh"><h3>交互作用：復健效果隨年齡遞減</h3></div><div id="w-inter"></div></div>
@@ -136,6 +148,7 @@
 
   <section class="part" id="p11" data-t="正則化 Ridge／Lasso">
     <div class="ph"><span class="num">11</span><div><h2>正則化迴歸</h2><div class="en">RIDGE · LASSO · ELASTIC NET</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 58–60 頁（PART 10 前段）</p>
     <p class="one">變數多、樣本不多、又彼此相關時，給係數加一條韁繩反而讓模型更穩。正則化前必須標準化；λ 用交叉驗證選。</p>
     <div class="concept">
       <div><b>Ridge（L2）</b>係數平方和懲罰：壓小但不歸零，對共線性特別有效</div>
@@ -147,13 +160,16 @@
 
   <section class="part" id="p12" data-t="信賴區間 vs 預測區間">
     <div class="ph"><span class="num">12</span><div><h2>信賴區間 vs 預測區間</h2><div class="en">CONFIDENCE VS PREDICTION INTERVAL</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 61–65 頁（PART 10 後段）</p>
     <p class="one">信賴區間回答「這個年齡的病人平均住幾天」，預測區間回答「下一位這個年齡的病人住幾天」。跟病人溝通個人預後，要用預測區間。</p>
     <div class="wd"><div class="wh"><h3>兩條帶子差多少？</h3><span class="tag amber">互動</span></div><div id="w-pi"></div></div>
     <div class="wd"><div class="wh"><h3>線性迴歸 vs 迴歸樹：什麼時候換工具</h3></div><div id="w-tree"></div></div>
+    <div class="wd"><div class="wh"><h3>標準報告格式與建模前五個提問</h3><span class="tag blue">講義第 63、65 頁</span></div><div id="w-report"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="AI Studio 實作與作業">
     <div class="ph"><span class="num">13</span><div><h2>AI Studio 實作與作業</h2><div class="en">HANDS-ON LABS · TAKE-HOME</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 67–73 頁（PART 11、12）</p>
     <p class="one">三個案例是刻意設計的難度階梯。記錄每一步的指標變化，比最後的數字更重要。作業與分類篇合併一份報告，第 6 週前繳交。</p>
     <div class="wd"><div class="wh"><h3>三個實作</h3></div><div id="w-labs"></div></div>
     <div class="wd"><div class="wh"><h3>Car Sales 五輪改良紀錄表</h3><span class="tag amber">可填寫、可下載</span></div><p class="hint">邊做邊填，右側自動算出每輪相對前一輪的改善。內容只存在你的瀏覽器。</p><div id="w-rounds"></div></div>
@@ -162,6 +178,7 @@
 
   <section class="part" id="p14" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">14</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M2-1：第 74–78 頁（術語、回顧）</p>
     <div class="wd"><div class="wh"><h3>常見錯誤自我檢查</h3></div><div id="w-errors"></div></div>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3></div><div id="w-final"></div></div>
@@ -176,5 +193,6 @@
 <script src="m21b.js"></script>
 <script src="m21c.js"></script>
 <script src="m21case.js"></script>
+<script src="m21e.js"></script>
 </body>
 </html>

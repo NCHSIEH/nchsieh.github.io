@@ -36,6 +36,7 @@
 
   <section class="part" id="p01" data-t="非監督式學習 101">
     <div class="ph"><span class="num">01</span><div><h2>非監督式學習 101</h2><div class="en">UNSUPERVISED LEARNING BASICS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 5–7 頁（PART 01）</p>
     <p class="one">監督式問「這一筆會怎樣」，非監督式問「這一堆裡面有什麼結構」。沒有答案可以對，所以最終判準一定包含人的專業判斷。</p>
     <div class="concept">
       <div><b>分群 Clustering</b>把相似的個案分成幾群：病人分型、照護路徑設計 → M3 主軸</div>
@@ -44,10 +45,12 @@
       <div><b>關聯規則</b>找出常一起出現的組合：共病、用藥組合 → M4</div>
     </div>
     <div class="wd"><div class="wh"><h3>分群沒有標準答案</h3><span class="tag amber">互動</span></div><p class="hint">同一份資料，換不同的 K。演算法每一次都「正確」地照做——選哪一個是你的判斷。</p><div id="w-nok"></div></div>
+    <div class="wd"><div class="wh"><h3>非監督式學習的四大應用</h3><span class="tag blue">講義第 7 頁</span></div><div id="w-apps"></div></div>
   </section>
 
   <section class="part" id="p02" data-t="前處理：縮放是必要的">
     <div class="ph"><span class="num">02</span><div><h2>前處理：縮放是必要的</h2><div class="en">SCALING IS NOT OPTIONAL</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 9–13 頁（PART 02、03）</p>
     <p class="one">監督式學習中，縮放「看演算法而定」；非監督式多數技術靠距離運作——不縮放等於白做。</p>
     <div class="concept">
       <div><b>① 哪些欄位要納入</b>ID 類一律移除；與分群目的無關的也移除，放越多不代表分得越好</div>
@@ -55,10 +58,12 @@
       <div><b>③ 用哪一種縮放</b>Z-Score 是預設；Min-Max 需要固定範圍時用，但離群值會壓縮其他點</div>
     </div>
     <div class="wd"><div class="wh"><h3>縮放如何改變分群結果</h3><span class="tag amber">互動</span></div><p class="hint">作業一任務 4 的核心：比較未縮放與 Z-Score 後的 K-Means（K=3）。</p><div id="w-scale"></div></div>
+    <div class="wd"><div class="wh"><h3>分群前的三個前處理決策</h3><span class="tag blue">講義第 13 頁</span></div><div id="w-prep3"></div></div>
   </section>
 
   <section class="part" id="p03" data-t="K-Means 手算">
     <div class="ph"><span class="num">03</span><div><h2>K-Means：手算到收斂</h2><div class="en">K-MEANS · 指派 → 更新中心 → 重複</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 15–18 頁（PART 04）</p>
     <p class="one">K-Means 只反覆做兩件事：每點歸給最近的中心、中心移到該群的平均位置。保證會收斂，但不保證收斂到全域最優。</p>
     <div class="wd"><div class="wh"><h3>六位病人、K = 2</h3><span class="tag amber">核心互動</span></div><p class="hint">按「下一步」逐步執行；也可以換起始中心，看結果會不會不同。</p><div id="w-hand"></div></div>
     <div class="wd"><div class="wh"><h3>在 180 筆資料上一步步跑</h3><span class="tag amber">互動</span></div><div id="w-steps"></div></div>
@@ -66,6 +71,7 @@
 
   <section class="part" id="p04" data-t="怎麼決定 K">
     <div class="ph"><span class="num">04</span><div><h2>怎麼決定 K</h2><div class="en">ELBOW · SILHOUETTE · 業務可解釋性</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 20–24 頁（PART 05）</p>
     <p class="one">沒有唯一正確答案，但有三個判準：手肘看趨勢、Silhouette 看品質、業務可解釋性拍板。</p>
     <div class="wd"><div class="wh"><h3>手肘法、Silhouette 與 Davies-Bouldin</h3><span class="tag amber">核心互動</span></div><p class="hint">點選 K，看分群結果與每一點的 Silhouette。</p><div id="w-k"></div></div>
     <div class="wd"><div class="wh"><h3>手算一個點的 Silhouette</h3></div><div id="w-sil"></div></div>
@@ -75,18 +81,21 @@
 
   <section class="part" id="p05" data-t="階層式分群">
     <div class="ph"><span class="num">05</span><div><h2>階層式分群</h2><div class="en">HIERARCHICAL CLUSTERING · 樹狀圖</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 26–29 頁（PART 06）</p>
     <p class="one">不必事先決定群數：它把所有可能的群數一次算完，讓你事後再切。合併距離突然跳很高的地方，就是最自然的切點。</p>
     <div class="wd"><div class="wh"><h3>五個點的樹狀圖</h3><span class="tag amber">核心互動</span></div><p class="hint">換連結方式看樹怎麼變；拖動切線決定群數。</p><div id="w-dendro"></div></div>
   </section>
 
   <section class="part" id="p06" data-t="DBSCAN">
     <div class="ph"><span class="num">06</span><div><h2>DBSCAN 密度式分群</h2><div class="en">DENSITY-BASED CLUSTERING · 核心點、邊界點、雜訊</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 31–34 頁（PART 07）</p>
     <p class="one">前兩種都假設群是一團一團的；DBSCAN 改問：哪裡的點特別密集？不必指定群數，還會自動標出雜訊。</p>
     <div class="wd"><div class="wh"><h3>調 eps 與 min_samples</h3><span class="tag amber">核心互動</span></div><div id="w-db"></div></div>
   </section>
 
   <section class="part" id="p07" data-t="三種演算法的形狀能力">
     <div class="ph"><span class="num">07</span><div><h2>三種演算法的形狀能力</h2><div class="en">SAME DATA, DIFFERENT RESULTS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 36–37 頁（PART 08）</p>
     <p class="one">形狀決定演算法。先畫散布圖看資料長什麼樣，再決定用誰。</p>
     <div class="wd"><div class="wh"><h3>3 種資料 × 3 種演算法</h3><span class="tag amber">互動</span></div><div id="w-shape"></div></div>
     <div class="wd"><div class="wh"><h3>三種演算法全比較</h3></div><div id="w-cmp"></div></div>
@@ -94,6 +103,7 @@
 
   <section class="part" id="p08" data-t="分群結果怎麼解讀">
     <div class="ph"><span class="num">08</span><div><h2>分群結果怎麼解讀</h2><div class="en">CLUSTER PROFILING · 命名與行動</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 39–43 頁（PART 09）</p>
     <p class="one">跑出群組只是一半的工作。說不出「每一群是誰」、該做什麼，這個分析就沒有價值。</p>
     <div class="concept">
       <div><b>① 看群大小</b>極小的群（&lt; 5%）是真的次族群還是雜訊？</div>
@@ -105,27 +115,33 @@
     <div class="wd"><div class="wh"><h3>真實研究：成人糖尿病的五個群</h3><span class="tag blue">Lancet Diabetes Endocrinol 2018・8,980 人</span></div><p class="hint">瑞典 ANDIS 世代用 6 個常規變數做的 K-Means。切換群，看它的剖析（相對整體高或低）、研究者怎麼命名，以及後續的爭議。對應講義 M3 第 41 頁。</p><div id="w-ahl"></div></div>
     <div class="wd"><div class="wh"><h3>長者健康分群工作台</h3><span class="tag blue">600 位社區長者資料集</span></div><p class="hint">換 K、換放進分群的欄位，看熱圖、PCA 投影與每群的建議行動怎麼變。試試「只看心理社會」和「全部 9 個」的差別。</p><div id="w-elder"></div></div>
     <div class="wd"><div class="wh"><h3>敗血症四型：用 K-means 分群，改寫臨床試驗的判讀</h3><span class="tag blue">JAMA 2019</span></div><p class="hint">看四型的比例與預後、分群如何影響試驗結論，再判斷「分群」要補什麼證據。對應講義 M3 第 42 頁。</p><div id="w-sepsis"></div></div>
+    <div class="wd"><div class="wh"><h3>分群結果的解讀四步驟</h3><span class="tag blue">講義第 40 頁</span></div><div id="w-four"></div></div>
   </section>
 
   <section class="part" id="p09" data-t="異常偵測">
     <div class="ph"><span class="num">09</span><div><h2>異常偵測</h2><div class="en">ANOMALY DETECTION · 統計、距離、Isolation Forest</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 45–48 頁（PART 10）</p>
     <p class="one">換一個問法：不是「這些點怎麼分群」，而是「哪些點不像其他人」。沒有標籤可對，驗證只能靠領域專家。</p>
     <div class="wd"><div class="wh"><h3>三種取徑標出的點</h3><span class="tag amber">互動</span></div><div id="w-anom"></div></div>
     <div class="wd"><div class="wh"><h3>Isolation Forest：要切幾刀才孤立？</h3><span class="tag amber">互動</span></div><p class="hint">點任一個資料點，看隨機切幾刀能把它單獨隔離出來。</p><div id="w-iso"></div></div>
     <div class="note warn"><b>醫療場域三個提醒：</b>① 異常 ≠ 錯誤——血壓 0 是錯誤，血壓 210 是真實的高危個案　② 污染比例設 5% 就會標出 5%，不管實際有幾個——要從領域知識設定　③ 標出前 20 名最異常的個案，請臨床人員判斷有幾個是真的。</div>
+    <div class="wd"><div class="wh"><h3>異常偵測在醫療場域的三個提醒</h3><span class="tag blue">講義第 48 頁</span></div><div id="w-anom3"></div></div>
   </section>
 
   <section class="part" id="p10" data-t="降維與 PCA">
     <div class="ph"><span class="num">10</span><div><h2>降維與主成分分析</h2><div class="en">DIMENSIONALITY REDUCTION · PCA</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 50–56 頁（PART 11 前段）</p>
     <p class="one">PCA 不是「刪掉欄位」，而是「換一組座標軸」，再丟掉變異小的那些軸。為什麼要降維：看得見、算得動、避開維度詛咒。</p>
     <div class="wd"><div class="wh"><h3>自己轉座標軸，找變異最大的方向</h3><span class="tag amber">核心互動</span></div><p class="hint">轉動投影方向，看投影後的變異多大；再按「PCA 最佳解」。</p><div id="w-pca"></div></div>
     <div class="wd"><div class="wh"><h3>要保留幾個主成分</h3><span class="tag amber">互動</span></div><div id="w-scree"></div></div>
     <div class="wd"><div class="wh"><h3>讀懂主成分：載荷與雙標圖</h3><span class="tag blue">600 位社區長者資料集</span></div><p class="hint">主成分沒有名字——看它由哪些欄位組成，再替它取名。切換 PC1／PC2，再用「對答案」看四種型態落在哪裡。</p><div id="w-loading"></div></div>
     <div class="wd"><div class="wh"><h3>維度詛咒：點和點越來越一樣遠</h3></div><div id="w-curse"></div></div>
+    <div class="wd"><div class="wh"><h3>PCA 的三個限制</h3><span class="tag blue">講義第 55 頁</span></div><div id="w-pcalim"></div></div>
   </section>
 
   <section class="part" id="p11" data-t="降維＋分群">
     <div class="ph"><span class="num">11</span><div><h2>降維＋分群的實務組合</h2><div class="en">PCA · t-SNE · 先看見，再切開</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 57 頁（PART 11 後段）</p>
     <p class="one">降維是為了「看見」，分群才是「切開」。分群可在原始高維空間做，降維圖只是用來檢視。</p>
     <div class="wd"><div class="wh"><h3>10 維資料：PCA 降到 2 維看分群</h3><span class="tag amber">互動</span></div><div id="w-combo"></div></div>
     <div class="wd"><div class="wh"><h3>PCA 與 t-SNE 的差別</h3></div><div id="w-tsne"></div></div>
@@ -133,12 +149,14 @@
 
   <section class="part" id="p12" data-t="AI Studio 實作">
     <div class="ph"><span class="num">12</span><div><h2>AI Studio 實作</h2><div class="en">CUSTOMER CREDIT RISK · HR CHURN 降維</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 59–60 頁（PART 12）</p>
     <p class="one">Customer Credit Risk 的六個流程涵蓋本模組全部技術——請用 2026 版資料夾。</p>
     <div class="wd"><div class="wh"><h3>兩個實作</h3></div><div id="w-labs"></div></div>
   </section>
 
   <section class="part" id="p13" data-t="作業一：顧客分群">
     <div class="ph"><span class="num">13</span><div><h2>作業一：顧客分群分析</h2><div class="en">TAKE-HOME · 第 9 週前繳交 · 佔學期成績 15%</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 62–66 頁（PART 13）</p>
     <p class="one">Mall Customer Segmentation（Kaggle，200 筆）或你貫穿主線的資料（公開或模擬、欄位 ≥ 4）。PDF 報告 6–10 頁＋ .rmp。</p>
     <div class="wd"><div class="wh"><h3>決定 K 紀錄表</h3><span class="tag amber">可填寫、可下載</span></div><p class="hint">把 AI Studio 跑出的 Davies-Bouldin（必做）與 Silhouette（選做）填進來，自動畫折線並標出建議 K。</p><div id="w-ktable"></div></div>
     <div class="wd"><div class="wh"><h3>七個必做任務</h3></div><div id="w-tasks"></div></div>
@@ -146,6 +164,7 @@
 
   <section class="part" id="p14" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">14</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 67–71 頁（術語、回顧）</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
@@ -159,5 +178,6 @@
 <script src="m3b.js"></script>
 <script src="m3c.js"></script>
 <script src="m3case.js"></script>
+<script src="m3e.js"></script>
 </body>
 </html>
