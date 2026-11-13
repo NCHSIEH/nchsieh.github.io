@@ -214,7 +214,7 @@
         });
         if (Object.keys(shown).length === Q.length) out.append(note('效率數字容易量、也最先被公布；效益要等時間、要有對照。看到 AI 成果報導時，先問它量的是哪一種。'));
       }
-      out.append(h('p', { class: 'ai' }, '資料：AMA 2026 Physician Survey on Augmented Intelligence（2026/3，1,692 位醫師）；Stanford AI Index 2026 第 6 章；健保署與 Google 2026/3/4 發表（iThome、CIO Taiwan、科技新報報導）。最後一題的「三年後洗腎比例」為假設情境。講義 M0 第 42、44 頁。'));
+      out.append(h('p', { class: 'ai' }, '資料：AMA 2026 Physician Survey on Augmented Intelligence（2026/3，1,692 位醫師）；Stanford AI Index 2026 第 6 章；健保署與 Google 2026/3/4 發表（科技新報、CIO Taiwan、GeneOnline 報導）。最後一題的「三年後洗腎比例」為假設情境。講義 M0 第 42、44 頁。'));
     }
     box.append(out); draw();
   })();

@@ -36,6 +36,7 @@
 
   <section class="part" id="p01" data-t="什麼是資料科學">
     <div class="ph"><span class="num">01</span><div><h2>什麼是資料科學</h2><div class="en">WHAT IS DATA SCIENCE · 三個支柱與四個問題</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 5–10、14 頁</p>
     <p class="one">統計、工具、領域知識缺一不可。缺統計會誤讀結果、缺工具做不出來、缺領域知識會做出「統計上正確、實務上有害」的系統。</p>
     <div class="concept"><div><b>統計與數學</b>描述統計、假設檢定、迴歸；只講到「能正確使用」</div><div><b>運算與工具</b>本課用 AI Studio；重點是流程對，不是語法熟</div><div><b>領域知識</b>知道哪些變數說得通、錯了會造成什麼後果</div></div>
     <div class="wd"><div class="wh"><h3>資料科學文氏圖：你現在站在哪？</h3><span class="tag amber">互動</span></div><p class="hint">勾選你已具備的能力，看你落在哪一區。改繪自 Drew Conway（2010）。</p><div id="w-venn"></div></div>
@@ -47,6 +48,7 @@
 
   <section class="part" id="p02" data-t="監督式與非監督式">
     <div class="ph"><span class="num">02</span><div><h2>監督式與非監督式</h2><div class="en">SUPERVISED VS UNSUPERVISED · 從資料長相就分得出來</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 11–13 頁</p>
     <p class="one">判斷方式只有一個：你的資料裡有沒有「答案」那一欄（y）。有＝監督式，沒有＝非監督式。</p>
     <div class="concept"><div><b>x 變數＝特徵＝輸入</b>月費、方案、使用時數——兩種學習都需要</div><div><b>y 變數＝標籤＝目標</b>「是否取消」只有監督式才有</div><div><b>監督式在做什麼</b>用歷史資料學出 x → y，再預測新個案</div><div><b>非監督式在做什麼</b>沒有答案可學，改問「哪些個案彼此相似」</div></div>
     <div class="wd"><div class="wh"><h3>同一份 x，有沒有 y</h3><span class="tag amber">互動</span></div><p class="hint">切換「有標籤／沒標籤」：點的座標完全一樣，差別只在有沒有那一欄答案。沒標籤時可以讓演算法自己分群。</p><div id="w-sup"></div></div>
@@ -56,16 +58,21 @@
 
   <section class="part" id="p03" data-t="技術演進 1958–2026">
     <div class="ph"><span class="num">03</span><div><h2>技術演進：1958–2026</h2><div class="en">FROM STATISTICS TO AGENTS</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 16–29 頁（PART 02、03）</p>
     <p class="one">今天的每一個技術名詞，都是為了解決前一代做不到的事而出現的。推力只有三個：資料變多、算力變便宜、演算法有突破。</p>
     <div class="era"><div><span class="y">1960s–70s</span><b>資料是「樣本」</b>統計推論、假設檢定；資料少而貴，靠抽樣</div><div><span class="y">1980s</span><b>資料是「紀錄」</b>關聯式資料庫與 SQL；大量累積，但只用來查</div><div><span class="y">1990s</span><b>資料是「資產」</b>資料倉儲、KDD、CRISP-DM；電腦開始「找」假設</div><div><span class="y">2000s–今</span><b>資料是「原料」</b>集成學習、大數據，到深度學習與 Agent</div></div>
     <div class="wd"><div class="wh"><h3>互動時間軸</h3><span class="tag amber">點里程碑看說明</span></div><div id="w-timeline"></div></div>
     <div class="wd"><div class="wh"><h3>CRISP-DM：一個會繞回去的循環</h3></div><p class="hint">點每一步看它在問什麼；按「模擬一個真實專案」看它怎麼來回。</p><div id="w-crisp"></div></div>
     <div class="wd"><div class="wh"><h3>價格兩年掉 280 倍：算算你的工作要花多少</h3></div><div id="w-cost"></div></div>
+    <div class="wd"><div class="wh"><h3>Agent 怎麼完成一件事（長照個管師）</h3><span class="tag blue">講義第 24 頁</span></div><p class="hint">跟著一個真實會問的問題，看 Agent 依序用了哪些工具、最後為什麼一定要有人確認。</p><div id="w-agent"></div></div>
+    <div class="wd"><div class="wh"><h3>為什麼要用對數刻度看模型變大</h3><span class="tag blue">講義第 26–27 頁</span></div><p class="hint">同一組數字，切換刻度看差別。</p><div id="w-logscale"></div></div>
+    <div class="wd"><div class="wh"><h3>從傳統機器學習到深度學習：典範改變了什麼</h3><span class="tag blue">講義第 29 頁</span></div><div id="w-paradigm"></div></div>
     <div id="q03"></div>
   </section>
 
   <section class="part" id="p04" data-t="2026 技術地圖">
     <div class="ph"><span class="num">04</span><div><h2>2026 年的技術地圖</h2><div class="en">THE CURRENT LANDSCAPE</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 31–35 頁（PART 04）</p>
     <p class="one">2026 年真正重要的不是更準的演算法，而是怎麼讓系統能用、能信、能負責。趨勢已從「愈大愈好」轉向「夠用、可控、可負擔」。</p>
     <div class="concept" style="grid-template-columns:repeat(3,1fr)"><div><b>基礎模型</b>大規模預訓練、可提示或微調；你多半是使用者 → W12</div><div><b>RAG 檢索增強生成</b>先檢索文件再生成，答案可標來源 → W14</div><div><b>AI Agent</b>模型自行決定下一步、調用工具；責任歸屬是主要風險 → W15</div><div><b>小型專用模型 SLM</b>更便宜、更快，能在自己的機器上跑 → W12</div><div><b>邊緣與本地端</b>資料不出機構，對醫療資料幾乎是必要條件</div><div><b>治理與可解釋性</b>偏誤、公平性、可追溯；設計之初就要納入 → M9</div></div>
     <div class="wd"><div class="wh"><h3>四層技術堆疊</h3></div><div id="w-stack"></div></div>
@@ -76,6 +83,7 @@
 
   <section class="part" id="p05" data-t="應用領域巡禮">
     <div class="ph"><span class="num">05</span><div><h2>應用領域巡禮</h2><div class="en">WHERE IT ACTUALLY GETS USED</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 37–46 頁（PART 05）</p>
     <p class="one">方法是共通的：信用評分與疾病風險分層在技術上幾乎是同一件事，差別在於錯誤的代價。</p>
     <div class="concept"><div><b>醫療與臨床</b>風險預測、影像判讀輔助、病歷摘要</div><div><b>長照與高齡</b>失能評估、跌倒風險、居家監測</div><div><b>公共衛生</b>疫情趨勢、族群健康分層</div><div><b>金融、零售、製造</b>信用評分、顧客分群、設備異常偵測——方法共通</div></div>
     <div class="wd"><div class="wh"><h3>資料型態 × 問題型態：定位你的題目</h3><span class="tag amber">互動</span></div><div id="w-quad"></div></div>
@@ -90,6 +98,7 @@
 
   <section class="part" id="p06" data-t="AI / ML / DL / GenAI">
     <div class="ph"><span class="num">06</span><div><h2>AI / ML / DL / GenAI</h2><div class="en">HOW THEY RELATE · 含 NLP 七十年演進</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 48–55 頁（PART 06）</p>
     <p class="one">四者層層包含。生成式 AI 不是「最進階所以最好」——要預測住院天數，決策樹仍然比 LLM 適合得多。</p>
     <div class="concept"><div><b>人工智慧 AI</b>讓機器展現智慧行為的所有方法，含規則系統與搜尋</div><div><b>機器學習 ML</b>從資料自動學規律：迴歸、決策樹、分群</div><div><b>深度學習 DL</b>多層神經網路自動學特徵：CNN、Transformer</div><div><b>生成式 AI</b>能產生新內容：LLM、擴散模型</div></div>
     <div class="wd"><div class="wh"><h3>把方法放進最小的那一圈</h3><span class="tag amber">互動</span></div><div id="w-nest"></div></div>
@@ -99,6 +108,7 @@
 
   <section class="part" id="p07" data-t="工作流程與切分點">
     <div class="ph"><span class="num">07</span><div><h2>資料科學工作流程</h2><div class="en">THE SIX-STEP WORKFLOW · 切分點在哪裡</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 57–61 頁（PART 07）</p>
     <p class="one">最常被低估的是第一步——界定錯了，後五步做得再漂亮也沒有價值。會用到資料統計量的步驟，一律先切分再做。</p>
     <div class="wd"><div class="wh"><h3>六個步驟：產出與最常見的錯誤</h3></div><div id="w-six"></div></div>
     <div class="wd"><div class="wh"><h3>先補值再切分，測試集就偷看了答案</h3><span class="tag amber">互動</span></div><p class="hint">改血糖數字或點「分組」切換訓練／測試，看兩種順序補出來的值差多少。</p><div id="w-impute"></div></div>
@@ -109,6 +119,7 @@
 
   <section class="part" id="p08" data-t="工具鏈建置">
     <div class="ph"><span class="num">08</span><div><h2>工具鏈建置</h2><div class="en">TOOLCHAIN SETUP · AI Studio、Ollama、Dify…</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 63–65 頁（PART 08）</p>
     <p class="one">五套工具，各有出場時機與資料邊界。今天只需裝好 AI Studio 與課程 Repository，Ollama 可先試裝。</p>
     <div class="wd"><div class="wh"><h3>五套工具與出場週次</h3></div><div id="w-tools"></div></div>
     <div class="wd"><div class="wh"><h3>今天的安裝檢核</h3><span class="tag">進度存在你的瀏覽器</span></div><div id="w-install"></div></div>
@@ -117,6 +128,7 @@
 
   <section class="part" id="p09" data-t="第一個模型：MPG">
     <div class="ph"><span class="num">09</span><div><h2>第一個端到端專案：MPG 線性迴歸</h2><div class="en">YOUR FIRST COMPLETE WORKFLOW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 67–72 頁（PART 09）</p>
     <p class="one">重點是把流程走通，不是把模型調好。車重越重，每加侖里程越低——你先親手畫一條線，再看電腦怎麼找最好的那一條。</p>
     <div class="concept" style="grid-template-columns:repeat(5,1fr)"><div><b>Retrieve</b>拖曳資料集 → ② 蒐集資料</div><div><b>Set Role</b>mpg 設為 label → ③</div><div><b>Split Data</b>0.8／0.2 切分 → ⑤</div><div><b>Linear Regression＋Apply Model</b>訓練並套用到測試集 → ⑤</div><div><b>Performance</b>RMSE 與 squared correlation → ⑤</div></div>
     <div class="wd"><div class="wh"><h3>自己畫迴歸線</h3><span class="tag amber">核心互動</span></div><p class="hint">拖動截距與斜率，讓 RMSE 越小越好；再按「最小平方法」看答案。</p><div id="w-fit"></div></div>
@@ -128,6 +140,7 @@
 
   <section class="part" id="p10" data-t="專案界定 Scoping">
     <div class="ph"><span class="num">10</span><div><h2>專案界定：六步驟寫成一頁</h2><div class="en">SCOPING A PROJECT</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 74–80 頁（PART 10）</p>
     <p class="one">專案不是從資料開始，是從一個界定清楚的範圍開始。走完六步通常只要一兩小時，卻能省下數週走錯方向的時間。</p>
     <div class="concept" style="grid-template-columns:repeat(3,1fr)"><div><b>① 站在使用者角度</b>他在乎什麼？什麼指標對他重要？</div><div><b>② 腦力激盪問題</b>先別想資料，盡量想大</div><div><b>③ 腦力激盪解法</b>資料科學只是其中一種選項</div><div><b>④ 決定技術</b>監督式還是非監督式？</div><div><b>⑤ 釐清資料需求</b>結構、特徵、來源與範圍</div><div><b>⑥ 彙整範圍與目標</b>寫成一頁給使用者確認</div></div>
     <div class="wd"><div class="wh"><h3>技術選擇小幫手（步驟四）</h3></div><div id="w-tech"></div></div>
@@ -137,6 +150,7 @@
 
   <section class="part" id="p11" data-t="選定貫穿主線">
     <div class="ph"><span class="num">11</span><div><h2>選定你的貫穿主線</h2><div class="en">CHOOSE YOUR THREAD · 第 10、12、16 週各出現一次</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 82–87 頁（PART 11）</p>
     <p class="one">好題目的四個條件：你真的在意、資料取得可行、有明確的使用者、三種解法（Phase A／B／C）都說得通。</p>
     <div class="wd"><div class="wh"><h3>題目健檢</h3><span class="tag amber">互動</span></div><div id="w-thread"></div></div>
     <div class="wd"><div class="wh"><h3>歷屆選題示例</h3></div><div id="w-examples"></div></div>
@@ -144,6 +158,7 @@
 
   <section class="part" id="p12" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">12</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M0：第 88–91 頁</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本單元回顧</h3></div><div id="w-review"></div></div>
@@ -156,5 +171,7 @@
 <script src="../assets/ml.js"></script>
 <script src="m0mpg.js"></script>
 <script src="m0c.js"></script>
+<script src="../assets/case.js"></script>
+<script src="m0d.js"></script>
 </body>
 </html>
