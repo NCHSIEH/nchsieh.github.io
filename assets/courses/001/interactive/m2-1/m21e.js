@@ -56,6 +56,11 @@
       { t: '要向一位病人說明「你大概會住幾天」，該給哪種區間？', o: ['信賴區間', '預測區間'], a: 1, w: '個別病人的預測用預測區間，它比信賴區間寬。' }] }
   ], src: '講義 M2-1 第 63、65 頁；報告架構可對照 TRIPOD+AI（2024）。' });
 
+  (function () {
+    const b = document.getElementById('w-egfr-race'); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, '實算一位病人：'),
+      '60 歲男性、血清肌酸酐 1.4 mg/dL。若登記為黑人：2009 版 62.8 → 2021 版 57.5，從 G2 跨進 G3a；其他人：2009 版 54.2 → 2021 版 57.5，往上調。拿掉一個變數，不同群體的誤差往不同方向移動——所以評估要分組看。（依公式計算；講義 M2-1 第 41 頁）'));
+  })();
   CaseLinks('w-egfr-race', [
     ['Inker et al. NEJM 2021（大學典藏紀錄）', 'https://lup.lub.lu.se/record/c9a7a876-3735-48da-9d59-af5da53ce096'],
     ['Endocrine News 報導', 'https://endocrinenews.endocrine.org/?p=10855'],
