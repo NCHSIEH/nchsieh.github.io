@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>MyAssets 看盤</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23dc2626'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/style.css?v=8">
+<link rel="stylesheet" href="assets/style.css?v=9">
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -50,7 +50,7 @@
         <p style="font-size:12px;color:#64748b;margin:6px 0">試算表第一列為標題，A～D 欄放「代號、名稱、類別、持有（是／否）」，F～H 欄可放觀察名單。到「檔案 → 共用 → 發布到網路」，只選這個分頁、格式選 CSV，把網址貼在這裡。</p>
         <div style="display:flex;gap:6px"><input id="sheeturl" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?…output=csv" style="flex:1;padding:6px 10px;border:1px solid var(--line);border-radius:8px;font-size:12px"><button class="btn" id="sheetsave" type="button">儲存</button></div>
       </details>
-      <p style="font-size:12px;color:#64748b;margin:10px 0 0">清單存在您的 Google 帳號底下，只有您看得到，換手機或電腦登入同一帳號就會同步。刪除試算表帶入的標的只是隱藏，隨時可恢復。</p>
+      <p style="font-size:12px;color:#64748b;margin:10px 0 0">每個 Google 帳號各有一份清單，只有本人看得到、改得到，換手機或電腦登入同一帳號就會同步。清單有兩種維護方式，可以並用：①直接在這裡加入、刪除；②在「進階」連結自己的 Google 試算表，試算表改了，網站自動跟著變。試算表的發布網址只存在您的帳號裡，其他帳號讀不到。刪除試算表帶入的標的只是隱藏，隨時可恢復。</p>
     </div>
     <div class="list" id="list"><div class="loading">載入中…</div></div>
   </section>
@@ -65,8 +65,8 @@
   清單來源：<span id="src"></span><span id="sheetlinkwrap"></span></p>
 </main>
 
-<script src="assets/core.js?v=8"></script>
-<script type="module" src="assets/auth.js?v=8"></script>
+<script src="assets/core.js?v=9"></script>
+<script type="module" src="assets/auth.js?v=9"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
