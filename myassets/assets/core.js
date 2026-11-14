@@ -4,7 +4,7 @@
 
   const CONFIG = {
     // Google 試算表「看盤清單」分頁「發布到網路」的 CSV 網址；空白時使用下方備援清單
-    sheetCsv: '',
+    sheetCsv: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQUOXjn31s43XBKXntgqbZg4z24vuUR8_4uOdVvIQevFUchtCdshmNDpbys7miLEHt1kWkk5IRJd4fl/pub?gid=20261114&single=true&output=csv',
     sheetLink: 'https://docs.google.com/spreadsheets/d/13_apEylQGyscoaEjRDtF5MZo64GXJ5pz6MsODNfLcYo/edit',
     fallback: [
       ['0056', '元大高股息', 'ETF', '是'],
