@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>MyAssets 看盤</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%2316a34a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css?v=1">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./">MyAssets<small>懶人看盤</small></a>
+  <a class="btn" href="signals/">燈號詳解</a>
+  <button class="btn" id="refresh" type="button">重新整理</button>
+</div></header>
+
+<main class="wrap">
+  <nav class="tabs">
+    <button class="btn on" data-tab="stocks" type="button">股票</button>
+    <button class="btn" data-tab="divs" type="button">配息行事曆</button>
+  </nav>
+
+  <section id="tab-stocks">
+    <div class="meta" id="meta">載入中…</div>
+    <div class="legend"><span>會跌</span><span class="bar"></span><span>會漲</span><span style="margin-left:auto">顏色越深＝訊號越強</span></div>
+    <div class="summary" id="summary"></div>
+    <div id="alerts"></div>
+    <div class="filters" id="filters">
+      <button class="btn on" data-f="all" type="button">全部</button>
+      <button class="btn" data-f="etf" type="button">高股息／市值 ETF</button>
+      <button class="btn" data-f="bond" type="button">債券 ETF</button>
+      <button class="btn" data-f="stock" type="button">個股</button>
+      <button class="btn" data-s="score" type="button" style="margin-left:auto">依燈號排序</button>
+    </div>
+    <div class="list" id="list"><div class="loading">正在抓取行情與計算指標…</div></div>
+  </section>
+
+  <section id="tab-divs" hidden>
+    <div class="meta">資料來源：FinMind（證交所／櫃買中心公告）。年化殖利率＝近 12 個月現金配息合計 ÷ 最新收盤價。</div>
+    <div class="box" id="divbox"><div class="loading">載入中…</div></div>
+  </section>
+
+  <p class="foot">燈號由均線、MACD、KD、RSI、法人籌碼 5 項技術指標計算，只反映近期價格與籌碼的強弱，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（約下午 3 點後更新），盤中顯示的是前一交易日。點任一檔可看 5 項指標的燈號與解釋。<br>
+  清單來源：<span id="src"></span>　｜　<a id="sheetlink" target="_blank" rel="noopener">開啟 Google 試算表</a></p>
+</main>
+
+<script src="assets/core.js?v=1"></script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  let results = [], filter = 'all', sortBy = 'list', divLoaded = false;
+  $('#sheetlink').href = MA.CONFIG.sheetLink;
+
+  function lampHTML(s, cls){
+    const lv = MA.level(s);
+    return '<div class="lamp '+(cls||'')+'" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+lv.short+'<small>'+MA.strength(s)+'%</small></div>';
+  }
+  function match(it){
+    if (filter==='all') return true;
+    if (filter==='bond') return it.type.includes('債');
+    if (filter==='etf') return it.type.includes('ETF') && !it.type.includes('債');
+    if (filter==='stock') return !it.type.includes('ETF');
+    return true;
+  }
+  function render(){
+    const ok = results.filter(r => r && r.now);
+    // 摘要
+    const bins = [0,0,0,0,0];
+    ok.forEach(r => { const s=r.now.score; bins[s>=0.55?4:s>=0.2?3:s>-0.2?2:s>-0.55?1:0]++; });
+    const labels=['強跌','偏跌','維持','偏漲','強漲'], ref=[-0.8,-0.4,0,0.4,0.8];
+    $('#summary').innerHTML = labels.map((l,i)=>'<div><b style="color:'+MA.color(ref[i])+'">'+bins[i]+'</b>'+l+'</div>').join('');
+    // 提醒：燈號等級變化或分數變動大
+    const al = [];
+    ok.forEach(r => {
+      if (!r.yest) return;
+      const a = MA.level(r.yest.score).short, b = MA.level(r.now.score).short, d = r.now.score - r.yest.score;
+      if (a!==b) al.push('<li><b>'+r.item.name+'</b> '+a+' → <b style="color:'+MA.color(r.now.score)+'">'+b+'</b>：'+MA.advice(r.item, r.now.score)+'</li>');
+      else if (Math.abs(d) >= 0.25) al.push('<li><b>'+r.item.name+'</b> 仍為「'+b+'」，但訊號'+(d>0?'轉強':'轉弱')+' '+Math.round(Math.abs(d)*100)+' 分</li>');
+    });
+    $('#alerts').innerHTML = al.length ? '<div class="alerts"><h3>今日提醒（與前一交易日比較）</h3><ul>'+al.join('')+'</ul></div>' : '<div class="alerts"><h3>今日提醒</h3>所有標的燈號與前一交易日相同，維持即可。</div>';
+    // 清單
+    let rows = results.filter(r => r && match(r.item));
+    if (sortBy==='score') rows = rows.slice().sort((a,b)=>(b.now?b.now.score:-9)-(a.now?a.now.score:-9));
+    $('#list').innerHTML = rows.map(r => {
+      const it = r.item;
+      const tags = '<span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>');
+      if (!r.now) return '<div class="card"><div class="lamp" style="background:#cbd5e1">—</div><div class="info"><div class="nm">'+it.name+'<span class="code">'+it.code+'</span>'+tags+'</div><div class="err">'+(r.error||'資料不足，無法計算')+'</div></div></div>';
+      const n = r.now, arrow = n.change>0?'▲':n.change<0?'▼':'－';
+      const dots = Object.keys(MA.IND_NAMES).map(k => { const x=n.ind[k]; return '<span><i style="background:'+(x.skip?'#e2e8f0':MA.color(x.score))+'"></i>'+MA.IND_NAMES[k].slice(0,2)+'</span>'; }).join('');
+      return '<a class="card" href="signals/#'+it.code+'">'+lampHTML(n.score)+
+        '<div class="info"><div class="nm">'+it.name+'<span class="code">'+it.code+'</span>'+tags+'</div>'+
+        '<div class="adv">'+MA.advice(it, n.score)+'</div><div class="dots">'+dots+'</div></div>'+
+        '<div class="px"><b>'+MA.fmt(n.close)+'</b><span class="chg">'+arrow+' '+MA.fmt(Math.abs(n.change))+'（'+MA.fmt(Math.abs(n.pct))+'%）</span>'+MA.sparkline(r.px,{days:60,w:110,h:32})+'</div></a>';
+    }).join('') || '<div class="loading">此分類沒有標的</div>';
+  }
+
+  async function load(){
+    $('#list').innerHTML = '<div class="loading">正在抓取行情與計算指標…</div>';
+    const L = await MA.loadList();
+    $('#src').textContent = L.src==='sheet' ? 'Google 試算表「看盤清單」分頁' : '內建清單（試算表尚未發布到網路）';
+    results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent = '抓取中 '+d+'/'+t+'…'; });
+    results = results.map((r,i)=> r && r.item ? r : { item:L.items[i], error: (r&&r.error)||'抓取失敗' });
+    const dates = results.filter(r=>r.now).map(r=>r.now.date).sort();
+    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤）　共 '+results.length+' 檔';
+    render();
+    window.__items = L.items;
+    if (divLoaded) loadDivs(true);
+  }
+
+  async function loadDivs(force){
+    if (divLoaded && !force) return; divLoaded = true;
+    const items = (window.__items||[]);
+    $('#divbox').innerHTML = '<div class="loading">載入中…</div>';
+    const today = MA.ymd(new Date()), yearAgo = MA.ymd(new Date(Date.now()-365*864e5));
+    const rows = [];
+    for (const it of items){
+      try{
+        const ds = await MA.loadDividends(it);
+        if (!ds.length) continue;
+        const r = results.find(x=>x.item.code===it.code);
+        const price = r && r.now ? r.now.close : null;
+        const next = ds.find(d=>d.ex>=today), last = ds.filter(d=>d.ex<today).pop();
+        const yr = ds.filter(d=>d.ex>yearAgo && d.ex<=today).reduce((a,b)=>a+b.cash,0) + (next ? 0 : 0);
+        rows.push({ it, next, last, yld: price ? yr/price*100 : null });
+      }catch(e){}
+    }
+    rows.sort((a,b)=>{ const x=a.next?a.next.ex:'9999', y=b.next?b.next.ex:'9999'; return x<y?-1:x>y?1:0; });
+    const soon = d => (new Date(d) - new Date(today))/864e5 <= 7;
+    $('#divbox').innerHTML = rows.length ? rows.map(r=>{
+      const d = r.next || r.last;
+      return '<div class="divrow"><div class="d">'+(r.next? r.next.ex.slice(5).replace('-','/') : '—')+'<small>'+(r.next?'下次除息':'尚未公告')+'</small></div>'+
+        '<div class="n"><b>'+r.it.name+'</b> <span class="code" style="color:#64748b;font-size:12px">'+r.it.code+'</span>'+(r.next&&soon(r.next.ex)?'<span class="soon">7 天內除息</span>':'')+
+        '<div style="font-size:12px;color:#64748b">'+(r.next?'發放日 '+(r.next.pay||'未定'):'上次除息 '+(r.last?r.last.ex:'—'))+'</div></div>'+
+        '<div class="a"><b>'+MA.fmt(d.cash,3)+'</b> 元<div style="font-size:12px;color:#64748b">年化 '+(r.yld==null?'—':MA.fmt(r.yld,2)+'%')+'</div></div></div>';
+    }).join('') : '<div class="loading">查無配息資料</div>';
+  }
+
+  document.querySelectorAll('nav.tabs .btn').forEach(b => b.onclick = () => {
+    document.querySelectorAll('nav.tabs .btn').forEach(x=>x.classList.toggle('on', x===b));
+    $('#tab-stocks').hidden = b.dataset.tab!=='stocks';
+    $('#tab-divs').hidden = b.dataset.tab!=='divs';
+    if (b.dataset.tab==='divs') loadDivs();
+  });
+  document.querySelectorAll('#filters .btn').forEach(b => b.onclick = () => {
+    if (b.dataset.s){ sortBy = sortBy==='score'?'list':'score'; b.classList.toggle('on', sortBy==='score'); }
+    else { filter = b.dataset.f; document.querySelectorAll('#filters [data-f]').forEach(x=>x.classList.toggle('on', x===b)); }
+    render();
+  });
+  $('#refresh').onclick = () => { MA.clearCache(); load(); };
+  load();
+})();
+</script>
+</body>
+</html>

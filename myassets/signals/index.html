@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>MyAssets 買賣趨勢燈號</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23eab308'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css?v=1">
+<style>
+  .matrix{width:100%;border-collapse:collapse;font-size:13px}
+  .matrix th{font-weight:500;color:var(--mute);font-size:11px;padding:4px 2px;text-align:center}
+  .matrix td{padding:6px 2px;border-top:1px solid var(--line);text-align:center}
+  .matrix td.nm{text-align:left;white-space:nowrap}
+  .matrix tr{cursor:pointer}
+  .matrix tr:hover td{background:#f8fafc}
+  .cell{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:middle}
+  .cell.big{width:30px;height:30px}
+  .head{display:flex;gap:14px;align-items:center}
+  .head .lamp{flex-basis:84px;height:84px;font-size:17px}
+  .head .lamp small{font-size:12px}
+  .head h2{margin:0;font-size:20px}
+  .head .adv{font-size:15px;color:#334155;margin-top:4px}
+  .chart{margin-top:12px}
+  .chart svg{width:100%;height:auto}
+  .chartleg{font-size:11px;color:var(--mute);display:flex;gap:12px;margin-top:2px}
+  @media (max-width:560px){ .matrix .hide-s{display:none} }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="../">MyAssets<small>買賣趨勢燈號</small></a>
+  <a class="btn" href="../">回股票頁</a>
+  <button class="btn" id="refresh" type="button">重新整理</button>
+</div></header>
+
+<main class="wrap">
+  <div class="meta" id="meta" style="margin-top:12px">載入中…</div>
+  <div class="legend"><span>會跌</span><span class="bar"></span><span>會漲</span><span style="margin-left:auto">顏色越深＝訊號越強；百分比＝訊號強度</span></div>
+
+  <div class="box">
+    <h2>燈號總表</h2>
+    <table class="matrix" id="matrix"><tr><td class="loading">載入中…</td></tr></table>
+  </div>
+
+  <div class="pick" id="pick"></div>
+  <div class="box" id="detail"><div class="loading">載入中…</div></div>
+
+  <div class="box" id="howto">
+    <h2>怎麼看這些燈號</h2>
+    <p>每一項指標都算出 −100%～+100% 的分數：越綠代表越偏向會漲，越紅代表越偏向會跌，接近黃色代表方向不明、維持即可。綜合燈號是 5 項指標的加權平均。</p>
+    <ul>
+      <li><b>強烈會漲</b>（+55% 以上）：多數指標同時偏多。</li>
+      <li><b>偏向會漲</b>（+20%～+55%）：偏多，但還有指標沒跟上。</li>
+      <li><b>維持盤整</b>（−20%～+20%）：多空拉鋸，不必動作。</li>
+      <li><b>偏向會跌</b>（−20%～−55%）：偏弱，先不要加碼。</li>
+      <li><b>強烈會跌</b>（−55% 以下）：多數指標同時偏空。</li>
+    </ul>
+
+    <h3>① 均線趨勢（權重 1.2，最重）</h3>
+    <p>看「中期方向」。月線是近 20 個交易日的平均價，季線是近 60 日。股價在月線之上、月線又在季線之上，而且月線往上走，就是多頭排列，分數偏綠；三者反過來就偏紅。分數由三部分組成：股價離月線多遠（40%）、月線高於季線多少（30%）、月線近 5 日的斜率（30%）。</p>
+
+    <h3>② MACD 動能（權重 1.0）</h3>
+    <p>看「漲跌的力道有沒有變強」。柱狀體大於 0 代表多方占上風，小於 0 代表空方占上風；柱狀體比前一天長，代表力道在加強。柱狀體由負轉正叫黃金交叉，由正轉負叫死亡交叉。</p>
+
+    <h3>③ KD 轉折（權重 0.8）</h3>
+    <p>看「短線轉折點」，反應最快。K 值在 D 值之上偏多，之下偏弱。K 值在 20 以下屬於低檔，此時 K 向上穿過 D（低檔黃金交叉）是常見的買點訊號；K 值在 80 以上屬於高檔，向下穿過 D（高檔死亡交叉）是常見的賣點訊號。高檔或低檔「鈍化」代表強勢或弱勢延續中。</p>
+
+    <h3>④ RSI 冷熱（權重 0.6）</h3>
+    <p>看「漲過頭或跌過頭」，是反向指標。RSI 70 以上代表短線漲太多、容易拉回，分數偏紅；30 以下代表跌太多、容易反彈，分數偏綠。所以強勢股的 RSI 常是黃到偏紅，這不代表會大跌，只是提醒不要追高。</p>
+
+    <h3>⑤ 法人籌碼（權重 0.8）</h3>
+    <p>看「大戶在買還是在賣」。把外資、投信、自營商近 5 個交易日的買賣超加總，再除以同期成交量。買超占成交量 5% 以上為滿分綠，賣超 5% 以上為滿分紅。沒有法人資料的標的，這一項不計入。</p>
+
+    <h3>使用上的提醒</h3>
+    <ul>
+      <li>高股息 ETF 和債券 ETF 是領息部位，紅燈的意思是「暫緩加碼」，不是要賣掉。</li>
+      <li>債券 ETF 的價格主要跟著利率走，技術指標的參考性比股票低。</li>
+      <li>除息日當天股價會下跌，均線和 MACD 可能短暫轉弱，屬正常現象。</li>
+      <li>「今日提醒」比較的是今天和前一交易日的燈號，燈號跨級時才會出現。</li>
+    </ul>
+  </div>
+
+  <p class="foot">技術指標只反映近期價格與籌碼的強弱，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（FinMind，約下午 3 點後更新）。</p>
+</main>
+
+<script src="../assets/core.js?v=1"></script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const KEYS = Object.keys(MA.IND_NAMES);
+  let results = [], cur = null;
+
+  function lamp(s, cls){ const lv=MA.level(s); return '<div class="lamp '+(cls||'')+'" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+lv.short+'<small>'+MA.strength(s)+'%</small></div>'; }
+
+  function matrix(){
+    let h = '<tr><th style="text-align:left">標的</th><th>綜合</th>'+KEYS.map(k=>'<th>'+MA.IND_NAMES[k].replace(' ','<br>')+'</th>').join('')+'<th class="hide-s">昨日</th></tr>';
+    results.forEach(r=>{
+      if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="7" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
+      h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
+        '<td><span class="cell big" title="'+MA.level(r.now.score).label+'" style="background:'+MA.color(r.now.score)+'"></span></td>'+
+        KEYS.map(k=>{ const x=r.now.ind[k]; return '<td><span class="cell" title="'+x.text+'" style="background:'+(x.skip?'#e2e8f0':MA.color(x.score))+'"></span></td>'; }).join('')+
+        '<td class="hide-s">'+(r.yest?'<span class="cell" style="background:'+MA.color(r.yest.score)+'"></span>':'')+'</td></tr>';
+    });
+    $('#matrix').innerHTML = h;
+    $('#matrix').querySelectorAll('tr[data-code]').forEach(tr=>tr.onclick=()=>{ location.hash = tr.dataset.code; });
+  }
+
+  function pick(){
+    $('#pick').innerHTML = results.map(r=>'<button class="btn'+(cur===r.item.code?' on':'')+'" data-code="'+r.item.code+'" type="button"><span class="lamp sm" style="background:'+(r.now?MA.color(r.now.score):'#cbd5e1')+'"></span>'+r.item.name+'</button>').join('');
+    $('#pick').querySelectorAll('.btn').forEach(b=>b.onclick=()=>{ location.hash = b.dataset.code; });
+    const on = $('#pick .btn.on'); if (on) on.scrollIntoView({block:'nearest',inline:'center'});
+  }
+
+  function detail(){
+    const r = results.find(x=>x.item.code===cur) || results[0];
+    if (!r) return;
+    cur = r.item.code;
+    if (!r.now) { $('#detail').innerHTML = '<h2>'+r.item.name+'</h2><p class="err">'+(r.error||'資料不足，無法計算')+'</p>'; return; }
+    const n = r.now, it = r.item, arrow = n.change>0?'▲':n.change<0?'▼':'－';
+    const yl = r.yest ? MA.level(r.yest.score).short : '—';
+    let h = '<div class="head">'+lamp(n.score)+'<div><h2>'+it.name+' <span style="color:#64748b;font-size:14px;font-weight:400">'+it.code+'</span><span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>')+'</h2>'+
+      '<div style="font-size:15px;margin-top:2px"><b style="color:'+MA.color(n.score)+'">'+MA.level(n.score).label+'</b>（強度 '+MA.strength(n.score)+'%，昨日：'+yl+'）</div>'+
+      '<div class="adv">建議：'+MA.advice(it, n.score)+'</div></div></div>';
+    h += '<div class="chart">'+MA.sparkline(r.px,{days:120,w:600,h:150,ma60:true,stroke:1.8})+'<div class="chartleg"><span>— 收盤價</span><span style="color:#94a3b8">- - 月線</span><span style="color:#a78bfa">- - 季線</span><span style="margin-left:auto">近 120 個交易日</span></div></div>';
+    h += '<div class="kv">'+
+      '<div>收盤（'+n.date.slice(5).replace('-','/')+'）<b>'+MA.fmt(n.close)+' <span style="font-size:12px;color:#64748b">'+arrow+MA.fmt(Math.abs(n.pct))+'%</span></b></div>'+
+      '<div>近 20 日低點（支撐）<b>'+MA.fmt(n.lo20)+'</b></div>'+
+      '<div>近 20 日高點（壓力）<b>'+MA.fmt(n.hi20)+'</b></div>'+
+      '<div>月線（20 日均價）<b>'+MA.fmt(n.ma20)+'</b></div>'+
+      '<div>季線（60 日均價）<b>'+MA.fmt(n.ma60)+'</b></div>'+
+      '<div>離月線<b>'+(n.close>=n.ma20?'+':'')+MA.fmt((n.close/n.ma20-1)*100)+'%</b></div></div>';
+    h += '<h3 style="margin-top:16px">5 項指標</h3>';
+    KEYS.forEach(k=>{
+      const x = n.ind[k], c = x.skip?'#cbd5e1':MA.color(x.score), pos = ((x.score+1)/2*100).toFixed(1);
+      h += '<div class="ind"><span class="cell" style="background:'+c+';margin-top:2px"></span><div class="t"><b>'+MA.IND_NAMES[k]+'</b> <span style="font-size:12px;color:#64748b">權重 '+MA.WEIGHTS[k]+'</span>'+
+        '<div>'+x.text+'</div><div class="meter"><i style="left:'+pos+'%;background:'+c+'"></i></div></div>'+
+        '<div class="v">'+x.value+'<br><b style="color:'+c+'">'+(x.skip?'不計':(x.score>=0?'+':'')+Math.round(x.score*100)+'%')+'</b></div></div>';
+    });
+    $('#detail').innerHTML = h;
+    pick();
+  }
+
+  async function load(){
+    const L = await MA.loadList();
+    results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent='抓取中 '+d+'/'+t+'…'; });
+    results = results.map((r,i)=> r && r.item ? r : { item:L.items[i], error:(r&&r.error)||'抓取失敗' });
+    const dates = results.filter(r=>r.now).map(r=>r.now.date).sort();
+    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤）　點總表任一列或下方按鈕看該檔詳解';
+    cur = (location.hash||'').slice(1).toUpperCase() || (results[0]&&results[0].item.code);
+    matrix(); detail();
+  }
+  window.addEventListener('hashchange', ()=>{ cur = location.hash.slice(1).toUpperCase(); detail(); $('#detail').scrollIntoView({behavior:'smooth',block:'start'}); });
+  $('#refresh').onclick = ()=>{ MA.clearCache(); load(); };
+  load();
+})();
+</script>
+</body>
+</html>
