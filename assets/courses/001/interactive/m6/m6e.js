@@ -53,4 +53,10 @@
 
   CaseLinks('w-nursing', [['工商時報：高雄榮總護理紀錄 AI 報導（2025/5/14）', 'https://www.ctee.com.tw/news/20250514701484-431207']],
     '阮綜合與中山附醫的做法目前只查到 iThome、新聞鏡報導，連結無法開啟，未列；引用前請自行再查。');
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-tpr', '數字與一則虛構通報：', '2024 年第 2 季 18,152 件、第 3 季 19,500 件；第 3 季藥物事件 7,495 件（38%）、跌倒事件 4,540 件（23%）。「夜間 2 時病人自行下床如廁，於床旁滑倒，否認頭部撞擊，右膝擦傷，未使用助行器。」→ 文本分類歸為跌倒、主題模型找出夜間／如廁／未用輔具、否定偵測讓「否認頭部撞擊」不算頭部外傷。（講義 M6 第 5 頁）');
+  addNote('w-neg3', '順序做反會怎樣：', '「病人否認胸痛，主訴頭痛，但已無發燒」。先去停用詞 →「無」被刪掉，發燒被算成「有」；先標否定 → 胸痛[NEG]、發燒[NEG] 保住，頭痛仍是肯定（逗號與「但」是範圍邊界）。（講義 M6 第 31 頁）');
 })();
