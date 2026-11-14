@@ -48,4 +48,11 @@
     ['STAT News：Watson 建議不安全且不正確的治療（2018/7/25，STAT+ 訂閱）', 'https://www.statnews.com/2018/07/25/ibm-watson-recommended-unsafe-incorrect-treatments/'],
     ['Healthcare Dive 摘要', 'https://www.healthcaredive.com/news/stat-ibms-watson-gave-unsafe-and-incorrect-cancer-treatment-advice']
   ], '報導指出問題主要來自以少量「合成」個案訓練；STAT 稱無病人因此死亡。');
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-spo2', '數字與傳遞鏈：', '血氧計顯示 92–96% 時，動脈血氧實際 < 88% 的比例：黑人 11.7%、白人 3.6%（約 3 倍；NEJM 2020，約 4.8 萬組配對）；2024 統合分析約 1.7 倍。量測工具偏高 → 輸入特徵歪 → 「需要給氧」標籤也歪 → 模型在同一群人一起歪。（講義 M9 第 16 頁）');
+  addNote('w-proxy', '欄位悄悄攜帶的資訊：', '郵遞區號 → 族群、社經、居住區域；保險別 → 經濟狀況；院所層級 → 城鄉與可近性；過去醫療花費 → 就醫可近性（不是健康需求）；教育程度與職業 → 社經地位；手機型號與上網時間 → 消費能力。（講義 M9 第 18 頁）');
+  addNote('w-auto', '兩種介面（示意）：', '放大偏誤：只有一個紅色分數「高風險 0.87」、預設按鈕就是採納、「不採納」藏在角落。減緩偏誤：先填自己的判斷，再看 AI 建議與區間（0.71–0.93）、依據與「資料不完整」提示，「採納」與「不採納（寫理由）」一樣容易按。（講義 M9 第 34 頁）');
 })();
