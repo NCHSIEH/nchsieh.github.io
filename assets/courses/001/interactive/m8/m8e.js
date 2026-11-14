@@ -84,4 +84,11 @@
     ['Innolitics：UpDoc 清了什麼（2026/6/25）', 'https://innolitics.com/articles/updoc-fda-cleared-ai-agent/'],
     ['HLTH：UpDoc 發表首件 FDA 核准的病人端 LLM（2026/7/2）', 'https://hlth.com/insights/news/updoc-debuts-first-fda-cleared-patient-facing-clinical-llm-for-insulin-management']
   ], 'FDA 510(k) K253281，2025/12/23 核准；公開報導指出劑量決定仍在確定性演算法內，LLM 只負責對話介面。');
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-topk', '兩把剪刀（示意）：', '10 段召回依相似度排序 0.82、0.76、0.71、0.66、0.58……，答案在 #2 與 #4。Top-K = 3 只拿到 #1–#3，#4 被剪掉；Top-K = 5 加閾值 0.5 拿到 #1–#5，兩段答案都在。檢索模式：「Metformin」靠向量找到「二甲雙胍」，「第 4 條第 2 項」靠全文比對。（講義 M8 第 42 頁）');
+  addNote('w-nogen', '同一題問五次（示意）：', 'LLM 直接回答：17,960、18,240、18,580、18,240、19,100 元，差到 1,140 元；Code 節點查表：五次都是 18,960 元。數字會變的，就是生成的。（講義 M8 第 48 頁）');
+  addNote('w-fallback', '每一種失敗都先接好一條路：', '429／503／逾時 → 失敗分支＋備援模型；API 改版 → 異常回報節點、轉真人；模型拒答 → 備援模型或明確告知；知識庫空結果 → 退回內建知識庫並告知；輸入不足 → 反向提問；Agent 迭代用盡 → 最大迭代次數、轉人工。（講義 M8 第 74 頁）');
 })();
