@@ -87,7 +87,7 @@
       const tags = '<span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>');
       if (!r.now) return '<div class="card"><div class="lamp" style="background:#cbd5e1">—</div><div class="info"><div class="nm">'+it.name+'<span class="code">'+it.code+'</span>'+tags+'</div><div class="err">'+(r.error||'資料不足，無法計算')+'</div></div></div>';
       const n = r.now, arrow = n.change>0?'▲':n.change<0?'▼':'－';
-      const dots = Object.keys(MA.IND_NAMES).map(k => { const x=n.ind[k]; return '<span><i style="background:'+(x.skip?'#e2e8f0':MA.color(x.score))+'"></i>'+MA.IND_NAMES[k].slice(0,2)+'</span>'; }).join('');
+      const dots = Object.keys(MA.IND_NAMES).map(k => { const x=n.ind[k]; return '<span><i style="background:'+(x.skip?'#e2e8f0':MA.color(x.score))+'"></i>'+({ma:'均線',macd:'MACD',kd:'KD',rsi:'RSI',inst:'法人'})[k]+'</span>'; }).join('');
       return '<a class="card" href="signals/#'+it.code+'">'+lampHTML(n.score)+
         '<div class="info"><div class="nm">'+it.name+'<span class="code">'+it.code+'</span>'+tags+'</div>'+
         '<div class="adv">'+MA.advice(it, n.score)+'</div><div class="dots">'+dots+'</div></div>'+
