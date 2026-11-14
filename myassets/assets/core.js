@@ -3,23 +3,20 @@
   'use strict';
 
   const CONFIG = {
-    // Google 試算表「看盤清單」分頁「發布到網路」的 CSV 網址；空白時使用下方備援清單
-    sheetCsv: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQUOXjn31s43XBKXntgqbZg4z24vuUR8_4uOdVvIQevFUchtCdshmNDpbys7miLEHt1kWkk5IRJd4fl/pub?gid=20261114&single=true&output=csv',
+    ownerEmail: 'nchsieh@gmail.com',
+    ownerSheet: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQUOXjn31s43XBKXntgqbZg4z24vuUR8_4uOdVvIQevFUchtCdshmNDpbys7miLEHt1kWkk5IRJd4fl/pub?gid=20261114&single=true&output=csv',
     sheetLink: 'https://docs.google.com/spreadsheets/d/13_apEylQGyscoaEjRDtF5MZo64GXJ5pz6MsODNfLcYo/edit',
-    fallback: [
-      ['0056', '元大高股息', 'ETF', '是'],
-      ['00919', '群益台灣精選高息', 'ETF', '是'],
-      ['00929', '復華台灣科技優息', 'ETF', '是'],
-      ['00878', '國泰永續高股息', 'ETF', '是'],
-      ['00922', '國泰台灣領袖50', 'ETF', '是'],
-      ['00933B', '國泰10Y+金融債', '債券ETF', '是'],
-      ['00937B', '群益ESG投等債20+', '債券ETF', '是'],
-      ['1504', '東元', '個股', '是'],
-      ['2330', '台積電', '個股', '否'],
-      ['3231', '緯創', '個股', '是'],
-      ['3346', '麗清', '個股', '是']
+    // 未登入時的示範清單（也是新使用者的預設清單）
+    demo: [
+      ['0050', '元大台灣50', 'ETF'],
+      ['0056', '元大高股息', 'ETF'],
+      ['00878', '國泰永續高股息', 'ETF'],
+      ['2330', '台積電', '個股'],
+      ['2317', '鴻海', '個股'],
+      ['2454', '聯發科', '個股']
     ]
   };
+
 
   const FM = 'https://api.finmindtrade.com/api/v4/data';
 
@@ -41,7 +38,7 @@
     try { Object.keys(localStorage).filter(k => k.startsWith('ma:')).forEach(k => localStorage.removeItem(k)); } catch (e) { }
   }
 
-  async function finmind(dataset, id, start) {
+  async function finmind(dataset, id, start, mapper) {
     const key = 'ma:' + cacheBucket() + ':' + dataset + ':' + id;
     const hit = lsGet(key);
     if (hit) return hit;
@@ -50,8 +47,9 @@
     if (!r.ok) throw new Error('FinMind ' + r.status);
     const j = await r.json();
     if (j.status !== 200) throw new Error(j.msg || 'FinMind error');
-    lsSet(key, j.data);
-    return j.data;
+    const data = mapper ? mapper(j.data) : j.data;
+    lsSet(key, data);
+    return data;
   }
 
   async function pool(items, n, fn) {
@@ -77,36 +75,35 @@
     return rows;
   }
 
-  async function loadList() {
-    let src = 'fallback', rows = CONFIG.fallback;
-    if (CONFIG.sheetCsv) {
-      try {
-        const r = await fetch(CONFIG.sheetCsv + (CONFIG.sheetCsv.includes('?') ? '&' : '?') + 't=' + Date.now());
-        if (r.ok) {
-          const all = parseCSV(await r.text()).slice(1);
-          const list = [];
-          all.forEach(c => {
-            if ((c[0] || '').trim()) list.push([c[0].trim(), (c[1] || '').trim(), (c[2] || '個股').trim(), (c[3] || '是').trim()]);
-            if ((c[5] || '').trim()) list.push([c[5].trim(), (c[6] || '').trim(), (c[7] || '個股').trim(), '否']);
-          });
-          if (list.length) { rows = list; src = 'sheet'; }
-        }
-      } catch (e) { /* 退回備援清單 */ }
+  async function fetchSheet(url) {
+    const r = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now());
+    if (!r.ok) throw new Error('sheet ' + r.status);
+    const out = [];
+    parseCSV(await r.text()).slice(1).forEach(c => {
+      if ((c[0] || '').trim()) out.push({ code: c[0].trim().toUpperCase(), name: (c[1] || '').trim(), type: (c[2] || '個股').trim(), held: (c[3] || '是').trim() !== '否', origin: 'sheet' });
+      if ((c[5] || '').trim()) out.push({ code: c[5].trim().toUpperCase(), name: (c[6] || '').trim(), type: (c[7] || '個股').trim(), held: false, origin: 'sheet' });
+    });
+    return out;
+  }
+
+  // userDoc：登入者的 Firestore 文件；null＝未登入，顯示示範清單
+  async function loadList(userDoc) {
+    if (!userDoc) return { src: 'demo', items: CONFIG.demo.map(r => ({ code: r[0], name: r[1], type: r[2], held: false, origin: 'demo' })), hidden: [] };
+    let src = 'custom', base = [];
+    if (userDoc.sheetCsv) {
+      try { base = await fetchSheet(userDoc.sheetCsv); src = 'sheet'; } catch (e) { src = 'sheet-error'; }
     }
-    const seen = new Set();
-    const cu = getCustom(), hide = new Set(cu.hide);
-    let base = rows.map(r => ({ code: r[0].toUpperCase(), name: r[1], type: r[2], held: r[3] !== '否', origin: 'sheet' }));
+    const hide = new Set(userDoc.hide || []);
     const hidden = base.filter(x => hide.has(x.code));
-    base = base.filter(x => !hide.has(x.code));
-    const items = base.concat(cu.add.map(a => ({ code: a.code, name: a.name, type: a.type, held: false, origin: 'custom' })))
+    const seen = new Set();
+    const items = base.filter(x => !hide.has(x.code))
+      .concat((userDoc.list || []).map(a => ({ code: a.code, name: a.name, type: a.type, held: !!a.held, origin: 'custom' })))
       .filter(x => !seen.has(x.code) && seen.add(x.code));
     return { src, items, hidden };
   }
 
-  /* ---------- 自訂加入／刪除（存在這台裝置的瀏覽器） ---------- */
-  const CKEY = 'myassets-custom';
-  function getCustom() { const c = lsGet(CKEY) || {}; return { add: c.add || [], hide: c.hide || [] }; }
-  function setCustom(c) { lsSet(CKEY, c); }
+  /* ---------- 加入／刪除（寫回登入者的雲端清單） ---------- */
+  function legacyLocal() { const c = lsGet('myassets-custom') || {}; return { add: c.add || [], hide: c.hide || [] }; }
   async function lookup(code) {
     code = code.trim().toUpperCase();
     if (!/^\d{4,6}[A-Z]?$/.test(code)) throw new Error('代號格式不對（例：2317、00878、00937B）');
@@ -118,39 +115,39 @@
     const type = /ETF|受益/.test(cat) || /^00/.test(code) ? (/B$/.test(code) ? '債券ETF' : 'ETF') : '個股';
     return { code, name: row.stock_name, type };
   }
-  async function addTicker(code) {
-    const t = await lookup(code); const c = getCustom();
-    if (c.hide.includes(t.code)) c.hide = c.hide.filter(x => x !== t.code);
-    else if (!c.add.some(a => a.code === t.code)) c.add.push(t);
-    setCustom(c); return t;
+  async function addTicker(userDoc, code, held) {
+    const t = await lookup(code);
+    userDoc.list = userDoc.list || []; userDoc.hide = userDoc.hide || [];
+    if (userDoc.hide.includes(t.code)) userDoc.hide = userDoc.hide.filter(x => x !== t.code);
+    else if (!userDoc.list.some(a => a.code === t.code)) userDoc.list.push({ ...t, held: !!held });
+    await global.MAAuth.save(userDoc); return t;
   }
-  function removeTicker(code, origin) {
-    const c = getCustom();
-    if (origin === 'custom') c.add = c.add.filter(a => a.code !== code);
-    else if (!c.hide.includes(code)) c.hide.push(code);
-    setCustom(c);
+  async function removeTicker(userDoc, code, origin) {
+    if (origin === 'custom') userDoc.list = (userDoc.list || []).filter(a => a.code !== code);
+    else { userDoc.hide = userDoc.hide || []; if (!userDoc.hide.includes(code)) userDoc.hide.push(code); }
+    await global.MAAuth.save(userDoc);
   }
-  function restoreTicker(code) { const c = getCustom(); c.hide = c.hide.filter(x => x !== code); setCustom(c); }
+  async function restoreTicker(userDoc, code) { userDoc.hide = (userDoc.hide || []).filter(x => x !== code); await global.MAAuth.save(userDoc); }
+  async function toggleHeld(userDoc, code) { (userDoc.list || []).forEach(a => { if (a.code === code) a.held = !a.held; }); await global.MAAuth.save(userDoc); }
+  async function setSheet(userDoc, url) { userDoc.sheetCsv = (url || '').trim(); await global.MAAuth.save(userDoc); }
 
-  /* ---------- 指標計算 ---------- */
-  const sma = (a, n, i) => { if (i < n - 1) return null; let s = 0; for (let k = i - n + 1; k <= i; k++) s += a[k]; return s / n; };
-  function ema(a, n) { const k = 2 / (n + 1); const o = []; a.forEach((v, i) => o.push(i ? v * k + o[i - 1] * (1 - k) : v)); return o; }
-  function macd(c) {
-    const e12 = ema(c, 12), e26 = ema(c, 26);
-    const dif = c.map((_, i) => e12[i] - e26[i]); const dea = ema(dif, 9);
-    return { dif, dea, hist: dif.map((v, i) => v - dea[i]) };
-  }
-  function kd(h, l, c, n = 9) {
-    let K = 50, D = 50; const Ks = [], Ds = [];
-    for (let i = 0; i < c.length; i++) {
-      const s = Math.max(0, i - n + 1); let hi = -Infinity, lo = Infinity;
-      for (let k = s; k <= i; k++) { if (h[k] > hi) hi = h[k]; if (l[k] < lo) lo = l[k]; }
-      const rsv = hi === lo ? 50 : (c[i] - lo) / (hi - lo) * 100;
-      K = K * 2 / 3 + rsv / 3; D = D * 2 / 3 + K / 3; Ks.push(K); Ds.push(D);
+  // 第一次登入：建立個人文件（擁有者自動連結試算表，並帶入先前存在瀏覽器的自選）
+  async function ensureUserDoc(user) {
+    let d = await global.MAAuth.load();
+    if (!d) {
+      const old = legacyLocal();
+      d = { list: old.add.map(a => ({ ...a, held: false })), hide: old.hide, sheetCsv: user.email === CONFIG.ownerEmail ? CONFIG.ownerSheet : '' };
+      if (!d.sheetCsv && !d.list.length) d.list = CONFIG.demo.map(r => ({ code: r[0], name: r[1], type: r[2], held: false }));
+      await global.MAAuth.save(d);
     }
-    return { K: Ks, D: Ds };
+    d.list = d.list || []; d.hide = d.hide || [];
+    return d;
   }
-  function rsi(c, n = 14) {
+
+  /* ---------- 指標計算（全部為因果計算：第 i 天只用到第 i 天以前的資料） ---------- */
+  function rollMean(a, n) { const o = new Array(a.length).fill(null); let s = 0; for (let i = 0; i < a.length; i++) { s += a[i]; if (i >= n) s -= a[i - n]; if (i >= n - 1) o[i] = s / n; } return o; }
+  function ema(a, n) { const k = 2 / (n + 1); const o = []; a.forEach((v, i) => o.push(i ? v * k + o[i - 1] * (1 - k) : v)); return o; }
+  function rsiArr(c, n = 14) {
     const o = new Array(c.length).fill(null); if (c.length <= n) return o;
     let g = 0, l = 0;
     for (let i = 1; i <= n; i++) { const d = c[i] - c[i - 1]; if (d > 0) g += d; else l -= d; }
@@ -162,46 +159,57 @@
     }
     return o;
   }
+  function prep(px) {
+    const c = px.map(x => x.close), h = px.map(x => x.max), l = px.map(x => x.min), v = px.map(x => x.Trading_Volume);
+    const e12 = ema(c, 12), e26 = ema(c, 26), dif = c.map((_, i) => e12[i] - e26[i]), dea = ema(dif, 9);
+    const hist = dif.map((x, i) => x - dea[i]);
+    let K = 50, D = 50; const Ks = [], Ds = [];
+    for (let i = 0; i < c.length; i++) {
+      const s = Math.max(0, i - 8); let hi = -Infinity, lo = Infinity;
+      for (let k = s; k <= i; k++) { if (h[k] > hi) hi = h[k]; if (l[k] < lo) lo = l[k]; }
+      const rsv = hi === lo ? 50 : (c[i] - lo) / (hi - lo) * 100;
+      K = K * 2 / 3 + rsv / 3; D = D * 2 / 3 + K / 3; Ks.push(K); Ds.push(D);
+    }
+    return { px, c, h, l, v, ma20: rollMean(c, 20), ma60: rollMean(c, 60), ma40: rollMean(c, 40), hist, K: Ks, D: Ds, rsi: rsiArr(c) };
+  }
 
   const WEIGHTS = { ma: 1.2, macd: 1.0, kd: 0.8, rsi: 0.6, inst: 0.8 };
   const IND_NAMES = { ma: '均線趨勢', macd: 'MACD 動能', kd: 'KD 轉折', rsi: 'RSI 冷熱', inst: '法人籌碼' };
+  // 各預測期間的權重：短期看 KD／RSI，長期看均線趨勢
+  const HORIZONS = [
+    { k: 1, label: '隔日', long: '隔日（1 個交易日）', w: { kd: 1.2, rsi: 1.0, macd: 0.8, ma: 0.4, inst: 0.8 } },
+    { k: 3, label: '3日', long: '3 日（3 個交易日）', w: { kd: 1.0, rsi: 0.8, macd: 1.0, ma: 0.6, inst: 0.8 } },
+    { k: 5, label: '1週', long: '1 週（7 天，約 5 個交易日）', w: { kd: 0.8, rsi: 0.6, macd: 1.0, ma: 1.0, inst: 0.8 } },
+    { k: 10, label: '2週', long: '2 週（約 10 個交易日）', w: { kd: 0.5, rsi: 0.5, macd: 1.0, ma: 1.2, inst: 0.6 } },
+    { k: 20, label: '1個月', long: '1 個月（約 20 個交易日）', w: { kd: 0.3, rsi: 0.4, macd: 0.8, ma: 1.5, inst: 0.5 } }
+  ];
 
-  // px: 依日期排序的日K；instByDate: {date: 淨買賣股數}；end: 計算到第幾根（含），用來算「昨日燈號」
-  function evaluate(px, instByDate, end) {
-    const P = px.slice(0, end + 1);
-    const n = P.length; if (n < 30) return null;
-    const c = P.map(x => x.close), h = P.map(x => x.max), l = P.map(x => x.min), v = P.map(x => x.Trading_Volume);
-    const i = n - 1, last = c[i];
+  // 第 i 天的 5 項指標
+  function indAt(A, i, instByDate) {
+    const { c, h, l, v, px } = A; const last = c[i];
+    const ma20 = A.ma20[i], ma60 = A.ma60[i] || A.ma40[i] || ma20, ma20p = A.ma20[i - 5];
     const ind = {};
-
-    // 1 均線趨勢
-    const ma20 = sma(c, 20, i), ma60 = sma(c, 60, i) || sma(c, Math.min(n, 40), i), ma20p = sma(c, 20, i - 5);
     {
       const a = clamp((last - ma20) / ma20 / 0.03), b = clamp((ma20 - ma60) / ma60 / 0.03), s = clamp((ma20 - ma20p) / ma20p / 0.01);
-      const sc = clamp(a * 0.4 + b * 0.3 + s * 0.3);
       let t;
       if (last > ma20 && ma20 > ma60) t = '股價站上月線，月線在季線之上（多頭排列）';
       else if (last < ma20 && ma20 < ma60) t = '股價跌破月線，月線在季線之下（空頭排列）';
       else if (last > ma20) t = '股價站上月線，但月線仍在季線之下（整理偏多）';
       else t = '股價跌破月線，但月線仍在季線之上（整理偏弱）';
-      ind.ma = { score: sc, value: '月線 ' + fmt(ma20) + '／季線 ' + fmt(ma60), text: t };
+      ind.ma = { score: clamp(a * 0.4 + b * 0.3 + s * 0.3), value: '月線 ' + fmt(ma20) + '／季線 ' + fmt(ma60), text: t };
     }
-    // 2 MACD
     {
-      const m = macd(c), hs = m.hist[i], hp = m.hist[i - 1];
-      const a = clamp(hs / last / 0.004), b = Math.sign(hs - hp);
-      const sc = clamp(a * 0.7 + b * 0.3);
+      const hs = A.hist[i], hp = A.hist[i - 1];
+      const sc = clamp(clamp(hs / last / 0.004) * 0.7 + Math.sign(hs - hp) * 0.3);
       let cross = '';
       for (let k = 0; k < 3; k++) {
-        if (m.hist[i - k] > 0 && m.hist[i - k - 1] <= 0) cross = '，近 3 日出現黃金交叉';
-        if (m.hist[i - k] < 0 && m.hist[i - k - 1] >= 0) cross = '，近 3 日出現死亡交叉';
+        if (A.hist[i - k] > 0 && A.hist[i - k - 1] <= 0) cross = '，近 3 日出現黃金交叉';
+        if (A.hist[i - k] < 0 && A.hist[i - k - 1] >= 0) cross = '，近 3 日出現死亡交叉';
       }
-      const t = (hs > 0 ? (hs >= hp ? '多方動能增強' : '多方動能減弱') : (hs <= hp ? '空方動能增強' : '空方動能減弱')) + cross;
-      ind.macd = { score: sc, value: '柱狀體 ' + fmt(hs, 3), text: t };
+      ind.macd = { score: sc, value: '柱狀體 ' + fmt(hs, 3), text: (hs > 0 ? (hs >= hp ? '多方動能增強' : '多方動能減弱') : (hs <= hp ? '空方動能增強' : '空方動能減弱')) + cross };
     }
-    // 3 KD
     {
-      const k = kd(h, l, c), K = k.K[i], D = k.D[i], pK = k.K[i - 1], pD = k.D[i - 1];
+      const K = A.K[i], D = A.D[i], pK = A.K[i - 1], pD = A.D[i - 1];
       let sc = clamp((K - D) / 10) * 0.65 + clamp((50 - K) / 50) * 0.35;
       let t = K > D ? 'K 值在 D 值之上，短線偏多' : 'K 值在 D 值之下，短線偏弱';
       if (pK <= pD && K > D) { t = (K < 30 ? '低檔' : '') + '黃金交叉，短線轉強'; sc += K < 30 ? 0.3 : 0.15; }
@@ -210,34 +218,56 @@
       if (K <= 20 && K <= D) t = '低檔鈍化，弱勢但跌幅已深';
       ind.kd = { score: clamp(sc), value: 'K ' + fmt(K, 0) + '／D ' + fmt(D, 0), text: t };
     }
-    // 4 RSI
     {
-      const r = rsi(c)[i];
-      const sc = clamp((50 - r) / 22);
-      let t = r >= 70 ? '過熱區，容易拉回' : r >= 60 ? '偏熱，漲多留意' : r <= 30 ? '超賣區，容易反彈' : r <= 40 ? '偏冷，跌多可留意' : '中性區';
-      ind.rsi = { score: sc, value: 'RSI ' + fmt(r, 0), text: t };
+      const r = A.rsi[i];
+      ind.rsi = { score: clamp((50 - r) / 22), value: 'RSI ' + fmt(r, 0), text: r >= 70 ? '過熱區，容易拉回' : r >= 60 ? '偏熱，漲多留意' : r <= 30 ? '超賣區，容易反彈' : r <= 40 ? '偏冷，跌多可留意' : '中性區' };
     }
-    // 5 法人籌碼（近 5 日三大法人淨買賣 ÷ 成交量）
     {
-      const dates = P.slice(-5).map(x => x.date);
-      let net = 0, have = 0; dates.forEach(d => { if (instByDate && d in instByDate) { net += instByDate[d]; have++; } });
-      const vol = v.slice(-5).reduce((a, b) => a + b, 0);
+      let net = 0, have = 0, vol = 0;
+      for (let k = Math.max(0, i - 4); k <= i; k++) { vol += v[k]; const d = px[k].date; if (instByDate && d in instByDate) { net += instByDate[d]; have++; } }
       if (have >= 3 && vol > 0) {
-        const ratio = net / vol;
-        const lots = Math.round(net / 1000);
+        const ratio = net / vol, lots = Math.round(net / 1000);
         ind.inst = { score: clamp(ratio / 0.05), value: '5日' + (lots >= 0 ? '買超 ' : '賣超 ') + Math.abs(lots).toLocaleString() + ' 張', text: ratio > 0.01 ? '三大法人近 5 日偏買' : ratio < -0.01 ? '三大法人近 5 日偏賣' : '三大法人進出不明顯' };
       } else ind.inst = { score: 0, value: '無資料', text: '無法人資料，不計入', skip: true };
     }
-
+    return ind;
+  }
+  function wscore(ind, w, noInst) {
     let sw = 0, ss = 0;
-    Object.keys(ind).forEach(k => { if (!ind[k].skip) { sw += WEIGHTS[k]; ss += WEIGHTS[k] * ind[k].score; } });
-    const score = sw ? ss / sw : 0;
+    Object.keys(ind).forEach(k => { if (ind[k].skip || (noInst && k === 'inst')) return; sw += w[k]; ss += w[k] * ind[k].score; });
+    return sw ? ss / sw : 0;
+  }
+  const pct = (a, q) => { const s = a.slice().sort((x, y) => x - y); const p = (s.length - 1) * q, f = Math.floor(p); return s[f] + (s[Math.min(f + 1, s.length - 1)] - s[f]) * (p - f); };
 
-    const lo20 = Math.min(...l.slice(-20)), hi20 = Math.max(...h.slice(-20));
-    return {
-      date: P[i].date, close: last, prev: c[i - 1], change: last - c[i - 1], pct: (last - c[i - 1]) / c[i - 1] * 100,
-      ma20, ma60, lo20, hi20, ind, score
+  // 各期間預測：本身的加權分數＋過去「技術面分數相近」的日子，之後 N 日實際漲跌統計
+  function forecast(A, i, indNow, histInd) {
+    return HORIZONS.map(H => {
+      const sNow = wscore(indNow, H.w), sTech = wscore(indNow, H.w, true);
+      const samp = [];
+      for (let t = 65; t + H.k <= i; t++) samp.push({ d: Math.abs(wscore(histInd[t], H.w, true) - sTech), r: A.c[t + H.k] / A.c[t] - 1 });
+      if (samp.length < 40) return { H, score: sNow, n: 0 };
+      samp.sort((a, b) => a.d - b.d);
+      const k = Math.max(40, Math.round(samp.length * 0.15));
+      const nb = samp.slice(0, k).map(x => x.r);
+      const up = nb.filter(x => x > 0).length / nb.length;
+      const base = samp.filter(x => x.r > 0).length / samp.length;
+      const score = clamp(0.5 * sNow + 0.5 * clamp((up - 0.5) / 0.2));
+      return { H, score, rule: sNow, up, base, med: pct(nb, 0.5) * 100, p25: pct(nb, 0.25) * 100, p75: pct(nb, 0.75) * 100, n: nb.length };
+    });
+  }
+
+  function evaluateAll(px, instByDate) {
+    const n = px.length; if (n < 70) return { now: null, yest: null };
+    const A = prep(px);
+    const histInd = new Array(n);
+    for (let t = 30; t < n; t++) histInd[t] = indAt(A, t, null);
+    const build = i => {
+      const ind = indAt(A, i, instByDate);
+      const c = A.c, lo20 = Math.min(...A.l.slice(i - 19, i + 1)), hi20 = Math.max(...A.h.slice(i - 19, i + 1));
+      return { date: px[i].date, close: c[i], prev: c[i - 1], change: c[i] - c[i - 1], pct: (c[i] - c[i - 1]) / c[i - 1] * 100,
+        ma20: A.ma20[i], ma60: A.ma60[i], lo20, hi20, ind, score: wscore(ind, WEIGHTS), fc: forecast(A, i, ind, histInd) };
     };
+    return { now: build(n - 1), yest: build(n - 2) };
   }
 
   /* ---------- 燈號顏色與文字 ---------- */
@@ -279,16 +309,15 @@
 
   /* ---------- 整合：抓一檔的全部資料 ---------- */
   async function loadOne(item) {
-    const px = (await finmind('TaiwanStockPrice', item.code, daysAgo(420))).filter(x => x.close > 0);
-    px.sort((a, b) => a.date < b.date ? -1 : 1);
+    const raw = await finmind('TaiwanStockPrice', item.code, daysAgo(1100), d => d.filter(x => x.close > 0).map(x => ({ date: x.date, max: x.max, min: x.min, close: x.close, Trading_Volume: x.Trading_Volume })));
+    const px = raw.slice().sort((a, b) => a.date < b.date ? -1 : 1);
     let instByDate = null;
     try {
       const inst = await finmind('TaiwanStockInstitutionalInvestorsBuySell', item.code, daysAgo(30));
       if (inst && inst.length) { instByDate = {}; inst.forEach(r => { instByDate[r.date] = (instByDate[r.date] || 0) + (r.buy - r.sell); }); }
     } catch (e) { }
-    const now = evaluate(px, instByDate, px.length - 1);
-    const yest = evaluate(px, instByDate, px.length - 2);
-    return { item, px, now, yest };
+    const ev = evaluateAll(px, instByDate);
+    return { item, px, now: ev.now, yest: ev.yest };
   }
   async function loadAll(items, onProgress) {
     let done = 0;
@@ -301,6 +330,51 @@
       .sort((a, b) => a.ex < b.ex ? -1 : 1);
   }
 
+  /* ---------- 說明小視窗：電腦滑鼠移上去、手機點一下 ---------- */
+  const TIPS = {
+    score: ['綜合燈號', '5 項指標的加權平均（均線 1.2、MACD 1.0、KD 0.8、法人 0.8、RSI 0.6）。', '紅色越深越偏向會漲，綠色越深越偏向會跌，黃色＝盤整維持。百分比是訊號強度。'],
+    ma: ['均線趨勢', '看中期方向。月線＝近 20 個交易日平均價，季線＝近 60 日。', '股價在月線上、月線在季線上且往上走＝偏紅（偏漲）；三者反過來＝偏綠（偏跌）；交錯＝黃（整理）。'],
+    macd: ['MACD 動能', '看漲跌的力道有沒有變強。', '柱狀體大於 0 而且變長＝多方增強（紅）；小於 0 而且變長＝空方增強（綠）；柱狀體縮短＝力道減弱（偏黃）。由負轉正叫黃金交叉。'],
+    kd: ['KD 轉折', '看短線轉折點，反應最快。', 'K 在 D 之上偏紅、之下偏綠。K 低於 20 時往上穿過 D（低檔黃金交叉）是常見買點；高於 80 時往下穿過 D（高檔死亡交叉）是常見賣點。'],
+    rsi: ['RSI 冷熱', '看漲過頭或跌過頭，是反向指標。', '70 以上＝過熱、容易拉回（偏綠）；30 以下＝超賣、容易反彈（偏紅）。強勢股常見黃到偏綠，只是提醒別追高，不代表會大跌。'],
+    inst: ['法人籌碼', '外資、投信、自營商近 5 個交易日的買賣超，除以同期成交量。', '買超偏紅、賣超偏綠，買賣超達成交量 5% 為最深色。沒有法人資料的標的不計入。'],
+    yest: ['昨日燈號', '前一交易日的綜合燈號。', '和今天比較：顏色由綠轉紅代表轉強，由紅轉綠代表轉弱。'],
+    hz: ['期間預測', '該期間專屬的指標權重分數（50%）＋這檔股票過去三年「指標狀況相似的日子」之後實際上漲的機率（50%）。', '短期看 KD、RSI，長期看均線趨勢。紅＝偏漲、綠＝偏跌、黃＝方向不明。']
+  };
+  function initTips() {
+    if (document.querySelector('.tip-pop')) return;
+    const pop = document.createElement('div'); pop.className = 'tip-pop'; pop.hidden = true; document.body.appendChild(pop);
+    const hover = () => global.matchMedia && global.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let cur = null;
+    function show(el) {
+      const t = TIPS[el.dataset.tip]; if (!t) return;
+      cur = el;
+      const title = el.dataset.tipTitle || t[0];
+      pop.innerHTML = '<b>' + title + '</b><div>' + t[1] + '</div><div class="tip-how">' + t[2] + '</div>' +
+        (el.dataset.tipExtra ? '<div class="tip-x">' + el.dataset.tipExtra + '</div>' : '') +
+        '<div class="tip-leg"><span>偏跌</span><i></i><span>偏漲</span></div>';
+      pop.hidden = false;
+      const r = el.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+      let left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, innerWidth - w - 8));
+      let top = r.bottom + 8; if (top + h > innerHeight - 8 && r.top - h - 8 > 8) top = r.top - h - 8;
+      pop.style.left = left + 'px'; pop.style.top = top + 'px';
+    }
+    function hide() { pop.hidden = true; cur = null; }
+    document.addEventListener('mouseover', e => {
+      if (!hover()) return;
+      const el = e.target.closest('[data-tip]');
+      if (el) { if (el !== cur) show(el); } else if (!e.target.closest('.tip-pop')) hide();
+    });
+    document.addEventListener('click', e => {
+      const el = e.target.closest('[data-tip]');
+      if (el) { e.preventDefault(); e.stopPropagation(); if (cur === el && !hover()) hide(); else show(el); }
+      else if (!e.target.closest('.tip-pop')) hide();
+    }, true);
+    global.addEventListener('scroll', hide, { passive: true });
+    global.addEventListener('resize', hide);
+  }
+
+  const sma = (a, n, i) => { if (i < n - 1) return null; let s = 0; for (let k = i - n + 1; k <= i; k++) s += a[k]; return s / n; };
   /* ---------- 迷你走勢圖 ---------- */
   function sparkline(px, opt = {}) {
     const N = opt.days || 60, W = opt.w || 120, H = opt.h || 36;
@@ -320,5 +394,5 @@
       '<polyline fill="none" stroke="#1e293b" stroke-width="' + sw + '" points="' + path(P.map(x => x.close)) + '"/></svg>';
   }
 
-  global.MA = { CONFIG, IND_NAMES, WEIGHTS, loadList, loadAll, loadOne, loadDividends, evaluate, color, ink, level, strength, advice, sparkline, fmt, clearCache, ymd, addTicker, removeTicker, restoreTicker };
+  global.MA = { TIPS, initTips, CONFIG, IND_NAMES, WEIGHTS, HORIZONS, loadList, loadAll, loadOne, loadDividends, evaluateAll, color, ink, level, strength, advice, sparkline, fmt, clearCache, ymd, addTicker, removeTicker, restoreTicker, toggleHeld, setSheet, ensureUserDoc };
 })(window);

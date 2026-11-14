@@ -270,6 +270,20 @@ service cloud.firestore {
     }
 
 
+    // =========================================================================
+    //  MyAssets 看盤（nchsieh.github.io/myassets）
+    //  每位使用者一份文件，只有本人能讀寫；別人（含管理者）都看不到。
+    // =========================================================================
+    match /myassets_users/{uid} {
+      allow read, delete: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['list', 'hide', 'sheetCsv', 'email', 'updatedAt'])
+        && request.resource.data.list is list && request.resource.data.list.size() <= 200
+        && request.resource.data.hide is list && request.resource.data.hide.size() <= 200
+        && request.resource.data.sheetCsv is string && request.resource.data.sheetCsv.size() < 500;
+    }
+
+
     // ---------- 其餘一律拒絕 ----------
     match /{document=**} {
       allow read, write: if false;

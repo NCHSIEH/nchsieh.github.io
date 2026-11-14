@@ -6,16 +6,17 @@
 <meta name="robots" content="noindex,nofollow">
 <title>MyAssets 買賣趨勢燈號</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23eab308'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/style.css?v=2">
+<link rel="stylesheet" href="../assets/style.css?v=6">
 <style>
   .matrix{width:100%;border-collapse:collapse;font-size:13px}
-  .matrix th{font-weight:500;color:var(--mute);font-size:11px;padding:4px 2px;text-align:center}
+  .matrix th{font-weight:500;color:var(--mute);font-size:11px;padding:4px 2px;text-align:center;line-height:1.35}
   .matrix td{padding:6px 2px;border-top:1px solid var(--line);text-align:center}
   .matrix td.nm{text-align:left;white-space:nowrap}
-  .matrix tr{cursor:pointer}
-  .matrix tr:hover td{background:#f8fafc}
+  .matrix tr[data-code]{cursor:pointer}
+  .matrix tr[data-code]:hover td{background:#f8fafc}
   .cell{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:middle}
   .cell.big{width:30px;height:30px}
+  .cell.txt{width:auto;height:auto;border-radius:999px;padding:2px 6px;font-size:11px;font-weight:600}
   .head{display:flex;gap:14px;align-items:center}
   .head .lamp{flex-basis:84px;height:84px;font-size:17px}
   .head .lamp small{font-size:12px}
@@ -24,7 +25,9 @@
   .chart{margin-top:12px}
   .chart svg{width:100%;height:auto}
   .chartleg{font-size:11px;color:var(--mute);display:flex;gap:12px;margin-top:2px}
-  @media (max-width:560px){ .matrix .hide-s{display:none} }
+  .mtabs{display:flex;gap:6px;margin-bottom:8px}
+  .mtabs .btn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  @media (max-width:560px){ .matrix .hide-s{display:none} .matrix td.nm span{display:none} }
 </style>
 </head>
 <body>
@@ -32,14 +35,16 @@
   <a class="brand" href="../">MyAssets<small>買賣趨勢燈號</small></a>
   <a class="btn" href="../">回股票頁</a>
   <button class="btn" id="refresh" type="button">重新整理</button>
+  <span id="auth"></span>
 </div></header>
 
 <main class="wrap">
+  <div id="banner" style="margin-top:12px"></div>
   <div class="meta" id="meta" style="margin-top:12px">載入中…</div>
-  <div class="legend"><span>會跌</span><span class="bar"></span><span>會漲</span><span style="margin-left:auto">顏色越深＝訊號越強；百分比＝訊號強度</span></div>
+  <div class="legend"><span>會跌</span><span class="bar"></span><span>會漲</span><span style="margin-left:auto">滑鼠移到（手機點一下）有底線的文字可看說明</span></div>
 
   <div class="box">
-    <h2>燈號總表</h2>
+    <div class="mtabs"><button class="btn on" data-m="fc" type="button">各期間預測總表</button><button class="btn" data-m="ind" type="button">指標燈號總表</button></div>
     <table class="matrix" id="matrix"><tr><td class="loading">載入中…</td></tr></table>
   </div>
 
@@ -48,7 +53,7 @@
 
   <div class="box" id="howto">
     <h2>怎麼看這些燈號</h2>
-    <p>每一項指標都算出 −100%～+100% 的分數：越紅代表越偏向會漲，越綠代表越偏向會跌，接近黃色代表方向不明、維持即可。綜合燈號是 5 項指標的加權平均。</p>
+    <p>每一項指標都算出 −100%～+100% 的分數：紅色越深代表越偏向會漲，綠色越深代表越偏向會跌，接近黃色代表方向不明、維持即可（台灣習慣：紅漲綠跌）。</p>
     <ul>
       <li><b>強烈會漲</b>（+55% 以上）：多數指標同時偏多。</li>
       <li><b>偏向會漲</b>（+20%～+55%）：偏多，但還有指標沒跟上。</li>
@@ -57,51 +62,79 @@
       <li><b>強烈會跌</b>（−55% 以下）：多數指標同時偏空。</li>
     </ul>
 
-    <h3>① 均線趨勢（權重 1.2，最重）</h3>
-    <p>看「中期方向」。月線是近 20 個交易日的平均價，季線是近 60 日。股價在月線之上、月線又在季線之上，而且月線往上走，就是多頭排列，分數偏紅；三者反過來就偏綠。分數由三部分組成：股價離月線多遠（40%）、月線高於季線多少（30%）、月線近 5 日的斜率（30%）。</p>
+    <h3>各期間預測（隔日、3 日、1 週、2 週、1 個月）怎麼算</h3>
+    <p>每個期間有兩個依據，各占一半：</p>
+    <ul>
+      <li><b>期間專屬權重</b>：短期（隔日、3 日）看反應快的 KD 與 RSI；長期（2 週、1 個月）看均線趨勢與 MACD。</li>
+      <li><b>歷史相似情境</b>：從這檔股票過去約三年的每日資料中，找出指標狀況和今天最接近的日子（至少 40 天），統計這些日子之後 N 個交易日實際上漲的比例、漲跌中位數與常見區間（中間一半的範圍）。</li>
+    </ul>
+    <p>「這檔平時」是不看指標、任何一天買進持有 N 日的上漲比例，用來比較今天的訊號有沒有比平常好。相似日子彼此相連、樣本有重疊，統計只能當參考。</p>
 
+    <h3>① 均線趨勢（綜合權重 1.2，最重）</h3>
+    <p>看「中期方向」。月線是近 20 個交易日的平均價，季線是近 60 日。股價在月線之上、月線又在季線之上，而且月線往上走，就是多頭排列，分數偏紅；三者反過來就偏綠。</p>
     <h3>② MACD 動能（權重 1.0）</h3>
     <p>看「漲跌的力道有沒有變強」。柱狀體大於 0 代表多方占上風，小於 0 代表空方占上風；柱狀體比前一天長，代表力道在加強。柱狀體由負轉正叫黃金交叉，由正轉負叫死亡交叉。</p>
-
     <h3>③ KD 轉折（權重 0.8）</h3>
-    <p>看「短線轉折點」，反應最快。K 值在 D 值之上偏多，之下偏弱。K 值在 20 以下屬於低檔，此時 K 向上穿過 D（低檔黃金交叉）是常見的買點訊號；K 值在 80 以上屬於高檔，向下穿過 D（高檔死亡交叉）是常見的賣點訊號。高檔或低檔「鈍化」代表強勢或弱勢延續中。</p>
-
+    <p>看「短線轉折點」，反應最快。K 值在 D 值之上偏多，之下偏弱。K 值在 20 以下屬於低檔，此時 K 向上穿過 D（低檔黃金交叉）是常見的買點訊號；K 值在 80 以上屬於高檔，向下穿過 D（高檔死亡交叉）是常見的賣點訊號。</p>
     <h3>④ RSI 冷熱（權重 0.6）</h3>
-    <p>看「漲過頭或跌過頭」，是反向指標。RSI 70 以上代表短線漲太多、容易拉回，分數偏綠；30 以下代表跌太多、容易反彈，分數偏紅。所以強勢股的 RSI 常是黃到偏綠，這不代表會大跌，只是提醒不要追高。</p>
-
+    <p>看「漲過頭或跌過頭」，是反向指標。RSI 70 以上代表短線漲太多、容易拉回，分數偏綠；30 以下代表跌太多、容易反彈，分數偏紅。強勢股的 RSI 常是黃到偏綠，只是提醒不要追高。</p>
     <h3>⑤ 法人籌碼（權重 0.8）</h3>
-    <p>看「大戶在買還是在賣」。把外資、投信、自營商近 5 個交易日的買賣超加總，再除以同期成交量。買超占成交量 5% 以上為滿分紅，賣超 5% 以上為滿分綠。沒有法人資料的標的，這一項不計入。</p>
-
+    <p>看「大戶在買還是在賣」。把外資、投信、自營商近 5 個交易日的買賣超加總，再除以同期成交量。買超占成交量 5% 以上為最深紅，賣超 5% 以上為最深綠。沒有法人資料的標的，這一項不計入。歷史相似情境的統計不含這一項（法人資料只抓近一個月）。</p>
     <h3>使用上的提醒</h3>
     <ul>
       <li>高股息 ETF 和債券 ETF 是領息部位，綠燈的意思是「暫緩加碼」，不是要賣掉。</li>
       <li>債券 ETF 的價格主要跟著利率走，技術指標的參考性比股票低。</li>
-      <li>除息日當天股價會下跌，均線和 MACD 可能短暫轉弱，屬正常現象。</li>
-      <li>「今日提醒」比較的是今天和前一交易日的燈號，燈號跨級時才會出現。</li>
+      <li>除息日當天股價會下跌，均線和 MACD 可能短暫轉弱，屬正常現象；歷史統計也會受除息影響。</li>
     </ul>
   </div>
 
-  <p class="foot">技術指標只反映近期價格與籌碼的強弱，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（FinMind，約下午 3 點後更新）。</p>
+  <p class="foot">技術指標與歷史統計只反映過去的價格與籌碼，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（FinMind，約下午 3 點後更新）。</p>
 </main>
 
-<script src="../assets/core.js?v=4"></script>
+<script src="../assets/core.js?v=6"></script>
+<script type="module" src="../assets/auth.js?v=6"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
   const KEYS = Object.keys(MA.IND_NAMES);
-  let results = [], cur = null;
+  let results = [], cur = null, mode = 'fc', user = null, userDoc = null;
 
-  function lamp(s, cls){ const lv=MA.level(s); return '<div class="lamp '+(cls||'')+'" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+lv.short+'<small>'+MA.strength(s)+'%</small></div>'; }
+  const lamp = s => '<div class="lamp" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+MA.level(s).short+'<small>'+MA.strength(s)+'%</small></div>';
+  const q = t => String(t).replace(/"/g,'&quot;');
+  function fcExtra(f){
+    let t = '目前：'+MA.level(f.score).label+'（強度 '+MA.strength(f.score)+'%）';
+    if (f.n) t += '<br>過去相似情境 '+f.n+' 次，之後上漲 '+Math.round(f.up*100)+'%（這檔平時 '+Math.round(f.base*100)+'%）<br>漲跌中位數 '+(f.med>=0?'+':'')+MA.fmt(f.med)+'%，常見區間 '+MA.fmt(f.p25)+'%～'+MA.fmt(f.p75)+'%';
+    return q(t);
+  }
+  const indName = (k, br) => '<span data-tip="'+k+'">'+(br?MA.IND_NAMES[k].replace(' ','<br>'):MA.IND_NAMES[k])+'</span>';
+
+  function renderAuth(){
+    $('#auth').innerHTML = user ? '<span class="who">'+(user.photoURL?'<img src="'+user.photoURL+'" alt="" referrerpolicy="no-referrer">':'')+'<button class="btn" id="logout" type="button">登出</button></span>' : '<button class="btn primary" id="login" type="button">Google 登入</button>';
+    if ($('#login')) $('#login').onclick = () => MAAuth.signIn().catch(e => alert('登入失敗：'+(e.code||e.message)));
+    if ($('#logout')) $('#logout').onclick = () => MAAuth.signOut();
+    $('#banner').innerHTML = user ? '' : '<div class="banner"><span style="flex:1">目前顯示的是<b>示範清單</b>。登入後會顯示您自己的清單。</span><button class="btn primary" type="button" onclick="MAAuth.signIn()">Google 登入</button></div>';
+  }
 
   function matrix(){
-    let h = '<tr><th style="text-align:left">標的</th><th>綜合</th>'+KEYS.map(k=>'<th>'+MA.IND_NAMES[k].replace(' ','<br>')+'</th>').join('')+'<th class="hide-s">昨日</th></tr>';
-    results.forEach(r=>{
-      if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="7" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
-      h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
-        '<td><span class="cell big" title="'+MA.level(r.now.score).label+'" style="background:'+MA.color(r.now.score)+'"></span></td>'+
-        KEYS.map(k=>{ const x=r.now.ind[k]; return '<td><span class="cell" title="'+x.text+'" style="background:'+(x.skip?'#e2e8f0':MA.color(x.score))+'"></span></td>'; }).join('')+
-        '<td class="hide-s">'+(r.yest?'<span class="cell" style="background:'+MA.color(r.yest.score)+'"></span>':'')+'</td></tr>';
-    });
+    let h;
+    if (mode === 'fc') {
+      h = '<tr><th style="text-align:left">標的</th><th><span data-tip="score">綜合</span></th>'+MA.HORIZONS.map(H=>'<th><span data-tip="hz" data-tip-title="'+H.long+'">'+H.label+'</span></th>').join('')+'</tr>';
+      results.forEach(r=>{
+        if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="6" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
+        h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
+          '<td><span class="cell big" style="background:'+MA.color(r.now.score)+'"></span></td>'+
+          r.now.fc.map(f=>{ const a=f.score>=0.2?'▲':f.score<=-0.2?'▼':'－'; return '<td><span class="cell txt" data-tip="hz" data-tip-title="'+r.item.name+'｜'+f.H.long+'" data-tip-extra="'+fcExtra(f)+'" style="background:'+MA.color(f.score)+';color:'+MA.ink(f.score)+'">'+a+(f.n?Math.round(f.up*100)+'%':'')+'</span></td>'; }).join('')+'</tr>';
+      });
+    } else {
+      h = '<tr><th style="text-align:left">標的</th><th><span data-tip="score">綜合</span></th>'+KEYS.map(k=>'<th>'+indName(k,true)+'</th>').join('')+'<th class="hide-s"><span data-tip="yest">昨日</span></th></tr>';
+      results.forEach(r=>{
+        if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="7" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
+        h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
+          '<td><span class="cell big" style="background:'+MA.color(r.now.score)+'"></span></td>'+
+          KEYS.map(k=>{ const x=r.now.ind[k]; return '<td><span class="cell" data-tip="'+k+'" data-tip-title="'+r.item.name+'｜'+MA.IND_NAMES[k]+'" data-tip-extra="'+q(x.value+'：'+x.text+'（'+(x.skip?'不計':(x.score>=0?'+':'')+Math.round(x.score*100)+'%')+'）')+'" style="background:'+(x.skip?'#e2e8f0':MA.color(x.score))+'"></span></td>'; }).join('')+
+          '<td class="hide-s">'+(r.yest?'<span class="cell" style="background:'+MA.color(r.yest.score)+'"></span>':'')+'</td></tr>';
+      });
+    }
     $('#matrix').innerHTML = h;
     $('#matrix').querySelectorAll('tr[data-code]').forEach(tr=>tr.onclick=()=>{ location.hash = tr.dataset.code; });
   }
@@ -114,26 +147,44 @@
 
   function detail(){
     const r = results.find(x=>x.item.code===cur) || results[0];
-    if (!r) return;
+    if (!r) { $('#detail').innerHTML = '<div class="loading">清單是空的</div>'; return; }
     cur = r.item.code;
-    if (!r.now) { $('#detail').innerHTML = '<h2>'+r.item.name+'</h2><p class="err">'+(r.error||'資料不足，無法計算')+'</p>'; return; }
-    const n = r.now, it = r.item, arrow = n.change>0?'▲':n.change<0?'▼':'－';
+    if (!r.now) { $('#detail').innerHTML = '<h2>'+r.item.name+'</h2><p class="err">'+(r.error||'資料不足，無法計算')+'</p>'; pick(); return; }
+    const n = r.now, it = r.item, arrow = n.change>0?'▲':n.change<0?'▼':'－', cc = n.change>0?'#dc2626':n.change<0?'#16a34a':'#64748b';
     const yl = r.yest ? MA.level(r.yest.score).short : '—';
     let h = '<div class="head">'+lamp(n.score)+'<div><h2>'+it.name+' <span style="color:#64748b;font-size:14px;font-weight:400">'+it.code+'</span><span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>')+'</h2>'+
-      '<div style="font-size:15px;margin-top:2px"><b style="color:'+MA.color(n.score)+'">'+MA.level(n.score).label+'</b>（強度 '+MA.strength(n.score)+'%，昨日：'+yl+'）</div>'+
+      '<div style="font-size:15px;margin-top:2px"><b style="color:'+MA.color(n.score)+'" data-tip="score">'+MA.level(n.score).label+'</b>（強度 '+MA.strength(n.score)+'%，昨日：'+yl+'）</div>'+
       '<div class="adv">建議：'+MA.advice(it, n.score)+'</div></div></div>';
     h += '<div class="chart">'+MA.sparkline(r.px,{days:120,w:600,h:150,ma60:true,stroke:1.8})+'<div class="chartleg"><span>— 收盤價</span><span style="color:#94a3b8">- - 月線</span><span style="color:#a78bfa">- - 季線</span><span style="margin-left:auto">近 120 個交易日</span></div></div>';
     h += '<div class="kv">'+
-      '<div>收盤（'+n.date.slice(5).replace('-','/')+'）<b>'+MA.fmt(n.close)+' <span style="font-size:12px;color:'+(n.change>0?'#dc2626':n.change<0?'#16a34a':'#64748b')+'">'+arrow+MA.fmt(Math.abs(n.pct))+'%</span></b></div>'+
+      '<div>收盤（'+n.date.slice(5).replace('-','/')+'）<b>'+MA.fmt(n.close)+' <span style="font-size:12px;color:'+cc+'">'+arrow+MA.fmt(Math.abs(n.pct))+'%</span></b></div>'+
       '<div>近 20 日低點（支撐）<b>'+MA.fmt(n.lo20)+'</b></div>'+
       '<div>近 20 日高點（壓力）<b>'+MA.fmt(n.hi20)+'</b></div>'+
       '<div>月線（20 日均價）<b>'+MA.fmt(n.ma20)+'</b></div>'+
       '<div>季線（60 日均價）<b>'+MA.fmt(n.ma60)+'</b></div>'+
       '<div>離月線<b>'+(n.close>=n.ma20?'+':'')+MA.fmt((n.close/n.ma20-1)*100)+'%</b></div></div>';
+
+    // 各期間預測
+    h += '<h3 style="margin-top:16px"><span data-tip="hz">各期間預測</span></h3>';
+    n.fc.forEach(f=>{
+      const c = MA.color(f.score);
+      let t = '<b>'+f.H.long+'</b>　'+MA.level(f.score).label;
+      let v = '', bar = '';
+      if (f.n) {
+        t += '<div>過去相似情境 '+f.n+' 次，之後上漲 <b style="color:'+MA.color((f.up-0.5)/0.2)+'">'+Math.round(f.up*100)+'%</b>（這檔平時 '+Math.round(f.base*100)+'%）</div>';
+        const mp = n.close*(1+f.med/100), lo = n.close*(1+f.p25/100), hi = n.close*(1+f.p75/100);
+        v = '漲跌中位數<br><b style="color:'+(f.med>=0?'#dc2626':'#16a34a')+'">'+(f.med>=0?'+':'')+MA.fmt(f.med)+'%</b><br>約 '+MA.fmt(mp)+'<br><span style="font-size:11px">常見 '+MA.fmt(lo)+'～'+MA.fmt(hi)+'</span>';
+        const span = Math.max(Math.abs(f.p25), Math.abs(f.p75), 0.5)*1.2;
+        const L = 50 + f.p25/span*50, R = 50 + f.p75/span*50;
+        bar = '<div class="range" title="常見區間 '+MA.fmt(f.p25)+'%～'+MA.fmt(f.p75)+'%"><i style="left:'+L.toFixed(1)+'%;width:'+Math.max(1,R-L).toFixed(1)+'%;background:'+c+'"></i></div>';
+      } else t += '<div>歷史資料不足，僅依指標權重判斷</div>';
+      h += '<div class="fcrow"><div class="lamp md" style="background:'+c+';color:'+MA.ink(f.score)+';text-shadow:'+(Math.abs(f.score)<0.35?'none':'')+'">'+MA.level(f.score).short+'</div><div class="t">'+t+bar+'</div><div class="v">'+v+'</div></div>';
+    });
+
     h += '<h3 style="margin-top:16px">5 項指標</h3>';
     KEYS.forEach(k=>{
       const x = n.ind[k], c = x.skip?'#cbd5e1':MA.color(x.score), pos = ((x.score+1)/2*100).toFixed(1);
-      h += '<div class="ind"><span class="cell" style="background:'+c+';margin-top:2px"></span><div class="t"><b>'+MA.IND_NAMES[k]+'</b> <span style="font-size:12px;color:#64748b">權重 '+MA.WEIGHTS[k]+'</span>'+
+      h += '<div class="ind"><span class="cell" style="background:'+c+';margin-top:2px"></span><div class="t"><b>'+indName(k)+'</b> <span style="font-size:12px;color:#64748b">權重 '+MA.WEIGHTS[k]+'</span>'+
         '<div>'+x.text+'</div><div class="meter"><i style="left:'+pos+'%;background:'+c+'"></i></div></div>'+
         '<div class="v">'+x.value+'<br><b style="color:'+c+'">'+(x.skip?'不計':(x.score>=0?'+':'')+Math.round(x.score*100)+'%')+'</b></div></div>';
     });
@@ -142,17 +193,28 @@
   }
 
   async function load(){
-    const L = await MA.loadList();
+    $('#detail').innerHTML = '<div class="loading">載入中…</div>';
+    const L = await MA.loadList(userDoc);
     results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent='抓取中 '+d+'/'+t+'…'; });
     results = results.map((r,i)=> r && r.item ? r : { item:L.items[i], error:(r&&r.error)||'抓取失敗' });
     const dates = results.filter(r=>r.now).map(r=>r.now.date).sort();
-    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤）　點總表任一列或下方按鈕看該檔詳解';
-    cur = (location.hash||'').slice(1).toUpperCase() || (results[0]&&results[0].item.code);
+    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤）　點總表任一列看該檔詳解';
+    const h = (location.hash||'').slice(1).toUpperCase();
+    cur = results.some(r=>r.item.code===h) ? h : (results[0]&&results[0].item.code);
     matrix(); detail();
   }
+  document.querySelectorAll('.mtabs .btn').forEach(b=>b.onclick=()=>{ mode=b.dataset.m; document.querySelectorAll('.mtabs .btn').forEach(x=>x.classList.toggle('on',x===b)); matrix(); });
   window.addEventListener('hashchange', ()=>{ cur = location.hash.slice(1).toUpperCase(); detail(); $('#detail').scrollIntoView({behavior:'smooth',block:'start'}); });
   $('#refresh').onclick = ()=>{ MA.clearCache(); load(); };
-  load();
+  MA.initTips();
+  function start(){
+    MAAuth.onChange(async u => {
+      user = u; renderAuth();
+      if (u) { try { userDoc = await MA.ensureUserDoc(u); } catch(e) { userDoc = null; } } else userDoc = null;
+      load();
+    });
+  }
+  if (window.MAAuth) start(); else window.addEventListener('maauth-ready', start, { once:true });
 })();
 </script>
 </body>
