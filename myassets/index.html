@@ -32,6 +32,17 @@
       <button class="btn" data-f="bond" type="button">債券 ETF</button>
       <button class="btn" data-f="stock" type="button">個股</button>
       <button class="btn" data-s="score" type="button" style="margin-left:auto">依燈號排序</button>
+      <button class="btn" id="manage" type="button">＋ 管理標的</button>
+    </div>
+    <div class="box" id="mbox" hidden>
+      <h2>加入／刪除標的</h2>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <input id="addcode" inputmode="text" placeholder="輸入代號，例：2317、00878" style="flex:1;min-width:160px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;font-size:15px">
+        <button class="btn primary" id="addbtn" type="button">加入</button>
+      </div>
+      <div id="addmsg" style="font-size:13px;margin-top:6px;color:#64748b"></div>
+      <div id="mlist" style="margin-top:8px"></div>
+      <p style="font-size:12px;color:#64748b;margin:8px 0 0">加入、刪除只存在這台裝置的瀏覽器裡；要讓手機和電腦同步，請改在 Google 試算表「看盤清單」的 F～H 欄加入。刪除試算表帶入的標的，只是在網頁上隱藏，隨時可恢復。</p>
     </div>
     <div class="list" id="list"><div class="loading">正在抓取行情與計算指標…</div></div>
   </section>
@@ -45,7 +56,7 @@
   清單來源：<span id="src"></span>　｜　<a id="sheetlink" target="_blank" rel="noopener">開啟 Google 試算表</a></p>
 </main>
 
-<script src="assets/core.js?v=2"></script>
+<script src="assets/core.js?v=3"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
@@ -97,7 +108,7 @@
 
   async function load(){
     $('#list').innerHTML = '<div class="loading">正在抓取行情與計算指標…</div>';
-    const L = await MA.loadList();
+    const L = await MA.loadList(); lastList = L; renderManage();
     $('#src').textContent = L.src==='sheet' ? 'Google 試算表「看盤清單」分頁' : '內建清單（試算表尚未發布到網路）';
     results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent = '抓取中 '+d+'/'+t+'…'; });
     results = results.map((r,i)=> r && r.item ? r : { item:L.items[i], error: (r&&r.error)||'抓取失敗' });
@@ -147,6 +158,24 @@
     else { filter = b.dataset.f; document.querySelectorAll('#filters [data-f]').forEach(x=>x.classList.toggle('on', x===b)); }
     render();
   });
+  let lastList = null;
+  function renderManage(){
+    if (!lastList) return;
+    const row = (it, act) => '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:14px"><span style="flex:1"><b>'+it.name+'</b> <span style="color:#64748b">'+it.code+'</span><span class="tag">'+it.type+'</span>'+(it.origin==='custom'?'<span class="tag no">自行加入</span>':'')+'</span>'+act+'</div>';
+    $('#mlist').innerHTML = lastList.items.map(it => row(it, '<button class="btn" data-del="'+it.code+'" data-o="'+it.origin+'" type="button">刪除</button>')).join('') +
+      (lastList.hidden.length ? '<div style="font-size:12px;color:#64748b;margin-top:10px">已隱藏（試算表帶入）</div>' + lastList.hidden.map(it => row(it, '<button class="btn" data-res="'+it.code+'" type="button">恢復</button>')).join('') : '');
+    $('#mlist').querySelectorAll('[data-del]').forEach(b => b.onclick = () => { MA.removeTicker(b.dataset.del, b.dataset.o); load(); });
+    $('#mlist').querySelectorAll('[data-res]').forEach(b => b.onclick = () => { MA.restoreTicker(b.dataset.res); load(); });
+  }
+  $('#manage').onclick = () => { $('#mbox').hidden = !$('#mbox').hidden; renderManage(); if(!$('#mbox').hidden) $('#addcode').focus(); };
+  async function doAdd(){
+    const v = $('#addcode').value; if (!v.trim()) return;
+    $('#addmsg').textContent = '查詢中…';
+    try { const t = await MA.addTicker(v); $('#addmsg').textContent = '已加入 '+t.name+'（'+t.code+'）'; $('#addcode').value=''; load(); }
+    catch(e){ $('#addmsg').innerHTML = '<span class="err">'+e.message+'</span>'; }
+  }
+  $('#addbtn').onclick = doAdd;
+  $('#addcode').addEventListener('keydown', e => { if (e.key==='Enter') doAdd(); });
   $('#refresh').onclick = () => { MA.clearCache(); load(); };
   load();
 })();

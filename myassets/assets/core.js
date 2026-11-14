@@ -94,9 +94,43 @@
       } catch (e) { /* 退回備援清單 */ }
     }
     const seen = new Set();
-    const items = rows.filter(r => !seen.has(r[0]) && seen.add(r[0])).map(r => ({ code: r[0].toUpperCase(), name: r[1], type: r[2], held: r[3] !== '否' }));
-    return { src, items };
+    const cu = getCustom(), hide = new Set(cu.hide);
+    let base = rows.map(r => ({ code: r[0].toUpperCase(), name: r[1], type: r[2], held: r[3] !== '否', origin: 'sheet' }));
+    const hidden = base.filter(x => hide.has(x.code));
+    base = base.filter(x => !hide.has(x.code));
+    const items = base.concat(cu.add.map(a => ({ code: a.code, name: a.name, type: a.type, held: false, origin: 'custom' })))
+      .filter(x => !seen.has(x.code) && seen.add(x.code));
+    return { src, items, hidden };
   }
+
+  /* ---------- 自訂加入／刪除（存在這台裝置的瀏覽器） ---------- */
+  const CKEY = 'myassets-custom';
+  function getCustom() { const c = lsGet(CKEY) || {}; return { add: c.add || [], hide: c.hide || [] }; }
+  function setCustom(c) { lsSet(CKEY, c); }
+  async function lookup(code) {
+    code = code.trim().toUpperCase();
+    if (!/^\d{4,6}[A-Z]?$/.test(code)) throw new Error('代號格式不對（例：2317、00878、00937B）');
+    const r = await fetch(FM + '?dataset=TaiwanStockInfo&data_id=' + code);
+    const j = await r.json();
+    const row = (j.data || []).find(x => x.stock_id === code);
+    if (!row) throw new Error('查不到 ' + code + '，請確認代號');
+    const cat = row.industry_category || '';
+    const type = /ETF|受益/.test(cat) || /^00/.test(code) ? (/B$/.test(code) ? '債券ETF' : 'ETF') : '個股';
+    return { code, name: row.stock_name, type };
+  }
+  async function addTicker(code) {
+    const t = await lookup(code); const c = getCustom();
+    if (c.hide.includes(t.code)) c.hide = c.hide.filter(x => x !== t.code);
+    else if (!c.add.some(a => a.code === t.code)) c.add.push(t);
+    setCustom(c); return t;
+  }
+  function removeTicker(code, origin) {
+    const c = getCustom();
+    if (origin === 'custom') c.add = c.add.filter(a => a.code !== code);
+    else if (!c.hide.includes(code)) c.hide.push(code);
+    setCustom(c);
+  }
+  function restoreTicker(code) { const c = getCustom(); c.hide = c.hide.filter(x => x !== code); setCustom(c); }
 
   /* ---------- 指標計算 ---------- */
   const sma = (a, n, i) => { if (i < n - 1) return null; let s = 0; for (let k = i - n + 1; k <= i; k++) s += a[k]; return s / n; };
@@ -286,5 +320,5 @@
       '<polyline fill="none" stroke="#1e293b" stroke-width="' + sw + '" points="' + path(P.map(x => x.close)) + '"/></svg>';
   }
 
-  global.MA = { CONFIG, IND_NAMES, WEIGHTS, loadList, loadAll, loadOne, loadDividends, evaluate, color, ink, level, strength, advice, sparkline, fmt, clearCache, ymd };
+  global.MA = { CONFIG, IND_NAMES, WEIGHTS, loadList, loadAll, loadOne, loadDividends, evaluate, color, ink, level, strength, advice, sparkline, fmt, clearCache, ymd, addTicker, removeTicker, restoreTicker };
 })(window);
