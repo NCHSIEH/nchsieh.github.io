@@ -67,4 +67,11 @@
   CaseLinks('w-whisper', [
     ['Koenecke et al. Careless Whisper（arXiv）', 'https://arxiv.org/abs/2402.08021'],
     ['Cornell Chronicle 報導', 'https://news.cornell.edu/index%2ephp/node/328846']]);
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-cost', '如果改了設定，每月會變多少（示意推算）：', '目前 Top-K = 5 約 US$9.4；Top-K 調到 10（輸入約 4,080 tokens）約 US$12.8；改成 Agent、平均 5 輪約 US$47。召回段落占輸入 58%，真正會爆的是輪數不固定的 Agent。（講義 M7 第 16 頁）');
+  addNote('w-emb', '「像」不等於「有答案」（示意）：', '問「第 4 級的給付額度是多少？」——段落 A「第 4 級的評估標準……」相似度 0.89 被選為 Top-1，但沒有額度；段落 B「各級每月給付額度上限如附表……」相似度 0.81 落選，答案卻在這裡。Top-K 不要只取 1，並用 Tracing 看召回了哪幾段。（講義 M7 第 29 頁）');
+  addNote('w-prompt', '同一個需求，改寫前後（示意）：', '✘「請說明糖尿病飲食，不要編造。」✔ 角色：醫院衛教護理師，對象為剛確診的第二型糖尿病病人；步驟：先回答，再給一個日常例子；限制：只根據衛教手冊，查不到就回答「查無相關資料，建議洽詢糖尿病衛教師」；格式：三點、每點 40 字內、稱「您」、標手冊頁碼；再附一個問答範例。（講義 M7 第 64 頁）');
 })();
