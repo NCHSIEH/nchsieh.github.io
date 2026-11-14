@@ -207,8 +207,8 @@
   }
 
   /* ---------- 燈號顏色與文字 ---------- */
-  function color(s) { // -1 紅 → 0 黃 → +1 綠，連續漸變
-    const x = clamp(s); const hue = 60 * (x + 1);
+  function color(s) { // 台灣習慣：+1 紅（漲）→ 0 黃 → -1 綠（跌），連續漸變
+    const x = clamp(s); const hue = 60 * (1 - x);
     const light = 47 - Math.abs(x) * 6 + (Math.abs(x) < 0.3 ? 3 : 0);
     return 'hsl(' + hue.toFixed(0) + ',78%,' + light.toFixed(0) + '%)';
   }

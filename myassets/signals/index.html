@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>MyAssets 買賣趨勢燈號</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23eab308'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/style.css?v=1">
+<link rel="stylesheet" href="../assets/style.css?v=2">
 <style>
   .matrix{width:100%;border-collapse:collapse;font-size:13px}
   .matrix th{font-weight:500;color:var(--mute);font-size:11px;padding:4px 2px;text-align:center}
@@ -48,7 +48,7 @@
 
   <div class="box" id="howto">
     <h2>怎麼看這些燈號</h2>
-    <p>每一項指標都算出 −100%～+100% 的分數：越綠代表越偏向會漲，越紅代表越偏向會跌，接近黃色代表方向不明、維持即可。綜合燈號是 5 項指標的加權平均。</p>
+    <p>每一項指標都算出 −100%～+100% 的分數：越紅代表越偏向會漲，越綠代表越偏向會跌，接近黃色代表方向不明、維持即可。綜合燈號是 5 項指標的加權平均。</p>
     <ul>
       <li><b>強烈會漲</b>（+55% 以上）：多數指標同時偏多。</li>
       <li><b>偏向會漲</b>（+20%～+55%）：偏多，但還有指標沒跟上。</li>
@@ -58,7 +58,7 @@
     </ul>
 
     <h3>① 均線趨勢（權重 1.2，最重）</h3>
-    <p>看「中期方向」。月線是近 20 個交易日的平均價，季線是近 60 日。股價在月線之上、月線又在季線之上，而且月線往上走，就是多頭排列，分數偏綠；三者反過來就偏紅。分數由三部分組成：股價離月線多遠（40%）、月線高於季線多少（30%）、月線近 5 日的斜率（30%）。</p>
+    <p>看「中期方向」。月線是近 20 個交易日的平均價，季線是近 60 日。股價在月線之上、月線又在季線之上，而且月線往上走，就是多頭排列，分數偏紅；三者反過來就偏綠。分數由三部分組成：股價離月線多遠（40%）、月線高於季線多少（30%）、月線近 5 日的斜率（30%）。</p>
 
     <h3>② MACD 動能（權重 1.0）</h3>
     <p>看「漲跌的力道有沒有變強」。柱狀體大於 0 代表多方占上風，小於 0 代表空方占上風；柱狀體比前一天長，代表力道在加強。柱狀體由負轉正叫黃金交叉，由正轉負叫死亡交叉。</p>
@@ -67,14 +67,14 @@
     <p>看「短線轉折點」，反應最快。K 值在 D 值之上偏多，之下偏弱。K 值在 20 以下屬於低檔，此時 K 向上穿過 D（低檔黃金交叉）是常見的買點訊號；K 值在 80 以上屬於高檔，向下穿過 D（高檔死亡交叉）是常見的賣點訊號。高檔或低檔「鈍化」代表強勢或弱勢延續中。</p>
 
     <h3>④ RSI 冷熱（權重 0.6）</h3>
-    <p>看「漲過頭或跌過頭」，是反向指標。RSI 70 以上代表短線漲太多、容易拉回，分數偏紅；30 以下代表跌太多、容易反彈，分數偏綠。所以強勢股的 RSI 常是黃到偏紅，這不代表會大跌，只是提醒不要追高。</p>
+    <p>看「漲過頭或跌過頭」，是反向指標。RSI 70 以上代表短線漲太多、容易拉回，分數偏綠；30 以下代表跌太多、容易反彈，分數偏紅。所以強勢股的 RSI 常是黃到偏綠，這不代表會大跌，只是提醒不要追高。</p>
 
     <h3>⑤ 法人籌碼（權重 0.8）</h3>
-    <p>看「大戶在買還是在賣」。把外資、投信、自營商近 5 個交易日的買賣超加總，再除以同期成交量。買超占成交量 5% 以上為滿分綠，賣超 5% 以上為滿分紅。沒有法人資料的標的，這一項不計入。</p>
+    <p>看「大戶在買還是在賣」。把外資、投信、自營商近 5 個交易日的買賣超加總，再除以同期成交量。買超占成交量 5% 以上為滿分紅，賣超 5% 以上為滿分綠。沒有法人資料的標的，這一項不計入。</p>
 
     <h3>使用上的提醒</h3>
     <ul>
-      <li>高股息 ETF 和債券 ETF 是領息部位，紅燈的意思是「暫緩加碼」，不是要賣掉。</li>
+      <li>高股息 ETF 和債券 ETF 是領息部位，綠燈的意思是「暫緩加碼」，不是要賣掉。</li>
       <li>債券 ETF 的價格主要跟著利率走，技術指標的參考性比股票低。</li>
       <li>除息日當天股價會下跌，均線和 MACD 可能短暫轉弱，屬正常現象。</li>
       <li>「今日提醒」比較的是今天和前一交易日的燈號，燈號跨級時才會出現。</li>
@@ -84,7 +84,7 @@
   <p class="foot">技術指標只反映近期價格與籌碼的強弱，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（FinMind，約下午 3 點後更新）。</p>
 </main>
 
-<script src="../assets/core.js?v=1"></script>
+<script src="../assets/core.js?v=2"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
@@ -124,7 +124,7 @@
       '<div class="adv">建議：'+MA.advice(it, n.score)+'</div></div></div>';
     h += '<div class="chart">'+MA.sparkline(r.px,{days:120,w:600,h:150,ma60:true,stroke:1.8})+'<div class="chartleg"><span>— 收盤價</span><span style="color:#94a3b8">- - 月線</span><span style="color:#a78bfa">- - 季線</span><span style="margin-left:auto">近 120 個交易日</span></div></div>';
     h += '<div class="kv">'+
-      '<div>收盤（'+n.date.slice(5).replace('-','/')+'）<b>'+MA.fmt(n.close)+' <span style="font-size:12px;color:#64748b">'+arrow+MA.fmt(Math.abs(n.pct))+'%</span></b></div>'+
+      '<div>收盤（'+n.date.slice(5).replace('-','/')+'）<b>'+MA.fmt(n.close)+' <span style="font-size:12px;color:'+(n.change>0?'#dc2626':n.change<0?'#16a34a':'#64748b')+'">'+arrow+MA.fmt(Math.abs(n.pct))+'%</span></b></div>'+
       '<div>近 20 日低點（支撐）<b>'+MA.fmt(n.lo20)+'</b></div>'+
       '<div>近 20 日高點（壓力）<b>'+MA.fmt(n.hi20)+'</b></div>'+
       '<div>月線（20 日均價）<b>'+MA.fmt(n.ma20)+'</b></div>'+
