@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>MyAssets 看盤</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23dc2626'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/style.css?v=6">
+<link rel="stylesheet" href="assets/style.css?v=7">
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -60,12 +60,13 @@
     <div class="box" id="divbox"><div class="loading">載入中…</div></div>
   </section>
 
+  <div id="sources"></div>
   <p class="foot">燈號由均線、MACD、KD、RSI、法人籌碼 5 項技術指標計算；各期間預測另參考這檔股票過去三年相似情境的實際漲跌。只反映近期價格與籌碼的強弱，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（約下午 3 點後更新），盤中顯示的是前一交易日。<br>
   清單來源：<span id="src"></span><span id="sheetlinkwrap"></span></p>
 </main>
 
-<script src="assets/core.js?v=6"></script>
-<script type="module" src="assets/auth.js?v=6"></script>
+<script src="assets/core.js?v=7"></script>
+<script type="module" src="assets/auth.js?v=7"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
@@ -142,7 +143,7 @@
     results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent = '抓取中 '+d+'/'+t+'…'; });
     results = results.map((r,i)=> r && r.item ? r : { item:L.items[i], error: (r&&r.error)||'抓取失敗' });
     const dates = results.filter(r=>r.now).map(r=>r.now.date).sort();
-    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤）　共 '+results.length+' 檔';
+    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤，來源：證交所／櫃買中心，經 FinMind）　共 '+results.length+' 檔';
     render();
     if (divLoaded) loadDivs(true);
   }
@@ -201,7 +202,7 @@
   $('#sheetsave').onclick = async () => { try { await MA.setSheet(userDoc, $('#sheeturl').value); $('#addmsg').textContent='已儲存試算表連結'; load(); } catch(e){ $('#addmsg').innerHTML='<span class="err">儲存失敗：'+(e.code||e.message)+'</span>'; } };
   $('#refresh').onclick = () => { MA.clearCache(); load(); };
 
-  MA.initTips();
+  MA.initTips(); document.getElementById('sources').innerHTML = MA.SOURCES_HTML;
   function start(){
     MAAuth.onChange(async u => {
       user = u; renderAuth();

@@ -374,6 +374,16 @@
     global.addEventListener('resize', hide);
   }
 
+  /* ---------- 資料來源說明 ---------- */
+  const SOURCES_HTML = '<div class="box src"><h2>資料來源</h2><ul>' +
+    '<li><b>股價（開高低收、成交量）</b>：每日收盤資料，原始來源為<a href="https://www.twse.com.tw/" target="_blank" rel="noopener">臺灣證券交易所</a>（上市）與<a href="https://www.tpex.org.tw/" target="_blank" rel="noopener">證券櫃檯買賣中心</a>（上櫃，例如 00933B、00937B），經 <a href="https://finmindtrade.com/" target="_blank" rel="noopener">FinMind</a> 開放資料 API 取得。約下午 2:30～3:30 收盤資料公布後更新；盤中看到的是前一交易日。均線、MACD、KD、RSI 都由這份資料計算。</li>' +
+    '<li><b>三大法人買賣超</b>：證交所／櫃買中心每日公布的外資、投信、自營商買賣超，經 FinMind 取得，約下午 4～5 點後更新，取近 30 天。</li>' +
+    '<li><b>各期間預測的歷史統計</b>：同一份每日股價，取約三年（1,100 天）在瀏覽器即時計算，不另外抓資料。</li>' +
+    '<li><b>配息行事曆</b>：證交所／櫃買中心的除權息公告，經 FinMind 取得。</li>' +
+    '<li><b>股票名稱與類別</b>：FinMind 台股總覽（TaiwanStockInfo）。</li>' +
+    '<li><b>看盤清單</b>：登入者自己的清單（存於 Google Firebase）；擁有者另連結 Google 試算表「看盤清單」分頁。</li>' +
+    '</ul><p style="font-size:12px;color:#64748b;margin:6px 0 0">FinMind 為第三方整理的開放資料，若與交易所公告不一致，以交易所為準。資料抓取後在您的瀏覽器暫存（同一時段不重抓），按「重新整理」可強制更新。</p></div>';
+
   const sma = (a, n, i) => { if (i < n - 1) return null; let s = 0; for (let k = i - n + 1; k <= i; k++) s += a[k]; return s / n; };
   /* ---------- 迷你走勢圖 ---------- */
   function sparkline(px, opt = {}) {
@@ -394,5 +404,5 @@
       '<polyline fill="none" stroke="#1e293b" stroke-width="' + sw + '" points="' + path(P.map(x => x.close)) + '"/></svg>';
   }
 
-  global.MA = { TIPS, initTips, CONFIG, IND_NAMES, WEIGHTS, HORIZONS, loadList, loadAll, loadOne, loadDividends, evaluateAll, color, ink, level, strength, advice, sparkline, fmt, clearCache, ymd, addTicker, removeTicker, restoreTicker, toggleHeld, setSheet, ensureUserDoc };
+  global.MA = { SOURCES_HTML, TIPS, initTips, CONFIG, IND_NAMES, WEIGHTS, HORIZONS, loadList, loadAll, loadOne, loadDividends, evaluateAll, color, ink, level, strength, advice, sparkline, fmt, clearCache, ymd, addTicker, removeTicker, restoreTicker, toggleHeld, setSheet, ensureUserDoc };
 })(window);

@@ -102,3 +102,5 @@ nav.tabs .btn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .tip-pop .tip-x{margin-top:6px;padding-top:6px;border-top:1px solid #334155;color:#fde68a}
 .tip-leg{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;color:#94a3b8}
 .tip-leg i{flex:1;height:6px;border-radius:4px;background:linear-gradient(90deg,hsl(120,78%,41%),hsl(60,78%,50%),hsl(0,78%,41%))}
+.box.src ul{margin:0;padding-left:18px}
+.box.src li{font-size:13px;line-height:1.7;margin:3px 0}
