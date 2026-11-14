@@ -4,7 +4,6 @@
 
   const CONFIG = {
     ownerEmail: 'nchsieh@gmail.com',
-    ownerSheet: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQUOXjn31s43XBKXntgqbZg4z24vuUR8_4uOdVvIQevFUchtCdshmNDpbys7miLEHt1kWkk5IRJd4fl/pub?gid=20261114&single=true&output=csv',
     sheetLink: 'https://docs.google.com/spreadsheets/d/13_apEylQGyscoaEjRDtF5MZo64GXJ5pz6MsODNfLcYo/edit',
     // 未登入時的示範清單（也是新使用者的預設清單）
     demo: [
@@ -136,7 +135,7 @@
     let d = await global.MAAuth.load();
     if (!d) {
       const old = legacyLocal();
-      d = { list: old.add.map(a => ({ ...a, held: false })), hide: old.hide, sheetCsv: user.email === CONFIG.ownerEmail ? CONFIG.ownerSheet : '' };
+      d = { list: old.add.map(a => ({ ...a, held: false })), hide: old.hide, sheetCsv: '' };
       if (!d.sheetCsv && !d.list.length) d.list = CONFIG.demo.map(r => ({ code: r[0], name: r[1], type: r[2], held: false }));
       await global.MAAuth.save(d);
     }
