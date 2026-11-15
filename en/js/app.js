@@ -134,20 +134,59 @@
   function initSpeechSynthesis() {
     if (!("speechSynthesis" in window)) return;
 
+    // 精選標準發音（依優先順序）；其餘趣味／特效／冷門語音一律不列
+    const PREFERRED_VOICES = [
+      { re: /^(Samantha|Ava|Allison|Susan|Nicky|Zoe)\b|Google US English|Microsoft (Aria|Jenny|Ana)\b/i, tag: "美式女聲", lang: "US" },
+      { re: /^(Alex|Evan|Tom|Aaron|Nathan)\b|Microsoft (Guy|Davis|Christopher)\b/i, tag: "美式男聲", lang: "US" },
+      { re: /^(Daniel|Oliver|Arthur)\b|Google UK English Male|Microsoft (Ryan|George)\b/i, tag: "英式男聲", lang: "GB" },
+      { re: /^(Serena|Kate|Stephanie|Martha)\b|Google UK English Female|Microsoft (Sonia|Libby)\b/i, tag: "英式女聲", lang: "GB" },
+      { re: /^(Karen|Catherine|Lee)\b|Microsoft (Natasha|William)\b/i, tag: "澳洲", lang: "AU" },
+      { re: /^(Moira|Tessa)\b/i, tag: "愛爾蘭／南非", lang: "" },
+    ];
+    const MAX_VOICES = 6;
+    const qualityScore = (v) => (/premium|enhanced|neural|natural|online/i.test(v.name + " " + v.voiceURI) ? 1 : 0);
+
+    function curateVoices(enVoices) {
+      const picked = [];
+      const usedNames = new Set();
+      PREFERRED_VOICES.forEach((group) => {
+        const candidates = enVoices
+          .filter((v) => group.re.test(v.name) && (!group.lang || v.lang.replace("_", "-").toUpperCase().endsWith(group.lang)))
+          .sort((a, b) => qualityScore(b) - qualityScore(a));
+        const best = candidates.find((v) => !usedNames.has(v.name));
+        if (best) {
+          usedNames.add(best.name);
+          best.__tag = group.tag;
+          picked.push(best);
+        }
+      });
+      // 同一組若有第二個好選擇（例如 Samantha 之外的 Ava），補到上限為止
+      if (picked.length < MAX_VOICES) {
+        PREFERRED_VOICES.forEach((group) => {
+          if (picked.length >= MAX_VOICES) return;
+          const extra = enVoices
+            .filter((v) => group.re.test(v.name) && !usedNames.has(v.name))
+            .sort((a, b) => qualityScore(b) - qualityScore(a))[0];
+          if (extra) {
+            usedNames.add(extra.name);
+            extra.__tag = group.tag;
+            picked.push(extra);
+          }
+        });
+      }
+      return picked.slice(0, MAX_VOICES);
+    }
+
     function populateVoices() {
       const allVoices = window.speechSynthesis.getVoices() || [];
       const enVoices = allVoices.filter((v) => /^en(-|_|$)/i.test(v.lang));
-      enVoices.sort((a, b) => {
-        const score = (v) => {
-          let s = 0;
-          if (/enhanced|premium|natural|neural|siri/i.test(v.name)) s += 50;
-          if (/Ava|Samantha|Alex|Allison|Aaron|Nicky|Daniel|Karen|Moira|Google US/i.test(v.name)) s += 30;
-          if (v.lang.includes("US")) s += 10;
-          return s;
-        };
-        return score(b) - score(a);
-      });
-      state.availableVoices = enVoices;
+      let curated = curateVoices(enVoices);
+      if (!curated.length) {
+        // 找不到精選名單時，退而求其次：排除特效／趣味語音後取前幾個
+        const novelty = /^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Fred|Junior|Ralph|Kathy|Princess|Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley)\b/i;
+        curated = enVoices.filter((v) => !novelty.test(v.name)).slice(0, MAX_VOICES);
+      }
+      state.availableVoices = curated;
       renderVoiceSelector();
     }
 
@@ -161,10 +200,10 @@
     const select = document.getElementById("voiceSelect");
     if (!select) return;
     select.innerHTML = `<option value="">系統最佳母語發音 (自動雙人對話)</option>`;
-    state.availableVoices.slice(0, 18).forEach((v) => {
+    state.availableVoices.forEach((v) => {
       const opt = document.createElement("option");
       opt.value = v.voiceURI;
-      opt.textContent = `${v.name} (${v.lang})`;
+      opt.textContent = v.__tag ? `${v.name}・${v.__tag}` : `${v.name} (${v.lang})`;
       if (state.selectedVoiceURI === v.voiceURI) opt.selected = true;
       select.appendChild(opt);
     });
