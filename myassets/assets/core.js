@@ -307,7 +307,8 @@
   const pct = (a, q) => { const s = a.slice().sort((x, y) => x - y); const p = (s.length - 1) * q, f = Math.floor(p); return s[f] + (s[Math.min(f + 1, s.length - 1)] - s[f]) * (p - f); };
 
   function analyze(stocks, mkt) {
-    stocks.forEach(st => { st.A = prep(st.px); buildFeatures(st, mkt); });
+    stocks.forEach(st => { st.A = prep(st.px); });
+    stocks.forEach(st => buildFeatures(st, mkt));
     const cal = (mkt || stocks.slice().sort((a, b) => b.n - a.n)[0]).dates, nCal = cal.length;
     const refits = []; for (let i = Math.max(200, nCal - 480); i < nCal; i += 20) refits.push(cal[i]);
     ['eq', 'bd'].forEach(cls => {
