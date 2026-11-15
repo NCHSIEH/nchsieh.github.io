@@ -1,4 +1,4 @@
-/* M8 互動站強化（2026-11-13）：講義第 18、83、94、96 頁的互動版；Air Canada 案來源連結 */
+/* M8 互動站強化（2026-11-15）：對應講義第 7、18、25、27–28、32–33、35、43、48–50、55、57–58、68、70、72、74、83、89、94、96 頁與官方連結 */
 (function () {
   'use strict';
   const $ = U.$;
@@ -51,7 +51,7 @@
     { id: 'p', label: '課程定位', cards: [
       ['不列入必修', '也不列入期末專題評分項目，屬於【自學】層級。', ''],
       ['補充教材', '《n8n 入門與 AI Agent 實作》含兩個完整範例，供自學。', '']],
-      note: '本節為 2026 年 7 月查證之工具現況；此領域變動快，以官方文件為準。' }
+      note: '本節為 2026 年查證之工具現況；此領域變動快，以官方文件為準。' }
   ], src: '講義 M8 第 96 頁。' });
 
   CaseW($('#w-nogen'), { tabs: [
@@ -76,19 +76,36 @@
       { t: 'Tracing 顯示下游節點收到空值。最先該懷疑什麼？', o: ['變數綁定錯誤', '切塊大小太大'], a: 0, w: '下游收到空值是變數綁定錯誤的典型徵兆。' }] }
   ], src: '講義 M8 第 72 頁。' });
 
+  CaseLinks('w-isnot', [
+    ['Dify Official Documentation', 'https://docs.dify.ai/']
+  ], 'Dify 四層應用組裝架構：模型連接、RAG 知識檢索、邏輯與工具、發佈與 Tracing。');
+  CaseLinks('w-newagent', [
+    ['Dify GitHub Releases (v1.16–v1.18)', 'https://github.com/langgenius/dify/releases']
+  ]);
+  CaseLinks('w-tools', [
+    ['Model Context Protocol (MCP) Official Spec', 'https://modelcontextprotocol.io/']
+  ], 'MCP 為 AI 連接外部工具的開放標準；Dify v1.6+ 支援雙向 MCP。');
   CaseLinks('w-aircan', [
     ['裁決全文（BC Civil Resolution Tribunal）', 'https://decisions.civilresolutionbc.ca/crt/crtd/en/525448/1/document.do'],
     ['McCarthy Tétrault 案例評析', 'https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot']
   ], '案號 Moffatt v. Air Canada, 2024 BCCRT 149；2024/2/14 裁決。');
   CaseLinks('w-updoc', [
+    ['FDA 510(k) K253281 Official Record', 'https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm?ID=K253281'],
     ['Innolitics：UpDoc 清了什麼（2026/6/25）', 'https://innolitics.com/articles/updoc-fda-cleared-ai-agent/'],
     ['HLTH：UpDoc 發表首件 FDA 核准的病人端 LLM（2026/7/2）', 'https://hlth.com/insights/news/updoc-debuts-first-fda-cleared-patient-facing-clinical-llm-for-insulin-management']
   ], 'FDA 510(k) K253281，2025/12/23 核准；公開報導指出劑量決定仍在確定性演算法內，LLM 只負責對話介面。');
+  CaseLinks('w-n8ntips', [
+    ['n8n Official Documentation', 'https://docs.n8n.io/']
+  ]);
+
   function addNote(id, title, body) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
     b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
   }
+  addNote('w-swap', '抗改朝換代與黃金測試集（講義 p28）：', '模型名稱不寫死、Embedding 不輕易更換（換了整座知識庫要重算向量），核心金額與規則鎖在 Code 節點與知識庫。留存 5–10 個標準個案（含正常、邊界與拒答題），換新模型 5 分鐘跑完回歸測試再上線。');
+  addNote('w-sp', '四段式 System Prompt 骨架（講義 p35、p55）：', '# 角色 → # 步驟（先讀【參考資料】再判定）→ # 限制（查無資料固定拒答、禁止診斷/處方/推估金額）→ # 格式（固定欄位 + {{#context#}} 動態插槽 + 免責聲明）。');
   addNote('w-topk', '兩把剪刀（示意）：', '10 段召回依相似度排序 0.82、0.76、0.71、0.66、0.58……，答案在 #2 與 #4。Top-K = 3 只拿到 #1–#3，#4 被剪掉；Top-K = 5 加閾值 0.5 拿到 #1–#5，兩段答案都在。檢索模式：「Metformin」靠向量找到「二甲雙胍」，「第 4 條第 2 項」靠全文比對。（講義 M8 第 42 頁）');
-  addNote('w-nogen', '同一題問五次（示意）：', 'LLM 直接回答：17,960、18,240、18,580、18,240、19,100 元，差到 1,140 元；Code 節點查表：五次都是 18,960 元。數字會變的，就是生成的。（講義 M8 第 48 頁）');
+  addNote('w-code', '防呆正規表達式與三筆 Trace（講義 p57）：', 'Regex 只抓「第 [2-8] 級 / CMS [2-8]」，避免把個案年齡（80 歲）誤抓成等級；「第 4 級」→ 18,580、「CMS 6」→ 28,070、資訊不足 → amount: 0 安全歸零並提示轉照管專員。');
+  addNote('w-nogen', '同一題問五次（示意）：', 'LLM 直接回答：17,960、18,240、18,580、18,240、19,100 元，差到 1,140 元；Code 節點查表：五次都是 18,960 元。數字會變的，就是生成的。（講義 M8 第 48、58 頁）');
   addNote('w-fallback', '每一種失敗都先接好一條路：', '429／503／逾時 → 失敗分支＋備援模型；API 改版 → 異常回報節點、轉真人；模型拒答 → 備援模型或明確告知；知識庫空結果 → 退回內建知識庫並告知；輸入不足 → 反向提問；Agent 迭代用盡 → 最大迭代次數、轉人工。（講義 M8 第 74 頁）');
 })();
