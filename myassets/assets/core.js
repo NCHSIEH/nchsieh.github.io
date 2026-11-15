@@ -38,7 +38,7 @@
   }
 
   async function finmind(dataset, id, start, mapper) {
-    const key = 'ma:' + cacheBucket() + ':' + dataset + ':' + id;
+    const key = 'ma:' + cacheBucket() + ':' + dataset + ':' + id + ':' + (mapper ? 'm' : 'r') + start.slice(0, 7);
     const hit = lsGet(key);
     if (hit) return hit;
     const url = FM + '?dataset=' + dataset + '&data_id=' + encodeURIComponent(id) + '&start_date=' + start;
@@ -307,13 +307,35 @@
   }
 
   /* ---------- 整合：抓一檔的全部資料 ---------- */
+  // 還原權息：除息日之前的價格乘上 (前一日收盤 − 現金股利) ÷ 前一日收盤，避免除息缺口被當成下跌
+  function adjustForDividends(px, divs) {
+    const out = px.map(x => ({ ...x }));
+    const last = out.length ? out[out.length - 1].date : '';
+    divs.filter(d => d.ex <= last && d.ex > out[0].date).forEach(d => {
+      const i = out.findIndex(x => x.date >= d.ex); if (i < 1) return;
+      const prev = px[i - 1].close; if (!(prev > d.cash)) return;
+      const f = (prev - d.cash) / prev;
+      for (let k = 0; k < i; k++) { out[k].close *= f; out[k].max *= f; out[k].min *= f; }
+    });
+    return out;
+  }
   async function loadOne(item) {
     const raw = await finmind('TaiwanStockPrice', item.code, daysAgo(1100), d => d.filter(x => x.close > 0).map(x => ({ date: x.date, max: x.max, min: x.min, close: x.close, Trading_Volume: x.Trading_Volume })));
-    const px = raw.slice().sort((a, b) => a.date < b.date ? -1 : 1);
+    let px = raw.slice().sort((a, b) => a.date < b.date ? -1 : 1);
+    try {
+      const dv = await finmind('TaiwanStockDividend', item.code, daysAgo(1100), d => d.filter(x => x.CashExDividendTradingDate && (x.CashEarningsDistribution + (x.CashStatutorySurplus || 0)) > 0)
+        .map(x => ({ ex: x.CashExDividendTradingDate, cash: x.CashEarningsDistribution + (x.CashStatutorySurplus || 0) })));
+      if (dv && dv.length) px = adjustForDividends(px, dv);
+    } catch (e) { }
+    // ETF 的自營商買賣多半是造市與避險，不代表看法，只計外資與投信
+    const isETF = item.type && item.type.includes('ETF');
     let instByDate = null;
     try {
       const inst = await finmind('TaiwanStockInstitutionalInvestorsBuySell', item.code, daysAgo(30));
-      if (inst && inst.length) { instByDate = {}; inst.forEach(r => { instByDate[r.date] = (instByDate[r.date] || 0) + (r.buy - r.sell); }); }
+      if (inst && inst.length) {
+        instByDate = {};
+        inst.forEach(r => { if (isETF && !/^(Foreign_Investor|Investment_Trust)$/.test(r.name)) return; instByDate[r.date] = (instByDate[r.date] || 0) + (r.buy - r.sell); });
+      }
     } catch (e) { }
     const ev = evaluateAll(px, instByDate);
     return { item, px, now: ev.now, yest: ev.yest };
@@ -336,7 +358,7 @@
     macd: ['MACD 動能', '看漲跌的力道有沒有變強。', '柱狀體大於 0 而且變長＝多方增強（紅）；小於 0 而且變長＝空方增強（綠）；柱狀體縮短＝力道減弱（偏黃）。由負轉正叫黃金交叉。'],
     kd: ['KD 轉折', '看短線轉折點，反應最快。', 'K 在 D 之上偏紅、之下偏綠。K 低於 20 時往上穿過 D（低檔黃金交叉）是常見買點；高於 80 時往下穿過 D（高檔死亡交叉）是常見賣點。'],
     rsi: ['RSI 冷熱', '看漲過頭或跌過頭，是反向指標。', '70 以上＝過熱、容易拉回（偏綠）；30 以下＝超賣、容易反彈（偏紅）。強勢股常見黃到偏綠，只是提醒別追高，不代表會大跌。'],
-    inst: ['法人籌碼', '外資、投信、自營商近 5 個交易日的買賣超，除以同期成交量。', '買超偏紅、賣超偏綠，買賣超達成交量 5% 為最深色。沒有法人資料的標的不計入。'],
+    inst: ['法人籌碼', '外資、投信、自營商近 5 個交易日的買賣超，除以同期成交量。ETF 只計外資與投信（自營商多為造市避險）。', '買超偏紅、賣超偏綠，買賣超達成交量 5% 為最深色。沒有法人資料的標的不計入。'],
     yest: ['昨日燈號', '前一交易日的綜合燈號。', '和今天比較：顏色由綠轉紅代表轉強，由紅轉綠代表轉弱。'],
     hz: ['期間預測', '該期間專屬的指標權重分數（50%）＋這檔股票過去三年「指標狀況相似的日子」之後實際上漲的機率（50%）。', '短期看 KD、RSI，長期看均線趨勢。紅＝偏漲、綠＝偏跌、黃＝方向不明。']
   };
@@ -377,6 +399,7 @@
   const SOURCES_HTML = '<div class="box src"><h2>資料來源</h2><ul>' +
     '<li><b>股價（開高低收、成交量）</b>：每日收盤資料，原始來源為<a href="https://www.twse.com.tw/" target="_blank" rel="noopener">臺灣證券交易所</a>（上市）與<a href="https://www.tpex.org.tw/" target="_blank" rel="noopener">證券櫃檯買賣中心</a>（上櫃，例如 00933B、00937B），經 <a href="https://finmindtrade.com/" target="_blank" rel="noopener">FinMind</a> 開放資料 API 取得。約下午 2:30～3:30 收盤資料公布後更新；盤中看到的是前一交易日。均線、MACD、KD、RSI 都由這份資料計算。</li>' +
     '<li><b>三大法人買賣超</b>：證交所／櫃買中心每日公布的外資、投信、自營商買賣超，經 FinMind 取得，約下午 4～5 點後更新，取近 30 天。</li>' +
+    '<li><b>還原權息</b>：用證交所／櫃買中心的除息公告，把除息日之前的價格往下調整，讓除息缺口不會被當成下跌。圖表與指標用還原後的價格，收盤價顯示實際價格。</li>' +
     '<li><b>各期間預測的歷史統計</b>：同一份每日股價，取約三年（1,100 天）在瀏覽器即時計算，不另外抓資料。</li>' +
     '<li><b>配息行事曆</b>：證交所／櫃買中心的除權息公告，經 FinMind 取得。</li>' +
     '<li><b>股票名稱與類別</b>：FinMind 台股總覽（TaiwanStockInfo）。</li>' +

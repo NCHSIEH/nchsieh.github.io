@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>MyAssets 買賣趨勢燈號</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23eab308'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/style.css?v=9">
+<link rel="stylesheet" href="../assets/style.css?v=10">
 <style>
   .matrix{width:100%;border-collapse:collapse;font-size:13px}
   .matrix th{font-weight:500;color:var(--mute);font-size:11px;padding:4px 2px;text-align:center;line-height:1.35}
@@ -79,12 +79,12 @@
     <h3>④ RSI 冷熱（權重 0.6）</h3>
     <p>看「漲過頭或跌過頭」，是反向指標。RSI 70 以上代表短線漲太多、容易拉回，分數偏綠；30 以下代表跌太多、容易反彈，分數偏紅。強勢股的 RSI 常是黃到偏綠，只是提醒不要追高。</p>
     <h3>⑤ 法人籌碼（權重 0.8）</h3>
-    <p>看「大戶在買還是在賣」。把外資、投信、自營商近 5 個交易日的買賣超加總，再除以同期成交量。買超占成交量 5% 以上為最深紅，賣超 5% 以上為最深綠。沒有法人資料的標的，這一項不計入。歷史相似情境的統計不含這一項（法人資料只抓近一個月）。</p>
+    <p>看「大戶在買還是在賣」。把外資、投信、自營商近 5 個交易日的買賣超加總，再除以同期成交量（ETF 只計外資與投信，因為自營商的 ETF 買賣多半是造市與避險）。買超占成交量 5% 以上為最深紅，賣超 5% 以上為最深綠。沒有法人資料的標的，這一項不計入。歷史相似情境的統計不含這一項（法人資料只抓近一個月）。</p>
     <h3>使用上的提醒</h3>
     <ul>
       <li>高股息 ETF 和債券 ETF 是領息部位，綠燈的意思是「暫緩加碼」，不是要賣掉。</li>
       <li>債券 ETF 的價格主要跟著利率走，技術指標的參考性比股票低。</li>
-      <li>除息日當天股價會下跌，均線和 MACD 可能短暫轉弱，屬正常現象；歷史統計也會受除息影響。</li>
+      <li>所有指標都用「還原權息」後的價格計算，除息缺口不會被誤判為下跌。</li>
     </ul>
   </div>
 
@@ -92,8 +92,8 @@
   <p class="foot">技術指標與歷史統計只反映過去的價格與籌碼，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（FinMind，約下午 3 點後更新）。</p>
 </main>
 
-<script src="../assets/core.js?v=9"></script>
-<script type="module" src="../assets/auth.js?v=9"></script>
+<script src="../assets/core.js?v=10"></script>
+<script type="module" src="../assets/auth.js?v=10"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
