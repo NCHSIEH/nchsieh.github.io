@@ -8,15 +8,22 @@
 
   <!-- iOS / iPadOS Native Web App Meta -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#f1f5f9">
   <meta name="apple-mobile-web-app-title" content="EarFlow 聽力">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230f172a'/%3E%3Ccircle cx='90' cy='90' r='58' fill='none' stroke='%2338bdf8' stroke-width='10' stroke-dasharray='260 100' stroke-linecap='round'/%3E%3Cpath d='M72 65v50l44-25z' fill='%2338bdf8'/%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230f172a'/%3E%3Ccircle cx='90' cy='90' r='58' fill='none' stroke='%2338bdf8' stroke-width='10' stroke-dasharray='260 100' stroke-linecap='round'/%3E%3Cpath d='M72 65v50l44-25z' fill='%2338bdf8'/%3E%3C/svg%3E">
 
-  <link rel="stylesheet" href="css/app.css?v=20261111v5">
+  <link rel="stylesheet" href="css/app.css?v=20261115v3">
 </head>
-<body>
+<body class="theme-light">
+  <script>
+    // Use light unless the user has explicitly saved a dark preference.
+    try {
+      document.body.classList.toggle("theme-light", localStorage.getItem("earflow_theme_v1") !== "dark");
+    } catch (e) {}
+  </script>
   <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
 
   <div class="app-shell">
@@ -252,8 +259,8 @@
     </div>
   </footer>
 
-  <script src="js/data.js?v=20261111v5"></script>
-  <script src="js/analyzer.js?v=20261111v5"></script>
-  <script src="js/app.js?v=20261111v5"></script>
+  <script src="js/data.js?v=20261115v3"></script>
+  <script src="js/analyzer.js?v=20261115v3"></script>
+  <script src="js/app.js?v=20261115v3"></script>
 </body>
 </html>

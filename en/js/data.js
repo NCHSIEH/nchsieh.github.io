@@ -190,13 +190,13 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "A",
-        en: "Let's put a pin in the deployment date for now and revisit it on Thursday.",
-        zh: "我們先把上線日期這件事暫時擱置，週四再回來討論。",
-        ear: "Lets [pʊ-də-pi-nin] the deployment date fer now ən [ree-vi-zi-dit] on Thursday.",
-        cloze: ["put a pin in", "revisit it"],
+        en: "Let's leave the deployment date open for now and discuss it again on Thursday.",
+        zh: "我們先不敲定上線日期，週四再回來討論。",
+        ear: "Let's leave the deployment date open for now and discuss it again on Thursday.",
+        cloze: ["discuss it again"],
         chunks: [
-          { orig: "put a pin in", sound: "pʊ-də-pi-nin", tip: "會議極高頻片語：先把某議題「插根針記著（暫緩討論）」，免得卡住議程" },
-          { orig: "revisit it", sound: "ree-vi-zi-dit", tip: "稍後再回頭討論" }
+          { orig: "discuss it again", sound: "discuss it again", tip: "再討論一次" },
+          { orig: "again on", sound: "again-on", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -216,7 +216,7 @@ window.EARFLOW_DEFAULT_UNITS = [
     category: "meeting",
     categoryName: "💼 會議英語專區",
     title: "Meeting 03｜進度追蹤、瓶頸排除與責任歸屬 (Stand-up & Bottlenecks)",
-    focus: "專案會議追進度必聽詞：bandwidth（心力/時間）、snag（小阻礙）、ballpark（粗估）",
+    focus: "專案會議追進度常用詞：minor problem（小問題）、rough estimate（粗估）、need backup（需要支援）",
     duration: "約 3 分鐘 · 8 句",
     lines: [
       {
@@ -232,12 +232,13 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "B",
-        en: "We hit a minor snag yesterday with the hospital firewall permissions.",
-        zh: "我們昨天在醫院防火牆權限那邊遇到了一個小阻礙。",
-        ear: "We [hi-də] minor snag yesterday with the hospital firewall permissions.",
-        cloze: ["hit a minor snag"],
+        en: "We ran into a minor problem yesterday with the hospital firewall permissions.",
+        zh: "我們昨天在醫院防火牆權限上遇到一個小問題。",
+        ear: "We ran into a minor problem yesterday with the hospital firewall permissions.",
+        cloze: ["minor problem"],
         chunks: [
-          { orig: "hit a minor snag", sound: "hi-də minor snag", tip: "hit a snag = 遇到小麻煩、卡關（會議超常聽見）" }
+          { orig: "minor problem", sound: "minor problem", tip: "小問題" },
+          { orig: "ran into", sound: "ran-into", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -252,24 +253,24 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "B",
-        en: "Hopefully not, I already looped in the IT director to help us sort it out.",
-        zh: "希望不會，我已經把資訊主任拉進討論串，幫我們解決這個問題了。",
-        ear: "Hopefully not, I already [loop-tin] the IT director tə hel-pʌs [sor-di-dout].",
-        cloze: ["looped in", "sort it out"],
+        en: "Hopefully not, I already asked the IT director to help us sort it out.",
+        zh: "希望不會，我已經請資訊主管幫忙解決了。",
+        ear: "Hopefully not, I already asked the IT director to help us [sor-di-dout].",
+        cloze: ["sort it out"],
         chunks: [
-          { orig: "looped in", sound: "loop-tin", tip: "loop someone in = 把某人加入信件或會議討論中" },
-          { orig: "sort it out", sound: "sor-di-dout", tip: "把問題理清、解決掉" }
+          { orig: "sort it out", sound: "sort it out", tip: "把問題解決" },
+          { orig: "help us", sound: "help-us", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
         speaker: "A",
-        en: "Can you give me a ballpark figure of how many hours that will take?",
-        zh: "你能給我一個大概的估計，那需要花多少小時嗎？",
-        ear: "Kə-nyü [giv-mee-ə] [ball-park-figure] əv how many hours that-əl take?",
-        cloze: ["ballpark figure", "that will"],
+        en: "Can you give me a rough estimate of how many hours that will take?",
+        zh: "你能粗估一下這大概需要多少小時嗎？",
+        ear: "Can you [gimme] a rough estimate of how many hours that will take?",
+        cloze: ["a rough estimate"],
         chunks: [
-          { orig: "ballpark figure", sound: "ball-park figure", tip: "粗略估計的數字或範圍" },
-          { orig: "that will", sound: "that-əl /ˈðæɾəl/", tip: "will 在代名詞後常縮成 /əl/，t 變彈舌 d (thaddl)" }
+          { orig: "a rough estimate", sound: "a rough estimate", tip: "粗略估計" },
+          { orig: "give me", sound: "gimme /ˈɡɪmi/", tip: "give me 縮讀為 gimme" }
         ]
       },
       {
@@ -285,23 +286,25 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "A",
-        en: "Do you have enough bandwidth to handle this, or do you need backup?",
-        zh: "你目前手頭的時間與心力夠處理這件事嗎，還是需要支援？",
-        ear: "Djü hav i-nʌf [band-width] tə handle this, er djü need backup?",
-        cloze: ["enough bandwidth", "need backup"],
+        en: "Do you have enough time to handle this, or do you need backup?",
+        zh: "你有足夠時間處理這件事，還是需要人手支援？",
+        ear: "Do you have enough time to handle this, or do you need backup?",
+        cloze: ["enough time"],
         chunks: [
-          { orig: "bandwidth", sound: "band-width", tip: "會議口語的 bandwidth 指人的「時間、精力與工作負荷餘裕」" }
+          { orig: "enough time", sound: "enough time", tip: "足夠的時間" }
         ]
       },
       {
         speaker: "B",
-        en: "I'm on top of it, I'll ping you on Slack as soon as it goes through.",
-        zh: "這件事都在我掌握中，一旦審核通過我馬上在 Slack 上敲你。",
-        ear: "I'm [on-ta-pə-vit], I'll ping-yü on Slack əz [soo-nə-zit] goes through.",
-        cloze: ["on top of it", "as soon as it"],
+        en: "I'm on top of it, I'll message you on Slack as soon as it goes through.",
+        zh: "我有掌握進度，一處理好就會在 Slack 傳訊息給你。",
+        ear: "I'm on top of it, I'll message you on Slack as soon as it goes through.",
+        cloze: ["message you"],
         chunks: [
-          { orig: "I'm on top of it", sound: "I'm on-ta-pə-vit", tip: "一切都在掌握中、已經在積極處理了" },
-          { orig: "as soon as it", sound: "əz-soo-nə-zit", tip: "四個小詞完全連音" }
+          { orig: "message you", sound: "message you", tip: "傳訊息給你" },
+          { orig: "I'm on", sound: "I'm-on", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "top of", sound: "top-of", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "Slack as", sound: "Slack-as", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       }
     ]
@@ -316,13 +319,13 @@ window.EARFLOW_DEFAULT_UNITS = [
     lines: [
       {
         speaker: "A",
-        en: "We are coming up on the top of the hour, so let's start wrapping things up.",
-        zh: "我們快接近整點了，所以我們開始做個收尾吧。",
-        ear: "We're [cʌ-ming-ʌ-pon] the [ta-pəv-the-hour], so lets start [ra-ping-thing-zʌp].",
-        cloze: ["coming up on", "top of the hour"],
+        en: "We are almost out of time, so let's start wrapping things up.",
+        zh: "我們的時間快到了，開始收尾吧。",
+        ear: "We are almost [outta] time, so let's start wrapping things up.",
+        cloze: ["almost out of time"],
         chunks: [
-          { orig: "top of the hour", sound: "ta-pəv-the-hour", tip: "美式會議超常用：指「整點」（例如 10:00、11:00 會議結束時間）" },
-          { orig: "wrapping things up", sound: "ra-ping-thing-zʌp", tip: "把討論做個總結收尾" }
+          { orig: "almost out of time", sound: "almost out of time", tip: "時間快用完了" },
+          { orig: "things up", sound: "things-up", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -379,12 +382,13 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "A",
-        en: "Let's pencil in a quick fifteen-minute sync on Friday morning.",
-        zh: "我們先暫定在週五早上排一個 15 分鐘的快速同步會議。",
-        ear: "Lets [pen-sə-lin] ə quick fifteen-minute sync on Friday morning.",
-        cloze: ["pencil in", "quick fifteen-minute"],
+        en: "Let's schedule a quick fifteen-minute meeting on Friday morning.",
+        zh: "我們安排週五早上開個十五分鐘的簡短會議吧。",
+        ear: "Let's schedule a quick fifteen-minute meeting on Friday morning.",
+        cloze: ["schedule a quick"],
         chunks: [
-          { orig: "pencil in", sound: "pen-sə-lin", tip: "用鉛筆寫下 = 先暫定某個會議時間（之後可再調整）" }
+          { orig: "schedule a quick", sound: "schedule a quick", tip: "安排一個簡短的……" },
+          { orig: "meeting on", sound: "meeting-on", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -405,7 +409,7 @@ window.EARFLOW_DEFAULT_UNITS = [
     category: "meeting",
     categoryName: "💼 會議英語專區",
     title: "Meeting 05｜預算談判、臨時加需求與資源交換 (Scope Creep & Trade-offs)",
-    focus: "當對方在會議中要求加功能又不延後交期時，母語主管如何談條件交換（set in stone / hold off on）",
+    focus: "當對方在會議中要求加功能又不延後交期時，如何談條件交換（fixed launch date / hold off on）",
     duration: "約 3 分鐘 · 8 句",
     lines: [
       {
@@ -421,12 +425,13 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "B",
-        en: "To be honest, adding a major feature this late in the game is pretty risky.",
-        zh: "老實說，在專案都進行到這麼後期的階段才加大型功能，風險相當高。",
-        ear: "[Tə-bee-ah-nist], adding ə major feature this [lay-din-the-game] iz pri-dee risky.",
-        cloze: ["To be honest", "late in the game"],
+        en: "To be honest, adding a major feature at this late stage is pretty risky.",
+        zh: "老實說，在這麼後面的階段加入重大功能風險很高。",
+        ear: "To be honest, adding a major feature at this late stage is pretty risky.",
+        cloze: ["at this late stage"],
         chunks: [
-          { orig: "late in the game", sound: "lay-din-the-game", tip: "源自球賽末尾，指「在計畫或專案已經進入尾聲的階段」" }
+          { orig: "at this late stage", sound: "at this late stage", tip: "在這麼後面的階段" },
+          { orig: "adding a", sound: "adding-a", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -441,13 +446,14 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "B",
-        en: "If the launch date is set in stone, we will have to drop something else.",
-        zh: "如果上線日期是鐵板一塊不能動的，我們就必須先捨棄其他項目。",
-        ear: "If the launch date iz [se-din-stone], we'll [haf-tə] drop something else.",
-        cloze: ["set in stone", "have to"],
+        en: "If the launch date is fixed, we will have to drop something else.",
+        zh: "如果上線日期不能變動，我們就必須先拿掉其他項目。",
+        ear: "If the launch date is fixed, we will [hafta] drop something else.",
+        cloze: ["launch date is fixed"],
         chunks: [
-          { orig: "set in stone", sound: "se-din-stone", tip: "刻在石頭上 = 鐵板釘釘、絕對不能更改" },
-          { orig: "we will have to", sound: "we'll haf-tə", tip: "have to 無聲化為 hafta" }
+          { orig: "launch date is fixed", sound: "launch date is fixed", tip: "上線日期已固定" },
+          { orig: "have to", sound: "hafta /ˈhæftə/", tip: "have to 無聲化縮讀為 hafta" },
+          { orig: "something else", sound: "something-else", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -498,7 +504,7 @@ window.EARFLOW_DEFAULT_UNITS = [
     category: "meeting",
     categoryName: "💼 會議英語專區",
     title: "Meeting 06｜跨國危機處理與系統異常應變 (Crisis & Damage Control)",
-    focus: "緊急應變會議：找出根本原因（root cause）、不推卸責任、先止血（stopgap）再徹底修復",
+    focus: "緊急應變會議：找出根本原因（root cause）、不推卸責任、先採暫時措施（temporary solution）再徹底修復",
     duration: "約 3 分鐘 · 8 句",
     lines: [
       {
@@ -545,13 +551,13 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "A",
-        en: "Can we roll back to the previous version as a quick stopgap measure?",
-        zh: "我們可以先退回上一個版本，作為快速的暫時止血措施嗎？",
-        ear: "Kən-we [rol-back] tə the previous version əz ə quick [stap-gap] measure?",
-        cloze: ["roll back", "stopgap measure"],
+        en: "Can we roll back to the previous version as a temporary solution?",
+        zh: "我們能先回復到上一個版本，作為暫時的解決方式嗎？",
+        ear: "Can we roll back to the previous version as a temporary solution?",
+        cloze: ["a temporary solution"],
         chunks: [
-          { orig: "roll back", sound: "rol-back", tip: "系統退回前一穩定版本" },
-          { orig: "stopgap measure", sound: "stap-gap measure", tip: "權宜之計、暫時止血的應急措施" }
+          { orig: "a temporary solution", sound: "a temporary solution", tip: "暫時的解決方式" },
+          { orig: "version as", sound: "version-as", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -566,24 +572,27 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "A",
-        en: "Good call, let's put out a brief statement so our users aren't left in the dark.",
-        zh: "明智的決定，我們發個簡短聲明，別讓使用者被蒙在鼓裡乾著急。",
-        ear: "[Gʊd-call], lets [pʊ-dou-də] brief statement so our users aren't [lef-tin-the-dark].",
-        cloze: ["put out a", "left in the dark"],
+        en: "Good call, let's put out a brief statement so our users know what's happening.",
+        zh: "好主意，我們發個簡短聲明，讓使用者知道目前的狀況。",
+        ear: "Good call, let's put out a brief statement so our users know what's happening.",
+        cloze: ["know what's happening"],
         chunks: [
-          { orig: "Good call", sound: "Gʊd-call", tip: "稱讚對方「決定得好、判斷正確」" },
-          { orig: "left in the dark", sound: "lef-tin-the-dark", tip: "被蒙在鼓裡、毫不知情" }
+          { orig: "know what's happening", sound: "know what's happening", tip: "知道目前的狀況" },
+          { orig: "put out", sound: "put-out", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "out a", sound: "out-a", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "our users", sound: "our-users", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
         speaker: "B",
-        en: "Once the dust settles, we will schedule a post-mortem to prevent this from happening again.",
-        zh: "等事情平息下來後，我們會排一場事後檢討會，防止類似情況再次發生。",
-        ear: "Once the [dʌs'-se-dəlz], we'll schedule ə [post-mor-dəm] tə prevent this frəm happening ə-gain.",
-        cloze: ["dust settles", "post-mortem"],
+        en: "Once things are back to normal, we will schedule a review to prevent this from happening again.",
+        zh: "等狀況恢復正常後，我們會安排檢討，避免同樣的事情再次發生。",
+        ear: "Once things are back to normal, we will schedule a review to prevent this from happening again.",
+        cloze: ["back to normal"],
         chunks: [
-          { orig: "Once the dust settles", sound: "Once the dʌs'-se-dəlz", tip: "等塵埃落定、混亂平息之後" },
-          { orig: "post-mortem", sound: "post-mor-dəm", tip: "源自醫學驗屍，商務/工程界指「專案或事故後的不究責檢討會」" }
+          { orig: "back to normal", sound: "back to normal", tip: "恢復正常" },
+          { orig: "things are", sound: "things-are", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "happening again", sound: "happening-again", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       }
     ]
@@ -714,13 +723,14 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "B",
-        en: "That is a spot-on question, and it was actually one of our reviewers' main concerns.",
-        zh: "這問題非常切中要害，而且這其實也是我們審稿委員最主要的顧慮之一。",
-        ear: "[Tha-tsə] [spa-don] question, ən it wəz actually [wʌ-nə-vour] reviewers' main concerns.",
-        cloze: ["spot-on", "one of our"],
+        en: "That is a very good question, and it was actually one of our reviewers' main concerns.",
+        zh: "這是個很好的問題，也確實是我們其中一位審查者主要關心的事。",
+        ear: "That is a very good question, and it was actually one of our reviewers' main concerns.",
+        cloze: ["a very good question"],
         chunks: [
-          { orig: "spot-on", sound: "spa-don", tip: "非常精準、切中核心" },
-          { orig: "one of our", sound: "wʌ-nə-vour", tip: "三詞連讀成 wʌ-nə-vour" }
+          { orig: "a very good question", sound: "a very good question", tip: "一個很好的問題" },
+          { orig: "That is", sound: "That-is", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "and it", sound: "and-it", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -757,12 +767,12 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "A",
-        en: "I'd love to pick your brain over coffee if you have ten minutes during the break.",
-        zh: "如果您茶敘休息時間有十分鐘的話，我很想邊喝咖啡邊向您請益。",
-        ear: "I'd lʌv tə [pik-yer-brain] over coffee i-fyü hav ten minutes during the break.",
-        cloze: ["pick your brain", "during the break"],
+        en: "I'd love to hear more about your research over coffee if you have ten minutes during the break.",
+        zh: "如果你休息時間有十分鐘，我很想邊喝咖啡邊多了解你的研究。",
+        ear: "I'd love to hear more about your research over coffee if you have ten minutes during the break.",
+        cloze: ["hear more about your research"],
         chunks: [
-          { orig: "pick your brain", sound: "pik-yer-brain", tip: "歐美學者與商務人士超愛用：「向某人請益、挖寶取經」" }
+          { orig: "hear more about your research", sound: "hear more about your research", tip: "多了解你的研究" }
         ]
       },
       {
@@ -902,12 +912,15 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "A",
-        en: "Reviewer One was very supportive, but Reviewer Two really tore into our methodology.",
-        zh: "一號審稿人非常正面支持，但二號審稿人對我們的研究方法批得很兇。",
-        ear: "Reviewer One wəz very supportive, bət Reviewer Two really [tor-in-tə] our methodology.",
-        cloze: ["tore into", "methodology"],
+        en: "Reviewer One was very supportive, but Reviewer Two had serious concerns about our methodology.",
+        zh: "第一位審查者很支持，但第二位對我們的研究方法有很大的疑慮。",
+        ear: "Reviewer One was very supportive, but Reviewer Two had serious concerns about our methodology.",
+        cloze: ["serious concerns"],
         chunks: [
-          { orig: "tore into", sound: "tor-in-tə", tip: "tear into = 猛烈批評、嚴厲挑剔" }
+          { orig: "serious concerns", sound: "serious concerns", tip: "很大的疑慮" },
+          { orig: "Reviewer One", sound: "Reviewer-One", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "concerns about", sound: "concerns-about", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "about our", sound: "about-our", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -946,19 +959,19 @@ window.EARFLOW_DEFAULT_UNITS = [
         en: "How much time did the journal give us to turn the point-by-point response around?",
         zh: "期刊給我們多少時間完成逐點回覆（Point-by-point response）並交回去？",
         ear: "How much time did the journal [gi-vʌs] tə turn the point-by-point response [ə-round]?",
-        cloze: ["give us", "turn ... around"],
+        cloze: ["give us", "turn the point-by-point response around"],
         chunks: [
           { orig: "turn ... around", sound: "turn ... ə-round", tip: "turn something around = 完成處理並交付回來" }
         ]
       },
       {
         speaker: "B",
-        en: "We have six weeks, so let's divide and conquer the rebuttal items today.",
-        zh: "我們有六週時間，所以我們今天就來分工合作（各個擊破）這些回覆項目吧。",
-        ear: "We hav six weeks, so lets [di-vai-dən-con-ker] the rebuttal items tə-day.",
-        cloze: ["divide and conquer", "rebuttal"],
+        en: "We have six weeks, so let's split up the response items today.",
+        zh: "我們有六週，今天先把需要回覆的項目分工吧。",
+        ear: "We have six weeks, so let's split up the response items today.",
+        cloze: ["split up"],
         chunks: [
-          { orig: "divide and conquer", sound: "di-vai-dən-con-ker", tip: "分工合作、各個擊破" }
+          { orig: "split up", sound: "split up", tip: "分配、分工" }
         ]
       }
     ]
@@ -1355,23 +1368,22 @@ window.EARFLOW_DEFAULT_UNITS = [
     lines: [
       {
         speaker: "A",
-        en: "Hey! Long time no see, how have you been keeping lately?",
+        en: "Hey! Long time no see, how have you been lately?",
         zh: "嗨！好久不見，你最近過得怎麼樣？",
-        ear: "Hey! Long time no see, [how-vyü-bin] keeping lately?",
+        ear: "Hey! Long time no see, how have you been lately?",
         cloze: ["how have you been"],
         chunks: [
-          { orig: "how have you been", sound: "how-vyü-bin", tip: "have 縮成 /v/，been 唸短音 /bɪn/" }
+          { orig: "how have you been", sound: "how have you been", tip: "你最近過得怎麼樣" }
         ]
       },
       {
         speaker: "B",
-        en: "Can't complain! Been super swamped with the new semester though.",
-        zh: "還不錯啦！不過最近新學期真是忙翻了。",
-        ear: "[Can'-cəm-plain]! Bin super [swamp-twith] the new semester though.",
-        cloze: ["Can't complain", "swamped with"],
+        en: "Can't complain! I've been really busy with the new semester though.",
+        zh: "還不錯！不過最近新學期開始，真的很忙。",
+        ear: "Can't complain! I've been really busy with the new semester though.",
+        cloze: ["really busy"],
         chunks: [
-          { orig: "Can't complain", sound: "Can'-cəm-plain", tip: "「還不錯、沒什麼好抱怨的」" },
-          { orig: "swamped with", sound: "swamp-twith", tip: "忙得不可開交" }
+          { orig: "really busy", sound: "really busy", tip: "真的很忙" }
         ]
       },
       {
@@ -1649,12 +1661,14 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "A",
-        en: "The courier numbers on this street can be a little confusing at night.",
-        zh: "這條街的門牌號碼在晚上對快遞員來說確實有點容易搞混。",
-        ear: "The courier numbers on this street kən-bee [ə-li-dəl] confusing at night.",
-        cloze: ["can be", "a little confusing"],
+        en: "The house numbers on this street can be a little confusing at night.",
+        zh: "這條街的門牌號碼晚上看起來有點容易混淆。",
+        ear: "The house numbers on this street can be a little confusing at night.",
+        cloze: ["house numbers"],
         chunks: [
-          { orig: "a little", sound: "ə-li-dəl", tip: "tt 變彈舌 d" }
+          { orig: "house numbers", sound: "house numbers", tip: "門牌號碼" },
+          { orig: "numbers on", sound: "numbers-on", tip: "前字尾子音與後字首母音自然連音 (Catenation)" },
+          { orig: "confusing at", sound: "confusing-at", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -1934,12 +1948,13 @@ window.EARFLOW_DEFAULT_UNITS = [
       },
       {
         speaker: "B",
-        en: "Yes, it is bumper-to-bumper, you can just walk away no matter what happens.",
-        zh: "是的，這是從車頭保到車尾的全險，不管發生什麼事您都可以直接交還車鑰匙走人。",
-        ear: "Yes, i-ts [bʌm-per-tə-bʌm-per], yü kən jəs [waw-kə-way] no ma-der wha' happens.",
-        cloze: ["bumper-to-bumper", "walk away"],
+        en: "It covers many common problems, but let me explain what's excluded.",
+        zh: "它涵蓋許多常見狀況，不過讓我說明哪些情況不在保障範圍內。",
+        ear: "It covers many common problems, but [lemme] explain what's excluded.",
+        cloze: ["what's excluded"],
         chunks: [
-          { orig: "bumper-to-bumper", sound: "bʌm-per-tə-bʌm-per", tip: "從前保險桿到後保險桿 = 全車全險（亦可用於形容塞車車貼車）" }
+          { orig: "what's excluded", sound: "what's excluded", tip: "不包含的項目" },
+          { orig: "let me", sound: "lemme /ˈlɛmi/", tip: "let me 縮讀為 lemme" }
         ]
       },
       {
@@ -2635,13 +2650,13 @@ window.EARFLOW_DEFAULT_UNITS = [
     lines: [
       {
         speaker: "A",
-        en: "Good news, all the blood work from your annual physical came back normal!",
-        zh: "好消息，您年度健檢的所有抽血檢驗結果出來都很正常！",
-        ear: "Gʊd news, all the [blʌd-work] frəm yer annual physical [caym-back] normal!",
-        cloze: ["blood work", "came back"],
+        en: "Good news, most of the blood work from your annual physical came back normal!",
+        zh: "好消息，你年度健檢大部分的血液檢查結果都正常！",
+        ear: "Good news, most of the blood work from your annual physical came back normal!",
+        cloze: ["most of"],
         chunks: [
-          { orig: "blood work", sound: "blʌd-work", tip: "抽血檢驗報告" },
-          { orig: "came back normal", sound: "caym-back normal", tip: "檢驗結果出爐為正常" }
+          { orig: "most of", sound: "most of", tip: "大部分的" },
+          { orig: "your annual", sound: "your-annual", tip: "前字尾子音與後字首母音自然連音 (Catenation)" }
         ]
       },
       {
@@ -2953,7 +2968,7 @@ window.EARFLOW_DEFAULT_UNITS = [
         en: "Not today, I'm handing my old one down to my student for lab work.",
         zh: "今天先不用，我打算把舊的那台傳給我的學生做實驗室研究用。",
         ear: "Na' tə-day, I'm [han-ding] my old wʌn down tə my student fer lab work.",
-        cloze: ["handing ... down", "lab work"],
+        cloze: ["handing my old one down", "lab work"],
         chunks: [
           { orig: "hand down", sound: "hand down", tip: "把用過的物品傳承/轉交給下一代或後輩" }
         ]

@@ -293,7 +293,7 @@
     const targetTopic = topic?.trim() || "主持跨國研究會議並討論專案時程與分工";
     return `請幫我設計一組約 3 分鐘訓練量（共 ${sentenceCount} 句來回交鋒對話）的英語聽力單元，專為「能讀能講、但聽不懂母語者正常快語速（連音與弱讀）」的學習者設計。
 情境主題：「${targetTopic}」
-請嚴格以「每行一句，英文與繁體中文之間用 | 分隔」的格式輸出（共 ${sentenceCount} 行，不要加編號或其他說明文字），且英文必須大量包含母語者真實會議/日常口語（如 walk us through, on the same page, touch base, sign off on, should have, going to, did you, out of 等），範例格式如下：
+請嚴格以「每行一句，英文與繁體中文之間用 | 分隔」的格式輸出（共 ${sentenceCount} 行，不要加編號或其他說明文字）。維持中階至中高階的完整對話與專業情境，不要改成初學者短句。自然使用常見標準口語及必要的專業詞彙（如 walk us through, on the same page, should have, going to, did you 等），避免刻意堆疊冷僻俚語。使用標準拼字，不用自創拼音。範例格式如下：
 Good morning everyone, let's dive right in since we have a packed agenda today. | 大家早安，因為今天議程很滿，我們就直接切入正題吧。
 Before we start, did everyone get a chance to look over the proposal I sent out? | 在開始之前，大家都有空看過我發出的提案了嗎？`;
   }

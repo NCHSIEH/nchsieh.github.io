@@ -121,15 +121,14 @@
   }
 
   function initTheme() {
-    const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || "dark";
-    if (savedTheme === "light") {
-      document.body.classList.add("theme-light");
-    }
+    let savedTheme;
+    try { savedTheme = localStorage.getItem(STORAGE_KEYS.THEME); } catch (e) {}
+    document.body.classList.toggle("theme-light", savedTheme !== "dark");
   }
 
   function toggleTheme() {
     const isLight = document.body.classList.toggle("theme-light");
-    localStorage.setItem(STORAGE_KEYS.THEME, isLight ? "light" : "dark");
+    try { localStorage.setItem(STORAGE_KEYS.THEME, isLight ? "light" : "dark"); } catch (e) {}
   }
 
   function initSpeechSynthesis() {
@@ -233,11 +232,21 @@
     state.activeLineIndex = index;
     highlightActiveSentenceCard();
 
+    if (document.getElementById("trainerView").style.display === "none") {
+      switchTopView("trainer");
+    }
+    const session = playSessionId;
+    const unitId = state.currentUnitId;
+    // Keep scrolling separate from the original speech-synthesis implementation.
+    requestAnimationFrame(() => {
+      if (session === playSessionId && unitId === state.currentUnitId) followActiveSentence();
+    });
     const line = unit.lines[index];
     speakText(line.en, {
       speaker: line.speaker,
       rate: customRate || state.playbackRate,
       onEnd: () => {
+        if (session !== playSessionId || unitId !== state.currentUnitId) return;
         if (typeof onComplete === "function") onComplete();
       }
     });
@@ -384,6 +393,7 @@
   }
 
   function switchTopView(viewName) {
+    if (viewName !== "trainer") stopPlayback();
     document.querySelectorAll(".view-tab").forEach((t) => {
       t.classList.toggle("active", t.dataset.view === viewName);
     });
@@ -603,7 +613,7 @@
 
     document.getElementById("unitCategoryBadge").textContent = unit.categoryName;
     document.getElementById("unitTitle").textContent = unit.title;
-    document.getElementById("unitFocus").textContent = `🎯 破壁焦點（${unit.duration}）：${unit.focus}`;
+    document.getElementById("unitFocus").textContent = `🎯 練習目標（${unit.duration}）：${unit.focus}`;
 
     renderQuickCourseSwitcher(unit);
 
@@ -638,6 +648,7 @@
 
       card.className = `sentence-card ${isPlayingThis ? "playing" : ""} ${isAB ? "ab-selected" : ""}`;
       card.dataset.index = idx;
+      if (isPlayingThis) card.setAttribute("aria-current", "true");
 
       const enHtml = buildSentenceEnHtml(line, idx);
       const clozeBankHtml = state.currentStage === 2 ? buildClozeBankHtml(line, idx) : "";
@@ -694,6 +705,7 @@
     container.appendChild(navFooter);
 
     bindSentenceCardEvents(container, unit);
+    if (state.isPlaying) requestAnimationFrame(followActiveSentence);
   }
 
   function buildSentenceEnHtml(line, lineIdx) {
@@ -1058,6 +1070,30 @@
     document.querySelectorAll(".sentence-card").forEach((card) => {
       const idx = Number(card.dataset.index);
       card.classList.toggle("playing", idx === state.activeLineIndex);
+      if (idx === state.activeLineIndex) card.setAttribute("aria-current", "true");
+      else card.removeAttribute("aria-current");
+    });
+  }
+
+  function followActiveSentence() {
+    const trainer = document.getElementById("trainerView");
+    if (!trainer || trainer.style.display === "none") return;
+    const card = trainer.querySelector(`.sentence-card[data-index="${state.activeLineIndex}"]`);
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const nav = document.querySelector(".top-nav")?.getBoundingClientRect();
+    const dock = document.querySelector(".playback-dock")?.getBoundingClientRect();
+    const visibleTop = Math.max(0, nav?.bottom || 0) + 16;
+    const visibleBottom = Math.min(window.innerHeight, dock?.top ?? window.innerHeight) - 16;
+    const space = Math.max(0, visibleBottom - visibleTop);
+    // Tall cards (e.g. recording on a phone) start below the sticky navigation.
+    const targetTop = visibleTop + Math.max(0, (space - rect.height) / 2);
+    if (Math.abs(rect.top - targetTop) < 2) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({
+      top: Math.max(0, window.scrollY + rect.top - targetTop),
+      behavior: reduceMotion ? "instant" : "smooth"
     });
   }
 

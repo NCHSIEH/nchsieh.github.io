@@ -1,4 +1,5 @@
 :root {
+  color-scheme: dark;
   --bg-main: #0f172a;
   --bg-surface: #1e293b;
   --bg-elevated: #334155;
@@ -29,6 +30,7 @@
 }
 
 body.theme-light {
+  color-scheme: light;
   --bg-main: #f1f5f9;
   --bg-surface: #ffffff;
   --bg-elevated: #e2e8f0;
@@ -315,6 +317,7 @@ body.theme-light .cat-pill.active .cat-count-badge {
 
 /* Main Workspace */
 .main-stage {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
@@ -326,6 +329,7 @@ body.theme-light .cat-pill.active .cat-count-badge {
 
 /* Top Navigation Bar */
 .top-nav {
+  flex-wrap: wrap;
   position: sticky;
   top: var(--safe-top);
   z-index: 20;
@@ -534,6 +538,7 @@ body.theme-light .cat-pill.active .cat-count-badge {
   justify-content: space-between;
   margin-bottom: 10px;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .speaker-badge {
@@ -561,6 +566,7 @@ body.theme-light .cat-pill.active .cat-count-badge {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .mini-btn {
@@ -592,16 +598,16 @@ body.theme-light .cat-pill.active .cat-count-badge {
 
 /* English Sentence Text & Modes */
 .sentence-en {
-  font-size: 1.22rem;
+  font-size: 1.18rem;
   font-weight: 600;
-  line-height: 1.55;
-  margin: 6px 0 10px;
+  line-height: 1.5;
+  margin: 6px 0 4px;
   color: var(--text-main);
   letter-spacing: -0.01em;
 }
 
 .sentence-en.blind-blur {
-  filter: blur(10px);
+  filter: blur(9px);
   user-select: none;
   cursor: pointer;
   transition: filter 0.25s ease;
@@ -772,9 +778,11 @@ body.theme-light .cat-pill.active .cat-count-badge {
 }
 
 .sentence-zh {
-  margin: 8px 0 0;
-  font-size: 0.92rem;
-  color: var(--text-secondary);
+  margin: 2px 0 6px;
+  font-size: 0.81rem;
+  line-height: 1.45;
+  font-weight: 400;
+  color: var(--text-muted);
 }
 
 /* Stage 4: Shadowing & Recording Studio */
@@ -1201,6 +1209,24 @@ body.theme-light .primary-btn {
 
 /* Responsive Breakpoints for iPad Portrait & iPhone */
 @media (max-width: 960px) {
+  .top-nav {
+    flex-wrap: wrap;
+  }
+
+  .top-nav > div:first-child {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .view-tabs {
+    min-width: 0;
+    overflow-x: auto;
+  }
+
+  .view-tab {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
   .app-shell {
     grid-template-columns: 1fr;
   }
