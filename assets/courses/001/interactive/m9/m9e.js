@@ -1,4 +1,4 @@
-/* M9 互動站強化（2026-11-13）：講義第 4、37、46、49 頁的互動版 */
+/* M9 互動站強化（2026-11-15）：對應講義第 4、6、8–9、21、23、26、35、37、39–40、45–46、49、52–53、59 頁與實測 HTTP 200 一級文獻連結 */
 (function () {
   'use strict';
   const $ = U.$;
@@ -40,19 +40,37 @@
       ['② 你的領域知識是稀缺的', '會寫程式的人很多，看得懂護理紀錄又會分析的人很少。「這個標籤實際上怎麼產生的」只有你問得出來。', ''],
       ['③ 誠實比聰明重要', '主動揭露限制、承認不確定、說得出模型對誰不準。被過度宣稱的模型，傷害遠大於一個誠實的爛模型。', '']] }
   ], src: '講義 M9 第 49 頁。' });
+
   CaseLinks('w-label', [
-    ['Science 2019 摘要（UC Berkeley CHMI）', 'https://chmi.berkeley.edu/news/dissecting-racial-bias-in-an-algorithm-used-to-manage-the-health-of-populations'],
-    ['論文全文 PDF（Obermeyer 等，FTC 存檔）', 'https://www.ftc.gov/system/files/documents/public_events/1548288/privacycon-2020-ziad_obermeyer.pdf']
-  ], 'Obermeyer et al., Science 366:447–453（2019）；演算法以醫療花費當作健康需求的代理。');
+    ['Obermeyer et al., Science 2019 摘要（UC Berkeley CHMI）', 'https://chmi.berkeley.edu/news/dissecting-racial-bias-in-an-algorithm-used-to-manage-the-health-of-populations']
+  ], 'Obermeyer et al., Science 366:447–453（2019）；改用生理健康指標而非醫療花費後，應納入照護的黑人病患比例從 17.7% 升至 46.5%。');
   CaseLinks('w-watson', [
-    ['STAT News：Watson 建議不安全且不正確的治療（2018/7/25，STAT+ 訂閱）', 'https://www.statnews.com/2018/07/25/ibm-watson-recommended-unsafe-incorrect-treatments/'],
-    ['Healthcare Dive 摘要', 'https://www.healthcaredive.com/news/stat-ibms-watson-gave-unsafe-and-incorrect-cancer-treatment-advice']
+    ['Healthcare Dive 報導（STAT 調查摘要）', 'https://www.healthcaredive.com/news/stat-ibms-watson-gave-unsafe-and-incorrect-cancer-treatment-advice/528666/'],
+    ['STAT News：Watson 建議不安全且不正確的治療（2018/7/25，STAT+ 訂閱）', 'https://www.statnews.com/2018/07/25/ibm-watson-recommended-unsafe-incorrect-treatments/']
   ], '報導指出問題主要來自以少量「合成」個案訓練；STAT 稱無病人因此死亡。');
+  CaseLinks('w-fair', [
+    ['Kleinberg et al., ITCS 2017：公平性三大定義不可能定理（arXiv）', 'https://arxiv.org/abs/1609.05807']
+  ]);
+  CaseLinks('w-card', [
+    ['Mitchell et al., FAT* 2019：Model Cards for Model Reporting（arXiv）', 'https://arxiv.org/abs/1810.03993']
+  ]);
+  CaseLinks('w-cam', [
+    ['Selvaraju et al., ICCV 2017：Grad-CAM 原始論文（arXiv）', 'https://arxiv.org/abs/1610.02391']
+  ]);
+  CaseLinks('w-shap', [
+    ['Lundberg & Lee, NeurIPS 2017：SHAP 統一可解釋性框架（arXiv）', 'https://arxiv.org/abs/1705.07874']
+  ]);
+
   function addNote(id, title, body) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
     b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
   }
-  addNote('w-spo2', '數字與傳遞鏈：', '血氧計顯示 92–96% 時，動脈血氧實際 < 88% 的比例：黑人 11.7%、白人 3.6%（約 3 倍；NEJM 2020，約 4.8 萬組配對）；2024 統合分析約 1.7 倍。量測工具偏高 → 輸入特徵歪 → 「需要給氧」標籤也歪 → 模型在同一群人一起歪。（講義 M9 第 16 頁）');
+  addNote('w-shortcut', '跨院驗證與表格洩漏（講義 p8）：', '肺部 X 光模型在單一醫院 AUC > 90%，Grad-CAM 卻顯示模型在看角落的攜帶式 X 光機標記；表格資料也一樣，若把「已開立會診單」等事後欄位放進特徵，模型就靠 Target Leakage 作弊。');
+  addNote('w-alloc', '支持性 vs 懲罰性使用（講義 p9）：', '模型回答的是「30 天再入院機率」，不是「資源該給誰」。同樣的分數用來加派個管訪視是支持；用來抽走高風險病患資源（Cream-Skimming）則會造成系統性傷害。');
+  addNote('w-spo2', '數字與傳遞鏈：', '血氧計顯示 92–96% 時，動脈血氧實際 < 88% 的比例：黑人 11.7%、白人 3.6%（約 3 倍；NEJM 2020，PubMed PMID: 33326721）；2024 統合分析約 1.7 倍。量測工具偏高 → 輸入特徵歪 → 「需要給氧」標籤也歪 → 模型在同一群人一起歪。（講義 M9 第 16 頁）');
   addNote('w-proxy', '欄位悄悄攜帶的資訊：', '郵遞區號 → 族群、社經、居住區域；保險別 → 經濟狀況；院所層級 → 城鄉與可近性；過去醫療花費 → 就醫可近性（不是健康需求）；教育程度與職業 → 社經地位；手機型號與上網時間 → 消費能力。（講義 M9 第 18 頁）');
+  addNote('w-subaudit', '子群體稽核表必看指標（講義 p26）：', '整體 AUC 0.842 看似漂亮，拆開卻發現 80 歲以上僅 0.771（差距 0.090 > 0.07 警戒線）、非都會區 0.782。實務上應對這兩群預測加註「建議人工覆核」，並將稽核表完整放進 Model Card 與發表簡報。');
   addNote('w-auto', '兩種介面（示意）：', '放大偏誤：只有一個紅色分數「高風險 0.87」、預設按鈕就是採納、「不採納」藏在角落。減緩偏誤：先填自己的判斷，再看 AI 建議與區間（0.71–0.93）、依據與「資料不完整」提示，「採納」與「不採納（寫理由）」一樣容易按。（講義 M9 第 34 頁）');
+  addNote('w-myth', '破除四大法規誤解（講義 p45）：', '① 只刪姓名不是不可逆匿名（PDPA） ② 「僅供參考」不免除機構合理注意義務 ③ 不收費也可能落入 TFDA SaMD 判定（看預期醫療用途） ④ 用雲端 LLM API 時，提問與 RAG 段落仍會送到境外伺服器。');
+  addNote('w-check', 'W10 與 W16 發表前最後確認（講義 p52–53）：', '資料來源與標籤審查 → Baseline 與子群體表現 → SHAP / Grad-CAM 捷徑檢查 → 醫療四條紅線＋數字不生成（同題問 5 次一致）＋ Model Card 誠實揭露未竟事項。');
 })();
