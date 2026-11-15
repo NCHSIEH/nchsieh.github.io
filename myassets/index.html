@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>MyAssets 看盤</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23dc2626'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/style.css?v=10">
+<link rel="stylesheet" href="assets/style.css?v=11">
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -26,6 +26,7 @@
     <div id="banner"></div>
     <div class="meta" id="meta">載入中…</div>
     <div class="legend"><span>會跌</span><span class="bar"></span><span>會漲</span><span style="margin-left:auto"><span data-tip="score">顏色越深＝訊號越強</span></span></div>
+    <div id="mkt"></div>
     <div class="summary" id="summary"></div>
     <div id="alerts"></div>
     <div class="filters" id="filters">
@@ -61,23 +62,30 @@
   </section>
 
   <div id="sources"></div>
-  <p class="foot">燈號由均線、MACD、KD、RSI、法人籌碼 5 項技術指標計算；各期間預測另參考這檔股票過去三年相似情境的實際漲跌。只反映近期價格與籌碼的強弱，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（約下午 3 點後更新），盤中顯示的是前一交易日。<br>
+  <p class="foot">燈號由 9 項指標計算（均線、MACD、KD、RSI、中期動能、相對大盤、量價、法人籌碼、殖利率位階）。每項指標先用過去約三年資料回測，有效才計入；燈號強度依回測可信度打折，未被驗證的訊號會偏黃。回測代表過去，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（約下午 3 點後更新），盤中顯示的是前一交易日。<br>
   清單來源：<span id="src"></span><span id="sheetlinkwrap"></span></p>
 </main>
 
-<script src="assets/core.js?v=10"></script>
-<script type="module" src="assets/auth.js?v=10"></script>
+<script src="assets/core.js?v=11"></script>
+<script type="module" src="assets/auth.js?v=11"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
   let results = [], filter = 'all', sortBy = 'list', divLoaded = false, userDoc = null, lastList = null, user = null;
 
   const lampHTML = s => '<div class="lamp" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+MA.level(s).short+'<small>'+MA.strength(s)+'%</small></div>';
-  const hzHTML = fc => '<div class="hzrow">'+fc.map(f => { const s=f.score, a = s>=0.2?'▲':s<=-0.2?'▼':'－'; return '<span class="hz" data-tip="hz" data-tip-title="'+f.H.long+'" data-tip-extra="'+fcExtra(f)+'" style="background:'+MA.color(s)+';color:'+MA.ink(s)+'">'+f.H.label+a+'</span>'; }).join('')+'</div>';
+  const hzHTML = fc => '<div class="hzrow">'+fc.map(f => { const s=f.score, a = MA.arrow(s); return '<span class="hz" data-tip="hz" data-tip-title="'+f.H.long+'" data-tip-extra="'+fcExtra(f)+'" style="background:'+MA.color(s)+';color:'+MA.ink(s)+'">'+f.H.label+a+'</span>'; }).join('')+'</div>';
 
+  function btLine(b){
+    if (!b || !(b.bull+b.bear)) return '回測期間沒有發出明確訊號';
+    const p=(a,n)=> n ? Math.round(a/n*100)+'%（'+n+' 次）' : '無';
+    return '看漲後實際上漲 '+p(b.bullHit,b.bull)+'、看跌後實際下跌 '+p(b.bearHit,b.bear)+'；平時上漲 '+Math.round(b.up/b.tot*100)+'%';
+  }
   function fcExtra(f){
-    let t = '目前：'+MA.level(f.score).label+'（強度 '+MA.strength(f.score)+'%）';
-    if (f.n) t += '<br>過去相似情境 '+f.n+' 次，之後上漲 '+Math.round(f.up*100)+'%（這檔平時 '+Math.round(f.base*100)+'%）<br>漲跌中位數 '+(f.med>=0?'+':'')+MA.fmt(f.med)+'%，常見區間 '+MA.fmt(f.p25)+'%～'+MA.fmt(f.p75)+'%';
+    let t = '目前：'+MA.level(f.score).label+'（強度 '+MA.strength(f.score)+'%）　可信度 '+f.stars;
+    if (f.noSignal) t += '<br>這個期間沒有任何指標通過回測，不給方向';
+    if (f.n) t += '<br>過去訊號相似的 '+f.n+' 天，之後上漲 '+Math.round(f.up*100)+'%（平時 '+Math.round(f.base*100)+'%），漲跌中位數 '+(f.med>=0?'+':'')+MA.fmt(f.med)+'%';
+    t += '<br>近兩年回測：'+btLine(f.bt);
     return t.replace(/"/g,'&quot;');
   }
   function match(it){
@@ -97,15 +105,17 @@
   function render(){
     const ok = results.filter(r => r && r.now);
     const bins = [0,0,0,0,0];
-    ok.forEach(r => { const s=r.now.score; bins[s>=0.55?4:s>=0.2?3:s>-0.2?2:s>-0.55?1:0]++; });
-    const labels=['強跌','偏跌','維持','偏漲','強漲'], ref=[-0.8,-0.4,0,0.4,0.8];
+    ok.forEach(r => { bins[MA.bin(r.now.score)]++; });
+    const labels=['強跌','偏跌','維持','偏漲','強漲'], ref=[-0.8,-0.35,0,0.35,0.8];
     $('#summary').innerHTML = labels.map((l,i)=>'<div><b style="color:'+MA.color(ref[i])+'">'+bins[i]+'</b>'+l+'</div>').join('');
+    const M = MA.market();
+    $('#mkt').innerHTML = M ? '<a class="card" href="signals/#'+M.item.code+'" style="padding:8px 12px;margin-bottom:8px"><span class="lamp md" style="background:'+MA.color(M.now.score)+';color:'+MA.ink(M.now.score)+';text-shadow:none">'+MA.level(M.now.score).short+'</span><div class="info"><div style="font-size:13px;color:#64748b">大盤參考（元大台灣50）</div>'+hzHTML(M.now.fc)+'</div><div class="px"><b>'+MA.fmt(M.now.close)+'</b></div></a>' : '';
     const al = [];
     ok.forEach(r => {
       if (!r.yest) return;
       const a = MA.level(r.yest.score).short, b = MA.level(r.now.score).short, d = r.now.score - r.yest.score;
       if (a!==b) al.push('<li><b>'+r.item.name+'</b> '+a+' → <b style="color:'+MA.color(r.now.score)+'">'+b+'</b>：'+MA.advice(r.item, r.now.score)+'</li>');
-      else if (Math.abs(d) >= 0.25) al.push('<li><b>'+r.item.name+'</b> 仍為「'+b+'」，但訊號'+(d>0?'轉強':'轉弱')+' '+Math.round(Math.abs(d)*100)+' 分</li>');
+      else if (Math.abs(d) >= 0.15) al.push('<li><b>'+r.item.name+'</b> 仍為「'+b+'」，但訊號'+(d>0?'轉強':'轉弱')+' '+Math.round(Math.abs(d)*100)+' 分</li>');
     });
     $('#alerts').innerHTML = !ok.length ? '' : al.length ? '<div class="alerts"><h3>今日提醒（與前一交易日比較）</h3><ul>'+al.join('')+'</ul></div>' : '<div class="alerts"><h3>今日提醒</h3>所有標的燈號與前一交易日相同，維持即可。</div>';
     let rows = results.filter(r => r && match(r.item));
