@@ -39,4 +39,29 @@
     ['Sambasivan et al. 論文頁（Google Research）', 'https://research.google/pubs/pub49953/'],
     ['Google Research 部落格：Data Cascades', 'https://research.google/blog/data-cascades-in-machine-learning/']],
     '用本模組資料想一次（情境示意）：身高欄位約 5.5% 填成公尺（1.62）→ 清理時沒人檢查單位 → 算 BMI 時 65 公斤變成約 25 萬 → 模型把怪 BMI 當訊號。每一步都看起來正常，問題到上線才現形。講義 M1 第 8 頁。');
+
+  if (window.CaseLinks) {
+    CaseLinks('w-fhir', [
+      ['衛福部資訊處：臺灣核心實作指引（TW Core IG，FHIR R4）', 'https://twcore.mohw.gov.tw/ig/twcore/'],
+      ['衛福部資訊處：建立全臺 5,050 項國家級常用 LOINC 對照表（2026/6）', 'https://dep.mohw.gov.tw/DOIM/cp-936-87211-114.html']
+    ], '講義 M1 第 15 頁。');
+    CaseLinks('w-bmi', [
+      ['衛福部國民健康署：成人健康體位標準（BMI 切點 18.5 / 24 / 27）', 'https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=542&pid=9737']
+    ], '講義 M1 第 66 頁。');
+    CaseLinks('w-leakdemo', [
+      ['Kapoor & Narayanan, Patterns 2023：Leakage and the Reproducibility Crisis in ML-Based Science', 'https://arxiv.org/abs/2207.07048']
+    ], '盤點 17 個科學領域近 300 篇因資料洩漏導致結果無法重現的論文。講義 M1 第 71 頁。');
+  }
+
+  function addNote(id, title, body) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+  }
+  addNote('w-type', '貫穿資料 765 筆的三個匯入坑（實算數字）：', '① 編碼：Big5 檔用 UTF-8 硬讀，縣市與科別變亂碼；② 型態誤判：病歷號 P0007 讀成整數變 7（前導零消失），就診費用有 27 筆 ≥ 1,000 元含千分位逗號害整欄 765 筆變成 polynominal 文字，就診日混用三種日期格式；③ 尾端空白：科別「內科」（237 筆）與「內科 」（24 筆）、縣市「新北市」（229 筆）與「新北市 」（29 筆），未做 Trim 前在分組與 Join 會被拆成不同類別。（講義 M1 第 12 頁）');
+  addNote('w-roles', '角色（Role）分工與兩個必刪洩漏欄：', '15 個欄位中：「再就診30天」設為 label（唯一答案 y）；「就診序號 V00211、病歷號 P0088」設為 id（留著對帳與按病人切分，絕不進模型訓練，否則模型會硬背流水號）；「出院後30天門診次數、結案註記」是預測當下拿不到的洩漏誘餌，必須用 Select Attributes 移除。（講義 M1 第 18 頁）');
+  addNote('w-joinbig', 'Join 前後四項檢查（751 筆就診 × 397 筆檢驗實測）：', 'Join 前先對病歷號做 Trim 去空白（檢查 ②）並確認兩表皆為 polynominal（檢查 ③）。Join 後立刻接 Statistics 看筆數（檢查 ①）與遺失率（檢查 ④）：直接 Inner Join 變 684 筆（丟了 140 位沒檢驗的病人）；直接 Left Join 變 926 筆（160 位有檢驗的病人平均一人 2.5 筆檢驗，一對多膨脹多出 175 筆！）；正確做法是先把檢驗表依病歷號 Aggregate／Pivot 成 160 人一列，再 Left Join 回主檔，才會維持 751 筆且 140 人缺值留 ?。（講義 M1 第 29 頁）');
+  addNote('w-mech', '三種遺失機制的因果方向與處理：', '① MCAR（完全隨機，如血壓計當機半天）：缺失與 X、Y 皆無關，缺失少時直接刪列不偏；② MAR（隨機遺失，如年輕人較少常規驗骨密度）：缺失受「年齡 X」影響，直接刪除會讓樣本偏向年長者，可用年齡等已觀測欄位建模填補；③ MNAR（非隨機遺失，如病情輕微者不排檢驗）：缺失受「看不到的值本身 Y」影響，只看有驗者平均會高估，「有沒有做這項檢查」本身就是強訊號，必加 is_missing 指示欄。（講義 M1 第 34 頁）');
+  addNote('w-dup', '貫穿資料的三種重複（765 筆實算）：', '① 完全重複：765 筆中有 14 筆整列完全相同（重送），用 Remove Duplicates（all）降為 751 筆；② 鍵值重複：751 筆就診來自 300 位病人（232 人就診 ≥ 2 次），這是一對多粒度而非錯誤，病人層級建模前要依病歷號 Aggregate 成 300 列；③ 語意重複：臺北市(161)、台北市(113)、台北市 (26)、TAIPEI(13) 四種寫法指同一縣市，需用 Trim＋Replace/Map 合併為 313 筆。（講義 M1 第 50 頁）');
+  addNote('w-order', '五種常見洩漏來源與切分防火牆：', '① 前處理洩漏（切分前做 Normalize／填補／篩特徵）② 時間洩漏（放入出院後30天門診次數 → Accuracy 100%）③ 目標洩漏（放入結案註記 → Accuracy 100%）④ 重複樣本洩漏（751 筆隨機切 7:3，測試集 81% 就診的病人已在訓練集出現過）⑤ 過取樣洩漏（切分前做 SMOTE）。黃金律：把 Split / Cross Validation 當成防火牆，所有跨列算統計量或合成樣本的動作只能在訓練集做。（講義 M1 第 71 頁）');
+  addNote('w-tasks', '繳交前三大自我檢查：', '① 方法面：填補與縮放都在切分之後、病歷號設 id、洩漏欄已移除、Join 前後對過 Statistics 筆數；② 報告面：列出偽裝成 0 的遺失欄清單、附上填補前後平均／中位數／標準差對照、寫出離群值處理的臨床理由；③ 檔案面：關掉 AI Studio 重開 .rmp 確認無斷線與絕對路徑錯誤、嚴禁真實病歷個資。（講義 M1 第 88 頁）');
 })();
