@@ -60,13 +60,25 @@
       note: '這是 Take-Home Assignment 報告最後一節的模板；數字與規則必須換成你的資料與驗證結果。' }
   ], src: '講義 M2-2 第 119 頁（教學模板）。' });
 
+  CaseLinks('w-roc', [
+    ['Saito & Rehmsmeier PLOS ONE 2015：不平衡資料下 PR 圖比 ROC 圖更具資訊量（原始論文）', 'https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432']]);
+  CaseLinks('w-epic', [
+    ['Wong et al. JAMA Intern Med 2021：Epic 敗血症模型外部驗證（PMC 全文）', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8218233/']]);
   CaseLinks('w-readmit', [
     ['Kansagara et al. JAMA 2011（PDF，機構轉載）', 'https://mmcri.org/deptPages/core/downloads/jama_101911_1.pdf'],
     ['News-Medical 報導', 'https://www.news-medical.net/news/20111019/Many-hospital-readmission-risk-prediction-tools-have-poor-discriminative-ability.aspx']]);
+  CaseLinks('w-valid', [
+    ['Zech et al. PLOS Med 2018：肺炎 X 光 CNN 跨院泛化表現（原始論文）', 'https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1002683'],
+    ['Wong et al. JAMA Intern Med 2021：Epic 敗血症模型外部驗證（PMC 全文）', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8218233/'],
+    ['Collins et al. BMJ 2024：TRIPOD+AI 臨床預測模型報告準則（原始論文）', 'https://www.bmj.com/content/385/bmj-2023-078378']]);
   function addNote(id, title, body) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
     b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
   }
+  addNote('w-soft', '為什麼 6% 再入院問題不能用預設 Hard 分類（門檻 0.50）？', '在盛行率僅 6% 的問題中，多數真正會再入院病人的預測機率落在 0.25–0.45。若直接用 Hard 分類（門檻鎖死 0.50），p = 0.36 的高危病人會被直接判 0 漏掉！改用 Soft 分類輸出機率，既能依個管師容量取前 20% 優先追蹤，也能在代價比 20:1 時將門檻降至 0.30 救回漏網病人。（講義 M2-2 第 7、60 頁）');
+  addNote('w-knnmap', '三種距離尺與特徵縮放分工：', '① 歐氏距離 L2（√ΣΔ²）適合標準化後的一般生理數值；② 曼哈頓距離 L1（Σ|Δ|）對單一欄位離群值較穩健；③ 餘弦距離（夾角 cos θ）只看結構比例不看總量，適合文字向量（M6）與病患用藥組合型態。注意：k-NN、SVM、正則化 Logistic 與神經網路必先做 Normalize；決策樹、隨機森林、梯度提升與 Naive Bayes 則不需要縮放。（講義 M2-2 第 15、23 頁）');
+  addNote('w-roc', '為什麼盛行率 6% 時 ROC 會報喜不報憂？', 'ROC 橫軸 FPR = FP / (FP + TN) 的分母包含 94% 沒事的真陰性（11,280 人），就算誤報 1,128 人，FPR 也只有 10%，AUC 高達 0.85；而 PR 曲線縱軸 Precision = TP / (TP + FP) 完全不看 TN，直接揭露誤報海嘯（基準線為盛行率 0.06）。口訣：用 ROC 選模型排序力，用 PR 定不平衡場域門檻。（講義 M2-2 第 54 頁）');
   addNote('w-calib', '在 AI Studio 做出校準圖：', '① Apply Model 在驗證資料上拿到 confidence → ② Discretize 分成 10 組 → ③ Aggregate 每組算平均預測與實際發生率 → ④ 畫散布圖和對角線比，偏下＝高估。只拿來排序時失真無妨；要對病人說「您的風險是 70%」就必須先校準。（講義 M2-2 第 61 頁）');
-  addNote('w-printtree', '帶人數讀葉節點：', '路徑一 57%（13／23 人，95% 區間約 37%–74%）；路徑三 33%（9／27 人，約 19%–52%）；路徑二 8%（2／26 人，約 2%–24%）。8% 看似很低，但只有 26 人，區間寬到 24%——葉節點太小時調大 minimal leaf size，或在名單標註「證據有限」。（講義 M2-2 第 93 頁）');
+  addNote('w-printtree', '帶人數讀葉節點與特徵重要性三個陷阱：', '路徑一 57%（13／23 人，95% 區間約 37%–74%）；路徑二 8%（2／26 人，約 2%–24%）。此外看樹的特徵重要性時切記三個陷阱：① 偏愛高基數欄位（病歷號若排第一代表洩漏）；② 共線特徵（如收縮壓與舒張壓）會互相攤薄重要性；③ 預測重要 ≠ 臨床因果，穩健評估可改用驗證集 Permutation Importance 或 SHAP。（講義 M2-2 第 93、94 頁）');
+  addNote('w-rf', '陪審團定理與 OOB（36.8%）免費驗證集：', '單一模型準確率 0.70，5 個獨立成員多數決升至 0.837、25 個達 0.983；但若成員完全複製則永遠卡在 0.70（所以隨機森林靠 Bootstrap 抽樣本＋每次分裂抽特徵打破相關性）。每次 Bootstrap 取後放回連抽 n 次，約有 (1−1/n)ⁿ ≈ 1/e ≈ 36.8% 樣本未被抽中（Out-of-Bag），可用來做折外驗證——但若同一病人有多次就診紀錄，OOB 會因同人跨袋而虛高，仍須以病歷號做 Group Split！（講義 M2-2 第 98、100、103 頁）');
 })();
