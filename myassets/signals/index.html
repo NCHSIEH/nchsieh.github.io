@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>MyAssets 買賣趨勢燈號</title>
+<title>MyAssets 體檢詳解</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23eab308'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/style.css?v=12">
+<link rel="stylesheet" href="../assets/style.css?v=13">
 <style>
   .matrix{width:100%;border-collapse:collapse;font-size:13px}
   .matrix th{font-weight:500;color:var(--mute);font-size:11px;padding:4px 2px;text-align:center;line-height:1.35}
@@ -32,7 +32,7 @@
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="../">MyAssets<small>買賣趨勢燈號</small></a>
+  <a class="brand" href="../">MyAssets<small>體檢詳解</small></a>
   <a class="btn" href="../">回股票頁</a>
   <button class="btn" id="refresh" type="button">重新整理</button>
   <span id="auth"></span>
@@ -41,10 +41,10 @@
 <main class="wrap">
   <div id="banner" style="margin-top:12px"></div>
   <div class="meta" id="meta" style="margin-top:12px">載入中…</div>
-  <div class="legend"><span>會跌</span><span class="bar"></span><span>會漲</span><span style="margin-left:auto">滑鼠移到（手機點一下）有底線的文字可看說明</span></div>
+  <div class="legend"><span>不利／會跌</span><span class="bar"></span><span>有利／會漲</span><span style="margin-left:auto">滑鼠移到（手機點一下）有底線的文字可看說明</span></div>
 
   <div class="box">
-    <div class="mtabs"><button class="btn on" data-m="fc" type="button">各期間預測總表</button><button class="btn" data-m="ind" type="button">指標燈號總表</button></div>
+    <div class="mtabs"><button class="btn on" data-m="hc" type="button">體檢總表</button><button class="btn" data-m="fc" type="button">短期預測（僅供參考）</button><button class="btn" data-m="ind" type="button">技術指標</button></div>
     <table class="matrix" id="matrix"><tr><td class="loading">載入中…</td></tr></table>
   </div>
 
@@ -52,7 +52,32 @@
   <div class="box" id="detail"><div class="loading">載入中…</div></div>
 
   <div class="box" id="howto">
-    <h2>燈號怎麼算、準不準</h2>
+    <h2>體檢表怎麼看</h2>
+    <p>參考投顧分析股票常用的四個面向，把公開資料整理成「有利（紅）／普通（黃）／不利（綠）」。每一項都是和這檔自己的過去相比，不預測明天或下週的漲跌。</p>
+    <h3>個股看五項</h3>
+    <ul>
+      <li><b>營收</b>：近 3 個月營收和去年同期比。成長 10% 以上有利，衰退 5% 以上不利。</li>
+      <li><b>獲利</b>：最新一季每股盈餘（EPS）和去年同季比。成長 10% 以上有利，衰退 10% 以上或虧損不利。</li>
+      <li><b>價格</b>：本益比和自己近三年比。在最低的三成算便宜（有利），最高的三成算貴（不利）。</li>
+      <li><b>法人</b>：外資和投信近 20 個交易日買超達成交量 3% 有利，賣超 3% 不利。</li>
+      <li><b>趨勢</b>：股價在季線之上且季線上揚有利；在季線之下且季線下彎不利。</li>
+    </ul>
+    <h3>ETF 看四項</h3>
+    <ul>
+      <li><b>殖利率</b>：近 12 個月配息 ÷ 股價，和自己近兩年比。偏高代表價格相對便宜（有利）。</li>
+      <li><b>配息</b>：最近一次配息和前幾次平均比。持平或增加有利，減少超過兩成半不利。</li>
+      <li><b>法人</b>、<b>趨勢</b>：同個股。</li>
+    </ul>
+    <h3>結論怎麼來</h3>
+    <p>「有利」項數減「不利」項數：多數有利＝條件佳；有利略多＝正常；差不多＝參半；不利偏多＝留意。</p>
+    <ul>
+      <li>這是把公開資料整理成容易看的形式，不保證獲利，也不是投資建議。</li>
+      <li>營收每月更新、獲利每季更新，所以結論不會天天變，適合每週或每月看一次。</li>
+      <li>高股息 ETF 和債券 ETF 是領息部位，「留意」的意思是暫緩加碼，不是要賣掉。</li>
+      <li>債券 ETF 的價格主要看利率，這裡沒有納入利率資料。</li>
+    </ul>
+    <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">短期技術面預測怎麼算（僅供參考）</summary>
+    <h3>燈號怎麼算、準不準</h3>
     <p>紅色越深代表越偏向會漲，綠色越深代表越偏向會跌，黃色代表方向不明（台灣習慣：紅漲綠跌）。分級：+45% 以上「強烈會漲」、+15%～+45%「偏向會漲」、±15% 內「維持盤整」、−15%～−45%「偏向會跌」、−45% 以下「強烈會跌」。</p>
 
     <h3>第一步：9 項指標各自打分</h3>
@@ -87,19 +112,20 @@
       <li>高股息 ETF 和債券 ETF 是領息部位，綠燈的意思是「暫緩加碼」，不是要賣掉。</li>
       <li>債券 ETF 的價格主要跟著利率走，這裡沒有納入利率資料，參考性比股票低。</li>
     </ul>
+    </details>
   </div>
 
   <div id="sources"></div>
   <p class="foot">技術指標與歷史統計只反映過去的價格與籌碼，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（FinMind，約下午 3 點後更新）。</p>
 </main>
 
-<script src="../assets/core.js?v=12"></script>
-<script type="module" src="../assets/auth.js?v=12"></script>
+<script src="../assets/core.js?v=13"></script>
+<script type="module" src="../assets/auth.js?v=13"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
   const KEYS = Object.keys(MA.IND_NAMES);
-  let results = [], cur = null, mode = 'fc', user = null, userDoc = null;
+  let results = [], cur = null, mode = 'hc', user = null, userDoc = null;
 
   const lamp = s => '<div class="lamp" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+MA.level(s).short+'<small>'+MA.strength(s)+'%</small></div>';
   const q = t => String(t).replace(/"/g,'&quot;');
@@ -126,7 +152,17 @@
 
   function matrix(){
     let h;
-    if (mode === 'fc') {
+    if (mode === 'hc') {
+      const keys = ['rev','eps','val','yld','div','inst','trend'];
+      h = '<tr><th style="text-align:left">標的</th><th><span data-tip="verdict">結論</span></th>'+keys.map(k=>'<th><span data-tip="c_'+k+'">'+MA.CHECKS[k].short+'</span></th>').join('')+'</tr>';
+      results.forEach(r=>{
+        if (!r.health) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="8" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
+        const H = r.health;
+        h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
+          '<td><span class="cell txt" style="background:'+MA.color(H.score*0.85)+';color:'+MA.ink(H.score*0.85)+'">'+H.verdict.short+'</span></td>'+
+          keys.map(k=>{ const c=H.checks.find(x=>x.key===k); return '<td>'+(c?'<span class="cell" data-tip="c_'+k+'" data-tip-title="'+r.item.name+'｜'+c.short+'" data-tip-extra="'+q(MA.chkWord(c.s)+'：'+c.text)+'" style="background:'+MA.chkColor(c.s)+'"></span>':'<span style="color:#cbd5e1">—</span>')+'</td>'; }).join('')+'</tr>';
+      });
+    } else if (mode === 'fc') {
       h = '<tr><th style="text-align:left">標的</th><th><span data-tip="score">綜合</span></th>'+MA.HORIZONS.map(H=>'<th><span data-tip="hz" data-tip-title="'+H.long+'">'+H.label+'</span></th>').join('')+'</tr>';
       results.forEach(r=>{
         if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="6" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
@@ -149,7 +185,7 @@
   }
 
   function pick(){
-    $('#pick').innerHTML = results.map(r=>'<button class="btn'+(cur===r.item.code?' on':'')+'" data-code="'+r.item.code+'" type="button"><span class="lamp sm" style="background:'+(r.now?MA.color(r.now.score):'#cbd5e1')+'"></span>'+r.item.name+'</button>').join('');
+    $('#pick').innerHTML = results.map(r=>'<button class="btn'+(cur===r.item.code?' on':'')+'" data-code="'+r.item.code+'" type="button"><span class="lamp sm" style="background:'+(r.health?MA.color(r.health.score*0.85):'#cbd5e1')+'"></span>'+r.item.name+'</button>').join('');
     $('#pick').querySelectorAll('.btn').forEach(b=>b.onclick=()=>{ location.hash = b.dataset.code; });
     const on = $('#pick .btn.on'); if (on) on.scrollIntoView({block:'nearest',inline:'center'});
   }
@@ -160,10 +196,15 @@
     cur = r.item.code;
     if (!r.now) { $('#detail').innerHTML = '<h2>'+r.item.name+'</h2><p class="err">'+(r.error||'資料不足，無法計算')+'</p>'; pick(); return; }
     const n = r.now, it = r.item, arrow = n.change>0?'▲':n.change<0?'▼':'－', cc = n.change>0?'#dc2626':n.change<0?'#16a34a':'#64748b';
-    const yl = r.yest ? MA.level(r.yest.score).short : '—';
-    let h = '<div class="head">'+lamp(n.score)+'<div><h2>'+it.name+' <span style="color:#64748b;font-size:14px;font-weight:400">'+it.code+'</span><span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>')+'</h2>'+
-      '<div style="font-size:15px;margin-top:2px"><b style="color:'+MA.color(n.score)+'" data-tip="score">'+MA.level(n.score).label+'</b>（強度 '+MA.strength(n.score)+'%，昨日：'+yl+'）</div>'+
-      '<div class="adv">建議：'+MA.advice(it, n.score)+'</div></div></div>';
+    const H = r.health, hs = H.score*0.85;
+    let h = '<div class="head"><div class="lamp" data-tip="verdict" style="background:'+MA.color(hs)+';color:'+MA.ink(hs)+';text-shadow:'+(Math.abs(hs)<0.35?'none':'')+'">'+H.verdict.short+'<small>'+H.good+' 利 '+H.bad+' 弊</small></div><div><h2>'+it.name+' <span style="color:#64748b;font-size:14px;font-weight:400">'+it.code+'</span><span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>')+'</h2>'+
+      '<div style="font-size:15px;margin-top:2px"><b>'+H.verdict.label+'</b>（'+H.checks.filter(c=>c.s!==null).length+' 項檢查：'+H.good+' 項有利、'+H.bad+' 項不利）</div>'+
+      '<div class="adv">'+H.advice+'</div></div></div>';
+    h += '<h3 style="margin-top:14px">持股體檢</h3>';
+    H.checks.forEach(c=>{
+      const col = MA.chkColor(c.s);
+      h += '<div class="ind"><span class="cell" style="background:'+col+';margin-top:2px"></span><div class="t"><b><span data-tip="c_'+c.key+'">'+c.q+'</span></b><div>'+c.text+'</div></div><div class="v"><b style="color:'+(c.s===null?'#94a3b8':col)+';font-size:14px">'+MA.chkWord(c.s)+'</b></div></div>';
+    });
     h += '<div class="chart">'+MA.sparkline(r.px,{days:120,w:600,h:150,ma60:true,stroke:1.8})+'<div class="chartleg"><span>— 收盤價</span><span style="color:#94a3b8">- - 月線</span><span style="color:#a78bfa">- - 季線</span><span style="margin-left:auto">近 120 個交易日</span></div></div>';
     h += '<div class="kv">'+
       '<div>收盤（'+n.date.slice(5).replace('-','/')+'）<b>'+MA.fmt(n.close)+' <span style="font-size:12px;color:'+cc+'">'+arrow+MA.fmt(Math.abs(n.pct))+'%</span></b></div>'+
@@ -173,8 +214,9 @@
       '<div>季線（60 日均價）<b>'+MA.fmt(n.ma60)+'</b></div>'+
       '<div>離月線<b>'+(n.close>=n.ma20?'+':'')+MA.fmt((n.close/n.ma20-1)*100)+'%</b></div></div>';
 
-    // 各期間預測
-    h += '<h3 style="margin-top:16px"><span data-tip="hz">各期間預測</span></h3>';
+    // 短期技術面預測（收合）
+    h += '<details style="margin-top:16px"><summary style="cursor:pointer;font-weight:700;font-size:15px">短期技術面預測（僅供參考：回測顯示多數與亂猜差不多）</summary>';
+    h += '<h3 style="margin-top:12px"><span data-tip="hz">各期間預測</span>　綜合：'+MA.level(n.score).label+'</h3>';
     n.fc.forEach(f=>{
       const c = MA.color(f.score);
       let t = '<b>'+f.H.long+'</b>　'+MA.level(f.score).label+'　<span data-tip="hz" style="color:#b45309">可信度 '+f.stars+'</span>';
@@ -199,6 +241,7 @@
         '<div>'+x.text+'</div><div class="meter"><i style="left:'+pos+'%;background:'+c+'"></i></div></div>'+
         '<div class="v">'+x.value+'<br><b style="color:'+c+'">'+(x.skip?'不計':(x.score>=0?'+':'')+Math.round(x.score*100)+'%')+'</b></div></div>';
     });
+    h += '</details>';
     $('#detail').innerHTML = h;
     pick();
   }

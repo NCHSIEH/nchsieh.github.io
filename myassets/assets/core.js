@@ -333,7 +333,7 @@
         group.forEach(st => { st.poolBt[hi] = pooled; st.grade[hi] = gradeOf(st.bt[hi], pooled, k, m); });
       });
     });
-    stocks.forEach(st => { st.now = assess(st, st.n - 1, mkt, true); st.yest = assess(st, st.n - 2, mkt, false); });
+    stocks.forEach(st => { st.now = assess(st, st.n - 1, mkt, true); st.yest = assess(st, st.n - 2, mkt, false);  st.health = health(st); });
   }
 
   function assess(st, i, mkt, full) {
@@ -443,6 +443,89 @@
     return '明顯轉弱，考慮減碼或停損';
   }
 
+  /* ================= 持股體檢：參考投顧常用的基本面／評價／籌碼／趨勢四個面向 ================= */
+  const CHECKS = {
+    rev: { short: '營收', q: '公司營收有沒有成長？' },
+    eps: { short: '獲利', q: '公司獲利有沒有成長？' },
+    val: { short: '價格', q: '現在股價算便宜還是貴？' },
+    yld: { short: '殖利率', q: '現在殖利率算高還是低？' },
+    div: { short: '配息', q: '配息穩不穩定？' },
+    inst: { short: '法人', q: '外資、投信在買還是賣？' },
+    trend: { short: '趨勢', q: '中期趨勢往上還是往下？' }
+  };
+  const VERDICTS = [
+    { short: '留意', label: '不利項目偏多' }, { short: '參半', label: '好壞參半' }, { short: '正常', label: '大致正常' }, { short: '條件佳', label: '多數條件有利' }
+  ];
+  const sgn = (x, d = 1) => (x >= 0 ? '+' : '') + fmt(x, d) + '%';
+  function health(st) {
+    const i = st.n - 1, A = st.A, c = A.c, out = [];
+    const add = (key, s, text) => out.push({ key, ...CHECKS[key], s, text });   // s: 1 有利／0 普通／-1 不利／null 無資料
+    if (!st.isETF) {
+      // 營收：近 3 個月合計與去年同期比
+      const R = st.rev || [], m = new Map(R.map(x => [x.y * 12 + x.m, x.v]));
+      if (R.length) {
+        const L = Math.max(...m.keys()), g = k => m.get(k);
+        const have = [0, 1, 2, 12, 13, 14].every(d => g(L - d) > 0);
+        if (have) {
+          const y3 = ((g(L) + g(L - 1) + g(L - 2)) / (g(L - 12) + g(L - 13) + g(L - 14)) - 1) * 100, y1 = (g(L) / g(L - 12) - 1) * 100;
+          add('rev', y3 >= 10 ? 1 : y3 <= -5 ? -1 : 0, '近 3 個月營收比去年同期 ' + sgn(y3) + '（' + ((L - 1) % 12 + 1) + ' 月單月 ' + sgn(y1) + '）');
+        } else add('rev', null, '營收資料不足');
+      } else add('rev', null, '無營收資料');
+      // 獲利：最新一季 EPS 與去年同季比、近四季合計
+      const E = (st.eps || []).slice().sort((a, b) => a.date < b.date ? -1 : 1);
+      if (E.length >= 5) {
+        const cur = E[E.length - 1], ly = E.find(x => x.date === addYear(cur.date, -1)), ttm = E.slice(-4).reduce((a, b) => a + b.v, 0);
+        const qn = 'Q' + Math.ceil(parseInt(cur.date.slice(5, 7), 10) / 3);
+        let s = 0, t = '近四季每股盈餘（EPS）合計 ' + fmt(ttm) + ' 元';
+        if (ly) {
+          if (ly.v > 0) { const y = (cur.v / ly.v - 1) * 100; s = cur.v <= 0 ? -1 : y >= 10 ? 1 : y <= -10 ? -1 : 0; t += '；最新一季（' + qn + '）' + fmt(cur.v) + ' 元，比去年同季 ' + sgn(y, 0); }
+          else { s = cur.v > 0 ? 1 : -1; t += '；最新一季（' + qn + '）' + fmt(cur.v) + ' 元，' + (cur.v > 0 ? '去年同季虧損，已轉盈' : '仍在虧損'); }
+        }
+        if (ttm <= 0) s = -1;
+        add('eps', s, t);
+      } else add('eps', null, '無獲利資料');
+      // 評價：本益比在自己近三年的位階
+      const P = (st.per || []).filter(x => x.per > 0);
+      const lastP = st.per && st.per.length ? st.per[st.per.length - 1] : null;
+      if (lastP && lastP.per > 0 && P.length >= 200) {
+        const p = P.filter(x => x.per < lastP.per).length / P.length * 100;
+        add('val', p <= 30 ? 1 : p >= 70 ? -1 : 0, '本益比 ' + fmt(lastP.per, 1) + ' 倍，在近三年' + (p <= 30 ? '偏低（相對便宜）' : p >= 70 ? '偏高（相對貴）' : '中等') + '；比過去 ' + fmt(p, 0) + '% 的日子高');
+      } else add('val', null, lastP && !(lastP.per > 0) ? '目前沒有本益比（近四季虧損）' : '無本益比資料');
+    } else {
+      const y = st.yl.y[i], p = st.yl.p[i];
+      if (p === p) add('yld', p >= 0.7 ? 1 : p <= 0.3 ? -1 : 0, '近 12 個月殖利率 ' + fmt(y * 100, 1) + '%，在近兩年' + (p >= 0.7 ? '偏高（價格相對便宜）' : p <= 0.3 ? '偏低（價格相對貴）' : '中等') + '；比過去 ' + fmt(p * 100, 0) + '% 的日子高');
+      else add('yld', null, '配息紀錄不足，無法比較');
+      const dv = st.divs;
+      if (dv.length >= 3) {
+        const last = dv[dv.length - 1], prev = dv.slice(-5, -1), avg = prev.reduce((a, b) => a + b.cash, 0) / prev.length, ch = (last.cash / avg - 1) * 100;
+        add('div', ch >= -10 ? 1 : ch >= -25 ? 0 : -1, '最近一次配 ' + fmt(last.cash, 3) + ' 元（' + last.ex.slice(5).replace('-', '/') + ' 除息），' + (Math.abs(ch) < 3 ? '與前幾次持平' : '比前 ' + prev.length + ' 次平均 ' + sgn(ch, 0)));
+      } else add('div', null, '配息次數不足');
+    }
+    // 法人：外資＋投信近 20 日買賣超 ÷ 成交量
+    if (st.inst) {
+      let net = 0, vol = 0, have = 0;
+      for (let j = i - 19; j <= i; j++) { vol += A.v[j]; const r = st.inst[st.dates[j]]; if (r) { net += r[0]; have++; } }
+      if (have >= 10 && vol > 0) { const r = net / vol * 100, lots = Math.round(net / 1000); add('inst', r >= 3 ? 1 : r <= -3 ? -1 : 0, '外資＋投信近 20 日' + (lots >= 0 ? '買超 ' : '賣超 ') + Math.abs(lots).toLocaleString() + ' 張（占成交量 ' + fmt(Math.abs(r), 1) + '%）'); }
+      else add('inst', null, '無法人資料');
+    } else add('inst', null, '無法人資料');
+    // 趨勢：股價與季線
+    const ma60 = A.ma60[i], ma60p = A.ma60[i - 20], above = c[i] >= ma60, rising = ma60 >= ma60p;
+    add('trend', above && rising ? 1 : !above && !rising ? -1 : 0, '股價在季線（60 日均價 ' + fmt(ma60) + '）之' + (above ? '上' : '下') + '，季線' + (rising ? '上揚' : '下彎') + '；離季線 ' + sgn((c[i] / ma60 - 1) * 100));
+
+    const ok = out.filter(x => x.s !== null), good = ok.filter(x => x.s > 0).length, bad = ok.filter(x => x.s < 0).length;
+    const score = ok.length ? (good - bad) / ok.length : 0;
+    const vi = !ok.length ? 2 : score >= 0.5 ? 3 : score > 0 ? 2 : score >= -0.4 ? 1 : 0;
+    const it = st.item, bond = st.cls === 'bd';
+    let advice;
+    if (!it.held) advice = ['不利項目偏多，先觀望', '好壞參半，先觀望', '大致正常，可列入觀察', '多數條件有利，可留意進場點'][vi];
+    else if (st.isETF) advice = ['不利項目偏多，暫緩加碼（領息部位不必急賣）', '好壞參半，持續領息、暫不加碼', '大致正常，持續領息', '多數條件有利，想加碼可分批'][vi];
+    else advice = ['不利項目偏多，留意是否減碼', '好壞參半，續抱但暫不加碼', '大致正常，續抱觀察', '多數條件有利，可續抱'][vi];
+    if (bond) advice += '；債券 ETF 價格主要看利率走向';
+    return { checks: out, score, good, bad, vi, verdict: VERDICTS[vi], advice };
+  }
+  const CHK_COLOR = s => s === null ? '#cbd5e1' : color(s * 0.8);
+  const CHK_WORD = s => s === null ? '無資料' : s > 0 ? '有利' : s < 0 ? '不利' : '普通';
+
   /* ---------- 整合：抓資料、還原權息、整批分析 ---------- */
   // 還原權息：除息日之前的價格乘上 (前一日收盤 − 現金股利) ÷ 前一日收盤，避免除息缺口被當成下跌
   function adjustForDividends(px, divs) {
@@ -469,7 +552,14 @@
     let inst = null; try { const q = await finmind('TaiwanStockInstitutionalInvestorsBuySell', item.code, daysAgo(1100), INSTMAP); if (q && Object.keys(q).length) inst = q; } catch (e) { }
     const px = divs.length ? adjustForDividends(rawPx, divs) : rawPx;
     const isETF = !!(item.type && item.type.includes('ETF'));
-    return { item, px, raw: rawPx.map(x => x.close), dates: px.map(x => x.date), n: px.length, divs, inst, isETF, cls: item.type && item.type.includes('債') ? 'bd' : 'eq' };
+    // 個股另抓基本面：月營收、本益比、每季 EPS
+    let rev = null, per = null, eps = null;
+    if (!isETF) {
+      try { rev = await finmind('TaiwanStockMonthRevenue', item.code, daysAgo(900), d => d.map(x => ({ y: x.revenue_year, m: x.revenue_month, v: x.revenue }))); } catch (e) { }
+      try { per = await finmind('TaiwanStockPER', item.code, daysAgo(1100), d => d.map(x => ({ date: x.date, per: x.PER, pbr: x.PBR }))); } catch (e) { }
+      try { eps = await finmind('TaiwanStockFinancialStatements', item.code, daysAgo(1100), d => d.filter(x => x.type === 'EPS').map(x => ({ date: x.date, v: x.value }))); } catch (e) { }
+    }
+    return { item, rev, per, eps, px, raw: rawPx.map(x => x.close), dates: px.map(x => x.date), n: px.length, divs, inst, isETF, cls: item.type && item.type.includes('債') ? 'bd' : 'eq' };
   }
   let lastMarket = null;
   async function loadAll(items, onProgress) {
@@ -480,10 +570,10 @@
     const good = data.filter(d => d && d.px && d.n >= 200);
     const mkt = good.find(d => d.item.code === M.code) || null;
     if (good.length) analyze(good, mkt);
-    lastMarket = mkt && mkt.now ? { item: mkt.item, now: mkt.now } : null;
+    lastMarket = mkt && mkt.now ? { item: mkt.item, now: mkt.now, health: mkt.health } : null;
     return items.map((it, i) => {
       const d = data[i];
-      if (d && d.now) return { item: it, px: d.px, now: d.now, yest: d.yest };
+      if (d && d.now) return { item: it, px: d.px, now: d.now, yest: d.yest, health: d.health };
       return { item: it, error: d && d.error ? d.error : d && d.px ? '上市未滿約 10 個月，資料不足以回測' : '抓取失敗' };
     });
   }
@@ -504,6 +594,14 @@
     yld: ['殖利率位階', '近 12 個月現金配息 ÷ 股價，和這檔過去約兩年相比的高低位置。', '殖利率在高檔＝價格相對便宜（偏紅）；在低檔＝價格相對貴（偏綠）。適合高股息 ETF 判斷加碼時機。'],
     yest: ['昨日燈號', '前一交易日的綜合燈號。', '和今天比較：由綠轉紅代表轉強，由紅轉綠代表轉弱。'],
     hz: ['期間預測', '只用「回測有效」的指標加權（50%）＋過去訊號相似的日子之後實際上漲的機率（50%），再依可信度打折。', '可信度來自近兩年的樣本外回測：★★★ 命中率明顯高於亂猜，★☆☆ 與亂猜差不多（燈號會偏黃）。'],
+    c_rev: ['營收', '公司每月公布的營業收入，是最即時的經營數字。', '近 3 個月合計比去年同期成長 10% 以上＝有利；衰退 5% 以上＝不利。'],
+    c_eps: ['獲利（EPS）', '每股盈餘：公司每一股賺多少錢，每季公布一次。', '最新一季比去年同季成長 10% 以上＝有利；衰退 10% 以上或虧損＝不利。'],
+    c_val: ['價格（本益比）', '本益比＝股價 ÷ 每股盈餘，代表用幾倍的獲利在買這家公司。', '和這檔自己近三年相比：落在最低的三成＝相對便宜（有利）；最高的三成＝相對貴（不利）。'],
+    c_yld: ['殖利率', '近 12 個月現金配息 ÷ 目前股價。', '和這檔自己近兩年相比：殖利率偏高代表價格相對便宜（有利）；偏低代表價格相對貴（不利）。'],
+    c_div: ['配息', '最近一次配息金額和前幾次平均相比。', '持平或增加＝有利；減少一到兩成半＝普通；減少超過兩成半＝不利。'],
+    c_inst: ['法人', '外資和投信近 20 個交易日的買賣超，除以同期成交量。', '買超達成交量 3% 以上＝有利；賣超 3% 以上＝不利。'],
+    c_trend: ['趨勢', '股價和季線（近 60 個交易日的平均價）的關係。', '股價在季線之上、季線上揚＝有利；股價在季線之下、季線下彎＝不利；其餘＝普通。'],
+    verdict: ['體檢結論', '把各項檢查的「有利」減「不利」加總。', '條件佳＝多數有利；正常＝有利略多；參半＝好壞相當；留意＝不利偏多。這是整理公開資料，不是買賣建議。'],
     eff: ['指標占比', '這項指標在這檔的綜合燈號中實際占的比重，由回測決定。', '「不計入」代表過去約三年這項指標對這檔（及同類標的）沒有預測力，所以不採用；它的燈號只供參考。']
   };
   function initTips() {
@@ -517,7 +615,7 @@
       const title = el.dataset.tipTitle || t[0];
       pop.innerHTML = '<b>' + title + '</b><div>' + t[1] + '</div><div class="tip-how">' + t[2] + '</div>' +
         (el.dataset.tipExtra ? '<div class="tip-x">' + el.dataset.tipExtra + '</div>' : '') +
-        '<div class="tip-leg"><span>偏跌</span><i></i><span>偏漲</span></div>';
+        '<div class="tip-leg"><span>不利／偏跌</span><i></i><span>有利／偏漲</span></div>';
       pop.hidden = false;
       const r = el.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
       let left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, innerWidth - w - 8));
@@ -542,6 +640,7 @@
   /* ---------- 資料來源說明 ---------- */
   const SOURCES_HTML = '<div class="box src"><h2>資料來源</h2><ul>' +
     '<li><b>股價（開高低收、成交量）</b>：每日收盤資料，原始來源為<a href="https://www.twse.com.tw/" target="_blank" rel="noopener">臺灣證券交易所</a>（上市）與<a href="https://www.tpex.org.tw/" target="_blank" rel="noopener">證券櫃檯買賣中心</a>（上櫃，例如 00933B、00937B），經 <a href="https://finmindtrade.com/" target="_blank" rel="noopener">FinMind</a> 開放資料 API 取得。約下午 2:30～3:30 收盤資料公布後更新；盤中看到的是前一交易日。均線、MACD、KD、RSI 都由這份資料計算。</li>' +
+    '<li><b>基本面（個股）</b>：月營收、每季每股盈餘（EPS）、本益比，原始來源為公開資訊觀測站與證交所／櫃買中心，經 FinMind 取得。月營收每月 10 日前公布，EPS 每季公布。</li>' +
     '<li><b>三大法人買賣超</b>：證交所／櫃買中心每日公布的外資、投信、自營商買賣超，經 FinMind 取得，約下午 4～5 點後更新，取約三年。</li>' +
     '<li><b>還原權息</b>：用證交所／櫃買中心的除息公告，把除息日之前的價格往下調整，讓除息缺口不會被當成下跌。圖表與指標用還原後的價格，收盤價顯示實際價格。</li>' +
     '<li><b>指標權重與回測</b>：同一份每日股價、法人、配息資料，取約三年（1,100 天）在瀏覽器即時計算；回測為滾動式樣本外（每 20 個交易日只用當時已知的資料重估權重）。大盤參考為元大台灣50（0050）。</li>' +
@@ -570,5 +669,5 @@
       '<polyline fill="none" stroke="#1e293b" stroke-width="' + sw + '" points="' + path(P.map(x => x.close)) + '"/></svg>';
   }
 
-  global.MA = { SOURCES_HTML, TIPS, initTips, CONFIG, FEATS, IND_NAMES, HORIZONS, TH, bin, arrow, loadList, loadAll, loadOne, loadDividends, market: () => lastMarket, _analyze: analyze, color, ink, level, strength, advice, sparkline, fmt, clearCache, ymd, addTicker, removeTicker, restoreTicker, toggleHeld, setSheet, ensureUserDoc };
+  global.MA = { CHECKS, VERDICTS, chkColor: CHK_COLOR, chkWord: CHK_WORD, SOURCES_HTML, TIPS, initTips, CONFIG, FEATS, IND_NAMES, HORIZONS, TH, bin, arrow, loadList, loadAll, loadOne, loadDividends, market: () => lastMarket, _analyze: analyze, color, ink, level, strength, advice, sparkline, fmt, clearCache, ymd, addTicker, removeTicker, restoreTicker, toggleHeld, setSheet, ensureUserDoc };
 })(window);
