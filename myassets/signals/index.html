@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>MyAssets 體檢詳解</title>
+<title>MyAssets 燈號與體檢詳解</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23eab308'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/style.css?v=14">
+<link rel="stylesheet" href="../assets/style.css?v=15">
 <style>
+  .matrix-wrap{overflow-x:auto}
   .matrix{width:100%;border-collapse:collapse;font-size:13px}
   .matrix th{font-weight:500;color:var(--mute);font-size:11px;padding:4px 2px;text-align:center;line-height:1.35}
   .matrix td{padding:6px 2px;border-top:1px solid var(--line);text-align:center}
@@ -17,23 +18,26 @@
   .cell{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:middle}
   .cell.big{width:30px;height:30px}
   .cell.txt{width:auto;height:auto;border-radius:999px;padding:2px 6px;font-size:11px;font-weight:600}
-  .head{display:flex;gap:14px;align-items:center}
-  .head .lamp{flex-basis:84px;height:84px;font-size:17px}
-  .head .lamp small{font-size:12px}
+  .head{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .head .lamp{flex-basis:74px;width:74px;height:74px;font-size:16px}
+  .head .lamp small{font-size:11px}
   .head h2{margin:0;font-size:20px}
-  .head .adv{font-size:15px;color:#334155;margin-top:4px}
+  .head .adv{font-size:14px;color:#334155;margin-top:4px;line-height:1.5}
   .chart{margin-top:12px}
   .chart svg{width:100%;height:auto}
-  .chartleg{font-size:11px;color:var(--mute);display:flex;gap:12px;margin-top:2px}
-  .mtabs{display:flex;gap:6px;margin-bottom:8px}
+  .chartleg{font-size:11px;color:var(--mute);display:flex;gap:12px;margin-top:2px;flex-wrap:wrap}
+  .mtabs{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
   .mtabs .btn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .sec-title{display:flex;align-items:baseline;justify-content:space-between;margin:18px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--line)}
+  .sec-title h3{margin:0;font-size:16px}
+  .sec-title small{font-size:12px;color:var(--mute)}
   @media (max-width:560px){ .matrix .hide-s{display:none} .matrix td.nm span{display:none} }
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="../">MyAssets<small>體檢詳解</small></a>
-  <a class="btn" href="../">回股票頁</a>
+  <a class="brand" href="../">MyAssets<small>燈號與體檢詳解</small></a>
+  <a class="btn" href="../">回股票清單</a>
   <button class="btn" id="refresh" type="button">重新整理</button>
   <span id="auth"></span>
 </div></header>
@@ -41,93 +45,65 @@
 <main class="wrap">
   <div id="banner" style="margin-top:12px"></div>
   <div class="meta" id="meta" style="margin-top:12px">載入中…</div>
-  <div class="legend"><span>不利／會跌</span><span class="bar"></span><span>有利／會漲</span><span style="margin-left:auto">滑鼠移到（手機點一下）有底線的文字可看說明</span></div>
+  <div class="legend"><span>看跌／不利</span><span class="bar"></span><span>看漲／有利</span><span style="margin-left:auto">滑鼠移到（手機點一下）有底線的文字或燈號可看說明</span></div>
 
   <div class="box">
-    <div class="mtabs"><button class="btn on" data-m="hc" type="button">體檢總表</button><button class="btn" data-m="fc" type="button">短期預測（僅供參考）</button><button class="btn" data-m="ind" type="button">技術指標</button></div>
-    <table class="matrix" id="matrix"><tr><td class="loading">載入中…</td></tr></table>
+    <div class="mtabs">
+      <button class="btn on" data-m="fc" type="button">預測燈號總表（1/3/7/14/30日）</button>
+      <button class="btn" data-m="hc" type="button">持股體檢總表（含消息與量能）</button>
+      <button class="btn" data-m="ind" type="button">12項技術與籌碼指標</button>
+    </div>
+    <div class="matrix-wrap">
+      <table class="matrix" id="matrix"><tr><td class="loading">載入中…</td></tr></table>
+    </div>
   </div>
 
   <div class="pick" id="pick"></div>
   <div class="box" id="detail"><div class="loading">載入中…</div></div>
 
   <div class="box" id="howto">
-    <h2>體檢表怎麼看</h2>
-    <p>參考投顧分析股票常用的四個面向，把公開資料整理成「有利（紅）／普通（黃）／不利（綠）」。每一項都是和這檔自己的過去相比，不預測明天或下週的漲跌。</p>
-    <h3>個股看五項</h3>
-    <ul>
-      <li><b>營收</b>：近 3 個月營收和去年同期比。成長 10% 以上有利，衰退 5% 以上不利。</li>
-      <li><b>獲利</b>：最新一季每股盈餘（EPS）和去年同季比。成長 10% 以上有利，衰退 10% 以上或虧損不利。</li>
-      <li><b>價格</b>：本益比和自己近三年比。在最低的三成算便宜（有利），最高的三成算貴（不利）。</li>
-      <li><b>法人</b>：外資和投信近 20 個交易日買超達成交量 3% 有利，賣超 3% 不利。</li>
-      <li><b>趨勢</b>：股價在季線之上且季線上揚有利；在季線之下且季線下彎不利。</li>
-    </ul>
-    <h3>ETF 看四項</h3>
-    <ul>
-      <li><b>殖利率</b>：近 12 個月配息 ÷ 股價，和自己近兩年比。偏高代表價格相對便宜（有利）。</li>
-      <li><b>配息</b>：最近一次配息和前幾次平均比。持平或增加有利，減少超過兩成半不利。</li>
-      <li><b>法人</b>、<b>趨勢</b>：同個股。</li>
-    </ul>
-    <h3>結論怎麼來</h3>
-    <p>「有利」項數減「不利」項數：多數有利＝條件佳；有利略多＝正常；差不多＝參半；不利偏多＝留意。</p>
-    <ul>
-      <li>這是把公開資料整理成容易看的形式，不保證獲利，也不是投資建議。</li>
-      <li>營收每月更新、獲利每季更新，所以結論不會天天變，適合每週或每月看一次。</li>
-      <li>高股息 ETF 和債券 ETF 是領息部位，「留意」的意思是暫緩加碼，不是要賣掉。</li>
-      <li>債券 ETF 的價格主要看利率，這裡沒有納入利率資料。</li>
-    </ul>
-    <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">短期技術面預測怎麼算（僅供參考）</summary>
-    <h3>燈號怎麼算、準不準</h3>
-    <p>紅色越深代表越偏向會漲，綠色越深代表越偏向會跌，黃色代表方向不明（台灣習慣：紅漲綠跌）。分級：+45% 以上「強烈會漲」、+15%～+45%「偏向會漲」、±15% 內「維持盤整」、−15%～−45%「偏向會跌」、−45% 以下「強烈會跌」。</p>
+    <h2>預測燈號與體檢表怎麼看</h2>
+    <p>網站提供「<b>未來 1日／3日／7日／14日／30日 預測燈號</b>」與「<b>持股體檢（含主流媒體消息面与量能）</b>」雙軌資訊，協助同時掌握短中期買賣節奏與中長期基本面品質。</p>
 
-    <h3>第一步：9 項指標各自打分</h3>
+    <h3>一、未來 1日、3日、7日、14日、30日 預測燈號</h3>
+    <p>紅色越深代表越偏向看漲，綠色越深代表越偏向看跌，黃色代表區間盤整（台灣習慣：紅漲綠跌）。分級：+40% 以上「強烈看漲」、+13%～+40%「偏向看漲」、±13% 內「維持盤整」、−13%～−40%「偏向看跌」、−40% 以下「強烈看跌」。</p>
     <ul>
-      <li><b>均線趨勢、MACD 動能、中期動能</b>：順勢類，看趨勢方向和力道。</li>
-      <li><b>KD 轉折、RSI 冷熱</b>：反轉類，看是否漲過頭或跌過頭。</li>
-      <li><b>相對大盤</b>：比元大台灣50 強或弱。<b>量價配合</b>：上漲有量還是下跌有量。</li>
-      <li><b>法人籌碼</b>：外資、投信、自營商買賣超（ETF 只計外資與投信）。</li>
-      <li><b>殖利率位階</b>：目前殖利率在這檔過去約兩年的高低位置，高代表價格相對便宜。</li>
+      <li><b>12 項技術、量價與籌碼指標</b>：
+        <ul>
+          <li><b>極短線（1日、3日）主力指標</b>：<b>K線高低檔型態</b>（跳空缺口、長下影線承接、長上影線遇壓、紅黑K吞噬）、<b>量價與爆量（RVOL）</b>（今日成交量 ÷ 20日均量倍數、價漲量增／高檔爆量收黑／價跌量縮）、<b>布林通道（%B）與 ATR 波動突破</b>、<b>KD 轉折（含 J 值乖離）</b>、<b>6日／14日 RSI 冷熱</b>。</li>
+          <li><b>波段（7日、14日、30日）主力指標</b>：<b>均線趨勢</b>（週線 5日、月線 20日、季線 60日）、<b>MACD 動能</b>、<b>三大法人連買連賣轉折</b>（外資、投信連續買賣超天數与占成交量比重）、<b>散戶融資融券籌碼沉澱</b>（「法人買＋散戶融資減」代表籌碼安定）、<b>中期動能</b>、<b>相對大盤強弱（0050）</b>、<b>殖利率位階</b>。</li>
+        </ul>
+      </li>
+      <li><b>期間專屬權重＋三年滾動式回測修正</b>：每個預測期間先依短中長期特性配置基礎權重，再以過去約三年（1,100 天）歷史資料量測各指標與實際漲跌的相關性（IC）。回測有效的指標自動放大權重，若某指標對該股表現反向則自動壓低或歸零。</li>
+      <li><b>歷史相似日統計與主流媒體情緒加成</b>：系統會從過去三年找出「指標訊號與今天最相似」的日子，統計之後 1日、3日、7日、14日、30日 的實際上漲比例與漲跌幅中位數；並將近 7 日具公信力財經媒體的利多／利空情緒納入短期（1～7日）輔助微調。</li>
     </ul>
-    <p>分數都依每檔自己的波動度換算，股票和債券 ETF 用同一把尺。價格一律還原權息。</p>
 
-    <h3>第二步：用回測決定哪些指標算數</h3>
-    <p>同一項指標，對不同標的、不同期間的效果差很多。所以每個預測期間都會量測「指標分數」和「之後實際漲跌」在過去約三年的相關性，同時看這檔自己和同類標的（股票類、債券 ETF 類分開）。相關性不顯著，或方向和傳統解讀相反的指標，占比歸零，詳解頁會標示「回測無效，不計入」。</p>
-
-    <h3>第三步：樣本外回測，算出可信度</h3>
-    <p>把近兩年每一天都當成「今天」重演一次：每 20 個交易日只用當時已知的資料重估占比，發出看漲或看跌訊號，再對照之後實際的漲跌。</p>
+    <h3>二、有公信力的財經報導（媒體白名單過濾）</h3>
     <ul>
-      <li><b>★★★</b>：命中率明顯高於這檔平時的漲跌比例。</li>
-      <li><b>★★☆</b>：略高於平時，有一點參考價值。</li>
-      <li><b>★☆☆</b>：和亂猜差不多。這時燈號強度會打到 45%，顏色偏黃。</li>
+      <li><b>嚴格排除散戶論壇雜訊</b>：系統自動過濾並排除「CMoney 股市爆料同學會、個人網誌、聚財網、Facebook、vocus、PTT、Dcard」等論壇貼文。</li>
+      <li><b>只保留具公信力之主流媒體</b>：優先收錄<b>經濟日報、工商時報、鉅亨網、中央社、財訊、今周刊、MoneyDJ、先探、商業周刊</b>（標示深藍色媒體標籤），以及<b>聯合新聞網（UDN）、自由財經、Yahoo財經、ETtoday財經雲</b>等主流媒體報導，並自動去除重複轉載標題與判讀正負向情緒。</li>
     </ul>
-    <p>每個期間的回測數字都列在該檔詳解裡，例如「看漲後實際上漲 62%（85 次）；平時上漲 54%」。</p>
 
-    <h3>第四步：合成燈號</h3>
-    <p>期間燈號＝有效指標的加權分數（一半）＋過去訊號相似的日子之後實際上漲的機率（一半），再乘上可信度。綜合燈號＝1 週、2 週、1 個月三個期間的平均。</p>
-
-    <h3>使用上的提醒</h3>
+    <h3>三、持股體檢（基本面＋每日量能與消息面）</h3>
     <ul>
-      <li>回測只代表過去約三年，樣本有限，而且相鄰日子的結果彼此重疊；★★★ 也不保證之後有效。</li>
-      <li>隔日、3 日這類短期預測本來就接近擲銅板，可信度通常較低。</li>
-      <li>高股息 ETF 和債券 ETF 是領息部位，綠燈的意思是「暫緩加碼」，不是要賣掉。</li>
-      <li>債券 ETF 的價格主要跟著利率走，這裡沒有納入利率資料，參考性比股票低。</li>
+      <li><b>個股看七項</b>：<b>營收</b>（近 3 月 YoY ≥ +10% 有利）、<b>獲利 EPS</b>（最新季 YoY ≥ +10% 有利）、<b>價格本益比</b>（近三年最低三成有利）、<b>法人</b>（近 20 日外資＋投信買超 ≥ 成交量 3% 有利）、<b>量能</b>（每日更新：價漲量增有利、爆量收黑或出量下殺不利）、<b>趨勢</b>（每日更新：站上季線且季線上揚有利）、<b>消息</b>（每日更新：近 7 日主流媒體利多占優有利）。</li>
+      <li><b>ETF 看六項</b>：<b>殖利率位階</b>、<b>配息穩定度</b>、<b>法人</b>、<b>量能</b>、<b>趨勢</b>、<b>消息</b>。</li>
+      <li><b>免責聲明</b>：本網站將公開市場行情、法人籌碼與主流媒體新聞整理為視覺化燈號，供個人研究參考，不保證未來獲利，亦非任何投資買賣建議。</li>
     </ul>
-    </details>
   </div>
 
   <div id="sources"></div>
-  <p class="foot">技術指標與歷史統計只反映過去的價格與籌碼，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（FinMind，約下午 3 點後更新）。</p>
+  <p class="foot">技術指標、籌碼與歷史回測統計只反映過去與當下的公開資料，不保證未來漲跌，也不是投資建議。行情為每日收盤資料（FinMind，約下午 3 點後更新）。</p>
 </main>
 
-<script src="../assets/core.js?v=14"></script>
-<script type="module" src="../assets/auth.js?v=14"></script>
+<script src="../assets/core.js?v=15"></script>
+<script type="module" src="../assets/auth.js?v=15"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
   const KEYS = Object.keys(MA.IND_NAMES);
-  let results = [], cur = null, mode = 'hc', user = null, userDoc = null;
+  let results = [], cur = null, mode = 'fc', user = null, userDoc = null;
 
-  const lamp = s => '<div class="lamp" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+MA.level(s).short+'<small>'+MA.strength(s)+'%</small></div>';
   const q = t => String(t).replace(/"/g,'&quot;');
   function btLine(b){
     if (!b || !(b.bull+b.bear)) return '回測期間沒有發出明確訊號';
@@ -135,7 +111,7 @@
     return '看漲後實際上漲 '+p(b.bullHit,b.bull)+'、看跌後實際下跌 '+p(b.bearHit,b.bear)+'；平時上漲 '+Math.round(b.up/b.tot*100)+'%';
   }
   function fcExtra(f){
-    let t = '目前：'+MA.level(f.score).label+'（強度 '+MA.strength(f.score)+'%）　可信度 '+f.stars;
+    let t = '目前：'+MA.level(f.score).label+'（強度 '+MA.strength(f.score)+'%）　回測可信度 '+f.stars;
     if (f.noSignal) t += '<br>這個期間沒有任何指標通過回測，不給方向';
     if (f.n) t += '<br>過去訊號相似的 '+f.n+' 天，之後上漲 '+Math.round(f.up*100)+'%（平時 '+Math.round(f.base*100)+'%），漲跌中位數 '+(f.med>=0?'+':'')+MA.fmt(f.med)+'%';
     t += '<br>近兩年回測：'+btLine(f.bt);
@@ -152,28 +128,31 @@
 
   function matrix(){
     let h;
-    if (mode === 'hc') {
-      const keys = ['rev','eps','val','yld','div','inst','trend'];
+    if (mode === 'fc') {
+      h = '<tr><th style="text-align:left">標的</th><th><span data-tip="score">綜合預測</span></th>'+MA.HORIZONS.map(H=>'<th><span data-tip="hz" data-tip-title="'+H.long+'">'+H.label+'</span></th>').join('')+'<th><span data-tip="verdict">體檢</span></th><th><span data-tip="c_vol">量比</span></th></tr>';
+      results.forEach(r=>{
+        if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="8" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
+        const H = r.health;
+        h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
+          '<td><span class="cell txt" style="background:'+MA.color(r.now.score)+';color:'+MA.ink(r.now.score)+'">'+MA.level(r.now.score).short+' '+MA.strength(r.now.score)+'%</span></td>'+
+          r.now.fc.map(f=>{ const a=MA.arrow(f.score); return '<td><span class="cell txt" data-tip="hz" data-tip-title="'+r.item.name+'｜'+f.H.long+'" data-tip-extra="'+fcExtra(f)+'" style="background:'+MA.color(f.score)+';color:'+MA.ink(f.score)+'">'+a+(f.n?Math.round(f.up*100)+'%':'')+(f.grade==='hi'?'★':'')+'</span></td>'; }).join('')+
+          '<td>'+(H?'<span class="cell txt" style="background:'+MA.color(H.score*0.85)+';color:'+MA.ink(H.score*0.85)+'">'+H.verdict.short+'</span>':'—')+'</td>'+
+          '<td style="font-size:12px;color:'+(r.now.volRatio>=1.4?'#b91c1c':'#475569')+';font-weight:'+(r.now.volRatio>=1.4?'700':'400')+'">'+MA.fmt(r.now.volRatio,1)+'x</td></tr>';
+      });
+    } else if (mode === 'hc') {
+      const keys = ['rev','eps','val','yld','div','inst','vol','trend','news'];
       h = '<tr><th style="text-align:left">標的</th><th><span data-tip="verdict">結論</span></th>'+keys.map(k=>'<th><span data-tip="c_'+k+'">'+MA.CHECKS[k].short+'</span></th>').join('')+'</tr>';
       results.forEach(r=>{
-        if (!r.health) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="8" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
+        if (!r.health) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="10" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
         const H = r.health;
         h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
           '<td><span class="cell txt" style="background:'+MA.color(H.score*0.85)+';color:'+MA.ink(H.score*0.85)+'">'+H.verdict.short+'</span></td>'+
           keys.map(k=>{ const c=H.checks.find(x=>x.key===k); return '<td>'+(c?'<span class="cell" data-tip="c_'+k+'" data-tip-title="'+r.item.name+'｜'+c.short+'" data-tip-extra="'+q(MA.chkWord(c.s)+'：'+c.text)+'" style="background:'+MA.chkColor(c.s)+'"></span>':'<span style="color:#cbd5e1">—</span>')+'</td>'; }).join('')+'</tr>';
       });
-    } else if (mode === 'fc') {
-      h = '<tr><th style="text-align:left">標的</th><th><span data-tip="score">綜合</span></th>'+MA.HORIZONS.map(H=>'<th><span data-tip="hz" data-tip-title="'+H.long+'">'+H.label+'</span></th>').join('')+'</tr>';
-      results.forEach(r=>{
-        if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="6" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
-        h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
-          '<td><span class="cell big" style="background:'+MA.color(r.now.score)+'"></span></td>'+
-          r.now.fc.map(f=>{ const a=MA.arrow(f.score); return '<td><span class="cell txt" data-tip="hz" data-tip-title="'+r.item.name+'｜'+f.H.long+'" data-tip-extra="'+fcExtra(f)+'" style="background:'+MA.color(f.score)+';color:'+MA.ink(f.score)+'">'+a+(f.n?Math.round(f.up*100)+'%':'')+(f.grade==='hi'?'★':'')+'</span></td>'; }).join('')+'</tr>';
-      });
     } else {
       h = '<tr><th style="text-align:left">標的</th><th><span data-tip="score">綜合</span></th>'+KEYS.map(k=>'<th>'+indName(k,true)+'</th>').join('')+'<th class="hide-s"><span data-tip="yest">昨日</span></th></tr>';
       results.forEach(r=>{
-        if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="7" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
+        if (!r.now) { h += '<tr><td class="nm">'+r.item.name+'</td><td colspan="14" class="err">'+(r.error||'資料不足')+'</td></tr>'; return; }
         h += '<tr data-code="'+r.item.code+'"><td class="nm"><b>'+r.item.name+'</b> <span style="color:#64748b;font-size:11px">'+r.item.code+'</span></td>'+
           '<td><span class="cell big" style="background:'+MA.color(r.now.score)+'"></span></td>'+
           KEYS.map(k=>{ const x=r.now.ind[k]; return '<td><span class="cell" data-tip="'+k+'" data-tip-title="'+r.item.name+'｜'+MA.IND_NAMES[k]+'" data-tip-extra="'+q(x.value+'：'+x.text+'（'+(x.skip?'不計':(x.score>=0?'+':'')+Math.round(x.score*100)+'%')+'）')+'" style="background:'+(x.skip?'#e2e8f0':MA.color(x.score))+'"></span></td>'; }).join('')+
@@ -185,7 +164,7 @@
   }
 
   function pick(){
-    $('#pick').innerHTML = results.map(r=>'<button class="btn'+(cur===r.item.code?' on':'')+'" data-code="'+r.item.code+'" type="button"><span class="lamp sm" style="background:'+(r.health?MA.color(r.health.score*0.85):'#cbd5e1')+'"></span>'+r.item.name+'</button>').join('');
+    $('#pick').innerHTML = results.map(r=>'<button class="btn'+(cur===r.item.code?' on':'')+'" data-code="'+r.item.code+'" type="button"><span class="lamp sm" style="background:'+(r.now?MA.color(r.now.score):'#cbd5e1')+'"></span>'+r.item.name+'</button>').join('');
     $('#pick').querySelectorAll('.btn').forEach(b=>b.onclick=()=>{ location.hash = b.dataset.code; });
     const on = $('#pick .btn.on'); if (on) on.scrollIntoView({block:'nearest',inline:'center'});
   }
@@ -196,52 +175,79 @@
     cur = r.item.code;
     if (!r.now) { $('#detail').innerHTML = '<h2>'+r.item.name+'</h2><p class="err">'+(r.error||'資料不足，無法計算')+'</p>'; pick(); return; }
     const n = r.now, it = r.item, arrow = n.change>0?'▲':n.change<0?'▼':'－', cc = n.change>0?'#dc2626':n.change<0?'#16a34a':'#64748b';
-    const H = r.health, hs = H.score*0.85;
-    let h = '<div class="head"><div class="lamp" data-tip="verdict" style="background:'+MA.color(hs)+';color:'+MA.ink(hs)+';text-shadow:'+(Math.abs(hs)<0.35?'none':'')+'">'+H.verdict.short+'<small>'+H.good+' 利 '+H.bad+' 弊</small></div><div><h2>'+it.name+' <span style="color:#64748b;font-size:14px;font-weight:400">'+it.code+'</span><span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>')+'</h2>'+
-      '<div style="font-size:15px;margin-top:2px"><b>'+H.verdict.label+'</b>（'+H.checks.filter(c=>c.s!==null).length+' 項檢查：'+H.good+' 項有利、'+H.bad+' 項不利）</div>'+
-      '<div class="adv">'+H.advice+'</div></div></div>';
-    h += '<h3 style="margin-top:14px">持股體檢</h3>';
-    H.checks.forEach(c=>{
-      const col = MA.chkColor(c.s);
-      h += '<div class="ind"><span class="cell" style="background:'+col+';margin-top:2px"></span><div class="t"><b><span data-tip="c_'+c.key+'">'+c.q+'</span></b><div>'+c.text+'</div></div><div class="v"><b style="color:'+(c.s===null?'#94a3b8':col)+';font-size:14px">'+MA.chkWord(c.s)+'</b></div></div>';
-    });
-    h += '<div class="chart">'+MA.sparkline(r.px,{days:120,w:600,h:150,ma60:true,stroke:1.8})+'<div class="chartleg"><span>— 收盤價</span><span style="color:#94a3b8">- - 月線</span><span style="color:#a78bfa">- - 季線</span><span style="margin-left:auto">近 120 個交易日</span></div></div>';
+    const H = r.health, hs = H.score*0.85, ps = n.score;
+
+    let h = '<div class="head">'+
+      '<div class="lamps">'+
+        '<div class="lamp-col"><span class="lamp-cap">預測燈號</span><div class="lamp" data-tip="score" style="background:'+MA.color(ps)+';color:'+MA.ink(ps)+';text-shadow:'+(Math.abs(ps)<0.35?'none':'')+'">'+MA.level(ps).short+'<small>強度 '+MA.strength(ps)+'%</small></div></div>'+
+        '<div class="lamp-col"><span class="lamp-cap">持股體檢</span><div class="lamp" data-tip="verdict" style="background:'+MA.color(hs)+';color:'+MA.ink(hs)+';text-shadow:'+(Math.abs(hs)<0.35?'none':'')+'">'+H.verdict.short+'<small>'+H.good+' 利 '+H.bad+' 弊</small></div></div>'+
+      '</div>'+
+      '<div style="flex:1;min-width:220px"><h2>'+it.name+' <span style="color:#64748b;font-size:14px;font-weight:400">'+it.code+'</span><span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>')+'</h2>'+
+      '<div class="adv"><b>短期預判：'+MA.level(ps).label+'</b> — '+MA.advice(it, ps)+'<br><b>中長體檢：'+H.verdict.label+'</b>（'+H.good+' 項有利、'+H.bad+' 項不利） — '+H.advice+'</div></div></div>';
+
+    h += '<div class="chart">'+MA.sparkline(r.px,{days:120,w:600,h:150,ma60:true,stroke:1.8})+'<div class="chartleg"><span>— 收盤價</span><span style="color:#94a3b8">- - 月線（20日）</span><span style="color:#a78bfa">- - 季線（60日）</span><span style="margin-left:auto">近 120 個交易日（還原權息走勢）</span></div></div>';
     h += '<div class="kv">'+
       '<div>收盤（'+n.date.slice(5).replace('-','/')+'）<b>'+MA.fmt(n.close)+' <span style="font-size:12px;color:'+cc+'">'+arrow+MA.fmt(Math.abs(n.pct))+'%</span></b></div>'+
-      '<div>近 20 日低點（支撐）<b>'+MA.fmt(n.lo20)+'</b></div>'+
-      '<div>近 20 日高點（壓力）<b>'+MA.fmt(n.hi20)+'</b></div>'+
-      '<div>月線（20 日均價）<b>'+MA.fmt(n.ma20)+'</b></div>'+
-      '<div>季線（60 日均價）<b>'+MA.fmt(n.ma60)+'</b></div>'+
-      '<div>離月線<b>'+(n.close>=n.ma20?'+':'')+MA.fmt((n.close/n.ma20-1)*100)+'%</b></div></div>';
+      '<div>今日成交量／量比<b>'+n.volLots.toLocaleString()+' 張 <span style="font-size:12px;color:'+(n.volRatio>=1.4?'#dc2626':'#64748b')+'">（'+MA.fmt(n.volRatio,2)+'x 月均）</span></b></div>'+
+      '<div>週線（5日）／月線（20日）<b>'+MA.fmt(n.ma5)+' ／ '+MA.fmt(n.ma20)+'</b></div>'+
+      '<div>季線（60日均價）<b>'+MA.fmt(n.ma60)+'（'+(n.close>=n.ma60?'+':'')+MA.fmt((n.close/n.ma60-1)*100,1)+'%）</b></div>'+
+      '<div>近 20 日支撐（低點）<b>'+MA.fmt(n.lo20)+'</b></div>'+
+      '<div>近 20 日壓力（高點）<b>'+MA.fmt(n.hi20)+'</b></div></div>';
 
-    // 短期技術面預測（收合）
-    h += '<details style="margin-top:16px"><summary style="cursor:pointer;font-weight:700;font-size:15px">短期技術面預測（僅供參考：回測顯示多數與亂猜差不多）</summary>';
-    h += '<h3 style="margin-top:12px"><span data-tip="hz">各期間預測</span>　綜合：'+MA.level(n.score).label+'</h3>';
+    // 第一區塊：未來 1日 / 3日 / 7日 / 14日 / 30日 預測燈號（直接展開）
+    h += '<div class="sec-title"><h3><span data-tip="hz">未來 1日／3日／7日／14日／30日 預測燈號</span></h3><small>結合 12 項指標、歷史相似日分布與主流媒體情緒</small></div>';
     n.fc.forEach(f=>{
       const c = MA.color(f.score);
-      let t = '<b>'+f.H.long+'</b>　'+MA.level(f.score).label+'　<span data-tip="hz" style="color:#b45309">可信度 '+f.stars+'</span>';
+      let t = '<b>'+f.H.long+'</b>　<b style="color:'+c+'">'+MA.level(f.score).label+'（強度 '+MA.strength(f.score)+'%）</b>　<span data-tip="hz" style="color:#b45309;font-size:12px">回測可信度 '+f.stars+'</span>';
       let v = '', bar = '';
       if (f.noSignal) t += '<div>沒有任何指標通過回測，這個期間不給方向。</div>';
       if (f.n) {
-        t += '<div>過去訊號相似的 '+f.n+' 天，之後上漲 <b style="color:'+MA.color((f.up-0.5)/0.2)+'">'+Math.round(f.up*100)+'%</b>（這檔平時 '+Math.round(f.base*100)+'%）</div>';
+        t += '<div>過去 3 年訊號最相似的 '+f.n+' 天，之後上漲機率 <b style="color:'+MA.color((f.up-0.5)/0.2)+'">'+Math.round(f.up*100)+'%</b>（這檔平時上漲率 '+Math.round(f.base*100)+'%）</div>';
         const mp = n.close*(1+f.med/100), lo = n.close*(1+f.p25/100), hi = n.close*(1+f.p75/100);
-        v = '漲跌中位數<br><b style="color:'+(f.med>=0?'#dc2626':'#16a34a')+'">'+(f.med>=0?'+':'')+MA.fmt(f.med)+'%</b><br>約 '+MA.fmt(mp)+'<br><span style="font-size:11px">常見 '+MA.fmt(lo)+'～'+MA.fmt(hi)+'</span>';
+        v = '預估中位數<br><b style="color:'+(f.med>=0?'#dc2626':'#16a34a')+'">'+(f.med>=0?'+':'')+MA.fmt(f.med)+'%</b><br>約 '+MA.fmt(mp)+'<br><span style="font-size:11px">常見 '+MA.fmt(lo)+'～'+MA.fmt(hi)+'</span>';
         const span = Math.max(Math.abs(f.p25), Math.abs(f.p75), 0.5)*1.2;
         const L = 50 + f.p25/span*50, R = 50 + f.p75/span*50;
         bar = '<div class="range" title="常見區間 '+MA.fmt(f.p25)+'%～'+MA.fmt(f.p75)+'%"><i style="left:'+L.toFixed(1)+'%;width:'+Math.max(1,R-L).toFixed(1)+'%;background:'+c+'"></i></div>';
       }
-      t += '<div style="font-size:12px">近兩年回測：'+btLine(f.bt)+'</div>';
-      h += '<div class="fcrow"><div class="lamp md" style="background:'+c+';color:'+MA.ink(f.score)+';text-shadow:'+(Math.abs(f.score)<0.35?'none':'')+'">'+MA.level(f.score).short+'</div><div class="t">'+t+bar+'</div><div class="v">'+v+'</div></div>';
+      t += '<div style="font-size:12px;color:#64748b">近兩年樣本外回測：'+btLine(f.bt)+'</div>';
+      h += '<div class="fcrow"><div class="lamp md" style="background:'+c+';color:'+MA.ink(f.score)+';text-shadow:'+(Math.abs(f.score)<0.35?'none':'')+'">'+f.H.label+'<small>'+MA.level(f.score).short+'</small></div><div class="t">'+t+bar+'</div><div class="v">'+v+'</div></div>';
     });
 
-    h += '<h3 style="margin-top:16px">9 項指標（占比由回測決定）</h3>';
+    // 第二區塊：主流財經媒體報導（已過濾爆料同學會與論壇）
+    const NI = r.newsInfo;
+    h += '<div class="sec-title"><h3><span data-tip="c_news">主流財經媒體報導</span></h3><small>已自動排除爆料同學會、PTT、Dcard 與個人網誌</small></div>';
+    if (NI && NI.items && NI.items.length) {
+      const nCol = MA.chkColor(NI.s);
+      h += '<div style="font-size:13px;color:#334155;margin-bottom:6px;display:flex;align-items:center;gap:8px"><span class="cell" style="width:14px;height:14px;background:'+nCol+'"></span><b>'+NI.summary+'</b></div>';
+      h += '<div class="news-list">';
+      NI.items.slice(0, 8).forEach(nw => {
+        const sBadge = nw.sent > 0.1 ? '<span class="sent-badge pos">利多</span>' : nw.sent < -0.1 ? '<span class="sent-badge neg">利空</span>' : '<span class="sent-badge neu">一般</span>';
+        h += '<a class="news-item" href="'+nw.link+'" target="_blank" rel="noopener noreferrer">'+
+          '<span class="media-badge'+(nw.tier===1?' t1':'')+'">'+nw.source+'</span>'+sBadge+
+          '<span class="news-title">'+nw.title+'</span>'+
+          '<span class="news-date">'+nw.date.slice(5)+'</span></a>';
+      });
+      h += '</div>';
+    } else {
+      h += '<p style="font-size:13px;color:#64748b;margin:6px 0">近 21 日無主流財經媒體（經濟日報、工商時報、鉅亨網等）針對此標的之特別報導。</p>';
+    }
+
+    // 第三區塊：持股體檢（基本面／評價／籌碼／量能／趨勢／消息）
+    h += '<div class="sec-title"><h3>持股體檢（基本面＋量能＋籌碼＋消息）</h3><small>量能、法人、趨勢、消息每日收盤更新</small></div>';
+    H.checks.forEach(c=>{
+      const col = MA.chkColor(c.s);
+      h += '<div class="ind"><span class="cell" style="background:'+col+';margin-top:2px"></span><div class="t"><b><span data-tip="c_'+c.key+'">'+c.q+'</span></b><div>'+c.text+'</div></div><div class="v"><b style="color:'+(c.s===null?'#94a3b8':col)+';font-size:14px">'+MA.chkWord(c.s)+'</b></div></div>';
+    });
+
+    // 第四區塊：12 項技術、量價與籌碼指標詳解
+    h += '<div class="sec-title"><h3>12 項技術、量價與籌碼指標詳解</h3><small>占比結合各期間特性與三年回測表現</small></div>';
     KEYS.forEach(k=>{
       const x = n.ind[k], c = x.skip?'#cbd5e1':MA.color(x.score), pos = ((x.score+1)/2*100).toFixed(1);
-      h += '<div class="ind"><span class="cell" style="background:'+c+';margin-top:2px"></span><div class="t"><b>'+indName(k)+'</b> <span data-tip="eff" style="font-size:12px;color:'+(x.eff>0.005?'#b45309':'#94a3b8')+'">'+(x.skip?'無資料':x.eff>0.005?'占比 '+Math.round(x.eff*100)+'%':'回測無效，不計入')+'</span>'+
+      h += '<div class="ind"><span class="cell" style="background:'+c+';margin-top:2px"></span><div class="t"><b>'+indName(k)+'</b> <span data-tip="eff" style="font-size:12px;color:'+(x.eff>0.005?'#b45309':'#94a3b8')+'">'+(x.skip?'無資料':x.eff>0.005?'綜合占比 '+Math.round(x.eff*100)+'%':'回測反向，不計入')+'</span>'+
         '<div>'+x.text+'</div><div class="meter"><i style="left:'+pos+'%;background:'+c+'"></i></div></div>'+
         '<div class="v">'+x.value+'<br><b style="color:'+c+'">'+(x.skip?'不計':(x.score>=0?'+':'')+Math.round(x.score*100)+'%')+'</b></div></div>';
     });
-    h += '</details>';
+
     $('#detail').innerHTML = h;
     pick();
   }
@@ -249,10 +255,10 @@
   async function load(){
     $('#detail').innerHTML = '<div class="loading">載入中…</div>';
     const L = await MA.loadList(userDoc);
-    results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent='抓取中 '+d+'/'+t+'…'; });
+    results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent='抓取與回測運算中 '+d+'/'+t+'…'; });
     results = results.map((r,i)=> r && r.item ? r : { item:L.items[i], error:(r&&r.error)||'抓取失敗' });
     const dates = results.filter(r=>r.now).map(r=>r.now.date).sort();
-    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤，來源：證交所／櫃買中心，經 FinMind）　點總表任一列看該檔詳解';
+    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤價量／籌碼／主流媒體新聞，經 FinMind）　點總表任一列看該檔詳解';
     const h = (location.hash||'').slice(1).toUpperCase();
     cur = results.some(r=>r.item.code===h) ? h : (results[0]&&results[0].item.code);
     matrix(); detail();

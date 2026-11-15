@@ -4,28 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>MyAssets 看盤</title>
+<title>MyAssets 看盤｜預測燈號與持股體檢</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23dc2626'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/style.css?v=14">
+<link rel="stylesheet" href="assets/style.css?v=15">
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="./">MyAssets<small>持股體檢</small></a>
-  <a class="btn" href="signals/">體檢詳解</a>
+  <a class="brand" href="./">MyAssets<small>預測燈號＋持股體檢</small></a>
+  <a class="btn" href="signals/">燈號與體檢詳解</a>
   <button class="btn" id="refresh" type="button">重新整理</button>
   <span id="auth"></span>
 </div></header>
 
 <main class="wrap">
   <nav class="tabs">
-    <button class="btn on" data-tab="stocks" type="button">股票</button>
+    <button class="btn on" data-tab="stocks" type="button">股票清單</button>
     <button class="btn" data-tab="divs" type="button">配息行事曆</button>
   </nav>
 
   <section id="tab-stocks">
     <div id="banner"></div>
     <div class="meta" id="meta">載入中…</div>
-    <div class="legend"><span>不利</span><span class="bar"></span><span>有利</span><span style="margin-left:auto">○ 有利　△ 普通　✕ 不利　｜　點小標籤看說明</span></div>
+    <div class="legend"><span>看跌／不利</span><span class="bar"></span><span>看漲／有利</span><span style="margin-left:auto">▲ 看漲　▼ 看跌　｜　○ 有利　△ 普通　✕ 不利　｜　點小標籤看說明</span></div>
     <div id="mkt"></div>
     <div class="summary" id="summary"></div>
     <div id="alerts"></div>
@@ -34,7 +34,8 @@
       <button class="btn" data-f="etf" type="button">股票 ETF</button>
       <button class="btn" data-f="bond" type="button">債券 ETF</button>
       <button class="btn" data-f="stock" type="button">個股</button>
-      <button class="btn" data-s="score" type="button" style="margin-left:auto">依體檢排序</button>
+      <button class="btn" data-s="pred" type="button" style="margin-left:auto">依預測排序</button>
+      <button class="btn" data-s="health" type="button">依體檢排序</button>
       <button class="btn" id="manage" type="button">＋ 管理標的</button>
     </div>
     <div class="box" id="mbox" hidden>
@@ -62,19 +63,16 @@
   </section>
 
   <div id="sources"></div>
-  <p class="foot">持股體檢參考投顧常用的四個面向：基本面（營收、獲利）、評價（本益比或殖利率的高低位置）、籌碼（外資與投信買賣）、趨勢（股價與季線）。每一項都是把公開資料和這檔自己的過去相比，整理成「有利／普通／不利」，不預測短期漲跌，也不是投資建議。行情為每日收盤資料，盤中顯示的是前一交易日。短期技術面預測移到「體檢詳解」頁，僅供參考。<br>
+  <p class="foot">主畫面採用「<b>雙軌並排</b>」設計：① <b>預測燈號（1日／3日／7日／14日／30日）</b>結合 12 項技術、量價（RVOL 量比）、K線型態、布林通道與籌碼（三大法人連買賣＋散戶融資沉澱）及主流財經媒體情緒，每日收盤隨價量即時更新；② <b>持股體檢</b>結合基本面（營收、獲利、本益比／殖利率）、籌碼、量能、季線趨勢與主流媒體消息面。點任一卡片可查看完整 12 項指標、回測勝率與最新主流財經報導。<br>
   清單來源：<span id="src"></span><span id="sheetlinkwrap"></span></p>
 </main>
 
-<script src="assets/core.js?v=14"></script>
-<script type="module" src="assets/auth.js?v=14"></script>
+<script src="assets/core.js?v=15"></script>
+<script type="module" src="assets/auth.js?v=15"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
   let results = [], filter = 'all', sortBy = 'list', divLoaded = false, userDoc = null, lastList = null, user = null;
-
-  const lampHTML = s => '<div class="lamp" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+MA.level(s).short+'<small>'+MA.strength(s)+'%</small></div>';
-  const hzHTML = fc => '<div class="hzrow">'+fc.map(f => { const s=f.score, a = MA.arrow(s); return '<span class="hz" data-tip="hz" data-tip-title="'+f.H.long+'" data-tip-extra="'+fcExtra(f)+'" style="background:'+MA.color(s)+';color:'+MA.ink(s)+'">'+f.H.label+a+'</span>'; }).join('')+'</div>';
 
   function btLine(b){
     if (!b || !(b.bull+b.bear)) return '回測期間沒有發出明確訊號';
@@ -82,12 +80,26 @@
     return '看漲後實際上漲 '+p(b.bullHit,b.bull)+'、看跌後實際下跌 '+p(b.bearHit,b.bear)+'；平時上漲 '+Math.round(b.up/b.tot*100)+'%';
   }
   function fcExtra(f){
-    let t = '目前：'+MA.level(f.score).label+'（強度 '+MA.strength(f.score)+'%）　可信度 '+f.stars;
-    if (f.noSignal) t += '<br>這個期間沒有任何指標通過回測，不給方向';
+    let t = '目前：'+MA.level(f.score).label+'（強度 '+MA.strength(f.score)+'%）　回測可信度 '+f.stars;
+    if (f.noSignal) t += '<br>這個期間沒有指標通過回測，不給方向';
     if (f.n) t += '<br>過去訊號相似的 '+f.n+' 天，之後上漲 '+Math.round(f.up*100)+'%（平時 '+Math.round(f.base*100)+'%），漲跌中位數 '+(f.med>=0?'+':'')+MA.fmt(f.med)+'%';
     t += '<br>近兩年回測：'+btLine(f.bt);
     return t.replace(/"/g,'&quot;');
   }
+  const pLamp = n => {
+    const s = n.score;
+    return '<div class="lamp-col"><span class="lamp-cap">預測</span><div class="lamp" data-tip="score" data-tip-extra="'+('綜合預判：'+MA.level(s).label+'（強度 '+MA.strength(s)+'%）').replace(/"/g,'&quot;')+'" style="background:'+MA.color(s)+';color:'+MA.ink(s)+';text-shadow:'+(Math.abs(s)<0.35?'none':'')+'">'+MA.level(s).short+'<small>'+MA.strength(s)+'%</small></div></div>';
+  };
+  const vLamp = H => {
+    const hs = H.score * 0.85;
+    return '<div class="lamp-col"><span class="lamp-cap">體檢</span><div class="lamp" data-tip="verdict" style="background:'+MA.color(hs)+';color:'+MA.ink(hs)+';text-shadow:'+(Math.abs(hs)<0.35?'none':'')+'">'+H.verdict.short+'<small>'+H.good+'利'+H.bad+'弊</small></div></div>';
+  };
+  const hzHTML = fc => '<div class="hzrow"><span class="row-lbl">預判</span>'+fc.map(f => {
+    const s = f.score, a = MA.arrow(s), upTxt = f.n ? ' ' + Math.round(f.up * 100) + '%' : '';
+    return '<span class="hz" data-tip="hz" data-tip-title="'+f.H.long+'" data-tip-extra="'+fcExtra(f)+'" style="background:'+MA.color(s)+';color:'+MA.ink(s)+'">'+f.H.label+a+upTxt+'</span>';
+  }).join('')+'</div>';
+  const chips = H => '<div class="hzrow"><span class="row-lbl">體檢</span>'+H.checks.map(c => '<span class="hz" data-tip="c_'+c.key+'" data-tip-extra="'+(MA.chkWord(c.s)+'：'+c.text).replace(/"/g,'&quot;')+'" style="background:'+MA.chkColor(c.s)+';color:'+(c.s===null?'#475569':MA.ink(c.s*0.8))+'">'+c.short+(c.s===null?'？':c.s>0?' ○':c.s<0?' ✕':' △')+'</span>').join('')+'</div>';
+
   function match(it){
     if (filter==='bond') return it.type.includes('債');
     if (filter==='etf') return it.type.includes('ETF') && !it.type.includes('債');
@@ -102,36 +114,66 @@
     if (lo) lo.onclick = () => MAAuth.signOut();
     $('#banner').innerHTML = user ? '' : '<div class="banner"><span style="flex:1">目前顯示的是<b>示範清單</b>。用 Google 帳號登入後，可以建立自己的看盤清單，別人看不到，手機電腦同步。</span><button class="btn primary" type="button" onclick="MAAuth.signIn()">Google 登入</button></div>';
   }
-  const vLamp = (H, cls) => '<div class="lamp '+(cls||'')+'" data-tip="verdict" style="background:'+MA.color(H.score*0.85)+';color:'+MA.ink(H.score*0.85)+';text-shadow:'+(Math.abs(H.score*0.85)<0.35?'none':'')+'">'+H.verdict.short+'<small>'+H.good+' 利 '+H.bad+' 弊</small></div>';
-  const chips = H => '<div class="hzrow">'+H.checks.map(c => '<span class="hz" data-tip="c_'+c.key+'" data-tip-extra="'+(MA.chkWord(c.s)+'：'+c.text).replace(/"/g,'&quot;')+'" style="background:'+MA.chkColor(c.s)+';color:'+(c.s===null?'#475569':MA.ink(c.s*0.8))+'">'+c.short+(c.s===null?'？':c.s>0?' ○':c.s<0?' ✕':' △')+'</span>').join('')+'</div>';
+
   function render(){
-    const ok = results.filter(r => r && r.health);
-    const bins = [0,0,0,0]; ok.forEach(r => { bins[r.health.vi]++; });
-    const order=[3,2,1,0], ref=[-0.8,-0.3,0.3,0.8];
+    const ok = results.filter(r => r && r.health && r.now);
+    const bullCnt = ok.filter(r => r.now.score >= MA.TH.weak).length;
+    const flatCnt = ok.filter(r => r.now.score > -MA.TH.weak && r.now.score < MA.TH.weak).length;
+    const bearCnt = ok.filter(r => r.now.score <= -MA.TH.weak).length;
+    const goodHealth = ok.filter(r => r.health.vi >= 3).length;
     $('#summary').style.gridTemplateColumns = 'repeat(4,1fr)';
-    $('#summary').innerHTML = order.map(i=>'<div><b style="color:'+MA.color(ref[i])+'">'+bins[i]+'</b>'+MA.VERDICTS[i].short+'</div>').join('');
+    $('#summary').innerHTML =
+      '<div><b style="color:'+MA.color(0.75)+'">'+bullCnt+'</b>預測看漲</div>'+
+      '<div><b style="color:'+MA.color(0)+'">'+flatCnt+'</b>預測盤整</div>'+
+      '<div><b style="color:'+MA.color(-0.75)+'">'+bearCnt+'</b>預測看跌</div>'+
+      '<div><b style="color:'+MA.color(0.75)+'">'+goodHealth+'</b>體檢條件佳</div>';
+
     const M = MA.market();
-    const mt = M && M.health ? M.health.checks.find(c=>c.key==='trend') : null;
-    $('#mkt').innerHTML = mt ? '<div class="alerts" style="border-left-color:'+MA.chkColor(mt.s)+'"><b>大盤參考（元大台灣50）</b>：'+mt.text+'</div>' : '';
+    if (M && M.now && M.health) {
+      const mt = M.health.checks.find(c=>c.key==='trend');
+      const mfc = M.now.fc.slice(0,3).map(f => f.H.label + MA.arrow(f.score)).join('、');
+      $('#mkt').innerHTML = '<div class="alerts" style="border-left-color:'+MA.color(M.now.score)+'"><b>大盤參考（元大台灣50）</b>：短期預判 <b>'+MA.level(M.now.score).label+'</b>（'+mfc+'；量比 '+MA.fmt(M.now.volRatio,2)+'x）｜'+(mt?mt.text:'')+'</div>';
+    } else $('#mkt').innerHTML = '';
+
     const al = [];
     ok.filter(r=>r.item.held).forEach(r => {
+      const notes = [];
+      if (r.now.score >= MA.TH.strong) notes.push('<span style="color:#dc2626;font-weight:600">短期強勢看漲</span>');
+      else if (r.now.score <= -MA.TH.strong) notes.push('<span style="color:#16a34a;font-weight:600">短期轉弱看跌</span>');
+      if (r.now.volRatio >= 1.5) notes.push('今日出量（月均量 '+MA.fmt(r.now.volRatio,1)+' 倍）');
       const bad = r.health.checks.filter(c=>c.s<0);
-      if (bad.length) al.push('<li><b>'+r.item.name+'</b>：'+bad.map(c=>c.text.split('；')[0].split('（')[0]).join('；')+'</li>');
+      if (bad.length) notes.push('體檢留意：'+bad.map(c=>c.short).join('、'));
+      if (notes.length) al.push('<li><b>'+r.item.name+'</b>：'+notes.join('；')+'</li>');
     });
-    $('#alerts').innerHTML = !ok.length ? '' : al.length ? '<div class="alerts"><h3>持股中需要留意的項目</h3><ul>'+al.join('')+'</ul></div>' : '<div class="alerts"><h3>持股體檢</h3>目前持股沒有「不利」的項目。</div>';
+    $('#alerts').innerHTML = !ok.length ? '' : al.length ? '<div class="alerts"><h3>持股動態與留意提醒</h3><ul>'+al.join('')+'</ul></div>' : '<div class="alerts"><h3>持股動態</h3>目前持股狀況平穩，無異常警示項目。</div>';
+
     let rows = results.filter(r => r && match(r.item));
-    if (sortBy==='score') rows = rows.slice().sort((a,b)=>(b.health?b.health.score:-9)-(a.health?a.health.score:-9));
+    if (sortBy==='pred') rows = rows.slice().sort((a,b)=>(b.now?b.now.score:-9)-(a.now?a.now.score:-9));
+    else if (sortBy==='health') rows = rows.slice().sort((a,b)=>(b.health?b.health.score:-9)-(a.health?a.health.score:-9));
+
     $('#list').innerHTML = rows.map(r => {
       const it = r.item;
       const tags = '<span class="tag">'+it.type+'</span>'+(it.held?'':'<span class="tag no">未持有</span>');
       if (!r.now) return '<div class="card"><div class="lamp" style="background:#cbd5e1">—</div><div class="info"><div class="nm">'+it.name+'<span class="code">'+it.code+'</span>'+tags+'</div><div class="err">'+(r.error||'資料不足，無法計算')+'</div></div></div>';
       const n = r.now, H = r.health, arrow = n.change>0?'▲':n.change<0?'▼':'－', cc = n.change>0?'#dc2626':n.change<0?'#16a34a':'#64748b';
-      return '<a class="card" href="signals/#'+it.code+'">'+vLamp(H)+
-        '<div class="info"><div class="nm">'+it.name+'<span class="code">'+it.code+'</span>'+tags+'</div>'+
-        '<div class="adv">'+H.advice+'</div>'+chips(H)+'</div>'+
-        '<div class="px"><b>'+MA.fmt(n.close)+'</b><span class="chg" style="color:'+cc+'">'+arrow+' '+MA.fmt(Math.abs(n.change))+'（'+MA.fmt(Math.abs(n.pct))+'%）</span>'+MA.sparkline(r.px,{days:60,w:110,h:32})+'</div></a>';
+      const vrTag = n.volRatio >= 1.4 ? '<span class="tag" style="background:#fee2e2;color:#b91c1c;font-weight:600">出量 '+MA.fmt(n.volRatio,1)+'x</span>' :
+                    n.volRatio <= 0.65 ? '<span class="tag vol-tag">量縮 '+MA.fmt(n.volRatio,1)+'x</span>' :
+                    '<span class="tag vol-tag">量比 '+MA.fmt(n.volRatio,1)+'x</span>';
+      let newsHtml = '';
+      if (r.newsInfo && r.newsInfo.latest) {
+        const nw = r.newsInfo.latest;
+        const sBadge = nw.sent > 0.1 ? '<span class="sent-badge pos">利多</span>' : nw.sent < -0.1 ? '<span class="sent-badge neg">利空</span>' : '';
+        newsHtml = '<div class="news-snip"><span class="media-badge'+(nw.tier===1?' t1':'')+'">'+nw.source+'</span>'+sBadge+'<span class="n-txt">'+nw.title+'</span><span class="news-date">'+nw.day.slice(5)+'</span></div>';
+      }
+      return '<a class="card" href="signals/#'+it.code+'">'+
+        '<div class="lamps">'+pLamp(n)+vLamp(H)+'</div>'+
+        '<div class="info"><div class="nm">'+it.name+'<span class="code">'+it.code+'</span>'+tags+vrTag+'</div>'+
+        '<div class="adv"><b>預判：</b>'+MA.advice(it, n.score)+'　｜　<b>體檢：</b>'+H.advice+'</div>'+
+        hzHTML(n.fc)+chips(H)+newsHtml+'</div>'+
+        '<div class="px"><b>'+MA.fmt(n.close)+'</b><span class="chg" style="color:'+cc+'">'+arrow+' '+MA.fmt(Math.abs(n.change))+'（'+MA.fmt(Math.abs(n.pct))+'%）</span><span style="display:block;font-size:11px;color:#64748b;margin-top:2px">'+n.volLots.toLocaleString()+' 張</span>'+MA.sparkline(r.px,{days:60,w:110,h:32})+'</div></a>';
     }).join('') || '<div class="loading">'+(results.length?'此分類沒有標的':'清單是空的，按「＋ 管理標的」加入')+'</div>';
   }
+
   function renderManage(){
     if (!lastList) return;
     $('#sheeturl').value = (userDoc && userDoc.sheetCsv) || '';
@@ -147,14 +189,14 @@
   }
 
   async function load(){
-    $('#list').innerHTML = '<div class="loading">正在抓取行情與計算指標…</div>';
+    $('#list').innerHTML = '<div class="loading">正在抓取行情、籌碼、主流媒體新聞與計算預測燈號…</div>';
     const L = await MA.loadList(userDoc); lastList = L; renderManage();
     $('#src').textContent = { demo:'示範清單（未登入）', sheet:'您的 Google 試算表＋自選', custom:'您的自選清單', 'sheet-error':'試算表讀取失敗，只顯示自選' }[L.src];
     $('#sheetlinkwrap').innerHTML = user && user.email===MA.CONFIG.ownerEmail ? '　｜　<a href="'+MA.CONFIG.sheetLink+'" target="_blank" rel="noopener">開啟 Google 試算表</a>' : '';
-    results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent = '抓取中 '+d+'/'+t+'…'; });
+    results = await MA.loadAll(L.items, (d,t)=>{ $('#meta').textContent = '抓取與運算中 '+d+'/'+t+'…'; });
     results = results.map((r,i)=> r && r.item ? r : { item:L.items[i], error: (r&&r.error)||'抓取失敗' });
     const dates = results.filter(r=>r.now).map(r=>r.now.date).sort();
-    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤，來源：證交所／櫃買中心，經 FinMind）　共 '+results.length+' 檔';
+    $('#meta').textContent = '資料日期：'+(dates.length?dates[dates.length-1]:'—')+'（收盤價量／籌碼／主流媒體新聞，經 FinMind）　共 '+results.length+' 檔';
     render();
     if (divLoaded) loadDivs(true);
   }
@@ -194,8 +236,14 @@
     if (b.dataset.tab==='divs') loadDivs();
   });
   document.querySelectorAll('#filters [data-f],#filters [data-s]').forEach(b => b.onclick = () => {
-    if (b.dataset.s){ sortBy = sortBy==='score'?'list':'score'; b.classList.toggle('on', sortBy==='score'); }
-    else { filter = b.dataset.f; document.querySelectorAll('#filters [data-f]').forEach(x=>x.classList.toggle('on', x===b)); }
+    if (b.dataset.s){
+      const target = b.dataset.s;
+      sortBy = sortBy===target ? 'list' : target;
+      document.querySelectorAll('#filters [data-s]').forEach(x=>x.classList.toggle('on', x.dataset.s===sortBy));
+    } else {
+      filter = b.dataset.f;
+      document.querySelectorAll('#filters [data-f]').forEach(x=>x.classList.toggle('on', x===b));
+    }
     render();
   });
   $('#manage').onclick = () => {
