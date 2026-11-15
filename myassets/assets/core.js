@@ -478,7 +478,7 @@
         const qn = 'Q' + Math.ceil(parseInt(cur.date.slice(5, 7), 10) / 3);
         let s = 0, t = '近四季每股盈餘（EPS）合計 ' + fmt(ttm) + ' 元';
         if (ly) {
-          if (ly.v > 0) { const y = (cur.v / ly.v - 1) * 100; s = cur.v <= 0 ? -1 : y >= 10 ? 1 : y <= -10 ? -1 : 0; t += '；最新一季（' + qn + '）' + fmt(cur.v) + ' 元，比去年同季 ' + sgn(y, 0); }
+          if (ly.v > 0) { const y = (cur.v / ly.v - 1) * 100; s = cur.v <= 0 ? -1 : y >= 10 ? 1 : y <= -10 ? -1 : 0; t += '；最新一季（' + qn + '）' + fmt(cur.v) + ' 元，' + (cur.v <= 0 ? '由盈轉虧（去年同季 ' + fmt(ly.v) + ' 元）' : '比去年同季 ' + sgn(y, 0)); }
           else { s = cur.v > 0 ? 1 : -1; t += '；最新一季（' + qn + '）' + fmt(cur.v) + ' 元，' + (cur.v > 0 ? '去年同季虧損，已轉盈' : '仍在虧損'); }
         }
         if (ttm <= 0) s = -1;
