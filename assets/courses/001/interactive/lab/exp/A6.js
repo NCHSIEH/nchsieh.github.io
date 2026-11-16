@@ -96,6 +96,20 @@
     return { stats, rounds, selected, bestAcc };
   }
 
+  function makeRows(seed) {
+    const rs = LAB.data.clinic(seed, 14).map(pick);
+    const negs = rs.filter(r => r.dm === 0).sort((a, b) => b.glu - a.glu);
+    const poss = rs.filter(r => r.dm === 1).sort((a, b) => a.glu - b.glu);
+    if (negs[0] && poss[0]) {
+      negs[0].glu = Math.max(negs[0].glu, 134);
+      negs[0].bmi = Math.min(negs[0].bmi, 22.5);
+      poss[0].glu = Math.min(poss[0].glu, 112);
+      poss[0].bmi = Math.max(poss[0].bmi, 29.8);
+      poss[0].age = Math.max(poss[0].age, 64);
+    }
+    return rs;
+  }
+
   LAB.register({
     id: 'A6', group: 'A', title: '特徵選擇',
     module: { name: 'M1 第 09 節', url: '../m1/#p09' },
@@ -105,7 +119,7 @@
       scenario: '門診健檢：從年齡、BMI、空腹血糖、收縮壓 4 個特徵中，挑出預測糖尿病最關鍵的組合',
       columns: COLS,
       editable: ['age', 'bmi', 'glu', 'sbp', 'dm'],
-      small: seed => LAB.data.clinic(seed, 14).map(pick)
+      small: makeRows
     },
     params: [
       { key: 'method', label: '選擇方法', type: 'choice', value: 'corr', options: [{ v: 'corr', label: '相關係數' }, { v: 'ig', label: '資訊增益' }, { v: 'forward', label: '向前選擇' }] },

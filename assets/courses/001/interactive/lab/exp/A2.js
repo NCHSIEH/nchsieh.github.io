@@ -62,8 +62,8 @@
     },
     params: [
       { key: 'method', label: '縮放方法', type: 'choice', value: 'z', options: [{ v: 'z', label: 'Z 分數' }, { v: 'minmax', label: 'Min-Max' }] },
-      { key: 'a', label: '病人 A (#)', type: 'int', min: 1, max: 12, step: 1, value: 1 },
-      { key: 'b', label: '病人 B (#)', type: 'int', min: 1, max: 12, step: 1, value: 2 }
+      { key: 'a', label: '病人 A (#)', type: 'int', min: 1, max: 12, step: 1, value: 2 },
+      { key: 'b', label: '病人 B (#)', type: 'int', min: 1, max: 12, step: 1, value: 5 }
     ],
     pseudo: [
       '計算各欄統計量：',
@@ -101,6 +101,11 @@
         const ptB = points.find(x => x.id === 'p' + R.pB.id);
         const distVal = useScaled ? (isZ ? R.zD.d : R.mmD.d) : R.rawD.d;
         const lines = R.pA.id !== R.pB.id ? [{ id: 'ab', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', w: 2, label: f(distVal, 2) }] : [];
+        const nnId = useScaled ? (isZ ? R.rkZ.nearest.id : R.rkMM.nearest.id) : R.rkRaw.nearest.id;
+        const ptNN = points.find(x => x.id === 'p' + nnId);
+        if (ptNN && nnId !== R.pB.id) {
+          lines.push({ id: 'nn', x1: ptA.x, y1: ptA.y, x2: ptNN.x, y2: ptNN.y, cls: 'c2', dash: true, w: 1.8, label: '最近#' + nnId });
+        }
         const main = {
           type: 'scatter', slot: 'main',
           title: useScaled ? (isZ ? 'Z 分數空間' : 'Min-Max [0, 1] 空間') : '原始尺度空間',

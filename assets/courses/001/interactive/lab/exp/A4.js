@@ -15,7 +15,17 @@
     const r = LAB.rng(8100 + seed);
     const base = LAB.data.readmit(seed, 12);
     const depts = LAB.shuffle(r, [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]);
-    return base.map((o, i) => ({ id: o.id, age: o.age, los: o.los, dept: depts[i], readmit: o.readmit }));
+    const out = base.map((o, i) => ({ id: o.id, age: o.age, los: o.los, dept: depts[i], readmit: o.readmit }));
+    const ensurePos = (deptIdx, minPos) => {
+      const grp = out.filter(x => x.dept === deptIdx).sort((a, b) => (b.los * 3 + b.age) - (a.los * 3 + a.age));
+      let cur = grp.filter(x => x.readmit === 1).length;
+      for (let i = 0; i < grp.length && cur < minPos; i++) {
+        if (grp[i].readmit === 0) { grp[i].readmit = 1; cur++; }
+      }
+    };
+    ensurePos(2, 3);
+    ensurePos(0, 1);
+    return out;
   }
 
   function encode(rows, p) {
@@ -122,7 +132,7 @@
           digits: p.method === 'target' ? 3 : 0,
           items: R.stats.map(s => ({
             id: s.code,
-            label: s.name + ' (' + s.n + '人)',
+            label: s.name + ' (' + s.pos + '/' + s.n + '陽)',
             value: p.method === 'target' ? s.smooth : s.n,
             cls: 'c' + s.idx,
             hl: st.hlDept === s.idx

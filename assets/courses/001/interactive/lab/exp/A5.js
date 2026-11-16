@@ -8,13 +8,13 @@
   const cls = y => y ? 'c1' : 'c0';
 
   function makeRows(seed) {
-    for (let off = 0; off < 30; off++) {
+    for (let off = 0; off < 40; off++) {
       const rs = LAB.data.readmit(seed + off * 17, 20).map(pick);
       const pos = rs.filter(r => r.readmit === 1).length;
-      if (pos >= 3 && pos <= 5) return rs;
+      if (pos >= 4 && pos <= 5) return rs;
     }
     const rs = LAB.data.readmit(seed, 20).map(pick);
-    rs[0].readmit = 1; rs[1].readmit = 1; rs[2].readmit = 1;
+    rs[0].readmit = 1; rs[1].readmit = 1; rs[2].readmit = 1; rs[3].readmit = 1;
     return rs;
   }
 
@@ -211,27 +211,38 @@
           '目標陽性 ' + R.finalPos + ' 筆，需合成 ' + R.nAdd + ' 筆（K = ' + R.kUse + '）'
         ]);
         const nShow = Math.min(6, R.smoteSpecs.length);
+        const histLines = [];
+        const segLine = (sm, idx, isCur) => {
+          const src = rows.find(x => x.id === sm.srcId), nb = rows.find(x => x.id === sm.nbId);
+          return isCur
+            ? { id: 'seg_cur', x1: src.los, y1: src.cci, x2: nb.los, y2: nb.cci, cls: 'hl', dash: true, w: 2, label: 'λ=' + f(sm.lam, 2) }
+            : { id: 'seg_' + idx, x1: src.los, y1: src.cci, x2: nb.los, y2: nb.cci, cls: 'c5', dash: true, w: 1 };
+        };
         for (let i = 0; i < nShow; i++) {
           const sm = R.smoteSpecs[i];
-          const src = rows.find(x => x.id === sm.srcId), nb = rows.find(x => x.id === sm.nbId);
           st.curSrc = sm.srcId; st.curNew = sm.newId; st.hlIds = new Set([sm.srcId, sm.nbId]);
-          st.lines = [{ id: 'seg', x1: src.los, y1: src.cci, x2: nb.los, y2: nb.cci, cls: 'hl', dash: true, w: 2, label: 'λ=' + f(sm.lam, 2) }];
+          st.lines = histLines.concat([segLine(sm, i, true)]);
           st.added.push(sm);
           add(7, '合成：' + sm.newId, '從陽性 #' + sm.srcId + ' 找最近鄰居 #' + sm.nbId + '，在連線上取比例 λ=' + f(sm.lam, 2) + ' 產生新點。', [
             'x_new = #' + sm.srcId + ' + ' + f(sm.lam, 2) + '×(#' + sm.nbId + ' − #' + sm.srcId + ')',
             '座標 = (' + f(sm.los, 2) + ', ' + f(sm.cci, 2) + ')'
           ], { phase: (i + 1) + ' / ' + R.nAdd });
+          histLines.push(segLine(sm, i, false));
         }
         if (R.smoteSpecs.length > nShow) {
-          st.curSrc = null; st.curNew = null; st.hlIds = new Set(); st.lines = [];
+          st.curSrc = null; st.curNew = null; st.hlIds = new Set();
+          st.lines = R.smoteSpecs.map((sm, idx) => segLine(sm, idx, false));
           st.added = R.smoteSpecs.slice();
           add(7, '完成其餘合成點', '依同樣方式合成其餘 ' + (R.smoteSpecs.length - nShow) + ' 個新陽性點，擴充少數類的涵蓋區域。', [
             '合計合成 ' + R.nAdd + ' 個新樣本'
           ]);
+        } else {
+          st.lines = histLines;
         }
       }
 
-      st.curSrc = null; st.curNew = null; st.hlIds = new Set(); st.lines = [];
+      st.curSrc = null; st.curNew = null; st.hlIds = new Set();
+      if (p.method !== 'smote') st.lines = [];
       add(8, '比較前後類別比例', '重抽樣只應套用在「訓練集」，絕對不能在切分前對測試集做，否則會造成資料洩漏。', [
         '原比例：陽性 ' + R.nPos + ' / 陰性 ' + R.nNeg + '（' + LAB.pct(R.nPos / rows.length, 1) + '）',
         '處理後：陽性 ' + R.finalPos + ' / 陰性 ' + R.finalNeg + '（' + LAB.pct(R.finalPos / (R.finalPos + R.finalNeg), 1) + '）'

@@ -91,7 +91,12 @@
       scenario: '門診健檢：把連續的空腹血糖切成幾個區間，觀察各區間的糖尿病比例',
       columns: COLS,
       editable: ['glu', 'dm'],
-      small: seed => LAB.data.clinic(seed, 14).map(pick)
+      small: seed => {
+        const rs = LAB.data.clinic(seed, 14).map(pick);
+        const hi = rs.reduce((best, r) => r.glu > best.glu ? r : best, rs[0]);
+        if (hi.glu < 190) hi.glu = 198;
+        return rs;
+      }
     },
     params: [
       { key: 'method', label: '切分方法', type: 'choice', value: 'width', options: [{ v: 'width', label: '等寬' }, { v: 'freq', label: '等頻' }, { v: 'entropy', label: '依熵' }] },
@@ -122,10 +127,15 @@
         const lines = st.cuts.map((c, i) => ({
           id: 'cut' + i, x1: c, y1: AX.y.min, x2: c, y2: AX.y.max, cls: 'hl', w: 2, dash: true, label: f(c, 1)
         }));
+        const regions = st.cuts.length ? LAB.grid(x => {
+          let b = 0;
+          st.cuts.forEach(c => { if (x > c) b++; });
+          return 'c' + (b % 5);
+        }, AX.x.min, AX.x.max, AX.y.min, AX.y.max, 36, 10) : null;
         const main = {
           type: 'scatter', slot: 'main',
           title: '血糖分布與切點（' + mName + '）',
-          axes: AX, points, lines, circles: [],
+          axes: AX, points, lines, circles: [], regions,
           legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '切點' }]
         };
         let side;

@@ -10,8 +10,18 @@
 
   function makeRows(seed) {
     const raw = LAB.data.clinic(seed, 12).map(pick);
-    const out = LAB.data.withMissing(raw, FEATS, 0.15, seed);
-    FEATS.forEach(k => { if (out.every(r => r[k] == null)) out[0][k] = raw[0][k]; });
+    const out = LAB.data.withMissing(raw, FEATS, 0.16, seed);
+    // 確保三個欄位各有至少 2 個缺格，且沒有整列全空
+    FEATS.forEach((k, fi) => {
+      let cnt = out.filter(r => r[k] == null).length;
+      for (let idx = fi; cnt < 2 && idx < out.length; idx += 3) {
+        if (out[idx][k] != null && FEATS.filter(f2 => out[idx][f2] == null).length < 2) {
+          out[idx][k] = null;
+          cnt++;
+        }
+      }
+      if (out.every(r => r[k] == null)) out[0][k] = raw[0][k];
+    });
     out.forEach((r, i) => { if (FEATS.every(k => r[k] == null)) r.age = raw[i].age; });
     return out;
   }
@@ -130,14 +140,35 @@
             ring: hasMiss, hl: isCur, label: String(r.id), r: 6
           };
         });
+        const lines = [];
+        if (st.cur && p.method === 'knn') {
+          const det = R.details.find(d => d.idx === st.cur.idx && d.col === st.cur.col);
+          const curPt = points.find(pt => pt.id === 'p' + st.cur.id);
+          if (det && curPt) {
+            det.nbs.forEach((nb, ni) => {
+              const nbPt = points.find(pt => pt.id === 'p' + nb.id);
+              if (nbPt) lines.push({ id: 'kn' + ni, x1: curPt.x, y1: curPt.y, x2: nbPt.x, y2: nbPt.y, cls: 'hl', dash: true, w: 1.8 });
+            });
+          }
+        }
         const side = {
           type: 'scatter', slot: 'side', title: '年齡 × 血糖位置（空心＝待補）',
-          axes: AX, points, lines: [], circles: [],
+          axes: AX, points, lines, circles: [],
           legend: [{ cls: 'c0', label: '完整資料' }, { cls: 'c1', label: '含缺值／已補' }]
         };
         const colShow = st.barCol || 'glu';
         const bef = R.before[colShow], aft = st.done ? R.after[colShow] : bef;
-        const bars = {
+        const bars = st.done ? {
+          type: 'bars', slot: 'bottom',
+          title: FLAB[colShow] + ' 標準差比較：補前 vs 三種補值法',
+          digits: 2,
+          items: [
+            { id: 'bs', label: '補前標準差', value: bef.sd, cls: 'c0' },
+            { id: 'sm', label: '平均數法', value: Rmean.after[colShow].sd, cls: 'c1' },
+            { id: 'sd', label: '中位數法', value: Rmed.after[colShow].sd, cls: 'c2' },
+            { id: 'sk', label: 'k-NN 法', value: Rknn.after[colShow].sd, cls: 'c3' }
+          ]
+        } : {
           type: 'bars', slot: 'bottom',
           title: FLAB[colShow] + '：補值前後平均與標準差',
           digits: 2,
@@ -154,9 +185,11 @@
       const st = { filled: new Set(), cur: null, barCol: 'glu', done: false };
       const add = (line, title, say, calc, extra) => steps.push(Object.assign({ line, title, say, calc: calc || [], views: views(st), focus: st.cur ? [st.cur.id] : [] }, extra));
 
-      add(0, '題目', '這份 12 位病人的資料共缺少 ' + R.blanks.length + ' 格。請觀察如何用「' + (p.method === 'mean' ? '平均數' : p.method === 'median' ? '中位數' : 'k-NN') + '」把缺格補齊。', [
-        '缺格位置：' + R.blanks.map(b => b.id + '號' + FLAB[b.col]).join('、')
-      ]);
+      const missLines = FEATS.map(k => {
+        const ids = R.blanks.filter(b => b.col === k).map(b => b.id + '號').join('、');
+        return FLAB[k] + '缺：' + (ids || '無');
+      });
+      add(0, '題目', '這份 12 位病人的資料共缺少 ' + R.blanks.length + ' 格。請觀察如何用「' + (p.method === 'mean' ? '平均數' : p.method === 'median' ? '中位數' : 'k-NN') + '」把缺格補齊。', missLines);
 
       FEATS.forEach(k => {
         const b = R.before[k];
