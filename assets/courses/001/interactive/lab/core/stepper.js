@@ -158,9 +158,9 @@
       },
       B5: {
         laplace: '【Laplace 平滑 α (Laplace / Additive Smoothing)】\n公式：(次數 + α) / (類別數 + 2α)。\n用法：設 α=0 時，若某特徵組合在訓練集出現 0 次，會導致機率變 0 而使整條連乘歸零（Zero-Frequency Problem）；預設 α=1 可徹底避免。',
-        qAgeHigh: '【新病人：年齡 ≥ 55】\n用法：切換新病人的年齡離散條件（高／正常），觀察單一條件改變如何透過貝氏定理更新後驗機率（Posterior Probability）。',
-        qBmiHigh: '【新病人：BMI ≥ 26】\n用法：切換新病人的 BMI 條件，對比樸素貝氏假設「各特徵條件獨立（Conditional Independence）」的乘法機制。',
-        qGluHigh: '【新病人：血糖 ≥ 110】\n用法：切換新病人的血糖條件；在糖尿病資料中血糖似然比（Likelihood Ratio）差異最大，對後驗機率影響最顯著。'
+        qAgeHigh: '【新病人：年齡 ≥ 55 (Age ≥ 55)】\n用法：切換新病人的年齡離散條件（高／正常），觀察單一條件改變如何透過貝氏定理（Bayes\' Theorem）更新後驗機率（Posterior Probability）。',
+        qBmiHigh: '【新病人：BMI ≥ 26】\n用法：切換新病人的 BMI 條件，對比樸素貝氏（Naive Bayes）假設「各特徵條件獨立（Conditional Independence）」的乘法機制。',
+        qGluHigh: '【新病人：血糖 ≥ 110 (Fasting Glucose ≥ 110)】\n用法：切換新病人的血糖條件；在糖尿病資料中血糖似然比（Likelihood Ratio）差異最大，對後驗機率影響最顯著。'
       },
       B6: {
         criterion: '【不純度指標 (Impurity Criterion)】\n決定決策樹挑選分裂特徵與切點的評估標準。',
@@ -223,11 +223,11 @@
       },
       C7: {
         k: '【鄰居數 K (k-Nearest Neighbors)】\n用法：計算 k-距離（k-distance）與局部可達密度（LRD, Local Reachability Density）的鄰居數（2–5）。K 太小易受微群雜訊干擾，K 太大會稀釋局部密度差異。',
-        target: '【觀察病人 (#)】\n用法：指定要逐步追蹤 k-距離圓圈、可達距離（Reachability Distance）與 LOF 比值的病人編號（#13 為預設高 LOF 離群點）。'
+        target: '【觀察病人 (#) (Target Sample)】\n用法：指定要逐步追蹤 k-距離圓圈、可達距離（Reachability Distance）與 LOF 比值的病人編號（#13 為預設高 LOF 離群點）。'
       },
       C8: {
         trees: '【孤立樹數量 T (Number of Isolation Trees)】\n用法：隨機超平面切割樹的棵數（5–50）。樹越多，每個點的平均路徑長度 E(h(x)) 與異常分數（Anomaly Score）越穩定收斂。',
-        target: '【觀察病人 (#)】\n用法：指定要追蹤首棵樹隨機切割過程的病人編號；離群點通常只需 1–2 刀就被孤立（路徑短、異常分數接近 1）。'
+        target: '【觀察病人 (#) (Target Sample)】\n用法：指定要追蹤首棵樹隨機切割過程的病人編號；離群點通常只需 1–2 刀就被孤立（路徑短、異常分數接近 1）。'
       },
       D1: {
         min_sup: '【最小支持度 (Minimum Support, min_sup)】\n定義：項目集在所有處方箋中同時出現的比例門檻（0.20–0.60）。\n調高會只留下非常常見的用藥組合（Pruning 剪枝多）；調低能挖掘罕見但可能重要的合併用藥。',
@@ -238,17 +238,17 @@
       },
       E1: {
         query: '【查詢句 (Query Text)】\n選擇一句新護理紀錄，計算其與 6 篇既有紀錄的 TF-IDF 向量餘弦相似度（Cosine Similarity）。',
-        'query:0': '【查詢：夜間下床步態不穩】\n用途：測試跌倒風險（Fall Risk）詞彙檢索，觀察「夜間、步態、不穩」等高 IDF 詞如何主導相似度。',
-        'query:1': '【查詢：傷口紅腫有滲液】\n用途：測試傷口照護（Wound Care）詞彙檢索與停用詞「有」的影響。',
-        'query:2': '【查詢：主訴疼痛給予止痛藥】\n用途：測試疼痛處置（Pain Management）紀錄的匹配排名。',
+        'query:0': '【查詢：夜間下床步態不穩 (Fall Risk Query)】\n用途：測試跌倒風險（Fall Risk）詞彙檢索，觀察「夜間、步態、不穩」等高 IDF 詞如何主導相似度。',
+        'query:1': '【查詢：傷口紅腫有滲液 (Wound Care Query)】\n用途：測試傷口照護（Wound Care）詞彙檢索與停用詞「有」的影響。',
+        'query:2': '【查詢：主訴疼痛給予止痛藥 (Pain Query)】\n用途：測試疼痛處置（Pain Management）紀錄的匹配排名。',
         stop: '【去除停用詞 (Stopword Removal)】\n用法：開啟後移除「病人、有、給予」等在多數紀錄都出現的高頻低資訊詞，避免無關紀錄因共用常見字而得到虛高相似度。'
       },
       E2: {
         laplace: '【Laplace 平滑 α (Additive Smoothing)】\n公式：(詞在該類出現次數 + α) / (該類總詞數 + α·|V|)。\n用法：α=1 可避免測試句出現訓練集該類未見詞（Out-of-Vocabulary / Zero Count）時機率變 0。',
         query: '【測試句 (Test Document)】\n選擇要交給詞袋（Bag-of-Words）Naive Bayes 預測類別（跌倒／疼痛／壓傷）的護理短句。',
-        'query:0': '【測試句：跌倒風險語境】\n內容：「病人夜間下床步態不穩」，測試跌倒相關關鍵詞如何累積最高的對數後驗分數（Log Posterior）。',
-        'query:1': '【測試句：疼痛處置語境】\n內容：「主訴傷口疼痛給予止痛藥」，其中「傷口」跨多類別出現，觀察模型如何依機率加總正確判為疼痛處置。',
-        'query:2': '【測試句：壓傷感染語境】\n內容：「壓傷傷口紅腫有滲液」，觀察「壓傷、紅腫、滲液」對壓傷類別的高似然貢獻。'
+        'query:0': '【測試句：跌倒風險語境 (Fall Risk)】\n內容：「病人夜間下床步態不穩」，測試跌倒相關關鍵詞如何累積最高的對數後驗分數（Log Posterior）。',
+        'query:1': '【測試句：疼痛處置語境 (Pain Management)】\n內容：「主訴傷口疼痛給予止痛藥」，其中「傷口」跨多類別出現，觀察模型如何依機率加總正確判為疼痛處置。',
+        'query:2': '【測試句：壓傷感染語境 (Pressure Injury)】\n內容：「壓傷傷口紅腫有滲液」，觀察「壓傷、紅腫、滲液」對壓傷類別的高似然貢獻。'
       },
       E3: {
         win: '【滑動視窗大小 (Context Window Size ±win)】\n用法：決定中心詞左右各看幾個鄰居詞來產生 (中心詞, 上下文) 配對（1–3）。視窗小偏重局部語法搭配；視窗大偏重同主題語意關聯。',
@@ -272,17 +272,17 @@
         lr: '【學習率 η (Learning Rate)】\n用法：基礎步長（0.01–0.15）。調到 0.11–0.13 可清楚看見 SGD 沿 w₂ 劇烈鋸齒震盪，而 Adam 仍平滑前進。',
         steps: '【更新步數 (Optimization Steps)】\n用法：執行幾步參數更新（20–100），觀察三者誰最快收斂到谷底 (0, 0)。',
         start: '【起點座標 (Starting Point w₁, w₂)】\n選擇損失曲面上的不同出發位置。',
-        'start:0': '【(-3.5, 1.2) 左上斜坡】\n用途：兼顧長緩坡（w₁ = -3.5）與陡峭坡壁（w₂ = 1.2），最能對比三種優化器的差異。',
-        'start:1': '【(-3.0, -1.0) 左下斜坡】\n用途：第三象限起點，驗證負梯度方向反轉後的對稱軌跡。',
-        'start:2': '【(3.2, 1.1) 右上斜坡】\n用途：第一象限起點，觀察從正半軸收斂至 (0, 0) 的路徑。'
+        'start:0': '【(-3.5, 1.2) 左上斜坡 (Top-Left Ravine Wall)】\n用途：兼顧長緩坡（w₁ = -3.5）與陡峭坡壁（w₂ = 1.2），最能對比三種優化器的差異。',
+        'start:1': '【(-3.0, -1.0) 左下斜坡 (Bottom-Left Wall)】\n用途：第三象限起點，驗證負梯度方向反轉後的對稱軌跡。',
+        'start:2': '【(3.2, 1.1) 右上斜坡 (Top-Right Wall)】\n用途：第一象限起點，觀察從正半軸收斂至 (0, 0) 的路徑。'
       },
       F3: {
         image: '【輸入圖形 (6×6 Input Image)】\n選擇不同幾何圖案，觀察卷積核如何偵測對應方向的空間特徵。',
-        'image:0': '【直線】\n用途：垂直明暗交界，最適合測試「垂直邊緣」卷積核產生強烈正負響應。',
-        'image:1': '【橫線】\n用途：水平明暗交界，用來對比「水平邊緣」與「垂直邊緣」卷積核的方向選擇性。',
-        'image:2': '【斜線】\n用途：45° 對角線邊緣，水平與垂直核皆會偵測到部分斜邊訊號。',
-        'image:3': '【十字】\n用途：同時含垂直與水平線段，能直觀看到單一方向濾波器如何只萃取出其中一條線。',
-        'image:4': '【方塊】\n用途：封閉矩形輪廓，適合對比邊緣偵測與「模糊／銳化」濾波器的差異。',
+        'image:0': '【直線 (Vertical Line)】\n用途：垂直明暗交界，最適合測試「垂直邊緣」卷積核產生強烈正負響應。',
+        'image:1': '【橫線 (Horizontal Line)】\n用途：水平明暗交界，用來對比「水平邊緣」與「垂直邊緣」卷積核的方向選擇性。',
+        'image:2': '【斜線 (Diagonal Line)】\n用途：45° 對角線邊緣，水平與垂直核皆會偵測到部分斜邊訊號。',
+        'image:3': '【十字 (Cross)】\n用途：同時含垂直與水平線段，能直觀看到單一方向濾波器如何只萃取出其中一條線。',
+        'image:4': '【方塊 (Square)】\n用途：封閉矩形輪廓，適合對比邊緣偵測與「模糊／銳化」濾波器的差異。',
         kernel: '【卷積核 (3×3 Convolution Kernel / Filter)】\n選擇滑動計算內積的 3×3 權重矩陣。',
         'kernel:vert': '【垂直邊緣 (Vertical Edge Filter)】\n權重左正右負，專門偵測水平方向像素突變（即垂直邊界）。',
         'kernel:horiz': '【水平邊緣 (Horizontal Edge Filter)】\n權重上正下負，專門偵測垂直方向像素突變（即水平邊界）。',
@@ -362,7 +362,7 @@
         lr: '【學習率 η (Learning Rate)】\n用法：更新低秩矩陣 A、B 參數的步長（0.01–0.20）。'
       },
       I1: {
-        target: '【解釋病人 (#)】\n用法：選擇要進行局部解釋（Local Explanation）的病人編號，查看每個特徵如何將預測從基準平均（Base Value）推向最終輸出，並對照全域排列重要度（Permutation Importance）。'
+        target: '【解釋病人 (#) (Target Sample)】\n用法：選擇要進行局部解釋（Local Explanation）的病人編號，查看每個特徵如何將預測從基準平均（Base Value）推向最終輸出，並對照全域排列重要度（Permutation Importance）。'
       },
       J1: {
         alpha: '【學習率 α (Learning Rate)】\n公式：Q(s,a) ← Q(s,a) + α·[r + γ·max Q(s\',a\') − Q(s,a)]。\n用法：α 越大越快覆寫舊估計（適合確定性環境）；α 較小更新較平緩抗隨機波動。',
@@ -373,15 +373,44 @@
     };
     const pctl = {};
     const expTips = TIPS[def.id] || {};
+    const EN_UI = {
+      '補值方法': 'Imputation Method', '平均數': 'Mean', '中位數': 'Median',
+      '縮放方法': 'Scaling Method', 'Z 分數': 'Z-score',
+      '切分方法': 'Binning Method', '等寬': 'Equal-Width', '等頻': 'Equal-Freq', '依熵': 'Entropy', '區間數': 'Bins',
+      '編碼方式': 'Encoding', '目標編碼': 'Target', '平滑強度 m': 'Smoothing m',
+      '平衡方法': 'Resampling', '隨機過抽樣': 'Oversample', '隨機欠抽樣': 'Undersample', 'SMOTE 鄰居數 K': 'SMOTE K', '目標陽性比例': 'Target Ratio',
+      '選擇方法': 'Selection Method', '相關係數': 'Correlation', '資訊增益': 'Info Gain', '向前選擇': 'Forward', '目標特徵數': 'Top-K',
+      '求解方式': 'Solver', '最小平方法直接解': 'OLS', '梯度下降': 'Gradient Descent',
+      '學習率 η': 'Learning Rate', '迭代次數': 'Epochs', '正則化方法': 'Regularization', 'λ 刻度 (12 格對數)': 'λ Scale',
+      '判定門檻': 'Threshold', '鄰居數': 'Neighbors', '先標準化': 'Standardize',
+      '不純度指標': 'Criterion', '最大深度': 'Max Depth', '葉節點最少筆數': 'Min Leaf',
+      '樹的棵數': 'Trees', '樹的棵數 T': 'Trees T', '訓練輪數 T': 'Rounds T', '訓練輪數': 'Epochs',
+      '懲罰參數 C': 'Penalty C', '核函數 Kernel': 'Kernel', '目標編碼': 'Target',
+      '連結法 Linkage': 'Linkage', '單一 (最近)': 'Single', '完全 (最遠)': 'Complete', '平均 (UPGMA)': 'Average', '切分群數 K': 'Clusters K',
+      '鄰域半徑 ε': 'Radius ε', '核心門檻 minPts': 'minPts', '群數 K': 'Components K', '起始種子': 'Seed',
+      '特徵數': 'Features', '保留主成分數': 'Components', '鄰居數 K': 'Neighbors K', '孤立樹數量 T': 'Trees T',
+      '最小支持度 min_sup': 'Min Support', '最小信賴度 min_conf': 'Min Confidence',
+      '去除停用詞': 'Stopwords', '視窗大小': 'Window', '主題數 K': 'Topics K', 'Gibbs 迭代輪數': 'Gibbs Iters',
+      '輸入圖形': 'Image', '直線': 'Vertical', '橫線': 'Horizontal', '斜線': 'Diagonal', '十字': 'Cross', '方塊': 'Square',
+      '卷積核': 'Kernel', '垂直邊緣': 'Vert Edge', '水平邊緣': 'Horiz Edge', '模糊': 'Blur', '銳化': 'Sharpen',
+      '循環單元': 'RNN Cell', '平滑方法': 'Smoothing', '簡單 (SES)': 'SES', 'Holt (趨勢)': 'Holt',
+      '水準平滑 α': 'Level α', '趨勢平滑 β': 'Trend β', '季節平滑 γ': 'Season γ', '預測期數': 'Horizon',
+      '差分階數 d': 'Diff d', '自迴歸階數 p': 'AR Order p', '合併次數': 'Merges',
+      '觀察詞位置': 'Query Pos', '因果遮罩': 'Causal Mask', '顯示頭數': 'Head', '追蹤詞位置': 'Track Pos',
+      '解碼策略': 'Decoding', '抽樣 (Sampling)': 'Sampling', '切塊方式': 'Chunking', '依句 (8段)': 'Sentence', '依段 (6段)': 'Paragraph',
+      '取前 K 段': 'Top-K', '檢索方式': 'Retriever', '向量 (TF-IDF)': 'Vector', '混合 (RRF)': 'Hybrid RRF',
+      '學習率 α': 'Alpha α', '折扣因子 γ': 'Gamma γ', '探索率 ε': 'Epsilon ε', '訓練回合數': 'Episodes'
+    };
+    const withEn = s => (EN_UI[s] && !s.includes(EN_UI[s])) ? s + ' (' + EN_UI[s] + ')' : s;
     function buildParams() {
       elParams.textContent = ''; let lastG = null;
       def.params.forEach(p => {
         if (p.group && p.group !== lastG) elParams.append(h('span', { class: 'tag amber' }, p.group)); lastG = p.group || null;
         const pTip = p.tip || expTips[p.key] || null;
-        const lbl = h('span', { class: 'p-lbl', 'data-tip': pTip }, p.label);
+        const lbl = h('span', { class: 'p-lbl', 'data-tip': pTip }, withEn(p.label));
         const box = h('label', { class: 'p' }, lbl);
         if (p.type === 'bool') { const b = h('button', { class: 'btn sm', type: 'button', 'data-tip': pTip, onclick: () => { S.params[p.key] = !S.params[p.key]; syncParams(); recompute(); } }); box.append(b); pctl[p.key] = () => { b.textContent = S.params[p.key] ? '開' : '關'; b.classList.toggle('on', !!S.params[p.key]); }; }
-        else if (p.type === 'choice') { const sg = h('div', { class: 'seg' }); p.options.forEach(o => sg.append(h('button', { type: 'button', 'data-v': String(o.v), 'data-tip': o.tip || expTips[p.key + ':' + o.v] || pTip, onclick: () => { S.params[p.key] = o.v; syncParams(); recompute(); } }, o.label))); box.append(sg); pctl[p.key] = () => sg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === String(S.params[p.key]))); }
+        else if (p.type === 'choice') { const sg = h('div', { class: 'seg' }); p.options.forEach(o => sg.append(h('button', { type: 'button', 'data-v': String(o.v), 'data-tip': o.tip || expTips[p.key + ':' + o.v] || pTip, onclick: () => { S.params[p.key] = o.v; syncParams(); recompute(); } }, withEn(o.label)))); box.append(sg); pctl[p.key] = () => sg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === String(S.params[p.key]))); }
         else { const d = p.digits != null ? p.digits : (String(p.step || 1).split('.')[1] || '').length; const val = h('b'); const inp = h('input', { type: 'range', min: p.min, max: p.max, step: p.step || 1, 'data-tip': pTip, oninput: e => { S.params[p.key] = +e.target.value; val.textContent = LAB.f(S.params[p.key], d) + (p.unit ? ' ' + p.unit : ''); recompute(); } }); box.append(inp, val); pctl[p.key] = () => { inp.value = S.params[p.key]; val.textContent = LAB.f(S.params[p.key], d) + (p.unit ? ' ' + p.unit : ''); }; }
         elParams.append(box);
       });
