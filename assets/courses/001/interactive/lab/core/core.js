@@ -2,7 +2,7 @@
 (function (G) {
   'use strict';
   const LAB = G.LAB = G.LAB || {};
-  LAB.version = '1.1';
+  LAB.version = '1.2';
   LAB.exps = LAB.exps || {};
 
   /* 實驗註冊：每個實驗檔只呼叫一次 */
