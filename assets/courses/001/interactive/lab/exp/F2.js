@@ -78,8 +78,8 @@
     },
     params: [
       { key: 'optimizer', label: '目前觀察優化器', type: 'choice', value: 'sgd', options: [{ v: 'sgd', label: 'SGD' }, { v: 'momentum', label: 'Momentum' }, { v: 'adam', label: 'Adam' }] },
-      { key: 'lr', label: '學習率 η', type: 'num', min: 0.01, max: 0.15, step: 0.01, value: 0.08 },
-      { key: 'steps', label: '步數', type: 'int', min: 20, max: 100, step: 10, value: 40 },
+      { key: 'lr', label: '學習率 η', type: 'num', min: 0.01, max: 0.15, step: 0.01, value: 0.11 },
+      { key: 'steps', label: '步數', type: 'int', min: 20, max: 100, step: 10, value: 60 },
       { key: 'start', label: '起點', type: 'choice', value: '0', options: STARTS }
     ],
     pseudo: [

@@ -162,10 +162,20 @@
           hl: i === st.hlA || i === st.hlB,
           label: w, r: 6
         }));
+        const lines = [];
+        if (st.hlA >= 0 && st.hlB >= 0 && st.hlA < showWords.length && st.hlB < showWords.length) {
+          lines.push({ id: 'pair', x1: st.Win[st.hlA][0], y1: st.Win[st.hlA][1], x2: st.Win[st.hlB][0], y2: st.Win[st.hlB][1], cls: 'hl', dash: true, w: 2 });
+        } else if (st.done && R.targetIdx < showWords.length) {
+          R.sims.slice(0, 2).forEach((s, idx) => {
+            if (s.i < showWords.length) {
+              lines.push({ id: 'sim' + idx, x1: st.Win[R.targetIdx][0], y1: st.Win[R.targetIdx][1], x2: st.Win[s.i][0], y2: st.Win[s.i][1], cls: 'c1', dash: true, w: 1.8 });
+            }
+          });
+        }
         const main = {
           type: 'scatter', slot: 'main',
           title: '2D 詞向量空間（前 14 個詞）',
-          axes: AX, points, lines: [], circles: [],
+          axes: AX, points, lines, circles: [],
           legend: [{ cls: 'hl', label: '目前中心詞' }, { cls: 'c1', label: '上下文／目標詞' }]
         };
         const side = st.done ? {
