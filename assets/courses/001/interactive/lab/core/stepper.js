@@ -92,7 +92,12 @@
       B8: '在無法由單一直線切分的 2D 門診資料上，看 AdaBoost 如何逐輪挑選加權錯誤率 ε 最小的決策樹樁 (Decision Stump)，放大答錯病人的權重 wᵢ（圖上圓點變大），最後以話語權 α 加權組合出非線性邊界。',
       B9: '從全體平均 F₀ 出發，讓多棵深度為 1 的回歸樹樁接力擬合前一輪剩下的「殘差 (Residual)」，觀察散佈圖上的紅虛線誤差如何逐步縮短、階梯預測線如何貼近資料；比較不同學習率 η (Shrinkage) 對 MSE 的影響。',
       B10: '以 SMO (Sequential Minimal Optimization) 求解最大間隔超平面與支持向量 (Support Vectors, αᵢ > 0)；切換懲罰參數 C（0.1–100）與核函數（Linear vs RBF），觀察寬鬆軟間隔與彎曲非線性邊界的差異。',
+      B11: '在 8 筆訓練＋4 筆驗證的門診資料上調整多項式階數（degree 1–7），直觀對比 d=1 欠擬合 (Underfitting)、d=2–3 適度擬合與高階過擬合 (Overfitting) 曲線，並觀察 Train vs Validation MSE 的 U 型分岔。',
+      B12: '結合 Logistic 迴歸、決策樹樁與 3-NN 三種不同幾何邊界的基模型，對照直接投票 (Voting) 與第二層 Meta-Learner 自動分配權重 (Stacking) 如何提升整體準確率並形成互補決策區域。',
+      B13: '將 15 位病人切為 K 折輪流驗證 (K-Fold Cross Validation)，在「是否標準化 × K∈{1,3,5}」共 6 組超參數網格中搜尋最高平均驗證分數，並確保標準化只在每折訓練集內計算以防資料洩漏。',
       C1: '在標準化 BMI × 血糖空間反覆執行「指派最近中心」與「移動中心至成員平均」，透過中心輻射連線與勢力範圍底色觀察 SSE 單調下降；切換 9 組起始中心驗證 K-Means 易受初值影響而落入局部最佳解。',
+      C9: '對 K=2..5 執行 K-Means，逐點計算同群平均距離 a(i) 與最近外群距離 b(i) 得出輪廓係數 (Silhouette Score)，並同場繪出 SSE 手肘曲線，解答「分幾群最合適」的實務選擇題。',
+      C10: '在含極端高血糖離群點 #12 的資料上以 PAM (Partitioning Around Medoids) 挑選真實病人當群中心，並與 K-Means 幾何平均中心（星號）同場對照，直觀見證 Medoid 抗離群值不被拉偏的優勢。',
       C2: '從兩兩距離矩陣挑出最近群對逐步合併並繪製樹狀圖 (Dendrogram)；切換單一 (Single)、完全 (Complete) 與平均 (Average / UPGMA) 連結法，比較「鏈狀效應」與「緊實球狀分群」的結構差異。',
       C3: '依鄰域半徑 ε 與核心門檻 minPts 將病人標記為核心點 (Core)、邊界點 (Border) 與雜訊 (Noise, -1)，從核心點往外密度連通擴張群集；調整 ε 觀察群集分裂或過度合併的臨界點。',
       C4: '以多個高斯分佈混合擬合標準化血糖，交替執行 E 步（計算每點屬於各群的軟歸屬責任值 Responsibility）與 M 步（加權更新均值、變異數與權重），從曲線變化見證對數概似 (Log-Likelihood) 穩步上升。',
@@ -241,6 +246,22 @@
         'kernel:linear': '【線性核 (Linear Kernel)】\n公式：K(x, x\') = xᵀx\'，直接在原空間切出直線超平面。\n適用：特徵維度高（如文本分類）或資料線性可分時，速度快且不易過擬合。',
         'kernel:rbf': '【RBF 高斯核 (Radial Basis Function Kernel)】\n公式：K(x, x\') = exp(−γ‖x−x\'‖²)，隱式映射到無限維空間。\n適用：兩類別呈非線性包圍或交錯分佈，可切出彎曲封閉邊界。'
       },
+      B11: {
+        degree: '【多項式階數 d (Polynomial Degree)】\n用法：展開 z¹, z², …, zᵈ（1–7 階）。d=1 為直線（易欠擬合）；d=2–3 貼合真實彎曲趨勢；d≥5 自由度過高開始追逐雜訊而過擬合。',
+        showVal: '【顯示驗證點 (Show Validation Set)】\n用法：切換是否顯示 4 筆未參與擬合的驗證點（黃色菱形），直觀對比曲線在未見資料上的誤差。'
+      },
+      B12: {
+        method: '【集成方式 (Ensemble Method)】\n選擇結合 Logistic、決策樹與 3-NN 三個基模型的策略。',
+        'method:vote': '【Voting 投票集成】\n作法：三個模型直接多數決（硬投票）或機率平均（軟投票），不需額外訓練第二層模型。',
+        'method:stack': '【Stacking 堆疊集成】\n作法：把三個基模型預測機率當新特徵，訓練第二層 Meta-Learner 自動給表現較佳的模型更高權重。',
+        soft: '【軟機率投票 (Soft Voting)】\n用法：僅 Voting 使用。開啟後平均三個模型的預測機率；關閉則各投 0/1 票做多數決（Hard Voting）。'
+      },
+      B13: {
+        folds: '【折數 K-Fold (Number of Folds)】\n用法：設定交叉驗證切幾折（3–5）。K=5 代表每次 80% 訓練、20% 驗證，輪流 5 次取平均。',
+        metric: '【評估指標 (Evaluation Metric)】\n選擇網格搜尋挑選最佳超參數組合的依據。',
+        'metric:acc': '【正確率 (Accuracy)】\n公式：(TP + TN) / 總數。\n適用：類別比例較均衡時最直觀的整體答對率。',
+        'metric:f1': '【F1 分數 (F1-Score)】\n公式：2·Precision·Recall / (Precision + Recall)。\n適用：重視陽性樣本抓得準又抓得全時（不平衡醫療資料常用）。'
+      },
       C1: {
         k: '【分群數 K (Number of Clusters)】\n用法：預先指定要切成幾群（2–5）。隨著 K 增加，群內平方誤差和（SSE / Inertia）必單調下降；實務常搭配手肘法（Elbow Method）選折衷點。',
         init: '【起始中心種子 (Initialization Seed)】\n用法：切換不同的隨機初始中心。K-Means 屬局部最佳化（Local Optimum），不同初值可能收斂到不同分群結果。'
@@ -278,6 +299,14 @@
       C8: {
         trees: '【孤立樹數量 T (Number of Isolation Trees)】\n用法：隨機超平面切割樹的棵數（5–50）。樹越多，每個點的平均路徑長度 E(h(x)) 與異常分數（Anomaly Score）越穩定收斂。',
         target: '【觀察病人 (#) (Target Sample)】\n用法：指定要追蹤首棵樹隨機切割過程的病人編號；離群點通常只需 1–2 刀就被孤立（路徑短、異常分數接近 1）。'
+      },
+      C9: {
+        k: '【觀察群數 K (Number of Clusters)】\n用法：切換要在散佈圖與表單細看每個點 a(i)、b(i) 與輪廓係數的 K 值（2–5）。',
+        init: '【起始種子 (Initialization Seed)】\n用法：切換 K-Means 起始中心種子（1–3），觀察群數選擇指標在不同初值下是否穩定。'
+      },
+      C10: {
+        k: '【分群數 K (Number of Clusters)】\n用法：指定要選出幾位真實病人作為 Medoid 代表中心（2–4）。',
+        compare: '【對照 K-Means 平均中心 (Compare Centroids)】\n用法：開啟後在圖上顯示黃色星號（K-Means 幾何平均中心），對比 #12 離群點如何把平均中心拉偏而 Medoid 屹立不動。'
       },
       D1: {
         min_sup: '【最小支持度 (Minimum Support, min_sup)】\n定義：項目集在所有處方箋中同時出現的比例門檻（0.20–0.60）。\n調高會只留下非常常見的用藥組合（Pruning 剪枝多）；調低能挖掘罕見但可能重要的合併用藥。',
@@ -449,12 +478,15 @@
       '觀察詞位置': 'Query Pos', '因果遮罩': 'Causal Mask', '顯示頭數': 'Head', '追蹤詞位置': 'Track Pos',
       '解碼策略': 'Decoding', '抽樣 (Sampling)': 'Sampling', '切塊方式': 'Chunking', '依句 (8段)': 'Sentence', '依段 (6段)': 'Paragraph',
       '取前 K 段': 'Top-K', '檢索方式': 'Retriever', '向量 (TF-IDF)': 'Vector', '混合 (RRF)': 'Hybrid RRF',
-      '學習率 α': 'Alpha α', '折扣因子 γ': 'Gamma γ', '探索率 ε': 'Epsilon ε', '訓練回合數': 'Episodes'
+      '學習率 α': 'Alpha α', '折扣因子 γ': 'Gamma γ', '探索率 ε': 'Epsilon ε', '訓練回合數': 'Episodes',
+      '多項式階數 d': 'Degree d', '顯示驗證點': 'Validation Set', '集成方式': 'Ensemble', '軟機率投票': 'Soft Voting',
+      '折數 K-Fold': 'Folds', '評估指標': 'Metric', '觀察群數 K': 'Clusters K', '分群數 K': 'Clusters K', '對照 K-Means 平均中心': 'Compare K-Means'
     };
     const ACTIVE_IF = {
       'A1.k': ps => ps.method === 'knn',
       'A4.smoothing': ps => ps.method === 'target',
       'A5.k': ps => ps.method === 'smote',
+      'B12.soft': ps => ps.method === 'vote',
       'G1.beta': ps => ps.method !== 'ses',
       'G1.gamma': ps => ps.method === 'hw',
       'H5.temperature': ps => ps.strategy === 'sample',
