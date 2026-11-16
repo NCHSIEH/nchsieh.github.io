@@ -119,8 +119,8 @@
           });
           return { id: r.id, cells, hl: st.cur && st.cur.id === r.id };
         });
-        const main = {
-          type: 'table', slot: 'main',
+        const side = {
+          type: 'table', slot: 'side',
           title: '門診健檢補值表（共 ' + R.blanks.length + ' 個缺格）',
           cols: [{ key: 'id', label: '#' }, { key: 'age', label: '年齡' }, { key: 'bmi', label: 'BMI' }, { key: 'glu', label: '空腹血糖' }],
           rows: trs,
@@ -151,8 +151,8 @@
             });
           }
         }
-        const side = {
-          type: 'scatter', slot: 'side', title: '年齡 × 血糖位置（空心＝待補）',
+        const main = {
+          type: 'scatter', slot: 'main', title: '年齡 × 血糖位置（空心＝待補）',
           axes: AX, points, lines, circles: [],
           legend: [{ cls: 'c0', label: '完整資料' }, { cls: 'c1', label: '含缺值／已補' }]
         };
