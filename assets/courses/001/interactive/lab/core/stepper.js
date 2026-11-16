@@ -82,6 +82,7 @@
       A4: '將文字類別（內科／外科／急診）轉為 One-Hot（3 欄）、Dummy（去基準欄防完全共線性 Multicollinearity）或目標編碼 (Target Encoding)；調整平滑強度 m 觀察小樣本科別如何向整體平均率收縮並防範資料洩漏 (Data Leakage)。',
       A5: '針對陽性僅佔 20–25% 的不平衡資料，比較隨機過抽樣 (Oversampling)、欠抽樣 (Undersampling) 與 SMOTE（在少數類 K 鄰居連線上依比例 λ 內插合成新點）如何把陽性率拉升至目標比例並擴張少數類涵蓋區域。',
       A6: '比較單變數過濾法（皮爾森相關係數 |r|、資訊增益 Information Gain）與包裹法「向前選擇 (Forward Selection + LOOCV 3-NN)」如何從 4 個生理指標挑出最佳子集，觀察臨床重疊樣本如何讓向前選擇必須多選特徵才提升準確率。',
+      A7: '以四分位距 (IQR = Q3 − Q1) 畫出上下圍籬 (Fence) 找出極端高血壓離群點，實測比較「直接刪除 (Drop)」與「縮尾截斷 (Winsorizing)」如何把被嚴重拉偏的 BMI→收縮壓迴歸斜率搶救回正常趨勢。',
       B1: '用 BMI 預測收縮壓，對照最小平方法 (OLS) 公式一次算出斜率 w* 與截距 b*，以及梯度下降 (Gradient Descent) 如何從 (0,0) 沿損失曲面 (Loss Surface) 逐步逼近同一組解；試調學習率 η 觀察收斂速度與震盪。',
       B2: '在年齡、BMI、血糖共線迴歸中調大懲罰強度 λ（0.01 → 250），對照 Ridge (L2) 如何平滑壓縮所有係數，而 Lasso (L1) 如何透過軟閾值 (Soft Thresholding) 將次要特徵係數精確歸零以完成自動篩選。',
       B3: '透過梯度下降優化對數損失 (Log Loss / Binary Cross-Entropy)，觀察決策邊界如何從水平線旋轉推開兩群病人；試調判定門檻 (Threshold, 0.1–0.9) 直接看黃圈誤判點（FP 與 FN）如何消長。',
@@ -95,6 +96,9 @@
       B11: '在 8 筆訓練＋4 筆驗證的門診資料上調整多項式階數（degree 1–7），直觀對比 d=1 欠擬合 (Underfitting)、d=2–3 適度擬合與高階過擬合 (Overfitting) 曲線，並觀察 Train vs Validation MSE 的 U 型分岔。',
       B12: '結合 Logistic 迴歸、決策樹樁與 3-NN 三種不同幾何邊界的基模型，對照直接投票 (Voting) 與第二層 Meta-Learner 自動分配權重 (Stacking) 如何提升整體準確率並形成互補決策區域。',
       B13: '將 15 位病人切為 K 折輪流驗證 (K-Fold Cross Validation)，在「是否標準化 × K∈{1,3,5}」共 6 組超參數網格中搜尋最高平均驗證分數，並確保標準化只在每折訓練集內計算以防資料洩漏。',
+      B14: '針對連續數值目標（收縮壓），改用「誤差平方和 (SSE) 下降量」挑選最佳分裂切點，觀察每個葉節點如何輸出該區間平均收縮壓並形成階梯狀預測曲線。',
+      B15: '透過循序覆蓋 (Sequential Covering / RIPPER) 學出可讀性最高的「IF … THEN 糖尿病」臨床規則清單，每學一條高精確率規則就移除被覆蓋病人，並加上 ELSE 預設類別。',
+      B16: '將分類門檻由 1.00 逐步放寬至 0.00，即時追蹤 TP/FP/TN/FN 消長並連成 ROC 曲線與 Precision–Recall (PR) 曲線，對比 ROC-AUC 與不平衡資料上更誠實的 PR-AUC。',
       C1: '在標準化 BMI × 血糖空間反覆執行「指派最近中心」與「移動中心至成員平均」，透過中心輻射連線與勢力範圍底色觀察 SSE 單調下降；切換 9 組起始中心驗證 K-Means 易受初值影響而落入局部最佳解。',
       C9: '對 K=2..5 執行 K-Means，逐點計算同群平均距離 a(i) 與最近外群距離 b(i) 得出輪廓係數 (Silhouette Score)，並同場繪出 SSE 手肘曲線，解答「分幾群最合適」的實務選擇題。',
       C10: '在含極端高血糖離群點 #12 的資料上以 PAM (Partitioning Around Medoids) 挑選真實病人當群中心，並與 K-Means 幾何平均中心（星號）同場對照，直觀見證 Medoid 抗離群值不被拉偏的優勢。',
@@ -118,6 +122,7 @@
       F5: '訓練 3-1-3 自編碼器 (Autoencoder) 將 BMI、血糖、收縮壓壓縮至 1 維瓶頸 (Bottleneck) 再還原；利用正常群遵循的相關性，以「重建誤差 (Reconstruction Error)」精準揪出違背生理規律的異常點 #13。',
       G1: '對 24 個月門診人次依序對比簡單指數平滑 (SES, 僅水準)、Holt（加線性趨勢）與 Holt-Winters（加 12 期季節指數）如何逐期更新狀態並往未來延伸預測；調整 α、β、γ 觀察對短期波動的敏感度。',
       G2: '先對含趨勢的月門診序列做一階差分 (d=1) 使其平穩 (Stationary)，透過自相關函數 ACF 辨識滯後關聯，再以 AR(p) 線性迴歸預測未來差分值並累加還原回原始門診人次尺度。',
+      G3: '示範為什麼時間序列不可用隨機 K-Fold，改以「滑動固定窗 (Sliding)」或「擴張累積窗 (Expanding)」嚴格依時間順序往前滾動預測，真實衡量前瞻誤差 MAE。',
       H1: '從單一中文字元詞表出發，反覆統計並合併出現頻率最高的相鄰符號對 (Byte Pair Encoding, BPE)，示範詞表如何逐輪長出常用雙字與三字醫療詞根，進而用更少 Token 切分未見詞。',
       H2: '將 6 個護理詞彙查表轉為 4 維詞嵌入 (Word Embedding)，並加上正弦／餘弦位置編碼 (Positional Encoding)；對比相鄰位置的向量波紋差異，理解「詞序對調」時輸入矩陣為何能被 Transformer 分辨。',
       H3: '將詞向量投影為 Query、Key、Value，逐格計算縮放點積相似度 (Q·Kᵀ / √d_k)，測試因果遮罩 (Causal Mask) 如何將未來位置歸零，並經 Softmax 轉為注意力權重對 Value 加權融合上下文。',
@@ -186,6 +191,12 @@
         'method:ig': '【資訊增益 (Information Gain — Filter Method)】\n作法：衡量以該特徵中位數二分後，目標類別熵（Entropy）降低多少。\n適用：能捕捉非線性門檻切分效果，常用於樹模型前處理篩選。',
         'method:forward': '【向前選擇 (Forward Selection — Wrapper Method)】\n作法：從空集合出發，每輪試加一個特徵並用留一法（LOOCV, Leave-One-Out Cross-Validation）3-NN 實測正確率，挑提升最多者直到不再進步。\n優缺點：直接對齊模型表現，但計算成本較高。',
         top: '【目標特徵數 K (Top-K Features)】\n用法：過濾法（Filter）會依分數由高到低取前 K 名；向前選擇（Wrapper）則設定最多選入幾個特徵。'
+      },
+      A7: {
+        method: '【離群值處理方式 (Outlier Handling)】\n選擇對超出 IQR 圍籬的極端樣本要刪除或截斷。',
+        'method:drop': '【直接刪除 (Drop Outliers)】\n作法：移出超出圍籬的病人；適合確定為輸入錯誤或儀器故障，缺點是減少樣本數。',
+        'method:winsor': '【縮尾截斷 (Winsorizing / Capping)】\n作法：將極端值壓回上下圍籬上限，既消除單點拉偏斜率又保留該病人的其餘欄位資訊。',
+        iqr_k: '【IQR 倍數 k (Fence Multiplier)】\n用法：標準 Tukey 盒鬚圖設 k=1.5；調高至 2.5 只抓最極端離群點，調低至 1.0 會更嚴格過濾。'
       },
       B1: {
         method: '線性迴歸求解（Linear Regression Solver）：比較閉式公式解與疊代最佳化。',
@@ -261,6 +272,20 @@
         metric: '【評估指標 (Evaluation Metric)】\n選擇網格搜尋挑選最佳超參數組合的依據。',
         'metric:acc': '【正確率 (Accuracy)】\n公式：(TP + TN) / 總數。\n適用：類別比例較均衡時最直觀的整體答對率。',
         'metric:f1': '【F1 分數 (F1-Score)】\n公式：2·Precision·Recall / (Precision + Recall)。\n適用：重視陽性樣本抓得準又抓得全時（不平衡醫療資料常用）。'
+      },
+      B14: {
+        max_depth: '【最大深度 (Max Depth)】\n用法：限制迴歸樹最多切幾層（1–3）。深度越深階梯越多段、訓練 MSE 越低，但過度細切易過擬合。',
+        min_leaf: '【葉節點最少筆數 (Min Samples Leaf)】\n用法：預剪枝門檻，確保每個葉節點平均值至少由幾位病人算出，避免單點極端值自成一葉。'
+      },
+      B15: {
+        max_rules: '【最多規則數 (Max Rules)】\n用法：限制循序覆蓋最多學出幾條 IF–THEN 規則（1–4），規則越少越精簡好記。',
+        min_cov: '【單條最少涵蓋數 (Min Coverage)】\n用法：每條規則至少要命中幾位正樣本（1–3），避免為單一特例硬寫規則。'
+      },
+      B16: {
+        curve: '【曲線類型 (Curve Type)】\n切換檢視 ROC 曲線或 Precision–Recall (PR) 曲線。',
+        'curve:roc': '【ROC 曲線 (Receiver Operating Characteristic)】\n座標：FPR (X軸) vs TPR (Y軸)，越靠近左上角越好（AUC → 1）。',
+        'curve:pr': '【PR 曲線 (Precision–Recall Curve)】\n座標：Recall (X軸) vs Precision (Y軸)，在正負極度不平衡時比 ROC 更能反映誤報代價。',
+        threshold: '【判定門檻 (Threshold)】\n用法：拖曳門檻（0.05–0.95），即時觀看曲線上的紅星移動與 TP/FP/TN/FN 消長。'
       },
       C1: {
         k: '【分群數 K (Number of Clusters)】\n用法：預先指定要切成幾群（2–5）。隨著 K 增加，群內平方誤差和（SSE / Inertia）必單調下降；實務常搭配手肘法（Elbow Method）選折衷點。',
@@ -398,6 +423,13 @@
         p: '【自迴歸階數 p (Autoregressive Order AR(p))】\n用法：用過去 p 期的落後值線性組合預測當期（p=1 看前 1 期；p=2 看前 2 期，能捕捉週期震盪）。',
         horizon: '【預測期數 (Forecast Horizon)】\n用法：設定往未來遞迴預測幾期（1–12）；當期預測值會成為下一期的歷史輸入。'
       },
+      G3: {
+        mode: '【視窗模式 (Window Mode)】\n選擇隨時間往前滾動時訓練集如何更新。',
+        'mode:sliding': '【滑動固定窗 (Sliding Window)】\n作法：訓練窗維持固定長度 W 往前平移，忘掉過舊歷史，適合有季節轉折或概念飄移的序列。',
+        'mode:expanding': '【擴張累積窗 (Expanding Window)】\n作法：起點固定在第 1 期、訓練窗隨時間越滾越長，適合長期規律穩定的序列。',
+        win: '【訓練窗長 W (Training Window)】\n用法：初始訓練視窗包含幾個月（6–12），決定每折有多少歷史資料可用來擬合趨勢。',
+        horizon: '【每次驗證期數 H (Forecast Horizon)】\n用法：每次往前預測幾個月（1–4）當驗證集，並依此步幅向右滾動下一折。'
+      },
       H1: {
         merges: '【合併次數 (BPE Merge Operations)】\n用法：設定 Byte Pair Encoding 從單一字元出發要執行幾輪「最高頻相鄰配對合併」（1–12）。\n合併越多，詞表（Vocabulary）包含越長的高頻詞根，序列切分出的 Token 數越少。'
       },
@@ -480,7 +512,9 @@
       '取前 K 段': 'Top-K', '檢索方式': 'Retriever', '向量 (TF-IDF)': 'Vector', '混合 (RRF)': 'Hybrid RRF',
       '學習率 α': 'Alpha α', '折扣因子 γ': 'Gamma γ', '探索率 ε': 'Epsilon ε', '訓練回合數': 'Episodes',
       '多項式階數 d': 'Degree d', '顯示驗證點': 'Validation Set', '集成方式': 'Ensemble', '軟機率投票': 'Soft Voting',
-      '折數 K-Fold': 'Folds', '評估指標': 'Metric', '觀察群數 K': 'Clusters K', '分群數 K': 'Clusters K', '對照 K-Means 平均中心': 'Compare K-Means'
+      '折數 K-Fold': 'Folds', '評估指標': 'Metric', '觀察群數 K': 'Clusters K', '分群數 K': 'Clusters K', '對照 K-Means 平均中心': 'Compare K-Means',
+      '處理方式': 'Handling', 'IQR 倍數 k': 'IQR Multiplier', '最多規則數': 'Max Rules', '單條最少涵蓋數': 'Min Coverage',
+      '曲線類型': 'Curve', 'ROC 曲線': 'ROC', 'PR 曲線': 'PR', '視窗模式': 'Window Mode', '訓練窗長 W': 'Window W', '每次驗證期數 H': 'Horizon H'
     };
     const ACTIVE_IF = {
       'A1.k': ps => ps.method === 'knn',

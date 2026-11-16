@@ -225,6 +225,12 @@ a.lab-card,div.lab-card{display:block;background:var(--paper);border:1px solid v
 a.lab-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 8px 22px rgba(13,107,103,.16)}
 .lab-card .id{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:700} .lab-card h3{font-size:17px;margin:2px 0 4px} .lab-card p{font-size:14px;color:var(--muted);margin:0;line-height:1.55}
 .lab-card .st{position:absolute;top:10px;right:12px} div.lab-card{opacity:.62} .lab-card .ok{color:var(--good);font-weight:700;margin-left:6px}
+.lab-tier{font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.04em;margin:10px 0 6px}
+.lab-tier-sep{display:flex;align-items:center;gap:10px;margin:14px 0 8px;color:var(--muted);font-size:12.5px;font-weight:600}
+.lab-tier-sep::before,.lab-tier-sep::after{content:"";flex:1;border-top:1px dashed var(--line)}
+.lab-tier-sep::before{flex:0 0 18px}
+a.lab-card.is-adv{background:#faf9f4;border-color:#e5e3da;opacity:.88}
+a.lab-card.is-adv:hover{background:var(--paper);opacity:1;border-color:var(--accent)}
 
 @media (max-width:1180px){.lab-work{grid-template-columns:300px minmax(0,1fr)} .lab-work .col.r{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;gap:14px} .lab-work .col.r .pane+.pane{margin-top:0}}
 @media (max-width:820px){
