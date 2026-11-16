@@ -71,5 +71,58 @@
     { id: 'I1', group: 'I', title: 'SHAP 與排列重要度', brief: '三個特徵的所有加入順序，精確算出每個特徵的貢獻。', module: m('M9 第 11 節', '../m9/#p11'), status: 'live' },
     { id: 'J1', group: 'J', title: 'Q-learning', brief: '病房送藥路線：走一步、拿獎勵、更新 Q 表。', module: m('延伸參考', ''), status: 'live' }
   ];
+  LAB.EN_TITLES = {
+    A1: 'Missing Value Imputation',
+    A2: 'Standardization & Normalization',
+    A3: 'Discretization / Binning',
+    A4: 'Categorical Encoding',
+    A5: 'Imbalanced Data & SMOTE',
+    A6: 'Feature Selection',
+    B1: 'Linear Regression',
+    B2: 'Regularized Regression',
+    B3: 'Logistic Regression',
+    B4: 'k-Nearest Neighbors',
+    B5: 'Naive Bayes Classifier',
+    B6: 'Decision Tree',
+    B7: 'Random Forest',
+    B8: 'Adaptive Boosting',
+    B9: 'Gradient Boosted Decision Trees',
+    B10: 'Support Vector Machine',
+    C1: 'K-Means Clustering',
+    C2: 'Hierarchical Clustering',
+    C3: 'Density-Based Clustering',
+    C4: 'Gaussian Mixture Model',
+    C5: 'Principal Component Analysis',
+    C6: 't-Distributed Stochastic Neighbor Embedding',
+    C7: 'Local Outlier Factor',
+    C8: 'Isolation Forest',
+    D1: 'Apriori Association Rules',
+    D2: 'Frequent Pattern Growth',
+    E1: 'Tokenization & TF-IDF',
+    E2: 'Bag-of-Words Naive Bayes',
+    E3: 'Word Embeddings',
+    E4: 'Latent Dirichlet Allocation',
+    F1: 'Forward & Backward Propagation',
+    F2: 'Optimizer Comparison',
+    F3: 'Convolutional Neural Network',
+    F4: 'Recurrent Neural Networks',
+    F5: 'Autoencoder Anomaly Detection',
+    G1: 'Exponential Smoothing',
+    G2: 'Autoregressive Integrated Moving Average',
+    H1: 'Byte Pair Encoding',
+    H2: 'Word & Positional Encoding',
+    H3: 'Scaled Dot-Product Attention',
+    H4: 'Transformer Encoder Layer',
+    H5: 'Autoregressive Decoding',
+    H6: 'Retrieval-Augmented Generation',
+    H7: 'Low-Rank Adaptation',
+    I1: 'SHAP & Permutation Importance',
+    J1: 'Reinforcement Learning'
+  };
+  LAB.displayTitle = (id, base) => {
+    const en = LAB.EN_TITLES[id];
+    if (!en || (base && base.includes(en))) return base || '';
+    return (base || '') + ' (' + en + ')';
+  };
   LAB.entry = id => LAB.registry.find(e => e.id === id);
 })(typeof window !== 'undefined' ? window : globalThis);

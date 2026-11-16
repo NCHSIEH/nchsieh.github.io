@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>演算法實驗室 · 資料科學 2027 Spring</title>
 <link rel="stylesheet" href="../assets/style.css">
-<link rel="stylesheet" href="core/lab.css?v=1.1">
+<link rel="stylesheet" href="core/lab.css?v=1.2">
 </head>
 <body class="lab">
 <!-- 演算法實驗室 · 目錄頁（凍結檔，請勿修改）。內容由 core/registry.js 產生 -->
@@ -30,8 +30,8 @@
   <main id="groups"></main>
   <p class="dnote" style="margin-top:28px">教學用網站 · 範例資料皆為模擬資料，非真實病人資料 · 交叉驗證與 ROC／門檻的互動在 <a href="../m2-2/#p08">M2-2 第 08 節</a>、<a href="../m2-2/#p10">第 10 節</a></p>
 </div>
-<script src="core/core.js?v=1.1"></script>
-<script src="core/registry.js?v=1.1"></script>
+<script src="core/core.js?v=1.2"></script>
+<script src="core/registry.js?v=1.2"></script>
 <script>
 (function(){
   var LAB=window.LAB, box=document.getElementById('groups'), done=[];
@@ -44,7 +44,7 @@
     list.forEach(function(e){
       var live=e.status==='live', c=el(live?'a':'div','lab-card'); if(live) c.href='exp.html?id='+e.id;
       var st=el('span','st'); st.append(el('span','tag '+(live?'good':'gray'), live?'可操作':'建置中')); c.append(st);
-      var id=el('div','id',e.id); if(done.indexOf(e.id)>=0) id.append(el('span','ok','✓ 已走完')); c.append(id, el('h3',null,e.title), el('p',null,e.brief)); cards.append(c);
+      var id=el('div','id',e.id); if(done.indexOf(e.id)>=0) id.append(el('span','ok','✓ 已走完')); c.append(id, el('h3',null,LAB.displayTitle(e.id,e.title)), el('p',null,e.brief)); cards.append(c);
     });
     sec.append(cards); box.append(sec);
   });

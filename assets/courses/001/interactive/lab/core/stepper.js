@@ -20,9 +20,10 @@
     const link = (e, txt) => !e ? h('span') : e.status === 'live' ? h('a', { class: 'btn', href: 'exp.html?id=' + e.id }, txt(e)) : h('button', { class: 'btn', disabled: true }, txt(e) + '（建置中）');
     return h('div', { class: 'lab-nav' }, link(p, e => '← ' + e.id + ' ' + e.title), h('a', { class: 'btn', href: './' }, '回實驗室目錄'), link(n, e => e.id + ' ' + e.title + ' →'));
   }
+  const showTitle = e => LAB.displayTitle ? LAB.displayTitle(e.id, e.title) : e.title;
   if (!entry) { root.append(h('div', { class: 'lab-err' }, '找不到這個實驗。'), h('p', null, h('a', { class: 'btn primary', href: './' }, '回實驗室目錄'))); return; }
-  document.title = entry.id + ' ' + entry.title + ' · 演算法實驗室';
-  const crumb = document.getElementById('crumb'); if (crumb) crumb.textContent = '/ ' + entry.id + ' ' + entry.title;
+  document.title = entry.id + ' ' + showTitle(entry) + ' · 演算法實驗室';
+  const crumb = document.getElementById('crumb'); if (crumb) crumb.textContent = '/ ' + entry.id + ' ' + showTitle(entry);
   if (entry.status !== 'live') { root.append(h('div', { class: 'lab-hero' }, h('div', { class: 'badge' }, entry.id), h('div', null, h('h1', null, entry.title), h('p', { class: 'goal' }, entry.brief), h('span', { class: 'tag gray' }, '建置中'))), navRow()); return; }
 
   LAB.onRegister = function (def) { if (def.id === ID) init(def); };
@@ -77,7 +78,7 @@
     const canEdit = !!(def.data.editable && def.data.editable.length);
 
     root.append(
-      h('header', { class: 'lab-hero' }, h('div', { class: 'badge' }, def.id), h('div', null, h('h1', null, def.title), h('p', { class: 'goal' }, def.goal || ''),
+      h('header', { class: 'lab-hero' }, h('div', { class: 'badge' }, def.id), h('div', null, h('h1', null, showTitle(def)), h('p', { class: 'goal' }, def.goal || ''),
         h('div', { class: 'chips' }, def.module && def.module.url ? h('a', { class: 'tag', href: def.module.url, 'data-tip': '前往對應講義章節閱讀完整觀念推導' }, '對應講義：' + def.module.name + ' →') : null, h('span', { class: 'tag gray', 'data-tip': '本實驗使用固定亂數種子產生的教學模擬資料，可點「換一組資料」或直接修改表格數值' }, '模擬資料'), h('span', { class: 'tag blue' }, def.data.scenario || '')))),
       elParams, ctl, elErr,
       h('div', { class: 'lab-work' },
