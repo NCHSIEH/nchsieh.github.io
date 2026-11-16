@@ -52,7 +52,8 @@
       return cards;
     }
     if(core.length && adv.length){
-      sec.append(el('div','lab-tier','常用'), renderCards(core,false), el('div','lab-tier-sep',el('span',null,'進階')), renderCards(adv,true));
+      var sep=el('div','lab-tier-sep'); sep.append(el('span',null,'進階'));
+      sec.append(el('div','lab-tier','常用'), renderCards(core,false), sep, renderCards(adv,true));
     }else if(core.length){
       sec.append(renderCards(core,false));
     }else{
