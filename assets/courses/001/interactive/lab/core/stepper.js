@@ -401,6 +401,17 @@
       '取前 K 段': 'Top-K', '檢索方式': 'Retriever', '向量 (TF-IDF)': 'Vector', '混合 (RRF)': 'Hybrid RRF',
       '學習率 α': 'Alpha α', '折扣因子 γ': 'Gamma γ', '探索率 ε': 'Epsilon ε', '訓練回合數': 'Episodes'
     };
+    const ACTIVE_IF = {
+      'A1.k': ps => ps.method === 'knn',
+      'A4.smoothing': ps => ps.method === 'target',
+      'A5.k': ps => ps.method === 'smote',
+      'G1.beta': ps => ps.method !== 'ses',
+      'G1.gamma': ps => ps.method === 'hw',
+      'H5.temperature': ps => ps.strategy === 'sample',
+      'H5.top_k': ps => ps.strategy === 'sample',
+      'H5.top_p': ps => ps.strategy === 'sample',
+      'H5.seed': ps => ps.strategy === 'sample'
+    };
     const withEn = s => (EN_UI[s] && !s.includes(EN_UI[s])) ? s + ' (' + EN_UI[s] + ')' : s;
     function buildParams() {
       elParams.textContent = ''; let lastG = null;
@@ -409,9 +420,11 @@
         const pTip = p.tip || expTips[p.key] || null;
         const lbl = h('span', { class: 'p-lbl', 'data-tip': pTip }, withEn(p.label));
         const box = h('label', { class: 'p' }, lbl);
-        if (p.type === 'bool') { const b = h('button', { class: 'btn sm', type: 'button', 'data-tip': pTip, onclick: () => { S.params[p.key] = !S.params[p.key]; syncParams(); recompute(); } }); box.append(b); pctl[p.key] = () => { b.textContent = S.params[p.key] ? '開' : '關'; b.classList.toggle('on', !!S.params[p.key]); }; }
-        else if (p.type === 'choice') { const sg = h('div', { class: 'seg' }); p.options.forEach(o => sg.append(h('button', { type: 'button', 'data-v': String(o.v), 'data-tip': o.tip || expTips[p.key + ':' + o.v] || pTip, onclick: () => { S.params[p.key] = o.v; syncParams(); recompute(); } }, withEn(o.label)))); box.append(sg); pctl[p.key] = () => sg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === String(S.params[p.key]))); }
-        else { const d = p.digits != null ? p.digits : (String(p.step || 1).split('.')[1] || '').length; const val = h('b'); const inp = h('input', { type: 'range', min: p.min, max: p.max, step: p.step || 1, 'data-tip': pTip, oninput: e => { S.params[p.key] = +e.target.value; val.textContent = LAB.f(S.params[p.key], d) + (p.unit ? ' ' + p.unit : ''); recompute(); } }); box.append(inp, val); pctl[p.key] = () => { inp.value = S.params[p.key]; val.textContent = LAB.f(S.params[p.key], d) + (p.unit ? ' ' + p.unit : ''); }; }
+        const cond = ACTIVE_IF[def.id + '.' + p.key];
+        const updVis = () => { if (cond) box.classList.toggle('is-off', !cond(S.params)); };
+        if (p.type === 'bool') { const b = h('button', { class: 'btn sm', type: 'button', 'data-tip': pTip, onclick: () => { S.params[p.key] = !S.params[p.key]; syncParams(); recompute(); } }); box.append(b); pctl[p.key] = () => { b.textContent = S.params[p.key] ? '開' : '關'; b.classList.toggle('on', !!S.params[p.key]); updVis(); }; }
+        else if (p.type === 'choice') { const sg = h('div', { class: 'seg' }); p.options.forEach(o => sg.append(h('button', { type: 'button', 'data-v': String(o.v), 'data-tip': o.tip || expTips[p.key + ':' + o.v] || pTip, onclick: () => { S.params[p.key] = o.v; syncParams(); recompute(); } }, withEn(o.label)))); box.append(sg); pctl[p.key] = () => { sg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === String(S.params[p.key]))); updVis(); }; }
+        else { const d = p.digits != null ? p.digits : (String(p.step || 1).split('.')[1] || '').length; const val = h('b'); const inp = h('input', { type: 'range', min: p.min, max: p.max, step: p.step || 1, 'data-tip': pTip, oninput: e => { S.params[p.key] = +e.target.value; val.textContent = LAB.f(S.params[p.key], d) + (p.unit ? ' ' + p.unit : ''); recompute(); } }); box.append(inp, val); pctl[p.key] = () => { inp.value = S.params[p.key]; val.textContent = LAB.f(S.params[p.key], d) + (p.unit ? ' ' + p.unit : ''); updVis(); }; }
         elParams.append(box);
       });
       elParams.append(h('span', { class: 'sp' }));

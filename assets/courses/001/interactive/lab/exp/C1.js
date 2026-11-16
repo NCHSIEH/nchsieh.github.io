@@ -60,6 +60,7 @@
         (s.cent || []).forEach((c, k) => points.push({ id: 'c' + k, x: c[0], y: c[1], cls: CL[k], shape: 'diamond', r: 9, hl: true, ring: !!s.moved, label: name(k) }));
         let lines = [];
         if (s.cur != null && s.cent) { const best = M.argmin(R.iters[s.it].d[s.cur]); lines = s.cent.map((c, k) => ({ id: 'l' + k, x1: R.Z[s.cur][0], y1: R.Z[s.cur][1], x2: c[0], y2: c[1], cls: CL[k], dash: k !== best, w: k === best ? 3 : null, label: f(R.iters[s.it].d[s.cur][k], 2) })); }
+        else if (s.cent && s.a && !big) { s.a.forEach((ak, i) => { if (ak != null && s.cent[ak]) lines.push({ id: 'asg' + i, x1: R.Z[i][0], y1: R.Z[i][1], x2: s.cent[ak][0], y2: s.cent[ak][1], cls: CL[ak], dash: true, w: 1.2 }); }); }
         const regions = s.regions && s.cent ? LAB.grid((x, y) => CL[M.argmin(s.cent.map(c => M.dist([x, y], c)))], -3, 3, -3, 3, 36, 24) : null;
         const leg = M.range(K, k => ({ cls: CL[k], label: '第 ' + (k + 1) + ' 群' })).concat([{ cls: 'c5', shape: 'diamond', label: '菱形＝群中心' }]);
         const out = [{ type: 'scatter', slot: 'main', axes: AX, points, lines, regions, legend: s.cent ? leg : [{ cls: 'c5', label: '尚未分群的病人' }] }];

@@ -168,14 +168,25 @@
             hl: r.lift < 1
           })) : []
         };
-        const note = {
+        const bottom = (st.showRules && !st.warnTrap && R.rules.length) ? {
+          type: 'bars', slot: 'bottom',
+          title: '前 5 名關聯規則提升度 Lift（>1 正相關，越高越強）',
+          max: Math.max(2, Math.ceil(M.max(R.rules.slice(0, 5).map(r => r.lift)) * 1.1)),
+          digits: 2,
+          items: R.rules.slice(0, 5).map(r => ({
+            id: r.id,
+            label: r.text,
+            value: r.lift,
+            cls: r.lift < 1 ? 'bad' : 'good'
+          }))
+        } : {
           type: 'note', slot: 'bottom',
           tone: st.warnTrap ? 'warn' : 'info',
           text: st.warnTrap && R.trap
             ? 'Lift 陷阱！規則「' + R.trap.text + '」信賴度達 ' + LAB.pct(R.trap.conf, 1) + '，但 Lift = ' + f(R.trap.lift, 2) + ' < 1，代表兩藥其實比隨機碰巧還更少一起開（因為後項本身太常見）。'
             : 'Apriori 性質：若一個項目集本身不頻繁，它的任何超集也絕不可能頻繁，因此可直接跳過不計數。'
         };
-        return [main, side, note];
+        return [main, side, bottom];
       }
 
       const st = { stage: 0, prune1: false, prune2: false, prune3: false, showRules: false, warnTrap: false };

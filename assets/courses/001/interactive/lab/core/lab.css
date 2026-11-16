@@ -240,6 +240,7 @@ a.lab-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shado
 }
 
 /* ---------- 懸停提示 Tooltip ---------- */
+.lab-params .p.is-off{opacity:.4;transition:opacity .15s}
 .lab-params .p-lbl[data-tip]{border-bottom:1px dotted var(--line2);cursor:help;padding-bottom:1px}
 .lab-tip{position:fixed;z-index:9999;max-width:360px;background:#1e293b;color:#f8fafc;font-size:13.5px;line-height:1.58;padding:9px 13px;border-radius:9px;box-shadow:0 8px 24px rgba(15,23,42,.24);pointer-events:none;white-space:pre-line;opacity:0;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
 .lab-tip.show{opacity:1;transform:translateY(0)}
