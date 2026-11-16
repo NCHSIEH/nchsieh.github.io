@@ -52,24 +52,24 @@
     { id: 'E4', group: 'E', title: '主題模型 LDA', brief: '每個詞反覆重抽主題，主題慢慢成形。', module: m('M6 第 11 節', '../m6/#p11'), status: 'live' },
 
     { id: 'F1', group: 'F', title: '神經網路：前向與反向傳播', brief: '2-2-1 網路，每個權重的梯度怎麼算、怎麼更新。', module: m('M5 第 03 節', '../m5/#p03'), status: 'live' },
-    { id: 'F2', group: 'F', title: '優化器比較', brief: 'SGD、Momentum、Adam 在同一個損失曲面上各走出什麼路線。', module: m('M5 第 05 節', '../m5/#p05'), status: 'todo' },
+    { id: 'F2', group: 'F', title: '優化器比較', brief: 'SGD、Momentum、Adam 在同一個損失曲面上各走出什麼路線。', module: m('M5 第 05 節', '../m5/#p05'), status: 'live' },
     { id: 'F3', group: 'F', title: 'CNN：卷積與池化', brief: '卷積核一格一格滑過影像，再經 ReLU 與池化。', module: m('M5 第 13 節', '../m5/#p13'), status: 'live' },
-    { id: 'F4', group: 'F', title: 'RNN 與 LSTM', brief: '沿時間展開，遺忘閘、輸入閘、輸出閘各算出什麼。', module: m('M5 深度學習', '../m5/'), status: 'todo' },
-    { id: 'F5', group: 'F', title: 'Autoencoder', brief: '壓縮再還原，還原不回來的就是異常。', module: m('M5 第 17 節', '../m5/#p17'), status: 'todo' },
+    { id: 'F4', group: 'F', title: 'RNN 與 LSTM', brief: '沿時間展開，遺忘閘、輸入閘、輸出閘各算出什麼。', module: m('M5 深度學習', '../m5/'), status: 'live' },
+    { id: 'F5', group: 'F', title: 'Autoencoder', brief: '壓縮再還原，還原不回來的就是異常。', module: m('M5 第 17 節', '../m5/#p17'), status: 'live' },
 
-    { id: 'G1', group: 'G', title: '指數平滑', brief: '簡單、Holt、Holt-Winters 逐期更新水準、趨勢與季節。', module: m('M4 第 15 節', '../m4/#p15'), status: 'todo' },
-    { id: 'G2', group: 'G', title: 'ARIMA', brief: '差分、自相關，到用過去幾期預測下一期。', module: m('M4 第 15 節', '../m4/#p15'), status: 'todo' },
+    { id: 'G1', group: 'G', title: '指數平滑', brief: '簡單、Holt、Holt-Winters 逐期更新水準、趨勢與季節。', module: m('M4 第 15 節', '../m4/#p15'), status: 'live' },
+    { id: 'G2', group: 'G', title: 'ARIMA', brief: '差分、自相關，到用過去幾期預測下一期。', module: m('M4 第 15 節', '../m4/#p15'), status: 'live' },
 
-    { id: 'H1', group: 'H', title: 'BPE 斷詞', brief: '最常相鄰的兩個符號合併成一個，詞表就這樣長出來。', module: m('M7 第 04 節', '../m7/#p04'), status: 'todo' },
-    { id: 'H2', group: 'H', title: '詞嵌入與位置編碼', brief: '查表得到向量，再加上位置資訊。', module: m('M7 第 07 節', '../m7/#p07'), status: 'todo' },
-    { id: 'H3', group: 'H', title: 'Self-Attention', brief: 'Query、Key、Value、分數、softmax、加權和，逐格算。', module: m('M7 第 05 節', '../m7/#p05'), status: 'todo' },
-    { id: 'H4', group: 'H', title: 'Transformer 一層', brief: '注意力、殘差連接、層正規化、前饋網路，完整走一遍。', module: m('M7 第 06 節', '../m7/#p06'), status: 'todo' },
-    { id: 'H5', group: 'H', title: '生成解碼', brief: 'Greedy、Temperature、Top-k、Top-p 如何決定下一個字。', module: m('M7 第 09 節', '../m7/#p09'), status: 'todo' },
-    { id: 'H6', group: 'H', title: 'RAG 檢索', brief: '切塊、關鍵字與向量檢索取前 K 段，再組成提示詞。', module: m('M8 第 07 節', '../m8/#p07'), status: 'todo' },
-    { id: 'H7', group: 'H', title: 'LoRA 微調', brief: '不動原權重，只學兩個小矩陣的乘積。', module: m('M7 生成式 AI', '../m7/'), status: 'todo' },
+    { id: 'H1', group: 'H', title: 'BPE 斷詞', brief: '最常相鄰的兩個符號合併成一個，詞表就這樣長出來。', module: m('M7 第 04 節', '../m7/#p04'), status: 'live' },
+    { id: 'H2', group: 'H', title: '詞嵌入與位置編碼', brief: '查表得到向量，再加上位置資訊。', module: m('M7 第 07 節', '../m7/#p07'), status: 'live' },
+    { id: 'H3', group: 'H', title: 'Self-Attention', brief: 'Query、Key、Value、分數、softmax、加權和，逐格算。', module: m('M7 第 05 節', '../m7/#p05'), status: 'live' },
+    { id: 'H4', group: 'H', title: 'Transformer 一層', brief: '注意力、殘差連接、層正規化、前饋網路，完整走一遍。', module: m('M7 第 06 節', '../m7/#p06'), status: 'live' },
+    { id: 'H5', group: 'H', title: '生成解碼', brief: 'Greedy、Temperature、Top-k、Top-p 如何決定下一個字。', module: m('M7 第 09 節', '../m7/#p09'), status: 'live' },
+    { id: 'H6', group: 'H', title: 'RAG 檢索', brief: '切塊、關鍵字與向量檢索取前 K 段，再組成提示詞。', module: m('M8 第 07 節', '../m8/#p07'), status: 'live' },
+    { id: 'H7', group: 'H', title: 'LoRA 微調', brief: '不動原權重，只學兩個小矩陣的乘積。', module: m('M7 生成式 AI', '../m7/'), status: 'live' },
 
-    { id: 'I1', group: 'I', title: 'SHAP 與排列重要度', brief: '三個特徵的所有加入順序，精確算出每個特徵的貢獻。', module: m('M9 第 11 節', '../m9/#p11'), status: 'todo' },
-    { id: 'J1', group: 'J', title: 'Q-learning', brief: '病房送藥路線：走一步、拿獎勵、更新 Q 表。', module: m('延伸參考', ''), status: 'todo' }
+    { id: 'I1', group: 'I', title: 'SHAP 與排列重要度', brief: '三個特徵的所有加入順序，精確算出每個特徵的貢獻。', module: m('M9 第 11 節', '../m9/#p11'), status: 'live' },
+    { id: 'J1', group: 'J', title: 'Q-learning', brief: '病房送藥路線：走一步、拿獎勵、更新 Q 表。', module: m('延伸參考', ''), status: 'live' }
   ];
   LAB.entry = id => LAB.registry.find(e => e.id === id);
 })(typeof window !== 'undefined' ? window : globalThis);
