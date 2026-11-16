@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>圖形元件展示 · 演算法實驗室</title>
+<link rel="stylesheet" href="../../assets/style.css"><link rel="stylesheet" href="lab.css?v=1.1">
+<style>.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px}.dg h3{font-size:15px;margin:0 0 6px;font-family:var(--mono)}</style></head>
+<body class="lab">
+<!-- 圖形元件展示頁（凍結檔）：11 種元件各有 A、B 兩個狀態，按鈕切換可看補間動畫。寫實驗檔前先來這裡看每個元件長什麼樣、吃哪些欄位（原始碼在下方 script）。 -->
+<div class="lab-wrap"><header class="lab-top"><h1>圖形元件展示</h1><p class="lead">11 種元件，各有兩個狀態。按「切換狀態」看前後兩步之間的補間動畫。實驗檔只需要像下方 script 那樣宣告資料。</p>
+<button class="btn primary" id="tg">切換狀態（目前 A）</button> <a class="btn" href="../">回實驗室目錄</a></header><div class="dg" id="dg"></div></div>
+<script src="core.js"></script><script src="viz.js"></script>
+<script>
+(function(){
+var g=LAB.grid(function(x,y){return (x-1)*(x-1)+3*(y+0.5)*(y+0.5);},-3,3,-3,3,30,20);
+var reg=function(t){return LAB.grid(function(x,y){return x+y>t?'c1':'c0';},0,10,0,10,20,14);};
+var D={
+ scatter:[{type:'scatter',axes:{x:{label:'x',min:0,max:10},y:{label:'y',min:0,max:10}},points:[{id:1,x:2,y:3,cls:'c0',label:'1'},{id:2,x:6,y:7,cls:'c1',label:'2'},{id:3,x:8,y:2,cls:'c5',label:'3'},{id:'q',x:5,y:5,cls:'hl',shape:'star',r:9,ring:true,label:'新'}],lines:[{id:'a',x1:5,y1:5,x2:2,y2:3,cls:'hl',label:'3.61'}],regions:reg(10),legend:[{cls:'c0',label:'否'},{cls:'c1',label:'是'}]},
+          {type:'scatter',axes:{x:{label:'x',min:0,max:10},y:{label:'y',min:0,max:10}},points:[{id:1,x:3,y:4,cls:'c0',label:'1',dim:true},{id:2,x:6,y:7,cls:'c1',label:'2',ring:true},{id:3,x:8,y:2,cls:'c1',label:'3'},{id:4,x:1,y:8,cls:'c2',shape:'diamond',r:9,label:'中心'},{id:'q',x:6,y:4,cls:'c1',shape:'star',r:9,label:'新'}],lines:[{id:'a',x1:6,y1:4,x2:6,y2:7,cls:'c1',w:3,label:'3.00'}],circles:[{id:'c',x:6,y:4,r:3,cls:'hl'}],regions:reg(8),legend:[{cls:'c0',label:'否'},{cls:'c1',label:'是'}]}],
+ line:[{type:'line',slot:'side',axes:{x:{label:'輪',min:1,max:6},y:{label:'損失',min:0,max:1}},series:[{id:'a',label:'訓練',pts:[[1,.9],[2,.6]],cls:'c0',dots:true},{id:'b',label:'驗證',pts:[[1,.95],[2,.7]],cls:'c1',dash:true}],marker:{x:2,label:'現在'}},
+       {type:'line',slot:'side',axes:{x:{label:'輪',min:1,max:6},y:{label:'損失',min:0,max:1}},series:[{id:'a',label:'訓練',pts:[[1,.9],[2,.6],[3,.4],[4,.3],[5,.22]],cls:'c0',dots:true},{id:'b',label:'驗證',pts:[[1,.95],[2,.7],[3,.6],[4,.62],[5,.7]],cls:'c1',dash:true}],marker:{x:5,y:.22,label:'現在'}}],
+ surface:[{type:'surface',slot:'side',grid:g,x:{label:'w'},y:{label:'b'},path:[{x:-2.5,y:2.5}],label:'起點',target:{x:1,y:-0.5}},
+          {type:'surface',slot:'side',grid:g,x:{label:'w'},y:{label:'b'},path:[{x:-2.5,y:2.5},{x:-1.4,y:0.9},{x:-0.4,y:0.1},{x:0.4,y:-0.3}],label:'第 3 步',target:{x:1,y:-0.5}}],
+ matrix:[{type:'matrix',slot:'side',values:[[1,8,8,1],[1,8,8,1],[2,7,9,0],[1,8,8,1]],digits:0,heat:true,window:{r:0,c:0,h:3,w:3},hl:[[0,0]],rowLabels:['r1','r2','r3','r4'],colLabels:['c1','c2','c3','c4']},
+         {type:'matrix',slot:'side',values:[[1,8,8,1],[1,8,8,1],[2,7,9,0],[1,8,8,1]],digits:0,heat:true,window:{r:1,c:1,h:3,w:3},hl:[[2,2]],rowLabels:['r1','r2','r3','r4'],colLabels:['c1','c2','c3','c4']}],
+ matrix2:[{type:'matrix',slot:'side',title:'heat:"div"、含空格與文字',values:[[0.5,null,null],[-0.8,0.2,null],[0.1,-0.3,'—']],heat:'div'},{type:'matrix',slot:'side',title:'heat:"div"、含空格與文字',values:[[0.5,0.9,null],[-0.8,0.2,-0.6],[0.1,-0.3,'—']],heat:'div',hl:[[0,1],[1,2]]}],
+ tree:[{type:'tree',slot:'side',nodes:[{id:'r',label:'血糖 ≤ 110？',sub:'12 人',active:true},{id:'a',parent:'r',label:'否',sub:'7 人',edge:'是',cls:'c0'},{id:'b',parent:'r',label:'待切',sub:'5 人',edge:'否'}]},
+       {type:'tree',slot:'side',nodes:[{id:'r',label:'血糖 ≤ 110？',sub:'12 人'},{id:'a',parent:'r',label:'否',sub:'7 人',edge:'是',cls:'c0'},{id:'b',parent:'r',label:'BMI ≤ 27？',sub:'5 人',edge:'否',active:true},{id:'c',parent:'b',label:'否',sub:'1 人',edge:'是',cls:'c0'},{id:'d',parent:'b',label:'是',sub:'4 人',edge:'否',cls:'c1'}]}],
+ dendro:[{type:'tree',slot:'side',mode:'dendro',hMax:5,nodes:[{id:'m1',h:1,sub:'1.0',active:true},{id:1,parent:'m1',label:'1'},{id:2,parent:'m1',label:'2'},{id:3,label:'3'},{id:4,label:'4'},{id:5,label:'5'}]},
+         {type:'tree',slot:'side',mode:'dendro',hMax:5,cut:2.8,nodes:[{id:'m3',h:4.2,sub:'4.2'},{id:'m1',parent:'m3',h:1,sub:'1.0',cls:'c0'},{id:1,parent:'m1',label:'1',cls:'c0'},{id:2,parent:'m1',label:'2',cls:'c0'},{id:'m2',parent:'m3',h:2.2,sub:'2.2',cls:'c1'},{id:3,parent:'m2',label:'3',cls:'c1'},{id:'m4',parent:'m2',h:1.4,sub:'1.4',cls:'c1'},{id:4,parent:'m4',label:'4',cls:'c1'},{id:5,parent:'m4',label:'5',cls:'c1'}]}],
+ network:[{type:'network',slot:'side',layerLabels:['輸入','注意力','輸出'],layers:[[{id:'a',label:'詞向量',shape:'box'}],[{id:'b',label:'Self-Attention',shape:'box',hl:true}],[{id:'c',label:'加總',shape:'box',value:'待算'}]],edges:[{from:'a',to:'b',active:true,label:'Q K V'},{from:'b',to:'c'}]},
+          {type:'network',slot:'side',layerLabels:['輸入','注意力','輸出'],layers:[[{id:'a',label:'詞向量',shape:'box'}],[{id:'b',label:'Self-Attention',shape:'box'}],[{id:'c',label:'加總',shape:'box',value:'0.82',hl:true}]],edges:[{from:'a',to:'b',label:'Q K V'},{from:'b',to:'c',active:true}]}],
+ bars:[{type:'bars',items:[{id:'a',label:'是',value:2,cls:'c1'},{id:'b',label:'否',value:1,cls:'c0'},{id:'c',label:'未定',value:0.5,cls:'c5'}],max:3},{type:'bars',items:[{id:'b',label:'否',value:2.6,cls:'c0',hl:true},{id:'a',label:'是',value:0.4,cls:'c1'},{id:'c',label:'未定',value:0,cls:'c5',dim:true}],max:3}],
+ table:[{type:'table',slot:'side',cols:[{key:'id',label:'#'},{key:'d',label:'距離',num:true},{key:'g',label:'類別'}],rows:[{id:1,cells:[1,2.5,{v:'是',cls:'c1'}]},{id:2,cells:[2,0.4,{v:'否',cls:'c0'}],hl:true},{id:3,cells:[3,1.2,null]}],hlCol:'d'},
+        {type:'table',slot:'side',cols:[{key:'id',label:'#'},{key:'d',label:'距離',num:true},{key:'g',label:'類別'}],rows:[{id:2,cells:[2,0.4,{v:'否',cls:'c0'}]},{id:3,cells:[3,1.1,{v:'是',cls:'c1'}],hl:true},{id:1,cells:[1,2.5,{v:'是',cls:'c1'}],dim:true}],hlCol:'d',caption:'排序後'}],
+ tokens:[{type:'tokens',groups:[{id:'s',label:'原句',items:[{id:1,text:'病人'},{id:2,text:'夜間',hl:true},{id:3,text:'下床'},{id:4,text:'步態不穩'}]},{id:'k',label:'保留',items:[]}]},
+         {type:'tokens',groups:[{id:'s',label:'原句',items:[{id:1,text:'病人',state:'cut'}]},{id:'k',label:'保留',items:[{id:2,text:'夜間',score:0.41,cls:'c0'},{id:3,text:'下床',score:0.62,cls:'c0'},{id:4,text:'步態不穩',score:1.1,cls:'c1',hl:true}]}]}],
+ sets:[{type:'sets',groups:[{id:'c',title:'候選 C2',note:'min support = 0.3',items:[{id:'ab',text:'降血糖＋降血壓',value:0.42},{id:'ac',text:'降血糖＋胃藥',value:0.08},{id:'bc',text:'降血壓＋降血脂',value:0.36}]},{id:'l',title:'頻繁 L2',items:[]}]},
+       {type:'sets',groups:[{id:'c',title:'候選 C2',note:'min support = 0.3',dim:true,items:[{id:'ac',text:'降血糖＋胃藥',value:0.08,state:'cut'}]},{id:'l',title:'頻繁 L2',hl:true,items:[{id:'ab',text:'降血糖＋降血壓',value:0.42,state:'keep'},{id:'bc',text:'降血壓＋降血脂',value:0.36,state:'keep'}]}]}],
+ note:[{type:'note',tone:'info',text:'狀態 A：一般說明。'},{type:'note',tone:'warn',text:'狀態 B：提醒（tone 可為 info、warn、good、bad）。'}]
+};
+var dg=document.getElementById('dg'), V={}, cur=0;
+Object.keys(D).forEach(function(k){var p=document.createElement('div');p.className='pane';var h=document.createElement('h3');h.textContent=D[k][0].type+(k!==D[k][0].type?'（'+k+'）':'');var b=document.createElement('div');p.append(h,b);dg.append(p);V[k]=LAB.viz.mount(b);V[k].update(D[k][0],false);});
+window.toggle=function(){cur=1-cur;Object.keys(D).forEach(function(k){V[k].update(D[k][cur],true);});document.getElementById('tg').textContent='切換狀態（目前 '+(cur?'B':'A')+'）';};
+document.getElementById('tg').onclick=window.toggle;
+})();
+</script></body></html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>演算法實驗室 · 資料科學 2027 Spring</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="core/lab.css?v=1.1">
+</head>
+<body class="lab">
+<!-- 演算法實驗室 · 目錄頁（凍結檔，請勿修改）。內容由 core/registry.js 產生 -->
+<div class="topbar"><div class="in">
+  <a class="brand" href="../"><span class="dot">DS</span>互動學習站</a>
+  <span class="meta">/ 演算法實驗室</span>
+  <span class="sp"></span>
+  <span class="meta" id="sum"></span>
+</div></div>
+<div class="lab-wrap">
+  <header class="lab-top">
+    <h1>演算法實驗室</h1>
+    <p class="lead">到 AI Studio 拉運算子之前，先看懂演算法每一步在算什麼。每個實驗都用一份小小的醫療模擬資料，按「下一步」就看到數字怎麼變；看完把同一份資料匯出，到 AI Studio 跑一次對答案。</p>
+    <div class="chips"><span class="tag gray">全部為模擬資料</span> <span class="tag">可改資料、改參數、換一組資料</span> <span class="tag blue">每個實驗附 CSV 與 AI Studio 對照</span></div>
+    <div class="lab-how">
+      <div><b>1　看資料</b>左邊是這次用的資料，數值可以直接改。</div>
+      <div><b>2　一步一步走</b>按「下一步」或鍵盤 →，也可以自動播放。</div>
+      <div><b>3　動手改</b>調參數、換一組資料，看結果怎麼變。</div>
+      <div><b>4　到 AI Studio 對答案</b>匯出 CSV，照頁面下方的運算子流程跑一次。</div>
+    </div>
+  </header>
+  <main id="groups"></main>
+  <p class="dnote" style="margin-top:28px">教學用網站 · 範例資料皆為模擬資料，非真實病人資料 · 交叉驗證與 ROC／門檻的互動在 <a href="../m2-2/#p08">M2-2 第 08 節</a>、<a href="../m2-2/#p10">第 10 節</a></p>
+</div>
+<script src="core/core.js?v=1.1"></script>
+<script src="core/registry.js?v=1.1"></script>
+<script>
+(function(){
+  var LAB=window.LAB, box=document.getElementById('groups'), done=[];
+  try{ done=JSON.parse(localStorage.getItem('lab:done')||'[]'); }catch(e){}
+  function el(t,c,x){var e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e;}
+  LAB.groups.forEach(function(g){
+    var list=LAB.registry.filter(function(e){return e.group===g.key;}); if(!list.length) return;
+    var sec=el('section','lab-grp'), h2=el('h2'); h2.append(el('span','g',g.key), g.name); sec.append(h2, el('p',null,g.desc));
+    var cards=el('div','lab-cards');
+    list.forEach(function(e){
+      var live=e.status==='live', c=el(live?'a':'div','lab-card'); if(live) c.href='exp.html?id='+e.id;
+      var st=el('span','st'); st.append(el('span','tag '+(live?'good':'gray'), live?'可操作':'建置中')); c.append(st);
+      var id=el('div','id',e.id); if(done.indexOf(e.id)>=0) id.append(el('span','ok','✓ 已走完')); c.append(id, el('h3',null,e.title), el('p',null,e.brief)); cards.append(c);
+    });
+    sec.append(cards); box.append(sec);
+  });
+  var n=LAB.registry.length, l=LAB.registry.filter(function(e){return e.status==='live';}).length;
+  document.getElementById('sum').textContent='共 '+n+' 個實驗 · '+l+' 個可操作';
+})();
+</script>
+</body>
+</html>
