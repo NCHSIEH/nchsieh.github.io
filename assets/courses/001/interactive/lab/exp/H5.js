@@ -110,14 +110,15 @@
       function views(st) {
         const cur = R.seq[st.seqIdx];
         const probsShow = st.stage === 'p' ? cur.probsP : st.stage === 'k' ? cur.probsK : cur.probs;
+        const logitVals = CANDS.map((_, i) => Math.max(0, cur.logits[i] + 2));
         const main = {
           type: 'bars', slot: 'main',
-          title: '候選詞機率分布（第 ' + (st.seqIdx + 1) + ' 詞）',
-          max: 1, digits: 3,
+          title: st.showProb ? '候選詞機率分布（第 ' + (st.seqIdx + 1) + ' 詞）' : '候選詞原始分數 Logit（+2 平移示意）',
+          max: st.showProb ? 1 : Math.max(1, Math.ceil(M.max(logitVals) * 1.1)), digits: 3,
           items: CANDS.map((c, i) => ({
             id: 'c' + i,
             label: c.tok,
-            value: st.showProb ? probsShow[i] : Math.max(0, cur.logits[i] + 2),
+            value: st.showProb ? probsShow[i] : logitVals[i],
             cls: st.pickedIdx === i ? 'hl' : (probsShow[i] <= 0 && st.showProb ? 'dim' : 'c0'),
             dim: st.showProb && probsShow[i] <= 0,
             hl: st.pickedIdx === i

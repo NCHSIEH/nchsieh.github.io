@@ -85,10 +85,11 @@
           digits: 2, heat: true,
           hl: st.hlCell ? [st.hlCell] : []
         };
+        const maxW = st.showSoft ? Math.max(0.3, M.max(curH.A[qi]) * 1.2) : 1;
         const side = {
           type: 'bars', slot: 'side',
           title: '「' + qTok + '」對句中各詞的注意力權重',
-          max: 1, digits: 3,
+          max: maxW, digits: 3,
           items: R.tokens.map((t, j) => ({
             id: 'b' + j, label: t,
             value: st.showSoft ? curH.A[qi][j] : 0,

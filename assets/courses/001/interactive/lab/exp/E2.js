@@ -127,15 +127,16 @@
           }))
         };
         const minL = Math.min(-5, M.min(st.scores) - 2);
+        const barVals = [0, 1, 2].map(c => st.norm ? R.post[c] : Math.max(0, st.scores[c] - minL));
         const side = {
           type: 'bars', slot: 'side',
           title: st.norm ? '三類後驗機率' : '三類累計對數分數 ln P(c) + Σ ln P(w|c)',
-          max: st.norm ? 1 : 0,
+          max: st.norm ? 1 : Math.max(5, Math.ceil(M.max(barVals) * 1.15)),
           digits: 3,
           items: [0, 1, 2].map(c => ({
             id: 'c' + c,
             label: CLAB[c] + (st.norm ? '' : ' (' + f(st.scores[c], 2) + ')'),
-            value: st.norm ? R.post[c] : Math.max(0, st.scores[c] - minL),
+            value: barVals[c],
             cls: 'c' + c,
             hl: st.norm && R.pred === c
           }))

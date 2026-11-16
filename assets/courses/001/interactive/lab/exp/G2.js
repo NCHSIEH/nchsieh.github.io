@@ -119,10 +119,11 @@
           series.push({ id: 'fc', label: '預測', pts: fcPts, cls: 'c1', dash: true, dots: true });
         }
         const allY = pts.map(x => x[1]).concat(st.showFc ? (showDiff ? R.fcSeries : R.fcOrig) : []);
+        const yLo = M.min(allY), yHi = M.max(allY), yPad = Math.max(10, (yHi - yLo) * 0.08);
         const main = {
           type: 'line', slot: 'main',
           title: showDiff ? '一次差分序列 Δyₜ = yₜ − yₜ₋₁' : '月門診量與 ARIMA(' + R.arP + ',' + R.d + ',0) 預測',
-          axes: { x: { label: '期數 (月)', min: 1, max: R.n + R.H }, y: { label: showDiff ? '月增減量' : '門診人次', min: Math.floor(M.min(allY) * 0.95), max: Math.ceil(M.max(allY) * 1.05) } },
+          axes: { x: { label: '期數 (月)', min: 1, max: R.n + R.H }, y: { label: showDiff ? '月增減量' : '門診人次', min: Math.floor(yLo - yPad), max: Math.ceil(yHi + yPad) } },
           series
         };
         const side = {

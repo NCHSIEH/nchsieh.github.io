@@ -158,10 +158,12 @@
             hl: st.hlAct === idx
           }))
         };
+        const allR = R.epHistory.map(e => e.totR);
+        const yMin = Math.min(-12, Math.floor(M.min(allR) - 1)), yMax = Math.max(12, Math.ceil(M.max(allR) + 1));
         const line = {
           type: 'line', slot: 'bottom',
           title: '每回合累積獎勵變化',
-          axes: { x: { label: '回合', min: 1, max: R.episodes }, y: { label: '總獎勵', min: -12, max: 12 } },
+          axes: { x: { label: '回合', min: 1, max: R.episodes }, y: { label: '總獎勵', min: yMin, max: yMax } },
           series: [{ id: 'rew', label: '總獎勵', pts: st.rewPts.length ? st.rewPts : [[1, R.epHistory[0].totR]], cls: 'c1', dots: false }],
           marker: st.rewPts.length ? { x: st.rewPts[st.rewPts.length - 1][0], y: st.rewPts[st.rewPts.length - 1][1], label: 'Ep ' + st.rewPts[st.rewPts.length - 1][0] } : null
         };
