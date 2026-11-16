@@ -238,3 +238,8 @@ a.lab-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shado
   .lv-node .t1{font-size:17px!important} .lv-node .t2{font-size:15px!important} .lv-wire .wl,.lv-wire .gl{font-size:15px!important} .lv-neuron .nv{font-size:16px!important}
   .ais-grid,.lab-how{grid-template-columns:1fr} .lab-params .p input[type=range]{width:110px}
 }
+
+/* ---------- 懸停提示 Tooltip ---------- */
+.lab-params .p-lbl[data-tip]{border-bottom:1px dotted var(--line2);cursor:help;padding-bottom:1px}
+.lab-tip{position:fixed;z-index:9999;max-width:300px;background:#1e293b;color:#f8fafc;font-size:13.5px;line-height:1.55;padding:8px 12px;border-radius:9px;box-shadow:0 8px 24px rgba(15,23,42,.24);pointer-events:none;white-space:pre-line;opacity:0;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
+.lab-tip.show{opacity:1;transform:translateY(0)}
