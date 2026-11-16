@@ -104,13 +104,16 @@
         const points = rows.map(r => ({
           id: 'p' + r.id, x: r.bmi, y: r.sbp, cls: 'c0', label: String(r.id), r: 6
         }));
+        const curF = st.upto === 0 ? rows.map(() => R.f0) : R.rounds[st.upto - 1].F;
+        const resLines = st.showLine ? rows.map((r, i) => ({
+          id: 'res' + r.id, x1: r.bmi, y1: r.sbp, x2: r.bmi, y2: curF[i], cls: 'c4', dash: true, w: 1.3
+        })) : [];
         const main = {
           type: 'scatter', slot: 'main',
           title: 'BMI × 收縮壓與階梯預測線（已加 ' + st.upto + ' 棵樹）',
-          axes: AX, points, lines: st.showLine ? stepLines(st.upto) : [], circles: [],
-          legend: [{ cls: 'c0', label: '病人實際值' }, { cls: 'c1', shape: 'line', label: 'GBDT 階梯預測' }]
+          axes: AX, points, lines: st.showLine ? resLines.concat(stepLines(st.upto)) : [], circles: [],
+          legend: [{ cls: 'c0', label: '病人實際值' }, { cls: 'c1', shape: 'line', label: 'GBDT 階梯預測' }, { cls: 'c4', shape: 'line', label: '殘差' }]
         };
-        const curF = st.upto === 0 ? rows.map(() => R.f0) : R.rounds[st.upto - 1].F;
         const side = {
           type: 'table', slot: 'side',
           title: '每筆預測與殘差（第 ' + st.upto + ' 輪）',

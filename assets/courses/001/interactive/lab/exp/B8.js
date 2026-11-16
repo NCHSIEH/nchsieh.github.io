@@ -7,6 +7,20 @@
   const FLAB = { glu: '空腹血糖', bmi: 'BMI' };
   const AX = { x: { label: '空腹血糖（mg/dL）', min: 60, max: 220 }, y: { label: 'BMI (kg/m²)', min: 15, max: 40 } };
   const pick = r => ({ id: r.id, glu: r.glu, bmi: r.bmi, dm: r.dm });
+
+  function makeRows(seed) {
+    const rs = LAB.data.clinic(seed, 10).map(pick);
+    const negs = rs.filter(r => r.dm === 0).sort((a, b) => a.bmi - b.bmi);
+    const poss = rs.filter(r => r.dm === 1).sort((a, b) => b.bmi - a.bmi);
+    if (negs[0] && poss[0]) {
+      negs[0].glu = 148; negs[0].bmi = 21.5;
+      poss[0].glu = 96; poss[0].bmi = 33.5;
+    }
+    if (negs[1]) {
+      negs[1].glu = 82; negs[1].bmi = 34.0;
+    }
+    return rs;
+  }
   const cls = dm => dm ? 'c1' : 'c0';
 
   function fitAdaBoost(rows, rounds) {
@@ -75,7 +89,7 @@
       scenario: '門診健檢：10 位病人的血糖與 BMI，用單一切點樹樁逐輪強化分類',
       columns: COLS,
       editable: ['glu', 'bmi', 'dm'],
-      small: seed => LAB.data.clinic(seed, 10).map(pick)
+      small: makeRows
     },
     params: [
       { key: 'rounds', label: '訓練輪數 T', type: 'int', min: 1, max: 6, step: 1, value: 3 }
@@ -108,10 +122,18 @@
           if (sm.ft === 'glu') return { id: 'st' + idx, x1: sm.th, y1: AX.y.min, x2: sm.th, y2: AX.y.max, cls: isCur ? 'hl' : 'dim', dash: !isCur, w: isCur ? 2.5 : 1.5, label: isCur ? 'R' + (idx + 1) : null };
           return { id: 'st' + idx, x1: AX.x.min, y1: sm.th, x2: AX.x.max, y2: sm.th, cls: isCur ? 'hl' : 'dim', dash: !isCur, w: isCur ? 2.5 : 1.5, label: isCur ? 'R' + (idx + 1) : null };
         });
+        const regions = st.showReg ? LAB.grid((x, y) => {
+          let sc = 0;
+          R.history.forEach(h => {
+            const v = h.stump.ft === 'glu' ? x : y;
+            sc += h.alpha * (v <= h.stump.th ? h.stump.pol : -h.stump.pol);
+          });
+          return sc >= 0 ? 'c1' : 'c0';
+        }, AX.x.min, AX.x.max, AX.y.min, AX.y.max, 30, 20) : null;
         const main = {
           type: 'scatter', slot: 'main',
           title: '病人權重大小與樹樁切線（圓越大權重越高）',
-          axes: AX, points, lines, circles: [],
+          axes: AX, points, lines, circles: [], regions,
           legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '本輪樹樁' }]
         };
         const side = {
@@ -149,7 +171,8 @@
         scores: M.range(n, () => 0),
         miss: null,
         stumps: [],
-        alphasShown: 0
+        alphasShown: 0,
+        showReg: false
       };
       const add = (line, title, say, calc, extra) => steps.push(Object.assign({ line, title, say, calc: calc || [], views: views(st), focus: [] }, extra));
 
@@ -180,6 +203,7 @@
       });
 
       st.miss = rows.map((r, i) => R.finalPreds[i] !== r.dm);
+      st.showReg = true;
       add(8, '最終加權投票結果', '把所有輪的 αₜ × hₜ(x) 相加，大於 0 判為「是」，否則為「否」。', [
         '集成訓練準確率 = ' + LAB.pct(R.acc, 1) + '（答對 ' + rows.filter((r, i) => R.finalPreds[i] === r.dm).length + ' / ' + n + ' 人）'
       ]);

@@ -5,6 +5,19 @@
   const COLS = LAB.data.columns('clinic', ['bmi', 'glu', 'dm'], { dm: 'y' });
   const AX = { x: { label: 'BMI (kg/m²)', min: 15, max: 40 }, y: { label: '空腹血糖（mg/dL）', min: 60, max: 220 } };
   const pick = r => ({ id: r.id, bmi: r.bmi, glu: r.glu, dm: r.dm });
+
+  function makeRows(seed) {
+    const rs = LAB.data.clinic(seed, 12).map(pick);
+    const negs = rs.filter(r => r.dm === 0).sort((a, b) => (b.glu + b.bmi * 2) - (a.glu + a.bmi * 2));
+    const poss = rs.filter(r => r.dm === 1).sort((a, b) => (a.glu + a.bmi * 2) - (b.glu + b.bmi * 2));
+    if (negs[0] && poss[0]) {
+      negs[0].glu = Math.max(negs[0].glu, 126);
+      negs[0].bmi = Math.max(negs[0].bmi, 28.2);
+      poss[0].glu = Math.min(poss[0].glu, 108);
+      poss[0].bmi = Math.min(poss[0].bmi, 25.4);
+    }
+    return rs;
+  }
   const cls = dm => dm ? 'c1' : 'c0';
 
   function train(rows, p) {
@@ -70,7 +83,7 @@
       scenario: '門診健檢：用標準化後的 BMI 與空腹血糖，預測病人是否有糖尿病',
       columns: COLS,
       editable: ['bmi', 'glu', 'dm'],
-      small: seed => LAB.data.clinic(seed, 12).map(pick)
+      small: makeRows
     },
     params: [
       { key: 'lr', label: '學習率 η', type: 'num', min: 0.1, max: 2, step: 0.1, value: 0.5 },

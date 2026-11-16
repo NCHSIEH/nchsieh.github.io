@@ -7,6 +7,17 @@
   const FLAB = { age: '年齡', bmi: 'BMI', glu: '空腹血糖' };
   const AX = { x: { label: '年齡（歲）', min: 20, max: 90 }, y: { label: '空腹血糖（mg/dL）', min: 60, max: 220 } };
   const pick = r => ({ id: r.id, age: r.age, bmi: r.bmi, glu: r.glu, dm: r.dm });
+
+  function makeRows(seed) {
+    const rs = LAB.data.clinic(seed, 14).map(pick);
+    const negs = rs.filter(r => r.dm === 0).sort((a, b) => a.age - b.age);
+    const poss = rs.filter(r => r.dm === 1).sort((a, b) => b.age - a.age);
+    if (negs[0] && poss[0]) {
+      negs[0].glu = 128; negs[0].age = 31; negs[0].bmi = 22.0;
+      poss[0].glu = 104; poss[0].age = 68; poss[0].bmi = 30.5;
+    }
+    return rs;
+  }
   const cls = dm => dm ? 'c1' : 'c0';
 
   function impurity(sub, crit) {
@@ -96,7 +107,7 @@
       scenario: '門診健檢：用年齡、BMI 與空腹血糖建立決策樹，判斷是否有糖尿病',
       columns: COLS,
       editable: ['age', 'bmi', 'glu', 'dm'],
-      small: seed => LAB.data.clinic(seed, 14).map(pick)
+      small: makeRows
     },
     params: [
       { key: 'criterion', label: '不純度指標', type: 'choice', value: 'gini', options: [{ v: 'gini', label: 'Gini' }, { v: 'entropy', label: '資訊增益' }] },

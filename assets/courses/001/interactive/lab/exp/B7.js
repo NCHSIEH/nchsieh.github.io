@@ -9,13 +9,14 @@
   const cls = y => y ? 'c1' : 'c0';
 
   function makeRows(seed) {
-    for (let off = 0; off < 30; off++) {
-      const rs = LAB.data.readmit(seed + off * 19, 16).map(pick);
-      const pos = rs.filter(r => r.readmit === 1).length;
-      if (pos >= 5 && pos <= 7) return rs;
-    }
+    const r = LAB.rng(7710 + seed);
     const rs = LAB.data.readmit(seed, 16).map(pick);
-    for (let i = 0; i < 5; i++) rs[i].readmit = 1;
+    const ranked = rs.map((x, idx) => ({
+      idx,
+      sc: x.los * 0.45 + x.prior * 2.1 + x.cci * 0.9 + x.age * 0.04 + (r() - 0.5) * 2.2
+    })).sort((a, b) => b.sc - a.sc);
+    rs.forEach(x => { x.readmit = 0; });
+    for (let i = 0; i < 6; i++) rs[ranked[i].idx].readmit = 1;
     return rs;
   }
 

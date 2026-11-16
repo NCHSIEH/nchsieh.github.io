@@ -6,6 +6,16 @@
   const AX = { x: { label: 'BMI (kg/m²)', min: 15, max: 40 }, y: { label: '收縮壓 (mmHg)', min: 90, max: 190 } };
   const pick = r => ({ id: r.id, bmi: r.bmi, sbp: r.sbp });
 
+  function makeRows(seed) {
+    const r = LAB.rng(2100 + seed);
+    const base = LAB.data.clinic(seed, 12).map(pick);
+    return base.map(o => ({
+      id: o.id,
+      bmi: o.bmi,
+      sbp: Math.round(68 + 2.25 * o.bmi + (r() - 0.5) * 14)
+    }));
+  }
+
   function solve(rows, p) {
     const xs = LAB.col(rows, 'bmi'), ys = LAB.col(rows, 'sbp'), n = rows.length;
     const mx = M.mean(xs), sx = M.sd(xs) || 1, my = M.mean(ys);
@@ -58,7 +68,7 @@
       scenario: '門診健檢：用 BMI 預測收縮壓，比較最小平方法直接解與梯度下降',
       columns: COLS,
       editable: ['bmi', 'sbp'],
-      small: seed => LAB.data.clinic(seed, 12).map(pick)
+      small: makeRows
     },
     params: [
       { key: 'method', label: '求解方式', type: 'choice', value: 'gd', options: [{ v: 'ols', label: '最小平方法直接解' }, { v: 'gd', label: '梯度下降' }] },

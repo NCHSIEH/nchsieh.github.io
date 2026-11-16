@@ -12,7 +12,7 @@
     const mB = M.mean(bmis), sB = M.sd(bmis) || 1;
     const mG = M.mean(glus), sG = M.sd(glus) || 1;
     const r = LAB.rng(8700 + seed);
-    const out = { id: 13, bmi: Math.round((mB + (2.3 + r() * 0.4) * sB) * 10) / 10, glu: Math.round(mG + (2.1 + r() * 0.4) * sG) };
+    const out = { id: 13, bmi: Math.round((mB - (2.2 + r() * 0.3) * sB) * 10) / 10, glu: Math.round(mG + (2.3 + r() * 0.3) * sG) };
     return base.concat([out]);
   }
 
