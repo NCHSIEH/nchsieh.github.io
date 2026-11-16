@@ -156,7 +156,7 @@
         const side = {
           type: 'bars', slot: 'side',
           title: '檢索分數比較',
-          max: Math.max(0.05, M.max(scShow)), digits: 3,
+          max: M.max(scShow) * 1.1 || 0.05, digits: 3,
           items: R.texts.map((_, i) => ({
             id: 'b' + i, label: 'C' + (i + 1),
             value: scShow[i],
