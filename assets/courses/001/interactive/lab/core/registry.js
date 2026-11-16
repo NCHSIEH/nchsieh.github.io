@@ -46,14 +46,14 @@
     { id: 'D1', group: 'D', title: 'Apriori', brief: '一層層產生候選項目集、剪枝，再算 support、confidence、lift。', module: m('M4 第 12 節', '../m4/#p12'), status: 'live' },
     { id: 'D2', group: 'D', title: 'FP-Growth', brief: '把交易壓成一棵 FP-tree，不產生候選就找出頻繁項目集。', module: m('M4 第 13 節', '../m4/#p13'), status: 'live' },
 
-    { id: 'E1', group: 'E', title: '斷詞與 TF-IDF', brief: '最大匹配斷詞、詞頻、逆文件頻率，到文件之間的餘弦相似度。', module: m('M6 第 05 節', '../m6/#p05'), status: 'todo' },
-    { id: 'E2', group: 'E', title: '文本分類：詞袋 Naive Bayes', brief: '一句護理紀錄，逐詞乘上機率判斷類別。', module: m('M6 第 09 節', '../m6/#p09'), status: 'todo' },
-    { id: 'E3', group: 'E', title: 'Word2Vec', brief: '滑動視窗產生詞對，詞向量一步步靠近它的鄰居。', module: m('M6 第 20 節', '../m6/#p20'), status: 'todo' },
-    { id: 'E4', group: 'E', title: '主題模型 LDA', brief: '每個詞反覆重抽主題，主題慢慢成形。', module: m('M6 第 11 節', '../m6/#p11'), status: 'todo' },
+    { id: 'E1', group: 'E', title: '斷詞與 TF-IDF', brief: '最大匹配斷詞、詞頻、逆文件頻率，到文件之間的餘弦相似度。', module: m('M6 第 05 節', '../m6/#p05'), status: 'live' },
+    { id: 'E2', group: 'E', title: '文本分類：詞袋 Naive Bayes', brief: '一句護理紀錄，逐詞乘上機率判斷類別。', module: m('M6 第 09 節', '../m6/#p09'), status: 'live' },
+    { id: 'E3', group: 'E', title: 'Word2Vec', brief: '滑動視窗產生詞對，詞向量一步步靠近它的鄰居。', module: m('M6 第 20 節', '../m6/#p20'), status: 'live' },
+    { id: 'E4', group: 'E', title: '主題模型 LDA', brief: '每個詞反覆重抽主題，主題慢慢成形。', module: m('M6 第 11 節', '../m6/#p11'), status: 'live' },
 
     { id: 'F1', group: 'F', title: '神經網路：前向與反向傳播', brief: '2-2-1 網路，每個權重的梯度怎麼算、怎麼更新。', module: m('M5 第 03 節', '../m5/#p03'), status: 'live' },
     { id: 'F2', group: 'F', title: '優化器比較', brief: 'SGD、Momentum、Adam 在同一個損失曲面上各走出什麼路線。', module: m('M5 第 05 節', '../m5/#p05'), status: 'todo' },
-    { id: 'F3', group: 'F', title: 'CNN：卷積與池化', brief: '卷積核一格一格滑過影像，再經 ReLU 與池化。', module: m('M5 第 13 節', '../m5/#p13'), status: 'todo' },
+    { id: 'F3', group: 'F', title: 'CNN：卷積與池化', brief: '卷積核一格一格滑過影像，再經 ReLU 與池化。', module: m('M5 第 13 節', '../m5/#p13'), status: 'live' },
     { id: 'F4', group: 'F', title: 'RNN 與 LSTM', brief: '沿時間展開，遺忘閘、輸入閘、輸出閘各算出什麼。', module: m('M5 深度學習', '../m5/'), status: 'todo' },
     { id: 'F5', group: 'F', title: 'Autoencoder', brief: '壓縮再還原，還原不回來的就是異常。', module: m('M5 第 17 節', '../m5/#p17'), status: 'todo' },
 
