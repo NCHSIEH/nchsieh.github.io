@@ -44,7 +44,7 @@
     list.forEach(function(e){
       var live=e.status==='live', c=el(live?'a':'div','lab-card'); if(live) c.href='exp.html?id='+e.id;
       var st=el('span','st'); st.append(el('span','tag '+(live?'good':'gray'), live?'可操作':'建置中')); c.append(st);
-      var id=el('div','id',e.id); if(done.indexOf(e.id)>=0) id.append(el('span','ok','✓ 已走完')); c.append(id, el('h3',null,LAB.displayTitle(e.id,e.title)), el('p',null,e.brief)); cards.append(c);
+      var id=el('div','id',e.id); if(done.indexOf(e.id)>=0) id.append(el('span','ok','✓ 已走完')); c.append(id, el('h3',null,e.title), el('p',null,e.brief)); cards.append(c);
     });
     sec.append(cards); box.append(sec);
   });
