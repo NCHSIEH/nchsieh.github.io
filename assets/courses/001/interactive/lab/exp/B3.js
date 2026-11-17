@@ -119,11 +119,14 @@
 
       function views(st) {
         const h = R.hist[st.ep];
-        const points = rows.map((r, i) => ({
-          id: 'p' + r.id, x: r.bmi, y: r.glu, cls: cls(r.dm),
-          hl: st.cur === r.id, ring: st.ep > 0 && (h.ps[i] >= p.threshold ? 1 : 0) !== r.dm,
-          label: String(r.id), r: 6
-        }));
+        const points = rows.map((r, i) => {
+          const isErr = st.ep > 0 && (h.ps[i] >= p.threshold ? 1 : 0) !== r.dm;
+          return {
+            id: 'p' + r.id, x: r.bmi, y: r.glu, cls: cls(r.dm),
+            hl: st.cur === r.id, ring: isErr,
+            label: String(r.id), r: (st.cur === r.id || isErr) ? 7 : 5.5
+          };
+        });
         const regions = st.showReg ? LAB.grid((x, y) => {
           const z1 = (x - R.mB) / R.sB, z2 = (y - R.mG) / R.sG;
           return M.sigmoid(h.w1 * z1 + h.w2 * z2 + h.b) >= p.threshold ? 'c1' : 'c0';

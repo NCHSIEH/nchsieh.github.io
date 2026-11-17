@@ -111,7 +111,7 @@
             hl: st.cur === i,
             ring: st.cur === i || (st.done && isNoise),
             label: String(r.id),
-            r: 6
+            r: st.cur === i ? 8 : (st.rolesKnown && R.isCore[i] ? 6.5 : 5.5)
           };
         });
         const circles = st.cur != null ? [{ id: 'eps', x: R.Z[st.cur][0], y: R.Z[st.cur][1], r: R.eps, ry: R.eps, cls: 'hl' }] : [];

@@ -108,8 +108,8 @@
           const rl = R.rules[i];
           const isCur = i === st.hlRule;
           const x0 = Math.max(AX.x.min, rl.gMin), y0 = Math.max(AX.y.min, rl.bMin);
-          if (rl.gMin > -Infinity) lines.push({ id: 'rg' + i, x1: x0, y1: y0, x2: x0, y2: AX.y.max, cls: isCur ? 'hl' : 'c1', w: isCur ? 2.5 : 1.5, dash: !isCur });
-          if (rl.bMin > -Infinity) lines.push({ id: 'rb' + i, x1: x0, y1: y0, x2: AX.x.max, y2: y0, cls: isCur ? 'hl' : 'c1', w: isCur ? 2.5 : 1.5, dash: !isCur });
+          if (rl.gMin > -Infinity) lines.push({ id: 'rg' + i, x1: x0, y1: y0, x2: x0, y2: AX.y.max, cls: isCur ? 'hl' : 'c1', w: isCur ? 3 : 1.4, dash: !isCur });
+          if (rl.bMin > -Infinity) lines.push({ id: 'rb' + i, x1: x0, y1: y0, x2: AX.x.max, y2: y0, cls: isCur ? 'hl' : 'c1', w: isCur ? 3 : 1.4, dash: !isCur });
         }
         const regions = st.showReg ? LAB.grid((x, y) => cls(R.predOne({ glu: x, bmi: y }).pred), AX.x.min, AX.x.max, AX.y.min, AX.y.max, 28, 18) : null;
         const leg = [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '目前規則邊界' }];

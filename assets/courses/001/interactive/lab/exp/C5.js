@@ -119,12 +119,12 @@
         const lines = [];
         if (st.showAxes && !R.use4) {
           const v1 = R.eigs[0].vec, v2 = R.eigs[1].vec;
-          lines.push({ id: 'pc1', x1: -2.8 * v1[0], y1: -2.8 * v1[1], x2: 2.8 * v1[0], y2: 2.8 * v1[1], cls: 'c1', w: 2.5, label: 'PC1' });
-          lines.push({ id: 'pc2', x1: -2.2 * v2[0], y1: -2.2 * v2[1], x2: 2.2 * v2[0], y2: 2.2 * v2[1], cls: 'c2', dash: true, w: 1.8, label: 'PC2' });
+          lines.push({ id: 'pc1', x1: -2.8 * v1[0], y1: -2.8 * v1[1], x2: 2.8 * v1[0], y2: 2.8 * v1[1], cls: 'c1', w: 3, label: 'PC1' });
+          lines.push({ id: 'pc2', x1: -2.2 * v2[0], y1: -2.2 * v2[1], x2: 2.2 * v2[0], y2: 2.2 * v2[1], cls: 'c2', dash: true, w: 1.6, label: 'PC2' });
         }
         if (st.showProj && !R.use4) {
           rows.forEach((r, i) => {
-            lines.push({ id: 'pr' + r.id, x1: R.Z[i][0], y1: R.Z[i][1], x2: R.recon[i][0], y2: R.recon[i][1], cls: 'c4', dash: true, w: 1.3 });
+            lines.push({ id: 'pr' + r.id, x1: R.Z[i][0], y1: R.Z[i][1], x2: R.recon[i][0], y2: R.recon[i][1], cls: 'c4', dash: true, w: 1.2 });
           });
         }
         const leg = [{ cls: 'c0', label: '原始點' }, { cls: 'c1', label: 'PC1 / 重建點' }];

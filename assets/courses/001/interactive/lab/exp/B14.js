@@ -136,7 +136,7 @@
             }
             return cur.meanY;
           };
-          out.push({ id: 'cv' + i, x1, y1: predAt(x1), x2, y2: predAt(x2), cls: 'c1', w: 2.5 });
+          out.push({ id: 'cv' + i, x1, y1: predAt(x1), x2, y2: predAt(x2), cls: 'c1', w: 3 });
         }
         return out;
       }

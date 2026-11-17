@@ -93,9 +93,9 @@
         const points = rows.map((r, i) => ({
           id: 'p' + r.id, x: R.Z[i][0], y: R.Z[i][1],
           cls: CL[res.a[i]], hl: st.hlPt === i, ring: st.hlPt === i,
-          label: String(r.id), r: 6
+          label: String(r.id), r: st.hlPt === i ? 8 : 5.5
         }));
-        res.cent.forEach((c, k) => points.push({ id: 'c' + k, x: c[0], y: c[1], cls: CL[k], shape: 'diamond', r: 8 }));
+        res.cent.forEach((c, k) => points.push({ id: 'c' + k, x: c[0], y: c[1], cls: CL[k], shape: 'diamond', r: 9 }));
         const lines = [];
         if (st.hlPt != null) {
           const i = st.hlPt, own = res.a[i], oth = res.sils[i].bestOther;

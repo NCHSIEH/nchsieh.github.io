@@ -121,7 +121,7 @@
           const x2 = AX.x.min + (AX.x.max - AX.x.min) * ((i + 1) / N);
           const y1 = M.clamp(m.pred(x1), AX.y.min, AX.y.max);
           const y2 = M.clamp(m.pred(x2), AX.y.min, AX.y.max);
-          out.push({ id: 'cv' + i, x1, y1, x2, y2, cls: 'c1', w: 2.5 });
+          out.push({ id: 'cv' + i, x1, y1, x2, y2, cls: 'c1', w: 3 });
         }
         return out;
       }

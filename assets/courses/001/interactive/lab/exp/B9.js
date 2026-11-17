@@ -91,7 +91,7 @@
         for (let i = 0; i < xs.length - 1; i++) {
           const mid = (xs[i] + xs[i + 1]) / 2;
           const yv = evalF(mid);
-          out.push({ id: 'h' + i, x1: xs[i], y1: yv, x2: xs[i + 1], y2: yv, cls: 'c1', w: 2.5 });
+          out.push({ id: 'h' + i, x1: xs[i], y1: yv, x2: xs[i + 1], y2: yv, cls: 'c1', w: 3 });
           if (i < xs.length - 2) {
             const yNext = evalF((xs[i + 1] + xs[i + 2]) / 2);
             out.push({ id: 'v' + i, x1: xs[i + 1], y1: yv, x2: xs[i + 1], y2: yNext, cls: 'c1', dash: true, w: 1.5 });

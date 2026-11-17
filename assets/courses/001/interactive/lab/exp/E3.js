@@ -161,7 +161,7 @@
           id: 'w' + i, x: st.Win[i][0], y: st.Win[i][1],
           cls: i === st.hlA ? 'hl' : (i === st.hlB ? 'c1' : (st.done && i === R.targetIdx ? 'c1' : (topSimSet.has(i) ? 'good' : 'c0'))),
           hl: i === st.hlA || i === st.hlB || topSimSet.has(i),
-          label: w, r: 6
+          label: w, r: (i === st.hlA || i === st.hlB || topSimSet.has(i) || (st.done && i === R.targetIdx)) ? 8 : 5.5
         }));
         const lines = [];
         if (st.hlA >= 0 && st.hlB >= 0 && st.hlA < showWords.length && st.hlB < showWords.length) {

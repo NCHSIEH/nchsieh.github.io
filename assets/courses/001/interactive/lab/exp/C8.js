@@ -112,11 +112,11 @@
           ring: i === st.focusIdx,
           hl: i === st.focusIdx,
           label: String(r.id),
-          r: st.allDone ? Math.round(M.clamp(4 + R.scores[i] * 7, 5, 12)) : 6
+          r: st.allDone ? Math.round(M.clamp(4 + R.scores[i] * 7, 5, 12)) : (i === st.focusIdx ? 8 : 5.5)
         }));
         const lines = st.cuts.map((c, idx) => {
           const isNew = idx === st.cuts.length - 1;
-          const lc = isNew ? 'hl' : 'c2', lw = isNew ? 2.5 : 1.4, ld = !isNew;
+          const lc = isNew ? 'hl' : 'c2', lw = isNew ? 3 : 1.3, ld = !isNew;
           if (c.ft === 'bmi') return { id: 'cut' + idx, x1: c.th, y1: AX.y.min, x2: c.th, y2: AX.y.max, cls: lc, dash: ld, w: lw, label: '刀' + (idx + 1) };
           return { id: 'cut' + idx, x1: AX.x.min, y1: c.th, x2: AX.x.max, y2: c.th, cls: lc, dash: ld, w: lw, label: '刀' + (idx + 1) };
         });

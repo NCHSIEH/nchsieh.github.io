@@ -107,11 +107,11 @@
           lines.push({ id: 'olsRef', x1: AX.x.min, y1: yOls(AX.x.min), x2: AX.x.max, y2: yOls(AX.x.max), cls: 'good', dash: true, w: 1.8, label: 'OLS 目標' });
         }
         if (st.showLine) {
-          lines.push({ id: 'reg', x1: AX.x.min, y1: yAt(AX.x.min), x2: AX.x.max, y2: yAt(AX.x.max), cls: p.method === 'ols' ? 'good' : 'c1', w: 2.5, label: p.method === 'ols' ? 'OLS 迴歸線' : 'GD 迴歸線' });
+          lines.push({ id: 'reg', x1: AX.x.min, y1: yAt(AX.x.min), x2: AX.x.max, y2: yAt(AX.x.max), cls: p.method === 'ols' ? 'good' : 'c1', w: 3, label: p.method === 'ols' ? 'OLS 迴歸線' : 'GD 迴歸線' });
         }
         if (st.showRes) {
           rows.forEach(r => {
-            lines.push({ id: 'res' + r.id, x1: r.bmi, y1: r.sbp, x2: r.bmi, y2: yAt(r.bmi), cls: 'c4', dash: true, w: 1.5 });
+            lines.push({ id: 'res' + r.id, x1: r.bmi, y1: r.sbp, x2: r.bmi, y2: yAt(r.bmi), cls: 'c4', dash: true, w: 1.3 });
           });
         }
         const legend = [{ cls: 'c0', label: '病人' }];

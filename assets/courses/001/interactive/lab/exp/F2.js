@@ -110,18 +110,18 @@
 
       function views(st) {
         let lines = [];
-        const points = [{ id: 'goal', x: 0, y: 0, cls: 'c2', shape: 'star', r: 9, label: '谷底(0,0)' }];
+        const points = [{ id: 'goal', x: 0, y: 0, cls: 'c2', shape: 'star', r: 10, label: '谷底(0,0)' }];
         if (st.compareAll) {
           lines = lines.concat(pathToLines(R.sgd, 'c4', 's', R.nSteps))
             .concat(pathToLines(R.momentum, 'c0', 'm', R.nSteps))
             .concat(pathToLines(R.adam, 'c1', 'a', R.nSteps));
-          points.push({ id: 'p_sgd', x: R.sgd[R.nSteps].w1, y: R.sgd[R.nSteps].w2, cls: 'c4', r: 6, label: 'SGD' });
-          points.push({ id: 'p_mom', x: R.momentum[R.nSteps].w1, y: R.momentum[R.nSteps].w2, cls: 'c0', r: 6, label: 'Mom' });
-          points.push({ id: 'p_adm', x: R.adam[R.nSteps].w1, y: R.adam[R.nSteps].w2, cls: 'c1', r: 6, label: 'Adam' });
+          points.push({ id: 'p_sgd', x: R.sgd[R.nSteps].w1, y: R.sgd[R.nSteps].w2, cls: 'c4', r: 7, label: 'SGD' });
+          points.push({ id: 'p_mom', x: R.momentum[R.nSteps].w1, y: R.momentum[R.nSteps].w2, cls: 'c0', r: 7, label: 'Mom' });
+          points.push({ id: 'p_adm', x: R.adam[R.nSteps].w1, y: R.adam[R.nSteps].w2, cls: 'c1', r: 7, label: 'Adam' });
         } else {
           lines = pathToLines(curPath, curOpt === 'sgd' ? 'c4' : curOpt === 'momentum' ? 'c0' : 'c1', 'c', st.step);
           const pt = curPath[st.step];
-          points.push({ id: 'cur', x: pt.w1, y: pt.w2, cls: 'hl', r: 7, ring: true, label: '第' + st.step + '步' });
+          points.push({ id: 'cur', x: pt.w1, y: pt.w2, cls: 'hl', r: 8, ring: true, label: '第' + st.step + '步' });
         }
         const main = {
           type: 'scatter', slot: 'main',

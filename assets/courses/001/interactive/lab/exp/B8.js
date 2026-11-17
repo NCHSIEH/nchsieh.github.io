@@ -119,8 +119,8 @@
         }));
         const lines = st.stumps.map((sm, idx) => {
           const isCur = idx === st.stumps.length - 1;
-          if (sm.ft === 'glu') return { id: 'st' + idx, x1: sm.th, y1: AX.y.min, x2: sm.th, y2: AX.y.max, cls: isCur ? 'hl' : 'dim', dash: !isCur, w: isCur ? 2.5 : 1.5, label: isCur ? 'R' + (idx + 1) : null };
-          return { id: 'st' + idx, x1: AX.x.min, y1: sm.th, x2: AX.x.max, y2: sm.th, cls: isCur ? 'hl' : 'dim', dash: !isCur, w: isCur ? 2.5 : 1.5, label: isCur ? 'R' + (idx + 1) : null };
+          if (sm.ft === 'glu') return { id: 'st' + idx, x1: sm.th, y1: AX.y.min, x2: sm.th, y2: AX.y.max, cls: isCur ? 'hl' : 'dim', dash: !isCur, w: isCur ? 3 : 1.3, label: isCur ? 'R' + (idx + 1) : null };
+          return { id: 'st' + idx, x1: AX.x.min, y1: sm.th, x2: AX.x.max, y2: sm.th, cls: isCur ? 'hl' : 'dim', dash: !isCur, w: isCur ? 3 : 1.3, label: isCur ? 'R' + (idx + 1) : null };
         });
         const regions = st.showReg ? LAB.grid((x, y) => {
           let sc = 0;

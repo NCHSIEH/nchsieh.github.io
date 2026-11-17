@@ -190,12 +190,15 @@
 
       function views(st) {
         const sn = st.snap;
-        const points = rows.map((r, i) => ({
-          id: 'p' + r.id, x: r.bmi, y: r.glu, cls: cls(r.dm),
-          hl: sn.iIdx === i || sn.jIdx === i,
-          ring: st.showSV && sn.alpha[i] > 1e-4,
-          label: String(r.id), r: 6
-        }));
+        const points = rows.map((r, i) => {
+          const isSv = st.showSV && sn.alpha[i] > 1e-4;
+          return {
+            id: 'p' + r.id, x: r.bmi, y: r.glu, cls: cls(r.dm),
+            hl: sn.iIdx === i || sn.jIdx === i,
+            ring: isSv,
+            label: String(r.id), r: (isSv || sn.iIdx === i || sn.jIdx === i) ? 7.5 : 5.5
+          };
+        });
         const regions = st.showReg ? LAB.grid((x, y) => R.predictXY(x, y) >= 0 ? 'c1' : 'c0', AX.x.min, AX.x.max, AX.y.min, AX.y.max, 30, 20) : null;
         const leg = [{ cls: 'c1', label: '是' }, { cls: 'c0', label: '否' }, { cls: 'hl', shape: 'ring', label: '支持向量' }];
         if (!R.isRbf) leg.push({ cls: 'c2', shape: 'line', label: '±1 間隔帶' });
