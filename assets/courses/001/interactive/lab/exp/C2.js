@@ -165,7 +165,8 @@
           title: '標準化 BMI × 血糖（同色＝同一群）',
           axes: AX,
           points: rows.map((r, i) => ({ id: 'p' + r.id, x: R.Z[i][0], y: R.Z[i][1], cls: ptCls[i], label: String(r.id), r: 6 })),
-          lines: [], circles: []
+          lines: [], circles: [],
+          legend: [{ cls: 'c5', label: '尚未合併' }, { cls: 'c0', label: '群 1' }, { cls: 'c1', label: '群 2' }]
         };
         return [main, side, scatter];
       }

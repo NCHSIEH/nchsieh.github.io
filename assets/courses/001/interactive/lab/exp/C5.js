@@ -158,7 +158,8 @@
             id: 'pc' + j,
             label: 'PC' + (j + 1) + ' (' + LAB.pct(rt, 1) + ')',
             value: st.showVar ? rt : 0,
-            cls: j < R.keep ? 'good' : 'c5'
+            cls: j < R.keep ? 'good' : 'c5',
+            hl: st.showVar && j < R.keep
           }))
         };
         return [main, side, bars];

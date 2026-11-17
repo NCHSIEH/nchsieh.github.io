@@ -117,11 +117,13 @@
             { key: 'y', label: '實際' },
             { key: 'res', label: '判定' }
           ],
-          rows: R.sorted.map(r => {
+          rows: R.sorted.map((r, idx) => {
             const pred = r.prob >= thShow ? 1 : 0;
+            const nextProb = idx + 1 < R.sorted.length ? R.sorted[idx + 1].prob : -1;
+            const atCut = pred === 1 && nextProb < thShow;
             const tag = pred === 1 ? (r.y === 1 ? 'TP' : 'FP') : (r.y === 0 ? 'TN' : 'FN');
             const clsTag = (tag === 'TP' || tag === 'TN') ? 'good' : 'bad';
-            return { id: r.id, cells: [r.id, r.prob, { v: r.y ? '是' : '否', cls: r.y ? 'c1' : 'c0' }, { v: tag, cls: clsTag }] };
+            return { id: r.id, cells: [r.id, r.prob, { v: r.y ? '是' : '否', cls: r.y ? 'c1' : 'c0' }, { v: tag, cls: clsTag }], hl: atCut };
           })
         };
         const ev = st.showCur ? R.cur : curPt;
@@ -133,7 +135,7 @@
             { id: 'tpr', label: 'TPR / Recall', value: ev.tpr, cls: 'c1' },
             { id: 'fpr', label: 'FPR (誤報率)', value: ev.fpr, cls: 'c4' },
             { id: 'pre', label: 'Precision (準度)', value: ev.prec, cls: 'c0' },
-            { id: 'f1', label: 'F1 分數', value: ev.f1, cls: 'good' }
+            { id: 'f1', label: 'F1 分數', value: ev.f1, cls: 'good', hl: true }
           ]
         };
         return [main, side, bottom];

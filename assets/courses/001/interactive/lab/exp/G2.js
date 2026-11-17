@@ -136,7 +136,8 @@
             id: 'lag' + (idx + 1),
             label: 'Lag ' + (idx + 1),
             value: st.showAcf ? v : 0,
-            cls: idx < R.arP ? 'c1' : 'c0'
+            cls: idx < R.arP ? 'c1' : 'c0',
+            hl: st.showAcf && idx < R.arP
           }))
         };
         const bottom = {
