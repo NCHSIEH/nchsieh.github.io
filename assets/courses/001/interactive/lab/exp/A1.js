@@ -23,6 +23,9 @@
       if (out.every(r => r[k] == null)) out[0][k] = raw[0][k];
     });
     out.forEach((r, i) => { if (FEATS.every(k => r[k] == null)) r.age = raw[i].age; });
+    // 加入 1 位高血糖個案（右偏），讓平均數與中位數補值呈現清楚差異
+    const gluValid = out.filter(r => r.glu != null).sort((a, b) => b.glu - a.glu);
+    if (gluValid.length && gluValid[0].glu < 190) gluValid[0].glu = 196;
     return out;
   }
 
@@ -127,17 +130,19 @@
           hlCol: st.cur ? st.cur.col : null
         };
         const points = rows.map((r, ri) => {
-          const ageF = st.filled.has(ri + '_age') ? R.out[ri].age : r.age;
-          const gluF = st.filled.has(ri + '_glu') ? R.out[ri].glu : r.glu;
-          const x = ageF != null ? ageF : R.before.age.mean;
-          const y = gluF != null ? gluF : R.before.glu.mean;
-          const hasMiss = r.age == null || r.glu == null;
+          const ageMiss = r.age == null, gluMiss = r.glu == null;
+          const ageDone = !ageMiss || st.filled.has(ri + '_age');
+          const gluDone = !gluMiss || st.filled.has(ri + '_glu');
+          const x = ageDone ? (ageMiss ? R.out[ri].age : r.age) : (AX.x.min + 2.5);
+          const y = gluDone ? (gluMiss ? R.out[ri].glu : r.glu) : (AX.y.min + 6);
+          const hasMiss = ageMiss || gluMiss;
+          const allDone = ageDone && gluDone;
           const isCur = st.cur && st.cur.id === r.id;
           return {
             id: 'p' + r.id, x, y,
-            cls: isCur ? 'hl' : hasMiss ? 'c1' : 'c0',
-            hollow: hasMiss && !(st.filled.has(ri + '_age') || st.filled.has(ri + '_glu')),
-            ring: hasMiss, hl: isCur, label: String(r.id), r: 6
+            cls: isCur ? 'hl' : (hasMiss ? (allDone ? 'good' : 'c1') : 'c0'),
+            hollow: !allDone,
+            ring: hasMiss, hl: isCur, label: String(r.id), r: isCur ? 7 : 6
           };
         });
         const lines = [];
@@ -150,11 +155,16 @@
               if (nbPt) lines.push({ id: 'kn' + ni, x1: curPt.x, y1: curPt.y, x2: nbPt.x, y2: nbPt.y, cls: 'hl', dash: true, w: 1.8 });
             });
           }
+        } else if (st.cur && (p.method === 'mean' || p.method === 'median')) {
+          const refVal = p.method === 'mean' ? R.before[st.cur.col].mean : R.before[st.cur.col].median;
+          const refLbl = (p.method === 'mean' ? '平均=' : '中位=') + f(refVal, 1);
+          if (st.cur.col === 'age') lines.push({ id: 'ref_x', x1: refVal, y1: AX.y.min, x2: refVal, y2: AX.y.max, cls: 'c2', dash: true, w: 1.8, label: refLbl });
+          if (st.cur.col === 'glu') lines.push({ id: 'ref_y', x1: AX.x.min, y1: refVal, x2: AX.x.max, y2: refVal, cls: 'c2', dash: true, w: 1.8, label: refLbl });
         }
         const main = {
-          type: 'scatter', slot: 'main', title: '年齡 × 血糖位置（空心＝待補）',
+          type: 'scatter', slot: 'main', title: '年齡 × 血糖位置（空心待補 → 滑入補齊）',
           axes: AX, points, lines, circles: [],
-          legend: [{ cls: 'c0', label: '完整資料' }, { cls: 'c1', label: '含缺值／已補' }]
+          legend: [{ cls: 'c0', label: '完整資料' }, { cls: 'c1', label: '尚有缺值' }, { cls: 'good', label: '已補齊' }]
         };
         const colShow = st.barCol || 'glu';
         const bef = R.before[colShow], aft = st.done ? R.after[colShow] : bef;
@@ -164,9 +174,9 @@
           digits: 2,
           items: [
             { id: 'bs', label: '補前標準差', value: bef.sd, cls: 'c0' },
-            { id: 'sm', label: '平均數法', value: Rmean.after[colShow].sd, cls: 'c1' },
-            { id: 'sd', label: '中位數法', value: Rmed.after[colShow].sd, cls: 'c2' },
-            { id: 'sk', label: 'k-NN 法', value: Rknn.after[colShow].sd, cls: 'c3' }
+            { id: 'sm', label: '平均數法', value: Rmean.after[colShow].sd, cls: 'c1', hl: p.method === 'mean' },
+            { id: 'sd', label: '中位數法', value: Rmed.after[colShow].sd, cls: 'c2', hl: p.method === 'median' },
+            { id: 'sk', label: 'k-NN 法', value: Rknn.after[colShow].sd, cls: 'c3', hl: p.method === 'knn' }
           ]
         } : {
           type: 'bars', slot: 'bottom',
