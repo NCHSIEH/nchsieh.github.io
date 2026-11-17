@@ -119,7 +119,7 @@
           { from: 'sel', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1120, h: 290,
+          type: 'network', slot: 'main', w: 1320, h: 230,
           title: '資料前處理全流程圖（第 ' + Math.min(st.stage + 1, 7) + ' / 7 階段）',
           layerLabels: ['1. 輸入切分', '2. 資料清理', '3. 轉換縮放', '4. 篩選平衡', '5. 特徵輸出'],
           layers, edges

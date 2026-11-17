@@ -79,7 +79,7 @@
         ];
         const shown = st.stage >= 4 ? rows.length : st.stage >= 2 ? Math.min(3, rows.length) : 0;
         const main = {
-          type: 'network', slot: 'main', w: 1120, h: 240,
+          type: 'network', slot: 'main', w: 1320, h: 175,
           title: '深度學習訓練迴圈流程圖（' + R.archName + '｜橙色回流＝反向傳播更新）',
           layerLabels: ['1. 張量', '2. 網路架構', '3. 前向', '4. 反向更新', '5. 驗收'],
           layers, edges

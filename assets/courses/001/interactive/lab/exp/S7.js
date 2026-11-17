@@ -71,7 +71,7 @@
           { from: 'rule', to: 'lift', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1120, h: 240,
+          type: 'network', slot: 'main', w: 1320, h: 175,
           title: '關聯規則探勘全流程圖（' + (R.isFp ? 'FP-Growth 管線' : 'Apriori 管線') + '）',
           layerLabels: ['1. 交易籃', '2. 支持度', '3. 頻繁集', '4. 信賴度', '5. Lift 篩選'],
           layers, edges

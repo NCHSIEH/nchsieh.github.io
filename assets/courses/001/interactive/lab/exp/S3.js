@@ -79,7 +79,7 @@
           { from: 'ano', to: 'int', active: st.stage === 4 && R.isAnom, dim: !R.isAnom, cls: done(3) && R.isAnom ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1120, h: 290,
+          type: 'network', slot: 'main', w: 1320, h: 230,
           title: '非監督式學習全流程圖（' + (R.isAnom ? '異常偵測路徑' : R.isDim ? '降維壓縮路徑' : '分群探索路徑') + '）',
           layerLabels: ['1. 無標籤', '2. 標準化', '3. 降維', '4. 探勘模型', '5. 評估解讀'],
           layers, edges

@@ -90,7 +90,7 @@
           { from: 'te', to: 'eval', active: st.stage === 5, cls: done(4) ? 'good' : 'c4', label: '驗收' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1120, h: 290,
+          type: 'network', slot: 'main', w: 1320, h: 230,
           title: '監督式學習全流程圖（含 ' + R.k + '-Fold 調參回圈）',
           layerLabels: ['1. 資料', '2. 切分', '3. 驗證調參', '4. 重訓', '5. 驗收'],
           layers, edges
