@@ -1,4 +1,4 @@
-/* S2 監督式學習標準流程（含交叉驗證） */
+/* S2 監督式學習標準流程（分類／迴歸／不平衡 3 條管線＋可用演算法） */
 (function () {
   'use strict';
   const M = LAB.M, f = LAB.f;
@@ -22,17 +22,19 @@
 
   function simulate(p) {
     const k = Math.max(3, Math.round(p.folds || 5));
-    const isReg = p.task === 'reg';
+    const task = p.task || 'clf';
+    const isReg = task === 'reg';
+    const isImb = task === 'imbalance';
     const cvScores = M.range(k, i => Number((0.81 + Math.sin(i * 1.7) * 0.035).toFixed(3)));
     const meanCv = M.mean(cvScores);
     const testScore = Number((meanCv - 0.014).toFixed(3));
-    return { k, isReg, cvScores, meanCv, testScore };
+    return { k, task, isReg, isImb, cvScores, meanCv, testScore };
   }
 
   LAB.register({
     id: 'S2', group: 'S', title: '監督式學習流程（含 CV）',
     module: { name: 'M2 監督式學習', url: '../m2-2/#p08' },
-    goal: '透過動畫看懂監督式學習的標準流程：先保留獨立測試集，在訓練集內用 K-Fold 交叉驗證反覆調參，最後才用測試集驗收。',
+    goal: '透過全寬流程圖對照「分類＋CV」、「迴歸＋CV」與「不平衡醫療分類」3 條標準管線，標註各步可用的 B1–B16 與 A5 演算法。',
     data: {
       name: 'sup_cv_flow',
       scenario: '120 位門診病人資料（80% 訓練開發、20% 封存測試），走完監督式學習與交叉驗證全流程',
@@ -40,35 +42,43 @@
       small: makeRows
     },
     params: [
-      { key: 'task', label: '任務類型', type: 'choice', value: 'clf', options: [{ v: 'clf', label: '分類 (糖尿病是/否)' }, { v: 'reg', label: '迴歸 (預測收縮壓)' }] },
+      { key: 'task', label: '監督學習管線', type: 'choice', value: 'clf', options: [{ v: 'clf', label: '標準分類＋CV' }, { v: 'reg', label: '連續迴歸＋CV' }, { v: 'imbalance', label: '不平衡醫療分類 (SMOTE+PR)' }] },
       { key: 'folds', label: '交叉驗證折數 K', type: 'int', min: 3, max: 10, step: 1, value: 5 }
     ],
     pseudo: [
       '1. 準備特徵 X 與標準答案標籤 y',
       '2. 切出訓練集 (80%) 與封存測試集 (20%)',
-      '3. 在訓練集內切出 K 折交叉驗證：',
-      '   輪流留 1 折驗證、K−1 折訓練',
-      '   依 K 折平均分數調整超參數',
-      '4. 用最佳超參數重訓全體訓練集',
-      '5. 最後解封測試集評估真實泛化力'
+      '3. 在訓練集內執行 K 折交叉驗證：',
+      '   輪流留 1 折驗證（不平衡需折內採樣）',
+      '   網格搜尋最佳超參數組合',
+      '4. 用最佳參數重訓全體訓練集',
+      '5. 解封測試集評估並校正決策門檻'
     ],
     build(rows, p) {
       const R = simulate(p), steps = [];
-      const metric = R.isReg ? 'R²' : 'AUC';
+      const metric = R.isReg ? 'R²' : (R.isImb ? 'PR-AUC' : 'ROC-AUC');
+
+      const ALGO_ROWS = [
+        { id: 's0', st: '1. 定義 X 與 y', alg: R.isReg ? '連續血壓/費用' : '二元/多元標籤', use: '先確認問題是分類還是迴歸' },
+        { id: 's1', st: '2. 切分訓練/測試', alg: R.isReg ? '隨機切分' : '分層抽樣 Stratified', use: '分類保留正負比例，測試集鎖進保險箱' },
+        { id: 's2', st: '3. ' + R.k + '-Fold CV 調參', alg: R.isReg ? 'B1/B2/B9/B11/B14' : (R.isImb ? 'A5 折內 + B6/B7/B9' : 'B3/B4/B5/B6/B7/B10'), use: '搭配 B13 網格搜尋挑最佳超參數' },
+        { id: 's3', st: '4. 全訓練集重訓', alg: R.isReg ? 'Ridge/Lasso/GBDT' : 'B7 森林 / B12 集成', use: '用 100% 訓練資料與最佳參數重訓' },
+        { id: 's4', st: '5. 驗收與門檻校正', alg: R.isReg ? 'MSE / R² / 殘差圖' : 'B16 ROC & PR 曲線', use: R.isImb ? '依漏診/誤報成本調門檻，不用預設 0.5' : '最後才解封測試集評估泛化力' }
+      ];
 
       function views(st) {
         const done = k => st.stage > k;
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'data', label: '1. X 與標籤 y', value: '120 筆', shape: 'box', cls: clsOf(0), hl: act(0), sub: R.isReg ? '連續目標' : '二元分類' }],
+          [{ id: 'data', label: '1. X 與標籤 y', value: '120 筆', shape: 'box', cls: clsOf(0), hl: act(0), sub: R.isReg ? '連續 y' : (R.isImb ? '少數陽性' : '分類 y') }],
           [
-            { id: 'tr', label: '2a. 訓練開發集', value: '96 筆 (80%)', shape: 'box', cls: clsOf(1), hl: act(1), sub: '做前處理+CV' },
+            { id: 'tr', label: '2a. 訓練開發集', value: '96 筆 (80%)', shape: 'box', cls: clsOf(1), hl: act(1), sub: R.isImb ? '分層+折內 A5' : '前處理+CV' },
             { id: 'te', label: '2b. 封存測試集', value: '24 筆 (20%)', shape: 'box', cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c4'), hl: act(5), sub: st.stage < 5 ? '嚴禁偷看' : '最終驗收' }
           ],
-          [{ id: 'cv', label: '3. ' + R.k + '-Fold CV 調參', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', cls: clsOf(2), hl: act(2), sub: 'B13 網格搜尋' }],
-          [{ id: 'fit', label: '4. 全訓練集重訓', value: st.stage >= 3 ? '已收斂' : '待重訓', shape: 'box', cls: clsOf(3), hl: act(3), sub: '鎖定最佳參數' }],
-          [{ id: 'eval', label: '5. 測試驗收與部署', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', cls: clsOf(5), hl: act(5), sub: 'B16 ROC/PR' }]
+          [{ id: 'cv', label: '3. ' + R.k + '-Fold CV', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', cls: clsOf(2), hl: act(2), sub: R.isReg ? 'B1/B2/B11/B14' : 'B3-B13 網格搜尋' }],
+          [{ id: 'fit', label: '4. 全訓練重訓', value: st.stage >= 3 ? '已收斂' : '待重訓', shape: 'box', cls: clsOf(3), hl: act(3), sub: R.isReg ? 'B2/B9 GBDT' : 'B7 森林/B12 集成' }],
+          [{ id: 'eval', label: '5. 驗收與部署', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', cls: clsOf(5), hl: act(5), sub: R.isReg ? 'R² / RMSE' : 'B16 ROC/PR 門檻' }]
         ];
         const edges = [
           { from: 'data', to: 'tr', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
@@ -80,10 +90,14 @@
           { from: 'te', to: 'eval', active: st.stage === 5, cls: done(4) ? 'good' : 'c4' }
         ];
         const main = {
-          type: 'network', slot: 'main',
-          title: '監督式學習標準流程（含 ' + R.k + '-Fold 交叉驗證）',
-          layerLabels: ['資料', '切分', '驗證調參', '訓練', '驗收'],
-          layers, edges
+          type: 'table', slot: 'main',
+          title: '步驟與可用演算法對照（' + (R.isReg ? '迴歸管線' : R.isImb ? '不平衡分類管線' : '標準分類管線') + '）',
+          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '關鍵設計重點' }],
+          rows: ALGO_ROWS.map((ar, idx) => ({
+            id: ar.id,
+            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
+            hl: idx === Math.min(st.stage, 4)
+          }))
         };
         const side = {
           type: 'table', slot: 'side',
@@ -100,13 +114,10 @@
           }])
         };
         const bottom = {
-          type: 'bars', slot: 'bottom',
-          title: '各階段模型評估分數 (' + metric + ')',
-          max: 1, digits: 3,
-          items: [
-            { id: 'cv', label: R.k + '-Fold CV 平均', value: st.stage >= 2 ? R.meanCv : 0, cls: 'c0', hl: st.stage === 2 },
-            { id: 'te', label: '獨立測試集驗收', value: st.stage >= 5 ? R.testScore : 0, cls: 'good', hl: st.stage === 5 }
-          ]
+          type: 'network', slot: 'bottom', h: 350,
+          title: '監督式學習全流程圖（含 ' + R.k + '-Fold 調參回圈｜下方標註對應實驗）',
+          layerLabels: ['1. 資料', '2. 切分', '3. 驗證調參', '4. 重訓', '5. 驗收'],
+          layers, edges
         };
         return [main, side, bottom];
       }
@@ -114,36 +125,36 @@
       const st = { stage: 0, cvLoop: false };
       const add = (line, title, say, calc) => steps.push({ line, title, say, calc: calc || [], views: views(st), focus: [] });
 
-      add(0, '1. 準備 X 與標籤 y', '監督式學習必須有標準答案 y（' + (R.isReg ? '連續血壓值' : '是否糖尿病') + '），我們有 120 筆資料。', [
-        '目標：學出能準確預測「未來新病人」的模型'
+      add(0, '1. 準備 X 與標籤 y', '監督式學習有標準答案 y。先依任務選對指標：分類看 ROC/PR-AUC，迴歸看 R²/RMSE，不平衡看 PR-AUC。', [
+        '目前管線：' + (R.isReg ? '連續迴歸' : R.isImb ? '不平衡分類' : '標準分類') + '｜指標：' + metric
       ]);
       st.stage = 1;
-      add(1, '2. 切出獨立測試集', '第一件事就是把 20%（24 筆）測試集鎖進保險箱，只留 80%（96 筆）開發，避免調參作弊。', [
+      add(1, '2. 切出獨立測試集', '把 20% 測試集封存。分類任務建議用分層抽樣（Stratified）確保訓練與測試的正負比例一致。', [
         '訓練開發集 = 96 筆｜封存測試集 = 24 筆'
       ]);
       st.stage = 2;
-      add(2, '3a. K-Fold 交叉驗證', '把 96 筆訓練集切成 ' + R.k + ' 折，輪流拿 1 折當驗證集、其餘訓練，算出平均 ' + metric + '。', [
+      add(2, '3a. K-Fold 交叉驗證', '在訓練集內做 ' + R.k + ' 折交叉驗證；若是不平衡分類，SMOTE（A5）只能寫在每一折的訓練側，不可先整份過採樣！', [
         R.k + '-Fold 平均 ' + metric + ' = ' + f(R.meanCv, 3)
       ]);
       st.cvLoop = true;
-      add(4, '3b. 網格調參迴圈', '比較不同超參數（如 k-NN 的 K、正則化 λ、樹深度）的 CV 分數，挑出平均表現最佳的一組。', [
-        '橙色回流箭頭代表「調參 → 重算 CV → 挑最佳組合」'
+      add(4, '3b. 網格搜尋調參 (B13)', '比對不同模型家族與超參數（線性 B1/B3、k-NN B4、SVM B10、樹 B6/B7/B9）的 CV 平均分數。', [
+        '橙色回流箭頭代表「調參 → 重算 CV → 挑最佳模型」'
       ]);
       st.cvLoop = false; st.stage = 3;
-      add(5, '4. 全訓練集重訓', '選定最佳超參數後，用全部 96 筆訓練資料（包含剛剛輪流驗證的資料）重新訓練最終模型。', [
-        '模型資料量變回完整的 96 筆，估計更穩健'
+      add(5, '4. 全訓練集重訓', '選定最佳模型與超參數後，用全部 96 筆訓練資料重訓（也可將多模結合為 Voting/Stacking B12）。', [
+        '可用集成：B7 隨機森林、B8 AdaBoost、B9 GBDT、B12 Stacking'
       ]);
       st.stage = 4;
-      add(5, '5a. 檢查誤差與殘差', '確認沒有明顯過擬合（訓練遠高於 CV）後，準備解封測試集做最終考驗。', [
+      add(5, '5a. 檢查過擬合與偏差', '比較訓練分數與 CV 分數（B11 過擬合檢查），若兩者落差太大可改用正則化（B2 Ridge/Lasso）或調淺樹深。', [
         'CV 平均 ' + metric + ' = ' + f(R.meanCv, 3)
       ]);
       st.stage = 5;
-      add(6, '5b. 解封測試集驗收', '把從未參與訓練與調參的 24 筆測試集送進模型，測出真實上線表現 ' + metric + ' = ' + f(R.testScore, 3) + '！', [
-        'CV = ' + f(R.meanCv, 3) + ' vs 測試 = ' + f(R.testScore, 3) + '（差距小代表泛化良好）'
+      add(6, '5b. 解封測試集與校正', '用 24 筆測試集測出真實泛化分數 ' + metric + ' = ' + f(R.testScore, 3) + '；分類模型可依醫療成本調 B16 機率門檻。', [
+        'CV = ' + f(R.meanCv, 3) + ' vs 測試 = ' + f(R.testScore, 3)
       ]);
       while (steps.length < 10) {
-        add(6, '分類 vs 迴歸指標', R.isReg ? '迴歸看 RMSE、MAE 與 R²；記得畫殘差圖檢查是否漏掉非線性規律。' : '分類不平衡時別只看準確率，要看 ROC-AUC、PR-AUC 與臨床門檻下的 Recall/Precision。', [
-          '測試集只能用來驗收，不可看到分數低就回頭改參數！'
+        add(6, '模型挑選心法', '表格資料先試線性/Logistic 基線，再試隨機森林與 GBDT；若需高度可解釋性可用決策樹 B6 或 Rule Induction B15。', [
+          '測試集只能用來驗收，不可看到分數低就回頭調參！'
         ]);
       }
       return steps;
@@ -155,15 +166,15 @@
     explain(steps, rows, p) {
       const R = simulate(p);
       return [
-        '監督式學習必須先切出獨立測試集封存，所有前處理與 ' + R.k + '-Fold 交叉驗證都只能在訓練集內進行。',
-        '交叉驗證用來比較演算法與調整超參數；選定最佳參數後再用全部訓練集重訓，最後才在測試集驗收一次。',
-        '若看到測試集分數不佳又回頭修改參數，測試集就變成了驗證集，會高估模型上線後的表現。'
+        '監督式學習依任務分為分類、迴歸與不平衡分類三種管線，共同原則是「先封存測試集，只在訓練集內做 ' + R.k + '-Fold CV 調參」。',
+        '不平衡醫療資料務必在 CV 折內做 SMOTE（A5）並改看 PR-AUC 與調整判定門檻（B16）。',
+        'B 區 16 個實驗對應這條管線的各個核心模型與評估工具。'
       ];
     },
     aistudio: {
       operators: ['Read CSV', 'Split Data', 'Cross Validation', 'Apply Model', 'Performance'],
       params: [['Split Data', '0.8 / 0.2'], ['Cross Validation › number of folds', p => String(p.folds)]],
-      note: 'AI Studio 的 Cross Validation 子流程內左側放訓練模型、右側放 Apply Model + Performance，外層再接獨立測試集驗收。',
+      note: 'AI Studio 的 Cross Validation 子流程內左側放訓練模型（或含 SMOTE），右側放 Apply Model + Performance。',
       expect: (steps, rows, p) => {
         const R = simulate(p);
         return [R.k + '-Fold 平均 ≈ ' + f(R.meanCv, 3) + '，測試驗收 ≈ ' + f(R.testScore, 3)];

@@ -1,4 +1,4 @@
-/* S3 非監督式學習標準流程 */
+/* S3 非監督式學習標準流程（分群／異常偵測／降維壓縮 3 條管線＋可用演算法） */
 (function () {
   'use strict';
   const M = LAB.M, f = LAB.f;
@@ -16,49 +16,59 @@
   }
 
   function simulate(rows, p) {
-    const isAnom = p.goal === 'anomaly';
+    const goal = p.goal || 'cluster';
+    const isAnom = goal === 'anomaly';
+    const isDim = goal === 'dimred';
     const pcaVar = 0.84;
     const sils = [0.41, 0.56, 0.48, 0.39];
-    return { isAnom, pcaVar, sils, bestK: 3, topAnomaly: rows[rows.length - 1].id };
+    return { goal, isAnom, isDim, pcaVar, sils, bestK: 3, topAnomaly: rows[rows.length - 1].id };
   }
 
   LAB.register({
     id: 'S3', group: 'S', title: '非監督式學習流程',
     module: { name: 'M3 非監督式學習', url: '../m3/' },
-    goal: '透過動畫看懂在沒有標準答案 y 的情況下，如何從必做的特徵標準化出發，進行降維視覺化、分群或異常偵測，並用內部指標評估。',
+    goal: '透過全寬動畫流程圖對照「分群探索」、「異常偵測」與「高維降維壓縮」3 條無標籤管線，標註各步可用的 C1–C10 演算法。',
     data: {
       name: 'unsup_flow',
-      scenario: '8 位無標籤門診病人，示範標準化 → PCA 降維 → 分群／異常偵測 → 臨床解讀流程',
+      scenario: '8 位無標籤門診病人，示範標準化 → 降維 → 分群／異常偵測 → 評估與臨床解讀流程',
       columns: COLS,
       small: makeRows
     },
     params: [
-      { key: 'goal', label: '分析目標', type: 'choice', value: 'cluster', options: [{ v: 'cluster', label: '病人分群 (找亞型)' }, { v: 'anomaly', label: '異常偵測 (抓極端)' }] }
+      { key: 'goal', label: '非監督管線', type: 'choice', value: 'cluster', options: [{ v: 'cluster', label: '病人分群 (找亞型)' }, { v: 'anomaly', label: '異常偵測 (抓極端)' }, { v: 'dimred', label: '降維視覺與壓縮 (PCA/t-SNE)' }] }
     ],
     pseudo: [
       '1. 載入無標籤特徵矩陣 X（沒有 y）',
       '2. 特徵標準化（距離計算前必做！）',
-      '3. 降維（PCA / t-SNE）探索高維結構',
-      '4. 執行分群或異常偵測演算法',
+      '3. 降維探索（PCA / t-SNE）',
+      '4. 依目標執行分群或異常偵測',
       '5. 用內部指標（Silhouette/LOF）評估',
-      '6. 檢視各群特徵統計做臨床命名'
+      '6. 臨床特徵摘要命名或接續下游任務'
     ],
     build(rows, p) {
       const R = simulate(rows, p), steps = [];
+
+      const ALGO_ROWS = [
+        { id: 's0', st: '1. 無標籤資料 X', alg: '探索性統計 EDA', use: '沒有標準答案 y，先看各欄分布與共線性' },
+        { id: 's1', st: '2. 必做標準化', alg: 'A2 Z 分數標準化', use: '距離與共變異數高度受尺度影響，必做！' },
+        { id: 's2', st: '3. 降維與壓縮', alg: 'C5 PCA / C6 t-SNE', use: R.isDim ? '主軸保留最大變異，t-SNE 看局部鄰居' : '先壓到 2D 檢查是否有明顯群聚' },
+        { id: 's3', st: '4. 核心探勘模型', alg: R.isAnom ? 'C7 LOF / C8 IF / F5 AE' : (R.isDim ? 'C5 挑前 K 個主成分' : 'C1 K-Means / C2 階層 / C3 DBSCAN / C4 GMM'), use: R.isAnom ? '密度比對或隨機切割找離群點' : (R.isDim ? '降維後可接 B 區分類器減少共線' : '球狀用 K-Means、不規則用 DBSCAN') },
+        { id: 's4', st: '5. 內部評估解讀', alg: R.isAnom ? '分數排序＋專家複核' : (R.isDim ? '累積解釋變異 ≥ 80%' : 'C9 手肘法＋輪廓係數'), use: '將結果翻譯成臨床風險亞型或異常原因' }
+      ];
 
       function views(st) {
         const done = k => st.stage > k;
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'x', label: '1. 無標籤資料 X', value: rows.length + ' 筆', shape: 'box', cls: clsOf(0), hl: act(0), sub: '沒有答案 y' }],
+          [{ id: 'x', label: '1. 無標籤 X', value: rows.length + ' 筆', shape: 'box', cls: clsOf(0), hl: act(0), sub: '沒有答案 y' }],
           [{ id: 'scl', label: '2. 必做標準化', value: st.stage >= 1 ? 'Z 分數' : '單位不同', shape: 'box', cls: clsOf(1), hl: act(1), sub: 'A2 防大尺主導' }],
-          [{ id: 'dim', label: '3. 降維視覺化', value: st.stage >= 2 ? '保留 84% 變異' : '高維難看', shape: 'box', cls: clsOf(2), hl: act(2), sub: 'C5 PCA / C6 t-SNE' }],
+          [{ id: 'dim', label: '3. 降維探索', value: st.stage >= 2 ? '84% 變異' : '高維', shape: 'box', cls: clsOf(2), hl: act(2), sub: 'C5 PCA · C6 t-SNE' }],
           [
-            { id: 'clu', label: '4a. 分群探勘', value: R.isAnom ? '略過' : 'K=3 亞型', shape: 'box', cls: R.isAnom ? 'c5' : clsOf(3), hl: !R.isAnom && act(3), dim: R.isAnom, sub: 'C1 / C2 / C3' },
-            { id: 'ano', label: '4b. 異常偵測', value: R.isAnom ? '抓離群點' : '略過', shape: 'box', cls: !R.isAnom ? 'c5' : clsOf(3), hl: R.isAnom && act(3), dim: !R.isAnom, sub: 'C7 LOF / C8 IF' }
+            { id: 'clu', label: '4a. 分群探勘', value: R.isAnom || R.isDim ? '略過' : 'K=3 亞型', shape: 'box', cls: R.isAnom || R.isDim ? 'c5' : clsOf(3), hl: !R.isAnom && !R.isDim && act(3), dim: R.isAnom || R.isDim, sub: 'C1/C2/C3/C4/C10' },
+            { id: 'ano', label: '4b. 異常偵測', value: R.isAnom ? '抓離群點' : '略過', shape: 'box', cls: !R.isAnom ? 'c5' : clsOf(3), hl: R.isAnom && act(3), dim: !R.isAnom, sub: 'C7 LOF · C8 IF · F5' }
           ],
-          [{ id: 'int', label: '5. 內部評估與解讀', value: st.stage >= 4 ? (R.isAnom ? '複核 #' + R.topAnomaly : 'Sil=0.56') : '待評估', shape: 'box', cls: clsOf(4), hl: act(4), sub: 'C9 輪廓係數' }]
+          [{ id: 'int', label: '5. 評估解讀', value: st.stage >= 4 ? (R.isAnom ? '複核 #' + R.topAnomaly : (R.isDim ? '保留2軸' : 'Sil=0.56')) : '待評估', shape: 'box', cls: clsOf(4), hl: act(4), sub: R.isAnom ? '人工複核極端' : (R.isDim ? '累積變異率' : 'C9 輪廓係數') }]
         ];
         const edges = [
           { from: 'x', to: 'scl', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
@@ -69,39 +79,33 @@
           { from: 'ano', to: 'int', active: st.stage === 4 && R.isAnom, dim: !R.isAnom, cls: done(3) && R.isAnom ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main',
-          title: '非監督式學習標準流程（' + (R.isAnom ? '異常偵測路徑' : '分群探索路徑') + '）',
-          layerLabels: ['輸入', '標準化', '降維', '探勘模型', '評估解讀'],
-          layers, edges
+          type: 'table', slot: 'main',
+          title: '步驟與可用演算法對照（' + (R.isAnom ? '異常偵測管線' : R.isDim ? '降維壓縮管線' : '病人分群管線') + '）',
+          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '何時用／關鍵提醒' }],
+          rows: ALGO_ROWS.map((ar, idx) => ({
+            id: ar.id,
+            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
+            hl: idx === Math.min(st.stage, 4)
+          }))
         };
         const side = {
           type: 'table', slot: 'side',
           title: '病人特徵與探勘結果',
-          cols: [{ key: 'id', label: '#' }, { key: 'bmi', label: 'BMI', num: true, digits: 1 }, { key: 'glu', label: '血糖', num: true, digits: 0 }, { key: 'res', label: R.isAnom ? '異常判定' : '亞型群組' }],
+          cols: [{ key: 'id', label: '#' }, { key: 'bmi', label: 'BMI', num: true, digits: 1 }, { key: 'glu', label: '血糖', num: true, digits: 0 }, { key: 'res', label: R.isAnom ? '異常判定' : (R.isDim ? 'PC1/PC2' : '亞型群組') }],
           rows: rows.map((r, i) => ({
             id: r.id,
             cells: [
               r.id, r.bmi, r.glu,
-              st.stage >= 3 ? (R.isAnom ? (r.id === R.topAnomaly ? { v: '異常', cls: 'bad' } : { v: '正常', cls: 'good' }) : { v: '群 ' + (i % 3 + 1), cls: 'c' + (i % 3) }) : null
+              st.stage >= 3 ? (R.isAnom ? (r.id === R.topAnomaly ? { v: '異常', cls: 'bad' } : { v: '正常', cls: 'good' }) : (R.isDim ? { v: '已投影', cls: 'c2' } : { v: '群 ' + (i % 3 + 1), cls: 'c' + (i % 3) })) : null
             ],
             hl: st.stage >= 3 && R.isAnom && r.id === R.topAnomaly
           }))
         };
         const bottom = {
-          type: 'bars', slot: 'bottom',
-          title: R.isAnom ? '各階段完成度' : 'K = 2..5 輪廓係數 (Silhouette) 比較',
-          max: R.isAnom ? 100 : 1, digits: R.isAnom ? 0 : 2,
-          items: R.isAnom
-            ? [
-                { id: 's1', label: '標準化', value: st.stage >= 1 ? 100 : 0, cls: 'c0' },
-                { id: 's2', label: '降維檢查', value: st.stage >= 2 ? 100 : 0, cls: 'c2' },
-                { id: 's3', label: '異常評分', value: st.stage >= 3 ? 100 : 0, cls: 'c1' },
-                { id: 's4', label: '人工複核', value: st.stage >= 4 ? 100 : 0, cls: 'good' }
-              ]
-            : [2, 3, 4, 5].map((k, idx) => ({
-                id: 'k' + k, label: 'K = ' + k, value: st.stage >= 4 ? R.sils[idx] : 0,
-                cls: k === R.bestK ? 'good' : 'c0', hl: st.stage >= 4 && k === R.bestK
-              }))
+          type: 'network', slot: 'bottom', h: 340,
+          title: '非監督式學習全流程圖（下方標註對應 C 區演算法）',
+          layerLabels: ['1. 無標籤', '2. 標準化', '3. 降維', '4. 探勘模型', '5. 評估解讀'],
+          layers, edges
         };
         return [main, side, bottom];
       }
@@ -109,32 +113,32 @@
       const st = { stage: 0 };
       const add = (line, title, say, calc) => steps.push({ line, title, say, calc: calc || [], views: views(st), focus: [] });
 
-      add(0, '1. 載入無標籤資料 X', '非監督式學習沒有標準答案 y，目標是從資料本身的結構找出「隱藏群聚」或「不合群的異常點」。', [
-        '病人數 = ' + rows.length + '，欄位 = BMI、空腹血糖'
+      add(0, '1. 載入無標籤資料 X', '非監督式學習沒有標準答案 y，目標是找出「病人亞型分群」、「異常極端個案」或「低維主軸結構」。', [
+        '病人數 = ' + rows.length + '，沒有目標標籤 y'
       ]);
       st.stage = 1;
-      add(1, '2. 必做特徵標準化', '分群與降維高度依賴距離與變異數。若不先標準化，血糖（60–200）會完全壓過 BMI（18–35）。', [
+      add(1, '2. 必做特徵標準化 (A2)', '幾乎所有非監督演算法都算歐氏距離或共變異數，不標準化會讓血糖完全壓過 BMI。', [
         '轉為平均 0、標準差 1 的 Z 分數（A2）'
       ]);
       st.stage = 2;
-      add(2, '3. 降維與結構探索', '特徵很多時先做 PCA（線性保留最大變異）或 t-SNE（非線性看局部鄰居），把資料畫到 2D 平面檢查。', [
+      add(2, '3. 降維探索 (C5/C6)', '用 PCA（C5，保留線性最大變異）或 t-SNE（C6，保留局部鄰居關係）把高維資料壓到 2D 檢查結構。', [
         '前兩個主成分保留變異 = ' + LAB.pct(R.pcaVar, 0)
       ]);
       st.stage = 3;
-      add(3, R.isAnom ? '4. 異常偵測評分' : '4. 分群演算法探勘', R.isAnom ? '用 LOF（比較局部密度）或 Isolation Forest（隨機切割孤立深度）給每位病人異常分數。' : '依資料形狀選模型：球狀用 K-Means、不規則密度用 DBSCAN、要層次看樹狀圖用階層分群。', [
-        R.isAnom ? '標出最異常候選 #' + R.topAnomaly : '分出 3 個潛在病人亞型'
+      add(3, R.isAnom ? '4. 異常偵測 (C7/C8)' : R.isDim ? '4. 挑選主成分維度' : '4. 分群演算法 (C1–C4)', R.isAnom ? '局部密度稀疏用 LOF（C7）、隨機切割孤立用 Isolation Forest（C8）、重建誤差用 Autoencoder（F5）。' : R.isDim ? '依累積解釋變異（如 ≥ 80%）決定保留前 K 個主成分，可再送入下游模型訓練。' : '球狀群用 K-Means（C1/C10）、要層次看樹狀圖用階層（C2）、任意形狀用 DBSCAN（C3）、軟機率用 GMM（C4）。', [
+        R.isAnom ? '標出最異常候選 #' + R.topAnomaly : (R.isDim ? '保留 2 維主成分（84% 變異）' : '分出 3 個潛在病人亞型')
       ]);
       st.stage = 4;
-      add(4, '5. 內部指標評估', R.isAnom ? '沒有標籤時，常依分數排序抽檢前幾名，交給醫師或領域專家確認是「量測錯誤」還是「罕見病例」。' : '沒有標準答案可用準確率，改看組內緊密、組間分離的「輪廓係數 (Silhouette)」，找出 K=3 最高。', [
-        R.isAnom ? '異常點不可盲目刪除，須先查明原因' : 'K = 3 輪廓係數 = 0.56（最高）'
+      add(4, '5. 內部指標評估 (C9)', R.isAnom ? '依異常分數由高到低排序抽檢，交給臨床專家判斷是輸入錯誤還是罕見病例。' : R.isDim ? '注意：PCA 主成分是線性組合，能壓縮去共線但較難對病人直接解釋單一欄位。' : '用 C9 手肘法（SSE）與輪廓係數（Silhouette）選出最佳群數 K=3。', [
+        R.isAnom ? '異常點不可盲目刪除，須查明來源' : (R.isDim ? '累積解釋變異 = 84%' : 'K = 3 輪廓係數 = 0.56（最高）')
       ]);
       st.stage = 5;
-      add(5, '6. 臨床命名與應用', '回頭統計各群的平均年齡、BMI、血糖，把「群 1/2/3」翻譯成有意義的風險族群標籤！', [
-        '非監督分群常作為後續精準衛教或特徵工程的起點'
+      add(5, '6. 臨床命名與落地', '回頭比較各群的平均年齡、BMI、血糖，將群組編號命名為有臨床意義的風險族群！', [
+        '常作為精準衛教分眾或下游特徵工程的起點'
       ]);
       while (steps.length < 10) {
-        add(5, '降維≠特徵選擇', 'PCA 產生的主成分是原特徵的線性組合，能壓縮維度但較難直接向病人解釋單一指標。', [
-          '需要可解釋性時選「特徵選擇 A6」；只需壓縮選 PCA'
+        add(5, '演算法挑選總結', '有離群值干擾用 K-Medoids (C10) 或 DBSCAN (C3)；想知道「多像某群」用 GMM 軟分群 (C4)。', [
+          '目前管線：' + (R.isAnom ? '異常偵測' : R.isDim ? '降維壓縮' : '病人分群')
         ]);
       }
       return steps;
@@ -148,15 +152,15 @@
     },
     explain(steps, rows, p) {
       return [
-        '非監督式學習沒有標籤 y，因此「標準化」幾乎是第一步的鐵律，否則數值大的欄位會主導所有距離與共變異數。',
-        '實務上常先用 PCA 或 t-SNE 降維觀察資料是否有明顯群聚或離群點，再決定要用 K-Means、DBSCAN 還是異常偵測。',
-        '結果好壞沒有標準答案可對，必須結合內部指標（輪廓係數、SSE）與臨床領域知識一起解讀。'
+        '非監督式學習依目標分為「病人分群」、「異常偵測」與「降維壓縮」三條管線，共同前置條件都是標準化（A2）。',
+        '分群可用 C1 K-Means、C2 階層、C3 DBSCAN、C4 GMM、C10 K-Medoids，並用 C9 輪廓係數挑 K。',
+        '異常偵測可用 C7 LOF、C8 Isolation Forest 或 F5 Autoencoder，找出異常後須人工複核原因。'
       ];
     },
     aistudio: {
       operators: ['Read CSV', 'Normalize', 'PCA', 'k-Means', 'Cluster Distance Performance'],
       params: [['Normalize', 'Z-transformation'], ['k-Means › k', '3']],
-      note: 'AI Studio 的 Cluster Distance Performance 可計算群內平均距離（Davies–Bouldin 指數）來協助挑選最佳群數 K。',
+      note: 'AI Studio 的 Cluster Distance Performance 可計算群內平均距離協助挑選群數 K。',
       expect: () => ['前 2 主成分約保留 84% 變異；K=3 輪廓係數最佳'],
       python: 'from sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\nfrom sklearn.cluster import KMeans',
       confirmed: false

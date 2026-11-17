@@ -1,4 +1,4 @@
-/* S1 資料前處理標準流程 */
+/* S1 資料前處理標準流程（3 條管線對照＋可用演算法標註） */
 (function () {
   'use strict';
   const M = LAB.M, f = LAB.f;
@@ -24,7 +24,9 @@
   }
 
   function simulate(rows, p) {
-    const isLinear = p.model === 'linear';
+    const mode = p.model || 'linear';
+    const isLinear = mode !== 'tree';
+    const isStrict = mode === 'leak_safe';
     const ages = rows.map(r => r.age).filter(v => v != null);
     const medAge = M.median(ages);
     const glus = rows.map(r => r.glu).slice().sort((a, b) => a - b);
@@ -52,50 +54,60 @@
       dm: r.dm
     }));
     const nPos = rows.filter(r => r.dm === 1).length;
-    return { isLinear, medAge, hi, mA, sA, mG, sG, cleaned, ready, nPos };
+    return { mode, isLinear, isStrict, medAge, hi, mA, sA, mG, sG, cleaned, ready, nPos };
   }
 
   LAB.register({
     id: 'S1', group: 'S', title: '資料前處理流程',
     module: { name: 'M1 資料準備', url: '../m1/' },
-    goal: '透過動畫看懂資料在送進模型前，如何依序通過「檢視 → 補值與離群處理 → 編碼與縮放 → 特徵篩選與平衡」的標準管線。',
+    goal: '透過全寬動畫流程圖對照「線性／距離管線」、「樹模型管線」與「防洩漏嚴格管線」，並標註每步對應的 A1–A7 演算法。',
     data: {
       name: 'clinic_prep_flow',
-      scenario: '門診健檢原始資料（含缺值、極端血糖 320、文字科別），示範標準前處理管線',
+      scenario: '門診健檢原始資料（含缺值、極端血糖 320、文字科別），示範 3 種前處理標準管線',
       columns: COLS,
       small: makeRows
     },
     params: [
-      { key: 'model', label: '下游模型類型', type: 'choice', value: 'linear', options: [{ v: 'linear', label: '線性／距離模型 (需縮放)' }, { v: 'tree', label: '樹模型 (免縮放)' }] }
+      { key: 'model', label: '前處理管線', type: 'choice', value: 'linear', options: [{ v: 'linear', label: '線性／距離模型 (需縮放)' }, { v: 'tree', label: '樹模型 (免縮放)' }, { v: 'leak_safe', label: '防洩漏嚴格管線 (Pipeline)' }] }
     ],
     pseudo: [
-      '1. 載入並盤點原始資料與切分',
-      '2. 偵測並填補遺失值（防資料洩漏）',
-      '3. 檢查極端離群值並截斷或刪除',
-      '4. 將文字類別轉換為數值編碼',
-      '5. 依模型需求決定是否標準化縮放',
-      '6. 特徵選擇與類別不平衡處理',
+      '1. 先切分訓練集／測試集（防洩漏）',
+      '2. 遺失值補值（平均/中位/k-NN）',
+      '3. 離群值偵測與縮尾／刪除',
+      '4. 類別編碼（One-hot / 目標編碼）',
+      '5. 特徵縮放（Z 分數 / Min-Max）',
+      '6. 特徵選擇與 SMOTE 類別平衡',
       '7. 輸出乾淨特徵矩陣交給模型'
     ],
     build(rows, p) {
       const R = simulate(rows, p), steps = [];
+
+      const ALGO_ROWS = [
+        { id: 's0', st: '1. 切分與盤點', alg: 'Train/Test Split', use: R.isStrict ? '必先切分再學任何統計量' : '檢查缺值、極端與文字欄' },
+        { id: 's1', st: '2a. 遺失值補值', alg: 'A1 平均/中位/k-NN', use: '偏態用中位數，線性關聯用 k-NN' },
+        { id: 's2', st: '2b. 離群值處理', alg: 'A7 IQR 圍籬/縮尾', use: R.isLinear ? '線性模型必處理，防斜率被拉偏' : '樹模型對單調極端較穩健' },
+        { id: 's3', st: '3a. 類別編碼', alg: 'A4 One-hot/Dummy/目標', use: '線性用 Dummy；高基數用目標編碼' },
+        { id: 's4', st: '3b. 特徵縮放', alg: 'A2 Z分數 / Min-Max', use: R.isLinear ? '距離/梯度模型必做' : '樹模型可略過，保留原尺度' },
+        { id: 's5', st: '4. 篩選與平衡', alg: 'A5 SMOTE / A6 選擇', use: '只對訓練集做；樹常用 A3 離散' },
+        { id: 's6', st: '5. 乾淨特徵矩陣', alg: 'Pipeline 封裝套用', use: '同組參數 transform 驗證與測試集' }
+      ];
 
       function views(st) {
         const done = k => st.stage > k;
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'raw', label: '1. 原始資料', value: rows.length + ' 筆', shape: 'box', cls: clsOf(0), hl: act(0), sub: '含缺值/文字' }],
+          [{ id: 'raw', label: R.isStrict ? '1. 切分訓練集' : '1. 原始資料', value: rows.length + ' 筆', shape: 'box', cls: clsOf(0), hl: act(0), sub: R.isStrict ? '只用 Train fit' : '缺值/極端/文字' }],
           [
-            { id: 'imp', label: '2a. 遺失值補值', value: done(1) || act(1) ? '中位數=' + f(R.medAge, 0) : '待處理', shape: 'box', cls: clsOf(1), hl: act(1), sub: 'A1' },
-            { id: 'out', label: '2b. 離群值處理', value: done(2) || act(2) ? '上界=' + f(R.hi, 0) : '待檢查', shape: 'box', cls: clsOf(2), hl: act(2), sub: 'A7' }
+            { id: 'imp', label: '2a. 遺失補值', value: st.stage >= 1 ? '中位=' + f(R.medAge, 0) : '待補', shape: 'box', cls: clsOf(1), hl: act(1), sub: 'A1 平均/中位/k-NN' },
+            { id: 'out', label: '2b. 離群處理', value: st.stage >= 2 ? '上界=' + f(R.hi, 0) : '待查', shape: 'box', cls: clsOf(2), hl: act(2), sub: 'A7 IQR 縮尾/刪除' }
           ],
           [
-            { id: 'enc', label: '3a. 類別編碼', value: done(3) || act(3) ? 'One-Hot' : '文字欄', shape: 'box', cls: clsOf(3), hl: act(3), sub: 'A4' },
-            { id: 'scl', label: '3b. 特徵縮放', value: R.isLinear ? 'Z 分數' : '免縮放', shape: 'box', cls: R.isLinear ? clsOf(4) : (done(4) || act(4) ? 'c2' : 'c5'), hl: act(4), dim: !R.isLinear && st.stage >= 4, sub: 'A2' }
+            { id: 'enc', label: '3a. 類別編碼', value: st.stage >= 3 ? '0/1 數值' : '文字', shape: 'box', cls: clsOf(3), hl: act(3), sub: 'A4 One-Hot/目標' },
+            { id: 'scl', label: '3b. 特徵縮放', value: R.isLinear ? 'Z 分數' : '免縮放', shape: 'box', cls: R.isLinear ? clsOf(4) : (st.stage >= 4 ? 'c2' : 'c5'), hl: act(4), dim: !R.isLinear && st.stage >= 4, sub: 'A2 標準化 / A3 離散' }
           ],
-          [{ id: 'sel', label: '4. 篩選與平衡', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', cls: clsOf(5), hl: act(5), sub: 'A5 / A6' }],
-          [{ id: 'mat', label: '5. 乾淨特徵矩陣', value: done(5) || act(6) ? '就緒' : '準備中', shape: 'box', cls: clsOf(6), hl: act(6), sub: '送入 B/C 區' }]
+          [{ id: 'sel', label: '4. 篩選平衡', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', cls: clsOf(5), hl: act(5), sub: 'A5 SMOTE · A6 選特徵' }],
+          [{ id: 'mat', label: '5. 特徵矩陣', value: st.stage >= 6 ? '就緒' : '準備中', shape: 'box', cls: clsOf(6), hl: act(6), sub: R.isStrict ? '套用至 Val/Test' : '送入 B/C 區模型' }]
         ];
         const edges = [
           { from: 'raw', to: 'imp', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
@@ -107,10 +119,14 @@
           { from: 'sel', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main',
-          title: '資料前處理標準流程（第 ' + Math.min(st.stage + 1, 7) + ' / 7 階段）',
-          layerLabels: ['輸入', '清理', '轉換', '優化', '輸出'],
-          layers, edges
+          type: 'table', slot: 'main',
+          title: '步驟與可用演算法對照（' + (R.mode === 'tree' ? '樹模型管線' : R.isStrict ? '防洩漏嚴格管線' : '線性／距離管線') + '）',
+          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '何時用／關鍵提醒' }],
+          rows: ALGO_ROWS.map((ar, idx) => ({
+            id: ar.id,
+            cells: [ar.st, { v: ar.alg, cls: idx === st.stage ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
+            hl: idx === st.stage
+          }))
         };
         const side = {
           type: 'table', slot: 'side',
@@ -132,15 +148,10 @@
           })
         };
         const bottom = {
-          type: 'bars', slot: 'bottom',
-          title: '資料品質指標進度（%）',
-          max: 100, digits: 0, unit: '%',
-          items: [
-            { id: 'comp', label: '完整度 (無缺值)', value: st.stage >= 1 ? 100 : 88, cls: st.stage >= 1 ? 'good' : 'c4' },
-            { id: 'stab', label: '穩健度 (無極端)', value: st.stage >= 2 ? 100 : 75, cls: st.stage >= 2 ? 'good' : 'c4' },
-            { id: 'num', label: '數值化 (已編碼)', value: st.stage >= 3 ? 100 : 50, cls: st.stage >= 3 ? 'good' : 'c3' },
-            { id: 'scl', label: '尺度一致性', value: st.stage >= 4 ? 100 : (R.isLinear ? 30 : 80), cls: st.stage >= 4 ? 'good' : 'c0' }
-          ]
+          type: 'network', slot: 'bottom', h: 340,
+          title: '資料前處理全流程圖（第 ' + Math.min(st.stage + 1, 7) + ' / 7 階段｜下方標註對應實驗）',
+          layerLabels: ['1. 輸入切分', '2. 清理', '3. 轉換', '4. 優化', '5. 輸出'],
+          layers, edges
         };
         return [main, side, bottom];
       }
@@ -148,36 +159,36 @@
       const st = { stage: 0 };
       const add = (line, title, say, calc) => steps.push({ line, title, say, calc: calc || [], views: views(st), focus: [] });
 
-      add(0, '1. 盤點原始資料', '先看資料型態與問題：#3 年齡缺值、#6 血糖高達 320、科別是文字。切記：先切分訓練／測試集再學統計量！', [
+      add(0, '1. 切分與盤點資料', R.isStrict ? '嚴格管線第一條鐵律：先切出測試集封存，接下來的補值、縮放與編碼全都在訓練集內 fit！' : '先看資料問題：#3 年齡缺值、#6 血糖高達 320、科別是文字。', [
         '共 ' + rows.length + ' 筆｜缺值 1 格｜極端離群 1 筆｜文字欄 1 欄'
       ]);
       st.stage = 1;
-      add(1, '2a. 遺失值補值', '用訓練集年齡中位數 ' + f(R.medAge, 0) + ' 填補 #3 的缺格，確保所有特徵都有數值。', [
-        '中位數不受極端值影響；對應實驗：A1 遺失值補值'
+      add(1, '2a. 遺失值補值 (A1)', '用訓練集年齡中位數 ' + f(R.medAge, 0) + ' 填補 #3 的缺格；線性關係強時也可改用 k-NN 補值。', [
+        '可用演算法：A1（平均數／中位數／k-NN 補值）'
       ]);
       st.stage = 2;
-      add(2, '2b. 離群值偵測與縮尾', '依 IQR 圍籬算出血糖上界 ' + f(R.hi, 1) + '，將 #6 的 320 縮尾截斷，避免拉偏斜率。', [
-        '極端值由 320 截斷至 ' + f(R.hi, 1) + '；對應實驗：A7'
+      add(2, '2b. 離群值縮尾 (A7)', '依 IQR 圍籬算出血糖上界 ' + f(R.hi, 1) + '，將 #6 的 320 縮尾截斷，避免拉偏線性迴歸斜率。', [
+        '可用演算法：A7（IQR 圍籬＋刪除法／縮尾法）'
       ]);
       st.stage = 3;
-      add(3, '3a. 類別編碼', '模型只吃數字，將文字「科別」轉為 One-Hot（線性模型可用 Dummy 減一欄防共線）。', [
-        '急診 → 1，非急診 → 0；對應實驗：A4 類別編碼'
+      add(3, '3a. 類別編碼 (A4)', '將文字「科別」轉為數值：樹模型用 One-hot、線性模型用 Dummy 減一欄、高基數用目標編碼。', [
+        '可用演算法：A4（One-hot／Dummy／目標編碼）'
       ]);
       st.stage = 4;
-      add(4, '3b. 特徵縮放（依模型）', R.isLinear ? '下游是線性／距離模型，把年齡與血糖都轉為 Z 分數，避免大尺度欄主導距離。' : '下游是樹模型（決策樹／隨機森林），只看大小排序切點，可跳過特徵縮放！', [
-        R.isLinear ? 'Z = (x − μ) ÷ σ；對應實驗：A2' : '樹模型對單調縮放不變，維持原尺度更好解讀'
+      add(4, '3b. 特徵縮放 (A2)', R.isLinear ? '線性／距離／神經網路必做標準化（Z 分數或 Min-Max），避免血糖大尺度主導距離計算。' : '樹模型（決策樹／隨機森林／GBDT）只看大小排序切點，可跳過特徵縮放！', [
+        R.isLinear ? '可用演算法：A2（Z 分數／Min-Max）' : '樹模型可改用 A3 離散化分箱或維持原尺度'
       ]);
       st.stage = 5;
-      add(5, '4. 特徵選擇與不平衡', '移除冗餘特徵降低過擬合；若陽性比例過低，只在訓練集做 SMOTE 過抽樣或調類別權重。', [
-        '目前陽性 ' + R.nPos + ' / ' + rows.length + ' 筆；對應實驗：A5、A6'
+      add(5, '4. 篩選與平衡 (A5/A6)', '用 Filter/Wrapper 刪除冗餘特徵（A6）；若類別極度不平衡，只在訓練集做 SMOTE 合成（A5）。', [
+        '可用演算法：A5（SMOTE／欠抽樣）＋ A6（相關/IG/向前選擇）'
       ]);
       st.stage = 6;
-      add(6, '5. 輸出乾淨特徵矩陣', '所有欄位皆已完整、無極端扭曲、全數值化且尺度一致，可正式送入監督或非監督模型！', [
-        '完整度 100%｜穩健度 100%｜可重複套用於未來新病人'
+      add(6, '5. 輸出乾淨矩陣', '所有欄位皆完整、無極端扭曲、全數值化且尺度一致，可封裝進 Pipeline 套用到測試集與新病人！', [
+        '原則：fit on train → transform on val/test'
       ]);
       while (steps.length < 10) {
-        add(6, '實務黃金原則：防洩漏', '補值中位數、縮放 μ/σ、編碼表與 SMOTE 都必須「只從訓練集學」，再原封不動套用到驗證與測試集。', [
-          '原則：fit on train → transform on val/test'
+        add(6, '管線設計總結', '線性／k-NN／SVM／NN 務必完整走完補值＋縮尾＋編碼＋縮放；樹模型則可省去縮放步驟。', [
+          '目前選擇：' + (R.mode === 'tree' ? '樹模型管線' : R.isStrict ? '防洩漏嚴格管線' : '線性／距離管線')
         ]);
       }
       return steps;
@@ -189,15 +200,15 @@
     explain(steps, rows, p) {
       const R = simulate(rows, p);
       return [
-        '資料前處理的標準順序為：切分資料 → 補值與離群處理 → 類別編碼 → 依模型決定是否縮放 → 特徵選擇與不平衡處理。',
-        '所有需要計算統計量（平均、標準差、中位數、編碼字典）的步驟，都只能用訓練集計算，否則會造成資料洩漏。',
-        R.isLinear ? '線性迴歸、Logistic、k-NN、SVM 與神經網路都對尺度敏感，務必做標準化；樹模型則可免縮放。' : '決策樹與隨機森林對特徵縮放不敏感，保留原始單位反而更易臨床解讀。'
+        '資料前處理有三種常見實務考量：線性／距離模型必須縮放（A2）與處理離群（A7）；樹模型可免縮放；嚴格防洩漏管線必須先切分再 fit。',
+        '每一步都有對應的交互實驗：A1 補值、A2 縮放、A3 離散化、A4 編碼、A5 平衡、A6 選特徵、A7 離群值。',
+        '務必把前處理步驟打包成 Pipeline，確保測試集與未來線上新資料使用完全相同的平均、標準差與編碼字典。'
       ];
     },
     aistudio: {
       operators: ['Read CSV', 'Split Data', 'Replace Missing Values', 'Nominal to Numerical', 'Normalize'],
       params: [['Split Data', '0.8 / 0.2'], ['Normalize', 'Z-transformation (樹模型可略)']],
-      note: '在 AI Studio 中建議用 Group Models 把前處理模型與預測模型打包，再用一個 Apply Model 同時套用到測試集，徹底防止資料洩漏。',
+      note: '在 AI Studio 中建議用 Group Models 把前處理與模型打包，再用一個 Apply Model 同時套用到測試集，徹底防止資料洩漏。',
       expect: () => ['產出無缺值、純數值、尺度一致的特徵表'],
       python: 'from sklearn.pipeline import make_pipeline\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import StandardScaler',
       confirmed: false

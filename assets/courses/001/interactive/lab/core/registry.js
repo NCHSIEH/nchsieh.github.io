@@ -17,11 +17,14 @@
   ];
   const m = (name, url) => ({ name, url });
   LAB.registry = [
-    { id: 'S1', group: 'S', title: '資料前處理流程', brief: '原始資料 → 補值與離群處理 → 編碼與縮放 → 特徵篩選，動畫走過每一步。', module: m('M1 資料準備', '../m1/'), status: 'live' },
-    { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '切分訓練／測試集、K-Fold 交叉驗證調參、模型訓練與最終驗收。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
-    { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '無標籤探索 → 必做標準化 → 降維視覺化 → 分群或異常偵測與評估。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
-    { id: 'S4', group: 'S', title: '深度學習流程', brief: '張量準備 → 網路架構 → 前向計算 → 反向傳播更新權重 → 早停部署。', module: m('M5 深度學習', '../m5/'), status: 'live' },
-    { id: 'S5', group: 'S', title: 'NLP 文字處理流程', brief: '文本清理 → 斷詞／BPE → 向量化（TF-IDF/詞嵌入）→ 建模與 RAG 應用。', module: m('M6 文字探勘', '../m6/'), status: 'live' },
+    { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A7 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
+    { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '分類、迴歸與不平衡 3 條管線，含 K-Fold 調參回圈與 B1–B16 對照。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
+    { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '病人分群、異常偵測與降維壓縮 3 條管線，對照 C1–C10 演算法。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
+    { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大主流架構管線。', module: m('M5 深度學習', '../m5/'), status: 'live' },
+    { id: 'S5', group: 'S', title: 'NLP 與 LLM 處理流程', brief: '傳統 TF-IDF、Word2Vec 詞向量與現代 LLM＋RAG 3 條文字管線。', module: m('M6 文字探勘', '../m6/'), status: 'live' },
+    { id: 'S6', group: 'S', title: '時間序列預測流程', brief: '統計 ARIMA／指數平滑、滯後特徵 ML 與 LSTM 序列 3 條滾動驗證流程。', module: m('M4 時間序列', '../m4/#p15'), status: 'live' },
+    { id: 'S7', group: 'S', title: '關聯規則探勘流程', brief: '比較 Apriori 逐層剪枝與 FP-Growth 前綴樹 2 條關聯探勘與 Lift 篩選流程。', module: m('M4 關聯規則', '../m4/#p12'), status: 'live', tier: 'adv' },
+    { id: 'S8', group: 'S', title: '可解釋性與上線監控', brief: 'SHAP 歸因與醫療門檻校正、上線飄移監控與重訓 2 條落地管線。', module: m('M9 可解釋性', '../m9/#p11'), status: 'live', tier: 'adv' },
 
     { id: 'A1', group: 'A', title: '遺失值補值', brief: '平均數、中位數、k-NN 三種補法，逐格算給你看。', module: m('M1 第 06 節', '../m1/#p06'), status: 'live' },
     { id: 'A2', group: 'A', title: '標準化與正規化', brief: 'Z 分數與 Min-Max 逐欄計算，看距離怎麼被單位左右。', module: m('M1 第 10 節', '../m1/#p10'), status: 'live' },
@@ -93,7 +96,10 @@
     S2: 'Supervised Learning & CV Pipeline',
     S3: 'Unsupervised Learning Pipeline',
     S4: 'Deep Learning Training Pipeline',
-    S5: 'NLP & Text Mining Pipeline',
+    S5: 'NLP & LLM Processing Pipelines',
+    S6: 'Time Series Forecasting Pipelines',
+    S7: 'Association Rule Mining Pipelines',
+    S8: 'XAI & MLOps Monitoring Pipelines',
     A1: 'Missing Value Imputation',
     A2: 'Standardization & Normalization',
     A3: 'Discretization / Binning',
