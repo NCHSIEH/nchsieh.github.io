@@ -58,21 +58,43 @@
         const done = k => st.stage > k;
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
-        const layers = [
-          [{ id: 'txt', label: '1. 原始文字', value: rows.length + ' 句', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: '清理＋去識別' }],
-          [{ id: 'tok', label: R.isLLM ? '2. BPE 子詞' : '2. 中文斷詞', value: st.stage >= 1 ? '切詞完成' : '字串', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: R.isLLM ? 'H1 BPE' : 'E1 最大匹配' }],
-          [{ id: 'flt', label: R.isLLM ? '3. 嵌入+位置' : '3. 去停用詞', value: st.stage >= 2 ? (R.isLLM ? 'E + PE' : '留關鍵詞') : '含虛詞', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: R.isLLM ? 'H2 位置編碼' : 'E1 刪功能詞' }],
-          [{ id: 'vec', label: R.isLLM ? '4. 注意力層' : R.isEmb ? '4. Word2Vec' : '4. TF-IDF', value: st.stage >= 3 ? '向量化' : '待轉換', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: R.isLLM ? 'H3/H4 Attn' : R.isEmb ? 'E3 Skip-gram' : 'E1 詞頻加權' }],
-          [{ id: 'app', label: R.isLLM ? '5. RAG / 生成' : R.isEmb ? '5. 語意檢索' : '5. 分類 / 主題', value: st.stage >= 4 ? '完成' : '待推論', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: R.isLLM ? 'H5/H6/H7' : R.isEmb ? '餘弦相似詞' : 'E2 NB · E4 LDA' }]
+        const layers = R.isLLM ? [
+          [
+            { id: 'q', label: '1a. 使用者提問', value: 'Query', shape: 'box', w: 148, cls: clsOf(0), hl: act(0), sub: '問題文本' },
+            { id: 'kb', label: '1b. 知識庫切塊', value: '衛教文件', shape: 'box', w: 148, cls: clsOf(0), hl: act(0), sub: 'H6 依句/依段' }
+          ],
+          [{ id: 'tok', label: '2. BPE + 嵌入', value: st.stage >= 1 ? 'E + PE' : '切子詞', shape: 'box', w: 150, cls: clsOf(1) || clsOf(2), hl: act(1) || act(2), sub: 'H1 BPE · H2 位置' }],
+          [{ id: 'vec', label: '3. Self-Attention', value: st.stage >= 3 ? 'Q·K·V 融合' : '待運算', shape: 'box', w: 150, cls: clsOf(3), hl: act(3), sub: 'H3/H4 注意力層' }],
+          [{ id: 'rag', label: '4. RAG 檢索組裝', value: st.stage >= 4 ? 'BM25+向量' : '待檢索', shape: 'box', w: 150, cls: clsOf(4), hl: act(4), sub: 'H6 RRF 取 Top-K' }],
+          [{ id: 'gen', label: '5. 解碼生成 / LoRA', value: st.stage >= 5 ? '完成回答' : '待生成', shape: 'box', w: 152, cls: clsOf(4), hl: act(4), sub: 'H5 Top-p · H7 LoRA' }]
+        ] : [
+          [{ id: 'txt', label: '1. 原始文字', value: rows.length + ' 句', shape: 'box', w: 150, cls: clsOf(0), hl: act(0), sub: '清理＋去識別' }],
+          [{ id: 'tok', label: '2. 中文斷詞', value: st.stage >= 1 ? '切詞完成' : '字串', shape: 'box', w: 150, cls: clsOf(1), hl: act(1), sub: 'E1 最大匹配' }],
+          [{ id: 'flt', label: '3. 去停用詞', value: st.stage >= 2 ? '留關鍵詞' : '含虛詞', shape: 'box', w: 150, cls: clsOf(2), hl: act(2), sub: 'E1 刪功能詞' }],
+          [{ id: 'vec', label: R.isEmb ? '4. Word2Vec' : '4. TF-IDF 矩陣', value: st.stage >= 3 ? '向量化' : '待轉換', shape: 'box', w: 150, cls: clsOf(3), hl: act(3), sub: R.isEmb ? 'E3 Skip-gram' : 'E1 詞頻加權' }],
+          R.isEmb
+            ? [{ id: 'app', label: '5. 語意檢索/分類', value: st.stage >= 4 ? '完成' : '待推論', shape: 'box', w: 152, cls: clsOf(4), hl: act(4), sub: '餘弦相似詞' }]
+            : [
+                { id: 'app1', label: '5a. 文本分類', value: '跌倒/痛/傷口', shape: 'box', w: 150, cls: clsOf(4), hl: act(4), sub: 'E2 Naive Bayes' },
+                { id: 'app2', label: '5b. 主題探勘', value: '隱含主題', shape: 'box', w: 150, cls: clsOf(4), hl: act(4), sub: 'E4 LDA 主題模型' }
+              ]
         ];
-        const edges = [
+        const edges = R.isLLM ? [
+          { from: 'q', to: 'tok', active: st.stage === 1 || st.stage === 2, cls: done(0) ? 'good' : 'c5' },
+          { from: 'kb', to: 'rag', active: st.stage === 4, cls: done(0) ? 'c2' : 'c5', label: '混合檢索' },
+          { from: 'tok', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'vec', to: 'rag', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'rag', to: 'gen', active: st.stage === 4 || st.stage === 5, cls: done(3) ? 'good' : 'c5' }
+        ] : [
           { from: 'txt', to: 'tok', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'tok', to: 'flt', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'flt', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'vec', to: 'app', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          ...(R.isEmb
+            ? [{ from: 'vec', to: 'app', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }]
+            : [{ from: 'vec', to: 'app1', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }, { from: 'vec', to: 'app2', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }])
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1520, h: 150,
+          type: 'network', slot: 'main', w: 1500, h: R.isEmb ? 160 : 215,
           title: 'NLP 文字處理全流程圖（' + (R.isLLM ? '現代 LLM＋RAG' : R.isEmb ? 'Word2Vec 詞向量' : '傳統 TF-IDF') + '）',
           layerLabels: ['1. 原文', '2. 切分', '3. 精煉', '4. 表示/運算', '5. 應用'],
           layers, edges

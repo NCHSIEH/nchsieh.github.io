@@ -60,26 +60,64 @@
         const done = k => st.stage > k;
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
-        const layers = [
-          [{ id: 'x', label: '1. 無標籤 X', value: rows.length + ' 筆', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: '沒有答案 y' }],
-          [{ id: 'scl', label: '2. 必做標準化', value: st.stage >= 1 ? 'Z 分數' : '單位不同', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: 'A2 防大尺主導' }],
-          [{ id: 'dim', label: '3. 降維探索', value: st.stage >= 2 ? '84% 變異' : '高維', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: 'C5 PCA · C6 t-SNE' }],
+        const layers = R.isAnom ? [
+          [{ id: 'x', label: '1. 無標籤 X', value: rows.length + ' 筆', shape: 'box', w: 145, cls: clsOf(0), hl: act(0), sub: '沒有答案 y' }],
+          [{ id: 'scl', label: '2. 標準化', value: st.stage >= 1 ? 'Z 分數' : '待縮放', shape: 'box', w: 145, cls: clsOf(1), hl: act(1), sub: 'A2 防大尺主導' }],
           [
-            { id: 'clu', label: '4a. 分群探勘', value: R.isAnom || R.isDim ? '略過' : 'K=3 亞型', shape: 'box', w: 156, cls: R.isAnom || R.isDim ? 'c5' : clsOf(3), hl: !R.isAnom && !R.isDim && act(3), dim: R.isAnom || R.isDim, sub: 'C1/C2/C3/C4/C10' },
-            { id: 'ano', label: '4b. 異常偵測', value: R.isAnom ? '抓離群點' : '略過', shape: 'box', w: 156, cls: !R.isAnom ? 'c5' : clsOf(3), hl: R.isAnom && act(3), dim: !R.isAnom, sub: 'C7 LOF · C8 IF · F5' }
+            { id: 'd1', label: '3a. LOF 密度', value: '局部稀疏', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: 'C7 鄰居密度比' },
+            { id: 'd2', label: '3b. Isolation', value: '隨機孤立', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: 'C8 幾刀被切出' },
+            { id: 'd3', label: '3c. Autoencoder', value: '重建誤差', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: 'F5 還原失敗度' }
           ],
-          [{ id: 'int', label: '5. 評估解讀', value: st.stage >= 4 ? (R.isAnom ? '複核 #' + R.topAnomaly : (R.isDim ? '保留2軸' : 'Sil=0.56')) : '待評估', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: R.isAnom ? '人工複核極端' : 'C9 輪廓係數 · 命名' }]
+          [{ id: 'rank', label: '4. 異常排序', value: 'Top #' + R.topAnomaly, shape: 'box', w: 145, cls: clsOf(4), hl: act(4), sub: '由高到低抽檢' }],
+          [{ id: 'int', label: '5. 醫師複核', value: st.stage >= 4 ? '錯誤 vs 罕病' : '待確認', shape: 'box', w: 145, cls: clsOf(4), hl: act(4), sub: '不可盲目刪除' }]
+        ] : R.isDim ? [
+          [{ id: 'x', label: '1. 高維 X', value: '4+ 維特徵', shape: 'box', w: 145, cls: clsOf(0), hl: act(0), sub: '含共線性' }],
+          [{ id: 'scl', label: '2. 標準化', value: 'Z 分數', shape: 'box', w: 145, cls: clsOf(1), hl: act(1), sub: 'A2 必做' }],
+          [{ id: 'dim', label: '3. 特徵分解', value: '84% 變異', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: 'C5 PCA / C6 t-SNE' }],
+          [
+            { id: 'pc1', label: 'PC1 主軸', value: '最大變異', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: '保留 62%' },
+            { id: 'pc2', label: 'PC2 正交軸', value: '次大變異', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: '保留 22%' }
+          ],
+          [{ id: 'int', label: '5. 視覺/下游', value: '去共線新特徵', shape: 'box', w: 145, cls: clsOf(4), hl: act(4), sub: '累積變異 ≥80%' }]
+        ] : [
+          [{ id: 'x', label: '1. 無標籤 X', value: rows.length + ' 筆', shape: 'box', w: 145, cls: clsOf(0), hl: act(0), sub: '沒有答案 y' }],
+          [{ id: 'scl', label: '2. 標準化', value: st.stage >= 1 ? 'Z 分數' : '單位不同', shape: 'box', w: 145, cls: clsOf(1), hl: act(1), sub: 'A2 防大尺主導' }],
+          [{ id: 'dim', label: '3. 降維探索', value: st.stage >= 2 ? '84% 變異' : '高維', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: 'C5 PCA · C6 t-SNE' }],
+          [
+            { id: 'c1', label: '群 1 亞型', value: '低風險', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: 'C1 K-Means / C3' },
+            { id: 'c2', label: '群 2 亞型', value: '中風險', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: 'C2 階層 / C4 GMM' },
+            { id: 'c3', label: '群 3 亞型', value: '高風險', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: 'C10 K-Medoids' }
+          ],
+          [{ id: 'int', label: '5. 評估命名', value: st.stage >= 4 ? 'Sil=0.56' : '待評估', shape: 'box', w: 145, cls: clsOf(4), hl: act(4), sub: 'C9 輪廓係數挑 K' }]
         ];
-        const edges = [
+        const edges = R.isAnom ? [
+          { from: 'x', to: 'scl', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'scl', to: 'd1', active: st.stage === 3, cls: done(1) ? 'good' : 'c5' },
+          { from: 'scl', to: 'd2', active: st.stage === 3, cls: done(1) ? 'good' : 'c5' },
+          { from: 'scl', to: 'd3', active: st.stage === 3, cls: done(1) ? 'good' : 'c5' },
+          { from: 'd1', to: 'rank', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'd2', to: 'rank', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'd3', to: 'rank', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'rank', to: 'int', active: st.stage === 4 || st.stage === 5, cls: done(3) ? 'good' : 'c5' }
+        ] : R.isDim ? [
           { from: 'x', to: 'scl', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'scl', to: 'dim', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'dim', to: 'clu', active: st.stage === 3 && !R.isAnom, dim: R.isAnom, cls: done(2) && !R.isAnom ? 'good' : 'c5' },
-          { from: 'dim', to: 'ano', active: st.stage === 3 && R.isAnom, dim: !R.isAnom, cls: done(2) && R.isAnom ? 'good' : 'c5' },
-          { from: 'clu', to: 'int', active: st.stage === 4 && !R.isAnom, dim: R.isAnom, cls: done(3) && !R.isAnom ? 'good' : 'c5' },
-          { from: 'ano', to: 'int', active: st.stage === 4 && R.isAnom, dim: !R.isAnom, cls: done(3) && R.isAnom ? 'good' : 'c5' }
+          { from: 'dim', to: 'pc1', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'dim', to: 'pc2', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'pc1', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'pc2', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+        ] : [
+          { from: 'x', to: 'scl', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'scl', to: 'dim', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'dim', to: 'c1', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'dim', to: 'c2', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'dim', to: 'c3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'c1', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'c2', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'c3', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1480, h: 215,
+          type: 'network', slot: 'main', w: 1480, h: R.isDim ? 215 : 250,
           title: '非監督式學習全流程圖（' + (R.isAnom ? '異常偵測路徑' : R.isDim ? '降維壓縮路徑' : '分群探索路徑') + '）',
           layerLabels: ['1. 無標籤', '2. 標準化', '3. 降維', '4. 探勘模型', '5. 評估解讀'],
           layers, edges
