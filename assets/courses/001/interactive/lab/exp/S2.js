@@ -1,4 +1,4 @@
-/* S2 監督式學習標準流程（分類／迴歸／不平衡 3 條管線＋可用演算法） */
+/* S2 監督式學習標準流程（單一線性／單一樹規則／集成學習／不平衡分類 4 條管線） */
 (function () {
   'use strict';
   const M = LAB.M, f = LAB.f;
@@ -23,47 +23,72 @@
   function simulate(p) {
     const k = Math.max(3, Math.round(p.folds || 5));
     const task = p.task || 'clf';
-    const isReg = task === 'reg';
+    const isTree = task === 'tree';
+    const isEns = task === 'ensemble';
     const isImb = task === 'imbalance';
     const cvScores = M.range(k, i => Number((0.81 + Math.sin(i * 1.7) * 0.035).toFixed(3)));
     const meanCv = M.mean(cvScores);
     const testScore = Number((meanCv - 0.014).toFixed(3));
-    return { k, task, isReg, isImb, cvScores, meanCv, testScore };
+    return { k, task, isTree, isEns, isImb, cvScores, meanCv, testScore };
   }
 
   LAB.register({
     id: 'S2', group: 'S', title: '監督式學習流程（含 CV）',
     module: { name: 'M2 監督式學習', url: '../m2-2/#p08' },
-    goal: '透過全寬流程圖對照「分類＋CV」、「迴歸＋CV」與「不平衡醫療分類」3 條標準管線，標註各步可用的 B1–B16 與 A5 演算法。',
+    goal: '點選不同管線比較「單一線性／距離模型」、「單一樹／規則模型」、「集成學習 (RF/GBDT/Stacking)」與「不平衡醫療分類」的完整標準流程。',
     data: {
       name: 'sup_cv_flow',
-      scenario: '120 位門診病人資料（80% 訓練開發、20% 封存測試），走完監督式學習與交叉驗證全流程',
+      scenario: '120 位門診病人資料（80% 訓練開發、20% 封存測試），比較 4 種監督式學習標準管線',
       columns: COLS,
       small: makeRows
     },
     params: [
-      { key: 'task', label: '監督學習管線', type: 'choice', value: 'clf', options: [{ v: 'clf', label: '標準分類＋CV' }, { v: 'reg', label: '連續迴歸＋CV' }, { v: 'imbalance', label: '不平衡醫療分類 (SMOTE+PR)' }] },
+      { key: 'task', label: '監督學習管線', type: 'choice', value: 'clf', options: [
+        { v: 'clf', label: '單一線性／距離模型' },
+        { v: 'tree', label: '單一樹／規則模型' },
+        { v: 'ensemble', label: '集成學習 (Bagging/Boosting)' },
+        { v: 'imbalance', label: '不平衡醫療分類 (SMOTE+PR)' }
+      ] },
       { key: 'folds', label: '交叉驗證折數 K', type: 'int', min: 3, max: 10, step: 1, value: 5 }
     ],
     pseudo: [
       '1. 準備特徵 X 與標準答案標籤 y',
       '2. 切出訓練集 (80%) 與封存測試集 (20%)',
       '3. 在訓練集內執行 K 折交叉驗證：',
-      '   輪流留 1 折驗證（不平衡需折內採樣）',
-      '   網格搜尋最佳超參數組合',
+      '   依模型家族做對應前處理（折內不洩漏）',
+      '   網格搜尋最佳超參數或集成組合',
       '4. 用最佳參數重訓全體訓練集',
       '5. 解封測試集評估並校正決策門檻'
     ],
     build(rows, p) {
       const R = simulate(p), steps = [];
-      const metric = R.isReg ? 'R²' : (R.isImb ? 'PR-AUC' : 'ROC-AUC');
+      const metric = R.isImb ? 'PR-AUC' : 'ROC-AUC';
+      const pipeName = R.isTree ? '單一樹／規則管線' : R.isEns ? '集成學習管線' : R.isImb ? '不平衡醫療分類' : '單一線性／距離管線';
 
-      const ALGO_ROWS = [
-        { id: 's0', st: '1. 定義 X 與 y', alg: R.isReg ? '連續血壓/費用' : '二元/多元標籤', use: '先確認問題是分類還是迴歸' },
-        { id: 's1', st: '2. 切分訓練/測試', alg: R.isReg ? '隨機切分' : '分層抽樣 Stratified', use: '分類保留正負比例，測試集鎖進保險箱' },
-        { id: 's2', st: '3. ' + R.k + '-Fold CV 調參', alg: R.isReg ? 'B1/B2/B9/B11/B14' : (R.isImb ? 'A5 折內 + B6/B7/B9' : 'B3/B4/B5/B6/B7/B10'), use: '搭配 B13 網格搜尋挑最佳超參數' },
-        { id: 's3', st: '4. 全訓練集重訓', alg: R.isReg ? 'Ridge/Lasso/GBDT' : 'B7 森林 / B12 集成', use: '用 100% 訓練資料與最佳參數重訓' },
-        { id: 's4', st: '5. 驗收與門檻校正', alg: R.isReg ? 'MSE / R² / 殘差圖' : 'B16 ROC & PR 曲線', use: R.isImb ? '依漏診/誤報成本調門檻，不用預設 0.5' : '最後才解封測試集評估泛化力' }
+      const ALGO_ROWS = R.isTree ? [
+        { id: 's0', st: '1. 切分訓練/測試', alg: 'Stratified Split (80/20)', use: '保留原始正負比例，測試集封存' },
+        { id: 's1', st: '2. 樹專用前處理', alg: '免縮放 · A4 One-hot', use: '保留原始 BMI/血糖單位，直接看出切點意義' },
+        { id: 's2', st: '3. ' + R.k + '-Fold 剪枝調深', alg: 'B6 決策樹 · B14 迴歸樹 · B15 規則', use: '用 B13 CV 調整 max_depth 防止樹長太深過擬合' },
+        { id: 's3', st: '4. 產出可解釋規則', alg: '視覺化樹狀圖 / IF–THEN', use: '可列印給醫師審查每條切點門檻' },
+        { id: 's4', st: '5. 測試驗收', alg: 'B16 ROC / PR · 準確率', use: '解封測試集驗證真實泛化表現' }
+      ] : R.isEns ? [
+        { id: 's0', st: '1. 切分訓練/測試', alg: 'Stratified Split (80/20)', use: '集成模型容量大，更要嚴守測試集隔離' },
+        { id: 's1', st: '2. 選集成策略', alg: 'Bagging(B7) / Boosting(B8,B9) / B12', use: '降變異用森林；降偏差用 GBDT；異質融合用 Stacking' },
+        { id: 's2', st: '3. ' + R.k + '-Fold 調學習率/樹數', alg: 'B13 網格搜尋 (n_trees, lr)', use: '森林可搭 OOB 袋外驗證；Stacking 需折外預測防洩漏' },
+        { id: 's3', st: '4. 全訓練集成重訓', alg: 'B7 RF · B9 GBDT · B12 Stacking', use: '結合多棵樹或異質基模型投票／堆疊' },
+        { id: 's4', st: '5. 測試驗收與 SHAP', alg: 'B16 ROC/PR · I1 SHAP 解釋', use: '黑箱集成模型搭配 I1 SHAP 補回可解釋性' }
+      ] : R.isImb ? [
+        { id: 's0', st: '1. 分層切分', alg: 'Stratified Split (80/20)', use: '確保測試集也有足夠少數類陽性個案' },
+        { id: 's1', st: '2. 折內過抽樣', alg: 'A5 SMOTE（僅限訓練折）', use: '嚴禁在 CV 切分前就先做 SMOTE，否則驗證分數虛高' },
+        { id: 's2', st: '3. ' + R.k + '-Fold 優化 PR-AUC', alg: 'B3/B7/B9 + class_weight', use: '改用 PR-AUC 或 F1 挑超參數，不看易被多數類稀釋的 Acc' },
+        { id: 's3', st: '4. 決策門檻校正', alg: 'B16 移動機率門檻', use: '依漏診與誤報醫療成本調降切點，取代預設 0.50' },
+        { id: 's4', st: '5. 測試集最終驗收', alg: 'Recall / Precision / PR-AUC', use: '確認實戰抓出高風險病人的能力' }
+      ] : [
+        { id: 's0', st: '1. 準備與切分', alg: 'Stratified Split (80/20)', use: '線性／距離模型對資料洩漏敏感，必先切分' },
+        { id: 's1', st: '2. 必做縮放與共線處理', alg: 'A2 標準化 · A4 Dummy · A7 縮尾', use: '必做 Z 分數（否則 k-NN/SVM 被大尺度欄主導）' },
+        { id: 's2', st: '3. ' + R.k + '-Fold 調正則化', alg: 'B1/B2 Ridge·Lasso / B3 / B4 / B5 / B10', use: '用 B13 網格搜尋調 λ、k-NN 的 K 或 SVM 的 C' },
+        { id: 's3', st: '4. 全訓練集重訓', alg: 'B2/B3/B10 最佳超參數', use: '用全部訓練資料算出最終權重或支持向量' },
+        { id: 's4', st: '5. 驗收與係數解讀', alg: 'B16 ROC/PR · 勝算比 OR', use: '線性模型可直接從係數 exp(w) 解讀風險倍數' }
       ];
 
       function views(st) {
@@ -71,14 +96,14 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'data', label: '1. X 與標籤 y', value: '120 筆', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: R.isReg ? '連續 y' : (R.isImb ? '少數陽性' : '分類 y') }],
+          [{ id: 'data', label: '1. X 與標籤 y', value: '120 筆', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: R.isImb ? '少數陽性極不平衡' : '分類／迴歸目標' }],
           [
-            { id: 'tr', label: '2a. 訓練開發集', value: '96 筆 (80%)', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: R.isImb ? '分層+折內 A5' : '前處理+CV' },
+            { id: 'tr', label: R.isTree ? '2a. 訓練(免縮放)' : R.isImb ? '2a. 訓練+折內A5' : '2a. 訓練+標準化', value: '96 筆 (80%)', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: R.isTree ? '保留原單位' : R.isImb ? '折內 SMOTE' : 'A2 標準化+Dummy' },
             { id: 'te', label: '2b. 封存測試集', value: '24 筆 (20%)', shape: 'box', w: 156, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c4'), hl: act(5), sub: st.stage < 5 ? '嚴禁偷看' : '最終驗收' }
           ],
-          [{ id: 'cv', label: '3. ' + R.k + '-Fold CV', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: R.isReg ? 'B1/B2/B11/B14' : 'B3–B13 網格搜尋' }],
-          [{ id: 'fit', label: '4. 全訓練重訓', value: st.stage >= 3 ? '已收斂' : '待重訓', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: R.isReg ? 'B2/B9 GBDT' : 'B7 森林/B12 集成' }],
-          [{ id: 'eval', label: '5. 驗收與部署', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 156, cls: clsOf(5), hl: act(5), sub: R.isReg ? 'R² / RMSE' : 'B16 ROC/PR 門檻' }]
+          [{ id: 'cv', label: R.isEns ? '3. 集成 CV 調參' : '3. ' + R.k + '-Fold CV', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: R.isTree ? 'B6/B14/B15 調樹深' : R.isEns ? 'B7/B8/B9/B12 調參' : 'B1–B5/B10/B13' }],
+          [{ id: 'fit', label: R.isEns ? '4. 多模集成重訓' : R.isImb ? '4. 重訓＋調門檻' : '4. 全訓練重訓', value: st.stage >= 3 ? '已收斂' : '待重訓', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: R.isTree ? '產出樹/IF-THEN' : R.isEns ? '投票/殘差/Stacking' : R.isImb ? 'B16 校正切點' : '鎖定最佳參數' }],
+          [{ id: 'eval', label: '5. 驗收與部署', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 156, cls: clsOf(5), hl: act(5), sub: R.isEns ? 'B16 + I1 SHAP' : 'B16 ROC/PR 驗收' }]
         ];
         const edges = [
           { from: 'data', to: 'tr', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '80%' },
@@ -90,9 +115,9 @@
           { from: 'te', to: 'eval', active: st.stage === 5, cls: done(4) ? 'good' : 'c4', label: '驗收' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1320, h: 230,
-          title: '監督式學習全流程圖（含 ' + R.k + '-Fold 調參回圈）',
-          layerLabels: ['1. 資料', '2. 切分', '3. 驗證調參', '4. 重訓', '5. 驗收'],
+          type: 'network', slot: 'main', w: 1480, h: 215,
+          title: '監督式學習全流程圖（' + pipeName + '｜' + R.k + '-Fold CV）',
+          layerLabels: ['1. 資料', '2. 切分與前處理', '3. 驗證調參', '4. 重訓策略', '5. 驗收解釋'],
           layers, edges
         };
         const side = {
@@ -111,7 +136,7 @@
         };
         const bottom = {
           type: 'table', slot: 'bottom',
-          title: '步驟與可用演算法對照（' + (R.isReg ? '迴歸管線' : R.isImb ? '不平衡分類管線' : '標準分類管線') + '）',
+          title: '步驟與可用演算法對照（' + pipeName + '）',
           cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '關鍵設計重點' }],
           rows: ALGO_ROWS.map((ar, idx) => ({
             id: ar.id,
@@ -125,36 +150,36 @@
       const st = { stage: 0, cvLoop: false };
       const add = (line, title, say, calc) => steps.push({ line, title, say, calc: calc || [], views: views(st), focus: [] });
 
-      add(0, '1. 準備 X 與標籤 y', '監督式學習有標準答案 y。先依任務選對指標：分類看 ROC/PR-AUC，迴歸看 R²/RMSE，不平衡看 PR-AUC。', [
-        '目前管線：' + (R.isReg ? '連續迴歸' : R.isImb ? '不平衡分類' : '標準分類') + '｜指標：' + metric
+      add(0, '1. 準備 X 與標籤 y', '監督式學習有標準答案 y。依「線性距離 / 樹規則 / 集成 / 不平衡」選對管線，從源頭決定前處理與調參策略。', [
+        '目前選擇：' + pipeName + '｜指標：' + metric
       ]);
       st.stage = 1;
-      add(1, '2. 切出獨立測試集', '把 20% 測試集封存。分類任務建議用分層抽樣（Stratified）確保訓練與測試的正負比例一致。', [
+      add(1, '2. 切分與專屬前處理', R.isTree ? '切分 80/20 後，樹模型可免縮放直接保留原單位；線性與距離模型則必做標準化（A2）。' : R.isImb ? '分層切分保留少數類比例；SMOTE（A5）只能寫在 CV 訓練折內。' : '切分後在訓練集做 Z 分數標準化（A2）、Dummy 編碼（A4）與離群縮尾（A7）。', [
         '訓練開發集 = 96 筆｜封存測試集 = 24 筆'
       ]);
       st.stage = 2;
-      add(2, '3a. K-Fold 交叉驗證', '在訓練集內做 ' + R.k + ' 折交叉驗證；若是不平衡分類，SMOTE（A5）只能寫在每一折的訓練側，不可先整份過採樣！', [
+      add(2, '3a. K-Fold 交叉驗證', '在訓練集內切成 ' + R.k + ' 折輪流驗證，算出平均 ' + metric + ' 評估模型穩定度。', [
         R.k + '-Fold 平均 ' + metric + ' = ' + f(R.meanCv, 3)
       ]);
       st.cvLoop = true;
-      add(4, '3b. 網格搜尋調參 (B13)', '比對不同模型家族與超參數（線性 B1/B3、k-NN B4、SVM B10、樹 B6/B7/B9）的 CV 平均分數。', [
-        '橙色回流箭頭代表「調參 → 重算 CV → 挑最佳模型」'
+      add(4, '3b. 網格搜尋調參 (B13)', R.isTree ? '調整樹深 max_depth 與葉節點最小樣本，防止決策樹過擬合（B6/B14/B15）。' : R.isEns ? '調整樹數、學習率（B9 GBDT）或訓練多異質基模型（B12 Stacking）。' : '搜尋正則化強度 λ（B2）、k-NN 的 K（B4）或 SVM 的 C/Kernel（B10）。', [
+        '橙色回流箭頭代表「調參 → 重算 CV → 挑最佳組合」'
       ]);
       st.cvLoop = false; st.stage = 3;
-      add(5, '4. 全訓練集重訓', '選定最佳模型與超參數後，用全部 96 筆訓練資料重訓（也可將多模結合為 Voting/Stacking B12）。', [
-        '可用集成：B7 隨機森林、B8 AdaBoost、B9 GBDT、B12 Stacking'
+      add(5, '4. 全訓練集重訓', R.isImb ? '重訓後用驗證集 PR 曲線（B16）移動判定門檻，取代預設 0.50。' : R.isEns ? '以全部 96 筆訓練資料重訓隨機森林／GBDT 或 Meta-Learner。' : '以全部 96 筆訓練資料與最佳超參數算出最終模型。', [
+        '資料量恢復為完整的 96 筆'
       ]);
       st.stage = 4;
-      add(5, '5a. 檢查過擬合與偏差', '比較訓練分數與 CV 分數（B11 過擬合檢查），若兩者落差太大可改用正則化（B2 Ridge/Lasso）或調淺樹深。', [
+      add(5, '5a. 過擬合與解釋檢查', R.isEns ? '集成模型準確率高但較黑箱，建議搭配 I1 SHAP 與排列重要度檢查特徵合理性。' : '比較訓練分數與 CV 分數落差（B11），確認無嚴重過擬合。', [
         'CV 平均 ' + metric + ' = ' + f(R.meanCv, 3)
       ]);
       st.stage = 5;
-      add(6, '5b. 解封測試集與校正', '用 24 筆測試集測出真實泛化分數 ' + metric + ' = ' + f(R.testScore, 3) + '；分類模型可依醫療成本調 B16 機率門檻。', [
+      add(6, '5b. 解封測試集驗收', '最後一次解封 24 筆測試集測出真實泛化表現 ' + metric + ' = ' + f(R.testScore, 3) + '！', [
         'CV = ' + f(R.meanCv, 3) + ' vs 測試 = ' + f(R.testScore, 3)
       ]);
       while (steps.length < 10) {
-        add(6, '模型挑選心法', '表格資料先試線性/Logistic 基線，再試隨機森林與 GBDT；若需高度可解釋性可用決策樹 B6 或 Rule Induction B15。', [
-          '測試集只能用來驗收，不可看到分數低就回頭調參！'
+        add(6, '四條管線選用比較', '需白箱解釋選「線性或單一樹」；追求最高預測力選「集成學習」；罕病篩檢務必走「不平衡管線」。', [
+          '目前管線：' + pipeName
         ]);
       }
       return steps;
@@ -166,20 +191,20 @@
     explain(steps, rows, p) {
       const R = simulate(p);
       return [
-        '監督式學習依任務分為分類、迴歸與不平衡分類三種管線，共同原則是「先封存測試集，只在訓練集內做 ' + R.k + '-Fold CV 調參」。',
-        '不平衡醫療資料務必在 CV 折內做 SMOTE（A5）並改看 PR-AUC 與調整判定門檻（B16）。',
-        'B 區 16 個實驗對應這條管線的各個核心模型與評估工具。'
+        '監督式學習依模型家族分為「單一線性／距離」、「單一樹／規則」、「集成學習」與「不平衡醫療分類」四條不同流程。',
+        '線性與距離模型必做標準化（A2）；樹模型可免縮放；集成模型常搭配 SHAP（I1）補回可解釋性；不平衡資料必做折內 SMOTE（A5）與門檻校正（B16）。',
+        '不管哪一條管線，測試集都只能封存到最後驗收一次，不可看測試分數回頭調參。'
       ];
     },
     aistudio: {
       operators: ['Read CSV', 'Split Data', 'Cross Validation', 'Apply Model', 'Performance'],
       params: [['Split Data', '0.8 / 0.2'], ['Cross Validation › number of folds', p => String(p.folds)]],
-      note: 'AI Studio 的 Cross Validation 子流程內左側放訓練模型（或含 SMOTE），右側放 Apply Model + Performance。',
+      note: 'AI Studio 的 Cross Validation 內可自由替換單一模型或集成運算子（Random Forest / GBDT / Vote / Stacking）。',
       expect: (steps, rows, p) => {
         const R = simulate(p);
         return [R.k + '-Fold 平均 ≈ ' + f(R.meanCv, 3) + '，測試驗收 ≈ ' + f(R.testScore, 3)];
       },
-      python: 'from sklearn.model_selection import train_test_split, GridSearchCV\n# 先切 test，再對 X_train 跑 GridSearchCV',
+      python: 'from sklearn.model_selection import train_test_split, GridSearchCV\n# 依模型家族組合 Pipeline 與 GridSearchCV',
       confirmed: false
     }
   });

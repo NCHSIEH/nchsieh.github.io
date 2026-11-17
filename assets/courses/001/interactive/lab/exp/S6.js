@@ -76,7 +76,7 @@
           { from: 'mod', to: 'fc', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1320, h: 175,
+          type: 'network', slot: 'main', w: 1520, h: 150,
           title: '時間序列預測全流程圖（' + (R.isMl ? '滯後特徵 ML' : R.isDl ? 'LSTM 深度序列' : '統計 ETS / ARIMA') + '）',
           layerLabels: ['1. 探索', '2. 平穩/建窗', '3. 時序切分', '4. 預測模型', '5. 滾動驗收'],
           layers, edges

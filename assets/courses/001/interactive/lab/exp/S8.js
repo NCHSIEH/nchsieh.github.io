@@ -72,7 +72,7 @@
           { from: 'mon', to: 'mod', active: st.stage === 4 && R.isOps, back: true, cls: 'c3', label: '飄移重訓' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1320, h: 175,
+          type: 'network', slot: 'main', w: 1520, h: 150,
           title: '模型落地與監控全流程圖（' + (R.isOps ? 'MLOps 監控重訓' : 'XAI 解釋與校正') + '）',
           layerLabels: ['1. 模型', '2. 全域解釋', '3. 單筆歸因', '4. 門檻校正', '5. 監控閉環'],
           layers, edges

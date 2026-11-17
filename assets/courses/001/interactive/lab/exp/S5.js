@@ -72,7 +72,7 @@
           { from: 'vec', to: 'app', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1320, h: 175,
+          type: 'network', slot: 'main', w: 1520, h: 150,
           title: 'NLP 文字處理全流程圖（' + (R.isLLM ? '現代 LLM＋RAG' : R.isEmb ? 'Word2Vec 詞向量' : '傳統 TF-IDF') + '）',
           layerLabels: ['1. 原文', '2. 切分', '3. 精煉', '4. 表示/運算', '5. 應用'],
           layers, edges
