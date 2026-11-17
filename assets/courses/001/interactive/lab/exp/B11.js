@@ -160,7 +160,11 @@
           ],
           rows: R.models.slice(0, st.shownDegs).map(md => ({
             id: 'd' + md.deg,
-            cells: [md.deg, md.trainMse, md.valMse],
+            cells: [
+              md.deg,
+              md.trainMse,
+              st.shownDegs >= 7 ? { v: f(md.valMse, 1), cls: md.deg === R.bestDeg ? 'good' : (md.valMse > 100 ? 'bad' : null) } : md.valMse
+            ],
             hl: md.deg === st.deg
           }))
         };

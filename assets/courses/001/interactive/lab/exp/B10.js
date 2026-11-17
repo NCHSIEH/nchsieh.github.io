@@ -180,10 +180,10 @@
             const z1a = (AX.x.min - R.mB) / R.sB, z1b = (AX.x.max - R.mB) / R.sB;
             const gA = ((rhs - w1 * z1a) / w2) * R.sG + R.mG;
             const gB = ((rhs - w1 * z1b) / w2) * R.sG + R.mG;
-            return { id, x1: AX.x.min, y1: gA, x2: AX.x.max, y2: gB, cls: dash ? 'c5' : 'hl', dash, w: dash ? 1.5 : 2.5, label };
+            return { id, x1: AX.x.min, y1: gA, x2: AX.x.max, y2: gB, cls: dash ? 'c2' : 'hl', dash, w: dash ? 1.5 : 2.5, label };
           }
           const bx = (rhs / w1) * R.sB + R.mB;
-          return { id, x1: bx, y1: AX.y.min, x2: bx, y2: AX.y.max, cls: dash ? 'c5' : 'hl', dash, w: dash ? 1.5 : 2.5, label };
+          return { id, x1: bx, y1: AX.y.min, x2: bx, y2: AX.y.max, cls: dash ? 'c2' : 'hl', dash, w: dash ? 1.5 : 2.5, label };
         };
         return [makeL(-b, 'db', false, '決策邊界'), makeL(1 - b, 'm1', true, '+1'), makeL(-1 - b, 'm2', true, '−1')];
       }
@@ -197,11 +197,13 @@
           label: String(r.id), r: 6
         }));
         const regions = st.showReg ? LAB.grid((x, y) => R.predictXY(x, y) >= 0 ? 'c1' : 'c0', AX.x.min, AX.x.max, AX.y.min, AX.y.max, 30, 20) : null;
+        const leg = [{ cls: 'c1', label: '是' }, { cls: 'c0', label: '否' }, { cls: 'hl', shape: 'ring', label: '支持向量' }];
+        if (!R.isRbf) leg.push({ cls: 'c2', shape: 'line', label: '±1 間隔帶' });
         const main = {
           type: 'scatter', slot: 'main',
           title: (R.isRbf ? 'RBF 核函數' : '線性') + ' SVM（C = ' + R.C + '）',
           axes: AX, points, lines: st.showLines ? linLines(sn.w1, sn.w2, sn.b) : [], circles: [], regions,
-          legend: [{ cls: 'c1', label: '是' }, { cls: 'c0', label: '否' }, { cls: 'hl', shape: 'ring', label: '支持向量' }]
+          legend: leg
         };
         const side = {
           type: 'table', slot: 'side',

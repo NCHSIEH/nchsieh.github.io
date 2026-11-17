@@ -97,20 +97,32 @@
           id: 'p' + r.id, x: r.bmi, y: r.sbp, cls: 'c0', label: String(r.id), r: 6
         }));
         const yAt = x => st.w * ((x - R.mx) / R.sx) + st.b;
+        const yOls = x => R.wStar * ((x - R.mx) / R.sx) + R.bStar;
         const lines = [];
+        if (st.showMean) {
+          lines.push({ id: 'mx', x1: R.mx, y1: AX.y.min, x2: R.mx, y2: AX.y.max, cls: 'c5', dash: true, w: 1.2, label: 'x̄' });
+          lines.push({ id: 'my', x1: AX.x.min, y1: R.my, x2: AX.x.max, y2: R.my, cls: 'c5', dash: true, w: 1.2, label: 'ȳ' });
+        }
+        if (st.showLine && p.method === 'gd') {
+          lines.push({ id: 'olsRef', x1: AX.x.min, y1: yOls(AX.x.min), x2: AX.x.max, y2: yOls(AX.x.max), cls: 'good', dash: true, w: 1.8, label: 'OLS 目標' });
+        }
         if (st.showLine) {
-          lines.push({ id: 'reg', x1: AX.x.min, y1: yAt(AX.x.min), x2: AX.x.max, y2: yAt(AX.x.max), cls: 'c1', w: 2.5, label: '迴歸線' });
+          lines.push({ id: 'reg', x1: AX.x.min, y1: yAt(AX.x.min), x2: AX.x.max, y2: yAt(AX.x.max), cls: p.method === 'ols' ? 'good' : 'c1', w: 2.5, label: p.method === 'ols' ? 'OLS 迴歸線' : 'GD 迴歸線' });
         }
         if (st.showRes) {
           rows.forEach(r => {
             lines.push({ id: 'res' + r.id, x1: r.bmi, y1: r.sbp, x2: r.bmi, y2: yAt(r.bmi), cls: 'c4', dash: true, w: 1.5 });
           });
         }
+        const legend = [{ cls: 'c0', label: '病人' }];
+        if (p.method === 'gd') legend.push({ cls: 'c1', shape: 'line', label: 'GD 迴歸線' });
+        legend.push({ cls: 'good', shape: 'line', label: p.method === 'ols' ? 'OLS 迴歸線' : 'OLS 目標線' });
+        legend.push({ cls: 'c4', shape: 'line', label: '殘差' });
         const main = {
           type: 'scatter', slot: 'main',
           title: 'BMI × 收縮壓與迴歸線',
           axes: AX, points, lines, circles: [],
-          legend: [{ cls: 'c0', label: '病人' }, { cls: 'c1', label: '迴歸線' }, { cls: 'c4', shape: 'line', label: '殘差' }]
+          legend
         };
         const side = {
           type: 'surface', slot: 'side',
@@ -133,7 +145,7 @@
       }
 
       const st = {
-        showLine: false, showRes: false,
+        showLine: false, showRes: false, showMean: false,
         w: 0, b: 0,
         path: [{ x: 0, y: 0 }],
         surfLabel: '起點 (0, 0)',
@@ -148,11 +160,12 @@
       ]);
 
       if (p.method === 'ols') {
+        st.showMean = true;
         add(3, '計算 Sxx 與 Sxy', '先算 BMI 的離均差平方和 Sxx，以及 BMI 與收縮壓的乘積和 Sxy。', [
           'Sxx = Σ(x − x̄)² = ' + f(R.sxx, 2),
           'Sxy = Σ(x − x̄)(y − ȳ) = ' + f(R.sxy, 2)
         ]);
-        st.showLine = true; st.w = R.wStar; st.b = R.bStar;
+        st.showMean = false; st.showLine = true; st.w = R.wStar; st.b = R.bStar;
         st.path = [{ x: R.wStar, y: R.bStar }];
         st.surfLabel = '直接解 (w*, b*)';
         add(4, '算出原始斜率與截距', '直接解斜率 w_raw = Sxy ÷ Sxx，截距 b_raw = ȳ − w_raw·x̄。', [

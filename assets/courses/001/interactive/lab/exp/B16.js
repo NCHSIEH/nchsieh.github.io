@@ -88,8 +88,12 @@
       function views(st) {
         const sub = R.pts.slice(0, st.upto);
         const curPt = R.pts[Math.min(st.curIdx, R.pts.length - 1)];
+        const posRate = rows.filter(r => r.y === 1).length / rows.length;
         const series = isPR
-          ? [{ id: 'pr', label: 'PR 曲線 (AUC=' + f(R.prAuc, 3) + ')', pts: sub.slice(1).map(x => [x.rec, x.prec]), cls: 'c1', dots: true }]
+          ? [
+              { id: 'base', label: '隨機基準 (' + f(posRate, 2) + ')', pts: [[0, posRate], [1, posRate]], cls: 'c5', dash: true, dots: false },
+              { id: 'pr', label: 'PR 曲線 (AUC=' + f(R.prAuc, 3) + ')', pts: sub.slice(1).map(x => [x.rec, x.prec]), cls: 'c1', dots: true }
+            ]
           : [
               { id: 'diag', label: '隨機猜測線', pts: [[0, 0], [1, 1]], cls: 'c5', dash: true, dots: false },
               { id: 'roc', label: 'ROC 曲線 (AUC=' + f(R.rocAuc, 3) + ')', pts: sub.map(x => [x.fpr, x.tpr]), cls: 'c1', dots: true }

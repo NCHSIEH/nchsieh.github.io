@@ -127,13 +127,15 @@
 
       function views(st) {
         const sub = path.slice(0, st.upto);
-        const series = [0, 1, 2].map(j => ({
+        const series = [
+          { id: 'zero', label: '0 線', pts: [[-2.1, 0], [2.5, 0]], cls: 'c5', dash: true, dots: false }
+        ].concat([0, 1, 2].map(j => ({
           id: 'f' + j,
           label: FLAB[j],
           pts: sub.map(pt => [pt.logL, pt.w[j]]),
           cls: 'c' + j,
           dots: true
-        }));
+        })));
         const curPt = path[Math.min(st.cur, path.length - 1)];
         const main = {
           type: 'line', slot: 'main',
@@ -147,12 +149,16 @@
           type: 'bars', slot: 'side',
           title: '目前係數大小（λ = ' + curPt.lam + '）',
           max: maxBar, digits: 2,
-          items: [0, 1, 2].map(j => ({
-            id: 'b' + j,
-            label: FLAB[j] + ' (' + f(curPt.w[j], 2) + ')',
-            value: Math.abs(curPt.w[j]),
-            cls: Math.abs(curPt.w[j]) < 1e-6 ? 'c5' : 'c' + j
-          }))
+          items: [0, 1, 2].map(j => {
+            const isZero = Math.abs(curPt.w[j]) < 1e-6;
+            return {
+              id: 'b' + j,
+              label: FLAB[j] + ' (' + f(curPt.w[j], 2) + (isZero ? ' 歸零' : '') + ')',
+              value: Math.abs(curPt.w[j]),
+              cls: isZero ? 'c5' : 'c' + j,
+              hl: isLasso && isZero
+            };
+          })
         };
         const bottom = {
           type: 'table', slot: 'bottom',

@@ -108,10 +108,11 @@
         const resLines = st.showLine ? rows.map((r, i) => ({
           id: 'res' + r.id, x1: r.bmi, y1: r.sbp, x2: r.bmi, y2: curF[i], cls: 'c4', dash: true, w: 1.3
         })) : [];
+        const splitLine = st.candSplit != null ? [{ id: 'candSplit', x1: st.candSplit, y1: AX.y.min, x2: st.candSplit, y2: AX.y.max, cls: 'hl', dash: true, w: 2, label: '切點' }] : [];
         const main = {
           type: 'scatter', slot: 'main',
           title: 'BMI × 收縮壓與階梯預測線（已加 ' + st.upto + ' 棵樹）',
-          axes: AX, points, lines: st.showLine ? resLines.concat(stepLines(st.upto)) : [], circles: [],
+          axes: AX, points, lines: (st.showLine ? resLines.concat(stepLines(st.upto)) : []).concat(splitLine), circles: [],
           legend: [{ cls: 'c0', label: '病人實際值' }, { cls: 'c1', shape: 'line', label: 'GBDT 階梯預測' }, { cls: 'c4', shape: 'line', label: '殘差' }]
         };
         const side = {
@@ -123,10 +124,13 @@
             { key: 'pred', label: '預測 F', num: true, digits: 1 },
             { key: 'res', label: '殘差', num: true, digits: 1 }
           ],
-          rows: rows.map((r, i) => ({
-            id: r.id,
-            cells: [r.id, r.sbp, st.showLine ? curF[i] : null, st.showLine ? (r.sbp - curF[i]) : null]
-          }))
+          rows: rows.map((r, i) => {
+            const rv = st.showLine ? (r.sbp - curF[i]) : null;
+            return {
+              id: r.id,
+              cells: [r.id, r.sbp, st.showLine ? curF[i] : null, rv == null ? null : { v: f(rv, 1), cls: rv > 0 ? 'c1' : 'c0' }]
+            };
+          })
         };
         const msePts = [[0, R.mse0]].concat(R.rounds.slice(0, st.upto).map(rd => [rd.round, rd.mse]));
         const curMse = st.upto === 0 ? R.mse0 : R.rounds[st.upto - 1].mse;
@@ -140,7 +144,7 @@
         return [main, side, line];
       }
 
-      const st = { upto: 0, showLine: false };
+      const st = { upto: 0, showLine: false, candSplit: null };
       const add = (line, title, say, calc, extra) => steps.push(Object.assign({ line, title, say, calc: calc || [], views: views(st), focus: [] }, extra));
 
       add(0, '題目', '12 位門診病人的 BMI 與收縮壓。GBDT 不用一棵大樹，而是讓 ' + R.rounds.length + ' 棵深度為 1 的小樹樁接力修補殘差。', [
@@ -157,9 +161,11 @@
           add(3, '第 ' + rd.round + ' 輪：算殘差', '算出每筆目前還差多少（rᵢ = yᵢ − F），下一棵樹不學 y，改學這個殘差。', [
             '1 號殘差 = ' + f(rd.resBefore[0], 2) + '，最大正殘差 = ' + f(M.max(rd.resBefore), 2)
           ], { phase: '第 ' + rd.round + ' 輪' });
+          st.candSplit = rd.stump.th;
           add(4, '第 ' + rd.round + ' 輪：找樹樁切點', '試切所有 BMI 中點，找出讓左右兩邊殘差平方誤差最小的切點。', [
             '切點：BMI ≤ ' + f(rd.stump.th, 2) + '（左葉 ' + f(rd.stump.vL, 2) + '、右葉 ' + f(rd.stump.vR, 2) + '）'
           ], { phase: '第 ' + rd.round + ' 輪' });
+          st.candSplit = null;
           st.upto = rd.round;
           add(5, '第 ' + rd.round + ' 輪：加上 η·h(x)', '把樹樁輸出乘上學習率 η = ' + f(p.lr, 1) + ' 加回預測線，階梯形狀多出一階、MSE 下降。', [
             '左調 ' + f(p.lr * rd.stump.vL, 2) + '、右調 ' + f(p.lr * rd.stump.vR, 2),

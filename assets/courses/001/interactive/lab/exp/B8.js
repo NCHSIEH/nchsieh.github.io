@@ -134,7 +134,7 @@
           type: 'scatter', slot: 'main',
           title: '病人權重大小與樹樁切線（圓越大權重越高）',
           axes: AX, points, lines, circles: [], regions,
-          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '本輪樹樁' }]
+          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '本輪樹樁' }, { cls: 'hl', shape: 'ring', label: '本輪答錯' }]
         };
         const side = {
           type: 'table', slot: 'side',
@@ -160,7 +160,8 @@
             id: 'a' + h.round,
             label: '第 ' + h.round + ' 輪 (' + FLAB[h.stump.ft] + '≤' + f(h.stump.th, 1) + ')',
             value: i < st.alphasShown ? h.alpha : 0,
-            cls: i < st.alphasShown ? 'c' + (i % 5) : 'c5'
+            cls: i < st.alphasShown ? 'c' + (i % 5) : 'c5',
+            hl: i === st.alphasShown - 1
           }))
         };
         return [main, side, bars];

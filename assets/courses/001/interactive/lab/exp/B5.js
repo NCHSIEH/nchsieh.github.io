@@ -123,8 +123,8 @@
           max: st.norm ? 1 : Math.max(0.05, R.priorYes, R.priorNo),
           digits: 3,
           items: [
-            { id: 'yes', label: '糖尿病：是', value: st.norm ? R.postYes : (st.mult ? R.scoreYes : st.prior ? R.priorYes : 0), cls: 'c1', hl: st.norm && R.pred === 1 },
-            { id: 'no', label: '糖尿病：否', value: st.norm ? R.postNo : (st.mult ? R.scoreNo : st.prior ? R.priorNo : 0), cls: 'c0', hl: st.norm && R.pred === 0 }
+            { id: 'yes', label: '糖尿病：是', value: st.norm ? R.postYes : (st.mult ? R.scoreYes : st.prior ? R.priorYes : 0), cls: st.norm && R.pred === 1 ? 'good' : 'c1', hl: st.norm && R.pred === 1 },
+            { id: 'no', label: '糖尿病：否', value: st.norm ? R.postNo : (st.mult ? R.scoreNo : st.prior ? R.priorNo : 0), cls: st.norm && R.pred === 0 ? 'good' : 'c0', hl: st.norm && R.pred === 0 }
           ]
         };
         const tokens = {
@@ -133,7 +133,7 @@
           items: R.cond.map((c, idx) => ({
             id: c.key,
             text: c.name + '：' + (c.qVal ? '高' : '正常'),
-            cls: st.curIdx === idx || st.pick ? (c.qVal ? 'c1' : 'c0') : 'c5',
+            cls: st.curIdx === idx || st.pick ? (c.qVal ? 'c3' : 'c0') : 'c5',
             hl: st.curIdx === idx
           }))
         };

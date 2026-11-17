@@ -179,7 +179,7 @@
             }
             return {
               id: r.id,
-              cells: [r.id, { v: r.readmit ? '是' : '否', cls: cls(r.readmit) }, { v: inB ? '袋內' : '袋外(OOB)', cls: inB ? 'c0' : 'c1' }, st.showTree ? (tr.predOne(r) ? '是' : '否') : null],
+              cells: [r.id, { v: r.readmit ? '是' : '否', cls: cls(r.readmit) }, { v: inB ? '袋內' : '袋外(OOB)', cls: inB ? 'good' : 'c3' }, st.showTree ? (tr.predOne(r) ? '是' : '否') : null],
               hl: !inB
             };
           })
@@ -191,8 +191,8 @@
           title: '新病人（72歲、住院9天、近一年2次、共病4分）投票',
           max: R.nTrees, digits: 0, unit: ' 票',
           items: [
-            { id: 'vy', label: '再入院：是', value: yesVotes, cls: 'c1', hl: st.votesDone === R.nTrees && R.qPred === 1 },
-            { id: 'vn', label: '再入院：否', value: noVotes, cls: 'c0', hl: st.votesDone === R.nTrees && R.qPred === 0 }
+            { id: 'vy', label: '再入院：是', value: yesVotes, cls: st.votesDone === R.nTrees && R.qPred === 1 ? 'good' : 'c1', hl: st.votesDone === R.nTrees && R.qPred === 1 },
+            { id: 'vn', label: '再入院：否', value: noVotes, cls: st.votesDone === R.nTrees && R.qPred === 0 ? 'good' : 'c0', hl: st.votesDone === R.nTrees && R.qPred === 0 }
           ]
         };
         return [main, side, bars];

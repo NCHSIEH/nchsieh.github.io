@@ -167,7 +167,7 @@
             { key: 'gain', label: '下降量', num: true, digits: 3 }
           ],
           rows: sorted.map((c, idx) => ({
-            id: c.ft + '_' + idx,
+            id: c.ft + '_' + f(c.th, 2),
             cells: [FLAB[c.ft], c.th, c.gain],
             hl: st.bestCand && c.ft === st.bestCand.ft && Math.abs(c.th - st.bestCand.th) < 1e-9
           }))
@@ -180,8 +180,10 @@
         }
         const lines = [];
         st.splitLines.forEach((nd, i) => {
-          if (nd.best.ft === 'age') lines.push({ id: 'sl' + i, x1: nd.best.th, y1: AX.y.min, x2: nd.best.th, y2: AX.y.max, cls: 'hl', dash: true, w: 2 });
-          if (nd.best.ft === 'glu') lines.push({ id: 'sl' + i, x1: AX.x.min, y1: nd.best.th, x2: AX.x.max, y2: nd.best.th, cls: 'hl', dash: true, w: 2 });
+          const isNew = i === st.splitLines.length - 1;
+          const lc = isNew ? 'hl' : 'c2', lw = isNew ? 2.5 : 1.5, ld = !isNew;
+          if (nd.best.ft === 'age') lines.push({ id: 'sl' + i, x1: nd.best.th, y1: AX.y.min, x2: nd.best.th, y2: AX.y.max, cls: lc, dash: ld, w: lw });
+          if (nd.best.ft === 'glu') lines.push({ id: 'sl' + i, x1: AX.x.min, y1: nd.best.th, x2: AX.x.max, y2: nd.best.th, cls: lc, dash: ld, w: lw });
         });
         const regions = st.showReg ? LAB.grid((x, y) => cls(T.predictOne({ age: x, bmi: M.mean(LAB.col(rows, 'bmi')), glu: y }).pred), AX.x.min, AX.x.max, AX.y.min, AX.y.max, 28, 18) : null;
         const bottom = {

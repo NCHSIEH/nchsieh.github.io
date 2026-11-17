@@ -163,11 +163,31 @@
           }))
         };
         const points = rows.map(r => ({ id: 'p' + r.id, x: r.bmi, y: r.sbp, cls: 'c0', label: String(r.id), r: 5 }));
+        const mAge = M.mean(rows.map(r => r.age));
+        const predAt = x => {
+          let cur = T.root;
+          while (!cur.isLeaf && st.revealed.has(cur.left.id)) {
+            const v = cur.best.ft === 'bmi' ? x : mAge;
+            cur = v <= cur.best.th ? cur.left : cur.right;
+          }
+          return cur.meanY;
+        };
+        const lines = st.showLine ? stepCurveLines(st.revealed) : [];
+        if (st.showLine) {
+          rows.forEach(r => {
+            lines.push({ id: 'res' + r.id, x1: r.bmi, y1: r.sbp, x2: r.bmi, y2: predAt(r.bmi), cls: 'c4', dash: true, w: 1.3 });
+          });
+          (function collectSplits(nd) {
+            if (!nd || nd.isLeaf || !st.revealed.has(nd.left.id)) return;
+            if (nd.best.ft === 'bmi') lines.push({ id: 'sp' + nd.id, x1: nd.best.th, y1: AX.y.min, x2: nd.best.th, y2: AX.y.max, cls: 'c2', dash: true, w: 1.5 });
+            collectSplits(nd.left); collectSplits(nd.right);
+          })(T.root);
+        }
         const bottom = {
           type: 'scatter', slot: 'bottom',
           title: 'BMI × 收縮壓階梯預測線（年齡固定為平均）',
-          axes: AX, points, lines: st.showLine ? stepCurveLines(st.revealed) : [], circles: [],
-          legend: [{ cls: 'c0', label: '病人' }, { cls: 'c1', shape: 'line', label: '迴歸樹階梯預測' }]
+          axes: AX, points, lines, circles: [],
+          legend: [{ cls: 'c0', label: '病人' }, { cls: 'c1', shape: 'line', label: '迴歸樹階梯預測' }, { cls: 'c4', shape: 'line', label: '殘差' }]
         };
         return [main, side, bottom];
       }

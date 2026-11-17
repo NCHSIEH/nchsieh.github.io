@@ -112,11 +112,13 @@
           if (rl.bMin > -Infinity) lines.push({ id: 'rb' + i, x1: x0, y1: y0, x2: AX.x.max, y2: y0, cls: isCur ? 'hl' : 'c1', w: isCur ? 2.5 : 1.5, dash: !isCur });
         }
         const regions = st.showReg ? LAB.grid((x, y) => cls(R.predOne({ glu: x, bmi: y }).pred), AX.x.min, AX.x.max, AX.y.min, AX.y.max, 28, 18) : null;
+        const leg = [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '目前規則邊界' }];
+        if (st.dimCov) leg.push({ cls: 'c5', label: '已覆蓋（變淡）' });
         const main = {
           type: 'scatter', slot: 'main',
           title: '循序覆蓋規則區域（已覆蓋樣本變淡）',
           axes: AX, points, lines, circles: [], regions,
-          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }]
+          legend: leg
         };
         const sideRows = R.rules.slice(0, st.shownRules).map((rl, i) => ({
           id: 'r' + i,

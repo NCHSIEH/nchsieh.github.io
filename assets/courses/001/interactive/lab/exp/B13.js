@@ -125,7 +125,11 @@
           ],
           rows: curItem.foldScores.map((sc, fi) => ({
             id: 'f' + fi,
-            cells: ['第 ' + (fi + 1) + ' 折', R.folds[fi].length, st.foldShown > fi ? sc : null],
+            cells: [
+              '第 ' + (fi + 1) + ' 折',
+              R.folds[fi].length,
+              st.foldShown > fi ? { v: f(sc, 3), cls: sc >= 0.8 ? 'good' : (sc >= 0.65 ? 'c0' : 'c4') } : null
+            ],
             hl: st.foldShown === fi + 1
           }))
         };

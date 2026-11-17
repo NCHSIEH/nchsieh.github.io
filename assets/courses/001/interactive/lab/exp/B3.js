@@ -132,11 +132,11 @@
           type: 'scatter', slot: 'main',
           title: 'BMI × 血糖與決策邊界',
           axes: AX, points, lines: st.ep > 0 ? boundaryLine(h.w1, h.w2, h.b) : [], circles: [], regions,
-          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '決策邊界' }]
+          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '決策邊界' }, { cls: 'hl', shape: 'ring', label: '誤判樣本' }]
         };
         const trs = rows.map((r, i) => ({
           id: r.id,
-          cells: [r.id, h.zs[i], h.ps[i], { v: r.dm ? '是' : '否', cls: cls(r.dm) }],
+          cells: [r.id, h.zs[i], { v: f(h.ps[i], 3), cls: st.ep > 0 ? (h.ps[i] >= p.threshold ? 'c1' : 'c0') : null }, { v: r.dm ? '是' : '否', cls: cls(r.dm) }],
           hl: st.cur === r.id
         }));
         const side = {
@@ -190,6 +190,7 @@
       }
       marks.forEach((ep, idx) => {
         st.ep = ep;
+        if (idx === 0) st.showReg = true;
         const h = R.hist[ep];
         add(7, '第 ' + ep + ' 輪', idx === 0 ? '之後每段固定輪數顯示一次快照，觀察決策邊界慢慢轉正並推開兩群。' : '權重持續調整，Log Loss 穩定下降，圖上黃圈為目前誤判的病人。', [
           'w₁ = ' + f(h.w1, 3) + '，w₂ = ' + f(h.w2, 3) + '，b = ' + f(h.b, 3),

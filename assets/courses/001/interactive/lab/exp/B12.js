@@ -154,7 +154,7 @@
           type: 'scatter', slot: 'main',
           title: isStack ? 'Stacking 元學習器決策邊界（黃圈＝誤判）' : 'Voting 投票決策邊界（黃圈＝誤判）',
           axes: AX, points, lines: [], circles: [], regions,
-          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }]
+          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'ring', label: '誤判個案' }]
         };
         const side = {
           type: 'table', slot: 'side',
@@ -189,7 +189,7 @@
             { id: 'l', label: 'Logistic', value: st.s1 ? R.accLog : 0, cls: 'c0' },
             { id: 't', label: '決策樹樁', value: st.s2 ? R.accTree : 0, cls: 'c2' },
             { id: 'k', label: '3-NN', value: st.s3 ? R.accKnn : 0, cls: 'c3' },
-            { id: 'e', label: isStack ? 'Stacking' : 'Voting', value: st.showEns ? ensAcc : 0, cls: 'c1', hl: st.showEns }
+            { id: 'e', label: isStack ? 'Stacking' : 'Voting', value: st.showEns ? ensAcc : 0, cls: st.showEns && ensAcc >= Math.max(R.accLog, R.accTree, R.accKnn) ? 'good' : 'c1', hl: st.showEns }
           ]
         };
         return [main, side, bottom];
