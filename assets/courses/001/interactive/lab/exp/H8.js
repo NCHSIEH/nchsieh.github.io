@@ -10,10 +10,10 @@
   ];
 
   const TOOLS = [
-    { key: 'sql_lab', name: '病歷檢驗 SQL' },
-    { key: 'rag_guide', name: '衛教指引 RAG' },
-    { key: 'py_calc', name: 'Python 計算機' },
-    { key: 'finish', name: '結束輸出 Answer' }
+    { key: 'sql_lab', name: '病歷檢驗 SQL', hint: 'SELECT 檢驗數據' },
+    { key: 'rag_guide', name: '衛教指引 RAG', hint: 'H6 向量檢索指引' },
+    { key: 'py_calc', name: 'Python 計算機', hint: '精確數值運算' },
+    { key: 'finish', name: '結束輸出 Answer', hint: '彙整最終回覆' }
   ];
 
   function makeRows(seed) {
@@ -31,6 +31,7 @@
   function simulate(rows, p) {
     const task = p.task || 'combo';
     const maxSteps = Math.max(2, Math.min(5, Math.round(p.max_steps || 4)));
+    const temp = Math.max(0.2, Math.min(2.0, Number(p.temp || 0.7)));
     const qText = task === 'bmi'
       ? '查 #3 病人身高體重並計算 BMI 與判定標準'
       : task === 'guide'
@@ -48,6 +49,20 @@
       finish: '已備齊數據與指引出處，產出最終回答'
     };
 
+    const argMap = {
+      sql_lab: task === 'bmi' ? 'SELECT height, weight FROM pt WHERE id=3' : 'SELECT hba1c, fbg FROM labs WHERE id=3',
+      py_calc: task === 'bmi' ? '79 / (1.68 ** 2)' : 'calc_risk(hba1c=7.8, fbg=146)',
+      rag_guide: 'search("HbA1c>7% 照護與飲食指引", top_k=3)',
+      finish: 'summarize(context_observations)'
+    };
+
+    const thoughtMap = {
+      sql_lab: '缺少病人客觀檢驗/量測數據，應先查詢資料庫。',
+      py_calc: '已取得原始數值，但 LLM 心算易出錯，應呼叫 Python 計算。',
+      rag_guide: '已有數值結果，需再檢索臨床衛教指引作為依據。',
+      finish: '數據與指引皆已齊備，可停止迴圈並輸出 Final Answer。'
+    };
+
     const actualPlan = plan.slice(0, maxSteps);
     if (actualPlan[actualPlan.length - 1] !== 'finish' && maxSteps >= 2) {
       actualPlan[actualPlan.length - 1] = 'finish';
@@ -59,7 +74,7 @@
         if (t.key === 'finish') return idx === actualPlan.length - 1 ? 2.8 : 0.3 + idx * 0.35;
         return 0.6 + ((ti + idx) % 3) * 0.25;
       });
-      const exps = logits.map(Math.exp);
+      const exps = logits.map(l => Math.exp(l / temp));
       const sumE = M.sum(exps);
       const probs = exps.map(e => e / sumE);
       const tokCost = 48 + idx * 14 + (winKey === 'rag_guide' ? 24 : 0);
@@ -67,6 +82,8 @@
         turn: idx + 1,
         winKey,
         winName: TOOLS.find(t => t.key === winKey).name,
+        arg: argMap[winKey],
+        thought: thoughtMap[winKey],
         logits,
         probs,
         obs: obsMap[winKey],
@@ -75,7 +92,7 @@
     });
 
     const totTokens = M.sum(turns.map(t => t.tokCost));
-    return { task, maxSteps, qText, turns, totTokens };
+    return { task, maxSteps, temp, qText, turns, totTokens };
   }
 
   LAB.register({
@@ -95,6 +112,7 @@
         { v: 'bmi', label: '查身高體重並算 BMI' },
         { v: 'guide', label: '查檢驗並比對衛教指引' }
       ] },
+      { key: 'temp', label: '溫度係數 τ', type: 'num', min: 0.2, max: 2.0, step: 0.1, value: 0.7 },
       { key: 'max_steps', label: '最大步數上限', type: 'int', min: 2, max: 5, step: 1, value: 4 }
     ],
     pseudo: [
@@ -112,15 +130,22 @@
       function views(st) {
         const curT = R.turns[Math.min(st.turnIdx, R.turns.length - 1)];
         const activeTool = st.showAct ? curT.winKey : null;
+        const isObs = st.phase === 'obs';
+        const isFin = isObs && curT.winKey === 'finish';
         const layers = [
-          [{ id: 'ctx', label: '上下文 Context', value: st.ctxLines.length + ' 筆訊息', shape: 'box', w: 145, cls: st.phase === 'obs' ? 'good' : 'c0', hl: st.phase === 'ctx', sub: '累積對話與觀察' }],
-          [{ id: 'llm', label: 'LLM 思維鏈', value: st.phase === 'think' ? '規劃中…' : 'Thought', shape: 'box', w: 145, cls: st.phase === 'think' ? 'hl' : 'c2', hl: st.phase === 'think', sub: 'Softmax 挑工具' }],
-          TOOLS.map(t => ({
-            id: t.key, label: t.name, shape: 'box', w: 145,
-            cls: activeTool === t.key ? (t.key === 'finish' ? 'good' : 'hl') : 'c5',
+          [{ id: 'ctx', label: '1. 記憶 Context', value: st.ctxLines.length + ' 筆 / ' + st.usedTok + ' tok', shape: 'box', w: 148, cls: isObs && !isFin ? 'good' : (st.phase === 'ctx' ? 'hl' : 'c0'), hl: st.phase === 'ctx', sub: 'System + 歷史 Obs' }],
+          [{ id: 'llm', label: '2. 推理 Thought', value: st.phase === 'think' ? 'Softmax 評分' : 'Turn #' + curT.turn, shape: 'box', w: 148, cls: st.phase === 'think' ? 'hl' : 'c2', hl: st.phase === 'think', sub: 'τ = ' + f(R.temp, 1) + ' 決策規劃' }],
+          TOOLS.map((t, ti) => ({
+            id: t.key, label: t.name,
+            value: st.showProbs ? 'p = ' + f(curT.probs[ti], 3) : '待評分',
+            sub: activeTool === t.key ? curT.arg.slice(0, 18) : t.hint,
+            shape: 'box', w: 152,
+            cls: activeTool === t.key ? (t.key === 'finish' ? 'good' : 'hl') : (st.showProbs && t.key === curT.winKey ? 'c1' : 'c5'),
             hl: activeTool === t.key,
             dim: activeTool && activeTool !== t.key
-          }))
+          })),
+          [{ id: 'obs', label: '4. 觀察 Obs', value: isObs ? (isFin ? '準備彙整' : '取得真實回傳') : '等待工具', shape: 'box', w: 148, cls: isObs && !isFin ? 'hl' : (isFin ? 'good' : 'c5'), hl: isObs && !isFin, sub: isObs ? curT.obs.slice(0, 16) + '…' : '決定繼續或結束' }],
+          [{ id: 'fin', label: '5. Final Answer', value: isFin ? st.usedTok + ' tok' : '未完成', shape: 'box', w: 148, cls: isFin ? 'good' : 'c5', hl: isFin, sub: '附數據與指引回覆' }]
         ];
         const edges = [
           { from: 'ctx', to: 'llm', active: st.phase === 'think', cls: 'c0', label: '輸入上下文' },
@@ -130,14 +155,21 @@
             dim: st.phase === 'act' && curT.winKey !== t.key,
             cls: curT.winKey === t.key ? 'hl' : 'c5'
           })),
-          ...(st.phase === 'obs' && curT.winKey !== 'finish'
-            ? [{ from: curT.winKey, to: 'ctx', active: true, back: true, cls: 'c3', label: '寫回 Obs' }]
+          ...TOOLS.filter(t => t.key !== 'finish').map(t => ({
+            from: t.key, to: 'obs',
+            active: isObs && curT.winKey === t.key,
+            dim: isObs && curT.winKey !== t.key,
+            cls: curT.winKey === t.key ? 'good' : 'c5'
+          })),
+          { from: 'finish', to: 'fin', active: isFin, cls: isFin ? 'good' : 'c5' },
+          ...(isObs && curT.winKey !== 'finish'
+            ? [{ from: 'obs', to: 'ctx', active: true, back: true, cls: 'c3', label: '寫回 Context 再推理' }]
             : [])
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1480, h: 280,
-          title: 'ReAct 單輪狀態機（Turn ' + curT.turn + ' / ' + R.turns.length + '）',
-          layerLabels: ['記憶上下文', 'LLM 決策', '外部工具 / 結束'],
+          type: 'network', slot: 'main', w: 1480, h: 270,
+          title: 'ReAct 單輪狀態機（Turn ' + curT.turn + ' / ' + R.turns.length + '，τ = ' + f(R.temp, 1) + '）',
+          layerLabels: ['1. 記憶 Context', '2. 推理 Thought', '3. 候選工具 Action', '4. 觀察 Obs 回寫', '5. 最終輸出'],
           layers, edges
         };
         const side = {
@@ -178,22 +210,26 @@
         st.turnIdx = ti;
         st.phase = 'think'; st.showProbs = true; st.showAct = false;
         const winIdx = TOOLS.findIndex(t => t.key === tr.winKey);
-        add(3, 'R' + tr.turn + '：Thought 選工具', '根據目前上下文還缺少的資訊，計算 4 個候選動作的 Softmax 機率。', [
-          '最高機率：' + tr.winName + '（p = ' + f(tr.probs[winIdx], 3) + '）'
+        const runnerIdx = tr.probs.map((pr, idx) => ({ pr, idx })).sort((a, b) => b.pr - a.pr)[1].idx;
+        add(3, 'R' + tr.turn + '：Thought 選工具', 'Thought：' + tr.thought + '（以 τ = ' + f(R.temp, 1) + ' 計算 Softmax）。', [
+          '最高機率：' + tr.winName + '（logit=' + f(tr.logits[winIdx], 2) + ' → p = ' + f(tr.probs[winIdx], 3) + '）',
+          '次高候選：' + TOOLS[runnerIdx].name + '（logit=' + f(tr.logits[runnerIdx], 2) + ' → p = ' + f(tr.probs[runnerIdx], 3) + '）'
         ], { phase: '第 ' + tr.turn + ' 輪' });
 
         st.phase = 'act'; st.showAct = true;
-        st.ctxLines = st.ctxLines.concat([{ role: 'Action #' + tr.turn, cls: 'hl', msg: '呼叫 ' + tr.winName, tk: Math.round(tr.tokCost * 0.4) }]);
+        st.ctxLines = st.ctxLines.concat([{ role: 'Action #' + tr.turn, cls: 'hl', msg: tr.winName + '｜' + tr.arg, tk: Math.round(tr.tokCost * 0.4) }]);
         st.usedTok += Math.round(tr.tokCost * 0.4);
         add(4, 'R' + tr.turn + '：Action 執行', tr.winKey === 'finish' ? '判斷資訊已足夠，呼叫 finish 彙整輸出最終回答。' : '暫停文字生成，改為呼叫外部工具「' + tr.winName + '」取得真實結果。', [
-          '執行動作：' + tr.winKey
+          '呼叫指令：' + tr.arg,
+          '消耗上下文：+' + Math.round(tr.tokCost * 0.4) + ' tokens（累計 ' + st.usedTok + '）'
         ], { phase: '第 ' + tr.turn + ' 輪' });
 
         st.phase = 'obs';
         st.ctxLines = st.ctxLines.concat([{ role: tr.winKey === 'finish' ? 'Final' : 'Obs #' + tr.turn, cls: tr.winKey === 'finish' ? 'good' : 'c2', msg: tr.obs, tk: Math.round(tr.tokCost * 0.6) }]);
         st.usedTok += Math.round(tr.tokCost * 0.6);
         add(tr.winKey === 'finish' ? 6 : 5, tr.winKey === 'finish' ? '輸出 Final Answer' : 'R' + tr.turn + '：寫回 Obs', tr.winKey === 'finish' ? '整合所有工具取得的數據與指引，產出有憑有據的最終回覆！' : '工具回傳真實結果並寫回 Context（橙色回流），下一輪 LLM 就能看見這份新線索。', [
-          (tr.winKey === 'finish' ? '最終結果：' : '回傳寫入：') + tr.obs
+          (tr.winKey === 'finish' ? '最終結果：' : '回傳寫入：') + tr.obs,
+          '寫回耗用：+' + Math.round(tr.tokCost * 0.6) + ' tokens（累計 ' + st.usedTok + '）'
         ], { phase: '第 ' + tr.turn + ' 輪' });
       });
 
