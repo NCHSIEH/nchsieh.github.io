@@ -3,6 +3,7 @@
   'use strict';
   const LAB = G.LAB;
   LAB.groups = [
+    { key: 'S', name: 'Start｜資料分析全流程', desc: '先看全局再動手：以動畫走過資料前處理、監督式學習(含CV)、非監督式學習、深度學習與 NLP 的標準作業流程。' },
     { key: 'A', name: '資料前處理', desc: '模型看到資料之前要先做的事：補值、縮放、編碼、抽樣、選特徵。' },
     { key: 'B', name: '監督式學習', desc: '有標準答案的學習：從一條直線到一整片森林。' },
     { key: 'C', name: '非監督式學習', desc: '沒有標準答案：分群、降維、找出異常。' },
@@ -16,6 +17,12 @@
   ];
   const m = (name, url) => ({ name, url });
   LAB.registry = [
+    { id: 'S1', group: 'S', title: '資料前處理流程', brief: '原始資料 → 補值與離群處理 → 編碼與縮放 → 特徵篩選，動畫走過每一步。', module: m('M1 資料準備', '../m1/'), status: 'live' },
+    { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '切分訓練／測試集、K-Fold 交叉驗證調參、模型訓練與最終驗收。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
+    { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '無標籤探索 → 必做標準化 → 降維視覺化 → 分群或異常偵測與評估。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
+    { id: 'S4', group: 'S', title: '深度學習流程', brief: '張量準備 → 網路架構 → 前向計算 → 反向傳播更新權重 → 早停部署。', module: m('M5 深度學習', '../m5/'), status: 'live' },
+    { id: 'S5', group: 'S', title: 'NLP 文字處理流程', brief: '文本清理 → 斷詞／BPE → 向量化（TF-IDF/詞嵌入）→ 建模與 RAG 應用。', module: m('M6 文字探勘', '../m6/'), status: 'live' },
+
     { id: 'A1', group: 'A', title: '遺失值補值', brief: '平均數、中位數、k-NN 三種補法，逐格算給你看。', module: m('M1 第 06 節', '../m1/#p06'), status: 'live' },
     { id: 'A2', group: 'A', title: '標準化與正規化', brief: 'Z 分數與 Min-Max 逐欄計算，看距離怎麼被單位左右。', module: m('M1 第 10 節', '../m1/#p10'), status: 'live' },
     { id: 'A3', group: 'A', title: '離散化', brief: '等寬、等頻、依熵找切點，把連續數值切成區間。', module: m('M1 第 11 節', '../m1/#p11'), status: 'live' },
@@ -82,6 +89,11 @@
     { id: 'J1', group: 'J', title: 'Q-learning', brief: '病房送藥路線：走一步、拿獎勵、更新 Q 表。', module: m('延伸參考', ''), status: 'live', tier: 'adv' }
   ];
   LAB.EN_TITLES = {
+    S1: 'Data Preprocessing Pipeline',
+    S2: 'Supervised Learning & CV Pipeline',
+    S3: 'Unsupervised Learning Pipeline',
+    S4: 'Deep Learning Training Pipeline',
+    S5: 'NLP & Text Mining Pipeline',
     A1: 'Missing Value Imputation',
     A2: 'Standardization & Normalization',
     A3: 'Discretization / Binning',
