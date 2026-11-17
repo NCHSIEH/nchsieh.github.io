@@ -80,6 +80,7 @@
 
   LAB.register({
     id: 'H8', group: 'H', title: 'AI Agent：ReAct 工具呼叫',
+    wideMain: true,
     module: { name: 'M8 AI Agent', url: '../m8/' },
     goal: '看懂 AI Agent 如何在每一輪對候選工具計算 Softmax 選擇機率，透過 Thought → Action → Observation 把外部真實資料寫回上下文完成任務。',
     data: {
@@ -134,7 +135,7 @@
             : [])
         ];
         const main = {
-          type: 'network', slot: 'main', h: 380,
+          type: 'network', slot: 'main', w: 1480, h: 280,
           title: 'ReAct 單輪狀態機（Turn ' + curT.turn + ' / ' + R.turns.length + '）',
           layerLabels: ['記憶上下文', 'LLM 決策', '外部工具 / 結束'],
           layers, edges

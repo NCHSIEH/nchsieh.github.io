@@ -130,12 +130,13 @@
       H5: '給定「病人頭暈下床…」的 8 個候選詞原始 Logit 分數，對比 Greedy（永遠選最大）與抽樣解碼 (Sampling)；實測 Temperature 縮放、Top-k 截斷與 Top-p (Nucleus) 核抽樣如何重塑機率分佈與生成多樣性。',
       H6: '針對長照 3.0 外籍看護條件問題，比較依句／依段切塊 (Chunking) 與三種檢索法：BM25 精準字面比對、TF-IDF 向量餘弦相似度與混合檢索 RRF (Reciprocal Rank Fusion)，挑出前 K 段組裝成 LLM 提示詞。',
       H7: '凍結 4×4 預訓練權重矩陣 W₀，只在旁側訓練兩個低秩小矩陣 B (4×r) 與 A (r×4)；設定 rank r=1 即可將微調參數量從 16 減半至 8，並在熱圖上觀察 ΔW = B·A 如何逼近目標權重增量。',
+      H8: '以門診智能助理為例，在每一輪追蹤 LLM 如何依目前上下文計算 4 個候選動作（病歷 SQL、衛教 RAG、Python 計算機、finish）的 Softmax 選擇機率，透過 Thought → Action → Observation 迴圈把外部真實資料寫回 Prompt Context 完成任務。',
       I1: '對單一門診病人的預測機率，枚舉年齡、BMI、血糖全部 3! = 6 種加入順序計算邊際貢獻，精確算出滿足加總公理的 SHAP 值（Base value + ΣSHAP = 預測值），並對照全域排列重要度 (Permutation Importance)。',
       J1: '（延伸參考）在無監督答案的 4×4 病房網格（含障礙牆、−5 陷阱與 +10 終點）中，讓智能體透過 ε-greedy 試錯探索與貝爾曼 (Bellman) 更新累積經驗，觀察 Q 值熱圖如何從終點反推收斂出最佳避障路線。'
     };
 
     const canEdit = !!(def.data.editable && def.data.editable.length);
-    const isWideMain = def.group === 'S';
+    const isWideMain = def.group === 'S' || !!def.wideMain;
 
     root.append(
       h('header', { class: 'lab-hero' }, h('div', { class: 'badge' }, def.id), h('div', null, h('h1', null, showTitle(def)), h('p', { class: 'goal' }, GOALS[def.id] || def.goal || ''),
