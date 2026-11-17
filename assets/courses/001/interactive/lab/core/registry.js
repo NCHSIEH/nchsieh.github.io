@@ -88,6 +88,7 @@
     { id: 'H6', group: 'H', title: 'RAG 檢索', brief: '切塊、關鍵字與向量檢索取前 K 段，再組成提示詞。', module: m('M8 第 07 節', '../m8/#p07'), status: 'live' },
     { id: 'H4', group: 'H', title: 'Transformer 一層', brief: '注意力、殘差連接、層正規化、前饋網路，完整走一遍。', module: m('M7 第 06 節', '../m7/#p06'), status: 'live', tier: 'adv' },
     { id: 'H7', group: 'H', title: 'LoRA 微調', brief: '不動原權重，只學兩個小矩陣的乘積。', module: m('M7 生成式 AI', '../m7/'), status: 'live', tier: 'adv' },
+    { id: 'H8', group: 'H', title: 'AI Agent：ReAct 工具呼叫', brief: '逐輪計算工具選擇機率，走過 Thought → Action → Observation 推理迴圈。', module: m('M8 AI Agent', '../m8/'), status: 'live', tier: 'adv' },
 
     { id: 'I1', group: 'I', title: 'SHAP 與排列重要度', brief: '三個特徵的所有加入順序，精確算出每個特徵的貢獻。', module: m('M9 第 11 節', '../m9/#p11'), status: 'live' },
     { id: 'J1', group: 'J', title: 'Q-learning', brief: '病房送藥路線：走一步、拿獎勵、更新 Q 表。', module: m('延伸參考', ''), status: 'live', tier: 'adv' }
@@ -156,6 +157,7 @@
     H5: 'Autoregressive Decoding',
     H6: 'Retrieval-Augmented Generation',
     H7: 'Low-Rank Adaptation',
+    H8: 'AI Agent (ReAct & Tool Calling)',
     I1: 'SHAP & Permutation Importance',
     J1: 'Reinforcement Learning'
   };
