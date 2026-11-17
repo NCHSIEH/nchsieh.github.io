@@ -125,18 +125,22 @@
           title: '類別編碼轉換表',
           cols, rows: trs
         };
+        const sideItems = R.stats.map(s => ({
+          id: s.code,
+          label: s.name + ' (' + s.pos + '/' + s.n + '陽)',
+          value: p.method === 'target' ? s.smooth : s.n,
+          cls: 'c' + s.idx,
+          hl: st.hlDept === s.idx
+        }));
+        if (p.method === 'target') {
+          sideItems.push({ id: 'prior', label: '整體平均 (先驗)', value: R.prior, cls: 'c5' });
+        }
         const side = {
           type: 'bars', slot: 'side',
-          title: p.method === 'target' ? '各科別目標編碼值（平滑後）' : '各科別病人數',
+          title: p.method === 'target' ? '各科別目標編碼值（向先驗收縮）' : '各科別病人數',
           max: p.method === 'target' ? 1 : Math.max(4, rows.length / 2),
           digits: p.method === 'target' ? 3 : 0,
-          items: R.stats.map(s => ({
-            id: s.code,
-            label: s.name + ' (' + s.pos + '/' + s.n + '陽)',
-            value: p.method === 'target' ? s.smooth : s.n,
-            cls: 'c' + s.idx,
-            hl: st.hlDept === s.idx
-          }))
+          items: sideItems
         };
         const note = {
           type: 'note', slot: 'bottom',

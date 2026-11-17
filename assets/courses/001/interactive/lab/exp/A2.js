@@ -81,36 +81,41 @@
       function views(st) {
         const useScaled = st.scaled;
         const ax = !useScaled ? AX_RAW : (isZ ? AX_Z : AX_MM);
+        const nnId = useScaled ? (isZ ? R.rkZ.nearest.id : R.rkMM.nearest.id) : R.rkRaw.nearest.id;
         const points = R.pts.map((pt, i) => {
           const scaledPt = useScaled && i < st.upto;
           const x = scaledPt ? (isZ ? pt.zA : pt.mmA) : pt.age;
           const y = scaledPt ? (isZ ? pt.zG : pt.mmG) : pt.glu;
-          const isPair = pt.id === R.pA.id || pt.id === R.pB.id;
+          const isA = pt.id === R.pA.id, isB = pt.id === R.pB.id, isNN = pt.id === nnId && !isB;
           const isCur = st.cur === pt.id;
           return {
             id: 'p' + pt.id,
             x: useScaled && !scaledPt ? (isZ ? pt.zA : pt.mmA) : x,
             y: useScaled && !scaledPt ? (isZ ? pt.zG : pt.mmG) : y,
-            cls: isCur ? 'hl' : isPair ? 'c1' : 'c0',
-            ring: isPair, hl: isCur,
+            cls: isA ? 'hl' : isB ? 'c1' : isNN ? 'good' : 'c0',
+            ring: isA || isB || isNN, hl: isCur || isA,
             dim: useScaled && i >= st.upto,
-            label: String(pt.id), r: isPair ? 7 : 6
+            label: isNN ? pt.id + '(近)' : String(pt.id), r: (isA || isB) ? 7 : 6
           };
         });
         const ptA = points.find(x => x.id === 'p' + R.pA.id);
         const ptB = points.find(x => x.id === 'p' + R.pB.id);
         const distVal = useScaled ? (isZ ? R.zD.d : R.mmD.d) : R.rawD.d;
-        const lines = R.pA.id !== R.pB.id ? [{ id: 'ab', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', w: 2, label: f(distVal, 2) }] : [];
-        const nnId = useScaled ? (isZ ? R.rkZ.nearest.id : R.rkMM.nearest.id) : R.rkRaw.nearest.id;
+        const lines = [];
+        if (R.pA.id !== R.pB.id) {
+          lines.push({ id: 'dx', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptA.y, cls: 'c0', dash: true, w: 1.4 });
+          lines.push({ id: 'dy', x1: ptB.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', dash: true, w: 1.4 });
+          lines.push({ id: 'ab', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', w: 2.2, label: f(distVal, 2) });
+        }
         const ptNN = points.find(x => x.id === 'p' + nnId);
         if (ptNN && nnId !== R.pB.id) {
-          lines.push({ id: 'nn', x1: ptA.x, y1: ptA.y, x2: ptNN.x, y2: ptNN.y, cls: 'c2', dash: true, w: 1.8, label: '最近#' + nnId });
+          lines.push({ id: 'nn', x1: ptA.x, y1: ptA.y, x2: ptNN.x, y2: ptNN.y, cls: 'good', dash: true, w: 1.8, label: '最近#' + nnId });
         }
         const main = {
           type: 'scatter', slot: 'main',
           title: useScaled ? (isZ ? 'Z 分數空間' : 'Min-Max [0, 1] 空間') : '原始尺度空間',
           axes: ax, points, lines, circles: [],
-          legend: [{ cls: 'c1', label: '觀察對象 #' + R.pA.id + ' 與 #' + R.pB.id }, { cls: 'c0', label: '其他病人' }]
+          legend: [{ cls: 'hl', label: '基準 #' + R.pA.id }, { cls: 'c1', label: '對照 #' + R.pB.id }, { cls: 'good', label: '最近鄰 #' + nnId }, { cls: 'c0', label: '其他病人' }]
         };
 
         const trs = R.pts.map((pt, i) => {

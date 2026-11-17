@@ -124,9 +124,10 @@
           label: String(r.id),
           r: 6
         }));
-        const lines = st.cuts.map((c, i) => ({
-          id: 'cut' + i, x1: c, y1: AX.y.min, x2: c, y2: AX.y.max, cls: 'hl', w: 2, dash: true, label: f(c, 1)
-        }));
+        const lines = st.cuts.map((c, i) => {
+          const isNew = i === st.cuts.length - 1;
+          return { id: 'cut' + i, x1: c, y1: AX.y.min, x2: c, y2: AX.y.max, cls: isNew ? 'hl' : 'c2', w: isNew ? 2.5 : 1.6, dash: true, label: f(c, 1) };
+        });
         const regions = st.cuts.length ? LAB.grid(x => {
           let b = 0;
           st.cuts.forEach(c => { if (x > c) b++; });
@@ -157,7 +158,12 @@
           type: 'bars', slot: 'bottom',
           title: '各區間糖尿病陽性比例',
           max: 1, digits: 2,
-          items: st.showBins ? R.bins.map(b => ({ id: 'bb' + b.idx, label: '區間 ' + b.idx + ' (' + b.n + '人)', value: b.rate, cls: b.rate >= 0.5 ? 'c1' : 'c0' })) : [{ id: 'empty', label: '尚未切分', value: 0, cls: 'c5' }]
+          items: st.showBins ? R.bins.map(b => ({
+            id: 'bb' + b.idx,
+            label: '區間' + b.idx + ' [' + b.label + '] (' + b.n + '人)',
+            value: b.rate,
+            cls: b.n === 0 ? 'c5' : (b.rate >= 0.5 ? 'c1' : 'good')
+          })) : [{ id: 'empty', label: '尚未切分', value: 0, cls: 'c5' }]
         };
         return [main, side, bars];
       }

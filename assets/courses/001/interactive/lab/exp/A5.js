@@ -108,10 +108,16 @@
           label: String(r.id),
           r: 6
         }));
+        const dupCnt = {};
         st.added.forEach(pt => {
+          const isOver = p.method === 'over';
+          const cnt = isOver ? (dupCnt[pt.srcId] = (dupCnt[pt.srcId] || 0) + 1) : 0;
+          const ox = isOver ? (cnt % 2 === 1 ? 0.35 : -0.35) : 0;
+          const oy = isOver ? (cnt <= 2 ? 0.2 : -0.2) : 0;
           points.push({
-            id: pt.newId, x: pt.los, y: pt.cci,
-            cls: 'new', shape: 'diamond', r: 7, hl: st.curNew === pt.newId, label: pt.newId
+            id: pt.newId, x: pt.los + ox, y: pt.cci + oy,
+            cls: 'new', shape: 'diamond', r: 7, hl: st.curNew === pt.newId,
+            label: isOver ? ('×' + (cnt + 1)) : pt.newId
           });
         });
         const main = {

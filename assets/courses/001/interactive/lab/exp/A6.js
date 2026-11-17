@@ -144,13 +144,13 @@
           id: s.ft,
           label: s.label,
           value: i < st.shown ? s[keyScore] : 0,
-          cls: st.pickedSet.has(s.ft) ? 'c1' : (i < st.shown ? 'c0' : 'c5'),
+          cls: st.pickedSet.has(s.ft) ? 'good' : (i < st.shown ? 'c0' : 'c5'),
           hl: st.curFt === s.ft
         }));
         if (st.sorted) items = items.slice().sort((a, b) => b.value - a.value);
         const main = {
           type: 'bars', slot: 'main',
-          title: p.method === 'ig' ? '各特徵資訊增益 (以中位數二分)' : '各特徵與糖尿病的相關係數 |r|',
+          title: p.method === 'ig' ? '各特徵資訊增益 (以中位數二分)' : (p.method === 'forward' ? '各特徵單變量參考 |r|（綠＝向前選擇已選入）' : '各特徵與糖尿病的相關係數 |r|'),
           max: 1, digits: 3, items
         };
         const side = {
