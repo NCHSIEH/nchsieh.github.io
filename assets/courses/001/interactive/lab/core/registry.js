@@ -25,6 +25,7 @@
     { id: 'S6', group: 'S', title: '時間序列預測流程', brief: '統計 ARIMA／指數平滑、滯後特徵 ML 與 LSTM 序列 3 條滾動驗證流程。', module: m('M4 時間序列', '../m4/#p15'), status: 'live' },
     { id: 'S7', group: 'S', title: '關聯規則探勘流程', brief: '比較 Apriori 逐層剪枝與 FP-Growth 前綴樹 2 條關聯探勘與 Lift 篩選流程。', module: m('M4 關聯規則', '../m4/#p12'), status: 'live', tier: 'adv' },
     { id: 'S8', group: 'S', title: '可解釋性與上線監控', brief: 'SHAP 歸因與醫療門檻校正、上線飄移監控與重訓 2 條落地管線。', module: m('M9 可解釋性', '../m9/#p11'), status: 'live', tier: 'adv' },
+    { id: 'S9', group: 'S', title: 'AI Agent 工作流程', brief: 'ReAct 工具迴圈、Multi-Agent 協作與 Guardrail 混合工作流 3 條主流管線。', module: m('M8 生成式 AI 應用', '../m8/'), status: 'live', tier: 'adv' },
 
     { id: 'A1', group: 'A', title: '遺失值補值', brief: '平均數、中位數、k-NN 三種補法，逐格算給你看。', module: m('M1 第 06 節', '../m1/#p06'), status: 'live' },
     { id: 'A2', group: 'A', title: '標準化與正規化', brief: 'Z 分數與 Min-Max 逐欄計算，看距離怎麼被單位左右。', module: m('M1 第 10 節', '../m1/#p10'), status: 'live' },
@@ -100,6 +101,7 @@
     S6: 'Time Series Forecasting Pipelines',
     S7: 'Association Rule Mining Pipelines',
     S8: 'XAI & MLOps Monitoring Pipelines',
+    S9: 'AI Agent & Multi-Agent Workflows',
     A1: 'Missing Value Imputation',
     A2: 'Standardization & Normalization',
     A3: 'Discretization / Binning',
