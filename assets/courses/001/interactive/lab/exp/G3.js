@@ -97,6 +97,7 @@
             hl: st.showFold && idx === st.foldIdx
           }))
         };
+        const bestMae = M.min(R.folds.map(x => x.mae));
         const bottom = {
           type: 'bars', slot: 'bottom',
           title: '各滾動折 MAE 比較（全折平均 = ' + f(R.meanMae, 1) + ' 人次）',
@@ -105,7 +106,7 @@
           items: R.folds.map((x, idx) => ({
             id: 'b' + idx, label: 'F' + x.fold,
             value: idx < st.doneCount ? x.mae : 0,
-            cls: st.showFold && idx === st.foldIdx ? 'hl' : 'c0'
+            cls: st.doneCount >= R.folds.length && x.mae === bestMae ? 'good' : (st.showFold && idx === st.foldIdx ? 'hl' : 'c0')
           }))
         };
         return [main, side, bottom];

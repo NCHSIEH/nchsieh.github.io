@@ -139,14 +139,17 @@
           cols: [{ key: 't', label: '月', num: true, digits: 0 }, { key: 'x', label: 'xₜ', num: true, digits: 2 }, { key: 'h', label: 'hₜ', num: true, digits: 2 }, { key: 'gp', label: '連乘梯度', num: true, digits: 3 }],
           rows: R.rnnSteps.map((s, idx) => ({
             id: s.t,
-            cells: [s.t, s.x, idx <= st.tIdx ? s.h : null, idx <= st.tIdx ? s.gradProd : null],
+            cells: [s.t, s.x, idx <= st.tIdx ? s.h : null, idx <= st.tIdx ? { v: f(s.gradProd, 3), cls: s.gradProd < 0.05 ? 'bad' : (s.gradProd < 0.2 ? 'c3' : 'good') } : null],
             hl: idx === st.tIdx
           }))
         };
         const line = {
           type: 'line', slot: 'bottom', title: '標準化門診量序列',
           axes: { x: { label: '月份 t', min: 1, max: 9 }, y: { label: 'Z(門診量)', min: -2.5, max: 2.5 } },
-          series: [{ id: 'seq', label: 'Z(門診量)', pts: R.xs.map((x, i) => [i + 1, x]), cls: 'c0', dots: true }],
+          series: [
+            { id: 'zero', label: '0 線', pts: [[1, 0], [9, 0]], cls: 'c5', dash: true, dots: false },
+            { id: 'seq', label: 'Z(門診量)', pts: R.xs.map((x, i) => [i + 1, x]), cls: 'c0', dots: true }
+          ],
           marker: st.tIdx >= 0 ? { x: st.tIdx + 1, y: R.xs[st.tIdx], label: 't=' + (st.tIdx + 1) } : null
         };
         return [main, side, line];

@@ -113,7 +113,9 @@
         const pts = showDiff
           ? R.diff1.map((v, i) => [i + 2, v])
           : R.y.map((v, i) => [i + 1, v]);
-        const series = [{ id: 's', label: showDiff ? '一次差分 Δy' : '門診人次', pts, cls: 'c0', dots: false }];
+        const series = [];
+        if (showDiff) series.push({ id: 'zero', label: '0 線', pts: [[1, 0], [R.n + R.H, 0]], cls: 'c5', dash: true, dots: false });
+        series.push({ id: 's', label: showDiff ? '一次差分 Δy' : '門診人次', pts, cls: 'c0', dots: false });
         if (st.showFc) {
           const fcPts = (showDiff ? R.fcSeries : R.fcOrig).map((v, i) => [R.n + i + 1, v]);
           series.push({ id: 'fc', label: '預測', pts: fcPts, cls: 'c1', dash: true, dots: true });

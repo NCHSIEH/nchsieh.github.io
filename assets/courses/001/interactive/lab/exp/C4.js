@@ -102,6 +102,14 @@
           dots: false
         }));
         series.push({
+          id: 'mix',
+          label: '總混合分布',
+          pts: xsGrid.map(x => [x, M.sum(M.range(R.k, c => h.weights[c] * gaussPdf(x, h.means[c], h.vars[c])))]),
+          cls: 'hl',
+          dash: true,
+          dots: false
+        });
+        series.push({
           id: 'pts',
           label: '病人血糖 Z',
           pts: (big ? R.Z.slice(0, 30) : R.Z).map(z => [z, 0.01]),
@@ -123,11 +131,14 @@
           type: 'table', slot: 'side',
           title: '各筆責任值（軟分群機率）',
           cols,
-          rows: showRows.map((r, i) => ({
-            id: r.id,
-            cells: [r.id, R.Z[i]].concat(M.range(R.k, c => st.showResp ? h.resp[i][c] : null)),
-            hl: st.hlPt === i
-          })),
+          rows: showRows.map((r, i) => {
+            const bestC = M.argmax(h.resp[i]);
+            return {
+              id: r.id,
+              cells: [r.id, R.Z[i]].concat(M.range(R.k, c => st.showResp ? { v: f(h.resp[i][c], 2), cls: c === bestC ? 'c' + c : null } : null)),
+              hl: st.hlPt === i
+            };
+          }),
           caption: big ? '只列出前 12 位' : null
         };
 

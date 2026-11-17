@@ -136,9 +136,9 @@
             id: 'p' + idx,
             cells: [
               pr.label,
-              idx < st.permUpto ? pr.contribs[0] : null,
-              idx < st.permUpto ? pr.contribs[1] : null,
-              idx < st.permUpto ? pr.contribs[2] : null
+              idx < st.permUpto ? { v: f(pr.contribs[0], 3), cls: pr.contribs[0] >= 0 ? 'c1' : 'c0' } : null,
+              idx < st.permUpto ? { v: f(pr.contribs[1], 3), cls: pr.contribs[1] >= 0 ? 'c1' : 'c0' } : null,
+              idx < st.permUpto ? { v: f(pr.contribs[2], 3), cls: pr.contribs[2] >= 0 ? 'c1' : 'c0' } : null
             ],
             hl: idx === st.permUpto - 1
           }))

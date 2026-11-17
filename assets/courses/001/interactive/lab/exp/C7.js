@@ -122,7 +122,7 @@
               r.id,
               (st.allDone || (i === ti && st.showCircle) || (st.showNbLrd && R.kNbrs[ti].includes(i))) ? R.kDist[i] : null,
               (st.allDone || (i === ti && st.tLrd) || (st.showNbLrd && R.kNbrs[ti].includes(i))) ? R.lrd[i] : null,
-              (st.allDone || (i === ti && st.tLrd)) ? R.lof[i] : null
+              (st.allDone || (i === ti && st.tLrd)) ? { v: f(R.lof[i], 2), cls: R.lof[i] > 1.5 ? 'bad' : 'good' } : null
             ],
             hl: i === ti
           }))

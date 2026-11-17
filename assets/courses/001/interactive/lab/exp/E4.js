@@ -151,11 +151,15 @@
           type: 'table', slot: 'side',
           title: '主題—詞計數表（高頻前 8 詞）',
           cols,
-          rows: topList.map(x => ({
-            id: x.w,
-            cells: R.K > 2 ? [x.w, x.c0, x.c1, x.c2] : [x.w, x.c0, x.c1],
-            hl: st.curWord === x.w
-          }))
+          rows: topList.map(x => {
+            const vals = R.K > 2 ? [x.c0, x.c1, x.c2] : [x.c0, x.c1];
+            const bestT = M.argmax(vals);
+            return {
+              id: x.w,
+              cells: [x.w].concat(vals.map((v, k) => st.colored && k === bestT && v > 0 ? { v, cls: 'c' + k } : v)),
+              hl: st.curWord === x.w
+            };
+          })
         };
 
         const bars = {

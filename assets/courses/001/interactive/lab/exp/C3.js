@@ -119,7 +119,7 @@
           type: 'scatter', slot: 'main',
           title: 'DBSCAN 密度分群（實心＝核心、空心＝邊界/雜訊）',
           axes: AX, points, lines: [], circles,
-          legend: [{ cls: 'c0', label: '群 0' }, { cls: 'c1', label: '群 1' }, { cls: 'c5', label: '未分/雜訊' }]
+          legend: [{ cls: 'c0', label: '群 0' }, { cls: 'c1', label: '群 1' }, { cls: 'c5', label: '未分/雜訊' }, { cls: 'hl', shape: 'ring', label: '目前點 / 雜訊' }]
         };
         const side = {
           type: 'table', slot: 'side',
@@ -134,12 +134,13 @@
             const known = i < st.checkedUpto;
             const lb = st.labels[i];
             const roleTxt = !known ? null : (R.isCore[i] ? '核心' : (lb >= 0 ? '邊界' : (st.done ? '雜訊' : '非核心')));
+            const roleCls = !known ? null : (R.isCore[i] ? 'good' : (lb === -1 && st.done ? 'bad' : 'c2'));
             return {
               id: r.id,
               cells: [
                 r.id,
                 known ? R.nbrs[i].length : null,
-                roleTxt,
+                roleTxt ? { v: roleTxt, cls: roleCls } : null,
                 lb >= 0 ? '群 ' + lb : (lb === -1 && st.done ? '雜訊' : '—')
               ],
               hl: st.cur === i

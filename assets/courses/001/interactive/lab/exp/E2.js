@@ -137,7 +137,7 @@
             id: 'c' + c,
             label: CLAB[c] + (st.norm ? '' : ' (' + f(st.scores[c], 2) + ')'),
             value: barVals[c],
-            cls: 'c' + c,
+            cls: st.norm && R.pred === c ? 'good' : 'c' + c,
             hl: st.norm && R.pred === c
           }))
         };

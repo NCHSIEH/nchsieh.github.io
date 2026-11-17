@@ -156,10 +156,11 @@
       const AX = { x: { label: '維度 1', min: -bnd, max: bnd }, y: { label: '維度 2', min: -bnd, max: bnd } };
 
       function views(st) {
+        const topSimSet = new Set(st.done ? R.sims.slice(0, 2).map(s => s.i) : []);
         const points = showWords.map((w, i) => ({
           id: 'w' + i, x: st.Win[i][0], y: st.Win[i][1],
-          cls: i === st.hlA ? 'hl' : (i === st.hlB ? 'c1' : (i === R.targetIdx && st.done ? 'c1' : 'c0')),
-          hl: i === st.hlA || i === st.hlB,
+          cls: i === st.hlA ? 'hl' : (i === st.hlB ? 'c1' : (st.done && i === R.targetIdx ? 'c1' : (topSimSet.has(i) ? 'good' : 'c0'))),
+          hl: i === st.hlA || i === st.hlB || topSimSet.has(i),
           label: w, r: 6
         }));
         const lines = [];
@@ -168,7 +169,7 @@
         } else if (st.done && R.targetIdx < showWords.length) {
           R.sims.slice(0, 2).forEach((s, idx) => {
             if (s.i < showWords.length) {
-              lines.push({ id: 'sim' + idx, x1: st.Win[R.targetIdx][0], y1: st.Win[R.targetIdx][1], x2: st.Win[s.i][0], y2: st.Win[s.i][1], cls: 'c1', dash: true, w: 1.8 });
+              lines.push({ id: 'sim' + idx, x1: st.Win[R.targetIdx][0], y1: st.Win[R.targetIdx][1], x2: st.Win[s.i][0], y2: st.Win[s.i][1], cls: 'good', dash: true, w: 1.8 });
             }
           });
         }
@@ -176,7 +177,7 @@
           type: 'scatter', slot: 'main',
           title: '2D 詞向量空間（前 14 個詞）',
           axes: AX, points, lines, circles: [],
-          legend: [{ cls: 'hl', label: '目前中心詞' }, { cls: 'c1', label: '上下文／目標詞' }]
+          legend: [{ cls: 'hl', label: '目前中心詞' }, { cls: 'c1', label: '上下文／目標詞' }, { cls: 'good', label: '最近相似詞' }, { cls: 'c0', label: '其他詞' }]
         };
         const side = st.done ? {
           type: 'table', slot: 'side',

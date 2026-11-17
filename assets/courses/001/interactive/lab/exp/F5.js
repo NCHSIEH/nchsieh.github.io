@@ -139,7 +139,7 @@
           cols: [{ key: 'id', label: '#' }, { key: 'z', label: '編碼 z', num: true, digits: 2 }, { key: 'err', label: '重建誤差', num: true, digits: 3 }],
           rows: rows.map((r, i) => ({
             id: r.id,
-            cells: [r.id, st.showZ ? sn.fwd[i].z : null, st.showOut ? sn.fwd[i].err : null],
+            cells: [r.id, st.showZ ? sn.fwd[i].z : null, st.showOut ? (st.done && i === R.ranked[0].i ? { v: f(sn.fwd[i].err, 3), cls: 'bad' } : sn.fwd[i].err) : null],
             hl: i === st.ptIdx || (st.done && i === R.ranked[0].i)
           }))
         };
@@ -148,7 +148,7 @@
           title: '重建誤差排名（前 6 名，越大越異常）',
           max: Math.max(1, M.max(R.fin.fwd.map(o => o.err))), digits: 3,
           items: st.done
-            ? R.ranked.slice(0, 6).map(o => ({ id: 'rk' + o.id, label: '#' + o.id, value: o.err, cls: o.id === R.ranked[0].id ? 'c1' : 'c0', hl: o.id === R.ranked[0].id }))
+            ? R.ranked.slice(0, 6).map(o => ({ id: 'rk' + o.id, label: '#' + o.id, value: o.err, cls: o.id === R.ranked[0].id ? 'bad' : 'c0', hl: o.id === R.ranked[0].id }))
             : [{ id: 'w', label: '#' + rows[0].id, value: st.showOut ? sn.fwd[0].err : 0, cls: 'c0' }]
         };
         return [main, side, bars];

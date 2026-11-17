@@ -127,7 +127,7 @@
           max: R.fullParams * 1.6, digits: 0, unit: ' 個',
           items: [
             { id: 'full', label: '全量微調 W', value: R.fullParams, cls: 'c0' },
-            { id: 'lora', label: 'LoRA (A+B)', value: R.loraParams, cls: 'c1' }
+            { id: 'lora', label: 'LoRA (A+B)', value: R.loraParams, cls: 'good' }
           ]
         };
         const line = {

@@ -146,7 +146,7 @@
           rows: h.meds.map((mi, k) => {
             const memIdx = h.a.map((ak, i) => ak === k ? i : -1).filter(i => i >= 0);
             const cSum = M.sum(memIdx.map(i => Math.hypot(R.Z[i][0] - R.Z[mi][0], R.Z[i][1] - R.Z[mi][1])));
-            return { id: 'k' + k, cells: ['第 ' + (k + 1) + ' 群', '#' + rows[mi].id, memIdx.length, cSum], hl: true };
+            return { id: 'k' + k, cells: [{ v: '第 ' + (k + 1) + ' 群', cls: CL[k] }, '#' + rows[mi].id, memIdx.length, cSum] };
           })
         };
         const maxC = Math.max(2, R.hist[0].cost * 1.1);

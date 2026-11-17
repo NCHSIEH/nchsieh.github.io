@@ -132,7 +132,7 @@
           title: '與查詢句「' + R.qText + '」的餘弦相似度',
           max: 1, digits: 3,
           items: st.showSim
-            ? R.sims.map(s => ({ id: 's' + s.id, label: '#' + s.id + ' ' + s.text.slice(0, 8) + '…', value: s.sim, cls: s.id === R.ranked[0].id ? 'c1' : 'c0', hl: s.id === R.ranked[0].id }))
+            ? R.sims.map(s => ({ id: 's' + s.id, label: '#' + s.id + ' ' + s.text.slice(0, 8) + '…', value: s.sim, cls: s.id === R.ranked[0].id ? 'good' : 'c0', hl: s.id === R.ranked[0].id }))
             : [{ id: 'w', label: '尚未計算相似度', value: 0, cls: 'c5' }]
         };
         return [main, side, bars];

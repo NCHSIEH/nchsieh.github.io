@@ -127,11 +127,13 @@
             lines.push({ id: 'pr' + r.id, x1: R.Z[i][0], y1: R.Z[i][1], x2: R.recon[i][0], y2: R.recon[i][1], cls: 'c4', dash: true, w: 1.3 });
           });
         }
+        const leg = [{ cls: 'c0', label: '原始點' }, { cls: 'c1', label: 'PC1 / 重建點' }];
+        if (!R.use4) leg.push({ cls: 'c2', shape: 'line', label: 'PC2' }, { cls: 'c4', shape: 'line', label: '投影誤差' });
         const main = {
           type: 'scatter', slot: 'main',
           title: R.use4 ? 'BMI × 血糖標準化空間' : '標準化空間與主成分軸 (PC1 / PC2)',
           axes: AX, points, lines, circles: [],
-          legend: [{ cls: 'c0', label: '原始點' }, { cls: 'c1', label: '主成分 / 重建點' }]
+          legend: leg
         };
         const side = st.showVec ? {
           type: 'matrix', slot: 'side',
@@ -156,7 +158,7 @@
             id: 'pc' + j,
             label: 'PC' + (j + 1) + ' (' + LAB.pct(rt, 1) + ')',
             value: st.showVar ? rt : 0,
-            cls: j < R.keep ? 'c1' : 'c5'
+            cls: j < R.keep ? 'good' : 'c5'
           }))
         };
         return [main, side, bars];

@@ -160,7 +160,7 @@
           items: R.texts.map((_, i) => ({
             id: 'b' + i, label: 'C' + (i + 1),
             value: scShow[i],
-            cls: st.showPick && pickedSet.has(i) ? 'c1' : 'c0',
+            cls: st.showPick && pickedSet.has(i) ? 'good' : 'c0',
             hl: st.showPick && pickedSet.has(i)
           }))
         };

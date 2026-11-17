@@ -115,8 +115,10 @@
           r: st.allDone ? Math.round(M.clamp(4 + R.scores[i] * 7, 5, 12)) : 6
         }));
         const lines = st.cuts.map((c, idx) => {
-          if (c.ft === 'bmi') return { id: 'cut' + idx, x1: c.th, y1: AX.y.min, x2: c.th, y2: AX.y.max, cls: 'hl', dash: true, w: 1.8, label: '刀' + (idx + 1) };
-          return { id: 'cut' + idx, x1: AX.x.min, y1: c.th, x2: AX.x.max, y2: c.th, cls: 'hl', dash: true, w: 1.8, label: '刀' + (idx + 1) };
+          const isNew = idx === st.cuts.length - 1;
+          const lc = isNew ? 'hl' : 'c2', lw = isNew ? 2.5 : 1.4, ld = !isNew;
+          if (c.ft === 'bmi') return { id: 'cut' + idx, x1: c.th, y1: AX.y.min, x2: c.th, y2: AX.y.max, cls: lc, dash: ld, w: lw, label: '刀' + (idx + 1) };
+          return { id: 'cut' + idx, x1: AX.x.min, y1: c.th, x2: AX.x.max, y2: c.th, cls: lc, dash: ld, w: lw, label: '刀' + (idx + 1) };
         });
         const main = {
           type: 'scatter', slot: 'main',
@@ -139,7 +141,7 @@
               r.id,
               st.showT0 ? R.paths[i][0].h : null,
               st.allDone ? R.meanH[i] : null,
-              st.allDone ? R.scores[i] : null
+              st.allDone ? { v: f(R.scores[i], 3), cls: R.scores[i] > 0.6 ? 'bad' : 'good' } : null
             ],
             hl: i === st.focusIdx
           }))

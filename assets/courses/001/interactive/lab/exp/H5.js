@@ -119,7 +119,7 @@
             id: 'c' + i,
             label: c.tok,
             value: st.showProb ? probsShow[i] : logitVals[i],
-            cls: st.pickedIdx === i ? 'hl' : (probsShow[i] <= 0 && st.showProb ? 'dim' : 'c0'),
+            cls: st.pickedIdx === i ? 'good' : (probsShow[i] <= 0 && st.showProb ? 'dim' : 'c0'),
             dim: st.showProb && probsShow[i] <= 0,
             hl: st.pickedIdx === i
           }))

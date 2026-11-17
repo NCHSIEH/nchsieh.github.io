@@ -164,7 +164,10 @@
           type: 'line', slot: 'bottom',
           title: '每回合累積獎勵變化',
           axes: { x: { label: '回合', min: 1, max: R.episodes }, y: { label: '總獎勵', min: yMin, max: yMax } },
-          series: [{ id: 'rew', label: '總獎勵', pts: st.rewPts.length ? st.rewPts : [[1, R.epHistory[0].totR]], cls: 'c1', dots: false }],
+          series: [
+            { id: 'zero', label: '0 線', pts: [[1, 0], [R.episodes, 0]], cls: 'c5', dash: true, dots: false },
+            { id: 'rew', label: '總獎勵', pts: st.rewPts.length ? st.rewPts : [[1, R.epHistory[0].totR]], cls: 'c1', dots: false }
+          ],
           marker: st.rewPts.length ? { x: st.rewPts[st.rewPts.length - 1][0], y: st.rewPts[st.rewPts.length - 1][1], label: 'Ep ' + st.rewPts[st.rewPts.length - 1][0] } : null
         };
         return [main, side, line];
