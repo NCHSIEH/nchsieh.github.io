@@ -78,7 +78,7 @@
     items.forEach(it => { const s = H('span', null, null, lg); H('i', 'sw' + kc(it.cls) + (it.shape ? ' sh-' + it.shape : ''), null, s); s.appendChild(document.createTextNode(it.label)); });
   }
   function svgIn(box, spec, w, h) {
-    const sz = SIZE[spec.slot] || SIZE.main, W = w || sz[0], Hh = h || spec.h || sz[1];
+    const sz = SIZE[spec.slot] || SIZE.main, W = w || spec.w || sz[0], Hh = h || spec.h || sz[1];
     const sv = S('svg', { viewBox: '0 0 ' + W + ' ' + Hh, class: 'lv-svg', role: 'img' }, box); sv.__W = W; sv.__H = Hh; return sv;
   }
   function axes(g, st, ax, P, W, Hh) {

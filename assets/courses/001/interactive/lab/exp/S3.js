@@ -61,28 +61,27 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
+          [{ id: 'x', label: '1. 無標籤 X', value: rows.length + ' 筆', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: '沒有答案 y' }],
+          [{ id: 'scl', label: '2. 必做標準化', value: st.stage >= 1 ? 'Z 分數' : '單位不同', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: 'A2 防大尺主導' }],
+          [{ id: 'dim', label: '3. 降維探索', value: st.stage >= 2 ? '84% 變異' : '高維', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: 'C5 PCA · C6 t-SNE' }],
           [
-            { id: 'x', label: '1. 無標籤資料 X', value: rows.length + ' 筆', shape: 'box', w: 168, cls: clsOf(0), hl: act(0), sub: '沒有標準答案 y' },
-            { id: 'scl', label: '2. 必做標準化', value: st.stage >= 1 ? 'Z 分數' : '單位不同', shape: 'box', w: 168, cls: clsOf(1), hl: act(1), sub: 'A2 防大尺主導' }
+            { id: 'clu', label: '4a. 分群探勘', value: R.isAnom || R.isDim ? '略過' : 'K=3 亞型', shape: 'box', w: 156, cls: R.isAnom || R.isDim ? 'c5' : clsOf(3), hl: !R.isAnom && !R.isDim && act(3), dim: R.isAnom || R.isDim, sub: 'C1/C2/C3/C4/C10' },
+            { id: 'ano', label: '4b. 異常偵測', value: R.isAnom ? '抓離群點' : '略過', shape: 'box', w: 156, cls: !R.isAnom ? 'c5' : clsOf(3), hl: R.isAnom && act(3), dim: !R.isAnom, sub: 'C7 LOF · C8 IF · F5' }
           ],
-          [
-            { id: 'dim', label: '3. 降維探索', value: st.stage >= 2 ? '84% 變異' : '高維', shape: 'box', w: 168, cls: clsOf(2), hl: act(2), sub: 'C5 PCA · C6 t-SNE' },
-            { id: 'clu', label: R.isAnom ? '4. 異常偵測' : R.isDim ? '4. 挑主成分' : '4. 分群探勘', value: st.stage >= 3 ? (R.isAnom ? '抓離群點' : R.isDim ? '保留2軸' : 'K=3 亞型') : '待執行', shape: 'box', w: 168, cls: clsOf(3), hl: act(3), sub: R.isAnom ? 'C7 LOF · C8 IF · F5' : R.isDim ? 'C5 累積變異 ≥80%' : 'C1/C2/C3/C4/C10' }
-          ],
-          [
-            { id: 'int', label: '5. 評估與解讀', value: st.stage >= 4 ? (R.isAnom ? '複核 #' + R.topAnomaly : (R.isDim ? '降維完成' : 'Sil=0.56')) : '待評估', shape: 'box', w: 168, cls: clsOf(4), hl: act(4), sub: R.isAnom ? '人工複核極端' : 'C9 輪廓係數 · 臨床命名' }
-          ]
+          [{ id: 'int', label: '5. 評估解讀', value: st.stage >= 4 ? (R.isAnom ? '複核 #' + R.topAnomaly : (R.isDim ? '保留2軸' : 'Sil=0.56')) : '待評估', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: R.isAnom ? '人工複核極端' : 'C9 輪廓係數 · 命名' }]
         ];
         const edges = [
-          { from: 'x', to: 'scl', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '標準化' },
-          { from: 'scl', to: 'dim', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '降維' },
-          { from: 'dim', to: 'clu', active: st.stage === 3, cls: done(2) ? 'good' : 'c5', label: '探勘' },
-          { from: 'clu', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5', label: '評估' }
+          { from: 'x', to: 'scl', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'scl', to: 'dim', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'dim', to: 'clu', active: st.stage === 3 && !R.isAnom, dim: R.isAnom, cls: done(2) && !R.isAnom ? 'good' : 'c5' },
+          { from: 'dim', to: 'ano', active: st.stage === 3 && R.isAnom, dim: !R.isAnom, cls: done(2) && R.isAnom ? 'good' : 'c5' },
+          { from: 'clu', to: 'int', active: st.stage === 4 && !R.isAnom, dim: R.isAnom, cls: done(3) && !R.isAnom ? 'good' : 'c5' },
+          { from: 'ano', to: 'int', active: st.stage === 4 && R.isAnom, dim: !R.isAnom, cls: done(3) && R.isAnom ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', h: 440,
+          type: 'network', slot: 'main', w: 1120, h: 290,
           title: '非監督式學習全流程圖（' + (R.isAnom ? '異常偵測路徑' : R.isDim ? '降維壓縮路徑' : '分群探索路徑') + '）',
-          layerLabels: ['輸入與標準化', '降維與探勘', '評估解讀'],
+          layerLabels: ['1. 無標籤', '2. 標準化', '3. 降維', '4. 探勘模型', '5. 評估解讀'],
           layers, edges
         };
         const side = {

@@ -97,28 +97,31 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
+          [{ id: 'raw', label: R.isStrict ? '1. 切分訓練集' : '1. 原始資料', value: rows.length + ' 筆', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: R.isStrict ? '只用 Train fit' : '含缺值/極端/文字' }],
           [
-            { id: 'raw', label: R.isStrict ? '1. 切分訓練集' : '1. 原始資料', value: rows.length + ' 筆', shape: 'box', w: 168, cls: clsOf(0), hl: act(0), sub: R.isStrict ? '只用 Train fit' : '含缺值/極端/文字' },
-            { id: 'imp', label: '2. 補值與離群', value: st.stage >= 2 ? '上界=' + f(R.hi, 0) : (st.stage >= 1 ? '中位=' + f(R.medAge, 0) : '待處理'), shape: 'box', w: 168, cls: act(1) || act(2) ? 'hl' : (done(2) ? 'good' : 'c5'), hl: act(1) || act(2), sub: 'A1 補值 · A7 縮尾' }
+            { id: 'imp', label: '2a. 遺失補值', value: st.stage >= 1 ? '中位=' + f(R.medAge, 0) : '待補', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: 'A1 平均/中位/k-NN' },
+            { id: 'out', label: '2b. 離群處理', value: st.stage >= 2 ? '上界=' + f(R.hi, 0) : '待查', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: 'A7 IQR 縮尾/刪除' }
           ],
           [
-            { id: 'enc', label: '3. 編碼與縮放', value: st.stage >= 4 ? (R.isLinear ? 'Z 分數' : '免縮放') : (st.stage >= 3 ? '0/1 數值' : '待轉換'), shape: 'box', w: 168, cls: act(3) || act(4) ? 'hl' : (done(4) ? 'good' : 'c5'), hl: act(3) || act(4), sub: 'A4 編碼 · A2 縮放' },
-            { id: 'sel', label: '4. 篩選與平衡', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', w: 168, cls: clsOf(5), hl: act(5), sub: 'A5 SMOTE · A6 選特徵' }
+            { id: 'enc', label: '3a. 類別編碼', value: st.stage >= 3 ? '0/1 數值' : '文字', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: 'A4 One-Hot/目標' },
+            { id: 'scl', label: '3b. 特徵縮放', value: R.isLinear ? 'Z 分數' : '免縮放', shape: 'box', w: 156, cls: R.isLinear ? clsOf(4) : (st.stage >= 4 ? 'c2' : 'c5'), hl: act(4), dim: !R.isLinear && st.stage >= 4, sub: 'A2 標準化 / A3 離散' }
           ],
-          [
-            { id: 'mat', label: '5. 乾淨特徵矩陣', value: st.stage >= 6 ? '就緒' : '準備中', shape: 'box', w: 168, cls: clsOf(6), hl: act(6), sub: R.isStrict ? '套用至 Val/Test' : '送入 B/C 區模型' }
-          ]
+          [{ id: 'sel', label: '4. 篩選平衡', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', w: 156, cls: clsOf(5), hl: act(5), sub: 'A5 SMOTE · A6 選特徵' }],
+          [{ id: 'mat', label: '5. 乾淨矩陣', value: st.stage >= 6 ? '就緒' : '準備中', shape: 'box', w: 156, cls: clsOf(6), hl: act(6), sub: R.isStrict ? '套用至 Val/Test' : '送入 B/C 區模型' }]
         ];
         const edges = [
-          { from: 'raw', to: 'imp', active: st.stage === 1 || st.stage === 2, cls: done(0) ? 'good' : 'c5', label: '清理' },
-          { from: 'imp', to: 'enc', active: st.stage === 3 || st.stage === 4, cls: done(2) ? 'good' : 'c5', label: '轉換' },
-          { from: 'enc', to: 'sel', active: st.stage === 5, cls: done(4) ? 'good' : 'c5', label: '優化' },
-          { from: 'sel', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5', label: '輸出' }
+          { from: 'raw', to: 'imp', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'raw', to: 'out', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'imp', to: 'enc', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'out', to: 'scl', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'enc', to: 'sel', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'scl', to: 'sel', active: st.stage === 5 && R.isLinear, dim: !R.isLinear, cls: done(4) ? 'good' : 'c5' },
+          { from: 'sel', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', h: 440,
+          type: 'network', slot: 'main', w: 1120, h: 290,
           title: '資料前處理全流程圖（第 ' + Math.min(st.stage + 1, 7) + ' / 7 階段）',
-          layerLabels: ['輸入與清理', '轉換與優化', '特徵輸出'],
+          layerLabels: ['1. 輸入切分', '2. 資料清理', '3. 轉換縮放', '4. 篩選平衡', '5. 特徵輸出'],
           layers, edges
         };
         const side = {

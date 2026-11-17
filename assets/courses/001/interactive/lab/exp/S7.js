@@ -58,28 +58,22 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [
-            { id: 'tx', label: '1. 處方交易籃', value: R.nTx + ' 張處方', shape: 'box', w: 168, cls: clsOf(0), hl: act(0), sub: 'Basket 格式' },
-            { id: 'sup', label: '2. 支持度過濾', value: 'sup ≥ 0.25', shape: 'box', w: 168, cls: clsOf(1), hl: act(1), sub: '保留頻繁單項' }
-          ],
-          [
-            { id: 'mine', label: R.isFp ? '3. 建 FP-tree' : '3. 逐層 Ck→Lk', value: st.stage >= 2 ? (R.isFp ? '掃描 2 次' : '逐層剪枝') : '待探勘', shape: 'box', w: 168, cls: clsOf(2), hl: act(2), sub: R.isFp ? 'D2 FP-Growth' : 'D1 Apriori' },
-            { id: 'rule', label: '4. 產生規則', value: 'conf ≥ 0.60', shape: 'box', w: 168, cls: clsOf(3), hl: act(3), sub: 'A → B 信賴度' }
-          ],
-          [
-            { id: 'lift', label: '5. Lift 驗收', value: st.stage >= 4 ? 'Lift=' + R.topLift : '防陷阱', shape: 'box', w: 168, cls: clsOf(4), hl: act(4), sub: '剔除 Lift ≤ 1' }
-          ]
+          [{ id: 'tx', label: '1. 處方交易籃', value: R.nTx + ' 張處方', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: 'Basket 格式' }],
+          [{ id: 'sup', label: '2. 支持度過濾', value: 'sup ≥ 0.25', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: '保留頻繁單項' }],
+          [{ id: 'mine', label: R.isFp ? '3. 建 FP-tree' : '3. 逐層 Ck→Lk', value: st.stage >= 2 ? (R.isFp ? '掃描 2 次' : '逐層剪枝') : '待探勘', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: R.isFp ? 'D2 FP-Growth' : 'D1 Apriori' }],
+          [{ id: 'rule', label: '4. 產生規則', value: 'conf ≥ 0.60', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: 'A → B 信賴度' }],
+          [{ id: 'lift', label: '5. Lift 驗收', value: st.stage >= 4 ? 'Lift=' + R.topLift : '防陷阱', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: '剔除 Lift ≤ 1' }]
         ];
         const edges = [
-          { from: 'tx', to: 'sup', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: 'Support' },
-          { from: 'sup', to: 'mine', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '挖掘' },
-          { from: 'mine', to: 'rule', active: st.stage === 3, cls: done(2) ? 'good' : 'c5', label: 'Confidence' },
-          { from: 'rule', to: 'lift', active: st.stage === 4, cls: done(3) ? 'good' : 'c5', label: 'Lift 篩選' }
+          { from: 'tx', to: 'sup', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'sup', to: 'mine', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'mine', to: 'rule', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'rule', to: 'lift', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', h: 440,
+          type: 'network', slot: 'main', w: 1120, h: 240,
           title: '關聯規則探勘全流程圖（' + (R.isFp ? 'FP-Growth 管線' : 'Apriori 管線') + '）',
-          layerLabels: ['交易籃與支持度', '頻繁集與規則', 'Lift 驗收'],
+          layerLabels: ['1. 交易籃', '2. 支持度', '3. 頻繁集', '4. 信賴度', '5. Lift 篩選'],
           layers, edges
         };
         const side = {

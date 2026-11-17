@@ -58,29 +58,23 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [
-            { id: 'mod', label: '1. 驗收模型', value: '已通過測試', shape: 'box', w: 168, cls: clsOf(0), hl: act(0), sub: 'S2 產出模型' },
-            { id: 'glb', label: '2. 全域重要度', value: st.stage >= 1 ? '血糖最關鍵' : '待分析', shape: 'box', w: 168, cls: clsOf(1), hl: act(1), sub: 'I1 Permutation' }
-          ],
-          [
-            { id: 'loc', label: '3. 單筆 SHAP', value: st.stage >= 2 ? 'φ=+0.29' : '待歸因', shape: 'box', w: 168, cls: clsOf(2), hl: act(2), sub: 'I1 個別病人解釋' },
-            { id: 'thr', label: '4. 門檻校正', value: st.stage >= 3 ? 'p ≥ 0.40' : '預設 0.50', shape: 'box', w: 168, cls: clsOf(3), hl: act(3), sub: 'B16 醫療成本權衡' }
-          ],
-          [
-            { id: 'mon', label: '5. 監控與重訓', value: st.stage >= 4 ? (R.isOps ? '飄移監控中' : '臨床上線') : '待部署', shape: 'box', w: 168, cls: clsOf(4), hl: act(4), sub: R.isOps ? 'G3 飄移回流重訓' : '醫師稽核閉環' }
-          ]
+          [{ id: 'mod', label: '1. 驗收模型', value: '已通過測試', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: 'S2 產出模型' }],
+          [{ id: 'glb', label: '2. 全域重要度', value: st.stage >= 1 ? '血糖最關鍵' : '待分析', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: 'I1 Permutation' }],
+          [{ id: 'loc', label: '3. 單筆 SHAP', value: st.stage >= 2 ? 'φ=+0.29' : '待歸因', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: 'I1 個別病人解釋' }],
+          [{ id: 'thr', label: '4. 門檻校正', value: st.stage >= 3 ? 'p ≥ 0.40' : '預設 0.50', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: 'B16 醫療成本權衡' }],
+          [{ id: 'mon', label: '5. 監控與重訓', value: st.stage >= 4 ? (R.isOps ? '飄移監控中' : '臨床上線') : '待部署', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: R.isOps ? 'G3 飄移回流重訓' : '醫師稽核閉環' }]
         ];
         const edges = [
-          { from: 'mod', to: 'glb', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '全域' },
-          { from: 'glb', to: 'loc', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '單筆' },
-          { from: 'loc', to: 'thr', active: st.stage === 3, cls: done(2) ? 'good' : 'c5', label: '校正' },
-          { from: 'thr', to: 'mon', active: st.stage === 4, cls: done(3) ? 'good' : 'c5', label: '部署' },
+          { from: 'mod', to: 'glb', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'glb', to: 'loc', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'loc', to: 'thr', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'thr', to: 'mon', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
           { from: 'mon', to: 'mod', active: st.stage === 4 && R.isOps, back: true, cls: 'c3', label: '飄移重訓' }
         ];
         const main = {
-          type: 'network', slot: 'main', h: 440,
+          type: 'network', slot: 'main', w: 1120, h: 240,
           title: '模型落地與監控全流程圖（' + (R.isOps ? 'MLOps 監控重訓' : 'XAI 解釋與校正') + '）',
-          layerLabels: ['模型與全域解釋', '單筆歸因與門檻', '監控閉環'],
+          layerLabels: ['1. 模型', '2. 全域解釋', '3. 單筆歸因', '4. 門檻校正', '5. 監控閉環'],
           layers, edges
         };
         const th = st.stage >= 3 ? R.optTh : 0.50;

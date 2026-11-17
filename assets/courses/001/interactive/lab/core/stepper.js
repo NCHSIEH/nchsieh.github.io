@@ -135,14 +135,16 @@
     };
 
     const canEdit = !!(def.data.editable && def.data.editable.length);
+    const isWideMain = def.group === 'S';
 
     root.append(
       h('header', { class: 'lab-hero' }, h('div', { class: 'badge' }, def.id), h('div', null, h('h1', null, showTitle(def)), h('p', { class: 'goal' }, GOALS[def.id] || def.goal || ''),
         h('div', { class: 'chips' }, def.module && def.module.url ? h('a', { class: 'tag', href: def.module.url, 'data-tip': '前往對應講義章節閱讀完整觀念推導' }, '對應講義：' + def.module.name + ' →') : null, h('span', { class: 'tag gray', 'data-tip': '本實驗使用固定亂數種子產生的教學模擬資料，可點「換一組資料」或直接修改表格數值' }, '模擬資料'), h('span', { class: 'tag blue' }, def.data.scenario || '')))),
       elParams, ctl, elErr,
+      isWideMain ? h('div', { style: 'margin-bottom:14px' }, pMain) : null,
       h('div', { class: 'lab-work' },
         h('div', { class: 'col l' }, h('div', { class: 'pane' }, h('h3', null, '資料', canEdit ? h('span', { class: 'tag gray', style: 'margin-left:6px;font-weight:500', 'data-tip': '點擊表格內的數值即可直接修改，即時測試極端值或邊界個案對結果的影響' }, '可改值') : null, elDataCnt), elData, elDataNote), h('div', { class: 'pane' }, h('h3', null, '演算法步驟'), elPseudo)),
-        h('div', { class: 'col c' }, pMain, pBottom),
+        h('div', { class: 'col c' }, isWideMain ? null : pMain, pBottom),
         h('div', { class: 'col r' }, stepBox, pSide)),
       exSec, aisSec, navRow());
 
