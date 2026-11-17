@@ -59,27 +59,29 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'txt', label: '1. 原始文字', value: rows.length + ' 句', shape: 'box', cls: clsOf(0), hl: act(0), sub: '清理＋去識別' }],
-          [{ id: 'tok', label: R.isLLM ? '2. BPE 子詞' : '2. 中文斷詞', value: st.stage >= 1 ? '切詞完成' : '字串', shape: 'box', cls: clsOf(1), hl: act(1), sub: R.isLLM ? 'H1 BPE' : 'E1 最大匹配' }],
-          [{ id: 'flt', label: R.isLLM ? '3. 嵌入+位置' : '3. 去停用詞', value: st.stage >= 2 ? (R.isLLM ? 'E + PE' : '留關鍵詞') : '含虛詞', shape: 'box', cls: clsOf(2), hl: act(2), sub: R.isLLM ? 'H2 位置編碼' : 'E1 刪功能詞' }],
-          [{ id: 'vec', label: R.isLLM ? '4. 注意力層' : R.isEmb ? '4. Word2Vec' : '4. TF-IDF', value: st.stage >= 3 ? '向量化' : '待轉換', shape: 'box', cls: clsOf(3), hl: act(3), sub: R.isLLM ? 'H3/H4 Attn' : R.isEmb ? 'E3 Skip-gram' : 'E1 詞頻加權' }],
-          [{ id: 'app', label: R.isLLM ? '5. RAG/生成' : R.isEmb ? '5. 語意檢索' : '5. 分類/主題', value: st.stage >= 4 ? '完成' : '待推論', shape: 'box', cls: clsOf(4), hl: act(4), sub: R.isLLM ? 'H5/H6/H7' : R.isEmb ? '餘弦相似詞' : 'E2 NB · E4 LDA' }]
+          [
+            { id: 'txt', label: '1. 原始文字', value: rows.length + ' 句', shape: 'box', w: 168, cls: clsOf(0), hl: act(0), sub: '清理＋去識別' },
+            { id: 'tok', label: R.isLLM ? '2. BPE 子詞' : '2. 中文斷詞', value: st.stage >= 1 ? '切詞完成' : '字串', shape: 'box', w: 168, cls: clsOf(1), hl: act(1), sub: R.isLLM ? 'H1 BPE' : 'E1 最大匹配' }
+          ],
+          [
+            { id: 'flt', label: R.isLLM ? '3. 嵌入+位置' : '3. 去停用詞', value: st.stage >= 2 ? (R.isLLM ? 'E + PE' : '留關鍵詞') : '含虛詞', shape: 'box', w: 168, cls: clsOf(2), hl: act(2), sub: R.isLLM ? 'H2 位置編碼' : 'E1 刪功能詞' },
+            { id: 'vec', label: R.isLLM ? '4. 注意力層' : R.isEmb ? '4. Word2Vec' : '4. TF-IDF', value: st.stage >= 3 ? '向量化' : '待轉換', shape: 'box', w: 168, cls: clsOf(3), hl: act(3), sub: R.isLLM ? 'H3/H4 Attn' : R.isEmb ? 'E3 Skip-gram' : 'E1 詞頻加權' }
+          ],
+          [
+            { id: 'app', label: R.isLLM ? '5. RAG / 生成' : R.isEmb ? '5. 語意檢索' : '5. 分類 / 主題', value: st.stage >= 4 ? '完成' : '待推論', shape: 'box', w: 168, cls: clsOf(4), hl: act(4), sub: R.isLLM ? 'H5/H6/H7' : R.isEmb ? '餘弦相似詞' : 'E2 NB · E4 LDA' }
+          ]
         ];
         const edges = [
-          { from: 'txt', to: 'tok', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'tok', to: 'flt', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'flt', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'vec', to: 'app', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          { from: 'txt', to: 'tok', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '切分' },
+          { from: 'tok', to: 'flt', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '精煉' },
+          { from: 'flt', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5', label: '向量化' },
+          { from: 'vec', to: 'app', active: st.stage === 4, cls: done(3) ? 'good' : 'c5', label: '推論' }
         ];
         const main = {
-          type: 'table', slot: 'main',
-          title: '步驟與可用演算法對照（' + (R.isLLM ? '現代 LLM＋RAG' : R.isEmb ? 'Word2Vec 詞向量' : '傳統 TF-IDF') + '）',
-          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '何時用／關鍵提醒' }],
-          rows: ALGO_ROWS.map((ar, idx) => ({
-            id: ar.id,
-            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
-            hl: idx === Math.min(st.stage, 4)
-          }))
+          type: 'network', slot: 'main', h: 440,
+          title: 'NLP 文字處理全流程圖（' + (R.isLLM ? '現代 LLM＋RAG' : R.isEmb ? 'Word2Vec 詞向量' : '傳統 TF-IDF') + '）',
+          layerLabels: ['原文與切分', '精煉與向量化', '下游應用'],
+          layers, edges
         };
         const toksShow = st.stage === 0
           ? [{ id: 'raw', text: R.sample, cls: 'c5' }]
@@ -99,10 +101,14 @@
           items: toksShow
         };
         const bottom = {
-          type: 'network', slot: 'bottom', h: 340,
-          title: 'NLP 文字處理全流程圖（下方標註 E 區與 H 區演算法）',
-          layerLabels: ['1. 原文', '2. 切分', '3. 精煉', '4. 表示/運算', '5. 應用'],
-          layers, edges
+          type: 'table', slot: 'bottom',
+          title: '步驟與可用演算法對照（' + (R.isLLM ? '現代 LLM＋RAG' : R.isEmb ? 'Word2Vec 詞向量' : '傳統 TF-IDF') + '）',
+          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '何時用／關鍵提醒' }],
+          rows: ALGO_ROWS.map((ar, idx) => ({
+            id: ar.id,
+            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
+            hl: idx === Math.min(st.stage, 4)
+          }))
         };
         return [main, side, bottom];
       }

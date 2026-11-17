@@ -62,28 +62,30 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'ts', label: '1. 時間序列 yₜ', value: rows.length + ' 期', shape: 'box', cls: clsOf(0), hl: act(0), sub: '不可打亂順序' }],
-          [{ id: 'prep', label: R.isMl ? '2. 建 Lag 特徵' : R.isDl ? '2. 序列切窗' : '2. 差分平穩', value: st.stage >= 1 ? '已轉換' : '非平穩', shape: 'box', cls: clsOf(1), hl: act(1), sub: R.isMl ? 'Windowing' : R.isDl ? 'A2 標準化' : 'G2 差分 · ACF' }],
-          [{ id: 'cv', label: '3. 滾動切分', value: 'Train → Future', shape: 'box', cls: clsOf(2), hl: act(2), sub: 'G3 滑動視窗驗證' }],
-          [{ id: 'mod', label: R.isMl ? '4. GBDT/迴歸' : R.isDl ? '4. LSTM 訓練' : '4. ETS/ARIMA', value: st.stage >= 3 ? '已擬合' : '待訓練', shape: 'box', cls: clsOf(3), hl: act(3), sub: R.isMl ? 'B1 / B9' : R.isDl ? 'F4 LSTM' : 'G1 / G2' }],
-          [{ id: 'fc', label: '5. 滾動驗收', value: st.stage >= 4 ? 'MAE=' + f(R.meanMae, 1) : '待預測', shape: 'box', cls: clsOf(4), hl: act(4), sub: '還原尺度預測' }]
+          [
+            { id: 'ts', label: '1. 時間序列 yₜ', value: rows.length + ' 期', shape: 'box', w: 168, cls: clsOf(0), hl: act(0), sub: '不可打亂順序' },
+            { id: 'prep', label: R.isMl ? '2. 建 Lag 特徵' : R.isDl ? '2. 序列切窗' : '2. 差分平穩', value: st.stage >= 1 ? '已轉換' : '非平穩', shape: 'box', w: 168, cls: clsOf(1), hl: act(1), sub: R.isMl ? 'Windowing' : R.isDl ? 'A2 標準化' : 'G2 差分 · ACF' }
+          ],
+          [
+            { id: 'cv', label: '3. 滾動切分', value: 'Train → Future', shape: 'box', w: 168, cls: clsOf(2), hl: act(2), sub: 'G3 滑動視窗驗證' },
+            { id: 'mod', label: R.isMl ? '4. GBDT / 迴歸' : R.isDl ? '4. LSTM 訓練' : '4. ETS / ARIMA', value: st.stage >= 3 ? '已擬合' : '待訓練', shape: 'box', w: 168, cls: clsOf(3), hl: act(3), sub: R.isMl ? 'B1 / B9' : R.isDl ? 'F4 LSTM' : 'G1 / G2' }
+          ],
+          [
+            { id: 'fc', label: '5. 滾動驗收', value: st.stage >= 4 ? 'MAE=' + f(R.meanMae, 1) : '待預測', shape: 'box', w: 168, cls: clsOf(4), hl: act(4), sub: '還原尺度預測' }
+          ]
         ];
         const edges = [
-          { from: 'ts', to: 'prep', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'prep', to: 'cv', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'cv', to: 'mod', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'ts', to: 'prep', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '平穩化' },
+          { from: 'prep', to: 'cv', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '切窗' },
+          { from: 'cv', to: 'mod', active: st.stage === 3, cls: done(2) ? 'good' : 'c5', label: '訓練' },
           { from: 'mod', to: 'cv', active: st.stage === 3 && st.rollLoop, back: true, cls: 'c3', label: '滾動多折' },
-          { from: 'mod', to: 'fc', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          { from: 'mod', to: 'fc', active: st.stage === 4, cls: done(3) ? 'good' : 'c5', label: '預測' }
         ];
         const main = {
-          type: 'table', slot: 'main',
-          title: '步驟與可用演算法對照（' + (R.isMl ? '滯後特徵 ML' : R.isDl ? 'LSTM 深度序列' : '統計 ETS / ARIMA') + '）',
-          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '何時用／關鍵提醒' }],
-          rows: ALGO_ROWS.map((ar, idx) => ({
-            id: ar.id,
-            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
-            hl: idx === Math.min(st.stage, 4)
-          }))
+          type: 'network', slot: 'main', h: 440,
+          title: '時間序列預測全流程圖（' + (R.isMl ? '滯後特徵 ML' : R.isDl ? 'LSTM 深度序列' : '統計 ETS / ARIMA') + '）',
+          layerLabels: ['探索與平穩化', '時序切分與模型', '滾動驗收'],
+          layers, edges
         };
         const side = {
           type: 'table', slot: 'side',
@@ -96,10 +98,14 @@
           }))
         };
         const bottom = {
-          type: 'network', slot: 'bottom', h: 340,
-          title: '時間序列預測全流程圖（橙色回流＝滾動視窗驗證｜下方標註 G1–G3 / F4）',
-          layerLabels: ['1. 探索', '2. 平穩/建窗', '3. 時序切分', '4. 預測模型', '5. 滾動驗收'],
-          layers, edges
+          type: 'table', slot: 'bottom',
+          title: '步驟與可用演算法對照（' + (R.isMl ? '滯後特徵 ML' : R.isDl ? 'LSTM 深度序列' : '統計 ETS / ARIMA') + '）',
+          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '何時用／關鍵提醒' }],
+          rows: ALGO_ROWS.map((ar, idx) => ({
+            id: ar.id,
+            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
+            hl: idx === Math.min(st.stage, 4)
+          }))
         };
         return [main, side, bottom];
       }

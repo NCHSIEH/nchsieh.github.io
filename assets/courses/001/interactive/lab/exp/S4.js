@@ -64,29 +64,31 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'ten', label: isCnn ? '1. 影像張量' : isLstm ? '1. 序列視窗' : isAe ? '1. 正常樣本' : '1. 表格張量', value: 'Train/Val/Test', shape: 'box', cls: clsOf(0), hl: act(0), sub: isCnn ? '正規化+翻轉增強' : isLstm ? 't−k … t 切片' : isAe ? '無監督訓練' : 'A2 標準化' }],
-          [{ id: 'arch', label: '2. ' + R.archName, value: R.arch.toUpperCase(), shape: 'box', cls: clsOf(1), hl: act(1), sub: isCnn ? 'F3 Conv+Pool' : isLstm ? 'F4 閘門記憶' : isAe ? 'F5 3-1-3 瓶頸' : 'F1 Dense 網路' }],
-          [{ id: 'fwd', label: '3. 前向與 Loss', value: st.stage >= 2 ? (isAe ? '重建 MSE' : '算損失') : '待計算', shape: 'box', cls: clsOf(2), hl: act(2), sub: isAe ? '‖x − x̂‖²' : '交叉熵 / MSE' }],
-          [{ id: 'bwd', label: '4. 反向＋Adam', value: st.stage >= 3 ? '∂L/∂W' : '待更新', shape: 'box', cls: act(3) ? 'c3' : clsOf(3), hl: act(3), sub: 'F1 連鎖律 · F2 Adam' }],
-          [{ id: 'stop', label: isAe ? '5. 異常判定' : '5. 早停部署', value: st.stage >= 5 ? (isAe ? '誤差>門檻' : 'Ep=' + R.bestEp) : '監控中', shape: 'box', cls: clsOf(5), hl: act(5), sub: isAe ? '高誤差＝異常' : 'Val 最低存檔' }]
+          [
+            { id: 'ten', label: isCnn ? '1. 影像張量' : isLstm ? '1. 序列視窗' : isAe ? '1. 正常樣本' : '1. 表格張量', value: 'Train/Val/Test', shape: 'box', w: 168, cls: clsOf(0), hl: act(0), sub: isCnn ? '正規化+資料增強' : isLstm ? 't−k … t 切片' : isAe ? '無監督訓練' : 'A2 標準化' },
+            { id: 'arch', label: '2. ' + R.archName, value: R.arch.toUpperCase(), shape: 'box', w: 168, cls: clsOf(1), hl: act(1), sub: isCnn ? 'F3 Conv+Pool' : isLstm ? 'F4 閘門記憶' : isAe ? 'F5 3-1-3 瓶頸' : 'F1 Dense 網路' }
+          ],
+          [
+            { id: 'fwd', label: '3. 前向與 Loss', value: st.stage >= 2 ? (isAe ? '重建 MSE' : '算損失') : '待計算', shape: 'box', w: 168, cls: clsOf(2), hl: act(2), sub: isAe ? '‖x − x̂‖²' : '交叉熵 / MSE' },
+            { id: 'bwd', label: '4. 反向＋Adam', value: st.stage >= 3 ? '∂L/∂W' : '待更新', shape: 'box', w: 168, cls: act(3) ? 'c3' : clsOf(3), hl: act(3), sub: 'F1 連鎖律 · F2 Adam' }
+          ],
+          [
+            { id: 'stop', label: isAe ? '5. 異常判定' : '5. 早停部署', value: st.stage >= 5 ? (isAe ? '誤差>門檻' : 'Ep=' + R.bestEp) : '監控中', shape: 'box', w: 168, cls: clsOf(5), hl: act(5), sub: isAe ? '高誤差＝異常' : 'Val 最低存檔' }
+          ]
         ];
         const edges = [
           { from: 'ten', to: 'arch', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'arch', to: 'fwd', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'fwd', to: 'bwd', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'bwd', to: 'arch', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: '梯度更新' },
-          { from: 'fwd', to: 'stop', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
+          { from: 'arch', to: 'fwd', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '前向' },
+          { from: 'fwd', to: 'bwd', active: st.stage === 3, cls: done(2) ? 'good' : 'c5', label: '算梯度' },
+          { from: 'bwd', to: 'arch', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: '更新權重' },
+          { from: 'fwd', to: 'stop', active: st.stage === 5, cls: done(4) ? 'good' : 'c5', label: '早停' }
         ];
         const shown = st.stage >= 4 ? rows.length : st.stage >= 2 ? Math.min(3, rows.length) : 0;
         const main = {
-          type: 'table', slot: 'main',
-          title: '步驟與可用演算法對照（' + R.archName + '）',
-          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法 / 模組' }, { key: 'use', label: '實務重點' }],
-          rows: ALGO_ROWS.map((ar, idx) => ({
-            id: ar.id,
-            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
-            hl: idx === Math.min(st.stage, 4)
-          }))
+          type: 'network', slot: 'main', h: 440,
+          title: '深度學習訓練迴圈流程圖（' + R.archName + '）',
+          layerLabels: ['張量與架構', '前向與反向更新', '早停部署'],
+          layers, edges
         };
         const side = {
           type: 'table', slot: 'side',
@@ -103,10 +105,14 @@
           }))
         };
         const bottom = {
-          type: 'network', slot: 'bottom', h: 350,
-          title: '深度學習訓練迴圈流程圖（橙色回流＝反向傳播更新｜下方標註 F1–F5）',
-          layerLabels: ['1. 張量', '2. 網路架構', '3. 前向', '4. 反向更新', '5. 驗收'],
-          layers, edges
+          type: 'table', slot: 'bottom',
+          title: '步驟與可用演算法對照（' + R.archName + '）',
+          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法 / 模組' }, { key: 'use', label: '實務重點' }],
+          rows: ALGO_ROWS.map((ar, idx) => ({
+            id: ar.id,
+            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
+            hl: idx === Math.min(st.stage, 4)
+          }))
         };
         return [main, side, bottom];
       }

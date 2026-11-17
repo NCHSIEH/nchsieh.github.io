@@ -71,33 +71,33 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'data', label: '1. X 與標籤 y', value: '120 筆', shape: 'box', cls: clsOf(0), hl: act(0), sub: R.isReg ? '連續 y' : (R.isImb ? '少數陽性' : '分類 y') }],
           [
-            { id: 'tr', label: '2a. 訓練開發集', value: '96 筆 (80%)', shape: 'box', cls: clsOf(1), hl: act(1), sub: R.isImb ? '分層+折內 A5' : '前處理+CV' },
-            { id: 'te', label: '2b. 封存測試集', value: '24 筆 (20%)', shape: 'box', cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c4'), hl: act(5), sub: st.stage < 5 ? '嚴禁偷看' : '最終驗收' }
+            { id: 'data', label: '1. X 與標籤 y', value: '120 筆', shape: 'box', w: 168, cls: clsOf(0), hl: act(0), sub: R.isReg ? '連續 y' : (R.isImb ? '少數陽性' : '分類 y') },
+            { id: 'te', label: '2b. 封存測試集', value: '24 筆 (20%)', shape: 'box', w: 168, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c4'), hl: act(5), sub: st.stage < 5 ? '嚴禁偷看' : '最終驗收' }
           ],
-          [{ id: 'cv', label: '3. ' + R.k + '-Fold CV', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', cls: clsOf(2), hl: act(2), sub: R.isReg ? 'B1/B2/B11/B14' : 'B3-B13 網格搜尋' }],
-          [{ id: 'fit', label: '4. 全訓練重訓', value: st.stage >= 3 ? '已收斂' : '待重訓', shape: 'box', cls: clsOf(3), hl: act(3), sub: R.isReg ? 'B2/B9 GBDT' : 'B7 森林/B12 集成' }],
-          [{ id: 'eval', label: '5. 驗收與部署', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', cls: clsOf(5), hl: act(5), sub: R.isReg ? 'R² / RMSE' : 'B16 ROC/PR 門檻' }]
+          [
+            { id: 'tr', label: '2a. 訓練開發集', value: '96 筆 (80%)', shape: 'box', w: 168, cls: clsOf(1), hl: act(1), sub: R.isImb ? '分層+折內 A5' : '前處理+CV' },
+            { id: 'cv', label: '3. ' + R.k + '-Fold CV', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 168, cls: clsOf(2), hl: act(2), sub: R.isReg ? 'B1/B2/B11/B14' : 'B3–B13 網格搜尋' }
+          ],
+          [
+            { id: 'fit', label: '4. 全訓練重訓', value: st.stage >= 3 ? '已收斂' : '待重訓', shape: 'box', w: 168, cls: clsOf(3), hl: act(3), sub: R.isReg ? 'B2/B9 GBDT' : 'B7 森林/B12 集成' },
+            { id: 'eval', label: '5. 驗收與部署', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 168, cls: clsOf(5), hl: act(5), sub: R.isReg ? 'R² / RMSE' : 'B16 ROC/PR 門檻' }
+          ]
         ];
         const edges = [
-          { from: 'data', to: 'tr', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'data', to: 'te', active: st.stage === 1, cls: done(0) ? 'c4' : 'c5' },
+          { from: 'data', to: 'tr', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '80%' },
+          { from: 'data', to: 'te', active: st.stage === 1, cls: done(0) ? 'c4' : 'c5', label: '20% 封存' },
           { from: 'tr', to: 'cv', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '輪流驗證' },
           { from: 'cv', to: 'tr', active: st.stage === 2 && st.cvLoop, back: true, cls: 'c3', label: '調參回圈' },
           { from: 'cv', to: 'fit', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
           { from: 'fit', to: 'eval', active: st.stage === 4 || st.stage === 5, cls: done(3) ? 'good' : 'c5' },
-          { from: 'te', to: 'eval', active: st.stage === 5, cls: done(4) ? 'good' : 'c4' }
+          { from: 'te', to: 'eval', active: st.stage === 5, cls: done(4) ? 'good' : 'c4', label: '驗收' }
         ];
         const main = {
-          type: 'table', slot: 'main',
-          title: '步驟與可用演算法對照（' + (R.isReg ? '迴歸管線' : R.isImb ? '不平衡分類管線' : '標準分類管線') + '）',
-          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '關鍵設計重點' }],
-          rows: ALGO_ROWS.map((ar, idx) => ({
-            id: ar.id,
-            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
-            hl: idx === Math.min(st.stage, 4)
-          }))
+          type: 'network', slot: 'main', h: 440,
+          title: '監督式學習全流程圖（含 ' + R.k + '-Fold 調參回圈）',
+          layerLabels: ['資料與測試集', '訓練與交叉驗證', '重訓與驗收'],
+          layers, edges
         };
         const side = {
           type: 'table', slot: 'side',
@@ -114,10 +114,14 @@
           }])
         };
         const bottom = {
-          type: 'network', slot: 'bottom', h: 350,
-          title: '監督式學習全流程圖（含 ' + R.k + '-Fold 調參回圈｜下方標註對應實驗）',
-          layerLabels: ['1. 資料', '2. 切分', '3. 驗證調參', '4. 重訓', '5. 驗收'],
-          layers, edges
+          type: 'table', slot: 'bottom',
+          title: '步驟與可用演算法對照（' + (R.isReg ? '迴歸管線' : R.isImb ? '不平衡分類管線' : '標準分類管線') + '）',
+          cols: [{ key: 'st', label: '步驟' }, { key: 'alg', label: '可用演算法' }, { key: 'use', label: '關鍵設計重點' }],
+          rows: ALGO_ROWS.map((ar, idx) => ({
+            id: ar.id,
+            cells: [ar.st, { v: ar.alg, cls: idx === Math.min(st.stage, 4) ? 'hl' : (idx < st.stage ? 'good' : 'c0') }, ar.use],
+            hl: idx === Math.min(st.stage, 4)
+          }))
         };
         return [main, side, bottom];
       }

@@ -175,7 +175,7 @@ table.kv td.m{font-family:var(--mono)}
 .lv-neuron{transition:opacity .35s}
 .lv-neuron circle:not(.ring),.lv-neuron rect{fill:var(--ks,#fff);stroke:var(--k,var(--accent));stroke-width:2.2;transition:fill .35s,stroke .35s}
 .lv-neuron .nv{font-family:var(--mono)!important;font-size:14px!important;fill:var(--ink)!important;font-weight:700} .lv-neuron .nv.small{font-size:12px!important;font-weight:500}
-.lv-neuron .nl{fill:var(--ink)!important;font-weight:600} .lv-neuron .ns{font-size:12px!important;font-family:var(--mono)!important}
+.lv-neuron .nl{fill:var(--ink)!important;font-weight:700;font-size:14.5px!important} .lv-neuron .ns{font-size:12.5px!important;font-family:var(--mono)!important;fill:var(--muted)!important}
 .lv-neuron.is-hl circle:not(.ring),.lv-neuron.is-hl rect{stroke:var(--hl);stroke-width:3.4;fill:var(--hls)} .lv-neuron.is-dim{opacity:.3}
 
 .lv-bars{display:grid;gap:6px}
