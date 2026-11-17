@@ -95,7 +95,7 @@
             cls: isA ? 'hl' : isB ? 'c1' : isNN ? 'good' : 'c0',
             ring: isA || isB || isNN, hl: isCur || isA,
             dim: useScaled && i >= st.upto,
-            label: isNN ? pt.id + '(近)' : String(pt.id), r: (isA || isB) ? 7 : 6
+            label: isNN ? pt.id + '(近)' : String(pt.id), r: (isA || isB) ? 8 : (isNN ? 7 : 5.5)
           };
         });
         const ptA = points.find(x => x.id === 'p' + R.pA.id);
@@ -103,9 +103,9 @@
         const distVal = useScaled ? (isZ ? R.zD.d : R.mmD.d) : R.rawD.d;
         const lines = [];
         if (R.pA.id !== R.pB.id) {
-          lines.push({ id: 'dx', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptA.y, cls: 'c0', dash: true, w: 1.4 });
-          lines.push({ id: 'dy', x1: ptB.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', dash: true, w: 1.4 });
-          lines.push({ id: 'ab', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', w: 2.2, label: f(distVal, 2) });
+          lines.push({ id: 'dx', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptA.y, cls: 'c0', dash: true, w: 1.3 });
+          lines.push({ id: 'dy', x1: ptB.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', dash: true, w: 1.3 });
+          lines.push({ id: 'ab', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', w: 2.5, label: f(distVal, 2) });
         }
         const ptNN = points.find(x => x.id === 'p' + nnId);
         if (ptNN && nnId !== R.pB.id) {

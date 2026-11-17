@@ -109,11 +109,17 @@
         }
         if (st.applied) {
           lines.push({ id: 'la', x1: AX.x.min, y1: olsAfter.w * AX.x.min + olsAfter.b, x2: AX.x.max, y2: olsAfter.w * AX.x.max + olsAfter.b, cls: 'good', w: 2.5, label: '處理後斜率=' + f(olsAfter.w, 2) });
+          if (isWin) {
+            rows.forEach((r, i) => {
+              if (R.flags[i]) lines.push({ id: 'cap' + r.id, x1: r.bmi, y1: r.sbp, x2: r.bmi, y2: R.rowsCap[i].sbp, cls: 'hl', dash: true, w: 1.8 });
+            });
+          }
         }
+        const regions = st.showFence ? LAB.grid((_, y) => (y >= R.lo && y <= R.hi ? 'good' : 'c4'), AX.x.min, AX.x.max, AX.y.min, AX.y.max, 18, 22) : null;
         const main = {
           type: 'scatter', slot: 'main',
-          title: 'BMI × 收縮壓（圍籬與迴歸斜率對比）',
-          axes: AX, points, lines, circles: [],
+          title: 'BMI × 收縮壓（安全區間與迴歸斜率對比）',
+          axes: AX, points, lines, circles: [], regions,
           legend: [{ cls: 'c0', label: '正常病人' }, { cls: 'c1', label: '離群病人' }, { cls: 'c4', shape: 'line', label: '處理前直線' }, { cls: 'good', shape: 'line', label: '處理後直線' }]
         };
         const side = {

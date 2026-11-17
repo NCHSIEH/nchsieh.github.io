@@ -106,7 +106,7 @@
           ring: st.hlIds.has(r.id),
           hl: st.curSrc === r.id,
           label: String(r.id),
-          r: 6
+          r: r.readmit === 1 ? 6.5 : 5.5
         }));
         const dupCnt = {};
         st.added.forEach(pt => {

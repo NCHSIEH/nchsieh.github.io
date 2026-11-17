@@ -166,7 +166,10 @@
           type: 'line', slot: 'bottom',
           title: '向前選擇：特徵數 vs LOO 正確率',
           axes: { x: { label: '選入特徵數', min: 1, max: 4 }, y: { label: 'LOO 正確率', min: 0.4, max: 1.0 } },
-          series: [{ id: 'acc', label: 'LOO 正確率', pts: st.curve.length ? st.curve : [[1, R.rounds[0] ? R.rounds[0].acc : 0.5]], cls: 'c1', dots: true }],
+          series: [
+            { id: 'base', label: '隨機基準', pts: [[1, 0.5], [4, 0.5]], cls: 'c5', dash: true, dots: false },
+            { id: 'acc', label: 'LOO 正確率', pts: st.curve.length ? st.curve : [[1, R.rounds[0] ? R.rounds[0].acc : 0.5]], cls: 'c1', dots: true }
+          ],
           marker: st.curve.length ? { x: st.curve[st.curve.length - 1][0], y: st.curve[st.curve.length - 1][1], label: '目前' } : null
         };
         return [main, side, line];

@@ -124,10 +124,10 @@
           label: String(r.id),
           r: 6
         }));
-        const lines = st.cuts.map((c, i) => {
+        const lines = [{ id: 'sep', x1: AX.x.min, y1: 0.5, x2: AX.x.max, y2: 0.5, cls: 'c5', dash: true, w: 1 }].concat(st.cuts.map((c, i) => {
           const isNew = i === st.cuts.length - 1;
           return { id: 'cut' + i, x1: c, y1: AX.y.min, x2: c, y2: AX.y.max, cls: isNew ? 'hl' : 'c2', w: isNew ? 2.5 : 1.6, dash: true, label: f(c, 1) };
-        });
+        }));
         const regions = st.cuts.length ? LAB.grid(x => {
           let b = 0;
           st.cuts.forEach(c => { if (x > c) b++; });
