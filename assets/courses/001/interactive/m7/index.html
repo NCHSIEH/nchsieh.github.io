@@ -32,6 +32,9 @@
       </ol>
       <span style="font-size:13.5px;color:var(--muted)">需要先會：M6 的詞袋與 TF-IDF（對照 Embedding）、M0 的 AI 基本概念。</span>
     </div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 7 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=H1">H1 BPE 斷詞</a>、<a href="../lab/exp.html?id=H2">H2 詞嵌入與位置編碼</a>、<a href="../lab/exp.html?id=H3">H3 Self-Attention</a>、<a href="../lab/exp.html?id=H5">H5 生成解碼</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=H4">H4 Transformer 一層</a>、<a href="../lab/exp.html?id=H7">H7 LoRA 微調</a>、<a href="../lab/exp.html?id=H9">H9 KV 快取、Rerank 與偏好對齊</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <section class="part" id="p01" data-t="技術演進">
@@ -69,6 +72,9 @@
     <p class="one">模型看不到「字」，只看到編號。這件事同時決定了你的帳單（輸入、輸出分開計價）、上下文上限，以及它為什麼數不清字數。</p>
     <div class="wd"><div class="wh"><h3>Token 切切看（示意 tokenizer）</h3><span class="tag amber">互動</span></div><p class="hint">每個模型有自己的 tokenizer，切法各家不同；這裡用簡化規則示範。</p><div id="w-token"></div></div>
     <div class="wd"><div class="wh"><h3>算一次帳：衛教問答機器人的月成本</h3><span class="tag amber">核心互動</span></div><p class="hint">預設為講義數值；費率隨模型與時間變動，此處只示範算法。</p><div id="w-cost"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=H1">H1 BPE 斷詞</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p05" data-t="Attention">
@@ -77,6 +83,9 @@
     <p class="one">對句子中每一個詞算一個權重，權重高＝關聯強。舊做法（RNN）一個字一個字讀，讀到「他」時前面的「病人」已經模糊；Attention 一次看全部，距離多遠都不衰減。代價：計算量隨長度平方成長。</p>
     <div class="wd"><div class="wh"><h3>「他」指的是誰？</h3><span class="tag amber">核心互動</span></div><p class="hint">點任一個字，看它把注意力放在哪裡（講義的示意權重）。</p><div id="w-attn"></div></div>
     <div class="wd"><div class="wh"><h3>為什麼上下文有上限：長度的平方</h3><span class="tag amber">互動</span></div><div id="w-quad"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=H3">H3 Self-Attention</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p06" data-t="三種 Transformer">
@@ -85,6 +94,9 @@
     <p class="one">嵌入用 Encoder-only（把文字變向量）、生成用 Decoder-only（產生答案）——這是兩件不同的事，所以 Dify 的知識庫設定裡「嵌入模型」與「LLM」是兩個分開的下拉選單。</p>
     <div class="wd"><div class="wh"><h3>誰看得到誰：注意力遮罩</h3><span class="tag amber">互動</span></div><div id="w-mask"></div></div>
     <div class="wd"><div class="wh"><h3>這件事交給哪一種？</h3><span class="tag amber">練習</span></div><div id="w-arch3"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=H4">H4 Transformer 一層</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p07" data-t="Embedding">
@@ -94,6 +106,9 @@
     <div class="wd"><div class="wh"><h3>語意空間與 RAG 召回</h3><span class="tag amber">核心互動</span></div><p class="hint">選一個查詢，調整 Top-K 與 Score 閾值（實務是幾百到幾千維，這裡畫成二維示意）。</p><div id="w-emb"></div></div>
     <div class="wd"><div class="wh"><h3>餘弦相似度手算</h3><span class="tag amber">互動</span></div><p class="hint">預設為講義的 4 維示範向量；可以拖動段落 A 的數值。</p><div id="w-cos"></div></div>
     <div class="wd"><div class="wh"><h3>從 600 句衛教語料，自己學出詞向量</h3><span class="tag blue">600 句衛教語料</span></div><p class="hint">每個詞的向量只來自「它周圍出現哪些詞」（共現次數 + PPMI 加權），在瀏覽器裡即時計算。看看「摔倒」和「跌倒」會不會自己靠在一起。</p><div id="w-ppmi"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=H2">H2 詞嵌入與位置編碼</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p08" data-t="預訓練、微調、推論">
@@ -112,6 +127,9 @@
     <div class="wd"><div class="wh"><h3>「這位病人的病情⋯」下一個詞</h3><span class="tag amber">核心互動</span></div><div id="w-temp"></div></div>
     <div class="wd"><div class="wh"><h3>在瀏覽器裡訓練一個迷你語言模型</h3><span class="tag blue">600 句衛教語料</span></div><p class="hint">n-gram 語言模型：數「前面是這幾個詞時，下一個詞出現幾次」。原理和大型語言模型一樣都是預測下一個詞，只是看的前文很短。</p><div id="w-lm"></div></div>
     <div class="wd"><div class="wh"><h3>其他常見推論參數：醫療建議值與調錯後果</h3><span class="tag blue">講義第 37 頁</span></div><div id="w-params"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=H5">H5 生成解碼</a>、<a href="../lab/exp.html?id=H9">H9 KV 快取、Rerank 與偏好對齊</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p10" data-t="幻覺的成因">

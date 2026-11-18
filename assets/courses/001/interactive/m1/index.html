@@ -70,6 +70,9 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
       </ol>
       <span style="font-size:13.5px;color:var(--muted)">需要先會：M0 的專案流程（先補值再切分）與 AI Studio 基本操作。</span>
     </div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 9 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=S1">S1 資料前處理流程</a>、<a href="../lab/exp.html?id=A1">A1 遺失值補值</a>、<a href="../lab/exp.html?id=A2">A2 標準化與正規化</a>、<a href="../lab/exp.html?id=A3">A3 離散化</a>、<a href="../lab/exp.html?id=A4">A4 類別編碼</a>、<a href="../lab/exp.html?id=A6">A6 特徵選擇</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=A7">A7 IQR 離群值與縮尾</a>、<a href="../lab/exp.html?id=A8">A8 偏態轉換與穩健縮放</a>、<a href="../lab/exp.html?id=A9">A9 衍生特徵與共線性 VIF</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <!-- ============ P01 ============ -->
@@ -158,6 +161,9 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
       <p class="hint">模擬胰島素（右偏）600 筆。灰框是真實分布，看哪種方法讓標準差與分布形狀失真最多。</p><div id="w-impute"></div></div>
     <div class="wrong"><b>填補最容易犯的三個錯：</b>①先填補再切分（測試集資訊滲入訓練）②偏態分布用平均數填補 ③填補後不留紀錄——建議同時新增 <code>is_missing</code> 欄位。</div>
     <div class="wd"><div class="wh"><h3>填補時最容易犯的三個錯</h3><span class="tag blue">講義第 41 頁</span></div><div id="w-impfix"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=A1">A1 遺失值補值</a></p>
+    <!--/lab-sec-->
   </section>
 
   <!-- ============ P07 ============ -->
@@ -168,6 +174,9 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
     <div class="wd"><div class="wh"><h3>三種視角：直方圖、盒鬚圖、標準差法</h3><span class="tag amber">互動</span></div>
       <p class="hint">模擬舒張壓 300 筆。加入極端值，觀察標準差法的門檻如何被「撐寬」（遮蔽效應），盒鬚圖則較穩健。</p><div id="w-out"></div></div>
     <div class="wd"><div class="wh"><h3>找到之後怎麼辦？逐筆判斷</h3></div><p class="hint">先問「生理上可能嗎」，不可能 → 視為遺失；可能但罕見 → 可能是重症個案。</p><div id="w-outdec"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=A7">A7 IQR 離群值與縮尾</a></p>
+    <!--/lab-sec-->
   </section>
 
   <!-- ============ P08 ============ -->
@@ -190,6 +199,9 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
     <div class="wd"><div class="wh"><h3>|r| 長什麼樣？</h3><span class="tag amber">互動</span></div><div id="w-rslider"></div></div>
     <div class="wd"><div class="wh"><h3>手算 r：六位病人</h3></div><p class="hint">直接改表格裡的血壓數字，每一步會即時重算。</p><div id="w-hand"></div></div>
     <div class="wd"><div class="wh"><h3>相關矩陣：點格子看解讀</h3></div><div id="w-matrix"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=A6">A6 特徵選擇</a>、<a href="../lab/exp.html?id=A9">A9 衍生特徵與共線性 VIF</a></p>
+    <!--/lab-sec-->
   </section>
 
   <!-- ============ P10 ============ -->
@@ -202,6 +214,9 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
       <p class="hint">點散布圖任一處設定查詢點，比較原始尺度與 Z-Score 後找到的 5 個最近鄰居。</p><div id="w-knn"></div></div>
     <div class="wd"><div class="wh"><h3>縮放如何改變分群結果（K-Means）</h3></div><div id="w-kmeans"></div></div>
     <div class="wd"><div class="wh"><h3>哪些演算法需要縮放？</h3></div><p class="hint">點每個演算法，標成「需要」或「不需要」。</p><div id="w-algos"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=A2">A2 標準化與正規化</a>、<a href="../lab/exp.html?id=A8">A8 偏態轉換與穩健縮放</a></p>
+    <!--/lab-sec-->
   </section>
 
   <!-- ============ P11 ============ -->
@@ -213,6 +228,9 @@ section.part{background:var(--paper);border:1px solid var(--line);border-radius:
     <div class="wd"><div class="wh"><h3>分箱：等距、等頻、臨床切點</h3><span class="tag amber">互動</span></div><div id="w-bin"></div></div>
     <div class="wd"><div class="wh"><h3>BMI 計算與兩套標準</h3></div><div id="w-bmi"></div></div>
     <div class="wd"><div class="wh"><h3>對數轉換：讓右偏的費用變好用</h3></div><div id="w-log"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=A3">A3 離散化</a>、<a href="../lab/exp.html?id=A4">A4 類別編碼</a></p>
+    <!--/lab-sec-->
   </section>
 
   <!-- ============ P12 ============ -->

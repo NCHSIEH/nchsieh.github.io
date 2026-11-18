@@ -32,6 +32,9 @@
       </ol>
       <span style="font-size:13.5px;color:var(--muted)">需要先會：M1 的資料清理與特徵工程、M2-2 的分類評估（Recall、F1）。</span>
     </div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 6 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=S5">S5 NLP 與 LLM 處理流程</a>、<a href="../lab/exp.html?id=E1">E1 斷詞與 TF-IDF</a>、<a href="../lab/exp.html?id=E2">E2 文本分類：詞袋 Naive Bayes</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=E3">E3 Word2Vec</a>、<a href="../lab/exp.html?id=E4">E4 主題模型 LDA</a>、<a href="../lab/exp.html?id=E5">E5 N-gram 詞組與 BM25 檢索</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <section class="part" id="p01" data-t="NLP 的三個時代">
@@ -81,6 +84,9 @@
     <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 22–23 頁</p>
     <p class="one">IDF：出現在越少篇文件裡的詞，越能代表這篇文件。「病人」4 篇中出現 3 篇 → 權重最低。公式（scikit-learn）：idf = ln((1+N)/(1+df)) + 1，再做 L2 正規化。</p>
     <div class="wd"><div class="wh"><h3>四篇病歷的 TF-IDF 完整手算</h3><span class="tag amber">核心互動</span></div><div id="w-tfidf"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=E1">E1 斷詞與 TF-IDF</a>、<a href="../lab/exp.html?id=E5">E5 N-gram 詞組與 BM25 檢索</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p06" data-t="探索性文字分析">
@@ -111,6 +117,9 @@
     <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 35 頁（PART 05）</p>
     <p class="one">「天真」指的是它假設各個詞互相獨立——語言上明顯不成立，但它照樣好用。小資料（< 1 萬筆）的文本分類首選；中等資料改用邏輯斯迴歸，可以看係數。</p>
     <div class="wd"><div class="wh"><h3>這封信是垃圾信的機率</h3><span class="tag amber">核心互動</span></div><p class="hint">預設為講義例子（含「免費」、不含「會議」）。切換詞的有無、調整訓練資料的次數。</p><div id="w-nb"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=E2">E2 文本分類：詞袋 Naive Bayes</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p10" data-t="解讀分類結果">
@@ -127,6 +136,9 @@
     <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 41–43 頁（PART 06）</p>
     <p class="one">把文件—詞矩陣分解成「文件—主題」×「主題—詞」。演算法只給你詞的組合，主題的名字是你取的——這正是護理背景的優勢。</p>
     <div class="wd"><div class="wh"><h3>在瀏覽器裡跑 NMF</h3><span class="tag amber">核心互動</span></div><p class="hint">80 則虛構的衛教諮詢（已斷詞）。改主題數、改前處理，看主題怎麼變；替每個主題命名。</p><div id="w-nmf"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=E4">E4 主題模型 LDA</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p12" data-t="情感分析">
@@ -201,6 +213,9 @@
     <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
     <div class="wd"><div class="wh"><h3>M6 → M7 → M8：同一條線的三個階段</h3><span class="tag blue">講義第 69 頁</span></div><div id="w-line"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=E3">E3 Word2Vec</a></p>
+    <!--/lab-sec-->
   </section>
 </main>
 </div>

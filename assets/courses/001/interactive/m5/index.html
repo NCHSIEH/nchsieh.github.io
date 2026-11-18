@@ -32,6 +32,9 @@
       </ol>
       <span style="font-size:13.5px;color:var(--muted)">需要先會：M2-2 的 Logistic 迴歸與交叉驗證、M4 的梯度提升樹基準線。</span>
     </div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 7 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=S4">S4 深度學習流程</a>、<a href="../lab/exp.html?id=F1">F1 神經網路：前向與反向傳播</a>、<a href="../lab/exp.html?id=F2">F2 優化器比較</a>、<a href="../lab/exp.html?id=F3">F3 CNN：卷積與池化</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=F4">F4 RNN 與 LSTM</a>、<a href="../lab/exp.html?id=F5">F5 Autoencoder</a>、<a href="../lab/exp.html?id=F6">F6 激活函數、BN 與 Dropout</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <section class="part" id="p01" data-t="誰決定特徵">
@@ -60,6 +63,9 @@
     <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 11 頁</p>
     <p class="one">每個神經元只做兩件事：① 加權求和（輸入 × 權重 ＋ 偏差）② 通過激活函數。複雜的不是單一步驟，是「有幾百萬個權重要調」。</p>
     <div class="wd"><div class="wh"><h3>3 → 2（ReLU）→ 1（Sigmoid）</h3><span class="tag amber">核心互動</span></div><p class="hint">預設為講義數值；拖動輸入或權重，看每一步怎麼變。</p><div id="w-fwd"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=F1">F1 神經網路：前向與反向傳播</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p04" data-t="激活函數">
@@ -76,6 +82,9 @@
     <p class="one">梯度下降＝站在損失曲面上往下坡最陡的方向走一步，步伐就是學習率；反向傳播＝用連鎖律把輸出的誤差一層層往回傳，算出每個權重該調多少。Loss 亂跳時，第一個該懷疑的就是學習率。</p>
     <div class="wd"><div class="wh"><h3>學習率選錯會發生什麼</h3><span class="tag amber">核心互動</span></div><div id="w-gd"></div></div>
     <div class="wd"><div class="wh"><h3>SGD、Momentum、Adam 走的路不一樣</h3><span class="tag amber">互動</span></div><p class="hint">一個細長的損失谷：橫向很平、縱向很陡。</p><div id="w-opt"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=F2">F2 優化器比較</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p06" data-t="層堆疊與輸出層">
@@ -101,6 +110,9 @@
     <div class="wd"><div class="wh"><h3>One-Hot 距離 vs 嵌入距離</h3><span class="tag amber">互動</span></div><p class="hint">點兩個診斷碼比較距離。嵌入位置為示意（實務上是模型學出來的 32 維向量，此處投影到 2 維）。</p><div id="w-emb"></div></div>
     <div class="wd"><div class="wh"><h3>嵌入層真的學出來：24 個診斷碼自己分群</h3><span class="tag blue">3,000 次住院 × 24 個診斷碼</span></div><p class="hint">模型只看每個碼的病人「30 天再入院」與「住院超過 14 天」，在瀏覽器裡即時訓練 2 維嵌入。顏色（器官系統）是事後上的，模型不知道。</p><div id="w-embreal"></div></div>
     <div class="wd"><div class="wh"><h3>表格資料上，深度學習什麼時候真的有機會</h3><span class="tag blue">講義第 25 頁</span></div><div id="w-tabdl"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=F6">F6 激活函數、BN 與 Dropout</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p09" data-t="Epoch、Batch、Iteration">
@@ -145,6 +157,9 @@
     <p class="ai" style="margin:-2px 0 8px">對應講義 M5：第 34–35 頁（PART 05 前段）</p>
     <p class="one">全連接網路處理影像有三個問題：參數爆炸、丟失空間結構、沒有平移不變性。卷積一次解決：權重共享、局部連接、滑動視窗。卷積核的數值不是你設的，是模型學出來的。</p>
     <div class="wd"><div class="wh"><h3>5×5 影像 × 3×3 卷積核</h3><span class="tag amber">核心互動</span></div><p class="hint">點輸入格子切換明暗；點輸出格子看它怎麼算出來的。</p><div id="w-conv"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=F3">F3 CNN：卷積與池化</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p14" data-t="池化與 CNN 流程">
@@ -178,6 +193,9 @@
     <div class="wd"><div class="wh"><h3>梯度傳回第一層還剩多少</h3><span class="tag amber">核心互動</span></div><div id="w-res"></div></div>
     <div class="wd"><div class="wh"><h3>架構設計思想的演進</h3></div><div id="w-evo"></div></div>
     <div class="wd"><div class="wh"><h3>四大架構家族、選用對照與自編碼器</h3><span class="tag blue">講義第 53、54、55 頁</span></div><div id="w-families"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=F5">F5 Autoencoder</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p18" data-t="什麼時候不該用">

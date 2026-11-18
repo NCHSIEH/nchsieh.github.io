@@ -32,6 +32,9 @@
       </ol>
       <span style="font-size:13.5px;color:var(--muted)">需要先會：M2-2 的混淆矩陣與交叉驗證、M1 的資料洩漏。</span>
     </div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 16 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=S6">S6 時間序列預測流程</a>、<a href="../lab/exp.html?id=D1">D1 Apriori</a>、<a href="../lab/exp.html?id=D2">D2 FP-Growth</a>、<a href="../lab/exp.html?id=G1">G1 指數平滑</a>、<a href="../lab/exp.html?id=G2">G2 ARIMA</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=S7">S7 關聯規則探勘流程</a>、<a href="../lab/exp.html?id=B8">B8 AdaBoost</a>、<a href="../lab/exp.html?id=B9">B9 梯度提升 GBDT</a>、<a href="../lab/exp.html?id=B12">B12 Voting 與 Stacking 集成</a>、<a href="../lab/exp.html?id=C7">C7 LOF 局部離群因子</a>、<a href="../lab/exp.html?id=C8">C8 Isolation Forest</a>、<a href="../lab/exp.html?id=C12">C12 馬氏距離與橢圓異常偵測</a>、<a href="../lab/exp.html?id=D3">D3 序列樣式探勘 PrefixSpan</a>、<a href="../lab/exp.html?id=D4">D4 進階評估指標與負關聯</a>、<a href="../lab/exp.html?id=G3">G3 滑動視窗驗證</a>、<a href="../lab/exp.html?id=G4">G4 季節分解 STL 與滯後特徵工程</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <section class="part" id="p01" data-t="四大主題選用地圖">
@@ -72,6 +75,9 @@
     <div class="wd"><div class="wh"><h3>把方法放進正確的家族</h3><span class="tag amber">練習</span></div><div id="w-tax"></div></div>
     <div class="wd"><div class="wh"><h3>Bootstrap：那 36.8% 是怎麼來的</h3><span class="tag amber">互動</span></div><p class="hint">有放回地抽 n 次，看有多少筆從沒被抽到（袋外樣本 OOB）。</p><div id="w-boot"></div></div>
     <div class="wd"><div class="wh"><h3>單棵樹 vs Bagging vs 隨機森林：換十批資料</h3><span class="tag amber">核心互動</span></div><p class="hint">同一個母體抽十批訓練資料，各自訓練，在同一份測試集上評估。重點看「標準差」。</p><div id="w-bag"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B12">B12 Voting 與 Stacking 集成</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p05" data-t="AdaBoost 手算">
@@ -80,6 +86,9 @@
     <p class="one">每一輪做兩件事：訓練一個弱分類器、把它分錯的樣本權重調高。越準的分類器票數越重；但被反覆放大的樣本若其實標錯了，AdaBoost 就會越陷越深。</p>
     <div class="wd"><div class="wh"><h3>10 筆樣本的三輪手算</h3><span class="tag amber">核心互動</span></div><p class="hint">預設為講義的例子（分錯 {1,2,3}、{4,5,6}、{7,8}）。也可以點樣本改變每一輪分錯哪些，數字會即時重算。</p><div id="w-ada"></div></div>
     <div class="wd"><div class="wh"><h3>決策樁一輪一輪疊起來</h3><span class="tag amber">互動</span></div><p class="hint">每一輪只用一刀（決策樁）。點的大小＝目前的樣本權重。</p><div id="w-adamap"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B8">B8 AdaBoost</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p06" data-t="梯度提升與 GBDT">
@@ -90,6 +99,9 @@
     <div class="wd"><div class="wh"><h3>三種長樹方式</h3></div><div id="w-grow"></div></div>
     <div class="wd"><div class="wh"><h3>梯度提升一棵一棵長出來</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">在你的瀏覽器裡真的訓練 GBDT：每棵樹擬合前面的殘差。換學習率與樹的深度，找出驗證損失開始回升的早停點。</p><div id="w-gbreal"></div></div>
     <div class="wd"><div class="wh"><h3>表格資料該選誰：GBDT、Logistic，還是 2025 年的 TabPFN？</h3><span class="tag blue">NeurIPS 2022・Nature 2025</span></div><p class="hint">依你的專題條件調整：樣本數、欄位數、要不要逐筆解釋、有沒有 GPU。看建議的基準組合與理由。對應講義 M4 第 22 頁。</p><div id="w-tabsel"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B9">B9 梯度提升 GBDT</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p07" data-t="投票與 Stacking">
@@ -123,6 +135,9 @@
     <p class="one">統計法最好解釋、可稽核，是醫療場域的首選起點；但 μ 與 σ 會被離群值拉走。資料由密度不同的群體組成時，要用「跟鄰居比」的 LOF。</p>
     <div class="wd"><div class="wh"><h3>病房 30 天日均給藥次數：三種門檻</h3><span class="tag amber">核心互動</span></div><p class="hint">加入一筆極端值，看哪一種門檻被拉走。</p><div id="w-stat"></div></div>
     <div class="wd"><div class="wh"><h3>全域距離 vs LOF</h3><span class="tag amber">互動</span></div><p class="hint">密集群旁邊的 A 與稀疏群裡的 B，離最近鄰的距離差不多。</p><div id="w-lof"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C7">C7 LOF 局部離群因子</a>、<a href="../lab/exp.html?id=C12">C12 馬氏距離與橢圓異常偵測</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p11" data-t="無標籤怎麼評估">
@@ -131,6 +146,9 @@
     <p class="one">異常偵測最大的困難不是演算法，而是「你怎麼知道抓對了」。把它定位成「幫人縮小檢視範圍的工具」，門檻由人力可負荷量決定。</p>
     <div class="wd"><div class="wh"><h3>門檻由人力決定：每天能覆核幾筆？</h3><span class="tag amber">核心互動</span></div><div id="w-cap"></div></div>
     <div class="wd"><div class="wh"><h3>穩定性檢查：contamination 0.01 / 0.05 / 0.10</h3><span class="tag amber">互動</span></div><div id="w-stab"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C8">C8 Isolation Forest</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p12" data-t="關聯規則三指標">
@@ -139,6 +157,9 @@
     <p class="one">support 管「值不值得看」、lift 管「是不是真的有關」、confidence 管「實際上多可靠」。只看 confidence 排序，會把負相關當成重要發現。</p>
     <div class="wd"><div class="wh"><h3>10 筆處方交易：自己算五個指標</h3><span class="tag amber">核心互動</span></div><p class="hint">點格子可增減藥品；選一條規則 A → B。</p><div id="w-rule"></div></div>
     <div class="wd"><div class="wh"><h3>依 confidence 排序 vs 依 lift 排序</h3><span class="tag amber">互動</span></div><div id="w-rank"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=D1">D1 Apriori</a>、<a href="../lab/exp.html?id=S7">S7 關聯規則探勘流程</a>、<a href="../lab/exp.html?id=D4">D4 進階評估指標與負關聯</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p13" data-t="Apriori 與醫療應用">
@@ -150,6 +171,9 @@
     <div class="wd"><div class="wh"><h3>1,200 張處方：挖出真正有意義的用藥組合</h3><span class="tag blue">1,200 張處方 × 15 種藥</span></div><p class="hint">調整 support 與 confidence 門檻，切換排序方式；點任一條規則（散布圖或表格），看它在臨床上代表什麼。</p><div id="w-rx"></div></div>
     <div class="note warn"><b>三個常見誤用：</b>① 把關聯當成因果　② 支持度門檻設得太低（起點：support ≥ 0.01、lift ≥ 1.2，規則控制在幾十條）　③ 忽略品項粒度（品項名、成分、ATC 分類，結果完全不同——要跟臨床討論）。</div>
     <div class="wd"><div class="wh"><h3>關聯規則：六個醫護應用與三個常見誤用</h3><span class="tag blue">講義第 48、49 頁</span></div><div id="w-armis"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=D2">D2 FP-Growth</a>、<a href="../lab/exp.html?id=D3">D3 序列樣式探勘 PrefixSpan</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p14" data-t="時間序列切分">
@@ -168,6 +192,9 @@
     <div class="wd"><div class="wh"><h3>觀測值 ＝ 趨勢 ＋ 季節性 ＋ 殘差</h3><span class="tag amber">互動</span></div><div id="w-decomp"></div></div>
     <div class="wd"><div class="wh"><h3>Google 流感趨勢：資料很多，卻連續高估</h3><span class="tag blue">Science 2014</span></div><p class="hint">看 108 週中 100 週高估的數字、三個原因，再判斷基準線與監測怎麼做。對應講義 M4 第 59 頁。</p><div id="w-gft"></div></div>
     <div class="wd"><div class="wh"><h3>時間序列：五個差異與三個實務提醒</h3><span class="tag blue">講義第 54、58 頁</span></div><div id="w-tsfive"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=S6">S6 時間序列預測流程</a>、<a href="../lab/exp.html?id=G1">G1 指數平滑</a>、<a href="../lab/exp.html?id=G2">G2 ARIMA</a>、<a href="../lab/exp.html?id=G3">G3 滑動視窗驗證</a>、<a href="../lab/exp.html?id=G4">G4 季節分解 STL 與滯後特徵工程</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p16" data-t="機率校準">

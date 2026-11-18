@@ -32,6 +32,9 @@
       </ol>
       <span style="font-size:13.5px;color:var(--muted)">需要先會：M2-1 的迴歸建模流程與評估、M1 的資料洩漏。</span>
     </div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 14 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=S2">S2 監督式學習流程</a>、<a href="../lab/exp.html?id=A5">A5 不平衡資料與 SMOTE</a>、<a href="../lab/exp.html?id=B3">B3 Logistic 迴歸</a>、<a href="../lab/exp.html?id=B4">B4 k-NN：找最像的 K 位病人投票</a>、<a href="../lab/exp.html?id=B5">B5 Naive Bayes</a>、<a href="../lab/exp.html?id=B6">B6 決策樹</a>、<a href="../lab/exp.html?id=B7">B7 隨機森林</a>、<a href="../lab/exp.html?id=B10">B10 支持向量機 SVM</a>、<a href="../lab/exp.html?id=B13">B13 交叉驗證與網格搜尋</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=B14">B14 迴歸決策樹</a>、<a href="../lab/exp.html?id=B15">B15 Rule Induction 規則歸納</a>、<a href="../lab/exp.html?id=B16">B16 ROC 與 PR 曲線</a>、<a href="../lab/exp.html?id=B17">B17 高斯貝氏與線性判別 LDA</a>、<a href="../lab/exp.html?id=B18">B18 多元分類：OvR 與 Softmax</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <section class="part" id="p01" data-t="分類 101 與案例">
@@ -67,6 +70,9 @@
     <p class="one">它只是把訓練資料背起來，新個案來時看最像的 k 個鄰居怎麼樣。第一步忘了正規化，整個模型就只看值域最大的那個特徵。</p>
     <div class="wd"><div class="wh"><h3>手算：P6 會不會再入院？</h3><span class="tag amber">互動</span></div><p class="hint">切換 k 與是否正規化，看最近鄰居與投票結果怎麼變。</p><div id="w-knnhand"></div></div>
     <div class="wd"><div class="wh"><h3>k 值如何改變決策邊界</h3><span class="tag amber">核心互動</span></div><p class="hint">k 小 → 邊界破碎、記住雜訊；k 大 → 邊界平滑、可能欠擬合。看訓練與測試正確率怎麼分岔。</p><div id="w-knnmap"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B4">B4 k-NN：找最像的 K 位病人投票</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p04" data-t="Logistic 迴歸">
@@ -77,6 +83,9 @@
     <div class="wd"><div class="wh"><h3>係數 → 勝算比</h3><span class="tag amber">互動</span></div><div id="w-or"></div></div>
     <div class="wd"><div class="wh"><h3>模型為什麼說這位病人高風險？</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">1,400 次出院訓練 Logistic 迴歸，預測另外 600 次。點一位病人，看每個欄位把他的風險往上推或往下拉多少。</p><div id="w-why"></div></div>
     <div class="wd"><div class="wh"><h3>其他分類器速覽</h3></div><div id="w-others"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B3">B3 Logistic 迴歸</a>、<a href="../lab/exp.html?id=B18">B18 多元分類：OvR 與 Softmax</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p05" data-t="Naive Bayes">
@@ -84,6 +93,9 @@
     <p class="ai" style="margin:-2px 0 8px">對應講義 M2-2：第 36–38 頁（PART 06 前段）</p>
     <p class="one">它假設特徵彼此獨立——明知是錯的。但這個假設讓它快得離譜，而且只要「哪一類分數較高」的排序對了就夠用。</p>
     <div class="wd"><div class="wh"><h3>手算：發燒＋咳嗽，是流感嗎？</h3><span class="tag amber">互動</span></div><p class="hint">調整先驗與條件機率，看後驗怎麼變；試試把先驗調高到 30%。</p><div id="w-nb"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B5">B5 Naive Bayes</a>、<a href="../lab/exp.html?id=B17">B17 高斯貝氏與線性判別 LDA</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p06" data-t="混淆矩陣家族">
@@ -113,6 +125,9 @@
     <div class="wd"><div class="wh"><h3>真實案例：Epic 敗血症模型的外部驗證</h3><span class="tag blue">JAMA IM 2021・38,455 次住院</span></div><p class="hint">用論文報告的敏感度 33%、特異度 83%，重建 38,455 次住院的混淆矩陣；再拉動盛行率，看同一個模型換到別家醫院時 PPV 和警示量怎麼變。對應講義 M2-2 第 65 頁。</p><div id="w-epic"></div></div>
     <div class="wd"><div class="wh"><h3>再入院預測模型的現實：整體 AUC 為什麼不高</h3><span class="tag blue">JAMA 2011 系統性回顧</span></div><p class="hint">26 個已驗證模型的 AUC 範圍、為什麼不準，以及同一個 AUC 放在不同用途的結論。對應講義 M2-2 第 66 頁。</p><div id="w-readmit"></div></div>
     <div class="wd"><div class="wh"><h3>Brier 分數、淨效益，與內部／外部驗證</h3><span class="tag blue">講義第 63、64 頁</span></div><div id="w-valid"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=S2">S2 監督式學習流程</a>、<a href="../lab/exp.html?id=B13">B13 交叉驗證與網格搜尋</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p09" data-t="類別不平衡">
@@ -123,6 +138,9 @@
     <div class="wd"><div class="wh"><h3>類別權重 vs 只調門檻</h3><span class="tag amber">互動</span></div><p class="hint">權重改變「訓練出來的模型」，門檻只改變「怎麼用這個模型」。兩者可以並用。</p><div id="w-weight"></div></div>
     <div class="note warn"><b>三個鐵則（作業必查）：</b>① 取樣只能在訓練集做（放進 CV 的訓練子流程）　② 測試集維持原始分布　③ 不平衡時不用 Accuracy 當主指標，改看 Recall、Precision、PR-AUC，並附類別比例。</div>
     <div class="wd"><div class="wh"><h3>不平衡處理的三個鐵則</h3><span class="tag blue">講義第 71 頁</span></div><div id="w-iron"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=A5">A5 不平衡資料與 SMOTE</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p10" data-t="交叉驗證">
@@ -138,6 +156,9 @@
     <div class="wd"><div class="wh"><h3>不分層時，某一折可能一個陽性都沒有</h3><span class="tag amber">互動</span></div><div id="w-strat"></div></div>
     <div class="wd"><div class="wh"><h3>學習曲線：資料夠了嗎？</h3></div><div id="w-lc"></div></div>
     <div class="wd"><div class="wh"><h3>切分與驗證的五個檢查</h3><span class="tag blue">講義第 81 頁</span></div><div id="w-five"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B16">B16 ROC 與 PR 曲線</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p11" data-t="決策樹">
@@ -147,6 +168,9 @@
     <div class="wd"><div class="wh"><h3>Gini 手算：兩個候選切點選哪個？</h3><span class="tag amber">互動</span></div><div id="w-gini"></div></div>
     <div class="wd"><div class="wh"><h3>深度旋鈕：又是那條過擬合曲線</h3><span class="tag amber">核心互動</span></div><div id="w-depth"></div></div>
     <div class="wd"><div class="wh"><h3>讀一棵印出來的樹：比率與人數一起看</h3></div><p class="hint">點葉節點，看 95% 信賴區間有多寬。</p><div id="w-printtree"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B6">B6 決策樹</a>、<a href="../lab/exp.html?id=B14">B14 迴歸決策樹</a>、<a href="../lab/exp.html?id=B15">B15 Rule Induction 規則歸納</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p12" data-t="集成方法">
@@ -156,6 +180,9 @@
     <div class="wd"><div class="wh"><h3>為什麼投票有效</h3><span class="tag amber">互動</span></div><div id="w-vote"></div></div>
     <div class="wd"><div class="wh"><h3>森林越大，邊界越平滑</h3><span class="tag amber">核心互動</span></div><div id="w-rf"></div></div>
     <div class="wd"><div class="wh"><h3>三種集成策略</h3></div><div id="w-ens"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B7">B7 隨機森林</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p13" data-t="模型比較與選擇">
@@ -164,6 +191,9 @@
     <p class="one">沒有永遠的冠軍，只有適不適合你的場域。實務流程：Logistic 建基準 → 樹看結構 → 森林／提升拚效能 → 依可解釋性需求決定部署。</p>
     <div class="wd"><div class="wh"><h3>你的情況適合誰？</h3><span class="tag amber">互動</span></div><p class="hint">勾選你的需求，看哪些模型同時符合。</p><div id="w-pick"></div></div>
     <div class="wd"><div class="wh"><h3>四個模型同場比較</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">勾選模型，瀏覽器會用同一份訓練集真的訓練一次，再在同一份測試集上比 ROC、AUC 與實務指標。</p><div id="w-arena"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B10">B10 支持向量機 SVM</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p14" data-t="實作、作業與回顧">

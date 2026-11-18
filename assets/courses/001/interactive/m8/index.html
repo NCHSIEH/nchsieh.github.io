@@ -31,6 +31,9 @@
         <li>為 Agent 設工具、迭代上限與失敗分支，並把人工確認寫進專題流程　<a href="#p14">第 14 節</a>、<a href="#p15">第 15 節</a>、<a href="#p16">第 16 節</a>、<a href="#p17">第 17 節</a></li>
       </ol>
       <div style="font-size:13px;color:var(--muted)">需要先會：M7 的 Embedding 與 RAG 概念、提示詞四層次與四條紅線。</div></div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 3 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=H6">H6 RAG 檢索</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=S9">S9 AI Agent 工作流程</a>、<a href="../lab/exp.html?id=H8">H8 AI Agent：ReAct 工具呼叫</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <section class="part" id="p01" data-t="Dify 是什麼">
@@ -92,6 +95,9 @@
     <p class="one">品質瓶頸幾乎都在第 ③ 步：LLM 只看得到「被召回的那幾段」。召回錯了，生成再厲害也沒用——這也是為什麼一直改 Prompt 常常沒有效果。</p>
     <div class="wd"><div class="wh"><h3>切塊模擬器：「CMS 第 4 級每月給付額度是多少？」</h3><span class="tag amber">核心互動</span></div><p class="hint">示範文件為依講義數字編寫的簡短給付基準（以衛福部最新公告為準）；字數按比例縮小。</p><div id="w-chunk"></div></div>
     <div class="wd"><div class="wh"><h3>切塊實驗：8 種切法 × 40 題測試問題</h3><span class="tag blue">長照手冊 × 40 題</span></div><p class="hint">依長照 2.0 給付基準編寫的簡化手冊（教學用，實際以主管機關公告為準）。每種切法都真的用 BM25 檢索 Top-3，檢查拿回的段落裡有沒有完整答案。</p><div id="w-chunkexp"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=H6">H6 RAG 檢索</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p08" data-t="Top-K、閾值、Rerank">

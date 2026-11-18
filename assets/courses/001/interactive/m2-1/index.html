@@ -32,6 +32,9 @@
       </ol>
       <span style="font-size:13.5px;color:var(--muted)">需要先會：M1 的遺失值與離群值處理、縮放與資料洩漏。</span>
     </div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 3 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=B1">B1 線性迴歸</a>、<a href="../lab/exp.html?id=B2">B2 正則化迴歸 Ridge／Lasso</a>、<a href="../lab/exp.html?id=B11">B11 多項式迴歸與過擬合</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <section class="part" id="p01" data-t="迴歸 101">
@@ -68,6 +71,9 @@
     <div class="wd"><div class="wh"><h3>拖動直線，找最小的殘差平方和</h3><span class="tag blue">500 位病人資料集</span></div><p class="hint">40 位病人。自己轉動直線讓 SSE 變小，再按「讓電腦自己下山」看梯度下降怎麼一步步找到同一個答案。</p><div id="w-sse"></div></div>
     <div class="wd"><div class="wh"><h3>用模型預測：小心外插</h3></div><div id="w-extrap"></div></div>
     <div id="q03"></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B1">B1 線性迴歸</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p04" data-t="讀懂模型輸出">
@@ -135,6 +141,9 @@
     <div class="wd"><div class="wh"><h3>交叉驗證：讓每一筆都當過一次驗證資料</h3></div><div id="w-cv"></div></div>
     <div class="wrong"><b>這一步做錯會怎樣：</b>先對全部資料縮放或填補再切分，測試集的資訊已滲入訓練——分數虛高，部署後大幅下滑，而且不會有任何錯誤訊息。</div>
     <div class="wd"><div class="wh"><h3>三份資料的正確用法，與「順序反了」的洩漏</h3><span class="tag blue">講義第 46、47、50 頁</span></div><div id="w-split3"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B11">B11 多項式迴歸與過擬合</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p10" data-t="迴歸的特徵工程">
@@ -156,6 +165,9 @@
       <div><b>Elastic Net</b>兩者混合；AI Studio GLM 的 alpha：0＝Ridge、1＝Lasso</div>
     </div>
     <div class="wd"><div class="wh"><h3>係數路徑：拉動 λ</h3><span class="tag amber">核心互動</span></div><div id="w-ridge"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=B2">B2 正則化迴歸 Ridge／Lasso</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p12" data-t="信賴區間 vs 預測區間">

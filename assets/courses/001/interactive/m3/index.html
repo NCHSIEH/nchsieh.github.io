@@ -32,6 +32,9 @@
       </ol>
       <span style="font-size:13.5px;color:var(--muted)">需要先會：M1 的縮放、M0 的資料科學專案完整流程。</span>
     </div>
+    <!--lab-box-->
+    <div class="note labbox"><b>演算法實驗室：這個單元有 10 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=S3">S3 非監督式學習流程</a>、<a href="../lab/exp.html?id=C1">C1 K-Means 分群</a>、<a href="../lab/exp.html?id=C2">C2 階層式分群</a>、<a href="../lab/exp.html?id=C3">C3 DBSCAN</a>、<a href="../lab/exp.html?id=C5">C5 主成分分析 PCA</a>、<a href="../lab/exp.html?id=C9">C9 手肘法與輪廓係數</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=C4">C4 高斯混合模型 GMM</a>、<a href="../lab/exp.html?id=C6">C6 t-SNE</a>、<a href="../lab/exp.html?id=C10">C10 K-Medoids 分群</a>、<a href="../lab/exp.html?id=C11">C11 K-Means++ 與模糊分群 FCM</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
+    <!--/lab-box-->
   </header>
 
   <section class="part" id="p01" data-t="非監督式學習 101">
@@ -67,6 +70,9 @@
     <p class="one">K-Means 只反覆做兩件事：每點歸給最近的中心、中心移到該群的平均位置。保證會收斂，但不保證收斂到全域最優。</p>
     <div class="wd"><div class="wh"><h3>六位病人、K = 2</h3><span class="tag amber">核心互動</span></div><p class="hint">按「下一步」逐步執行；也可以換起始中心，看結果會不會不同。</p><div id="w-hand"></div></div>
     <div class="wd"><div class="wh"><h3>在 180 筆資料上一步步跑</h3><span class="tag amber">互動</span></div><div id="w-steps"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C1">C1 K-Means 分群</a>、<a href="../lab/exp.html?id=C10">C10 K-Medoids 分群</a>、<a href="../lab/exp.html?id=C11">C11 K-Means++ 與模糊分群 FCM</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p04" data-t="怎麼決定 K">
@@ -77,6 +83,9 @@
     <div class="wd"><div class="wh"><h3>手算一個點的 Silhouette</h3></div><div id="w-sil"></div></div>
     <div class="wd"><div class="wh"><h3>真實資料的手肘沒那麼明顯</h3><span class="tag blue">600 位社區長者資料集</span></div><p class="hint">9 個健康欄位、四種型態彼此重疊。從 K = 2 算到 8，看手肘法與 Silhouette 會不會給你明確答案。</p><div id="w-elbow"></div></div>
     <div id="q04"></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C9">C9 手肘法與輪廓係數</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p05" data-t="階層式分群">
@@ -84,6 +93,9 @@
     <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 26–29 頁（PART 06）</p>
     <p class="one">不必事先決定群數：它把所有可能的群數一次算完，讓你事後再切。合併距離突然跳很高的地方，就是最自然的切點。</p>
     <div class="wd"><div class="wh"><h3>五個點的樹狀圖</h3><span class="tag amber">核心互動</span></div><p class="hint">換連結方式看樹怎麼變；拖動切線決定群數。</p><div id="w-dendro"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C2">C2 階層式分群</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p06" data-t="DBSCAN">
@@ -91,6 +103,9 @@
     <p class="ai" style="margin:-2px 0 8px">對應講義 M3：第 31–34 頁（PART 07）</p>
     <p class="one">前兩種都假設群是一團一團的；DBSCAN 改問：哪裡的點特別密集？不必指定群數，還會自動標出雜訊。</p>
     <div class="wd"><div class="wh"><h3>調 eps 與 min_samples</h3><span class="tag amber">核心互動</span></div><div id="w-db"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C3">C3 DBSCAN</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p07" data-t="三種演算法的形狀能力">
@@ -99,6 +114,9 @@
     <p class="one">形狀決定演算法。先畫散布圖看資料長什麼樣，再決定用誰。</p>
     <div class="wd"><div class="wh"><h3>3 種資料 × 3 種演算法</h3><span class="tag amber">互動</span></div><div id="w-shape"></div></div>
     <div class="wd"><div class="wh"><h3>三種演算法全比較</h3></div><div id="w-cmp"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C4">C4 高斯混合模型 GMM</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p08" data-t="分群結果怎麼解讀">
@@ -137,6 +155,9 @@
     <div class="wd"><div class="wh"><h3>讀懂主成分：載荷與雙標圖</h3><span class="tag blue">600 位社區長者資料集</span></div><p class="hint">主成分沒有名字——看它由哪些欄位組成，再替它取名。切換 PC1／PC2，再用「對答案」看四種型態落在哪裡。</p><div id="w-loading"></div></div>
     <div class="wd"><div class="wh"><h3>維度詛咒：點和點越來越一樣遠</h3></div><div id="w-curse"></div></div>
     <div class="wd"><div class="wh"><h3>PCA 的三個限制</h3><span class="tag blue">講義第 55 頁</span></div><div id="w-pcalim"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C5">C5 主成分分析 PCA</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p11" data-t="降維＋分群">
@@ -145,6 +166,9 @@
     <p class="one">降維是為了「看見」，分群才是「切開」。分群可在原始高維空間做，降維圖只是用來檢視。</p>
     <div class="wd"><div class="wh"><h3>10 維資料：PCA 降到 2 維看分群</h3><span class="tag amber">互動</span></div><div id="w-combo"></div></div>
     <div class="wd"><div class="wh"><h3>PCA 與 t-SNE 的差別</h3></div><div id="w-tsne"></div></div>
+    <!--lab-sec-->
+    <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=C6">C6 t-SNE</a></p>
+    <!--/lab-sec-->
   </section>
 
   <section class="part" id="p12" data-t="AI Studio 實作">

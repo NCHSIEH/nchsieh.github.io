@@ -155,3 +155,10 @@ label.ctl{white-space:nowrap}
 .era>div .y{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:700}
 .era>div b{display:block;color:var(--ink);font-size:15px;margin:2px 0 4px}
 @media (max-width:900px){.era{grid-template-columns:1fr 1fr}}
+
+/* 演算法實驗室連結（2026-11-18） */
+.labbox{margin:14px 0 6px;padding:12px 16px;border:1px solid #bcd9d1;border-left:5px solid #0d747e;border-radius:10px;background:#f1f8f6;font-size:14.5px;line-height:1.9}
+.labbox b{color:#0d747e}.labbox .adv a{color:var(--muted)}
+.labbox .sec{display:block;margin-top:2px}
+.lablink{margin:16px 0 4px;padding:9px 14px;border:1px dashed #9cc7bd;border-radius:10px;background:#f6fbf9;font-size:14px;line-height:1.8}
+.lablink b{color:#0d747e}
