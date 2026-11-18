@@ -86,9 +86,9 @@
         { id: 's0', st: '1. 切分與盤點', alg: 'Train/Test Split', use: R.isStrict ? '必先切分再學任何統計量' : '檢查缺值、極端與文字欄' },
         { id: 's1', st: '2a. 遺失值補值', alg: 'A1 平均/中位/k-NN', use: '偏態用中位數，線性關聯用 k-NN' },
         { id: 's2', st: '2b. 離群值處理', alg: 'A7 IQR 圍籬/縮尾', use: R.isLinear ? '線性模型必處理，防斜率被拉偏' : '樹模型對單調極端較穩健' },
-        { id: 's3', st: '3a. 類別編碼', alg: 'A4 One-hot/Dummy/目標', use: '線性用 Dummy；高基數用目標編碼' },
-        { id: 's4', st: '3b. 特徵縮放', alg: 'A2 Z分數 / Min-Max', use: R.isLinear ? '距離/梯度模型必做' : '樹模型可略過，保留原尺度' },
-        { id: 's5', st: '4. 篩選與平衡', alg: 'A5 SMOTE / A6 選擇', use: '只對訓練集做；樹常用 A3 離散' },
+        { id: 's3', st: '3a. 類別與衍生', alg: 'A4 編碼 / A9 衍生特徵', use: '線性用 Dummy；領域公式衍生 BMI 與交互項' },
+        { id: 's4', st: '3b. 偏態與縮放', alg: 'A2 Z分數 / A8 ln(1+x)·Robust', use: R.isLinear ? '右偏先取對數，距離/梯度必標準化' : '樹模型可略過，保留原尺度' },
+        { id: 's5', st: '4. 共線篩選與平衡', alg: 'A6 選擇 / A9 VIF / A5 SMOTE', use: '剔除 VIF>5 共線欄；SMOTE 只對訓練集做' },
         { id: 's6', st: '5. 乾淨特徵矩陣', alg: 'Pipeline 封裝套用', use: '同組參數 transform 驗證與測試集' }
       ];
 
@@ -106,15 +106,15 @@
             { id: 'out', label: '2b. 離群值圍籬', value: st.stage >= 2 ? '上界=' + f(R.hi, 0) : '待查', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'A7 IQR 縮尾/刪除' }
           ],
           [
-            { id: 'enc', label: '3a. 類別編碼', value: st.stage >= 3 ? '0/1 數值' : '文字欄', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'A4 One-Hot/Dummy' },
-            { id: 'bin', label: '3b. 連續分箱', value: R.isLinear ? '視需求' : '等頻/等寬', shape: 'box', w: 142, cls: !R.isLinear ? clsOf(3) : 'c5', hl: act(3) && !R.isLinear, dim: R.isLinear, sub: 'A3 離散化切區間' }
+            { id: 'enc', label: '3a. 編碼與衍生', value: st.stage >= 3 ? '0/1 + BMI' : '文字/原欄', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'A4 編碼 · A9 衍生比率' },
+            { id: 'bin', label: '3b. 分箱/偏態', value: R.isLinear ? 'ln(1+x)' : '等頻/等寬', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'A8 偏態對數 · A3 分箱' }
           ],
           [
-            { id: 'scl', label: '4a. 數值標準化', value: R.isLinear ? 'Z 分數' : '略過', shape: 'box', w: 142, cls: R.isLinear ? clsOf(4) : 'c5', hl: act(4) && R.isLinear, dim: !R.isLinear, sub: 'A2 Z-score / MinMax' },
+            { id: 'scl', label: '4a. 數值標準化', value: R.isLinear ? 'Z / Robust' : '略過', shape: 'box', w: 142, cls: R.isLinear ? clsOf(4) : 'c5', hl: act(4) && R.isLinear, dim: !R.isLinear, sub: 'A2 Z分數 · A8 Robust' },
             { id: 'raws', label: '4b. 保留原尺度', value: !R.isLinear ? '樹免縮放' : '備用', shape: 'box', w: 142, cls: !R.isLinear ? clsOf(4) : 'c5', hl: act(4) && !R.isLinear, dim: R.isLinear, sub: '樹只看大小排序切點' }
           ],
           [
-            { id: 'sel', label: '5a. 特徵選擇', value: '去冗餘共線', shape: 'box', w: 142, cls: clsOf(5), hl: act(5), sub: 'A6 相關/IG/Wrapper' },
+            { id: 'sel', label: '5a. 選特徵去共線', value: 'VIF ≤ 5', shape: 'box', w: 142, cls: clsOf(5), hl: act(5), sub: 'A6 選擇 · A9 共線 VIF' },
             { id: 'imb', label: '5b. 少數類合成', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', w: 142, cls: clsOf(5), hl: act(5), sub: 'A5 SMOTE (僅Train)' }
           ],
           [

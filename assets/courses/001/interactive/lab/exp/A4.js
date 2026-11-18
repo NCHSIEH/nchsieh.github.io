@@ -142,16 +142,23 @@
           digits: p.method === 'target' ? 3 : 0,
           items: sideItems
         };
-        const note = {
-          type: 'note', slot: 'bottom',
-          tone: p.method === 'target' ? 'warn' : 'info',
-          text: p.method === 'target'
-            ? '資料洩漏提醒：目標編碼用到標籤 y，實務上只能在訓練集內計算（或搭配交叉驗證折內編碼），不可先在整份資料算完再切分。'
-            : p.method === 'dummy'
-              ? '共線性提醒：三個二元欄位的和恆等於 1，線性／Logistic 迴歸需去掉一欄（以內科為基準組）才能避免完全共線。'
-              : '樹模型可直接吃 One-hot 全部欄位；若類別高達數十種，One-hot 會讓維度暴增，可改用目標編碼。'
+        const bottom = {
+          type: 'table', slot: 'bottom',
+          title: '三種類別編碼策略全維度對照（共線性 vs 維度爆炸 vs 資料洩漏）',
+          cols: [
+            { key: 'm', label: '編碼法' },
+            { key: 'dim', label: '新增欄數 (k=3)' },
+            { key: 'col', label: '完全共線性' },
+            { key: 'leak', label: '標籤洩漏風險' },
+            { key: 'fit', label: '最適合模型與防呆重點' }
+          ],
+          rows: [
+            { id: 'oh', cells: ['One-hot', 'k = 3 欄', { v: '有 (Σ欄=1)', cls: 'bad' }, { v: '無 (不用 y)', cls: 'good' }, '決策樹／隨機森林／有 L2 正則之模型'], hl: p.method === 'onehot' },
+            { id: 'dm', cells: ['Dummy (去一欄)', 'k − 1 = 2 欄', { v: '無 (內科作基準)', cls: 'good' }, { v: '無 (不用 y)', cls: 'good' }, 'OLS 線性迴歸／Logistic 迴歸（可解讀相對於基準組之勝算比）'], hl: p.method === 'dummy' },
+            { id: 'tg', cells: ['目標編碼 (m=' + R.m + ')', '1 欄 (連續值)', { v: '無 (單一欄)', cls: 'good' }, { v: '高 (必折內算)', cls: 'bad' }, '高基數類別（如數百個診斷碼 ICD）；嚴禁切分前用全資料計算'], hl: p.method === 'target' }
+          ]
         };
-        return [main, side, note];
+        return [main, side, bottom];
       }
 
       const st = { c: 0, hlDept: -1, done: false };

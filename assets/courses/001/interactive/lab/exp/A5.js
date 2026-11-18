@@ -128,25 +128,31 @@
         };
 
         let side;
-        if (p.method === 'smote') {
+        if (!st.added.length && !st.dropped.length) {
           side = {
-            type: 'table', slot: 'side', title: 'SMOTE 合成紀錄',
-            cols: [{ key: 'id', label: '新點' }, { key: 'src', label: '起點' }, { key: 'nb', label: '鄰居' }, { key: 'lam', label: 'λ', num: true, digits: 2 }],
-            rows: st.added.slice(0, 10).map(s => ({ id: s.newId, cells: [s.newId, '#' + s.srcId, '#' + s.nbId, s.lam], hl: st.curNew === s.newId }))
+            type: 'table', slot: 'side', title: '少數類（再入院＝是）原始樣本清單',
+            cols: [{ key: 'id', label: '陽性#' }, { key: 'los', label: '住院天數', num: true, digits: 0 }, { key: 'cci', label: '共病指數', num: true, digits: 0 }],
+            rows: R.pos.map(r => ({ id: 'pos' + r.id, cells: ['#' + r.id, r.los, r.cci], hl: true }))
+          };
+        } else if (p.method === 'smote') {
+          side = {
+            type: 'table', slot: 'side', title: 'SMOTE 連線內插合成紀錄（x_new = x_i + λ(x_nn − x_i)）',
+            cols: [{ key: 'id', label: '新點' }, { key: 'src', label: '起點' }, { key: 'nb', label: '鄰居' }, { key: 'lam', label: 'λ', num: true, digits: 2 }, { key: 'xy', label: '合成座標' }],
+            rows: st.added.slice(0, 10).map(s => ({ id: s.newId, cells: [s.newId, '#' + s.srcId, '#' + s.nbId, s.lam, '(' + f(s.los, 1) + ', ' + f(s.cci, 1) + ')'], hl: st.curNew === s.newId }))
           };
         } else if (p.method === 'over') {
           side = {
-            type: 'table', slot: 'side', title: '複製樣本紀錄',
+            type: 'table', slot: 'side', title: '隨機過抽樣複製紀錄（與原點完全重疊）',
             cols: [{ key: 'id', label: '新點' }, { key: 'src', label: '複製來源' }, { key: 'los', label: '天數', num: true, digits: 0 }, { key: 'cci', label: '共病', num: true, digits: 0 }],
             rows: st.added.slice(0, 10).map(s => ({ id: s.newId, cells: [s.newId, '#' + s.srcId, s.los, s.cci], hl: st.curNew === s.newId }))
           };
         } else {
           side = {
-            type: 'table', slot: 'side', title: '被丟棄的多數類樣本',
+            type: 'table', slot: 'side', title: '隨機欠抽樣丟棄的多數類樣本',
             cols: [{ key: 'id', label: '#' }, { key: 'los', label: '天數', num: true, digits: 0 }, { key: 'cci', label: '共病', num: true, digits: 0 }],
             rows: st.dropped.slice(0, 10).map(did => {
               const r = rows.find(x => x.id === did);
-              return { id: 'd' + did, cells: ['#' + did, r.los, r.cci] };
+              return { id: 'd' + did, cells: ['#' + did, r.los, r.cci], hl: st.curSrc === did };
             })
           };
         }
@@ -155,11 +161,13 @@
         const nCurNeg = R.nNeg - st.dropped.length;
         const bars = {
           type: 'bars', slot: 'bottom',
-          title: '類別筆數變化（目前陽性率 ' + LAB.pct(nCurPos / (nCurPos + nCurNeg), 1) + '）',
+          title: '處理前後類別筆數對照（目前陽性率 ' + LAB.pct(nCurPos / (nCurPos + nCurNeg), 1) + '，目標 ' + LAB.pct(p.ratio, 0) + '）',
           max: Math.max(20, nCurPos, nCurNeg), digits: 0, unit: ' 筆',
           items: [
-            { id: 'pos', label: '再入院：是', value: nCurPos, cls: 'c1' },
-            { id: 'neg', label: '再入院：否', value: nCurNeg, cls: 'c0' }
+            { id: 'op', label: '處理前：陽性（少數類）', value: R.nPos, cls: 'c5' },
+            { id: 'cp', label: '目前：陽性（再入院＝是）', value: nCurPos, cls: 'c1', hl: st.added.length > 0 },
+            { id: 'on', label: '處理前：陰性（多數類）', value: R.nNeg, cls: 'c5' },
+            { id: 'cn', label: '目前：陰性（再入院＝否）', value: nCurNeg, cls: 'c0', hl: st.dropped.length > 0 }
           ]
         };
         return [main, side, bars];

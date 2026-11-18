@@ -167,26 +167,34 @@
           legend: [{ cls: 'c0', label: '完整資料' }, { cls: 'c1', label: '尚有缺值' }, { cls: 'good', label: '已補齊' }]
         };
         const colShow = st.barCol || 'glu';
-        const bef = R.before[colShow], aft = st.done ? R.after[colShow] : bef;
+        const curRows = rows.map((r, ri) => {
+          const copy = Object.assign({}, r);
+          FEATS.forEach(col => {
+            if (copy[col] == null && st.filled.has(ri + '_' + col)) copy[col] = R.out[ri][col];
+          });
+          return copy;
+        });
+        const bef = R.before[colShow], aft = st.done ? R.after[colShow] : colStats(curRows, colShow);
+        const anyFilledInCol = R.details.some(d => d.col === colShow && st.filled.has(d.idx + '_' + d.col));
         const bars = st.done ? {
           type: 'bars', slot: 'bottom',
-          title: FLAB[colShow] + ' 標準差比較：補前 vs 三種補值法',
+          title: FLAB[colShow] + ' 標準差比較：補前 vs 三種補值法（觀察變異縮小程度）',
           digits: 2,
           items: [
-            { id: 'bs', label: '補前標準差', value: bef.sd, cls: 'c0' },
-            { id: 'sm', label: '平均數法', value: Rmean.after[colShow].sd, cls: 'c1', hl: p.method === 'mean' },
-            { id: 'sd', label: '中位數法', value: Rmed.after[colShow].sd, cls: 'c2', hl: p.method === 'median' },
-            { id: 'sk', label: 'k-NN 法', value: Rknn.after[colShow].sd, cls: 'c3', hl: p.method === 'knn' }
+            { id: 'bs', label: '補前標準差 (原始)', value: bef.sd, cls: 'c0' },
+            { id: 'sm', label: '平均數法 (拉向中心)', value: Rmean.after[colShow].sd, cls: 'c1', hl: p.method === 'mean' },
+            { id: 'sd', label: '中位數法 (抗離群)', value: Rmed.after[colShow].sd, cls: 'c2', hl: p.method === 'median' },
+            { id: 'sk', label: 'k-NN 法 (保留變異)', value: Rknn.after[colShow].sd, cls: 'good', hl: p.method === 'knn' }
           ]
         } : {
           type: 'bars', slot: 'bottom',
-          title: FLAB[colShow] + '：補值前後平均與標準差',
+          title: FLAB[colShow] + '：即時平均數與標準差變化（隨缺格填入更新）',
           digits: 2,
           items: [
             { id: 'bm', label: '補前平均', value: bef.mean, cls: 'c0' },
-            { id: 'am', label: '補後平均', value: aft.mean, cls: st.done ? 'c2' : 'c5' },
+            { id: 'am', label: '目前平均', value: aft.mean, cls: anyFilledInCol ? 'c2' : 'c5', hl: anyFilledInCol },
             { id: 'bs', label: '補前標準差', value: bef.sd, cls: 'c1' },
-            { id: 'as', label: '補後標準差', value: aft.sd, cls: st.done ? 'c3' : 'c5' }
+            { id: 'as', label: '目前標準差', value: aft.sd, cls: anyFilledInCol ? 'c3' : 'c5', hl: anyFilledInCol }
           ]
         };
         return [main, side, bars];

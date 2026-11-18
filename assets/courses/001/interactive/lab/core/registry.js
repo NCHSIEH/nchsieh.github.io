@@ -17,7 +17,7 @@
   ];
   const m = (name, url) => ({ name, url });
   LAB.registry = [
-    { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A7 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
+    { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A9 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
     { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '分類、迴歸與不平衡 3 條管線，含 K-Fold 調參回圈與 B1–B16 對照。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
     { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '病人分群、異常偵測與降維壓縮 3 條管線，對照 C1–C10 演算法。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
     { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大主流架構管線。', module: m('M5 深度學習', '../m5/'), status: 'live' },
@@ -34,6 +34,8 @@
     { id: 'A5', group: 'A', title: '不平衡資料與 SMOTE', brief: '過抽樣、欠抽樣，以及 SMOTE 如何在兩點之間合成新樣本。', module: m('M2-2 第 09 節', '../m2-2/#p09'), status: 'live' },
     { id: 'A6', group: 'A', title: '特徵選擇', brief: '相關係數、卡方、資訊增益排名，再用向前選擇逐步加變數。', module: m('M1 第 09 節', '../m1/#p09'), status: 'live' },
     { id: 'A7', group: 'A', title: 'IQR 離群值與縮尾', brief: '用四分位距找出離群點，比較刪除法與縮尾截斷對斜率的影響。', module: m('M1 第 07 節', '../m1/#p07'), status: 'live', tier: 'adv' },
+    { id: 'A8', group: 'A', title: '偏態轉換與穩健縮放', brief: '對數 ln(1+x)、平方根 √x 與 RobustScaler，校正右偏長尾並抗離群。', module: m('M1 第 10 節', '../m1/#p10'), status: 'live', tier: 'adv' },
+    { id: 'A9', group: 'A', title: '衍生特徵與共線性 VIF', brief: '建構 BMI 與交互作用項提升預測力，再用 VIF 診斷剔除多重共線性。', module: m('M1 第 09 節', '../m1/#p09'), status: 'live', tier: 'adv' },
 
     { id: 'B1', group: 'B', title: '線性迴歸', brief: '最小平方法一次解出，對照梯度下降一步步走下損失曲面。', module: m('M2-1 第 03 節', '../m2-1/#p03'), status: 'live' },
     { id: 'B11', group: 'B', title: '多項式迴歸與過擬合', brief: '調高多項式階數 d，看懂欠擬合、剛好與過擬合的 U 型驗證曲線。', module: m('M2-1 第 09 節', '../m2-1/#p09'), status: 'live' },
@@ -110,6 +112,8 @@
     A5: 'Imbalanced Data & SMOTE',
     A6: 'Feature Selection',
     A7: 'Outlier Detection & Winsorizing',
+    A8: 'Skewness Transform & Robust Scaling',
+    A9: 'Feature Construction & VIF Multicollinearity',
     B1: 'Linear Regression',
     B2: 'Regularized Regression',
     B3: 'Logistic Regression',

@@ -153,14 +153,33 @@
           title: p.method === 'ig' ? '各特徵資訊增益 (以中位數二分)' : (p.method === 'forward' ? '各特徵單變量參考 |r|（綠＝向前選擇已選入）' : '各特徵與糖尿病的相關係數 |r|'),
           max: 1, digits: 3, items
         };
-        const side = {
+        const side = st.tblRows && st.tblRows.length ? {
           type: 'table', slot: 'side',
           title: st.tblTitle || '向前選擇每輪候選正確率',
           cols: [
             { key: 'ft', label: '候選特徵' },
-            { key: 'acc', label: 'LOO 正確率', num: true, digits: 3 }
+            { key: 'acc', label: 'LOO 3-NN 正確率', num: true, digits: 3 }
           ],
-          rows: (st.tblRows || []).map(c => ({ id: c.ft, cells: [c.label, c.acc], hl: st.bestFt === c.ft }))
+          rows: st.tblRows.map(c => ({ id: c.ft, cells: [c.label, c.acc], hl: st.bestFt === c.ft }))
+        } : {
+          type: 'table', slot: 'side',
+          title: '過濾法（Filter）單變量評估指標總表',
+          cols: [
+            { key: 'ft', label: '特徵' },
+            { key: 'r', label: '|r| 相關', num: true, digits: 3 },
+            { key: 'ig', label: 'IG 資訊增益', num: true, digits: 3 },
+            { key: 'chi', label: 'χ² 卡方', num: true, digits: 2 }
+          ],
+          rows: R.stats.map((s, i) => ({
+            id: 'f_' + s.ft,
+            cells: [
+              s.label,
+              i < st.shown ? s.corr : null,
+              i < st.shown ? s.ig : null,
+              i < st.shown ? s.chi2 : null
+            ],
+            hl: st.curFt === s.ft || st.pickedSet.has(s.ft)
+          }))
         };
         const line = {
           type: 'line', slot: 'bottom',

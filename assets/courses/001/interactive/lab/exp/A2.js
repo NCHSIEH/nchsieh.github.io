@@ -102,6 +102,15 @@
         const ptB = points.find(x => x.id === 'p' + R.pB.id);
         const distVal = useScaled ? (isZ ? R.zD.d : R.mmD.d) : R.rawD.d;
         const lines = [];
+        if (useScaled && isZ) {
+          lines.push({ id: 'zx', x1: 0, y1: AX_Z.y.min, x2: 0, y2: AX_Z.y.max, cls: 'c5', dash: true, w: 1, label: 'μ=0' });
+          lines.push({ id: 'zy', x1: AX_Z.x.min, y1: 0, x2: AX_Z.x.max, y2: 0, cls: 'c5', dash: true, w: 1 });
+        } else if (useScaled && !isZ) {
+          lines.push({ id: 'mb0', x1: 0, y1: 0, x2: 1, y2: 0, cls: 'c5', dash: true, w: 1 });
+          lines.push({ id: 'mb1', x1: 0, y1: 1, x2: 1, y2: 1, cls: 'c5', dash: true, w: 1, label: '[0,1] 區間' });
+          lines.push({ id: 'mb2', x1: 0, y1: 0, x2: 0, y2: 1, cls: 'c5', dash: true, w: 1 });
+          lines.push({ id: 'mb3', x1: 1, y1: 0, x2: 1, y2: 1, cls: 'c5', dash: true, w: 1 });
+        }
         if (R.pA.id !== R.pB.id) {
           lines.push({ id: 'dx', x1: ptA.x, y1: ptA.y, x2: ptB.x, y2: ptA.y, cls: 'c0', dash: true, w: 1.3 });
           lines.push({ id: 'dy', x1: ptB.x, y1: ptA.y, x2: ptB.x, y2: ptB.y, cls: 'c1', dash: true, w: 1.3 });
@@ -140,14 +149,16 @@
           rows: trs
         };
 
-        const dInfo = useScaled ? (isZ ? R.zD : R.mmD) : R.rawD;
+        const scD = isZ ? R.zD : R.mmD;
         const bars = {
           type: 'bars', slot: 'bottom',
-          title: '#' + R.pA.id + ' 與 #' + R.pB.id + ' 距離平方的特徵貢獻（%）',
+          title: '#' + R.pA.id + ' 與 #' + R.pB.id + ' 距離平方 (d²) 的特徵貢獻率對照（原始 vs ' + newLabel + '）',
           max: 100, digits: 1, unit: '%',
           items: [
-            { id: 'sx', label: '年齡貢獻', value: dInfo.shareX, cls: 'c0' },
-            { id: 'sy', label: '空腹血糖貢獻', value: dInfo.shareY, cls: 'c1' }
+            { id: 'rx', label: '原始：年齡 Δx² 占比', value: R.rawD.shareX, cls: 'c0', dim: useScaled },
+            { id: 'ry', label: '原始：血糖 Δy² 占比', value: R.rawD.shareY, cls: 'c4', dim: useScaled },
+            { id: 'sx', label: newLabel + '：年齡 Δx² 占比', value: useScaled ? scD.shareX : 0, cls: 'c2', hl: useScaled },
+            { id: 'sy', label: newLabel + '：血糖 Δy² 占比', value: useScaled ? scD.shareY : 0, cls: 'good', hl: useScaled }
           ]
         };
         return [main, side, bars];

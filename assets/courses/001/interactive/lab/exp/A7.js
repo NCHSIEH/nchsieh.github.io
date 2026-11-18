@@ -100,6 +100,10 @@
           };
         });
         const lines = [];
+        if (st.showQuartiles) {
+          lines.push({ id: 'q1', x1: AX.x.min, y1: R.q1, x2: AX.x.max, y2: R.q1, cls: 'c2', dash: true, w: 1.4, label: 'Q1=' + f(R.q1, 1) });
+          lines.push({ id: 'q3', x1: AX.x.min, y1: R.q3, x2: AX.x.max, y2: R.q3, cls: 'c2', dash: true, w: 1.4, label: 'Q3=' + f(R.q3, 1) });
+        }
         if (st.showFence) {
           lines.push({ id: 'fhi', x1: AX.x.min, y1: R.hi, x2: AX.x.max, y2: R.hi, cls: 'hl', dash: true, w: 1.8, label: '上圍籬=' + f(R.hi, 1) });
           if (R.lo >= AX.y.min) lines.push({ id: 'flo', x1: AX.x.min, y1: R.lo, x2: AX.x.max, y2: R.lo, cls: 'hl', dash: true, w: 1.5, label: '下圍籬=' + f(R.lo, 1) });
@@ -156,13 +160,14 @@
         return [main, side, bottom];
       }
 
-      const st = { showFence: false, showOrigLine: false, applied: false };
+      const st = { showQuartiles: false, showFence: false, showOrigLine: false, applied: false };
       const add = (line, title, say, calc) => steps.push({ line, title, say, calc: calc || [], views: views(st), focus: [] });
 
       add(0, '題目', '12 位門診病人中有一位血壓高達 ' + M.max(rows.map(r => r.sbp)) + ' mmHg 的極端值，看看它如何嚴重扭曲資料規律。', [
         '將收縮壓由小到大排序共 ' + rows.length + ' 筆'
       ]);
-      add(0, '計算四分位數 Q1 與 Q3', '取第 25 百分位 Q1 與第 75 百分位 Q3，中間 50% 病人的血壓就落在此區間。', [
+      st.showQuartiles = true;
+      add(0, '計算四分位數 Q1 與 Q3', '取第 25 百分位 Q1 與第 75 百分位 Q3（圖中藍虛線），中間 50% 病人的血壓落在此盒狀區間。', [
         'Q1 = ' + f(R.q1, 2) + '，Q3 = ' + f(R.q3, 2)
       ]);
       add(1, '計算四分位距 IQR', 'IQR = Q3 − Q1，用來衡量中間一半資料的分散寬度（不受極端值影響）。', [

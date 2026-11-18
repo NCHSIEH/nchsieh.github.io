@@ -139,6 +139,18 @@
           axes: AX, points, lines, circles: [], regions,
           legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'line', label: '切點' }]
         };
+        const curEdges = [R.mn].concat(st.cuts).concat([R.mx]);
+        const curBins = [];
+        for (let i = 0; i < curEdges.length - 1; i++) {
+          const lo = curEdges[i], hi = curEdges[i + 1];
+          const sub = rows.filter(r => i === 0 ? (r.glu <= hi + 1e-12) : i === curEdges.length - 2 ? (r.glu > lo + 1e-12) : (r.glu > lo + 1e-12 && r.glu <= hi + 1e-12));
+          const pos = sub.filter(r => r.dm === 1).length;
+          curBins.push({
+            idx: i + 1, lo, hi,
+            label: (i === 0 ? '[' : '(') + f(lo, 1) + ', ' + f(hi, 1) + ']',
+            n: sub.length, pos, rate: sub.length ? pos / sub.length : 0
+          });
+        }
         let side;
         if (st.showCands && R.entCands.length) {
           const topC = R.entCands.slice().sort((a, b) => b.gain - a.gain).slice(0, 8);
@@ -149,21 +161,22 @@
           };
         } else {
           side = {
-            type: 'table', slot: 'side', title: '各區間統計',
-            cols: [{ key: 'rng', label: '區間' }, { key: 'n', label: '筆數', num: true, digits: 0 }, { key: 'pos', label: '陽性', num: true, digits: 0 }, { key: 'rt', label: '陽性率', num: true, digits: 2 }],
-            rows: st.showBins ? R.bins.map(b => ({ id: 'b' + b.idx, cells: [b.label, b.n, b.pos, b.rate] })) : []
+            type: 'table', slot: 'side', title: '各區間即時統計（目前 ' + curBins.length + ' 組）',
+            cols: [{ key: 'rng', label: '血糖區間' }, { key: 'n', label: '筆數', num: true, digits: 0 }, { key: 'pos', label: '陽性', num: true, digits: 0 }, { key: 'rt', label: '陽性率', num: true, digits: 2 }],
+            rows: curBins.map((b, bi) => ({ id: 'b' + b.idx, cells: [b.label, b.n, b.pos, b.rate], hl: st.showBins && bi === curBins.length - 1 }))
           };
         }
         const bars = {
           type: 'bars', slot: 'bottom',
-          title: '各區間糖尿病陽性比例',
+          title: '各區間糖尿病陽性比例（隨切點即時拆分）',
           max: 1, digits: 2,
-          items: st.showBins ? R.bins.map(b => ({
+          items: curBins.map(b => ({
             id: 'bb' + b.idx,
-            label: '區間' + b.idx + ' [' + b.label + '] (' + b.n + '人)',
+            label: '區間' + b.idx + ' ' + b.label + ' (' + b.n + '人)',
             value: b.rate,
-            cls: b.n === 0 ? 'c5' : (b.rate >= 0.5 ? 'c1' : 'good')
-          })) : [{ id: 'empty', label: '尚未切分', value: 0, cls: 'c5' }]
+            cls: b.n === 0 ? 'c5' : (b.rate >= 0.5 ? 'c1' : 'good'),
+            hl: st.showBins && b.rate >= 0.5
+          }))
         };
         return [main, side, bars];
       }
