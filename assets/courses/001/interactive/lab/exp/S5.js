@@ -60,52 +60,113 @@
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = R.isLLM ? [
           [
-            { id: 'q', label: '1a. 使用者提問', value: 'Query', shape: 'box', w: 148, cls: clsOf(0), hl: act(0), sub: '問題文本' },
-            { id: 'kb', label: '1b. 知識庫切塊', value: '衛教文件', shape: 'box', w: 148, cls: clsOf(0), hl: act(0), sub: 'H6 依句/依段' }
+            { id: 'q', label: '1a. 使用者提問', value: 'Query 文本', shape: 'box', w: 140, cls: clsOf(0), hl: act(0), sub: '門診/照護問題' },
+            { id: 'kb', label: '1b. 知識庫切塊', value: '衛教文件', shape: 'box', w: 140, cls: clsOf(0), hl: act(0), sub: 'H6 依句/依段切分' }
           ],
           [
-            { id: 'tok', label: '2a. BPE + 嵌入', value: st.stage >= 1 ? 'E + PE' : '切子詞', shape: 'box', w: 150, cls: (act(1) || act(2)) ? 'hl' : (done(2) ? 'good' : 'c5'), hl: act(1) || act(2), sub: 'H1 BPE · H2 位置' },
-            { id: 'vdb', label: '2b. 向量建索引', value: st.stage >= 2 ? 'Chunk 向量' : '離線建庫', shape: 'box', w: 150, cls: clsOf(2), hl: act(2), sub: 'BM25 + 向量庫' }
+            { id: 'tok', label: '2a. BPE 子詞切分', value: st.stage >= 1 ? 'Subwords' : '切子詞', shape: 'box', w: 140, cls: clsOf(1), hl: act(1), sub: 'H1 處理罕見醫療詞' },
+            { id: 'vdb', label: '2b. 離線向量建庫', value: 'Chunk 索引', shape: 'box', w: 140, cls: clsOf(1), hl: act(1), sub: 'BM25 + 向量庫' }
           ],
-          [{ id: 'vec', label: '3. Self-Attention', value: st.stage >= 3 ? 'Q·K·V 融合' : '待運算', shape: 'box', w: 150, cls: clsOf(3), hl: act(3), sub: 'H3/H4 注意力層' }],
-          [{ id: 'rag', label: '4. RAG 檢索組裝', value: st.stage >= 4 ? 'BM25+向量' : '待檢索', shape: 'box', w: 150, cls: clsOf(4), hl: act(4), sub: 'H6 RRF 取 Top-K' }],
-          [{ id: 'gen', label: '5. 解碼生成 / LoRA', value: st.stage >= 5 ? '完成回答' : '待生成', shape: 'box', w: 152, cls: clsOf(5), hl: act(5), sub: 'H5 Top-p · H7 LoRA' }]
+          [
+            { id: 'emb', label: '3a. 詞嵌入+位置', value: st.stage >= 2 ? 'E + PE' : '查表編碼', shape: 'box', w: 140, cls: clsOf(2), hl: act(2), sub: 'H2 正餘弦位置波' },
+            { id: 'qemb', label: '3b. Query 向量化', value: '檢索嵌入', shape: 'box', w: 140, cls: clsOf(2), hl: act(2), sub: '對齊知識庫空間' }
+          ],
+          [
+            { id: 'vec', label: '4a. Self-Attention', value: st.stage >= 3 ? 'Q·Kᵀ/√d' : '待運算', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'H3/H4 因果遮罩+FFN' },
+            { id: 'rag', label: '4b. RRF 混合檢索', value: st.stage >= 4 ? 'Top-K 段落' : '待檢索', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'H6 字面+語意融合' }
+          ],
+          [
+            { id: 'aug', label: '5a. 提示詞組裝', value: '注入證據', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: '防幻覺 Grounding' },
+            { id: 'lora', label: '5b. LoRA 低秩旁路', value: 'ΔW = B·A', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'H7 凍結主幹省顯存' }
+          ],
+          [
+            { id: 'dec', label: '6a. 抽樣解碼策略', value: 'Temp / Top-p', shape: 'box', w: 142, cls: clsOf(5), hl: act(5), sub: 'H5 控制隨機與創意' },
+            { id: 'gen', label: '6b. 附引據回覆', value: st.stage >= 5 ? '完成回答' : '待生成', shape: 'box', w: 142, cls: clsOf(5), hl: act(5), sub: '標註衛教段落來源' }
+          ]
         ] : [
-          [{ id: 'txt', label: '1. 原始文字', value: rows.length + ' 句', shape: 'box', w: 150, cls: clsOf(0), hl: act(0), sub: '清理＋去識別' }],
-          [{ id: 'tok', label: '2. 中文斷詞', value: st.stage >= 1 ? '切詞完成' : '字串', shape: 'box', w: 150, cls: clsOf(1), hl: act(1), sub: 'E1 最大匹配' }],
-          [{ id: 'flt', label: '3. 去停用詞', value: st.stage >= 2 ? '留關鍵詞' : '含虛詞', shape: 'box', w: 150, cls: clsOf(2), hl: act(2), sub: 'E1 刪功能詞' }],
+          [
+            { id: 'txt', label: '1a. 原始護理文字', value: rows.length + ' 句', shape: 'box', w: 140, cls: clsOf(0), hl: act(0), sub: '非結構化自由書寫' },
+            { id: 'pii', label: '1b. 去識別與清理', value: '遮蔽個資', shape: 'box', w: 140, cls: clsOf(0), hl: act(0), sub: '移除姓名/標點雜訊' }
+          ],
+          [
+            { id: 'tok', label: '2a. 中文正向斷詞', value: st.stage >= 1 ? '切詞完成' : '字串', shape: 'box', w: 140, cls: clsOf(1), hl: act(1), sub: 'E1 最大匹配演算法' },
+            { id: 'lex', label: '2b. 醫療領域詞典', value: '保留專有名詞', shape: 'box', w: 140, cls: clsOf(1), hl: act(1), sub: '防拆碎「糖化血色素」' }
+          ],
+          [
+            { id: 'flt', label: '3a. 停用詞過濾', value: st.stage >= 2 ? '刪虛詞' : '含虛詞', shape: 'box', w: 140, cls: clsOf(2), hl: act(2), sub: 'E1 刪除「的/了/病人」' },
+            { id: 'kw', label: '3b. 臨床關鍵詞集', value: '建立詞表 V', shape: 'box', w: 140, cls: clsOf(2), hl: act(2), sub: '保留高資訊量症狀詞' }
+          ],
           R.isEmb
             ? [
-                { id: 'vec', label: '4a. Skip-gram', value: st.stage >= 3 ? '詞向量' : '待訓練', shape: 'box', w: 150, cls: clsOf(3), hl: act(3), sub: 'E3 上下文預測' },
-                { id: 'neg', label: '4b. 負採樣/視窗', value: '降計算量', shape: 'box', w: 150, cls: clsOf(3), hl: act(3), sub: '滑動視窗 C=2' }
+                { id: 'win', label: '4a. 滑動上下文窗', value: '視窗 C=2', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '收集鄰近共現詞對' },
+                { id: 'neg', label: '4b. 負採樣配對', value: '對比非鄰居', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '大幅降低訓練計算量' }
               ]
-            : [{ id: 'vec', label: '4. TF-IDF 矩陣', value: st.stage >= 3 ? '向量化' : '待轉換', shape: 'box', w: 150, cls: clsOf(3), hl: act(3), sub: 'E1 詞頻加權' }],
-          R.isEmb
-            ? [{ id: 'app', label: '5. 語意檢索/分類', value: st.stage >= 4 ? '完成' : '待推論', shape: 'box', w: 152, cls: clsOf(4), hl: act(4), sub: '餘弦相似詞' }]
             : [
-                { id: 'app1', label: '5a. 文本分類', value: '跌倒/痛/傷口', shape: 'box', w: 150, cls: clsOf(4), hl: act(4), sub: 'E2 Naive Bayes' },
-                { id: 'app2', label: '5b. 主題探勘', value: '隱含主題', shape: 'box', w: 150, cls: clsOf(4), hl: act(4), sub: 'E4 LDA 主題模型' }
+                { id: 'tf', label: '4a. TF 詞頻統計', value: '單句出現次數', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '衡量句內重要度' },
+                { id: 'idf', label: '4b. IDF 逆文件權重', value: 'log(N / df)', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '壓低跨篇常見詞' }
+              ],
+          R.isEmb
+            ? [
+                { id: 'vec', label: '5a. Skip-gram 預測', value: st.stage >= 3 ? '中心猜上下文' : '待訓練', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'E3 學習語意鄰近性' },
+                { id: 'dns', label: '5b. 稠密詞向量表', value: '低維連續空間', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: '同義詞餘弦距離近' }
+              ]
+            : [
+                { id: 'vec', label: '5a. TF-IDF 矩陣', value: st.stage >= 3 ? 'TF × IDF' : '待轉換', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'E1 高維稀疏權重' },
+                { id: 'nrm', label: '5b. L2 長度正規化', value: '消除長短句偏誤', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: '便於算餘弦相似度' }
+              ],
+          R.isEmb
+            ? [
+                { id: 'app', label: '6a. 同義語意檢索', value: st.stage >= 4 ? '餘弦相似詞' : '待推論', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: '頭暈 ↔ 眩暈自動關聯' },
+                { id: 'clf', label: '6b. 句向量分類', value: '平均池化送分類', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: '支援下游風險預測' }
+              ]
+            : [
+                { id: 'app1', label: '6a. 文本事件分類', value: '跌倒/痛/傷口', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'E2 單純貝氏 + 拉普拉斯' },
+                { id: 'app2', label: '6b. 無監督主題探勘', value: '挖掘潛在主題', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'E4 LDA 文件-主題分布' }
               ]
         ];
         const edges = R.isLLM ? [
-          { from: 'q', to: 'tok', active: st.stage === 1 || st.stage === 2, cls: done(0) ? 'good' : 'c5' },
-          { from: 'kb', to: 'vdb', active: st.stage === 2, cls: done(0) ? 'c2' : 'c5', label: '切塊建庫' },
-          { from: 'vdb', to: 'rag', active: st.stage === 4, cls: done(2) ? 'c2' : 'c5', label: '混合檢索' },
-          { from: 'tok', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'vec', to: 'rag', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
-          { from: 'rag', to: 'gen', active: st.stage === 4 || st.stage === 5, cls: done(3) ? 'good' : 'c5' }
+          { from: 'q', to: 'tok', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'kb', to: 'vdb', active: st.stage === 1, cls: done(0) ? 'c2' : 'c5' },
+          { from: 'tok', to: 'emb', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'vdb', to: 'qemb', active: st.stage === 2, cls: done(1) ? 'c2' : 'c5' },
+          { from: 'emb', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'qemb', to: 'rag', active: st.stage === 4, cls: done(2) ? 'c2' : 'c5', label: '混合檢索' },
+          { from: 'vec', to: 'aug', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'rag', to: 'aug', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'vec', to: 'lora', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'aug', to: 'dec', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'aug', to: 'gen', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'lora', to: 'gen', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
         ] : [
           { from: 'txt', to: 'tok', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'pii', to: 'lex', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'tok', to: 'flt', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'flt', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'lex', to: 'kw', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           ...(R.isEmb
-            ? [{ from: 'flt', to: 'neg', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' }, { from: 'vec', to: 'app', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }, { from: 'neg', to: 'app', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }]
-            : [{ from: 'vec', to: 'app1', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }, { from: 'vec', to: 'app2', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }])
+            ? [
+                { from: 'flt', to: 'win', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'kw', to: 'neg', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'win', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'neg', to: 'dns', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'vec', to: 'app', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+                { from: 'dns', to: 'clf', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+              ]
+            : [
+                { from: 'flt', to: 'tf', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'kw', to: 'idf', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'tf', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'idf', to: 'vec', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'idf', to: 'nrm', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+                { from: 'vec', to: 'app1', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+                { from: 'nrm', to: 'app2', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+              ])
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1500, h: 215,
+          type: 'network', slot: 'main', w: 1500, h: 230,
           title: 'NLP 文字處理全流程圖（' + (R.isLLM ? '現代 LLM＋RAG' : R.isEmb ? 'Word2Vec 詞向量' : '傳統 TF-IDF') + '）',
-          layerLabels: ['1. 原文', '2. 切分', '3. 精煉', '4. 表示/運算', '5. 應用'],
+          layerLabels: R.isLLM
+            ? ['1. 提問與知識庫', '2. 子詞與索引', '3. 嵌入與位置', '4. 注意力與檢索', '5. 組裝與微調', '6. 解碼與生成']
+            : ['1. 清理去識別', '2. 斷詞與詞典', '3. 停用詞過濾', '4. 詞頻/視窗統計', '5. 向量表徵', '6. 下游任務應用'],
           layers, edges
         };
         const toksShow = st.stage === 0

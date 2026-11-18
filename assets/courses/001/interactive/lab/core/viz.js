@@ -265,7 +265,9 @@
       join(gE, mE, (sp.edges || []).map(e => Object.assign({ id: e.from + '>' + e.to }, e)), () => { const g = S('g'); g.__l = S('line', null, g); g.__f = S('line', { class: 'flow' }, g); g.__bw = S('rect', { class: 'lb', rx: 4 }, g); g.__w = S('text', { class: 'wl', 'text-anchor': 'middle' }, g); g.__bg = S('rect', { class: 'lb gb', rx: 4 }, g); g.__g = S('text', { class: 'gl', 'text-anchor': 'middle' }, g); return g; }, (g, e, a, i) => {
         const p = pos[e.from], q = pos[e.to]; if (!p || !q) return;
         setCls(g, 'lv-wire' + (e.back ? ' back' : '') + (e.w != null && e.w < 0 ? ' neg' : ''), { cls: e.cls, hl: e.hl, dim: e.dim, active: e.active });
-        const dx = q.x - p.x, dy = q.y - p.y, len = Math.sqrt(dx * dx + dy * dy) || 1, ra = hwOf(p.n), rb = hwOf(q.n), x1 = p.x + dx / len * ra, y1 = p.y + dy / len * (p.n.shape === 'box' ? 21 : ra), x2 = q.x - dx / len * rb, y2 = q.y - dy / len * (q.n.shape === 'box' ? 21 : rb);
+        const dx = q.x - p.x, dy = q.y - p.y, len = Math.sqrt(dx * dx + dy * dy) || 1, ra = hwOf(p.n), rb = hwOf(q.n);
+        let x1 = p.x + dx / len * ra, y1 = p.y + dy / len * (p.n.shape === 'box' ? 21 : ra), x2 = q.x - dx / len * rb, y2 = q.y - dy / len * (q.n.shape === 'box' ? 21 : rb);
+        if (e.back && Math.abs(dy) < 18) { y1 += 14; y2 += 14; }
         const c = { x1, y1, x2, y2 }; tw(g.__l, c, a); tw(g.__f, c, a); g.__l.style.strokeWidth = (e.w == null ? 1.6 : 1.2 + 3.6 * Math.abs(e.w) / wmax).toFixed(2);
         const place = (t, bg, s, f) => { t.textContent = s; const show = s !== ''; t.style.display = bg.style.display = show ? '' : 'none'; if (!show) return; const x = x1 + (x2 - x1) * f, y = y1 + (y2 - y1) * f, w = s.length * 7.4 + 10; tw(t, { x, y: y + 4.5 }, a); tw(bg, { x: x - w / 2, y: y - 9, width: w, height: 18 }, a); };
         place(g.__w, g.__bw, e.label != null ? txt(e.label) : e.w != null ? LAB.f(e.w, sp.digits == null ? 2 : sp.digits) : '', e.at || 0.3);

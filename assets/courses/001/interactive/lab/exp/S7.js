@@ -59,41 +59,47 @@
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
           [
-            { id: 'tx', label: '1a. 處方交易籃', value: R.nTx + ' 張處方', shape: 'box', w: 154, cls: clsOf(0), hl: act(0), sub: 'Basket 格式' },
-            { id: 'cln', label: '1b. 項目正規化', value: '無標籤 y', shape: 'box', w: 154, cls: clsOf(0), hl: act(0), sub: '去重複藥品項' }
+            { id: 'tx', label: '1a. 處方交易籃', value: R.nTx + ' 張處方', shape: 'box', w: 142, cls: clsOf(0), hl: act(0), sub: 'Basket 集合格式' },
+            { id: 'cln', label: '1b. 項目去重正規', value: '無目標 y', shape: 'box', w: 142, cls: clsOf(0), hl: act(0), sub: '同處方藥品不重複計' }
           ],
           [
-            { id: 'sup', label: '2a. 算 Support', value: '出現比例', shape: 'box', w: 154, cls: clsOf(1), hl: act(1), sub: 'P(A) 單項支持度' },
-            { id: 'flt', label: '2b. min_sup 剪枝', value: 'sup ≥ 0.25', shape: 'box', w: 154, cls: clsOf(1), hl: act(1), sub: '刪罕見項目防爆炸' }
+            { id: 'sup', label: '2a. 保留頻繁單項', value: 'sup ≥ 0.25', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: '滿足最小支持度 L₁' },
+            { id: 'flt', label: '2b. 剪除罕見單項', value: 'sup < 0.25', shape: 'box', w: 142, cls: st.stage >= 1 ? 'c4' : 'c5', hl: act(1), sub: '防後續組合指數爆炸' }
           ],
           [
-            { id: 'ap', label: '3a. Apriori 剪枝', value: !R.isFp && st.stage >= 2 ? 'Ck → Lk' : '逐層產生', shape: 'box', w: 154, cls: !R.isFp ? clsOf(2) : 'c5', hl: !R.isFp && act(2), dim: R.isFp, sub: 'D1 子集不頻繁即剪' },
-            { id: 'fp', label: '3b. FP-Growth 樹', value: R.isFp && st.stage >= 2 ? '掃描 2 次' : '前綴樹壓縮', shape: 'box', w: 154, cls: R.isFp ? clsOf(2) : 'c5', hl: R.isFp && act(2), dim: !R.isFp, sub: 'D2 免生龐大候選集' }
+            { id: 'ap', label: '3a. Apriori 逐層', value: !R.isFp && st.stage >= 2 ? 'C₂→L₂→L₃' : '候選剪枝', shape: 'box', w: 142, cls: !R.isFp ? clsOf(2) : 'c5', hl: !R.isFp && act(2), dim: R.isFp, sub: 'D1 子集不頻繁即剪' },
+            { id: 'fp', label: '3b. FP-Growth 樹', value: R.isFp && st.stage >= 2 ? '只掃 2 次' : '前綴樹壓縮', shape: 'box', w: 142, cls: R.isFp ? clsOf(2) : 'c5', hl: R.isFp && act(2), dim: !R.isFp, sub: 'D2 免生龐大候選集' }
           ],
           [
-            { id: 'rule', label: '4a. 拆解 A → B', value: '條件機率', shape: 'box', w: 154, cls: clsOf(3), hl: act(3), sub: '列舉前提與推論' },
-            { id: 'conf', label: '4b. Conf 過濾', value: 'conf ≥ 0.60', shape: 'box', w: 154, cls: clsOf(3), hl: act(3), sub: 'P(B | A) ≥ 門檻' }
+            { id: 'freq', label: '4a. 頻繁項目集 Lk', value: '共現藥品組', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: '兩演算法結果完全相同' },
+            { id: 'rule', label: '4b. 拆解規則 A→B', value: '枚舉前提/結果', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: '雙向不對稱條件機率' }
           ],
           [
-            { id: 'lift', label: '5a. Lift 驗收', value: st.stage >= 4 ? 'Lift=' + R.topLift : '算增益度', shape: 'box', w: 154, cls: clsOf(4), hl: act(4), sub: 'Conf ÷ Sup(B) > 1' },
-            { id: 'drop', label: '5b. 剔除假關聯', value: 'Lift ≤ 1 捨棄', shape: 'box', w: 154, cls: st.stage >= 4 ? 'bad' : 'c5', hl: act(4), sub: '避免高頻藥品誤判' }
+            { id: 'conf', label: '5a. 信賴度達標', value: 'conf ≥ 0.60', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'P(B|A) = Sup(AB)/Sup(A)' },
+            { id: 'wkr', label: '5b. 剔除低信賴規則', value: 'conf < 0.60', shape: 'box', w: 142, cls: st.stage >= 3 ? 'c4' : 'c5', hl: act(3), sub: '條件機率過低不採納' }
+          ],
+          [
+            { id: 'lift', label: '6a. Lift > 1 真關聯', value: st.stage >= 4 ? 'Lift=' + R.topLift : '算增益度', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'Conf ÷ Sup(B) 正相關' },
+            { id: 'drop', label: '6b. 剔除 Lift ≤ 1', value: '獨立或互斥', shape: 'box', w: 142, cls: st.stage >= 4 ? 'bad' : 'c5', hl: act(4), sub: '破除熱門藥品假關聯' }
           ]
         ];
         const activeMine = R.isFp ? 'fp' : 'ap';
         const edges = [
           { from: 'tx', to: 'sup', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'cln', to: 'sup', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'sup', to: 'flt', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'flt', to: activeMine, active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: R.isFp ? '建樹壓縮' : '逐層擴展' },
+          { from: 'cln', to: 'flt', active: st.stage === 1, cls: done(0) ? 'c4' : 'c5' },
+          { from: 'sup', to: activeMine, active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: activeMine, to: 'freq', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: activeMine, to: 'rule', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'freq', to: 'conf', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
           { from: 'rule', to: 'conf', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'rule', to: 'wkr', active: st.stage === 3, cls: done(2) ? 'c4' : 'c5' },
           { from: 'conf', to: 'lift', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
           { from: 'conf', to: 'drop', active: st.stage === 4, cls: st.stage >= 4 ? 'bad' : 'c5' }
         ];
         const main = {
           type: 'network', slot: 'main', w: 1480, h: 225,
           title: '關聯規則探勘全流程圖（' + (R.isFp ? 'FP-Growth 管線' : 'Apriori 管線') + '）',
-          layerLabels: ['1. 交易籃', '2. 支持度', '3. 頻繁集', '4. 信賴度', '5. Lift 篩選'],
+          layerLabels: ['1. 交易籃整理', '2. 支持度剪枝', '3. 頻繁集演算法', '4. 規則拆解', '5. 信賴度過濾', '6. Lift 增益驗收'],
           layers, edges
         };
         const side = {

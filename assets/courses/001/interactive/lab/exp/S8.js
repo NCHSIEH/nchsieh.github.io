@@ -59,39 +59,47 @@
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
           [
-            { id: 'mod', label: '1a. 驗收後模型', value: '已通過 S2', shape: 'box', w: 154, cls: clsOf(0), hl: act(0), sub: 'B7/B9/B12/NN' },
-            { id: 'base', label: '1b. 基準特徵分布', value: 'PSI 基準線', shape: 'box', w: 154, cls: R.isOps ? clsOf(0) : 'c5', hl: act(0), dim: !R.isOps, sub: '存訓練期分布快照' }
+            { id: 'mod', label: '1a. 驗收後模型', value: '已通過 S2', shape: 'box', w: 142, cls: clsOf(0), hl: act(0), sub: 'B7/B9/B12/NN' },
+            { id: 'base', label: '1b. 基準特徵分布', value: 'PSI 基準線', shape: 'box', w: 142, cls: R.isOps ? clsOf(0) : 'c5', hl: act(0), dim: !R.isOps, sub: '存訓練期分布快照' }
           ],
           [
-            { id: 'glb', label: '2a. 全域重要度', value: st.stage >= 1 ? '血糖最關鍵' : '待分析', shape: 'box', w: 154, cls: clsOf(1), hl: act(1), sub: 'I1 Permutation' },
-            { id: 'loc', label: '2b. 單筆 SHAP', value: st.stage >= 2 ? 'φ=+' + f(R.topShap, 2) : '待歸因', shape: 'box', w: 154, cls: clsOf(2), hl: act(2), sub: 'I1 個別病人瀑布圖' }
+            { id: 'glb', label: '2a. 全域排列重要度', value: st.stage >= 1 ? '血糖最關鍵' : '待分析', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: 'I1 打亂欄位看掉分' },
+            { id: 'leak', label: '2b. 假線索稽核', value: '排除洩漏欄', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: '防學到病床號等雜訊' }
           ],
           [
-            { id: 'cal', label: '3a. 機率校準', value: st.stage >= 3 ? '對齊真實風險' : '校準檢查', shape: 'box', w: 154, cls: clsOf(3), hl: act(3), sub: '確保輸出機率可信' },
-            { id: 'thr', label: '3b. 門檻校正', value: st.stage >= 3 ? 'p ≥ ' + f(R.optTh, 2) : '預設 0.50', shape: 'box', w: 154, cls: clsOf(3), hl: act(3), sub: 'B16 醫療成本權衡' }
+            { id: 'loc', label: '3a. 單筆 SHAP 瀑布', value: st.stage >= 2 ? 'φ=+' + f(R.topShap, 2) : '待歸因', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'I1 基準值+各特徵貢獻' },
+            { id: 'rsn', label: '3b. 臨床理由摘要', value: '呈現正負因子', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: '供醫師向病人溝通' }
           ],
-          [{ id: 'ops', label: '4. 臨床警示上線', value: st.stage >= 4 ? '醫師覆核把關' : '待部署', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: '人機協作輔助決策' }],
           [
-            { id: 'psi', label: '5a. 分布飄移監控', value: st.stage >= 4 && R.isOps ? 'PSI 偵測中' : '定期稽核', shape: 'box', w: 154, cls: R.isOps ? clsOf(4) : 'c5', hl: act(4) && R.isOps, dim: !R.isOps, sub: '抓群體/季節變化' },
-            { id: 'ret', label: '5b. 觸發滾動重訓', value: st.stage >= 4 && R.isOps ? 'G3 回流更新' : '人工回饋', shape: 'box', w: 154, cls: clsOf(4), hl: act(4), sub: R.isOps ? '衰退即重訓部署' : '收集醫師標註回饋' }
+            { id: 'cal', label: '4a. 預測機率校準', value: st.stage >= 3 ? '對齊真實率' : '校準檢查', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: '確保 p=0.8 即 80% 風險' },
+            { id: 'thr', label: '4b. 醫療成本切點', value: st.stage >= 3 ? 'p ≥ ' + f(R.optTh, 2) : '預設 0.50', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'B16 篩檢下修門檻防漏診' }
+          ],
+          [
+            { id: 'ops', label: '5a. 診間預警上線', value: st.stage >= 4 ? '即時推論' : '待部署', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'HIS/EMR 系統串接' },
+            { id: 'hitl', label: '5b. 醫師覆核把關', value: '人機協作', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: '收集臨床處置回饋' }
+          ],
+          [
+            { id: 'psi', label: '6a. PSI 分布飄移', value: st.stage >= 4 && R.isOps ? '監控輸入變化' : '定期稽核', shape: 'box', w: 142, cls: R.isOps ? clsOf(4) : 'c5', hl: act(4) && R.isOps, dim: !R.isOps, sub: '抓季節/人口結構改變' },
+            { id: 'ret', label: '6b. 滾動重訓閉環', value: st.stage >= 4 && R.isOps ? 'G3 觸發重訓' : '版本更新', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: '效能衰退即回流更新' }
           ]
         ];
         const edges = [
           { from: 'mod', to: 'glb', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'mod', to: 'loc', active: st.stage === 2, cls: done(0) ? 'good' : 'c5' },
-          { from: 'glb', to: 'cal', active: st.stage === 3, cls: done(1) ? 'good' : 'c5' },
-          { from: 'loc', to: 'thr', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'mod', to: 'leak', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'glb', to: 'loc', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'leak', to: 'rsn', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'loc', to: 'cal', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'rsn', to: 'thr', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
           { from: 'cal', to: 'ops', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
-          { from: 'thr', to: 'ops', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
-          { from: 'base', to: 'psi', active: st.stage === 4 && R.isOps, dim: !R.isOps, cls: done(0) ? 'c2' : 'c5', label: '對比線上分布' },
+          { from: 'thr', to: 'hitl', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
           { from: 'ops', to: 'psi', active: st.stage === 4 && R.isOps, dim: !R.isOps, cls: done(3) ? 'good' : 'c5' },
-          { from: 'ops', to: 'ret', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
-          { from: 'ret', to: 'mod', active: st.stage === 4 && R.isOps, back: true, cls: 'c3', label: '飄移重訓' }
+          { from: 'hitl', to: 'ret', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'ret', to: 'base', active: st.stage === 4 && R.isOps, back: true, cls: 'c3', label: '飄移回流重訓' }
         ];
         const main = {
           type: 'network', slot: 'main', w: 1480, h: 225,
           title: '模型落地與監控全流程圖（' + (R.isOps ? 'MLOps 監控重訓' : 'XAI 解釋與校正') + '）',
-          layerLabels: ['1. 模型', '2. 全域解釋', '3. 單筆歸因', '4. 門檻校正', '5. 監控閉環'],
+          layerLabels: ['1. 模型與基準', '2. 全域可解釋性', '3. 單筆臨床歸因', '4. 校準與門檻', '5. 臨床部署把關', '6. 飄移監控閉環'],
           layers, edges
         };
         const th = st.stage >= 3 ? R.optTh : 0.50;

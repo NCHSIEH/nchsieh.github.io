@@ -86,29 +86,54 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = isCnn ? [
-          [{ id: 'n0', label: '6×6 影像', value: '資料增強', shape: 'box', w: 120, cls: clsOf(0), hl: act(0), sub: '翻轉/縮放' }],
           [
-            { id: 'n1a', label: '卷積核 1', value: '邊緣特徵', shape: 'box', w: 125, cls: clsOf(1), hl: act(1), sub: 'F3 3×3 Conv' },
-            { id: 'n1b', label: '卷積核 2', value: '紋理特徵', shape: 'box', w: 125, cls: clsOf(1), hl: act(1), sub: 'ReLU 去負值' }
+            { id: 'n0a', label: '1a. 6×6 醫療影像', value: '像素矩陣', shape: 'box', w: 134, cls: clsOf(0), hl: act(0), sub: '正規化 0–1' },
+            { id: 'n0b', label: '1b. 資料增強', value: '翻轉/旋轉', shape: 'box', w: 134, cls: clsOf(0), hl: act(0), sub: '擴充少數病灶' }
           ],
-          [{ id: 'n2', label: '2×2 池化', value: '降維濃縮', shape: 'box', w: 125, cls: clsOf(2), hl: act(2), sub: 'Max / Avg Pool' }],
-          [{ id: 'n3', label: '攤平分類頭', value: st.stage >= 3 ? '反向更新核' : 'Dense 層', shape: 'box', w: 135, cls: act(3) ? 'c3' : clsOf(2), hl: act(3), sub: 'F1+F2 Adam' }],
-          [{ id: 'n4', label: '預測＋熱圖', value: st.stage >= 5 ? 'Ep=' + R.bestEp : '監控中', shape: 'box', w: 135, cls: clsOf(5), hl: act(5), sub: 'Grad-CAM 早停' }]
+          [
+            { id: 'n1a', label: '2a. 3×3 卷積核 1', value: '邊緣特徵圖', shape: 'box', w: 134, cls: clsOf(1), hl: act(1), sub: 'F3 局部權重共享' },
+            { id: 'n1b', label: '2b. 3×3 卷積核 2', value: '紋理特徵圖', shape: 'box', w: 134, cls: clsOf(1), hl: act(1), sub: 'ReLU 激活去負值' }
+          ],
+          [
+            { id: 'n2a', label: '3a. 2×2 MaxPool', value: '保留極大值', shape: 'box', w: 134, cls: clsOf(2), hl: act(2), sub: 'F3 空間降維濃縮' },
+            { id: 'n2b', label: '3b. 平移不變性', value: '抗微小位移', shape: 'box', w: 134, cls: clsOf(2), hl: act(2), sub: '減少參數量防過擬合' }
+          ],
+          [
+            { id: 'flt', label: '4a. Flatten 攤平', value: '轉一維向量', shape: 'box', w: 134, cls: clsOf(2), hl: act(2), sub: '銜接全連接層' },
+            { id: 'dns', label: '4b. Dense+Softmax', value: '病灶機率 ŷ', shape: 'box', w: 134, cls: clsOf(2), hl: act(2), sub: '分類頭輸出' }
+          ],
+          [
+            { id: 'n3a', label: '5a. 交叉熵 Loss', value: st.stage >= 3 ? '計算誤差' : '−Σy log ŷ', shape: 'box', w: 136, cls: act(3) ? 'c3' : clsOf(3), hl: act(3), sub: '衡量預測偏離' },
+            { id: 'n3b', label: '5b. Adam 反向更新', value: st.stage >= 3 ? '∂L/∂Kernel' : 'F1+F2', shape: 'box', w: 136, cls: act(3) || act(4) ? 'c3' : clsOf(4), hl: act(3) || act(4), sub: '更新卷積核權重' }
+          ],
+          [
+            { id: 'n4a', label: '6a. Early Stop', value: st.stage >= 5 ? 'Ep=' + R.bestEp : '監控 Val', shape: 'box', w: 136, cls: clsOf(5), hl: act(5), sub: 'Val Loss 最低存檔' },
+            { id: 'n4b', label: '6b. Grad-CAM 熱圖', value: '標出病灶區', shape: 'box', w: 136, cls: clsOf(5), hl: act(5), sub: '確認未看假標記' }
+          ]
         ] : isLstm ? [
           [
-            { id: 'x1', label: '輸入 x₁', shape: 'circle', cls: clsOf(0), hl: act(0) },
-            { id: 'h1', label: 'LSTM 記憶₁', value: 'f₁·i₁·o₁', shape: 'box', w: 130, cls: clsOf(1), hl: act(1), sub: 't = 1' }
+            { id: 'w0', label: '1a. 序列切窗', value: '長度 T=3', shape: 'box', w: 132, cls: clsOf(0), hl: act(0), sub: '嚴格時間先後' },
+            { id: 's0', label: '1b. 訓練段縮放', value: 'A2 標準化', shape: 'box', w: 132, cls: clsOf(0), hl: act(0), sub: '防未來資訊洩漏' }
           ],
           [
-            { id: 'x2', label: '輸入 x₂', shape: 'circle', cls: clsOf(0), hl: act(0) },
-            { id: 'h2', label: 'LSTM 記憶₂', value: 'f₂·i₂·o₂', shape: 'box', w: 130, cls: clsOf(1), hl: act(1), sub: 't = 2 (F4)' }
+            { id: 'x1', label: '輸入 x₁', shape: 'circle', cls: clsOf(1), hl: act(1) },
+            { id: 'h1', label: 'LSTM 記憶₁', value: 'f₁·i₁·o₁', shape: 'box', w: 130, cls: clsOf(1), hl: act(1), sub: 't=1 寫入 c₁' }
           ],
           [
-            { id: 'x3', label: '輸入 x₃', shape: 'circle', cls: clsOf(0), hl: act(0) },
-            { id: 'h3', label: 'LSTM 記憶₃', value: 'c₃ 傳遞', shape: 'box', w: 130, cls: clsOf(2), hl: act(2) || act(3), sub: 'BPTT 裁剪' }
+            { id: 'x2', label: '輸入 x₂', shape: 'circle', cls: clsOf(1), hl: act(1) },
+            { id: 'h2', label: 'LSTM 記憶₂', value: 'f₂·i₂·o₂', shape: 'box', w: 130, cls: clsOf(1), hl: act(1), sub: 't=2 遺忘與更新(F4)' }
           ],
           [
-            { id: 'n4', label: '序列預測 ŷ', value: st.stage >= 5 ? 'Ep=' + R.bestEp : 'G3 早停', shape: 'box', w: 135, cls: clsOf(5), hl: act(5), sub: '滾動驗證' }
+            { id: 'x3', label: '輸入 x₃', shape: 'circle', cls: clsOf(2), hl: act(2) },
+            { id: 'h3', label: 'LSTM 記憶₃', value: 'c₃→h₃ 輸出', shape: 'box', w: 130, cls: clsOf(2), hl: act(2), sub: 't=3 濃縮序列趨勢' }
+          ],
+          [
+            { id: 'bpt', label: '5a. BPTT 跨時反向', value: '沿時間軸傳遞', shape: 'box', w: 136, cls: act(3) || act(4) ? 'c3' : clsOf(3), hl: act(3) || act(4), sub: 'F1+F2 Adam 更新閘門' },
+            { id: 'clp', label: '5b. 梯度裁剪', value: 'Clip Norm', shape: 'box', w: 136, cls: act(3) || act(4) ? 'c3' : clsOf(4), hl: act(3) || act(4), sub: '防長序列梯度爆炸' }
+          ],
+          [
+            { id: 'n4', label: '6a. 滾動驗證早停', value: st.stage >= 5 ? 'Ep=' + R.bestEp : 'G3 監控', shape: 'box', w: 136, cls: clsOf(5), hl: act(5), sub: '前瞻 Val Loss 最低' },
+            { id: 'fc', label: '6b. 未來趨勢預測', value: '輸出 ŷ_{t+1}', shape: 'box', w: 136, cls: clsOf(5), hl: act(5), sub: '重症生理預警' }
           ]
         ] : isAe ? [
           [
@@ -116,14 +141,24 @@
             { id: 'x1', label: '血糖', shape: 'circle', cls: clsOf(0), hl: act(0) },
             { id: 'x2', label: '血壓', shape: 'circle', cls: clsOf(0), hl: act(0) }
           ],
-          [{ id: 'z', label: '瓶頸 z (1維)', value: st.stage >= 1 ? '強迫壓縮' : '待壓縮', shape: 'box', w: 135, cls: clsOf(1), hl: act(1), sub: 'F5 編碼器' }],
+          [
+            { id: 'e0', label: '編碼 e₁', shape: 'circle', cls: clsOf(1), hl: act(1) },
+            { id: 'e1', label: '編碼 e₂', shape: 'circle', cls: clsOf(1), hl: act(1) }
+          ],
+          [{ id: 'z', label: '瓶頸 z (1維)', value: st.stage >= 1 ? '強迫壓縮' : '待壓縮', shape: 'box', w: 134, cls: clsOf(1), hl: act(1), sub: 'F5 只留正常規律' }],
           [
             { id: 'y0', label: '重建 x̂₀', shape: 'circle', cls: clsOf(2), hl: act(2) },
             { id: 'y1', label: '重建 x̂₁', shape: 'circle', cls: clsOf(2), hl: act(2) },
             { id: 'y2', label: '重建 x̂₂', shape: 'circle', cls: clsOf(2), hl: act(2) }
           ],
-          [{ id: 'n3', label: '重建 MSE', value: st.stage >= 3 ? '壓低正常誤差' : '‖x−x̂‖²', shape: 'box', w: 140, cls: act(3) ? 'c3' : clsOf(3), hl: act(3), sub: 'F2 Adam' }],
-          [{ id: 'n4', label: '異常門檻', value: st.stage >= 5 ? '高誤差＝異常' : '待設定', shape: 'box', w: 140, cls: clsOf(5), hl: act(5), sub: 'F5 無監督' }]
+          [
+            { id: 'n3', label: '5a. 重建 MSE', value: st.stage >= 3 ? '‖x−x̂‖²' : '算還原差', shape: 'box', w: 136, cls: act(3) ? 'c3' : clsOf(3), hl: act(3), sub: '無須人工標籤 y' },
+            { id: 'upd', label: '5b. Adam 更新', value: '壓低正常誤差', shape: 'box', w: 136, cls: act(3) || act(4) ? 'c3' : clsOf(4), hl: act(3) || act(4), sub: 'F1+F2 雙向更新' }
+          ],
+          [
+            { id: 'n4', label: '6a. 誤差門檻設定', value: st.stage >= 5 ? '95% 分位切點' : '待設定', shape: 'box', w: 138, cls: clsOf(5), hl: act(5), sub: '正常樣本誤差小' },
+            { id: 'alm', label: '6b. 異常樣本告警', value: '高誤差＝異常', shape: 'box', w: 138, cls: clsOf(5), hl: act(5), sub: '罕見病況無法還原' }
+          ]
         ] : [
           [
             { id: 'x0', label: '年齡', shape: 'circle', cls: clsOf(0), hl: act(0) },
@@ -136,39 +171,62 @@
             { id: 'h2', label: '隱藏 h₃', shape: 'circle', cls: clsOf(1), hl: act(1) }
           ],
           [
+            { id: 'd0', label: 'ReLU+Drop₁', shape: 'circle', cls: clsOf(1), hl: act(1) },
+            { id: 'd1', label: 'ReLU+Drop₂', shape: 'circle', cls: clsOf(1), hl: act(1) }
+          ],
+          [
             { id: 'o0', label: '輸出 ŷ', shape: 'circle', cls: clsOf(2), hl: act(2) }
           ],
-          [{ id: 'n3', label: 'Loss＋反向', value: st.stage >= 3 ? '∂L/∂W' : '交叉熵', shape: 'box', w: 135, cls: act(3) ? 'c3' : clsOf(3), hl: act(3), sub: 'F1+F2 Adam' }],
-          [{ id: 'n4', label: '早停部署', value: st.stage >= 5 ? 'Ep=' + R.bestEp : '監控中', shape: 'box', w: 135, cls: clsOf(5), hl: act(5), sub: 'Val 最低存檔' }]
+          [
+            { id: 'n3', label: '5a. 交叉熵 Loss', value: st.stage >= 3 ? '算預測誤差' : 'L(y, ŷ)', shape: 'box', w: 136, cls: act(3) ? 'c3' : clsOf(3), hl: act(3), sub: '前向傳播終點' },
+            { id: 'bkp', label: '5b. 反向傳播+Adam', value: st.stage >= 3 ? '∂L/∂W 更新' : 'F1+F2', shape: 'box', w: 136, cls: act(3) || act(4) ? 'c3' : clsOf(4), hl: act(3) || act(4), sub: '連鎖律逐層求梯度' }
+          ],
+          [
+            { id: 'n4', label: '6a. Early Stop', value: st.stage >= 5 ? 'Ep=' + R.bestEp : '監控中', shape: 'box', w: 136, cls: clsOf(5), hl: act(5), sub: 'Val Loss 最低存檔' },
+            { id: 'dep', label: '6b. 權重凍結部署', value: '防過擬合反彈', shape: 'box', w: 136, cls: clsOf(5), hl: act(5), sub: '輸出最終預測模型' }
+          ]
         ];
         const edges = isCnn ? [
-          { from: 'n0', to: 'n1a', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'n0', to: 'n1b', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'n1a', to: 'n2', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'n1b', to: 'n2', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'n2', to: 'n3', active: st.stage === 2 || st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'n3', to: 'n1a', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: '更新卷積核' },
-          { from: 'n3', to: 'n4', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
+          { from: 'n0a', to: 'n1a', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'n0b', to: 'n1b', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'n1a', to: 'n2a', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n1b', to: 'n2b', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n2a', to: 'flt', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n2b', to: 'dns', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'flt', to: 'n3a', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'dns', to: 'n3b', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'n3b', to: 'n1b', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: '更新卷積核' },
+          { from: 'n3a', to: 'n4a', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'n3b', to: 'n4b', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
         ] : isLstm ? [
-          { from: 'x1', to: 'h1', active: st.stage === 0 || st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'x2', to: 'h2', active: st.stage === 0 || st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'x3', to: 'h3', active: st.stage === 0 || st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'w0', to: 'x1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 's0', to: 'h1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'x1', to: 'h1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'x2', to: 'h2', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'x3', to: 'h3', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'h1', to: 'h2', active: st.stage === 1 || st.stage === 2, cls: done(1) ? 'good' : 'c5', label: 'c₁,h₁' },
           { from: 'h2', to: 'h3', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: 'c₂,h₂' },
-          { from: 'h3', to: 'h1', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: 'BPTT 反向' },
-          { from: 'h3', to: 'n4', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
+          { from: 'h3', to: 'bpt', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'h3', to: 'clp', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'clp', to: 'h2', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: 'BPTT 反向' },
+          { from: 'bpt', to: 'n4', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'clp', to: 'fc', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
         ] : isAe ? [
-          { from: 'x0', to: 'z', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'x1', to: 'z', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'x2', to: 'z', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'x0', to: 'e0', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'x1', to: 'e0', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'x1', to: 'e1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'x2', to: 'e1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'e0', to: 'z', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'e1', to: 'z', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'z', to: 'y0', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'z', to: 'y1', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'z', to: 'y2', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'y0', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
           { from: 'y1', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'y2', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'n3', to: 'z', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: '壓低重建誤差' },
-          { from: 'n3', to: 'n4', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
+          { from: 'y2', to: 'upd', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'upd', to: 'z', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: '壓低重建誤差' },
+          { from: 'n3', to: 'n4', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'upd', to: 'alm', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
         ] : [
           { from: 'x0', to: 'h0', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'x0', to: 'h1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
@@ -179,21 +237,26 @@
           { from: 'x2', to: 'h0', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'x2', to: 'h1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'x2', to: 'h2', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'h0', to: 'o0', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'h1', to: 'o0', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'h2', to: 'o0', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'h0', to: 'd0', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'h1', to: 'd0', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'h1', to: 'd1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'h2', to: 'd1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'd0', to: 'o0', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'd1', to: 'o0', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'o0', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'n3', to: 'h1', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: '反向更新' },
-          { from: 'n3', to: 'n4', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
+          { from: 'o0', to: 'bkp', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'bkp', to: 'd1', active: st.stage === 3 || st.stage === 4, back: true, cls: 'c3', label: '反向更新' },
+          { from: 'n3', to: 'n4', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'bkp', to: 'dep', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' }
         ];
         const shown = st.stage >= 4 ? rows.length : st.stage >= 2 ? Math.min(3, rows.length) : 0;
         const main = {
           type: 'network', slot: 'main', w: 1480, h: 250, r: 22,
           title: '深度學習專屬架構與流程（' + R.archName + '｜橙色回流＝反向更新）',
-          layerLabels: isCnn ? ['1. 影像輸入', '2. 平行卷積核', '3. 池化降維', '4. 分類與更新', '5. 熱圖早停']
-            : isLstm ? ['時間步 t=1', '時間步 t=2', '時間步 t=3 (展開)', '序列預測與早停']
-            : isAe ? ['1. 輸入 (3維)', '2. 瓶頸 z (1維)', '3. 重建 (3維)', '4. 最小化MSE', '5. 異常門檻']
-            : ['1. 輸入層 (3)', '2. 隱藏層 (3)', '3. 輸出層', '4. 損失與反向', '5. 早停部署'],
+          layerLabels: isCnn ? ['1. 影像與增強', '2. 平行卷積核 (F3)', '3. 池化降維', '4. 攤平分類頭', '5. 損失與反向更新', '6. 早停與熱圖解釋']
+            : isLstm ? ['1. 切窗與標準化', '2. 時間步 t=1', '3. 時間步 t=2 (F4)', '4. 時間步 t=3', '5. BPTT 與梯度裁剪', '6. 滾動早停與預測']
+            : isAe ? ['1. 正常樣本 (3維)', '2. 編碼壓縮層', '3. 瓶頸 z (1維)', '4. 解碼重建 (3維)', '5. 重建誤差最佳化', '6. 異常門檻告警']
+            : ['1. 輸入層 (3)', '2. 隱藏層 1 (Dense)', '3. ReLU + Dropout', '4. 輸出層 ŷ', '5. 損失與反向傳播', '6. 早停與模型部署'],
           layers, edges
         };
         const side = {

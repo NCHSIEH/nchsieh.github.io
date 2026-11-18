@@ -83,65 +83,130 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = R.isMulti ? [
-          [{ id: 'n0', label: '1. 複雜任務', value: '目標＋記憶', shape: 'box', w: 145, cls: clsOf(0), hl: act(0), sub: '臨床綜合評估' }],
-          [{ id: 'n1', label: '2. 協調者拆解', value: 'Coordinator', shape: 'box', w: 145, cls: clsOf(1), hl: act(1), sub: '任務分派規劃' }],
           [
-            { id: 'a1', label: '資料 Agent', value: '查病歷 SQL', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: '取 HbA1c=7.8%' },
-            { id: 'a2', label: '文獻 Agent', value: 'RAG 檢索', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: 'H6 查衛教指引' },
-            { id: 'a3', label: '程式 Agent', value: '算趨勢指標', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: 'Python 沙盒' }
+            { id: 'n0a', label: '1a. 複雜臨床任務', value: '多源問題', shape: 'box', w: 138, cls: clsOf(0), hl: act(0), sub: '需數據+指引+計算' },
+            { id: 'n0b', label: '1b. 共享任務記憶', value: 'Shared State', shape: 'box', w: 138, cls: clsOf(0), hl: act(0), sub: '跨代理狀態同步' }
           ],
-          [{ id: 'n3', label: '4. 審查彙整', value: 'Critic 查核', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: '消弭矛盾幻覺' }],
-          [{ id: 'n4', label: '5. 最終報告', value: st.stage >= 4 ? R.totTokens + ' tok' : '待產出', shape: 'box', w: 145, cls: clsOf(4), hl: act(4), sub: '附來源供覆核' }]
+          [
+            { id: 'n1a', label: '2a. 協調者拆解', value: 'Coordinator', shape: 'box', w: 138, cls: clsOf(1), hl: act(1), sub: '拆成獨立子任務' },
+            { id: 'n1b', label: '2b. 角色權限分派', value: '最小權限', shape: 'box', w: 138, cls: clsOf(1), hl: act(1), sub: '各代理僅配專屬工具' }
+          ],
+          [
+            { id: 'a1', label: '3a. 資料 Agent', value: '查病歷 SQL', shape: 'box', w: 138, cls: clsOf(2), hl: act(2), sub: '唯讀查詢檢驗值' },
+            { id: 'a2', label: '3b. 文獻 Agent', value: 'RAG 檢索', shape: 'box', w: 138, cls: clsOf(2), hl: act(2), sub: 'H6 查臨床照護指引' },
+            { id: 'a3', label: '3c. 程式 Agent', value: 'Python 沙盒', shape: 'box', w: 138, cls: clsOf(2), hl: act(2), sub: 'H8 精確算風險指標' }
+          ],
+          [
+            { id: 'o1', label: '4a. 結構化檢驗值', value: 'HbA1c=7.8%', shape: 'box', w: 138, cls: clsOf(3), hl: act(3), sub: '附資料時間戳記' },
+            { id: 'o2', label: '4b. 指引段落與公式', value: '第3段+風險比', shape: 'box', w: 138, cls: clsOf(3), hl: act(3), sub: '附文獻出處編號' }
+          ],
+          [
+            { id: 'n3a', label: '5a. Critic 交叉查核', value: '檢查矛盾/幻覺', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '數值與指引是否一致' },
+            { id: 'n3b', label: '5b. 缺漏退回補查', value: st.loopBack ? '退回重查' : '通過查核', shape: 'box', w: 140, cls: st.loopBack ? 'hl' : clsOf(3), hl: st.loopBack, sub: '設最大輪數防死結' }
+          ],
+          [
+            { id: 'n4a', label: '6a. 綜合臨床報告', value: st.stage >= 4 ? R.totTokens + ' tok' : '待產出', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '整合多代理證據' },
+            { id: 'n4b', label: '6b. 醫師最終簽核', value: '附完整溯源', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '展開 Trace 供稽核' }
+          ]
         ] : R.isMix ? [
-          [{ id: 'n0', label: '1. 意圖路由', value: 'Router 分流', shape: 'box', w: 148, cls: clsOf(0), hl: act(0), sub: '簡單→快模型' }],
-          [{ id: 'n1', label: '2. 結構抽取', value: 'JSON / Tool', shape: 'box', w: 148, cls: clsOf(1), hl: act(1), sub: 'Function Calling' }],
-          [{ id: 'n2', label: '3. 規則護欄', value: 'Guardrail', shape: 'box', w: 148, cls: clsOf(2), hl: act(2), sub: '劑量/格式/去識別' }],
-          [{ id: 'n3', label: '4. 人工把關', value: '醫師確認', shape: 'box', w: 148, cls: clsOf(3), hl: act(3), sub: 'Human-in-Loop' }],
-          [{ id: 'n4', label: '5. 安全執行', value: st.stage >= 4 ? '已核准' : '待核准', shape: 'box', w: 148, cls: clsOf(4), hl: act(4), sub: '寫入/回覆病人' }]
-        ] : [
-          [{ id: 'n0', label: '1. 任務與記憶', value: 'System Prompt', shape: 'box', w: 145, cls: clsOf(0), hl: act(0), sub: '定義工具清單' }],
-          [{ id: 'n1', label: '2. 推理 Thought', value: 'LLM 規劃', shape: 'box', w: 145, cls: clsOf(1), hl: act(1), sub: 'H5 思維鏈推理' }],
           [
-            { id: 't1', label: '工具: RAG 知識', value: '查衛教指引', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: 'H6 混合檢索' },
-            { id: 't2', label: '工具: 病歷 SQL', value: '查檢驗數據', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: 'HbA1c=7.8%' },
-            { id: 't3', label: '工具: Python', value: '精確計算', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: '避免 LLM 算錯' }
+            { id: 'n0a', label: '1a. 意圖分類路由', value: 'Router 分流', shape: 'box', w: 138, cls: clsOf(0), hl: act(0), sub: 'E2/H5 判斷任務風險' },
+            { id: 'n0b', label: '1b. 輸入去識別護欄', value: 'PII 遮罩', shape: 'box', w: 138, cls: clsOf(0), hl: act(0), sub: '攔截個資與注入攻擊' }
           ],
-          [{ id: 'n3', label: '4. 觀察 Obs', value: st.stage >= 3 ? '取得真實資料' : '待回傳', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: '決定繼續或結束' }],
-          [{ id: 'n4', label: '5. 最終回答', value: st.stage >= 4 ? R.totTokens + ' tok' : '待生成', shape: 'box', w: 145, cls: clsOf(4), hl: act(4), sub: '有憑有據回覆' }]
+          [
+            { id: 'n1a', label: '2a. 結構化抽取', value: 'JSON Schema', shape: 'box', w: 138, cls: clsOf(1), hl: act(1), sub: '強制固定欄位型別' },
+            { id: 'n1b', label: '2b. 工具參數生成', value: 'Function Call', shape: 'box', w: 138, cls: clsOf(1), hl: act(1), sub: 'H8 產生標準 API 參數' }
+          ],
+          [
+            { id: 'n2a', label: '3a. 外部系統查詢', value: '唯讀 SQL/RAG', shape: 'box', w: 138, cls: clsOf(2), hl: act(2), sub: '取得真實病歷與指引' },
+            { id: 'n2b', label: '3b. 確定性規則檢核', value: 'Guardrail', shape: 'box', w: 138, cls: clsOf(2), hl: act(2), sub: '程式檢查劑量與格式' }
+          ],
+          [
+            { id: 'n3a', label: '4a. 格式/數值驗證', value: st.loopBack ? '異常重試' : '通過驗證', shape: 'box', w: 138, cls: st.loopBack ? 'hl' : clsOf(2), hl: st.loopBack, sub: '不合規即退回重抽' },
+            { id: 'n3b', label: '4b. 風險等級分流', value: '低風險 vs 高風險', shape: 'box', w: 138, cls: clsOf(3), hl: act(3), sub: '高風險必走人工審核' }
+          ],
+          [
+            { id: 'n4a', label: '5a. 人工把關節點', value: 'Human-in-Loop', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '醫師檢視證據按確認' },
+            { id: 'n4b', label: '5b. 審核修改回饋', value: '紀錄修正原因', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '回饋微調或規則庫' }
+          ],
+          [
+            { id: 'n5a', label: '6a. 安全執行動作', value: st.stage >= 4 ? '已核准執行' : '待核准', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '寫入醫囑或發送衛教' },
+            { id: 'n5b', label: '6b. 稽核日誌留存', value: 'Audit Log', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '完整保留輸入與決策' }
+          ]
+        ] : [
+          [
+            { id: 'n0a', label: '1a. 使用者任務', value: '臨床提問', shape: 'box', w: 138, cls: clsOf(0), hl: act(0), sub: '查檢驗並比對指引' },
+            { id: 'n0b', label: '1b. 系統與記憶', value: 'System+Memory', shape: 'box', w: 138, cls: clsOf(0), hl: act(0), sub: '載入可用工具宣告' }
+          ],
+          [
+            { id: 'n1a', label: '2a. 推理 Thought', value: 'CoT 思維鏈', shape: 'box', w: 138, cls: clsOf(1), hl: act(1), sub: 'H5 盤點已知與缺口' },
+            { id: 'n1b', label: '2b. 工具機率路由', value: 'Softmax(z/τ)', shape: 'box', w: 138, cls: clsOf(1), hl: act(1), sub: 'H8 挑選最高分動作' }
+          ],
+          [
+            { id: 't1', label: '3a. 工具: 病歷 SQL', value: '查檢驗數據', shape: 'box', w: 138, cls: clsOf(2), hl: act(2), sub: 'SELECT HbA1c=7.8%' },
+            { id: 't2', label: '3b. 工具: 衛教 RAG', value: '查照護指引', shape: 'box', w: 138, cls: clsOf(2), hl: act(2), sub: 'H6 混合檢索第3段' },
+            { id: 't3', label: '3c. 工具: Python', value: '精確計算機', shape: 'box', w: 138, cls: clsOf(2), hl: act(2), sub: '避免 LLM 心算錯誤' }
+          ],
+          [
+            { id: 'ob1', label: '4a. 觀察結果 Obs', value: st.stage >= 3 ? '取得真實回傳' : '待回傳', shape: 'box', w: 138, cls: clsOf(3), hl: act(3), sub: '外部系統結構化回傳' },
+            { id: 'ob2', label: '4b. 寫回 Context', value: '追加至提示詞', shape: 'box', w: 138, cls: clsOf(3), hl: act(3), sub: '累積 Token 供下輪讀' }
+          ],
+          [
+            { id: 'chk1', label: '5a. 資訊完備判斷', value: st.loopBack ? '尚缺衛教→續查' : '資料已齊全', shape: 'box', w: 140, cls: st.loopBack ? 'hl' : clsOf(3), hl: st.loopBack, sub: '決定再跑一輪或 finish' },
+            { id: 'chk2', label: '5b. 步數上限護欄', value: 'max_steps ≤ 5', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '防工具失敗無窮迴圈' }
+          ],
+          [
+            { id: 'n4a', label: '6a. 呼叫 finish', value: st.stage >= 4 ? R.totTokens + ' tok' : '待生成', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '停止工具迴圈' },
+            { id: 'n4b', label: '6b. 最終臨床回答', value: '附數據與出處', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '有憑有據大幅降幻覺' }
+          ]
         ];
         const edges = R.isMulti ? [
-          { from: 'n0', to: 'n1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'n1', to: 'a1', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'n1', to: 'a2', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'n1', to: 'a3', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'a1', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'a2', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'a3', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'n3', to: 'n1', active: st.stage === 3 && st.loopBack, back: true, cls: 'c3', label: '退回補查' },
-          { from: 'n3', to: 'n4', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          { from: 'n0a', to: 'n1a', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'n0b', to: 'n1b', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'n1a', to: 'a1', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n1a', to: 'a2', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n1b', to: 'a3', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'a1', to: 'o1', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'a2', to: 'o2', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'a3', to: 'o2', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'o1', to: 'n3a', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'o2', to: 'n3b', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'n3b', to: 'n1b', active: st.stage === 3 && st.loopBack, back: true, cls: 'c3', label: '退回補查' },
+          { from: 'n3a', to: 'n4a', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'n3b', to: 'n4b', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ] : R.isMix ? [
-          { from: 'n0', to: 'n1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'n1', to: 'n2', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'n2', to: 'n1', active: st.stage === 2 && st.loopBack, back: true, cls: 'c3', label: '格式重試' },
-          { from: 'n2', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'n3', to: 'n4', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          { from: 'n0a', to: 'n1a', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'n0b', to: 'n1b', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'n1a', to: 'n2a', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n1b', to: 'n2b', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n2a', to: 'n3a', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n2b', to: 'n3b', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'n3a', to: 'n1a', active: st.stage === 2 && st.loopBack, back: true, cls: 'c3', label: '格式重試' },
+          { from: 'n3a', to: 'n4a', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'n3b', to: 'n4b', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'n4a', to: 'n5a', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'n4b', to: 'n5b', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ] : [
-          { from: 'n0', to: 'n1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'n1', to: 't1', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'n1', to: 't2', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'n1', to: 't3', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 't1', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 't2', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 't3', to: 'n3', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'n3', to: 'n1', active: st.stage === 3 && st.loopBack, back: true, cls: 'c3', label: 'ReAct 迴圈' },
-          { from: 'n3', to: 'n4', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          { from: 'n0a', to: 'n1a', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'n0b', to: 'n1b', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'n1a', to: 't1', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n1b', to: 't2', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'n1b', to: 't3', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 't1', to: 'ob1', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 't2', to: 'ob1', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 't3', to: 'ob2', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'ob1', to: 'chk1', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'ob2', to: 'chk2', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'chk1', to: 'n1a', active: st.stage === 3 && st.loopBack, back: true, cls: 'c3', label: 'ReAct 迴圈' },
+          { from: 'chk1', to: 'n4a', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'chk2', to: 'n4b', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1480, h: R.isMix ? 160 : 250,
+          type: 'network', slot: 'main', w: 1480, h: R.isMix ? 230 : 250,
           title: 'AI Agent 架構流程圖（' + pipeName + '）',
-          layerLabels: R.isMulti ? ['1. 任務', '2. 協調者', '3. 平行專才代理', '4. 審查', '5. 交付']
-            : R.isMix ? ['1. 路由', '2. 抽取', '3. 護欄', '4. 人工把關', '5. 執行']
-            : ['1. 任務記憶', '2. Thought', '3. Action 工具', '4. Obs 回圈', '5. Final'],
+          layerLabels: R.isMulti ? ['1. 任務與記憶', '2. 協調者拆解', '3. 平行專才代理', '4. 結構化回傳', '5. 審查與補查', '6. 報告交付簽核']
+            : R.isMix ? ['1. 路由與護欄', '2. 結構化抽取', '3. 查詢與規則檢核', '4. 驗證與分流', '5. 人工把關', '6. 安全執行留存']
+            : ['1. 任務與記憶', '2. 推理與路由', '3. 外部工具呼叫', '4. 觀察寫回', '5. 完備性與上限', '6. 最終回答輸出'],
           layers, edges
         };
         const side = {

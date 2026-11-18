@@ -98,41 +98,52 @@
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
           [
-            { id: 'raw', label: R.isStrict ? '1a. 訓練集 (fit)' : '1. 原始資料', value: rows.length + ' 筆', shape: 'box', w: 154, cls: clsOf(0), hl: act(0), sub: R.isStrict ? '只用 Train 學參數' : '含缺值/極端/文字' },
-            { id: 'val', label: '1b. 驗證/測試集', value: R.isStrict ? '封存隔離' : '待套用', shape: 'box', w: 154, cls: st.stage >= 6 ? 'good' : 'c4', hl: false, dim: !R.isStrict && st.stage < 6, sub: '嚴禁用來 fit 統計量' }
+            { id: 'raw', label: R.isStrict ? '1a. 訓練集 (Train)' : '1a. 原始資料集', value: rows.length + ' 筆', shape: 'box', w: 142, cls: clsOf(0), hl: act(0), sub: R.isStrict ? '只用 Train fit' : '含缺值/極端/文字' },
+            { id: 'val', label: '1b. 驗證/測試集', value: R.isStrict ? '封存隔離' : '待套用', shape: 'box', w: 142, cls: st.stage >= 6 ? 'good' : 'c4', hl: false, dim: !R.isStrict && st.stage < 6, sub: '禁算平均與中位數' }
           ],
           [
-            { id: 'imp', label: '2a. 遺失補值', value: st.stage >= 1 ? '中位=' + f(R.medAge, 0) : '待補', shape: 'box', w: 154, cls: clsOf(1), hl: act(1), sub: 'A1 平均/中位/k-NN' },
-            { id: 'out', label: '2b. 離群縮尾', value: st.stage >= 2 ? '上界=' + f(R.hi, 0) : '待查', shape: 'box', w: 154, cls: clsOf(2), hl: act(2), sub: 'A7 IQR 圍籬截斷' }
+            { id: 'imp', label: '2a. 遺失值補值', value: st.stage >= 1 ? '中位=' + f(R.medAge, 0) : '待補', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: 'A1 平均/中位/k-NN' },
+            { id: 'out', label: '2b. 離群值圍籬', value: st.stage >= 2 ? '上界=' + f(R.hi, 0) : '待查', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'A7 IQR 縮尾/刪除' }
           ],
           [
-            { id: 'enc', label: '3a. 類別編碼', value: st.stage >= 3 ? '0/1 數值' : '文字欄', shape: 'box', w: 154, cls: clsOf(3), hl: act(3), sub: 'A4 One-Hot/Dummy' },
-            { id: 'scl', label: '3b. 數值縮放', value: R.isLinear ? 'Z 分數' : '免縮放', shape: 'box', w: 154, cls: R.isLinear ? clsOf(4) : (st.stage >= 4 ? 'c2' : 'c5'), hl: act(4), dim: !R.isLinear && st.stage >= 4, sub: 'A2 標準化 / A3 離散' }
+            { id: 'enc', label: '3a. 類別編碼', value: st.stage >= 3 ? '0/1 數值' : '文字欄', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'A4 One-Hot/Dummy' },
+            { id: 'bin', label: '3b. 連續分箱', value: R.isLinear ? '視需求' : '等頻/等寬', shape: 'box', w: 142, cls: !R.isLinear ? clsOf(3) : 'c5', hl: act(3) && !R.isLinear, dim: R.isLinear, sub: 'A3 離散化切區間' }
           ],
           [
-            { id: 'sel', label: '4a. 特徵選擇', value: '去冗餘欄', shape: 'box', w: 154, cls: clsOf(5), hl: act(5), sub: 'A6 相關/IG/Wrapper' },
-            { id: 'imb', label: '4b. 類別平衡', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', w: 154, cls: clsOf(5), hl: act(5), sub: 'A5 SMOTE (僅訓練集)' }
+            { id: 'scl', label: '4a. 數值標準化', value: R.isLinear ? 'Z 分數' : '略過', shape: 'box', w: 142, cls: R.isLinear ? clsOf(4) : 'c5', hl: act(4) && R.isLinear, dim: !R.isLinear, sub: 'A2 Z-score / MinMax' },
+            { id: 'raws', label: '4b. 保留原尺度', value: !R.isLinear ? '樹免縮放' : '備用', shape: 'box', w: 142, cls: !R.isLinear ? clsOf(4) : 'c5', hl: act(4) && !R.isLinear, dim: R.isLinear, sub: '樹只看大小排序切點' }
           ],
-          [{ id: 'mat', label: '5. 乾淨矩陣', value: st.stage >= 6 ? 'Pipeline 就緒' : '準備中', shape: 'box', w: 158, cls: clsOf(6), hl: act(6), sub: 'Train fit → Test transform' }]
+          [
+            { id: 'sel', label: '5a. 特徵選擇', value: '去冗餘共線', shape: 'box', w: 142, cls: clsOf(5), hl: act(5), sub: 'A6 相關/IG/Wrapper' },
+            { id: 'imb', label: '5b. 少數類合成', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', w: 142, cls: clsOf(5), hl: act(5), sub: 'A5 SMOTE (僅Train)' }
+          ],
+          [
+            { id: 'mat', label: '6a. 訓練特徵 X_tr', value: st.stage >= 6 ? '送入 fit' : '準備中', shape: 'box', w: 144, cls: clsOf(6), hl: act(6), sub: '乾淨無缺值矩陣' },
+            { id: 'mte', label: '6b. 測試特徵 X_te', value: st.stage >= 6 ? '已 transform' : '待套用', shape: 'box', w: 144, cls: clsOf(6), hl: act(6), sub: '套用 Train 參數' }
+          ]
         ];
         const edges = [
-          { from: 'raw', to: 'imp', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '數值+類別' },
-          { from: 'raw', to: 'out', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '數值欄' },
+          { from: 'raw', to: 'imp', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'raw', to: 'out', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'imp', to: 'enc', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'imp', to: 'scl', active: st.stage === 4 && R.isLinear, dim: !R.isLinear, cls: done(2) ? 'good' : 'c5' },
+          { from: 'out', to: 'bin', active: st.stage === 3 && !R.isLinear, dim: R.isLinear, cls: done(2) ? 'good' : 'c5' },
+          { from: 'imp', to: 'scl', active: st.stage === 4 && R.isLinear, dim: !R.isLinear, cls: done(3) ? 'good' : 'c5' },
           { from: 'out', to: 'scl', active: st.stage === 4 && R.isLinear, dim: !R.isLinear, cls: done(3) ? 'good' : 'c5' },
+          { from: 'bin', to: 'raws', active: st.stage === 4 && !R.isLinear, dim: R.isLinear, cls: done(3) ? 'good' : 'c5' },
           { from: 'enc', to: 'sel', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
           { from: 'scl', to: 'sel', active: st.stage === 5 && R.isLinear, dim: !R.isLinear, cls: done(4) ? 'good' : 'c5' },
-          { from: 'enc', to: 'imb', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'raws', to: 'sel', active: st.stage === 5 && !R.isLinear, dim: R.isLinear, cls: done(4) ? 'good' : 'c5' },
           { from: 'scl', to: 'imb', active: st.stage === 5 && R.isLinear, dim: !R.isLinear, cls: done(4) ? 'good' : 'c5' },
+          { from: 'raws', to: 'imb', active: st.stage === 5 && !R.isLinear, dim: R.isLinear, cls: done(4) ? 'good' : 'c5' },
           { from: 'sel', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' },
           { from: 'imb', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' },
-          { from: 'val', to: 'mat', active: st.stage === 6, cls: st.stage >= 6 ? 'good' : 'c4', label: '套用 transform' }
+          { from: 'sel', to: 'mte', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' },
+          { from: 'val', to: 'mte', active: st.stage === 6, cls: st.stage >= 6 ? 'good' : 'c4', label: 'transform' }
         ];
         const main = {
           type: 'network', slot: 'main', w: 1480, h: 230,
           title: '資料前處理全流程圖（第 ' + Math.min(st.stage + 1, 7) + ' / 7 階段）',
-          layerLabels: ['1. 輸入切分', '2. 資料清理', '3. 轉換縮放', '4. 篩選平衡', '5. 特徵輸出'],
+          layerLabels: ['1. 切分盤點', '2. 缺值與離群', '3. 編碼與離散', '4. 特徵縮放', '5. 篩選與平衡', '6. 乾淨矩陣輸出'],
           layers, edges
         };
         const side = {
