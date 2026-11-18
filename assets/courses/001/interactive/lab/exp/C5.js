@@ -180,7 +180,7 @@
         'Σ[0,1] = ' + f(R.cov[0][1], 3) + '（正值代表兩特徵同向變動）'
       ]);
 
-      st.showVec = true;
+      st.showVec = true; st.showVar = true;
       add(3, '解特徵值與特徵向量', R.use4 ? '4×4 共變異矩陣求解 4 組正交特徵向量與對應特徵值。' : '2×2 矩陣直接解二次方程，得出最大變異方向 PC1 與正交方向 PC2。', [
         '特徵值 λ = (' + R.eigs.map(e => f(e.val, 3)).join(', ') + ')',
         'PC1 方向 = (' + R.eigs[0].vec.map(v => f(v, 3)).join(', ') + ')'

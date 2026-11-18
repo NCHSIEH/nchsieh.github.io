@@ -52,7 +52,7 @@
         { id: 's0', st: '1. 無標籤資料 X', alg: '探索性統計 EDA', use: '沒有標準答案 y，先看各欄分布與共線性' },
         { id: 's1', st: '2. 必做標準化', alg: 'A2 Z 分數標準化', use: '距離與共變異數高度受尺度影響，必做！' },
         { id: 's2', st: '3. 降維與壓縮', alg: 'C5 PCA / C6 t-SNE', use: R.isDim ? '主軸保留最大變異，t-SNE 看局部鄰居' : '先壓到 2D 檢查是否有明顯群聚' },
-        { id: 's3', st: '4. 核心探勘模型', alg: R.isAnom ? 'C7 LOF / C8 IF / F5 AE' : (R.isDim ? 'C5 挑前 K 個主成分' : 'C1 K-Means / C2 階層 / C3 DBSCAN / C4 GMM'), use: R.isAnom ? '密度比對或隨機切割找離群點' : (R.isDim ? '降維後可接 B 區分類器減少共線' : '球狀用 K-Means、不規則用 DBSCAN') },
+        { id: 's3', st: '4. 核心探勘模型', alg: R.isAnom ? 'C7 LOF / C8 IF / C12 馬氏 / F5 AE' : (R.isDim ? 'C5 挑前 K 個主成分' : 'C1/C10/C11 中心·模糊 / C2 階層 / C3 / C4'), use: R.isAnom ? '密度比對、隨機切割或斜橢圓找離群點' : (R.isDim ? '降維後可接 B 區分類器減少共線' : '球狀用 K-Means++、過渡帶用 FCM/GMM') },
         { id: 's4', st: '5. 內部評估解讀', alg: R.isAnom ? '分數排序＋專家複核' : (R.isDim ? '累積解釋變異 ≥ 80%' : 'C9 手肘法＋輪廓係數'), use: '將結果翻譯成臨床風險亞型或異常原因' }
       ];
 
@@ -75,7 +75,7 @@
           ],
           [
             { id: 'd1', label: '4a. LOF 密度比', value: '局部稀疏', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'C7 LOF > 1 異常' },
-            { id: 'd2', label: '4b. 孤立森林', value: '路徑最短', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'C8 幾刀即被切出' },
+            { id: 'd2', label: '4b. 孤立森林/馬氏', value: '少刀 / 斜橢圓', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'C8 孤立樹 · C12 馬氏' },
             { id: 'd3', label: '4c. Autoencoder', value: '重建誤差', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'F5 ‖x−x̂‖² 偏高' }
           ],
           [
@@ -125,9 +125,9 @@
             { id: 'vis', label: '3b. t-SNE 2D 預視', value: '觀察群狀', shape: 'box', w: 140, cls: clsOf(2), hl: act(2), sub: 'C6 球狀 vs 任意形狀' }
           ],
           [
-            { id: 'c1', label: '4a. 中心點分群', value: '球狀 K 群', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'C1 K-Means / C10' },
+            { id: 'c1', label: '4a. 中心點分群', value: '球狀 K 群', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'C1/C10/C11 K-Means++' },
             { id: 'c2', label: '4b. 階層樹狀分群', value: 'Dendrogram', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'C2 凝聚合併免預設 K' },
-            { id: 'c3', label: '4c. 密度 / 軟機率', value: '含噪 / 機率', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'C3 DBSCAN · C4 GMM' }
+            { id: 'c3', label: '4c. 密度 / 軟分群', value: '含噪 / 隸屬度', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: 'C3 · C4 GMM · C11 FCM' }
           ],
           [
             { id: 'elb', label: '5a. 手肘法 SSE', value: '找轉折點', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: 'C9 群內緊密度' },

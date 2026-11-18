@@ -148,11 +148,16 @@
         };
         const bars = {
           type: 'bars', slot: 'bottom',
-          title: '異常分數排名（前 6 名，越接近 1 越容易被孤立）',
-          max: 1, digits: 3,
+          title: st.allDone ? '異常分數排名（前 6 名，越接近 1 越容易被孤立）' : '第 1 棵樹切割刀數與理論基準 c(n) 對照（刀數越少越異常）',
+          max: st.allDone ? 1 : Math.max(5, R.maxH + 1),
+          digits: st.allDone ? 3 : 2,
           items: st.allDone
             ? R.ranked.slice(0, 6).map(x => ({ id: 'rk' + x.id, label: '#' + x.id, value: x.score, cls: x.score > 0.6 ? 'c1' : 'c0', hl: x.id === tid }))
-            : [{ id: 't', label: '#' + tid, value: 0, cls: 'c5' }]
+            : [
+                { id: 'h_t', label: '觀察點 #' + tid + ' 目前刀數', value: st.showT0 ? R.paths[ti][0].h : st.cuts.length, cls: 'hl', hl: st.focusIdx === ti },
+                { id: 'h_n', label: '正常點 #' + nid + ' 樹1刀數', value: st.focusIdx === ni ? R.paths[ni][0].h : 0, cls: 'c0', hl: st.focusIdx === ni },
+                { id: 'h_c', label: '理論平均路徑 c(n)', value: R.cn, cls: 'c5' }
+              ]
         };
         return [main, side, bars];
       }

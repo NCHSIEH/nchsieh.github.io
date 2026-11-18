@@ -129,11 +129,19 @@
         };
         const bars = {
           type: 'bars', slot: 'bottom',
-          title: 'LOF 異常分數排名（前 6 名，≈1 正常，≫1 異常）',
-          max: Math.max(2.5, M.max(R.lof)), digits: 2,
+          title: st.allDone ? 'LOF 異常分數排名（前 6 名，≈1 正常，≫1 異常）' : ('觀察點 #' + tid + ' 與 K 鄰居的局部可達密度 lrd 對照'),
+          max: st.allDone ? Math.max(2.5, M.max(R.lof)) : Math.max(2.0, M.max(R.lrd)),
+          digits: 2,
           items: st.allDone
             ? R.ranked.slice(0, 6).map(x => ({ id: 'rk' + x.id, label: '#' + x.id, value: x.lof, cls: x.lof > 1.5 ? 'c1' : 'c0', hl: x.id === tid }))
-            : [{ id: 't', label: '#' + tid, value: st.tLof ? R.lof[ti] : 0, cls: 'hl' }]
+            : [{ id: 't_lrd', label: '觀察點 #' + tid + ' lrd', value: st.tLrd ? R.lrd[ti] : R.kDist[ti], cls: 'hl', hl: true }].concat(
+                R.kNbrs[ti].map(j => ({
+                  id: 'nb_lrd_' + j,
+                  label: '鄰居 #' + rows[j].id + (st.showNbLrd ? ' lrd' : ' d'),
+                  value: st.showNbLrd ? R.lrd[j] : (st.showNbrs ? R.dist[ti][j] : 0),
+                  cls: 'c0'
+                }))
+              )
         };
         return [main, side, bars];
       }

@@ -166,7 +166,7 @@
           axes: AX,
           points: rows.map((r, i) => ({ id: 'p' + r.id, x: R.Z[i][0], y: R.Z[i][1], cls: ptCls[i], label: String(r.id), r: 6 })),
           lines: [], circles: [],
-          legend: [{ cls: 'c5', label: '尚未合併' }, { cls: 'c0', label: '群 1' }, { cls: 'c1', label: '群 2' }]
+          legend: [{ cls: 'c5', label: '單點未合併' }].concat(M.range(R.cutK, k => ({ cls: 'c' + k, label: '群 ' + (k + 1) })))
         };
         return [main, side, scatter];
       }

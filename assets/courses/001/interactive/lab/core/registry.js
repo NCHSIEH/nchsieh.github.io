@@ -19,7 +19,7 @@
   LAB.registry = [
     { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A9 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
     { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '線性距離、樹與規則、集成與不平衡 4 條管線，含 K-Fold 調參與 B1–B18 對照。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
-    { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '病人分群、異常偵測與降維壓縮 3 條管線，對照 C1–C10 演算法。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
+    { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '病人分群、異常偵測與降維壓縮 3 條管線，對照 C1–C12 演算法。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
     { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大主流架構管線。', module: m('M5 深度學習', '../m5/'), status: 'live' },
     { id: 'S5', group: 'S', title: 'NLP 與 LLM 處理流程', brief: '傳統 TF-IDF、Word2Vec 詞向量與現代 LLM＋RAG 3 條文字管線。', module: m('M6 文字探勘', '../m6/'), status: 'live' },
     { id: 'S6', group: 'S', title: '時間序列預測流程', brief: '統計 ARIMA／指數平滑、滯後特徵 ML 與 LSTM 序列 3 條滾動驗證流程。', module: m('M4 時間序列', '../m4/#p15'), status: 'live' },
@@ -66,6 +66,8 @@
     { id: 'C6', group: 'C', title: 't-SNE', brief: '高維的鄰居關係，如何在平面上一步步被拉近。', module: m('M3 第 11 節', '../m3/#p11'), status: 'live', tier: 'adv' },
     { id: 'C7', group: 'C', title: 'LOF 局部離群因子', brief: '跟鄰居比密度：比鄰居稀疏很多的就是異常。', module: m('M4 第 10 節', '../m4/#p10'), status: 'live', tier: 'adv' },
     { id: 'C8', group: 'C', title: 'Isolation Forest', brief: '隨機切幾刀就被孤立的點，就是異常。', module: m('M4 第 11 節', '../m4/#p11'), status: 'live', tier: 'adv' },
+    { id: 'C11', group: 'C', title: 'K-Means++ 與模糊分群 FCM', brief: '以距離平方 D(x)² 挑選分散起點，並用模糊隸屬度捕捉邊界過渡病人。', module: m('M3 第 03 節', '../m3/#p03'), status: 'live', tier: 'adv' },
+    { id: 'C12', group: 'C', title: '馬氏距離與橢圓異常偵測', brief: '納入共變異逆矩陣 Σ⁻¹ 畫出斜橢圓包絡，精準揪出違背相關規律的異常點。', module: m('M4 第 10 節', '../m4/#p10'), status: 'live', tier: 'adv' },
 
     { id: 'D1', group: 'D', title: 'Apriori', brief: '一層層產生候選項目集、剪枝，再算 support、confidence、lift。', module: m('M4 第 12 節', '../m4/#p12'), status: 'live' },
     { id: 'D2', group: 'D', title: 'FP-Growth', brief: '把交易壓成一棵 FP-tree，不產生候選就找出頻繁項目集。', module: m('M4 第 13 節', '../m4/#p13'), status: 'live' },
@@ -144,6 +146,8 @@
     C8: 'Isolation Forest',
     C9: 'Elbow Method & Silhouette Score',
     C10: 'K-Medoids Clustering (PAM)',
+    C11: 'K-Means++ & Fuzzy C-Means Clustering',
+    C12: 'Mahalanobis Distance & Elliptic Envelope',
     D1: 'Apriori Association Rules',
     D2: 'Frequent Pattern Growth',
     E1: 'Tokenization & TF-IDF',

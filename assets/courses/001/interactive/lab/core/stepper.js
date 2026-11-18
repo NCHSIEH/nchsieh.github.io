@@ -122,6 +122,8 @@
       C6: '依 Perplexity 調整高維高斯核寬度 σᵢ 記住鄰居相似度 Pᵢⱼ，再在 2D 平面以重尾 t 分佈 Qᵢⱼ 透過梯度下降最小化 KL 散度 (KL Divergence)；觀察原本交錯的群集如何一步步被推開聚攏。',
       C7: '對目標病人計算 k-距離圓圈、可達距離 (Reachability Distance) 與局部可達密度 (LRD)，並與其 K 位鄰居的密度相除得出 LOF 比值；對比正常密集點（LOF ≈ 1）與孤立點 #13（LOF ≫ 1）的密度落差。',
       C8: '不建正常模型，而是隨機選特徵與切點遞迴切割空間（Isolation Tree），統計將每個點單獨孤立所需的平均路徑長度 E(h)；觀察離群點 #13 如何只需 1–2 刀就被切出而獲得接近 1 的高異常分數。',
+      C11: '示範 K-Means++ 如何以距離平方 D(x)² 加權挑選彼此遠離的初始中心（徹底改善 C1 隨機起點的局部最佳解問題），並結合模糊 C-Means (FCM) 計算每位病人的軟隸屬度 u_ik，標出處於亞型交界帶的過渡病人。',
+      C12: '比較歐氏距離正圓包絡與馬氏距離 (Mahalanobis Distance) 斜橢圓包絡：當 BMI 與血糖高度正相關時，單看各欄不極端卻嚴重偏離對角線的 #12 會在歐氏距離下被漏抓，而納入共變異逆矩陣 Σ⁻¹ 的馬氏距離能精準揪出此異常。',
       D1: '從 12 張門診處方箋逐層產生候選藥品組合（C1 → C2 → C3），利用 Apriori 反單調性剪除低於 min_sup 的項目集；算出支持度 (Support)、信賴度 (Confidence) 與提升度 (Lift) 長條圖，並辨識「高信賴卻 Lift < 1」的假規則陷阱。',
       D2: '只掃描處方兩次即依頻繁度排序壓縮成前綴樹 (FP-Tree)，透過共有路徑合併省去 Apriori 產生海量候選集的成本，直接從條件模式基 (Conditional Pattern Base) 挖掘全部頻繁用藥組合。',
       E1: '以中文正向最大匹配斷詞並過濾停用詞 (Stopwords)，建立詞彙的詞頻 (TF) 與逆文件頻率 (IDF) 矩陣，再以 L2 正規化向量計算查詢句與 6 篇護理紀錄的餘弦相似度 (Cosine Similarity) 排名。',
@@ -407,6 +409,16 @@
         trees: '【孤立樹數量 T (Number of Isolation Trees)】\n用法：隨機超平面切割樹的棵數（5–50）。樹越多，每個點的平均路徑長度 E(h(x)) 與異常分數（Anomaly Score）越穩定收斂。',
         target: '【觀察病人 (#) (Target Sample)】\n用法：指定要追蹤首棵樹隨機切割過程的病人編號；離群點通常只需 1–2 刀就被孤立（路徑短、異常分數接近 1）。'
       },
+      C11: {
+        k: '【群數 K (Number of Clusters)】\n用法：設定 K-Means++ 挑選幾個分散起點並進行 FCM 模糊分群（2–4 群）。',
+        m: '【模糊指數 m (Fuzziness Exponent)】\n公式：權重為 u_ik^m，隸屬度更新指數為 2/(m−1)。\n用法：m 越接近 1（如 1.5）隸屬度越趨近 0 或 1（硬分群）；m 越大（如 2.5–3.0）邊界過渡越柔和。實務標準預設 m = 2.0。'
+      },
+      C12: {
+        metric: '【多變量距離度量 (Multivariate Distance Metric)】\n比較是否將特徵間的相關性（共變異數矩陣 Σ）納入距離計算。',
+        'metric:mahal': '【馬氏距離 (Mahalanobis Distance — 斜橢圓包絡)】\n公式：d_M = √((z−μ)ᵀ Σ⁻¹ (z−μ))。\n優勢：順著特徵相關軸方向放寬、垂直於相關軸方向嚴格懲罰，能抓出「低 BMI 卻高血糖」這類違背生理相關性的異常點 (#12)。',
+        'metric:euclid': '【歐氏距離 (Euclidean Distance — 正圓包絡)】\n公式：d_E = √((z−μ)ᵀ (z−μ))。\n限制：忽略特徵間相關性，將所有方向一視同仁畫出正圓，容易漏抓偏離相關對角線的異常點。',
+        th: '【異常門檻距離 (Outlier Cutoff Threshold)】\n用法：設定判定異常的距離半徑（1.6–2.8）。觀察馬氏距離下斜橢圓如何包住 #1–#11 正常主群並排除 #12。'
+      },
       C9: {
         k: '【觀察群數 K (Number of Clusters)】\n用法：切換要在散佈圖與表單細看每個點 a(i)、b(i) 與輪廓係數的 K 值（2–5）。',
         init: '【起始種子 (Initialization Seed)】\n用法：切換 K-Means 起始中心種子（1–3），觀察群數選擇指標在不同初值下是否穩定。'
@@ -623,7 +635,8 @@
       '網路架構': 'Architecture', '文字處理管線': 'NLP Pipeline', '預測管線': 'TS Pipeline', '探勘管線': 'Mining Pipeline',
       '落地管線': 'Deployment', 'Agent 架構管線': 'Agent Mode', '轉換方法': 'Transform', 'VIF 警戒門檻': 'VIF Threshold',
       '生成式模型': 'Generative Model', '多元分類法': 'Multiclass Strategy', '新病人 BMI': 'Query BMI', '新病人血糖': 'Query Glucose',
-      '臨床任務': 'Agent Task', '溫度係數 τ': 'Temperature τ', '最大步數上限': 'Max Steps'
+      '臨床任務': 'Agent Task', '溫度係數 τ': 'Temperature τ', '最大步數上限': 'Max Steps',
+      '模糊指數 m': 'Fuzziness m', '距離度量': 'Distance Metric', '異常門檻距離': 'Threshold'
     };
     const ACTIVE_IF = {
       'A1.k': ps => ps.method === 'knn',

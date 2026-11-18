@@ -63,7 +63,7 @@
         else if (s.cent && s.a && !big) { s.a.forEach((ak, i) => { if (ak != null && s.cent[ak]) lines.push({ id: 'asg' + i, x1: R.Z[i][0], y1: R.Z[i][1], x2: s.cent[ak][0], y2: s.cent[ak][1], cls: CL[ak], dash: true, w: 1.2 }); }); }
         const regions = s.regions && s.cent ? LAB.grid((x, y) => CL[M.argmin(s.cent.map(c => M.dist([x, y], c)))], -3, 3, -3, 3, 36, 24) : null;
         const leg = M.range(K, k => ({ cls: CL[k], label: '第 ' + (k + 1) + ' 群' })).concat([{ cls: 'c5', shape: 'diamond', label: '菱形＝群中心' }]);
-        const out = [{ type: 'scatter', slot: 'main', axes: AX, points, lines, regions, legend: s.cent ? leg : [{ cls: 'c5', label: '尚未分群的病人' }] }];
+        const out = [{ type: 'scatter', slot: 'main', title: '標準化 BMI × 血糖空間與 K = ' + K + ' 群中心移動', axes: AX, points, lines, regions, legend: s.cent ? leg : [{ cls: 'c5', label: '尚未分群的病人' }] }];
 
         if (big) {
           out.push({ type: 'table', slot: 'side', title: '各群現況', cols: [{ key: 'g', label: '群' }, { key: 'n', label: '人數', num: true, digits: 0 }, { key: 'x', label: '中心 Z_BMI', num: true }, { key: 'y', label: '中心 Z血糖', num: true }],
@@ -75,7 +75,8 @@
             return { id: r.id, hl: s.cur === i, cells: [r.id].concat(M.range(K, k => d ? { v: d[k], hl: s.cur === i && a === k } : null)).concat([a == null ? null : { v: '第 ' + (a + 1) + ' 群', cls: CL[a] }]) };
           }) });
         }
-        out.push({ type: 'line', slot: 'bottom', title: '群內誤差平方和 SSE（越小表示點離自己的中心越近）', h: 190, axes: { x: { label: '第幾輪', min: 1, max: Math.max(3, R.iters.length) }, y: { label: 'SSE', min: 0, max: R.iters[0].sse * 1.1 } }, series: [{ id: 'sse', label: 'SSE', pts: sseHist.map((v, i) => [i + 1, v]), dots: true, cls: 'hl' }] });
+        const ssePts = sseHist.length ? sseHist.map((v, i) => [i + 1, v]) : [[1, R.iters[0].sse]];
+        out.push({ type: 'line', slot: 'bottom', title: '群內誤差平方和 SSE（越小表示點離自己的中心越近）', h: 190, axes: { x: { label: '第幾輪', min: 1, max: Math.max(3, R.iters.length) }, y: { label: 'SSE', min: 0, max: R.iters[0].sse * 1.1 } }, series: [{ id: 'sse', label: 'SSE', pts: ssePts, dots: true, cls: sseHist.length ? 'hl' : 'c5' }] });
         return out;
       }
       const add = (line, title, say, calc, s, phase) => steps.push({ line, title, say, calc: calc || [], phase, views: views(s), focus: s.cur != null ? [rows[s.cur].id] : [] });
