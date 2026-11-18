@@ -50,10 +50,10 @@
       const R = simulate(rows, p), steps = [];
 
       const ALGO_ROWS = [
-        { id: 's0', st: '1. 時序探索', alg: '趨勢＋季節性分解', use: '先檢查有無長期趨勢、週期與缺漏期' },
-        { id: 's1', st: '2. 平穩 / 建窗', alg: R.isMl ? 'Lag-k 與移動平均' : R.isDl ? 'A2 標準化＋序列切窗' : 'G2 一次差分 / G1 季節指數', use: R.isMl ? '把序列轉成表格特徵' : '消除漂移趨勢讓統計量穩定' },
+        { id: 's0', st: '1. 時序探索', alg: 'G4 STL 趨勢＋季節性分解', use: '先拆解長期趨勢 Tₜ、季節 Sₜ 與殘差異常 Rₜ' },
+        { id: 's1', st: '2. 平穩 / 建窗', alg: R.isMl ? 'G4 Windowing (Lag-1, Lag-2)' : R.isDl ? 'A2 標準化＋序列切窗' : 'G2 一次差分 / G1 季節指數', use: R.isMl ? '用 G4 將序列轉成監督式滯後表格' : '消除漂移趨勢讓統計量穩定' },
         { id: 's2', st: '3. 時間序切分', alg: 'G3 滑動／擴張視窗', use: '訓練永遠早於驗證，嚴禁隨機打亂！' },
-        { id: 's3', st: '4. 模型擬合', alg: R.isMl ? 'B1 線性 / B9 GBDT' : R.isDl ? 'F4 LSTM 閘門記憶' : 'G1 ETS / G2 ARIMA(p,d,q)', use: '統計穩健省資料；ML/DL 擅長多變數' },
+        { id: 's3', st: '4. 模型擬合', alg: R.isMl ? 'G4 Lag-OLS / B9 GBDT' : R.isDl ? 'F4 LSTM 閘門記憶' : 'G1 ETS / G2 ARIMA(p,d,q)', use: '統計穩健省資料；ML/DL 擅長多變數' },
         { id: 's4', st: '5. 前瞻評估', alg: 'MAE / MAPE / RMSE', use: '還原差分尺度後與季節性基準比較' }
       ];
 

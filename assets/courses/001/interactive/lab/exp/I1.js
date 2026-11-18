@@ -143,18 +143,22 @@
             hl: idx === st.permUpto - 1
           }))
         };
+        const curOrder = R.permRows[Math.max(0, st.permUpto - 1)];
         const side = {
           type: 'bars', slot: 'side',
-          title: st.showPermImp ? '全域排列重要度（打亂後準確率下降）' : '各特徵 SHAP 值（相對於基準 ' + f(R.baseVal, 3) + '）',
+          title: st.showPermImp ? '全域排列重要度（打亂後準確率下降）' : st.showShap ? '各特徵 SHAP 值（6 種順序平均）' : '第 ' + Math.max(1, st.permUpto) + ' 種順序的邊際貢獻',
           digits: 3,
           items: st.showPermImp
             ? [0, 1, 2].map(j => ({ id: 'pi' + j, label: FLAB[j], value: R.permImp[j], cls: 'c' + j }))
-            : [0, 1, 2].map(j => ({
-                id: 'sh' + j,
-                label: FLAB[j] + ' (' + f(R.shap[j], 3) + ')',
-                value: st.showShap ? R.shap[j] : 0,
-                cls: R.shap[j] >= 0 ? 'c1' : 'c0'
-              }))
+            : [0, 1, 2].map(j => {
+                const v = st.showShap ? R.shap[j] : (st.permUpto > 0 ? curOrder.contribs[j] : 0);
+                return {
+                  id: 'sh' + j,
+                  label: FLAB[j] + ' (' + f(v, 3) + ')',
+                  value: v,
+                  cls: v >= 0 ? 'c1' : 'c0'
+                };
+              })
         };
         const wf = [
           { id: 'base', label: '基準 φ₀', value: R.baseVal, cls: 'c5' },

@@ -88,7 +88,7 @@
       small: seed => LAB.data.opd(seed, 24).map(pick),
       large: seed => LAB.data.opd(seed, 36).map(pick),
       view: rows => ({
-        type: 'line', title: '36 個月門診人次',
+        type: 'line', title: rows.length + ' 個月門診人次',
         series: [{ id: 'v', label: '門診人次', pts: rows.map(r => [r.t, r.visits]), cls: 'c0', dots: false }]
       })
     },
@@ -151,7 +151,10 @@
           rows: st.showFc ? R.fcOrig.map((v, h) => ({
             id: 'h' + h,
             cells: [R.n + h + 1, R.fcSeries[h], v]
-          })) : []
+          })) : R.y.slice(0, 6).map((v, i) => ({
+            id: 'init' + i,
+            cells: ['t=' + (i + 1), st.showDiff && R.d === 1 ? (i > 0 ? R.diff1[i - 1] : 0) : v, v]
+          }))
         };
         return [main, side, bottom];
       }
@@ -159,12 +162,12 @@
       const st = { showDiff: false, showAcf: false, showFc: false };
       const add = (line, title, say, calc) => steps.push({ line, title, say, calc: calc || [], views: views(st), focus: [] });
 
-      add(0, '題目', '對 36 個月門診人次建立 ARIMA(' + R.arP + ', ' + R.d + ', 0) 模型（註：AR 係數以最小平方法估計，套件預設 ARIMA 用最大概似法會略有差異）。', [
-        '起始最後一期（第 36 月）= ' + R.y[R.n - 1] + ' 人次'
+      add(0, '題目', '對 ' + R.n + ' 個月門診人次建立 ARIMA(' + R.arP + ', ' + R.d + ', 0) 模型（註：AR 係數以最小平方法估計，套件預設 ARIMA 用最大概似法會略有差異）。', [
+        '起始最後一期（第 ' + R.n + ' 月）= ' + R.y[R.n - 1] + ' 人次'
       ]);
 
       add(1, '檢視序列平穩性', '原序列呈現明顯上升趨勢與季節擺盪，平均值隨時間漂移（非平穩）。', [
-        '第 1 月 = ' + R.y[0] + '，第 36 月 = ' + R.y[R.n - 1]
+        '第 1 月 = ' + R.y[0] + '，第 ' + R.n + ' 月 = ' + R.y[R.n - 1]
       ]);
 
       if (R.d === 1) {
@@ -173,7 +176,7 @@
           't=2：' + R.y[1] + ' − ' + R.y[0] + ' = ' + R.diff1[0],
           't=3：' + R.y[2] + ' − ' + R.y[1] + ' = ' + R.diff1[1]
         ]);
-        add(2, '完成全部 35 期差分', '差分後序列平均 = ' + f(M.mean(R.diff1), 1) + '，趨勢已大致消除。', [
+        add(2, '完成全部 ' + R.diff1.length + ' 期差分', '差分後序列平均 = ' + f(M.mean(R.diff1), 1) + '，趨勢已大致消除。', [
           'Δy 平均 = ' + f(M.mean(R.diff1), 2) + '，標準差 = ' + f(M.sd(R.diff1), 1)
         ]);
       } else {
@@ -193,13 +196,13 @@
       ]);
 
       st.showFc = true;
-      add(5, '遞迴預測差分值', '把前幾期代入 AR(' + R.arP + ') 算出第 37 月預測，再拿它當輸入推算第 38 月…。', [
+      add(5, '遞迴預測差分值', '把前幾期代入 AR(' + R.arP + ') 算出第 ' + (R.n + 1) + ' 月預測，再拿它當輸入推算下一月…。', [
         '未來 ' + R.H + ' 期差分預測：' + R.fcSeries.slice(0, 3).map(v => f(v, 1)).join(', ') + '…'
       ]);
 
       st.showDiff = false;
-      add(6, '累加回原尺度預測', R.d === 1 ? '從第 36 月實際人次出發，把每期預測的增減量逐期累加回去。' : '直接輸出未來 ' + R.H + ' 個月的預測人次。', [
-        '第 37 月預測 = ' + f(R.fcOrig[0], 0) + '，第 ' + (36 + R.H) + ' 月預測 = ' + f(R.fcOrig[R.H - 1], 0)
+      add(6, '累加回原尺度預測', R.d === 1 ? '從第 ' + R.n + ' 月實際人次出發，把每期預測的增減量逐期累加回去。' : '直接輸出未來 ' + R.H + ' 個月的預測人次。', [
+        '第 ' + (R.n + 1) + ' 月預測 = ' + f(R.fcOrig[0], 0) + '，第 ' + (R.n + R.H) + ' 月預測 = ' + f(R.fcOrig[R.H - 1], 0)
       ]);
 
       while (steps.length < 10) {

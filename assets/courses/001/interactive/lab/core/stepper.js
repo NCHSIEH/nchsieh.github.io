@@ -142,6 +142,7 @@
       G1: '對 24 個月門診人次依序對比簡單指數平滑 (SES, 僅水準)、Holt（加線性趨勢）與 Holt-Winters（加 12 期季節指數）如何逐期更新狀態並往未來延伸預測；調整 α、β、γ 觀察對短期波動的敏感度。',
       G2: '先對含趨勢的月門診序列做一階差分 (d=1) 使其平穩 (Stationary)，透過自相關函數 ACF 辨識滯後關聯，再以 AR(p) 線性迴歸預測未來差分值並累加還原回原始門診人次尺度。',
       G3: '示範為什麼時間序列不可用隨機 K-Fold，改以「滑動固定窗 (Sliding)」或「擴張累積窗 (Expanding)」嚴格依時間順序往前滾動預測，真實衡量前瞻誤差 MAE。',
+      G4: '將 24 個月門診序列拆解為「長期趨勢 Tₜ + 12 個月季節效應 Sₜ + 殘差異常 Rₜ (STL 分解)」，再透過 Windowing 將前兩期觀測值轉為 Lag-1、Lag-2 監督式表格特徵，直接交給線性迴歸擬合預測。',
       H1: '從單一中文字元詞表出發，反覆統計並合併出現頻率最高的相鄰符號對 (Byte Pair Encoding, BPE)，示範詞表如何逐輪長出常用雙字與三字醫療詞根，進而用更少 Token 切分未見詞。',
       H2: '將 6 個護理詞彙查表轉為 4 維詞嵌入 (Word Embedding)，並加上正弦／餘弦位置編碼 (Positional Encoding)；對比相鄰位置的向量波紋差異，理解「詞序對調」時輸入矩陣為何能被 Transformer 分辨。',
       H3: '將詞向量投影為 Query、Key、Value，逐格計算縮放點積相似度 (Q·Kᵀ / √d_k)，測試因果遮罩 (Causal Mask) 如何將未來位置歸零，並經 Softmax 轉為注意力權重對 Value 加權融合上下文。',
@@ -152,7 +153,9 @@
       H8: '以門診智能助理為例，在每一輪追蹤 LLM 如何依目前上下文計算 4 個候選動作（病歷 SQL、衛教 RAG、Python 計算機、finish）的 Softmax 選擇機率，透過 Thought → Action → Observation 迴圈把外部真實資料寫回 Prompt Context 完成任務。',
       H9: '串聯現代 LLM 落地三大工程核心：比較無快取 O(T³) 與 KV Cache O(T²) 的自回歸生成內積次數，示範 Cross-Encoder 如何對 RAG 初篩結果做全詞交叉注意力精排，並用 DPO (Direct Preference Optimization) 拉開安全臨床回答與幻覺回答的機率差距。',
       I1: '對單一門診病人的預測機率，枚舉年齡、BMI、血糖全部 3! = 6 種加入順序計算邊際貢獻，精確算出滿足加總公理的 SHAP 值（Base value + ΣSHAP = 預測值），並對照全域排列重要度 (Permutation Importance)。',
-      J1: '（延伸參考）在無監督答案的 4×4 病房網格（含障礙牆、−5 陷阱與 +10 終點）中，讓智能體透過 ε-greedy 試錯探索與貝爾曼 (Bellman) 更新累積經驗，觀察 Q 值熱圖如何從終點反推收斂出最佳避障路線。'
+      I2: '掌握 SHAP 之外的三大臨床解釋工具：LIME 在病人周圍產生微擾樣本擬合局部加權線性模型、PDP / ICE 描繪血糖非線性邊際風險曲線，以及固定年齡不可改、搜尋最小生活型態改變處方的「反事實解釋 (Counterfactuals)」。',
+      J1: '（延伸參考）在無監督答案的 4×4 病房網格（含障礙牆、−5 陷阱與 +10 終點）中，讓智能體透過 ε-greedy 試錯探索與貝爾曼 (Bellman) 更新累積經驗，觀察 Q 值熱圖如何從終點反推收斂出最佳避障路線。',
+      J2: '（延伸參考）以 3 種未知有效率療法的「臨床適應性試驗」為例，比較多臂吃角子老虎機 (Multi-Armed Bandit) 的 ε-Greedy 與 UCB 信賴上界策略如何平衡探索新藥與利用最佳療法，最小化病患累積遺憾 (Cumulative Regret)。'
     };
 
     const canEdit = !!(def.data.editable && def.data.editable.length);
@@ -562,6 +565,10 @@
         win: '【訓練窗長 W (Training Window)】\n用法：初始訓練視窗包含幾個月（6–12），決定每折有多少歷史資料可用來擬合趨勢。',
         horizon: '【每次驗證期數 H (Forecast Horizon)】\n用法：每次往前預測幾個月（1–4）當驗證集，並依此步幅向右滾動下一折。'
       },
+      G4: {
+        ma_win: '【趨勢移動平均窗長 (Trend Moving Average Window)】\n用法：設定以幾個月的中心移動平均萃取平滑長期趨勢 Tₜ（3、5 或 7 個月）。窗長越長趨勢線越平滑。',
+        use_season: '【加入季節特徵 Sₜ (Include Seasonal Feature)】\n用法：開啟後在 Lag-1、Lag-2 之外，將 STL 分解出的當月季節指數 Sₜ 一併作為迴歸特徵，大幅降低淡旺季轉折月份的預測誤差。'
+      },
       H1: {
         merges: '【合併次數 (BPE Merge Operations)】\n用法：設定 Byte Pair Encoding 從單一字元出發要執行幾輪「最高頻相鄰配對合併」（1–12）。\n合併越多，詞表（Vocabulary）包含越長的高頻詞根，序列切分出的 Token 數越少。'
       },
@@ -633,11 +640,23 @@
       I1: {
         target: '【解釋病人 (#) (Target Sample)】\n用法：選擇要進行局部解釋（Local Explanation）的病人編號，查看每個特徵如何將預測從基準平均（Base Value）推向最終輸出，並對照全域排列重要度（Permutation Importance）。'
       },
+      I2: {
+        target: '【解釋病人 (#) (Target Patient)】\n用法：選擇要執行 LIME 局部近似、個人 ICE 曲線與反事實處方搜尋的目標病人編號（1–12）。',
+        kernel_w: '【LIME 指數核寬度 σ (Kernel Width)】\n公式：wᵢ = exp(−dᵢ² / σ²)。\n用法：控制 LIME 微擾樣本的局部鄰域範圍（0.5–2.5）。σ 越小只看極近鄰樣本（切線斜率）；σ 越大涵蓋範圍越廣。'
+      },
       J1: {
         alpha: '【學習率 α (Learning Rate)】\n公式：Q(s,a) ← Q(s,a) + α·[r + γ·max Q(s\',a\') − Q(s,a)]。\n用法：α 越大越快覆寫舊估計（適合確定性環境）；α 較小更新較平緩抗隨機波動。',
         gamma: '【折扣因子 γ (Discount Factor)】\n用法：衡量未來獎勵相對於眼前獎勵的權重（0.50–0.99）。接近 1 代表重視長期回報，會選擇繞過 −5 陷阱去拿 +10 終點獎勵。',
         epsilon: '【探索率 ε (Epsilon-Greedy Exploration)】\n用法：每步有 ε 機率隨機選動作探索新路徑，(1−ε) 機率選目前最大 Q 值動作（利用 Exploitation）。ε=0 純貪婪易卡在次佳解。',
         episodes: '【訓練回合數 (Episodes)】\n用法：智能體從起點 (0,0) 出發直到抵達終點或觸發陷阱結束的總嘗試回合數（10–200），回合越多 Q-Table 越收斂至最優路徑。'
+      },
+      J2: {
+        strategy: '【臨床試驗分派策略 (Bandit Allocation Strategy)】\n比較如何為下一位病人挑選治療方案。',
+        'strategy:ucb': '【UCB 信賴上界法 (Upper Confidence Bound, UCB1)】\n公式：argmax [ Q̂ₜ(a) + c·√(ln t / Nₜ(a)) ]。\n優勢：遵循「面對不確定性保持樂觀」，試驗次數 N 越少的方案獲得越大的探索紅利，不需盲目隨機抽籤。',
+        'strategy:eps': '【ε-Greedy 隨機探索法】\n作法：以 1−ε 機率選目前勝率最高方案，ε 機率隨機分派。\n限制：即使到了後期已經確定 C 藥很差，仍會固定浪費 ε/3 的病人去試 C 藥。',
+        ucb_c: '【UCB 探索係數 c (Exploration Confidence Multiplier)】\n用法：控制不確定性紅利的權重（0.50–2.00）。c 越大越積極嘗試少見方案；c 越小越快收斂到目前領先方案。',
+        epsilon: '【ε 隨機探索率 (Epsilon Exploration Rate)】\n用法：僅在 ε-Greedy 策略下生效，設定隨機分派病人的比例（0.0–0.5）。',
+        rounds: '【試驗總人數 T (Total Trial Patients)】\n用法：設定臨床試驗依序收案的總病人數（15–60 人），觀察累積遺憾（Regret）的長期走勢。'
       }
     };
     const pctl = {};
@@ -682,7 +701,9 @@
       '最小序列支持度 min_sup': 'Min Seq Support', '基準支持度 min_sup': 'Baseline Min Sup', '外加零交易筆數 Null Tx': 'Added Null Tx',
       'N-gram 範圍': 'N-gram Range', '飽和參數 k₁': 'Saturation k₁', '長度正規化 b': 'Length Norm b',
       '激活函數': 'Activation', '批次正規化 BatchNorm': 'BatchNorm', 'Dropout 丟棄率 p': 'Dropout p', '對角線': 'Anti-Diagonal',
-      '生成長度 T': 'Seq Length T', 'DPO 溫度 β': 'DPO Beta β'
+      '生成長度 T': 'Seq Length T', 'DPO 溫度 β': 'DPO Beta β',
+      '趨勢平滑窗長': 'Trend MA Window', '加入季節特徵': 'Seasonal Feature',
+      'LIME 核寬度 σ': 'Kernel Width σ', '分派策略': 'Bandit Strategy', 'UCB 探索係數 c': 'UCB c', 'ε 探索率': 'Epsilon ε', '試驗人數 T': 'Patients T'
     };
     const ACTIVE_IF = {
       'A1.k': ps => ps.method === 'knn',
@@ -694,7 +715,9 @@
       'H5.temperature': ps => ps.strategy === 'sample',
       'H5.top_k': ps => ps.strategy === 'sample',
       'H5.top_p': ps => ps.strategy === 'sample',
-      'H5.seed': ps => ps.strategy === 'sample'
+      'H5.seed': ps => ps.strategy === 'sample',
+      'J2.ucb_c': ps => ps.strategy === 'ucb',
+      'J2.epsilon': ps => ps.strategy === 'eps'
     };
     const withEn = s => (EN_UI[s] && !s.includes(EN_UI[s])) ? s + ' (' + EN_UI[s] + ')' : s;
     function buildParams() {

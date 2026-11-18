@@ -15,7 +15,9 @@
     const method = p.method || 'hw';
 
     const l0 = method === 'hw' ? M.mean(y.slice(0, 12)) : y[0];
-    const b0 = method === 'hw' ? (M.mean(y.slice(12, 24)) - M.mean(y.slice(0, 12))) / 12 : (method === 'holt' ? y[1] - y[0] : 0);
+    const b0 = method === 'hw'
+      ? (n >= 24 ? (M.mean(y.slice(12, 24)) - M.mean(y.slice(0, 12))) / 12 : (y[Math.min(12, n - 1)] - y[0]) / 12)
+      : (method === 'holt' ? y[1] - y[0] : 0);
     const s0 = method === 'hw' ? y.slice(0, 12).map(v => v - l0) : M.range(12, () => 0);
 
     let lv = l0, tr = b0;
@@ -69,7 +71,7 @@
       small: seed => LAB.data.opd(seed, 24).map(pick),
       large: seed => LAB.data.opd(seed, 36).map(pick),
       view: rows => ({
-        type: 'line', title: '36 個月門診人次',
+        type: 'line', title: rows.length + ' 個月門診人次',
         series: [{ id: 'v', label: '門診人次', pts: rows.map(r => [r.t, r.visits]), cls: 'c0', dots: false }]
       })
     },
@@ -82,7 +84,7 @@
     ],
     pseudo: [
       '設定初始水準 ℓ₀、趨勢 b₀ 與季節 s₀',
-      '逐期 t = 1…36 更新：',
+      '逐期 t = 1…N 更新：',
       '  產出一步預測 ŷₜ',
       '  水準 ℓₜ = α·去季節 + (1−α)前值',
       '  趨勢 bₜ = β(ℓₜ−ℓₜ₋₁) + (1−β)bₜ₋₁',
@@ -145,7 +147,7 @@
       const st = { upto: 0, showFc: false };
       const add = (line, title, say, calc, extra) => steps.push(Object.assign({ line, title, say, calc: calc || [], views: views(st), focus: [] }, extra));
 
-      add(0, '題目', '36 個月門診人次有長期成長趨勢與每年固定淡旺季。用 ' + (R.method === 'ses' ? '簡單指數平滑' : R.method === 'holt' ? 'Holt 雙參數' : 'Holt-Winters 三參數') + ' 預測未來 ' + R.H + ' 個月。', [
+      add(0, '題目', R.n + ' 個月門診人次有長期成長趨勢與每年固定淡旺季。用 ' + (R.method === 'ses' ? '簡單指數平滑' : R.method === 'holt' ? 'Holt 雙參數' : 'Holt-Winters 三參數') + ' 預測未來 ' + R.H + ' 個月。', [
         'α = ' + f(p.alpha, 2) + (R.method !== 'ses' ? '，β = ' + f(p.beta, 2) : '') + (R.method === 'hw' ? '，γ = ' + f(p.gamma, 2) : '')
       ]);
 
@@ -168,11 +170,11 @@
       });
 
       st.showFc = true;
-      add(7, '預測未來 ' + R.H + ' 個月', '從第 36 月的最終水準與趨勢出發，加上對應月份的季節指數，往後推出未來 ' + R.H + ' 期預測。', [
-        '第 37 月預測 = ' + f(R.fc[0], 0) + '，第 ' + (36 + R.H) + ' 月預測 = ' + f(R.fc[R.H - 1], 0)
+      add(7, '預測未來 ' + R.H + ' 個月', '從第 ' + R.n + ' 月的最終水準與趨勢出發，加上對應月份的季節指數，往後推出未來 ' + R.H + ' 期預測。', [
+        '第 ' + (R.n + 1) + ' 月預測 = ' + f(R.fc[0], 0) + '，第 ' + (R.n + R.H) + ' 月預測 = ' + f(R.fc[R.H - 1], 0)
       ]);
 
-      add(7, '訓練期誤差 MAE / MAPE', '計算 36 個月一步預測的平均絕對誤差（MAE）與平均絕對百分比誤差（MAPE）。', [
+      add(7, '訓練期誤差 MAE / MAPE', '計算 ' + R.n + ' 個月一步預測的平均絕對誤差（MAE）與平均絕對百分比誤差（MAPE）。', [
         'MAE = ' + f(R.mae, 1) + ' 人次，MAPE = ' + f(R.mape, 2) + '%'
       ]);
       return steps;

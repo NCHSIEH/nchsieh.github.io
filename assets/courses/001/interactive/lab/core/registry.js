@@ -90,6 +90,7 @@
     { id: 'G1', group: 'G', title: '指數平滑', brief: '簡單、Holt、Holt-Winters 逐期更新水準、趨勢與季節。', module: m('M4 第 15 節', '../m4/#p15'), status: 'live' },
     { id: 'G2', group: 'G', title: 'ARIMA', brief: '差分、自相關，到用過去幾期預測下一期。', module: m('M4 第 15 節', '../m4/#p15'), status: 'live' },
     { id: 'G3', group: 'G', title: '滑動視窗驗證', brief: '依時間軸滾動訓練與前瞻驗證，杜絕未來資料洩漏。', module: m('M4 第 15 節', '../m4/#p15'), status: 'live', tier: 'adv' },
+    { id: 'G4', group: 'G', title: '季節分解 STL 與滯後特徵工程', brief: '將序列拆解為趨勢、季節與殘差異常，並用 Windowing 轉成 Lag 表格交給迴歸預測。', module: m('M4 第 15 節', '../m4/#p15'), status: 'live', tier: 'adv' },
 
     { id: 'H1', group: 'H', title: 'BPE 斷詞', brief: '最常相鄰的兩個符號合併成一個，詞表就這樣長出來。', module: m('M7 第 04 節', '../m7/#p04'), status: 'live' },
     { id: 'H2', group: 'H', title: '詞嵌入與位置編碼', brief: '查表得到向量，再加上位置資訊。', module: m('M7 第 07 節', '../m7/#p07'), status: 'live' },
@@ -102,7 +103,9 @@
     { id: 'H9', group: 'H', title: 'KV 快取、Rerank 與偏好對齊', brief: '解析 KV Cache 降複雜度、Cross-Encoder 二階段精排與 DPO 臨床偏好對齊。', module: m('M7 第 09 節', '../m7/#p09'), status: 'live', tier: 'adv' },
 
     { id: 'I1', group: 'I', title: 'SHAP 與排列重要度', brief: '三個特徵的所有加入順序，精確算出每個特徵的貢獻。', module: m('M9 第 11 節', '../m9/#p11'), status: 'live' },
-    { id: 'J1', group: 'J', title: 'Q-learning', brief: '病房送藥路線：走一步、拿獎勵、更新 Q 表。', module: m('延伸參考', ''), status: 'live', tier: 'adv' }
+    { id: 'I2', group: 'I', title: 'LIME、PDP 與反事實解釋', brief: '局部微擾線性代理模型、部分依賴曲線，以及找出最小改善目標的反事實處方。', module: m('M9 第 11 節', '../m9/#p11'), status: 'live', tier: 'adv' },
+    { id: 'J1', group: 'J', title: 'Q-learning', brief: '病房送藥路線：走一步、拿獎勵、更新 Q 表。', module: m('延伸參考', ''), status: 'live', tier: 'adv' },
+    { id: 'J2', group: 'J', title: '多臂老虎機：UCB 與適應性試驗', brief: '在臨床適應性試驗中比較 ε-Greedy 與 UCB 信賴上界，平衡探索與利用並降低病患遺憾。', module: m('延伸參考', ''), status: 'live', tier: 'adv' }
   ];
   LAB.EN_TITLES = {
     S1: 'Data Preprocessing Pipeline',
@@ -171,6 +174,7 @@
     G1: 'Exponential Smoothing',
     G2: 'Autoregressive Integrated Moving Average',
     G3: 'Sliding Window Validation',
+    G4: 'STL Decomposition & Lag Feature Engineering',
     H1: 'Byte Pair Encoding',
     H2: 'Word & Positional Encoding',
     H3: 'Scaled Dot-Product Attention',
@@ -181,7 +185,9 @@
     H8: 'AI Agent (ReAct & Tool Calling)',
     H9: 'KV Cache, Cross-Encoder Rerank & DPO',
     I1: 'SHAP & Permutation Importance',
-    J1: 'Reinforcement Learning'
+    I2: 'LIME, PDP & Counterfactual Explanations',
+    J1: 'Reinforcement Learning',
+    J2: 'Multi-Armed Bandit (UCB & Adaptive Trials)'
   };
   LAB.TOOLS = {
     S1: { ais: 'Read CSV / Replace Missing / Normalize', py: 'scikit-learn (Pipeline / SimpleImputer / StandardScaler)' },
@@ -257,6 +263,7 @@
     G1: { ais: 'Holt-Winters (Time Series 擴充)', py: 'statsmodels (ExponentialSmoothing)' },
     G2: { ais: 'ARIMA (Time Series 擴充)', py: 'statsmodels (ARIMA / AutoReg)' },
     G3: { ais: 'Sliding Validation + Windowing', py: 'scikit-learn (TimeSeriesSplit)' },
+    G4: { ais: 'STL Decomposition + Windowing', py: 'statsmodels (seasonal_decompose) + pandas (shift)' },
 
     H1: { ais: null, py: 'tiktoken / HuggingFace tokenizers (BPE)' },
     H2: { ais: null, py: 'PyTorch (nn.Embedding + Positional Encoding)' },
@@ -269,7 +276,9 @@
     H9: { ais: null, py: 'transformers (KV Cache) / sentence-transformers (CrossEncoder) / trl (DPOTrainer)' },
 
     I1: { ais: 'Explain Predictions', py: 'shap / scikit-learn (permutation_importance)' },
-    J1: { ais: null, py: 'numpy / gymnasium (Q-Learning)' }
+    I2: { ais: 'Explain Predictions (LIME) + Model Simulator', py: 'lime / scikit-learn (PartialDependenceDisplay) / dice-ml' },
+    J1: { ais: null, py: 'numpy / gymnasium (Q-Learning)' },
+    J2: { ais: null, py: 'numpy / scipy (UCB1 & Multi-Armed Bandit)' }
   };
   LAB.displayTitle = (id, base) => {
     const en = LAB.EN_TITLES[id];

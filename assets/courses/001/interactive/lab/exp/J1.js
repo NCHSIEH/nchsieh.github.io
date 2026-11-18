@@ -132,7 +132,7 @@
 
       function qMatrix(Q) {
         return M.range(4, r => M.range(4, c => {
-          if (OBST.has(r + ',' + c)) return null;
+          if (OBST.has(r + ',' + c)) return -5;
           return M.max(Q[r * 4 + c]);
         }));
       }
