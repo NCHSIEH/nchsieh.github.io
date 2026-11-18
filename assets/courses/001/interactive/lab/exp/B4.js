@@ -61,7 +61,7 @@
         if (s.cur != null) { const r = rows.find(x => x.id === s.cur); lines = [{ id: 'cur', x1: p.qAge, y1: p.qGlu, x2: r.age, y2: r.glu, cls: 'hl', w: 2, label: f(dOf[r.id].d, 2) }]; }
         if (s.picked) lines = R.nb.map(n => { const r = rows.find(x => x.id === n.id); return { id: 'n' + n.id, x1: p.qAge, y1: p.qGlu, x2: r.age, y2: r.glu, cls: cls(n.dm), w: 2 }; });
         const circles = s.picked ? [{ id: 'kr', x: p.qAge, y: p.qGlu, r: dk * (p.scale ? R.sA : 1), ry: dk * (p.scale ? R.sG : 1), cls: 'hl' }] : [];
-        const main = { type: 'scatter', slot: 'main', axes: AX, points, lines, circles, regions: s.regions || null, legend: LEG.concat(s.regions ? [{ cls: 'c1', shape: 'area', label: '這一帶會判為「是」' }] : []) };
+        const main = { type: 'scatter', slot: 'main', title: '年齡 × 空腹血糖與 K = ' + R.k + ' 最近鄰搜尋範圍', axes: AX, points, lines, circles, regions: s.regions || null, legend: LEG.concat(s.regions ? [{ cls: 'c1', shape: 'area', label: '這一帶會判為「是」' }] : []) };
 
         const cols = [{ key: 'id', label: '#' }];
         if (p.scale) cols.push({ key: 'za', label: 'Z年齡', num: true }, { key: 'zg', label: 'Z血糖', num: true }); else cols.push({ key: 'age', label: '年齡', num: true, digits: 0 }, { key: 'glu', label: '血糖', num: true, digits: 0 });
@@ -75,9 +75,10 @@
           return { id: r.id, cells: c, hl: s.cur === r.id || (s.picked && inK.has(r.id)), dim: s.picked && !inK.has(r.id) };
         });
         const side = { type: 'table', slot: 'side', title: s.sorted ? '距離表（已排序）' : '距離表', cols, rows: trs, hlCol: s.upto > 0 ? 'd' : null, caption: big ? '只列出' + (s.sorted ? '最近的' : '前') + ' 12 位' : null };
-        const out = [main, side];
-        if (s.vote) out.push({ type: 'bars', slot: 'bottom', title: 'K = ' + R.k + ' 位鄰居的投票', max: R.k, digits: 0, unit: ' 票', items: [{ id: 'yes', label: '糖尿病：是', value: R.yes, cls: 'c1', hl: s.pred === 1 }, { id: 'no', label: '糖尿病：否', value: R.k - R.yes, cls: 'c0', hl: s.pred === 0 }] });
-        return out;
+        const bottom = s.vote
+          ? { type: 'bars', slot: 'bottom', title: 'K = ' + R.k + ' 位鄰居的多數決投票（P(是) = ' + f(R.pYes, 2) + '）', max: R.k, digits: 0, unit: ' 票', items: [{ id: 'yes', label: '糖尿病：是', value: R.yes, cls: 'c1', hl: s.pred === 1 }, { id: 'no', label: '糖尿病：否', value: R.k - R.yes, cls: 'c0', hl: s.pred === 0 }] }
+          : { type: 'bars', slot: 'bottom', title: '最近 K = ' + R.k + ' 位候選鄰居距離預覽（越小越相似）', max: Math.max(2, R.order[Math.min(R.k, R.order.length - 1)].d * 1.3), digits: 2, items: R.nb.map(n => ({ id: 'nb' + n.id, label: '#' + n.id + ' (' + (n.dm ? '是' : '否') + ')', value: s.upto > 0 ? n.d : 0, cls: cls(n.dm), hl: s.picked })) };
+        return [main, side, bottom];
       }
       const add = (line, title, say, calc, s, extra) => steps.push(Object.assign({ line, title, say, calc: calc || [], views: views(s), focus: s.cur != null ? [s.cur] : s.picked ? R.nb.map(n => n.id) : [] }, extra));
 

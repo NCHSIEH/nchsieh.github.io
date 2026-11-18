@@ -156,7 +156,7 @@
           title: '決策樹結構（' + critName + '）',
           nodes: treeNodes(st.revealed, st.activeId, st.pathSet)
         };
-        const cands = st.cands || [];
+        const cands = (st.cands && st.cands.length) ? st.cands : (T.root.cands || []);
         const sorted = cands.slice().sort((a, b) => b.gain - a.gain).slice(0, 8);
         const side = {
           type: 'table', slot: 'side',

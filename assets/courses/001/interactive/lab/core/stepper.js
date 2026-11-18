@@ -76,6 +76,15 @@
     const exBody = h('div', { class: 'body' }), exSec = h('section', { class: 'lab-sec lock' }, h('h2', null, '看懂了什麼'), exBody);
     const aisSec = h('section', { class: 'lab-sec' });
     const GOALS = {
+      S1: '透過 6 階段全寬動畫流程圖，對照「線性／距離模型」、「樹與集成模型」與「防資料洩漏嚴格管線」三條標準資料前處理路徑，清楚標示 A1–A9 各演算法的介入時機與 Train fit → Test transform 鐵律。',
+      S2: '完整走過監督式學習 6 階段：80/20 封存測試集、依四大主流管線（線性距離、單一決策樹、Bagging/Boosting/Stacking 集成、不平衡折內 SMOTE）做專屬前處理、K-Fold 交叉驗證網格調參、全訓練集重訓與最終驗收（對照 B1–B18）。',
+      S3: '針對無標籤 y 的資料，透過 6 階段動畫流程圖比較「病人亞型分群 (C1–C4, C9–C10)」、「無監督異常偵測 (C7–C8, F5)」與「高維降維壓縮 (C5 PCA, C6 t-SNE)」三條探勘管線與臨床落地方式。',
+      S4: '透過 6 階段架構動畫流程圖，同場對照深度學習 4 大主流神經網路管線：MLP 表格全連接網路、CNN 2D 醫療影像卷積池化、LSTM 生理序列記憶胞與 Autoencoder 無監督瓶頸重建（標註 F1–F5 演算法與橙色反向傳播回流）。',
+      S5: '對照文字探勘三個世代的 6 階段管線：傳統斷詞＋TF-IDF＋貝氏分類／LDA（E1, E2, E4）、Word2Vec Skip-gram 稠密詞向量（E3），以及現代 Transformer LLM＋RAG 混合檢索＋LoRA 微調（H1–H7）。',
+      S6: '展示時間序列預測不可隨機打亂的 6 階段流程：對比「統計 ETS／ARIMA (G1, G2)」、「滯後特徵 Lag-k 機器學習」與「LSTM 深度序列 (F4)」，並以 G3 滑動／擴張視窗往前滾動驗證。',
+      S7: '從門診處方交易籃出發，透過 6 階段流程圖對照 Apriori 逐層候選剪枝（D1）與 FP-Growth 前綴樹壓縮（D2），並示範為何通過 Support 與 Confidence 後還必須用 Lift > 1 剔除熱門藥品假關聯。',
+      S8: '模型通過測試集驗收後的 6 階段臨床落地管線：結合 I1 全域排列重要度與單筆 SHAP 瀑布歸因、機率校準與 B16 醫療成本門檻調整，以及上線後 PSI 分布飄移監控與觸發滾動重訓閉環。',
+      S9: '透過 6 階段全寬動畫流程圖，拆解最新生成式 AI Agent 三大主流架構：ReAct 單代理推理與工具呼叫迴圈（H8）、Coordinator + 平行專才 + Critic 的 Multi-Agent 多代理協作，以及結合 JSON Schema 護欄與醫師把關的混合工作流。',
       A1: '對同一份含遺失值的健檢資料，實測「平均數 (Mean)」、「中位數 (Median)」與「k-NN 鄰居補值 (k-NN Imputation)」如何填補空格；觀察平均數法如何人為壓低標準差 (SD)，而 k-NN 如何在散佈圖上依最近鄰居保留原始分佈。',
       A2: '將年齡（歲）與空腹血糖（mg/dL）換算為 Z 分數 (Z-score) 或 Min-Max [0, 1] 區間；觀察未縮放前血糖如何主導歐氏距離 (Euclidean Distance)，以及縮放後病人 A 的最近鄰居是否翻轉。',
       A3: '以「等寬 (Equal-Width)」、「等頻 (Equal-Frequency)」與「依熵監督式 (Entropy-based)」將連續血糖切成離散區間；對比極端高血糖（198）出現時等寬箱如何擠成一團，而依熵分箱如何精準對齊糖尿病風險轉折點。',
@@ -101,6 +110,8 @@
       B14: '針對連續數值目標（收縮壓），改用「誤差平方和 (SSE) 下降量」挑選最佳分裂切點，觀察每個葉節點如何輸出該區間平均收縮壓並形成階梯狀預測曲線。',
       B15: '透過循序覆蓋 (Sequential Covering / RIPPER) 學出可讀性最高的「IF … THEN 糖尿病」臨床規則清單，每學一條高精確率規則就移除被覆蓋病人，並加上 ELSE 預設類別。',
       B16: '將分類門檻由 1.00 逐步放寬至 0.00，即時追蹤 TP/FP/TN/FN 消長並連成 ROC 曲線與 Precision–Recall (PR) 曲線，對比 ROC-AUC 與不平衡資料上更誠實的 PR-AUC。',
+      B17: '將單純貝氏推廣至連續數值特徵（Gaussian Naive Bayes），並與費雪線性判別分析 (Fisher LDA) 同場對照：觀察各特徵獨立變異的二次曲線邊界，與共用共變異數矩陣 Σ 推導出的最佳直線判別邊界。',
+      B18: '面對「正常／糖尿病前期／確診糖尿病」三類別分期任務，比較將問題拆成 3 個獨立二元分類器的 One-vs-Rest (一對多) 策略，與透過 Softmax 交叉熵聯合最佳化三類別邊界的多元邏輯迴歸。',
       C1: '在標準化 BMI × 血糖空間反覆執行「指派最近中心」與「移動中心至成員平均」，透過中心輻射連線與勢力範圍底色觀察 SSE 單調下降；切換 9 組起始中心驗證 K-Means 易受初值影響而落入局部最佳解。',
       C9: '對 K=2..5 執行 K-Means，逐點計算同群平均距離 a(i) 與最近外群距離 b(i) 得出輪廓係數 (Silhouette Score)，並同場繪出 SSE 手肘曲線，解答「分幾群最合適」的實務選擇題。',
       C10: '在含極端高血糖離群點 #12 的資料上以 PAM (Partitioning Around Medoids) 挑選真實病人當群中心，並與 K-Means 幾何平均中心（星號）同場對照，直觀見證 Medoid 抗離群值不被拉偏的優勢。',
@@ -154,6 +165,61 @@
     /* ---------- 參數列 ---------- */
     /* ---------- 參數與選項提示字典 ---------- */
     const TIPS = {
+      S1: {
+        mode: '【前處理參考管線 (Preprocessing Pipeline)】\n切換不同下游模型家族所需的前處理步驟組合。',
+        'mode:linear': '【線性／距離模型管線 (Linear / Distance Pipeline)】\n適用：線性迴歸、Logistic、k-NN、SVM、PCA、神經網路。\n重點：必做離群值縮尾 (A7)、偏態轉換 (A8)、Dummy 去共線編碼 (A4)、Z 分數標準化 (A2) 與 VIF 共線性檢查 (A9)。',
+        'mode:tree': '【樹與集成模型管線 (Tree & Ensemble Pipeline)】\n適用：決策樹、隨機森林、AdaBoost、GBDT/XGBoost。\n重點：樹模型只看特徵排序切點，可省略 Z 分數縮放保留原始臨床單位，並支援 One-Hot 全欄與等頻/依熵分箱 (A3)。',
+        'mode:leak_safe': '【防資料洩漏嚴格管線 (Leakage-Safe Pipeline)】\n鐵律：第一步先切分訓練集與測試集！補值中位數、縮放 μ/σ、目標編碼與 SMOTE 全都只能在訓練集 fit，再單向 transform 套用至驗證與測試集。'
+      },
+      S2: {
+        mode: '【監督式學習管線 (Supervised Pipeline)】\n依模型原理與資料特性選擇四條標準訓練與驗證管線。',
+        'mode:clf': '【線性／距離與機率模型 (Linear / Distance / Probabilistic)】\n涵蓋：B1–B5、B10 SVM、B17 LDA、B18 Softmax。\n重點：對特徵尺度與共線性敏感，必先標準化並在 K-Fold 內調正則化參數 λ 或 C。',
+        'mode:tree': '【單一決策樹與規則歸納 (Decision Tree & Rule Induction)】\n涵蓋：B6 分類樹、B14 迴歸樹、B15 RIPPER 規則。\n重點：白箱可解釋性最高（直接產出樹狀圖或 IF-THEN 規則），調參重在限制 max_depth 與 min_leaf 防過擬合。',
+        'mode:ensemble': '【集成學習管線 (Bagging / Boosting / Stacking)】\n涵蓋：B7 隨機森林、B8 AdaBoost、B9 GBDT、B12 Voting/Stacking。\n重點：表格資料競賽與實務準確率最高，結合同質多樹或異質模型，最後搭配 I1 SHAP 補回可解釋性。',
+        'mode:imbalance': '【極度不平衡分類管線 (Imbalanced Classification)】\n涵蓋：A5 折內 SMOTE + 類別加權 + B16 PR 曲線門檻校正。\n重點：嚴禁在 K-Fold 切分前做 SMOTE，且改看 PR-AUC 與 Recall 取代易被多數類稀釋的 Accuracy。',
+        k: '【K-Fold 交叉驗證折數 (Number of CV Folds)】\n用法：將 80% 訓練開發集均分為 K 折（3–10 折，常用 5 或 10 折）輪流當驗證集，穩定評估超參數。'
+      },
+      S3: {
+        mode: '【非監督式探勘管線 (Unsupervised Pipeline)】\n在沒有標準答案標籤 y 的情況下，依探勘目的選擇三條主流管線。',
+        'mode:cluster': '【病人亞型分群管線 (Patient Subtyping / Clustering)】\n涵蓋：C1 K-Means、C2 階層式、C3 DBSCAN、C4 GMM、C10 K-Medoids。\n重點：先標準化與 PCA 去噪，再用 C9 手肘法與輪廓係數挑出最佳群數 K，最後依各群臨床特徵均值命名。',
+        'mode:anomaly': '【無監督異常偵測管線 (Unsupervised Anomaly Detection)】\n涵蓋：C7 LOF 局部密度比、C8 Isolation Forest 隨機孤立樹、F5 Autoencoder 重建誤差。\n重點：挑出異常分數最高的極端個案交由臨床專家複核（區分登錄錯誤或罕見重症）。',
+        'mode:dimred': '【高維降維與視覺化管線 (Dimensionality Reduction)】\n涵蓋：C5 PCA 線性正交主成分、C6 t-SNE 非線性流形鄰居對齊。\n重點：PCA 依累積解釋變異（≥80%）壓縮去共線供下游建模；t-SNE 專用於 2D 視覺化探索群聚結構。'
+      },
+      S4: {
+        arch: '【深度學習主流架構管線 (Deep Learning Architecture)】\n依輸入資料型態（表格、影像、序列、無標籤）切換四種神經網路架構與專屬訓練流程。',
+        'arch:mlp': '【MLP 多層感知器 — 表格資料 (Tabular MLP)】\n架構：輸入層 → 全連接隱藏層 (Dense + ReLU + Dropout) → 輸出層 ŷ。\n搭配：F1 反向傳播連鎖律 + F2 Adam 自適應更新。',
+        'arch:cnn': '【CNN 卷積神經網路 — 醫療影像 (2D Medical Imaging)】\n架構：影像增強 → F3 平行 3×3 卷積核提取邊緣/紋理 → MaxPool 空間降維 → Flatten + Dense 分類頭 + Grad-CAM 熱圖歸因。',
+        'arch:lstm': '【LSTM 長短期記憶 — 生理時序 (Sequential / Time-Series)】\n架構：滑動視窗切分 → F4 記憶胞 (遺忘閘 f、輸入閘 i、輸出閘 o) 跨時間步傳遞 → BPTT 跨時反向傳播與梯度裁剪。',
+        'arch:ae': '【Autoencoder 自編碼器 — 無監督異常偵測 (Bottleneck Reconstruction)】\n架構：僅用正常樣本訓練「編碼壓縮 → F5 低維瓶頸 z → 解碼還原」，以重建誤差 ‖x−x̂‖² 抓出無法還原的異常病況。'
+      },
+      S5: {
+        mode: '【NLP 與文字處理管線 (NLP & LLM Pipeline)】\n比較三個世代的醫療文本處理流程。',
+        'mode:classic': '【傳統統計管線：斷詞 + TF-IDF + 分類/主題】\n涵蓋：E1 中文最大匹配斷詞、停用詞過濾、TF-IDF 稀疏矩陣，接 E2 單純貝氏分類或 E4 LDA 主題探勘。',
+        'mode:embed': '【詞向量管線：Word2Vec 稠密語意空間】\n涵蓋：E3 Skip-gram 滑動視窗預測上下文 + 負採樣，將同義醫療詞（如頭暈↔眩暈）映射到相近餘弦距離。',
+        'mode:llm': '【現代生成式管線：Transformer + RAG + LoRA】\n涵蓋：H1 BPE 子詞、H2 位置編碼、H3/H4 自注意力、H6 BM25+向量混合檢索 (RRF)、H7 LoRA 微調與 H5 Top-p 解碼。'
+      },
+      S6: {
+        mode: '【時間序列預測管線 (Time Series Pipeline)】\n依資料規模與變數多寡選擇三條標準時序預測流程（皆嚴守 G3 時間序滾動驗證）。',
+        'mode:stat': '【經典統計管線：指數平滑 ETS 與 ARIMA】\n涵蓋：G1 SES/Holt/Holt-Winters 季節平滑、G2 一階差分平穩化 + ACF 診斷 + AR(p) 自迴歸。適合單變數中短期預測。',
+        'mode:ml_lag': '【機器學習管線：Lag 滯後特徵工程 + GBDT/迴歸】\n作法：將過去 t−1, t−2 期數值、滾動平均與假日外生變數轉為表格欄位，交給 B1 迴歸或 B9 GBDT 預測。',
+        'mode:dl_seq': '【深度序列管線：視窗標準化 + LSTM 閘門網路】\n作法：以訓練段統計量標準化後切為固定長度序列視窗，交給 F4 LSTM 捕捉複雜長期非線性動態。'
+      },
+      S7: {
+        mode: '【關聯規則探勘管線 (Association Rule Mining)】\n比較兩種挖掘頻繁處方／共病組合的演算法流程（找出的頻繁集與規則完全相同）。',
+        'mode:apriori': '【D1 Apriori 逐層候選剪枝管線】\n原理：利用「不頻繁項目的超集必不頻繁」反單調性，由 L₁ → C₂ → L₂ → C₃ 逐層產生候選集並掃描資料庫計數。',
+        'mode:fpgrowth': '【D2 FP-Growth 頻繁模式樹壓縮管線】\n原理：只掃描資料庫 2 次，將交易壓縮進前綴樹 (FP-Tree) 並由條件模式基直接遞迴挖掘，免產生龐大候選集、速度極快。'
+      },
+      S8: {
+        mode: '【模型臨床落地與監控管線 (Deployment, XAI & MLOps)】\n切換模型上線前解讀校準與上線後持續監控兩大重點。',
+        'mode:xai': '【XAI 可解釋性與醫療門檻校準管線】\n涵蓋：I1 全域排列重要度（排查資料洩漏假線索）、單筆 SHAP 瀑布圖（向醫師解釋個別病人風險來源）與 B16 成本門檻校正。',
+        'mode:mlops': '【MLOps 線上飄移監控與滾動重訓閉環】\n涵蓋：比較線上輸入分布與訓練期基準的 PSI 指標（偵測季節或人口結構飄移），一旦效能衰退即觸發 G3 滾動重訓。'
+      },
+      S9: {
+        mode: '【AI Agent 智能體架構管線 (AI Agent Architecture)】\n比較三種主流 LLM Agent 系統設計模式。',
+        'mode:react': '【ReAct 單代理推理與工具迴圈 (Reasoning + Acting)】\n流程：Thought (CoT 盤點缺口) → Action (H8 Softmax 挑選並呼叫 SQL / H6 RAG / Python 工具) → Observation (結果寫回 Context)，重複直到資訊齊備。',
+        'mode:multi': '【Multi-Agent 多代理分工協作 (Coordinator + Workers + Critic)】\n流程：由協調者拆解複雜臨床任務，分派給擁有獨立工具的「資料、文獻、程式」專才代理平行執行，再由 Critic 審查代理交叉查核防幻覺。',
+        'mode:workflow': '【確定性護欄＋人工把關混合工作流 (Guardrail + Human-in-the-Loop)】\n流程：意圖路由 → JSON Schema 結構化抽取 → 程式規則護欄（檢查劑量與格式）→ 高風險動作強制經醫師點按確認才執行。'
+      },
       A1: {
         method: '遺失值補值法（Missing Value Imputation）：選擇填補空格的策略，觀察欄位平均值與標準差（Standard Deviation）的變化。',
         'method:mean': '【平均數補值 (Mean Imputation)】\n作法：用該欄有效值的算術平均填補所有空格。\n具體效果：補完後欄位平均不變，但標準差會縮小（資料被拉向中心）。\n適用：數值接近常態分佈（Normal Distribution）且無極端離群值時。',
@@ -202,6 +268,17 @@
         'method:drop': '【直接刪除 (Drop Outliers)】\n作法：移出超出圍籬的病人；適合確定為輸入錯誤或儀器故障，缺點是減少樣本數。',
         'method:winsor': '【縮尾截斷 (Winsorizing / Capping)】\n作法：將極端值壓回上下圍籬上限，既消除單點拉偏斜率又保留該病人的其餘欄位資訊。',
         iqr_k: '【IQR 倍數 k (Fence Multiplier)】\n用法：標準 Tukey 盒鬚圖設 k=1.5；調高至 2.5 只抓最極端離群點，調低至 1.0 會更嚴格過濾。'
+      },
+      A8: {
+        method: '【偏態轉換與穩健縮放 (Skewness Transform & Robust Scaling)】\n處理醫療費用、發炎指數 CRP 等嚴重右偏長尾分布的前處理方法。',
+        'method:log1p': '【對數轉換 y = ln(1 + x) (Log1p Transform)】\n效果：強力壓縮右偏大數值（如將 142 壓至 4.96），使偏態係數 γ₁ 大幅趨近 0、分布恢復常態對稱；加 1 可安全處理 x = 0。',
+        'method:sqrt': '【平方根轉換 y = √x (Square-Root Transform)】\n效果：溫和壓縮右偏長尾，適合計數型資料（如門診次數、住院天數）且天然支援 0 值。',
+        'method:robust': '【穩健縮放 (x − Median) / IQR (RobustScaler)】\n效果：以中位數定 0 點、四分位距 IQR 定單位刻度，完全不怕極端值拉大標準差而把正常樣本壓扁（注意：屬線性平移縮放，不改變分布偏態形狀）。'
+      },
+      A9: {
+        vif_th: '【VIF 共線性警戒門檻 (Variance Inflation Factor Threshold)】\n公式：VIFⱼ = 1 / (1 − Rⱼ²)，衡量特徵 j 可被其餘特徵線性預測的程度。',
+        'vif_th:5': '【嚴格門檻 VIF ≤ 5 (Rⱼ² ≤ 0.80)】\n適用：臨床統計推論與勝算比 (OR) 解讀，確保迴歸係數標準誤不膨脹、正負號穩定。',
+        'vif_th:10': '【一般門檻 VIF ≤ 10 (Rⱼ² ≤ 0.90)】\n適用：一般預測建模常見上限；超過 10 代表嚴重多重共線性（如同時放入身高、體重與 BMI），必須剔除冗餘欄。'
       },
       B1: {
         method: '線性迴歸求解（Linear Regression Solver）：比較閉式公式解與疊代最佳化。',
@@ -477,6 +554,28 @@
         epochs: '【訓練輪數 (Epochs)】\n用法：凍結原始預訓練權重 W₀，只對低秩配接器（Adapter）A 與 B 做梯度下降的輪數（20–200）。',
         lr: '【學習率 η (Learning Rate)】\n用法：更新低秩矩陣 A、B 參數的步長（0.01–0.20）。'
       },
+      H8: {
+        task: '【臨床智能體任務 (Clinical Agent Task)】\n切換不同複雜度的門診提問，觀察 ReAct Agent 如何動態規劃工具呼叫順序。',
+        'task:combo': '【綜合任務：查檢驗＋Python 算風險比＋RAG 查衛教】\n完整走過「病歷 SQL → Python 計算機 → 衛教 RAG → finish」共 4 輪閉環推理。',
+        'task:bmi': '【計算任務：查身高體重＋Python 精確算 BMI】\n走過「病歷 SQL → Python 計算機 → finish」3 輪，避免 LLM 直接心算浮點數出錯。',
+        'task:guide': '【檢索任務：查糖化血色素＋RAG 比對臨床指引】\n走過「病歷 SQL → 衛教 RAG (H6) → finish」3 輪，確保衛教建議有據可查。',
+        temp: '【溫度係數 τ (Softmax Temperature)】\n公式：P(toolᵢ) = exp(zᵢ / τ) / Σ exp(zⱼ / τ)。\n用法：τ 設低（0.2–0.5）使機率高度集中在最高分工具，決策最穩定；τ 調高（1.5–2.0）使各工具機率拉平，增加隨機探索風險。',
+        max_steps: '【最大步數上限 (Max Iterations / Steps)】\n用法：設定 ReAct 迴圈最多允許呼叫幾次工具（2–5 步）。實務必設上限以防止外部 API 失敗時 Agent 陷入無窮迴圈燒光 Token。'
+      },
+      B17: {
+        method: '【連續特徵生成式分類器 (Generative Classifier)】\n比較兩種先對各類別特徵分布 P(x|y) 建模再用貝氏定理求 P(y|x) 的方法。',
+        'method:gnb': '【高斯單純貝氏 (Gaussian Naive Bayes)】\n假設：各特徵條件獨立，每個類別對 BMI 與血糖各自估計平均值與標準差。\n邊界：因兩群變異數不同，決策邊界呈微彎的二次曲線 (Quadratic)。',
+        'method:lda': '【費雪線性判別分析 (Fisher Linear Discriminant Analysis, LDA)】\n假設：兩類別共用同一個共變異數矩陣 Σ，最大化「組間距離 ÷ 組內變異」。\n邊界：二次項相消，決策邊界必為一條直線 w·x + b = 0。',
+        qBmi: '【新病人 BMI (Query BMI)】\n用法：移動待測新病人（星號）的 BMI，觀察其落入哪一類的常態分布等高橢圓與後驗機率變化。',
+        qGlu: '【新病人空腹血糖 (Query Fasting Glucose)】\n用法：移動待測新病人的空腹血糖值（80–190 mg/dL），即時比較 GNB 與 LDA 的後驗機率 P(是|x)。'
+      },
+      B18: {
+        method: '【多元分類策略 (Multiclass Classification Strategy)】\n當目標類別 K = 3（正常／糖尿病前期／確診糖尿病）時的建模方式。',
+        'method:softmax': '【Softmax 多元邏輯迴歸 (Multinomial Logistic Regression)】\n公式：P(y=k|x) = exp(zₖ) / Σⱼ exp(zⱼ)。\n原理：單一模型同時學習 3 組權重並在交叉熵損失下聯合最佳化，三類機率天然總和為 1、邊界銜接最平滑。',
+        'method:ovr': '【One-vs-Rest 一對多策略 (1-against-all)】\n原理：拆成 3 個獨立二元分類器（正常 vs 其他、前期 vs 其他、確診 vs 其他），各自算 Sigmoid 機率再除以總和正規化。可將任何二元分類器（如 SVM）推廣至多元分類。',
+        qBmi: '【新病人 BMI (Query BMI)】\n用法：拖曳改變待測新病人的 BMI（19–36 kg/m²），觀察三類別預測機率長條圖的消長。',
+        qGlu: '【新病人空腹血糖 (Query Fasting Glucose)】\n用法：拖曳改變待測新病人的血糖（80–185 mg/dL），看星號跨越「正常 → 前期 → 確診」三個決策區域。'
+      },
       I1: {
         target: '【解釋病人 (#) (Target Sample)】\n用法：選擇要進行局部解釋（Local Explanation）的病人編號，查看每個特徵如何將預測從基準平均（Base Value）推向最終輸出，並對照全域排列重要度（Permutation Importance）。'
       },
@@ -519,7 +618,12 @@
       '多項式階數 d': 'Degree d', '顯示驗證點': 'Validation Set', '集成方式': 'Ensemble', '軟機率投票': 'Soft Voting',
       '折數 K-Fold': 'Folds', '評估指標': 'Metric', '觀察群數 K': 'Clusters K', '分群數 K': 'Clusters K', '對照 K-Means 平均中心': 'Compare K-Means',
       '處理方式': 'Handling', 'IQR 倍數 k': 'IQR Multiplier', '最多規則數': 'Max Rules', '單條最少涵蓋數': 'Min Coverage',
-      '曲線類型': 'Curve', 'ROC 曲線': 'ROC', 'PR 曲線': 'PR', '視窗模式': 'Window Mode', '訓練窗長 W': 'Window W', '每次驗證期數 H': 'Horizon H'
+      '曲線類型': 'Curve', 'ROC 曲線': 'ROC', 'PR 曲線': 'PR', '視窗模式': 'Window Mode', '訓練窗長 W': 'Window W', '每次驗證期數 H': 'Horizon H',
+      '前處理管線': 'Pipeline', '監督式管線': 'Pipeline', '交叉驗證 K': 'CV Folds K', '非監督管線': 'Pipeline',
+      '網路架構': 'Architecture', '文字處理管線': 'NLP Pipeline', '預測管線': 'TS Pipeline', '探勘管線': 'Mining Pipeline',
+      '落地管線': 'Deployment', 'Agent 架構管線': 'Agent Mode', '轉換方法': 'Transform', 'VIF 警戒門檻': 'VIF Threshold',
+      '生成式模型': 'Generative Model', '多元分類法': 'Multiclass Strategy', '新病人 BMI': 'Query BMI', '新病人血糖': 'Query Glucose',
+      '臨床任務': 'Agent Task', '溫度係數 τ': 'Temperature τ', '最大步數上限': 'Max Steps'
     };
     const ACTIVE_IF = {
       'A1.k': ps => ps.method === 'knn',

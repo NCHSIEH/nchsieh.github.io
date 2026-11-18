@@ -86,7 +86,7 @@
       ] : [
         { id: 's0', st: '1. 準備與切分', alg: 'Stratified Split (80/20)', use: '線性／距離模型對資料洩漏敏感，必先切分' },
         { id: 's1', st: '2. 必做縮放與共線處理', alg: 'A2 標準化 · A4 Dummy · A7 縮尾', use: '必做 Z 分數（否則 k-NN/SVM 被大尺度欄主導）' },
-        { id: 's2', st: '3. ' + R.k + '-Fold 調正則化', alg: 'B1/B2 Ridge·Lasso / B3 / B4 / B5 / B10', use: '用 B13 網格搜尋調 λ、k-NN 的 K 或 SVM 的 C' },
+        { id: 's2', st: '3. ' + R.k + '-Fold 調正則化', alg: 'B1–B5 / B10 / B17 LDA / B18 多元', use: '用 B13 網格搜尋調 λ、k-NN 的 K 或 SVM 的 C' },
         { id: 's3', st: '4. 全訓練集重訓', alg: 'B2/B3/B10 最佳超參數', use: '用全部訓練資料算出最終權重或支持向量' },
         { id: 's4', st: '5. 驗收與係數解讀', alg: 'B16 ROC/PR · 勝算比 OR', use: '線性模型可直接從係數 exp(w) 解讀風險倍數' }
       ];

@@ -147,7 +147,8 @@
           title: '迴歸決策樹結構（最小化 SSE）',
           nodes: treeNodes(st.revealed, st.activeId)
         };
-        const sorted = (st.cands || []).slice().sort((a, b) => b.red - a.red).slice(0, 7);
+        const cands = (st.cands && st.cands.length) ? st.cands : (T.root.cands || []);
+        const sorted = cands.slice().sort((a, b) => b.red - a.red).slice(0, 7);
         const side = {
           type: 'table', slot: 'side',
           title: st.tblTitle || '候選切點（SSE 下降量）',

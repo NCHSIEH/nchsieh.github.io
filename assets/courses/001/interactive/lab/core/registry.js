@@ -18,7 +18,7 @@
   const m = (name, url) => ({ name, url });
   LAB.registry = [
     { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A9 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
-    { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '分類、迴歸與不平衡 3 條管線，含 K-Fold 調參回圈與 B1–B16 對照。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
+    { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '線性距離、樹與規則、集成與不平衡 4 條管線，含 K-Fold 調參與 B1–B18 對照。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
     { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '病人分群、異常偵測與降維壓縮 3 條管線，對照 C1–C10 演算法。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
     { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大主流架構管線。', module: m('M5 深度學習', '../m5/'), status: 'live' },
     { id: 'S5', group: 'S', title: 'NLP 與 LLM 處理流程', brief: '傳統 TF-IDF、Word2Vec 詞向量與現代 LLM＋RAG 3 條文字管線。', module: m('M6 文字探勘', '../m6/'), status: 'live' },
@@ -53,6 +53,8 @@
     { id: 'B14', group: 'B', title: '迴歸決策樹', brief: '以誤差平方和 SSE 下降量挑切點，葉節點輸出平均值階梯線。', module: m('M2-2 第 11 節', '../m2-2/#p11'), status: 'live', tier: 'adv' },
     { id: 'B15', group: 'B', title: 'Rule Induction 規則歸納', brief: '透過循序覆蓋學出條列式 IF–THEN 臨床規則清單。', module: m('M2-2 第 11 節', '../m2-2/#p11'), status: 'live', tier: 'adv' },
     { id: 'B16', group: 'B', title: 'ROC 與 PR 曲線', brief: '門檻由 1 降到 0 描繪 TPR/FPR 與 Precision–Recall 曲線及 AUC。', module: m('M2-2 第 10 節', '../m2-2/#p10'), status: 'live', tier: 'adv' },
+    { id: 'B17', group: 'B', title: '高斯貝氏與線性判別 LDA', brief: '連續特徵高斯分布分類，對照獨立變異 (GNB) 與共用共變異直線判別 (LDA)。', module: m('M2-2 第 05 節', '../m2-2/#p05'), status: 'live', tier: 'adv' },
+    { id: 'B18', group: 'B', title: '多元分類：OvR 與 Softmax', brief: '三類別血糖分期，比較一對多 (One-vs-Rest) 與 Softmax 聯合最佳化。', module: m('M2-2 第 04 節', '../m2-2/#p04'), status: 'live', tier: 'adv' },
 
     { id: 'C1', group: 'C', title: 'K-Means 分群', brief: '指派、移動質心、再指派，直到沒有人換群。', module: m('M3 第 03 節', '../m3/#p03'), status: 'live' },
     { id: 'C9', group: 'C', title: '手肘法與輪廓係數', brief: '比較 K = 2..5 的 SSE 手肘圖與 Silhouette 分數，選出最佳群數。', module: m('M3 第 04 節', '../m3/#p04'), status: 'live' },
@@ -130,6 +132,8 @@
     B14: 'Regression Tree',
     B15: 'Rule Induction (RIPPER)',
     B16: 'ROC / PR Curves & Threshold',
+    B17: 'Gaussian Naive Bayes & Fisher LDA',
+    B18: 'Multiclass Classification (OvR & Softmax)',
     C1: 'K-Means Clustering',
     C2: 'Hierarchical Clustering',
     C3: 'Density-Based Clustering',

@@ -109,6 +109,7 @@
     const accStack = accOf((x, y) => predOne(x, y, 'stack', true).pred);
 
     return {
+      mB, sB, mG, sG, w1, w2, b,
       p1, p2, p3, mw, mb, bestSt, predOne,
       accLog, accTree, accKnn, accHard, accSoft, accStack
     };
@@ -150,11 +151,22 @@
           label: String(r.id), r: 6
         }));
         const regions = st.showReg ? LAB.grid((x, y) => cls(R.predOne(x, y, p.method, p.soft).pred), AX.x.min, AX.x.max, AX.y.min, AX.y.max, 28, 18) : null;
+        const lines = [];
+        if (st.s1 && Math.abs(R.w2) > 1e-6) {
+          const z1a = (AX.x.min - R.mB) / R.sB, z1b = (AX.x.max - R.mB) / R.sB;
+          const gA = ((-R.b - R.w1 * z1a) / R.w2) * R.sG + R.mG;
+          const gB = ((-R.b - R.w1 * z1b) / R.w2) * R.sG + R.mG;
+          lines.push({ id: 'l_log', x1: AX.x.min, y1: gA, x2: AX.x.max, y2: gB, cls: 'c0', dash: true, w: 1.8, label: 'Logistic' });
+        }
+        if (st.s2) {
+          if (R.bestSt.ft === 'glu') lines.push({ id: 'l_tr', x1: AX.x.min, y1: R.bestSt.th, x2: AX.x.max, y2: R.bestSt.th, cls: 'c2', dash: true, w: 1.8, label: '樹樁' });
+          else lines.push({ id: 'l_tr', x1: R.bestSt.th, y1: AX.y.min, x2: R.bestSt.th, y2: AX.y.max, cls: 'c2', dash: true, w: 1.8, label: '樹樁' });
+        }
         const main = {
           type: 'scatter', slot: 'main',
-          title: isStack ? 'Stacking 元學習器決策邊界（黃圈＝誤判）' : 'Voting 投票決策邊界（黃圈＝誤判）',
-          axes: AX, points, lines: [], circles: [], regions,
-          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'hl', shape: 'ring', label: '誤判個案' }]
+          title: isStack ? 'Stacking 元學習器決策邊界（含基模型切線）' : 'Voting 投票決策邊界（含基模型切線）',
+          axes: AX, points, lines, circles: [], regions,
+          legend: [{ cls: 'c1', label: '糖尿病：是' }, { cls: 'c0', label: '糖尿病：否' }, { cls: 'c0', shape: 'line', label: 'Logistic 邊界' }, { cls: 'c2', shape: 'line', label: '樹樁切線' }]
         };
         const side = {
           type: 'table', slot: 'side',
