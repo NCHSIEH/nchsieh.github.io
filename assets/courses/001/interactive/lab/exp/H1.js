@@ -158,7 +158,11 @@
         return [main, side, bottom];
       }
 
-      const st = { words: initWords, topPairs: [], vocab: initVocab, newSym: null, showNewWord: false };
+      const initPairs = [
+        { pair: 'e + r', count: 15 }, { pair: 'r + </w>', count: 14 }, { pair: 'l + o', count: 7 },
+        { pair: 'o + w', count: 7 }, { pair: 'w + e', count: 8 }, { pair: 'n + e', count: 6 }
+      ];
+      const st = { words: initWords, topPairs: initPairs, vocab: initVocab, newSym: null, showNewWord: false };
       const add = (line, title, say, calc, extra) => steps.push(Object.assign({ line, title, say, calc: calc || [], views: views(st), focus: [] }, extra));
 
       add(0, '題目', 'LLM 不把每個英文單字都背起來，也不只看單一字母，而是用 BPE 找出最常見的字根／字尾片段。', [

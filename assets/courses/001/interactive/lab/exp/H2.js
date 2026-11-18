@@ -65,7 +65,7 @@
           title: st.swapped ? '對調第 1、2 詞後的輸入矩陣' : st.mode === 'sum' ? '相加後輸入矩陣 X = E + PE' : '詞嵌入矩陣 E（逐詞查表）',
           rowLabels: st.swapped ? [R.tokens[0], R.tokens[2], R.tokens[1], R.tokens[3], R.tokens[4], R.tokens[5]] : R.tokens,
           colLabels: colLabs,
-          values: mainMat.map((row, idx) => idx < st.embUpto ? row : [null, null, null, null]),
+          values: mainMat.map((row, idx) => idx < st.embUpto ? row : [0, 0, 0, 0]),
           digits: 2, heat: 'div',
           hl: st.curPos >= 0 ? [[st.curPos, 0], [st.curPos, 1], [st.curPos, 2], [st.curPos, 3]] : []
         };
@@ -74,7 +74,7 @@
           title: '正弦位置編碼矩陣 PE',
           rowLabels: R.tokens.map((_, i) => 'pos=' + i),
           colLabels: colLabs,
-          values: R.PE.map((row, idx) => idx < st.peUpto ? row : [null, null, null, null]),
+          values: R.PE.map((row, idx) => idx < st.peUpto ? row : [0, 0, 0, 0]),
           digits: 2, heat: 'div'
         };
         const tokens = {

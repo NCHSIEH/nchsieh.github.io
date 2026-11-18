@@ -51,7 +51,7 @@
         { id: 's1', st: '2. 切詞 / 子詞', alg: R.isLLM ? 'H1 BPE 子詞切分' : 'E1 正向最大匹配', use: R.isLLM ? '控制詞表大小並處理新詞' : '中文無空白，需先斷詞' },
         { id: 's2', st: '3. 過濾 / 編碼', alg: R.isLLM ? 'H2 詞嵌入＋位置編碼' : 'E1 停用詞過濾 · E5 N-gram', use: R.isLLM ? '同時保留詞義與詞序' : '刪掉虛詞並用 E5 Bigram 保留相鄰詞組' },
         { id: 's3', st: '4. 表示與運算', alg: R.isLLM ? 'H3 Self-Attention / H4' : R.isEmb ? 'E3 Word2Vec 負抽樣' : 'E1 TF-IDF · E5 BM25 飽和', use: R.isLLM ? '長距離上下文融合' : R.isEmb ? '學出詞與詞的語意距離' : '凸顯罕見詞並用 E5 BM25 抑制贅詞與長文偏誤' },
-        { id: 's4', st: '5. 下游應用', alg: R.isLLM ? 'H6 RAG · H5 解碼 · H7 LoRA' : R.isEmb ? '詞向量平均＋分類器' : 'E2 Naive Bayes · E4 LDA', use: R.isLLM ? '有憑據回答降低幻覺' : '快且省資源的分類與主題歸納' }
+        { id: 's4', st: '5. 下游應用', alg: R.isLLM ? 'H6 RAG · H9 Rerank/DPO · H7 LoRA' : R.isEmb ? '詞向量平均＋分類器' : 'E2 Naive Bayes · E4 LDA', use: R.isLLM ? '二階段精排與偏好對齊降低幻覺，KV Cache 加速推論' : '快且省資源的分類與主題歸納' }
       ];
 
       function views(st) {

@@ -99,6 +99,7 @@
     { id: 'H4', group: 'H', title: 'Transformer 一層', brief: '注意力、殘差連接、層正規化、前饋網路，完整走一遍。', module: m('M7 第 06 節', '../m7/#p06'), status: 'live', tier: 'adv' },
     { id: 'H7', group: 'H', title: 'LoRA 微調', brief: '不動原權重，只學兩個小矩陣的乘積。', module: m('M7 生成式 AI', '../m7/'), status: 'live', tier: 'adv' },
     { id: 'H8', group: 'H', title: 'AI Agent：ReAct 工具呼叫', brief: '逐輪計算工具選擇機率，走過 Thought → Action → Observation 推理迴圈。', module: m('M8 AI Agent', '../m8/'), status: 'live', tier: 'adv' },
+    { id: 'H9', group: 'H', title: 'KV 快取、Rerank 與偏好對齊', brief: '解析 KV Cache 降複雜度、Cross-Encoder 二階段精排與 DPO 臨床偏好對齊。', module: m('M7 第 09 節', '../m7/#p09'), status: 'live', tier: 'adv' },
 
     { id: 'I1', group: 'I', title: 'SHAP 與排列重要度', brief: '三個特徵的所有加入順序，精確算出每個特徵的貢獻。', module: m('M9 第 11 節', '../m9/#p11'), status: 'live' },
     { id: 'J1', group: 'J', title: 'Q-learning', brief: '病房送藥路線：走一步、拿獎勵、更新 Q 表。', module: m('延伸參考', ''), status: 'live', tier: 'adv' }
@@ -178,6 +179,7 @@
     H6: 'Retrieval-Augmented Generation',
     H7: 'Low-Rank Adaptation',
     H8: 'AI Agent (ReAct & Tool Calling)',
+    H9: 'KV Cache, Cross-Encoder Rerank & DPO',
     I1: 'SHAP & Permutation Importance',
     J1: 'Reinforcement Learning'
   };
@@ -264,6 +266,7 @@
     H6: { ais: null, py: 'rank_bm25 + scikit-learn (TfidfVectorizer)' },
     H7: { ais: null, py: 'HuggingFace PEFT (LoraConfig) / PyTorch' },
     H8: { ais: null, py: 'LangGraph / OpenAI Tool-Calling / ReAct' },
+    H9: { ais: null, py: 'transformers (KV Cache) / sentence-transformers (CrossEncoder) / trl (DPOTrainer)' },
 
     I1: { ais: 'Explain Predictions', py: 'shap / scikit-learn (permutation_importance)' },
     J1: { ais: null, py: 'numpy / gymnasium (Q-Learning)' }

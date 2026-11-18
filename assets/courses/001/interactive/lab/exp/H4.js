@@ -92,8 +92,10 @@
         ];
         const edges = [
           { from: 'in', to: 'attn', active: st.stage >= 1 },
+          { from: 'in', to: 'ln1', active: st.stage >= 2, cls: 'c2', label: '+殘差 X' },
           { from: 'attn', to: 'ln1', active: st.stage >= 2 },
           { from: 'ln1', to: 'ffn', active: st.stage >= 3 },
+          { from: 'ln1', to: 'ln2', active: st.stage >= 4, cls: 'c2', label: '+殘差 Norm1' },
           { from: 'ffn', to: 'ln2', active: st.stage >= 4 },
           { from: 'ln2', to: 'out', active: st.stage >= 5 }
         ];

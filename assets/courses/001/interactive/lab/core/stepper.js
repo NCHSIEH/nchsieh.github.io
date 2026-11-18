@@ -150,6 +150,7 @@
       H6: '針對長照 3.0 外籍看護條件問題，比較依句／依段切塊 (Chunking) 與三種檢索法：BM25 精準字面比對、TF-IDF 向量餘弦相似度與混合檢索 RRF (Reciprocal Rank Fusion)，挑出前 K 段組裝成 LLM 提示詞。',
       H7: '凍結 4×4 預訓練權重矩陣 W₀，只在旁側訓練兩個低秩小矩陣 B (4×r) 與 A (r×4)；設定 rank r=1 即可將微調參數量從 16 減半至 8，並在熱圖上觀察 ΔW = B·A 如何逼近目標權重增量。',
       H8: '以門診智能助理為例，在每一輪追蹤 LLM 如何依目前上下文計算 4 個候選動作（病歷 SQL、衛教 RAG、Python 計算機、finish）的 Softmax 選擇機率，透過 Thought → Action → Observation 迴圈把外部真實資料寫回 Prompt Context 完成任務。',
+      H9: '串聯現代 LLM 落地三大工程核心：比較無快取 O(T³) 與 KV Cache O(T²) 的自回歸生成內積次數，示範 Cross-Encoder 如何對 RAG 初篩結果做全詞交叉注意力精排，並用 DPO (Direct Preference Optimization) 拉開安全臨床回答與幻覺回答的機率差距。',
       I1: '對單一門診病人的預測機率，枚舉年齡、BMI、血糖全部 3! = 6 種加入順序計算邊際貢獻，精確算出滿足加總公理的 SHAP 值（Base value + ΣSHAP = 預測值），並對照全域排列重要度 (Permutation Importance)。',
       J1: '（延伸參考）在無監督答案的 4×4 病房網格（含障礙牆、−5 陷阱與 +10 終點）中，讓智能體透過 ε-greedy 試錯探索與貝爾曼 (Bellman) 更新累積經驗，觀察 Q 值熱圖如何從終點反推收斂出最佳避障路線。'
     };
@@ -611,6 +612,10 @@
         temp: '【溫度係數 τ (Softmax Temperature)】\n公式：P(toolᵢ) = exp(zᵢ / τ) / Σ exp(zⱼ / τ)。\n用法：τ 設低（0.2–0.5）使機率高度集中在最高分工具，決策最穩定；τ 調高（1.5–2.0）使各工具機率拉平，增加隨機探索風險。',
         max_steps: '【最大步數上限 (Max Iterations / Steps)】\n用法：設定 ReAct 迴圈最多允許呼叫幾次工具（2–5 步）。實務必設上限以防止外部 API 失敗時 Agent 陷入無窮迴圈燒光 Token。'
       },
+      H9: {
+        seq_len: '【生成序列長度 T (Generated Sequence Length)】\n定義：自回歸逐字生成的目標 Token 數量（4–10）。\n關鍵對比：無快取時第 t 步需重算 t² 次內積（總計 Σt² = T(T+1)(2T+1)/6，即 O(T³)）；開啟 KV Cache 快取歷史 K/V 後第 t 步只需算 t 次內積（總計 T(T+1)/2，即 O(T²)）！',
+        dpo_beta: '【DPO 偏好對齊溫度 β (KL Regularization Strength)】\n公式：L_DPO = −ln σ(β · [Δln π(y_w|x) − Δln π(y_l|x)])。\n用法：控制直接偏好最佳化（Direct Preference Optimization）拉開優選回答 y_w 與劣選回答 y_l 的力道（0.1–1.0）。'
+      },
       B17: {
         method: '【連續特徵生成式分類器 (Generative Classifier)】\n比較兩種先對各類別特徵分布 P(x|y) 建模再用貝氏定理求 P(y|x) 的方法。',
         'method:gnb': '【高斯單純貝氏 (Gaussian Naive Bayes)】\n假設：各特徵條件獨立，每個類別對 BMI 與血糖各自估計平均值與標準差。\n邊界：因兩群變異數不同，決策邊界呈微彎的二次曲線 (Quadratic)。',
@@ -676,7 +681,8 @@
       '模糊指數 m': 'Fuzziness m', '距離度量': 'Distance Metric', '異常門檻距離': 'Threshold',
       '最小序列支持度 min_sup': 'Min Seq Support', '基準支持度 min_sup': 'Baseline Min Sup', '外加零交易筆數 Null Tx': 'Added Null Tx',
       'N-gram 範圍': 'N-gram Range', '飽和參數 k₁': 'Saturation k₁', '長度正規化 b': 'Length Norm b',
-      '激活函數': 'Activation', '批次正規化 BatchNorm': 'BatchNorm', 'Dropout 丟棄率 p': 'Dropout p', '對角線': 'Anti-Diagonal'
+      '激活函數': 'Activation', '批次正規化 BatchNorm': 'BatchNorm', 'Dropout 丟棄率 p': 'Dropout p', '對角線': 'Anti-Diagonal',
+      '生成長度 T': 'Seq Length T', 'DPO 溫度 β': 'DPO Beta β'
     };
     const ACTIVE_IF = {
       'A1.k': ps => ps.method === 'knn',
