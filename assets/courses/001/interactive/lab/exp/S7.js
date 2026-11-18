@@ -58,20 +58,40 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'tx', label: '1. 處方交易籃', value: R.nTx + ' 張處方', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: 'Basket 格式' }],
-          [{ id: 'sup', label: '2. 支持度過濾', value: 'sup ≥ 0.25', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: '保留頻繁單項' }],
-          [{ id: 'mine', label: R.isFp ? '3. 建 FP-tree' : '3. 逐層 Ck→Lk', value: st.stage >= 2 ? (R.isFp ? '掃描 2 次' : '逐層剪枝') : '待探勘', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: R.isFp ? 'D2 FP-Growth' : 'D1 Apriori' }],
-          [{ id: 'rule', label: '4. 產生規則', value: 'conf ≥ 0.60', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: 'A → B 信賴度' }],
-          [{ id: 'lift', label: '5. Lift 驗收', value: st.stage >= 4 ? 'Lift=' + R.topLift : '防陷阱', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: '剔除 Lift ≤ 1' }]
+          [
+            { id: 'tx', label: '1a. 處方交易籃', value: R.nTx + ' 張處方', shape: 'box', w: 154, cls: clsOf(0), hl: act(0), sub: 'Basket 格式' },
+            { id: 'cln', label: '1b. 項目正規化', value: '無標籤 y', shape: 'box', w: 154, cls: clsOf(0), hl: act(0), sub: '去重複藥品項' }
+          ],
+          [
+            { id: 'sup', label: '2a. 算 Support', value: '出現比例', shape: 'box', w: 154, cls: clsOf(1), hl: act(1), sub: 'P(A) 單項支持度' },
+            { id: 'flt', label: '2b. min_sup 剪枝', value: 'sup ≥ 0.25', shape: 'box', w: 154, cls: clsOf(1), hl: act(1), sub: '刪罕見項目防爆炸' }
+          ],
+          [
+            { id: 'ap', label: '3a. Apriori 剪枝', value: !R.isFp && st.stage >= 2 ? 'Ck → Lk' : '逐層產生', shape: 'box', w: 154, cls: !R.isFp ? clsOf(2) : 'c5', hl: !R.isFp && act(2), dim: R.isFp, sub: 'D1 子集不頻繁即剪' },
+            { id: 'fp', label: '3b. FP-Growth 樹', value: R.isFp && st.stage >= 2 ? '掃描 2 次' : '前綴樹壓縮', shape: 'box', w: 154, cls: R.isFp ? clsOf(2) : 'c5', hl: R.isFp && act(2), dim: !R.isFp, sub: 'D2 免生龐大候選集' }
+          ],
+          [
+            { id: 'rule', label: '4a. 拆解 A → B', value: '條件機率', shape: 'box', w: 154, cls: clsOf(3), hl: act(3), sub: '列舉前提與推論' },
+            { id: 'conf', label: '4b. Conf 過濾', value: 'conf ≥ 0.60', shape: 'box', w: 154, cls: clsOf(3), hl: act(3), sub: 'P(B | A) ≥ 門檻' }
+          ],
+          [
+            { id: 'lift', label: '5a. Lift 驗收', value: st.stage >= 4 ? 'Lift=' + R.topLift : '算增益度', shape: 'box', w: 154, cls: clsOf(4), hl: act(4), sub: 'Conf ÷ Sup(B) > 1' },
+            { id: 'drop', label: '5b. 剔除假關聯', value: 'Lift ≤ 1 捨棄', shape: 'box', w: 154, cls: st.stage >= 4 ? 'bad' : 'c5', hl: act(4), sub: '避免高頻藥品誤判' }
+          ]
         ];
+        const activeMine = R.isFp ? 'fp' : 'ap';
         const edges = [
           { from: 'tx', to: 'sup', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'sup', to: 'mine', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'mine', to: 'rule', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'rule', to: 'lift', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          { from: 'cln', to: 'sup', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'sup', to: 'flt', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
+          { from: 'flt', to: activeMine, active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: R.isFp ? '建樹壓縮' : '逐層擴展' },
+          { from: activeMine, to: 'rule', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'rule', to: 'conf', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'conf', to: 'lift', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'conf', to: 'drop', active: st.stage === 4, cls: st.stage >= 4 ? 'bad' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1520, h: 150,
+          type: 'network', slot: 'main', w: 1480, h: 225,
           title: '關聯規則探勘全流程圖（' + (R.isFp ? 'FP-Growth 管線' : 'Apriori 管線') + '）',
           layerLabels: ['1. 交易籃', '2. 支持度', '3. 頻繁集', '4. 信賴度', '5. Lift 篩選'],
           layers, edges

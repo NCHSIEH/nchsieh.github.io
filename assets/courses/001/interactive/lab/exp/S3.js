@@ -73,10 +73,13 @@
         ] : R.isDim ? [
           [{ id: 'x', label: '1. 高維 X', value: '4+ 維特徵', shape: 'box', w: 145, cls: clsOf(0), hl: act(0), sub: '含共線性' }],
           [{ id: 'scl', label: '2. 標準化', value: 'Z 分數', shape: 'box', w: 145, cls: clsOf(1), hl: act(1), sub: 'A2 必做' }],
-          [{ id: 'dim', label: '3. 特徵分解', value: '84% 變異', shape: 'box', w: 145, cls: clsOf(2), hl: act(2), sub: 'C5 PCA / C6 t-SNE' }],
           [
-            { id: 'pc1', label: 'PC1 主軸', value: '最大變異', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: '保留 62%' },
-            { id: 'pc2', label: 'PC2 正交軸', value: '次大變異', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: '保留 22%' }
+            { id: 'dim', label: '3a. PCA 主成分', value: '84% 變異', shape: 'box', w: 148, cls: clsOf(2), hl: act(2), sub: 'C5 線性最大變異' },
+            { id: 'tsn', label: '3b. t-SNE 流形', value: '局部鄰居', shape: 'box', w: 148, cls: clsOf(2), hl: act(2), sub: 'C6 非線性視覺化' }
+          ],
+          [
+            { id: 'pc1', label: '4a. PC1 主軸', value: '最大變異', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: '保留 62%' },
+            { id: 'pc2', label: '4b. PC2 正交軸', value: '次大變異', shape: 'box', w: 145, cls: clsOf(3), hl: act(3), sub: '保留 22%' }
           ],
           [{ id: 'int', label: '5. 視覺/下游', value: '去共線新特徵', shape: 'box', w: 145, cls: clsOf(4), hl: act(4), sub: '累積變異 ≥80%' }]
         ] : [
@@ -102,10 +105,12 @@
         ] : R.isDim ? [
           { from: 'x', to: 'scl', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'scl', to: 'dim', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'scl', to: 'tsn', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'dim', to: 'pc1', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
           { from: 'dim', to: 'pc2', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
           { from: 'pc1', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
-          { from: 'pc2', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          { from: 'pc2', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'tsn', to: 'int', active: st.stage === 4, cls: done(2) ? 'good' : 'c5', label: '2D 散佈圖' }
         ] : [
           { from: 'x', to: 'scl', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'scl', to: 'dim', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
@@ -117,9 +122,13 @@
           { from: 'c3', to: 'int', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1480, h: R.isDim ? 215 : 250,
+          type: 'network', slot: 'main', w: 1480, h: R.isDim ? 230 : 250,
           title: '非監督式學習全流程圖（' + (R.isAnom ? '異常偵測路徑' : R.isDim ? '降維壓縮路徑' : '分群探索路徑') + '）',
-          layerLabels: ['1. 無標籤', '2. 標準化', '3. 降維', '4. 探勘模型', '5. 評估解讀'],
+          layerLabels: R.isAnom
+            ? ['1. 無標籤', '2. 標準化', '3. 異常偵測演算法', '4. 分數排序', '5. 專家複核']
+            : R.isDim
+              ? ['1. 高維資料', '2. 標準化', '3. 特徵分解', '4. 主軸萃取', '5. 視覺/下游']
+              : ['1. 無標籤', '2. 標準化', '3. 降維探索', '4. 分群演算法', '5. 評估命名'],
           layers, edges
         };
         const side = {

@@ -96,24 +96,30 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = R.isEns ? [
-          [{ id: 'data', label: '1. 訓練集 (80%)', value: '96 筆', shape: 'box', w: 145, cls: clsOf(0), hl: act(0), sub: '20% 測試集封存' }],
+          [
+            { id: 'data', label: '1a. 訓練集 (80%)', value: '96 筆', shape: 'box', w: 150, cls: clsOf(0), hl: act(0), sub: '訓練＋交叉驗證' },
+            { id: 'te', label: '1b. 封存測試集', value: '24 筆 (20%)', shape: 'box', w: 150, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c4'), hl: act(5), sub: st.stage < 5 ? '嚴禁偷看' : '最終驗收' }
+          ],
           [
             { id: 'm1', label: '2a. Bagging 森林', value: '降變異', shape: 'box', w: 148, cls: clsOf(1), hl: act(1), sub: 'B7 隨機森林/OOB' },
             { id: 'm2', label: '2b. Boosting 接力', value: '降偏差', shape: 'box', w: 148, cls: clsOf(1), hl: act(1), sub: 'B8 Ada · B9 GBDT' },
             { id: 'm3', label: '2c. 異質基模型', value: 'Log+樹+kNN', shape: 'box', w: 148, cls: clsOf(1), hl: act(1), sub: 'B12 多樣性互補' }
           ],
-          [{ id: 'cv', label: '3. ' + R.k + '-Fold 調參', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 150, cls: clsOf(2), hl: act(2), sub: 'B13 網格搜尋' }],
+          [{ id: 'cv', label: '3. ' + R.k + '-Fold 調參', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 150, cls: clsOf(2), hl: act(2), sub: 'B13 網格＋折外預測' }],
           [{ id: 'fit', label: '4. 集成融合器', value: st.stage >= 3 ? '投票/Stacking' : '待融合', shape: 'box', w: 150, cls: clsOf(3), hl: act(3), sub: 'B12 Meta-Learner' }],
-          [{ id: 'eval', label: '5. 驗收＋SHAP', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 150, cls: clsOf(5), hl: act(5), sub: 'B16 ROC · I1 SHAP' }]
+          [{ id: 'eval', label: '5. 驗收＋SHAP', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 150, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c5'), hl: act(5), sub: 'B16 ROC · I1 SHAP' }]
         ] : [
           [{ id: 'data', label: '1. X 與標籤 y', value: '120 筆', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: R.isImb ? '少數陽性極不平衡' : '分類／迴歸目標' }],
           [
             { id: 'tr', label: R.isTree ? '2a. 訓練(免縮放)' : R.isImb ? '2a. 訓練+折內A5' : '2a. 訓練+標準化', value: '96 筆 (80%)', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: R.isTree ? '保留原單位' : R.isImb ? '折內 SMOTE' : 'A2 標準化+Dummy' },
             { id: 'te', label: '2b. 封存測試集', value: '24 筆 (20%)', shape: 'box', w: 156, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c4'), hl: act(5), sub: st.stage < 5 ? '嚴禁偷看' : '最終驗收' }
           ],
-          [{ id: 'cv', label: '3. ' + R.k + '-Fold CV', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: R.isTree ? 'B6/B14/B15 調樹深' : 'B1–B5/B10/B13' }],
+          [
+            { id: 'cv', label: '3a. ' + R.k + '-Fold 驗證', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: R.isTree ? 'B6/B14/B15 估分' : 'B1–B5/B10 估分' },
+            { id: 'tune', label: '3b. 網格調參', value: st.cvLoop ? '搜尋最佳組合' : '超參數空間', shape: 'box', w: 156, cls: st.cvLoop ? 'hl' : clsOf(2), hl: st.cvLoop, sub: 'B13 調正則/樹深' }
+          ],
           [{ id: 'fit', label: R.isImb ? '4. 重訓＋調門檻' : '4. 全訓練重訓', value: st.stage >= 3 ? '已收斂' : '待重訓', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: R.isTree ? '產出樹/IF-THEN' : R.isImb ? 'B16 校正切點' : '鎖定最佳參數' }],
-          [{ id: 'eval', label: '5. 驗收與部署', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 156, cls: clsOf(5), hl: act(5), sub: 'B16 ROC/PR 驗收' }]
+          [{ id: 'eval', label: '5. 驗收與部署', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 156, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c5'), hl: act(5), sub: 'B16 ROC/PR 驗收' }]
         ];
         const edges = R.isEns ? [
           { from: 'data', to: 'm1', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
@@ -124,13 +130,16 @@
           { from: 'm3', to: 'cv', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'cv', to: 'm2', active: st.stage === 2 && st.cvLoop, back: true, cls: 'c3', label: '調參回圈' },
           { from: 'cv', to: 'fit', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'fit', to: 'eval', active: st.stage === 4 || st.stage === 5, cls: done(3) ? 'good' : 'c5' }
+          { from: 'fit', to: 'eval', active: st.stage === 4 || st.stage === 5, cls: done(3) ? 'good' : 'c5' },
+          { from: 'te', to: 'eval', active: st.stage === 5, cls: done(4) ? 'good' : 'c4', label: '測試集驗收' }
         ] : [
           { from: 'data', to: 'tr', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '80%' },
           { from: 'data', to: 'te', active: st.stage === 1, cls: done(0) ? 'c4' : 'c5', label: '20% 封存' },
           { from: 'tr', to: 'cv', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '輪流驗證' },
-          { from: 'cv', to: 'tr', active: st.stage === 2 && st.cvLoop, back: true, cls: 'c3', label: '調參回圈' },
+          { from: 'tr', to: 'tune', active: st.stage === 2 && st.cvLoop, cls: done(1) ? 'good' : 'c5' },
+          { from: 'tune', to: 'tr', active: st.stage === 2 && st.cvLoop, back: true, cls: 'c3', label: '調參回圈' },
           { from: 'cv', to: 'fit', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
+          { from: 'tune', to: 'fit', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
           { from: 'fit', to: 'eval', active: st.stage === 4 || st.stage === 5, cls: done(3) ? 'good' : 'c5' },
           { from: 'te', to: 'eval', active: st.stage === 5, cls: done(4) ? 'good' : 'c4', label: '驗收' }
         ];

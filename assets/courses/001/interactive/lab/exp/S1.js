@@ -97,29 +97,40 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'raw', label: R.isStrict ? '1. 切分訓練集' : '1. 原始資料', value: rows.length + ' 筆', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: R.isStrict ? '只用 Train fit' : '含缺值/極端/文字' }],
           [
-            { id: 'imp', label: '2a. 遺失補值', value: st.stage >= 1 ? '中位=' + f(R.medAge, 0) : '待補', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: 'A1 平均/中位/k-NN' },
-            { id: 'out', label: '2b. 離群處理', value: st.stage >= 2 ? '上界=' + f(R.hi, 0) : '待查', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: 'A7 IQR 縮尾/刪除' }
+            { id: 'raw', label: R.isStrict ? '1a. 訓練集 (fit)' : '1. 原始資料', value: rows.length + ' 筆', shape: 'box', w: 154, cls: clsOf(0), hl: act(0), sub: R.isStrict ? '只用 Train 學參數' : '含缺值/極端/文字' },
+            { id: 'val', label: '1b. 驗證/測試集', value: R.isStrict ? '封存隔離' : '待套用', shape: 'box', w: 154, cls: st.stage >= 6 ? 'good' : 'c4', hl: false, dim: !R.isStrict && st.stage < 6, sub: '嚴禁用來 fit 統計量' }
           ],
           [
-            { id: 'enc', label: '3a. 類別編碼', value: st.stage >= 3 ? '0/1 數值' : '文字', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: 'A4 One-Hot/目標' },
-            { id: 'scl', label: '3b. 特徵縮放', value: R.isLinear ? 'Z 分數' : '免縮放', shape: 'box', w: 156, cls: R.isLinear ? clsOf(4) : (st.stage >= 4 ? 'c2' : 'c5'), hl: act(4), dim: !R.isLinear && st.stage >= 4, sub: 'A2 標準化 / A3 離散' }
+            { id: 'imp', label: '2a. 遺失補值', value: st.stage >= 1 ? '中位=' + f(R.medAge, 0) : '待補', shape: 'box', w: 154, cls: clsOf(1), hl: act(1), sub: 'A1 平均/中位/k-NN' },
+            { id: 'out', label: '2b. 離群縮尾', value: st.stage >= 2 ? '上界=' + f(R.hi, 0) : '待查', shape: 'box', w: 154, cls: clsOf(2), hl: act(2), sub: 'A7 IQR 圍籬截斷' }
           ],
-          [{ id: 'sel', label: '4. 篩選平衡', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', w: 156, cls: clsOf(5), hl: act(5), sub: 'A5 SMOTE · A6 選特徵' }],
-          [{ id: 'mat', label: '5. 乾淨矩陣', value: st.stage >= 6 ? '就緒' : '準備中', shape: 'box', w: 156, cls: clsOf(6), hl: act(6), sub: R.isStrict ? '套用至 Val/Test' : '送入 B/C 區模型' }]
+          [
+            { id: 'enc', label: '3a. 類別編碼', value: st.stage >= 3 ? '0/1 數值' : '文字欄', shape: 'box', w: 154, cls: clsOf(3), hl: act(3), sub: 'A4 One-Hot/Dummy' },
+            { id: 'scl', label: '3b. 數值縮放', value: R.isLinear ? 'Z 分數' : '免縮放', shape: 'box', w: 154, cls: R.isLinear ? clsOf(4) : (st.stage >= 4 ? 'c2' : 'c5'), hl: act(4), dim: !R.isLinear && st.stage >= 4, sub: 'A2 標準化 / A3 離散' }
+          ],
+          [
+            { id: 'sel', label: '4a. 特徵選擇', value: '去冗餘欄', shape: 'box', w: 154, cls: clsOf(5), hl: act(5), sub: 'A6 相關/IG/Wrapper' },
+            { id: 'imb', label: '4b. 類別平衡', value: '陽性 ' + R.nPos + '/' + rows.length, shape: 'box', w: 154, cls: clsOf(5), hl: act(5), sub: 'A5 SMOTE (僅訓練集)' }
+          ],
+          [{ id: 'mat', label: '5. 乾淨矩陣', value: st.stage >= 6 ? 'Pipeline 就緒' : '準備中', shape: 'box', w: 158, cls: clsOf(6), hl: act(6), sub: 'Train fit → Test transform' }]
         ];
         const edges = [
-          { from: 'raw', to: 'imp', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'raw', to: 'out', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'raw', to: 'imp', active: st.stage === 1, cls: done(0) ? 'good' : 'c5', label: '數值+類別' },
+          { from: 'raw', to: 'out', active: st.stage === 2, cls: done(1) ? 'good' : 'c5', label: '數值欄' },
           { from: 'imp', to: 'enc', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'out', to: 'scl', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'imp', to: 'scl', active: st.stage === 4 && R.isLinear, dim: !R.isLinear, cls: done(2) ? 'good' : 'c5' },
+          { from: 'out', to: 'scl', active: st.stage === 4 && R.isLinear, dim: !R.isLinear, cls: done(3) ? 'good' : 'c5' },
           { from: 'enc', to: 'sel', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
           { from: 'scl', to: 'sel', active: st.stage === 5 && R.isLinear, dim: !R.isLinear, cls: done(4) ? 'good' : 'c5' },
-          { from: 'sel', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' }
+          { from: 'enc', to: 'imb', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
+          { from: 'scl', to: 'imb', active: st.stage === 5 && R.isLinear, dim: !R.isLinear, cls: done(4) ? 'good' : 'c5' },
+          { from: 'sel', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' },
+          { from: 'imb', to: 'mat', active: st.stage === 6, cls: done(5) ? 'good' : 'c5' },
+          { from: 'val', to: 'mat', active: st.stage === 6, cls: st.stage >= 6 ? 'good' : 'c4', label: '套用 transform' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1480, h: 215,
+          type: 'network', slot: 'main', w: 1480, h: 230,
           title: '資料前處理全流程圖（第 ' + Math.min(st.stage + 1, 7) + ' / 7 階段）',
           layerLabels: ['1. 輸入切分', '2. 資料清理', '3. 轉換縮放', '4. 篩選平衡', '5. 特徵輸出'],
           layers, edges

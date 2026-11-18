@@ -62,21 +62,39 @@
         const act = k => st.stage === k;
         const clsOf = k => act(k) ? 'hl' : (done(k) ? 'good' : 'c5');
         const layers = [
-          [{ id: 'ts', label: '1. 時間序列 yₜ', value: rows.length + ' 期', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: '不可打亂順序' }],
-          [{ id: 'prep', label: R.isMl ? '2. 建 Lag 特徵' : R.isDl ? '2. 序列切窗' : '2. 差分平穩', value: st.stage >= 1 ? '已轉換' : '非平穩', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: R.isMl ? 'Windowing' : R.isDl ? 'A2 標準化' : 'G2 差分 · ACF' }],
-          [{ id: 'cv', label: '3. 滾動切分', value: 'Train → Future', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: 'G3 滑動視窗驗證' }],
-          [{ id: 'mod', label: R.isMl ? '4. GBDT / 迴歸' : R.isDl ? '4. LSTM 訓練' : '4. ETS / ARIMA', value: st.stage >= 3 ? '已擬合' : '待訓練', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: R.isMl ? 'B1 / B9' : R.isDl ? 'F4 LSTM' : 'G1 / G2' }],
-          [{ id: 'fc', label: '5. 滾動驗收', value: st.stage >= 4 ? 'MAE=' + f(R.meanMae, 1) : '待預測', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: '還原尺度預測' }]
+          [
+            { id: 'ts', label: '1a. 時間序列 yₜ', value: rows.length + ' 期', shape: 'box', w: 156, cls: clsOf(0), hl: act(0), sub: '依時間排序禁打亂' },
+            { id: 'exo', label: '1b. 外生/日曆特徵', value: (R.isMl || R.isDl) ? '假日/季節' : '純單變數', shape: 'box', w: 156, cls: (R.isMl || R.isDl) ? clsOf(0) : 'c5', hl: act(0) && (R.isMl || R.isDl), dim: !(R.isMl || R.isDl), sub: '多變數時間對齊' }
+          ],
+          [
+            { id: 'dec', label: '2a. 趨勢與季節分解', value: st.stage >= 1 ? 'Trend+Season' : '檢查結構', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: '檢查週期與缺漏期' },
+            { id: 'prep', label: R.isMl ? '2b. 建 Lag 特徵' : R.isDl ? '2b. 切窗＋標準化' : '2b. 差分平穩', value: st.stage >= 1 ? '已轉換' : '非平穩', shape: 'box', w: 156, cls: clsOf(1), hl: act(1), sub: R.isMl ? 'Lag1, Lag2, MA' : R.isDl ? 'A2 僅用訓練段' : 'G2 差分 · ACF' }
+          ],
+          [
+            { id: 'trw', label: '3a. 訓練時間窗', value: '過去 1..t', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: 'G3 滑動/擴張視窗' },
+            { id: 'valw', label: '3b. 前瞻驗證窗', value: '未來 t+1..t+h', shape: 'box', w: 156, cls: clsOf(2), hl: act(2), sub: '嚴禁隨機 K-Fold' }
+          ],
+          [{ id: 'mod', label: R.isMl ? '4. GBDT / 迴歸' : R.isDl ? '4. LSTM 閘門' : '4. ETS / ARIMA', value: st.stage >= 3 ? '已擬合' : '待訓練', shape: 'box', w: 156, cls: clsOf(3), hl: act(3), sub: R.isMl ? 'B1 線性 / B9 GBDT' : R.isDl ? 'F4 記憶胞序列' : 'G1 平滑 / G2 ARIMA' }],
+          [
+            { id: 'inv', label: '5a. 尺度還原', value: st.stage >= 4 ? '反差分/反縮放' : '還原單位', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: '轉回實際門診量' },
+            { id: 'fc', label: '5b. 前瞻驗收', value: st.stage >= 4 ? 'MAE=' + f(R.meanMae, 1) : '待預測', shape: 'box', w: 156, cls: clsOf(4), hl: act(4), sub: '對照季節性基準' }
+          ]
         ];
         const edges = [
+          { from: 'ts', to: 'dec', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'ts', to: 'prep', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
-          { from: 'prep', to: 'cv', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
-          { from: 'cv', to: 'mod', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'mod', to: 'cv', active: st.stage === 3 && st.rollLoop, back: true, cls: 'c3', label: '滾動多折' },
-          { from: 'mod', to: 'fc', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' }
+          { from: 'exo', to: 'prep', active: st.stage === 1 && (R.isMl || R.isDl), dim: !(R.isMl || R.isDl), cls: done(0) ? 'good' : 'c5' },
+          { from: 'dec', to: 'trw', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'prep', to: 'trw', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'prep', to: 'valw', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
+          { from: 'trw', to: 'mod', active: st.stage === 3, cls: done(2) ? 'good' : 'c5', label: '擬合' },
+          { from: 'mod', to: 'valw', active: st.stage === 3 && st.rollLoop, back: true, cls: 'c3', label: '滾動多折' },
+          { from: 'mod', to: 'inv', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'inv', to: 'fc', active: st.stage === 4, cls: done(3) ? 'good' : 'c5' },
+          { from: 'valw', to: 'fc', active: st.stage === 4, cls: done(2) ? 'c0' : 'c5', label: '比對真實值' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1520, h: 150,
+          type: 'network', slot: 'main', w: 1480, h: 225,
           title: '時間序列預測全流程圖（' + (R.isMl ? '滯後特徵 ML' : R.isDl ? 'LSTM 深度序列' : '統計 ETS / ARIMA') + '）',
           layerLabels: ['1. 探索', '2. 平穩/建窗', '3. 時序切分', '4. 預測模型', '5. 滾動驗收'],
           layers, edges
