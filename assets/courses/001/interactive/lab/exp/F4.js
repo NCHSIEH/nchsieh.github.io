@@ -106,7 +106,9 @@
           ];
           edges = [
             { from: 'xt', to: 'fg', active: act === 'f' }, { from: 'hp', to: 'fg', active: act === 'f' },
-            { from: 'xt', to: 'ig', active: act === 'i' }, { from: 'xt', to: 'cg', active: act === 'c' },
+            { from: 'xt', to: 'ig', active: act === 'i' }, { from: 'hp', to: 'ig', active: act === 'i' },
+            { from: 'xt', to: 'cg', active: act === 'c' }, { from: 'hp', to: 'cg', active: act === 'c' },
+            { from: 'xt', to: 'og', active: act === 'o' }, { from: 'hp', to: 'og', active: act === 'o' },
             { from: 'cp', to: 'ct', active: act === 'ct' }, { from: 'fg', to: 'ct', active: act === 'ct' },
             { from: 'ig', to: 'ct', active: act === 'ct' }, { from: 'cg', to: 'ct', active: act === 'ct' },
             { from: 'ct', to: 'ht', active: act === 'ht' }, { from: 'og', to: 'ht', active: act === 'ht' }

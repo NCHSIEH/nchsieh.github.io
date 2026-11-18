@@ -46,11 +46,11 @@
       const R = simulate(rows, p), steps = [];
 
       const ALGO_ROWS = [
-        { id: 's0', st: '1. 交易籃整理', alg: '處方清單 / 購物籃格式', use: '每筆是一組不重複項目，無目標標籤 y' },
+        { id: 's0', st: '1. 交易籃整理', alg: '無序處方籃 (D1/D2) / 有序門診序列 (D3)', use: '同一處方看共現用籃子；跨次就醫看先後順序用 D3 PrefixSpan' },
         { id: 's1', st: '2. 過濾單項支持度', alg: 'Support(A) ≥ min_sup', use: '太罕見的項目先刪掉，縮小搜尋空間' },
-        { id: 's2', st: '3. 找頻繁項目集', alg: R.isFp ? 'D2 FP-Growth 建前綴樹' : 'D1 Apriori 逐層剪枝', use: R.isFp ? '只掃資料 2 次，免產生大量候選集' : '子集不頻繁則超集必剪除' },
-        { id: 's3', st: '4. 產生規則算信賴度', alg: 'Confidence = P(B | A)', use: '保留超過 min_conf 的規則 A → B' },
-        { id: 's4', st: '5. Lift 過濾假關聯', alg: 'Lift = Conf ÷ Support(B)', use: '必須 Lift > 1 才代表真正正相關！' }
+        { id: 's2', st: '3. 找頻繁項目集', alg: R.isFp ? 'D2 FP-Growth 建前綴樹 / D3 前綴投影' : 'D1 Apriori 逐層剪枝', use: R.isFp ? '只掃資料 2 次，免產生大量候選集' : '子集不頻繁則超集必剪除' },
+        { id: 's3', st: '4. 產生規則算信賴度', alg: 'Confidence = P(B | A)', use: '保留超過 min_conf 的正向規則 A → B 或負關聯 A → ¬B (D4)' },
+        { id: 's4', st: '5. 多指標過濾假關聯', alg: 'Lift / Kulczynski / Zhang (D4)', use: 'Lift > 1 為正相關；大資料庫加看零不變指標 Kulczynski (D4)' }
       ];
 
       function views(st) {
@@ -151,8 +151,8 @@
         '共現 ≠ 因果，部署前務必做領域專家審查'
       ]);
       while (steps.length < 10) {
-        add(5, '演算法選用比較', '教學或小資料看懂剪枝原理用 D1 Apriori；實務大數據探勘一律選 D2 FP-Growth。', [
-          '目前管線：' + (R.isFp ? 'FP-Growth' : 'Apriori')
+        add(5, '演算法選用比較', '單次處方看 D1 Apriori / D2 FP-Growth；跨次門診時序看 D3 PrefixSpan；抗零交易與互斥規則看 D4 進階指標。', [
+          '目前管線：' + (R.isFp ? 'FP-Growth' : 'Apriori') + '（搭配 D3 序列與 D4 Kulczynski）'
         ]);
       }
       return steps;

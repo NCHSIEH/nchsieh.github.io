@@ -75,10 +75,10 @@
         { id: 's4', st: '5. 設門檻抓異常', alg: 'F5 重建誤差 > 門檻＝異常', use: '沒見過的異常病人會還原失敗、誤差飆高' }
       ] : [
         { id: 's0', st: '1. 表格標準化', alg: 'A2 Z 分數 + Train/Val/Test', use: '表格特徵尺度不一，進網路前必做標準化' },
-        { id: 's1', st: '2. 全連接層堆疊', alg: 'F1 Dense + ReLU/Sigmoid', use: '學習特徵間的非線性交叉組合' },
+        { id: 's1', st: '2. 全連接層堆疊', alg: 'F1 Dense + F6 BatchNorm / ReLU', use: '學習非線性交叉並以 F6 穩定分布防梯度消失' },
         { id: 's2', st: '3. 前向計算 Loss', alg: '交叉熵 (分類) / MSE (迴歸)', use: '衡量網路輸出與標籤 y 的誤差' },
         { id: 's3', st: '4. 反向＋Adam 更新', alg: 'F1 連鎖律 + F2 Adam', use: '克服梯度方向震盪，穩定更新權重' },
-        { id: 's4', st: '5. 早停與 Dropout', alg: 'Val Loss 最低點存檔', use: '防止過度背誦訓練集雜訊' }
+        { id: 's4', st: '5. 早停與 Dropout', alg: 'F6 Inverted Dropout + 早停', use: '隨機遮罩神經元防止過度背誦訓練集雜訊' }
       ];
 
       function views(st) {

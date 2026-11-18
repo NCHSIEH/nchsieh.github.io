@@ -42,11 +42,31 @@
     var sec=el('section','lab-grp'), h2=el('h2'); h2.append(el('span','g',g.key), g.name); sec.append(h2, el('p',null,g.desc));
     var core=list.filter(function(e){return e.tier!=='adv';});
     var adv=list.filter(function(e){return e.tier==='adv';});
+    var SVG_AIS='<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M2.5 2A1.5 1.5 0 0 0 1 3.5v3A1.5 1.5 0 0 0 2.5 8h3A1.5 1.5 0 0 0 7 6.5v-3A1.5 1.5 0 0 0 5.5 2h-3zm8 0A1.5 1.5 0 0 0 9 3.5v3A1.5 1.5 0 0 0 10.5 8h3A1.5 1.5 0 0 0 15 6.5v-3A1.5 1.5 0 0 0 13.5 2h-3zM6 9.5A1.5 1.5 0 0 1 7.5 8h1A1.5 1.5 0 0 1 10 9.5v3a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 6 12.5v-3z"/></svg>';
+    var SVG_PY='<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M7.9 1C5.4 1 5.7 2.1 5.7 2.1v1.2h2.3v.4H4.7S3 3.5 3 6s1.5 2.4 1.5 2.4h.9V7.2s-.1-1.5 1.5-1.5h2.5s1.4.1 1.4-1.3V2.2S11 1 7.9 1zm-1.4.8a.5.5 0 1 1 0 1 .5.5 0 0 1 0-1zm1.6 13.2c2.5 0 2.2-1.1 2.2-1.1v-1.2H8v-.4h3.3S13 12.5 13 10s-1.5-2.4-1.5-2.4h-.9v1.2s.1 1.5-1.5 1.5H6.6s-1.4-.1-1.4 1.3v2.2S5 15 8.1 15zm1.4-.8a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1z"/></svg>';
     function renderCards(arr, isAdv){
       var cards=el('div','lab-cards');
       arr.forEach(function(e){
         var live=e.status==='live', c=el(live?'a':'div','lab-card'+(isAdv?' is-adv':'')); if(live) c.href='exp.html?id='+e.id;
-        var st=el('span','st'); st.append(el('span','tag '+(live?(isAdv?'gray':'good'):'gray'), live?(isAdv?'進階':'可操作'):'建置中')); c.append(st);
+        var st=el('span','st');
+        var tl=LAB.TOOLS&&LAB.TOOLS[e.id];
+        if(tl){
+          var tw=el('span','card-tools');
+          if(tl.ais){
+            var bAis=el('span','tool-ico ais');
+            bAis.innerHTML=SVG_AIS+'<span>AI Studio</span>';
+            bAis.title='AI Studio 運算子支援：'+tl.ais;
+            tw.append(bAis);
+          }
+          if(tl.py){
+            var bPy=el('span','tool-ico py');
+            bPy.innerHTML=SVG_PY+'<span>Python</span>';
+            bPy.title='Python 套件支援：'+tl.py;
+            tw.append(bPy);
+          }
+          st.append(tw);
+        }
+        st.append(el('span','tag '+(live?(isAdv?'gray':'good'):'gray'), live?(isAdv?'進階':'可操作'):'建置中')); c.append(st);
         var id=el('div','id',e.id); if(done.indexOf(e.id)>=0) id.append(el('span','ok','✓ 已走完')); c.append(id, el('h3',null,e.title), el('p',null,e.brief)); cards.append(c);
       });
       return cards;

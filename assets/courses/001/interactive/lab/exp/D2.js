@@ -224,7 +224,7 @@
         st.curTx = idx;
         st.nodesSnap = sn.nodesSnap;
         st.touched = sn.touched;
-        if (idx < 5) {
+        if (idx < 5 || idx === R.txSnaps.length - 1) {
           add(4, '插入處方 #' + sn.txId, '沿樹根往下走：路徑已存在就把節點計數 +1，沒有才長新分支。', [
             '#' + sn.txId + '：' + (sn.items.map(LAB.data.rxLabel).join(' → ') || '（無）')
           ], { phase: (idx + 1) + ' / ' + R.txSnaps.length });
@@ -236,7 +236,13 @@
       ]);
 
       st.showCond = true;
-      add(6, '取條件模式基與建條件樹', '從次數最少的頻繁單項開始，沿父節點往上收集前綴路徑（條件模式基），遞迴挖出所有組合。', [
+      if (R.condBases.length) {
+        const cb0 = R.condBases[0];
+        add(5, '由下往上：追溯 ' + cb0.label, '從出現次數最少的頻繁單項「' + cb0.label + '」開始，沿父節點往上收集它的前綴路徑（條件模式基）。', [
+          cb0.label + ' 前綴路徑：' + (cb0.paths.map(x => (x.items.map(LAB.data.rxLabel).join('+') || '∅') + ':' + x.count).join('｜') || '∅')
+        ]);
+      }
+      add(6, '取條件模式基與建條件樹', '對每個頻繁單項建立條件 FP-tree，遞迴挖出所有包含該項目的頻繁組合。', [
         '共挖出 ' + R.freqMap.size + ' 個頻繁項目集（與 Apriori 完全相同）'
       ]);
 

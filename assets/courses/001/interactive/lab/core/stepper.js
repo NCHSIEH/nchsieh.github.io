@@ -126,15 +126,19 @@
       C12: '比較歐氏距離正圓包絡與馬氏距離 (Mahalanobis Distance) 斜橢圓包絡：當 BMI 與血糖高度正相關時，單看各欄不極端卻嚴重偏離對角線的 #12 會在歐氏距離下被漏抓，而納入共變異逆矩陣 Σ⁻¹ 的馬氏距離能精準揪出此異常。',
       D1: '從 12 張門診處方箋逐層產生候選藥品組合（C1 → C2 → C3），利用 Apriori 反單調性剪除低於 min_sup 的項目集；算出支持度 (Support)、信賴度 (Confidence) 與提升度 (Lift) 長條圖，並辨識「高信賴卻 Lift < 1」的假規則陷阱。',
       D2: '只掃描處方兩次即依頻繁度排序壓縮成前綴樹 (FP-Tree)，透過共有路徑合併省去 Apriori 產生海量候選集的成本，直接從條件模式基 (Conditional Pattern Base) 挖掘全部頻繁用藥組合。',
+      D3: '針對具有時間先後順序的跨次門診紀錄，示範 PrefixSpan 如何透過「前綴投影（Prefix Projection）」只截取後綴子序列，免除候選序列爆炸並挖出有序的〈A → B → C〉臨床病程軌跡與轉移信賴度。',
+      D4: '剖析傳統 Lift 在併入大量無關處方（零交易 Null Transactions）時為何會嚴重膨脹失真，對照具備「零不變性（Null-Invariance）」的 Kulczynski 指標、具方向性的 Conviction，以及挖掘互斥處方的負關聯規則 A → ¬B。',
       E1: '以中文正向最大匹配斷詞並過濾停用詞 (Stopwords)，建立詞彙的詞頻 (TF) 與逆文件頻率 (IDF) 矩陣，再以 L2 正規化向量計算查詢句與 6 篇護理紀錄的餘弦相似度 (Cosine Similarity) 排名。',
       E2: '統計三類護理紀錄的詞頻並套用 Laplace 平滑 (α)，將測試句每個詞的對數條件機率 ln P(w|c) 累加至類別先驗，最後經 Softmax 輸出屬於「跌倒／疼痛／壓傷」的後驗機率分佈。',
       E3: '以滑動視窗 (±win) 從護理紀錄抽出 (中心詞, 上下文) 正樣本並搭配隨機負抽樣 (Negative Sampling)，透過 Skip-gram 梯度更新拉近共現詞、推開無關詞，在 2D 空間收斂出語意相近的詞向量鄰居。',
       E4: '透過 Collapsed Gibbs Sampling 反覆先扣除當前詞的計數，再依「該文件偏好主題 × 該主題偏好此詞」重抽主題標籤；觀察混合主題文件如何逐步分化並收斂出各主題的代表高頻詞。',
+      E5: '比較單詞袋 (1-gram) 與雙連詞 (Bigram) 如何保留關鍵詞序搭配，並體驗現代檢索標準 Okapi BM25 如何以「詞頻非線性飽和 k₁」與「文件長度正規化 b」解決傳統 TF-IDF 的贅詞灌水與長文偏誤。',
       F1: '追蹤 2-2-1 多層感知器 (MLP) 完整一輪：輸入經隱藏層 Sigmoid 算出預測 ŷ（前向傳播 Forward）與 BCE 損失，再依鏈鎖律逐層回推 δ 與 9 個權重梯度（反向傳播 Backpropagation）並驗證誤差下降。',
       F2: '在 w₂ 方向曲率為 w₁ 16 倍的狹長山谷損失曲面上，同場對照 SGD（陡峭方向易劇烈鋸齒震盪）、Momentum（累積速度加速谷底推進）與 Adam（依一、二階動量自適應各軸步長）的軌跡與收斂速度。',
       F3: '選擇直線、橫線、十字或方塊等 6×6 圖形與 3×3 卷積核 (Filter)，逐步觀看滑動內積算出特徵圖、Padding 補零維持尺寸、ReLU 截斷負值，以及 2×2 Max / Avg 池化 (Pooling) 如何濃縮空間特徵。',
       F4: '沿 8 個月門診序列展開隱藏狀態 hₜ 的時間傳遞，對比標準 RNN 的單純雙曲正切覆寫與 LSTM 如何透過遺忘閘 (f)、輸入閘 (i)、輸出閘 (o) 與細胞狀態 (C) 保留長期趨勢來預測下一月人次。',
       F5: '訓練 3-1-3 自編碼器 (Autoencoder) 將 BMI、血糖、收縮壓壓縮至 1 維瓶頸 (Bottleneck) 再還原；利用正常群遵循的相關性，以「重建誤差 (Reconstruction Error)」精準揪出違背生理規律的異常點 #13。',
+      F6: '透視現代深度網路三大訓練支柱：比較 Sigmoid（導數 ≤ 0.25 連乘消失）與 ReLU / Leaky ReLU 的深層梯度保留率，觀察 Batch Normalization 如何穩定各層分布，並實測 Inverted Dropout 如何隨機遮罩神經元與放大 1/(1−p) 抑制驗證集過擬合。',
       G1: '對 24 個月門診人次依序對比簡單指數平滑 (SES, 僅水準)、Holt（加線性趨勢）與 Holt-Winters（加 12 期季節指數）如何逐期更新狀態並往未來延伸預測；調整 α、β、γ 觀察對短期波動的敏感度。',
       G2: '先對含趨勢的月門診序列做一階差分 (d=1) 使其平穩 (Stationary)，透過自相關函數 ACF 辨識滯後關聯，再以 AR(p) 線性迴歸預測未來差分值並累加還原回原始門診人次尺度。',
       G3: '示範為什麼時間序列不可用隨機 K-Fold，改以「滑動固定窗 (Sliding)」或「擴張累積窗 (Expanding)」嚴格依時間順序往前滾動預測，真實衡量前瞻誤差 MAE。',
@@ -152,10 +156,16 @@
 
     const canEdit = !!(def.data.editable && def.data.editable.length);
     const isWideMain = def.group === 'S' || !!def.wideMain;
+    const tl = LAB.TOOLS && LAB.TOOLS[def.id];
 
     root.append(
       h('header', { class: 'lab-hero' }, h('div', { class: 'badge' }, def.id), h('div', null, h('h1', null, showTitle(def)), h('p', { class: 'goal' }, GOALS[def.id] || def.goal || ''),
-        h('div', { class: 'chips' }, def.module && def.module.url ? h('a', { class: 'tag', href: def.module.url, 'data-tip': '前往對應講義章節閱讀完整觀念推導' }, '對應講義：' + def.module.name + ' →') : null, h('span', { class: 'tag gray', 'data-tip': '本實驗使用固定亂數種子產生的教學模擬資料，可點「換一組資料」或直接修改表格數值' }, '模擬資料'), h('span', { class: 'tag blue' }, def.data.scenario || '')))),
+        h('div', { class: 'chips' },
+          def.module && def.module.url ? h('a', { class: 'tag', href: def.module.url, 'data-tip': '前往對應講義章節閱讀完整觀念推導' }, '對應講義：' + def.module.name + ' →') : null,
+          tl && tl.ais ? h('span', { class: 'tool-ico ais', 'data-tip': 'AI Studio 支援運算子：' + tl.ais }, '⚡ AI Studio：' + tl.ais) : null,
+          tl && tl.py ? h('span', { class: 'tool-ico py', 'data-tip': 'Python 支援套件：' + tl.py }, '🐍 Python：' + tl.py) : null,
+          h('span', { class: 'tag gray', 'data-tip': '本實驗使用固定亂數種子產生的教學模擬資料，可點「換一組資料」或直接修改表格數值' }, '模擬資料'),
+          h('span', { class: 'tag blue' }, def.data.scenario || '')))),
       elParams, ctl, elErr,
       isWideMain ? h('div', { style: 'margin-bottom:14px' }, pMain) : null,
       h('div', { class: 'lab-work' },
@@ -434,6 +444,13 @@
       D2: {
         min_sup: '【最小支持度 (Minimum Support, min_sup)】\n用法：篩選頻繁單品（Frequent 1-itemsets）並決定 FP-Tree（Frequent Pattern Tree）保留哪些項目與排序，不需像 Apriori 反覆掃描產生大量候選集。'
       },
+      D3: {
+        min_sup: '【最小序列支持度 (Minimum Sequential Support, min_sup)】\n定義：至少有多少比例的病人歷次門診序列中依序出現該樣式〈A → B〉（0.20–0.50）。\n原理：PrefixSpan 鎖定超過門檻的頻繁前綴，只截取該藥之後的「後綴投影資料庫 (Suffix Database)」遞迴挖掘。'
+      },
+      D4: {
+        min_sup: '【基準支持度 (Baseline Minimum Support)】\n用法：設定在原始 12 張處方中篩選候選關聯規則 A → B 的最小共現比例（0.15–0.45）。',
+        null_tx: '【外加零交易筆數 (Added Null Transactions n(¬A¬B))】\n定義：併入資料庫中「既不含 A 也不含 B」的無關處方張數（0–36 張）。\n關鍵現象：調大零交易筆數時，Lift = P(AB)/[P(A)P(B)] 會因總母數 N 變大而等比例暴漲失真；但具備「零不變性 (Null-Invariance)」的 Kulczynski 指標 ½[P(B|A)+P(A|B)] 則 100% 恆定不變！'
+      },
       E1: {
         query: '【查詢句 (Query Text)】\n選擇一句新護理紀錄，計算其與 6 篇既有紀錄的 TF-IDF 向量餘弦相似度（Cosine Similarity）。',
         'query:0': '【查詢：夜間下床步態不穩 (Fall Risk Query)】\n用途：測試跌倒風險（Fall Risk）詞彙檢索，觀察「夜間、步態、不穩」等高 IDF 詞如何主導相似度。',
@@ -456,6 +473,17 @@
       E4: {
         topics: '【主題數 K (Number of Topics)】\n用法：設定語料庫由幾個潛在主題（Latent Topics）混合（2 或 3），觀察「文件-主題」與「主題-詞」分佈的變化。',
         iters: '【Gibbs 抽樣輪數 (Gibbs Sampling Iterations)】\n用法：重複依條件機率重新指派每個詞的主題標籤（10–100 輪）。輪數越多主題聚類越收斂清晰。'
+      },
+      E5: {
+        ngram: '【N-gram 詞組範圍 (N-gram Range)】\n決定詞表特徵只取單詞或同時納入相鄰雙連詞。',
+        'ngram:uni': '【1-gram 單詞袋 (Unigram)】\n只切分獨立單詞，詞表較小，但無法區分詞序或固定片語搭配。',
+        'ngram:bi': '【1+2-gram 含雙連詞 (Unigram + Bigram)】\n將相鄰兩詞綁定為「wᵢ+wᵢ₊₁」（如「夜間+下床」、「步態+不穩」），能精準鎖定連續症狀片語。',
+        k1: '【BM25 詞頻飽和參數 k₁ (Term Frequency Saturation)】\n公式：tf·(k₁+1) / (tf + k₁·L)。\n用法：控制同一詞重複出現時分數飽和的速度（0.5–3.0，標準設 1.5）。k₁ 越小越快達到上限 k₁+1，防止單一重複詞洗版。',
+        b: '【BM25 文件長度正規化 b (Document Length Normalization)】\n公式：L = 1 − b + b·(dl / avgdl)。\n用法：控制對長篇病歷的懲罰強度（0.0–1.0，標準設 0.75）。b=0 完全不考慮文章長短；b=1 完全除以相對長度比。',
+        query: '【檢索查詢句 (Search Query)】\n切換不同臨床情境查詢句，觀察 BM25 與 Bigram 命中排序。',
+        'query:0': '【查詢：夜間下床步態不穩】\n測試跌倒風險相關單詞與雙連詞（夜間+下床、步態+不穩）的檢索加成。',
+        'query:1': '【查詢：給予止痛藥疼痛緩解】\n測試給藥與療效反應片語的檢索排名。',
+        'query:2': '【查詢：傷口有滲液更換敷料】\n測試傷口換藥處置紀錄的匹配得分。'
       },
       F1: {
         lr: '【學習率 η (Learning Rate)】\n用法：控制反向傳播（Backpropagation）依梯度更新 9 個參數的步長（0.1–2.0）。在本 8 筆小資料上，設 0.50 可在 50 輪內穩定降至高準確率。',
@@ -481,6 +509,7 @@
         'image:2': '【斜線 (Diagonal Line)】\n用途：45° 對角線邊緣，水平與垂直核皆會偵測到部分斜邊訊號。',
         'image:3': '【十字 (Cross)】\n用途：同時含垂直與水平線段，能直觀看到單一方向濾波器如何只萃取出其中一條線。',
         'image:4': '【方塊 (Square)】\n用途：封閉矩形輪廓，適合對比邊緣偵測與「模糊／銳化」濾波器的差異。',
+        'image:5': '【反對角線 (Anti-Diagonal Line)】\n用途：右上至左下斜線，觀察 3×3 邊緣核在斜向紋理上的局部響應。',
         kernel: '【卷積核 (3×3 Convolution Kernel / Filter)】\n選擇滑動計算內積的 3×3 權重矩陣。',
         'kernel:vert': '【垂直邊緣 (Vertical Edge Filter)】\n權重左正右負，專門偵測水平方向像素突變（即垂直邊界）。',
         'kernel:horiz': '【水平邊緣 (Horizontal Edge Filter)】\n權重上正下負，專門偵測垂直方向像素突變（即水平邊界）。',
@@ -501,6 +530,14 @@
         epochs: '【訓練輪數 (Epochs)】\n用法：自編碼器學習「壓縮成 1 維瓶頸（Bottleneck）再重建回 3 維」的輪數（50–500）。輪數越多，正常樣本重建誤差越低，與離群點 #13 的差距越明顯。',
         lr: '【學習率 η (Learning Rate)】\n用法：編碼器（Encoder）與解碼器（Decoder）權重的梯度下降步長（0.01–0.20）。',
         init: '【起始種子 (Initialization Seed)】\n用法：切換初始瓶頸權重方向，驗證模型在不同初值下是否都能抓出違背生理相關性的 #13 號異常點。'
+      },
+      F6: {
+        act: '【隱藏層激活函數 (Activation Function)】\n決定非線性轉換形狀與反向傳播的局部導數 f\'(z)。',
+        'act:sigmoid': '【Sigmoid 邏輯函數 σ(z) = 1/(1+e⁻ᶻ)】\n限制：導數最大僅 0.25，且在 |z| > 3 的飽和區趨近 0，超過 3–5 層就會發生嚴重梯度消失 (Vanishing Gradient)。',
+        'act:relu': '【ReLU 整流線性單元 max(0, z)】\n優勢：在 z > 0 正區間導數恆為 1，深層反向傳播梯度不衰減；缺點是 z < 0 導數為 0，可能產生 Dead ReLU。',
+        'act:leaky': '【Leaky ReLU 帶洩漏整流 max(0.1z, z)】\n優勢：正區間導數為 1，負區間保留 0.1 微小斜率，同時解決梯度消失與神經元死亡問題。',
+        bn: '【批次正規化 (Batch Normalization, BN)】\n作法：在進入激活函數前，將每個神經元跨 Batch 的輸入標準化為 z̃ = (z − μ_B) / σ_B。\n效果：消除內部共變數飄移 (Internal Covariate Shift)，避免數值衝入飽和區並加速收斂。',
+        drop: '【Dropout 隨機丟棄率 p (Inverted Dropout Rate)】\n作法：訓練期依機率 p（0.00–0.50）將隱藏神經元遮罩歸零，並將存活神經元放大 1/(1−p) 倍；推論測試期（eval）則全開不遮罩，強迫網路不依賴單一特徵、有效抑制過擬合。'
       },
       G1: {
         method: '指數平滑法（Exponential Smoothing）：依時間序列結構選擇對應平滑模型。',
@@ -636,7 +673,10 @@
       '落地管線': 'Deployment', 'Agent 架構管線': 'Agent Mode', '轉換方法': 'Transform', 'VIF 警戒門檻': 'VIF Threshold',
       '生成式模型': 'Generative Model', '多元分類法': 'Multiclass Strategy', '新病人 BMI': 'Query BMI', '新病人血糖': 'Query Glucose',
       '臨床任務': 'Agent Task', '溫度係數 τ': 'Temperature τ', '最大步數上限': 'Max Steps',
-      '模糊指數 m': 'Fuzziness m', '距離度量': 'Distance Metric', '異常門檻距離': 'Threshold'
+      '模糊指數 m': 'Fuzziness m', '距離度量': 'Distance Metric', '異常門檻距離': 'Threshold',
+      '最小序列支持度 min_sup': 'Min Seq Support', '基準支持度 min_sup': 'Baseline Min Sup', '外加零交易筆數 Null Tx': 'Added Null Tx',
+      'N-gram 範圍': 'N-gram Range', '飽和參數 k₁': 'Saturation k₁', '長度正規化 b': 'Length Norm b',
+      '激活函數': 'Activation', '批次正規化 BatchNorm': 'BatchNorm', 'Dropout 丟棄率 p': 'Dropout p', '對角線': 'Anti-Diagonal'
     };
     const ACTIVE_IF = {
       'A1.k': ps => ps.method === 'knn',

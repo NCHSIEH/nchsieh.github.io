@@ -166,7 +166,11 @@
             id: r.id,
             cells: [r.text, r.sup, r.conf, { v: f(r.lift, 2), cls: r.lift < 1 ? 'bad' : 'good' }],
             hl: r.lift < 1
-          })) : []
+          })) : R.c1.map(x => ({
+            id: 'c1_' + x.key,
+            cells: [x.label + ' (單項)', x.sup, 1, { v: '1.00', cls: 'dim' }],
+            cls: st.prune1 && x.sup < minSup - 1e-12 ? 'cut' : undefined
+          }))
         };
         const bottom = (st.showRules && !st.warnTrap && R.rules.length) ? {
           type: 'bars', slot: 'bottom',

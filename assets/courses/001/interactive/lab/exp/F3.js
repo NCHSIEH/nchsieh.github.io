@@ -27,7 +27,7 @@
   }
 
   function runCNN(rows, p) {
-    const imgIdx = Math.min(4, Math.max(0, parseInt(p.image || '0', 10)));
+    const imgIdx = Math.min(rows.length - 1, Math.max(0, parseInt(p.image || '0', 10)));
     const imgObj = rows[imgIdx];
     const grid = to2D(imgObj.px);
     const ker = KERNELS[p.kernel || 'vert'];
@@ -64,7 +64,7 @@
       columns: COLS,
       small: seed => makeRows(seed),
       view: (rows, p) => {
-        const imgIdx = Math.min(4, Math.max(0, parseInt((p && p.image) || '0', 10)));
+        const imgIdx = Math.min(rows.length - 1, Math.max(0, parseInt((p && p.image) || '0', 10)));
         return {
           type: 'matrix',
           title: '輸入影像：' + rows[imgIdx].name + ' (6×6)',
@@ -75,7 +75,7 @@
       }
     },
     params: [
-      { key: 'image', label: '輸入圖形', type: 'choice', value: '0', options: [{ v: '0', label: '直線' }, { v: '1', label: '橫線' }, { v: '2', label: '斜線' }, { v: '3', label: '十字' }, { v: '4', label: '方塊' }] },
+      { key: 'image', label: '輸入圖形', type: 'choice', value: '0', options: [{ v: '0', label: '直線' }, { v: '1', label: '橫線' }, { v: '2', label: '斜線' }, { v: '3', label: '十字' }, { v: '4', label: '方塊' }, { v: '5', label: '對角線' }] },
       { key: 'kernel', label: '卷積核', type: 'choice', value: 'vert', options: [{ v: 'vert', label: '垂直邊緣' }, { v: 'horiz', label: '水平邊緣' }, { v: 'blur', label: '模糊' }, { v: 'sharp', label: '銳化' }] },
       { key: 'padding', label: '補零 Padding', type: 'bool', value: false },
       { key: 'pool', label: '池化方式', type: 'choice', value: 'max', options: [{ v: 'max', label: '最大池化 (Max)' }, { v: 'avg', label: '平均池化 (Avg)' }] }
