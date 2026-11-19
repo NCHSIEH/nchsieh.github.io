@@ -8,28 +8,29 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23dc2626'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/style.css?v=17">
 <style>
-.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0 6px;font-size:13px;color:var(--mute)}
+.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0 6px;font-size:15px;color:var(--mute)}
 .ctl select{border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:13px;background:#fff}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#94a3b8;margin-right:4px}
 .dot.on{background:#16a34a}
-h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter-spacing:.5px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:8px}
+h2.sec{font-size:17px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter-spacing:.5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
 .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.q .n{font-size:13px;color:var(--mute);display:flex;justify-content:space-between;gap:6px}
-.q .p{font-size:22px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
-.q .c{font-size:13px;font-variant-numeric:tabular-nums}
-.q .s{font-size:11px;color:var(--mute);margin-top:3px}
+.q .n{font-size:16px;color:var(--mute);display:flex;justify-content:space-between;gap:6px}
+.q .p{font-size:32px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.q .c{font-size:17px;font-variant-numeric:tabular-nums}
+.q .s{font-size:14px;color:var(--mute);margin-top:3px}
 .up{color:#dc2626}.dn{color:#16a34a}.fl{color:#475569}
 .row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:6px}
-.row .nm{flex:1;min-width:0;font-weight:700;font-size:15px}
+.row .nm{flex:1;min-width:0;font-weight:700;font-size:19px}
 .row .nm small{color:var(--mute);font-weight:400;margin-left:4px}
-.row .nm .s{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:1px}
-.row .px{min-width:90px}
-.row .px b{font-size:18px;font-variant-numeric:tabular-nums}
-.row .chg{min-width:96px;text-align:right;font-size:13px;font-variant-numeric:tabular-nums}
+.row .nm .s{display:block;font-size:14px;color:var(--mute);font-weight:400;margin-top:1px}
+.row .px{min-width:110px}
+.row .px b{font-size:25px;font-variant-numeric:tabular-nums}
+.row .chg{min-width:120px;text-align:right;font-size:17px;font-variant-numeric:tabular-nums}
+.row .nm small{font-size:15px}.foot{font-size:14px}
 .flash{animation:fl .8s}
 @keyframes fl{from{background:#fef9c3}to{background:var(--card)}}
-.tag2{display:inline-block;font-size:10px;padding:1px 5px;border-radius:4px;background:#e2e8f0;color:#334155;margin-left:4px}
+.tag2{display:inline-block;font-size:12px;padding:1px 5px;border-radius:4px;background:#e2e8f0;color:#334155;margin-left:4px}
 .tag2.live{background:#dcfce7;color:#15803d}.tag2.dly{background:#fff7ed;color:#9a3412}
 </style>
 </head>
@@ -73,7 +74,7 @@ h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter
 (function(){
   const $ = s => document.querySelector(s);
   const TW_INDEX = { code:'t00', name:'加權指數' };
-  const CN_US = {'^DJI':'GI:DJI:INDEX','^GSPC':'GI:SPX:INDEX','^IXIC':'GI:IXIC:INDEX','^SOX':'GI:SOX:INDEX'};
+  const CN_US = {'^DJI':'GI:DJI:INDEX','^GSPC':'GI:INX:INDEX','^IXIC':'GI:IXIC:INDEX','^SOX':'GI:SOX:INDEX'};
   const US = [['^DJI','道瓊工業'],['^GSPC','S&P 500'],['^IXIC','那斯達克'],['^SOX','費城半導體']];
   let listInfo='', user=null, userDoc=null, items=[], timer=null, left=0, busy=false, prev={};
 
@@ -108,7 +109,8 @@ h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter
       const j = await tfetch(CN_BASE+syms.slice(i,i+30).join(',')+'?_='+Date.now(), {}, 'cnyes');
       (j.data||[]).forEach(r => {
         const price = num(r['6']); if (price==null) return;
-        out[r['0']||r['800013']] = { price, prev:num(r['21']), high:num(r['12']), low:num(r['13']), open:num(r['19']), vol:num(r['200013']), time:hms(r['200007']), name:r['200009'], live:true };
+        const ch = num(r['11']);
+        out[r['0']||r['800013']] = { price, prev:(ch!=null?price-ch:num(r['21'])), high:num(r['12']), low:num(r['13']), open:num(r['19']), vol:num(r['200013']), time:hms(r['200007']), name:r['200009'], live:true };
       });
     }
     return out;
