@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>MyAssets 即時看盤</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23dc2626'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css?v=17">
+<style>
+.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0 6px;font-size:13px;color:var(--mute)}
+.ctl select{border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:13px;background:#fff}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#94a3b8;margin-right:4px}
+.dot.on{background:#16a34a}
+h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter-spacing:.5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:8px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.q .n{font-size:13px;color:var(--mute);display:flex;justify-content:space-between;gap:6px}
+.q .p{font-size:22px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.q .c{font-size:13px;font-variant-numeric:tabular-nums}
+.q .s{font-size:11px;color:var(--mute);margin-top:3px}
+.up{color:#dc2626}.dn{color:#16a34a}.fl{color:#475569}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:6px}
+.row .nm{flex:1;min-width:0;font-weight:700;font-size:15px}
+.row .nm small{color:var(--mute);font-weight:400;margin-left:4px}
+.row .nm .s{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:1px}
+.row .px{min-width:90px}
+.row .px b{font-size:18px;font-variant-numeric:tabular-nums}
+.row .chg{min-width:96px;text-align:right;font-size:13px;font-variant-numeric:tabular-nums}
+.flash{animation:fl .8s}
+@keyframes fl{from{background:#fef9c3}to{background:var(--card)}}
+.tag2{display:inline-block;font-size:10px;padding:1px 5px;border-radius:4px;background:#e2e8f0;color:#334155;margin-left:4px}
+.tag2.live{background:#dcfce7;color:#15803d}.tag2.dly{background:#fff7ed;color:#9a3412}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="../">MyAssets<small>即時看盤</small></a>
+  <a class="btn" href="../">持股體檢</a>
+  <button class="btn primary" id="refresh" type="button">立即更新</button>
+  <span id="auth"></span>
+</div></header>
+
+<main class="wrap">
+  <div class="ctl">
+    <label><input type="checkbox" id="auto" checked> 自動更新</label>
+    <select id="every">
+      <option value="15">每 15 秒</option>
+      <option value="30" selected>每 30 秒</option>
+      <option value="60">每 1 分鐘</option>
+      <option value="300">每 5 分鐘</option>
+    </select>
+    <span><span class="dot" id="dot"></span><span id="status">載入中…</span></span>
+    <label style="margin-left:auto"><input type="checkbox" id="onlyheld" checked> 只看持有</label>
+  </div>
+  <div id="banner"></div>
+
+  <h2 class="sec">台股大盤與期貨</h2>
+  <div class="grid" id="tw"></div>
+
+  <h2 class="sec">美國四大指數</h2>
+  <div class="grid" id="us"></div>
+
+  <h2 class="sec">我的持股</h2>
+  <div id="hold"><div class="loading">載入中…</div></div>
+
+  <p class="foot">資料來源：台股與持股——證交所／櫃買中心基本市況報導（盤中約 5～20 秒延遲）；台指期——期交所行情；美股——Yahoo Finance（延遲約 15 分鐘，視交易所而定）。若即時來源暫時連不上，持股會改用 FinMind 前一收盤價並標示「收盤」。僅供參考，不構成投資建議。紅漲綠跌。</p>
+</main>
+
+<script src="../assets/core.js?v=17"></script>
+<script type="module" src="../assets/auth.js?v=17"></script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const TW_INDEX = { code:'t00', name:'加權指數' };
+  const US = [['^DJI','道瓊工業'],['^GSPC','S&P 500'],['^IXIC','那斯達克'],['^SOX','費城半導體']];
+  let user=null, userDoc=null, items=[], timer=null, left=0, busy=false, prev={};
+
+  /* ---------- 抓取：直連失敗時依序改走公開 CORS 中繼 ---------- */
+  const ROUTES = [u=>u, u=>'https://corsproxy.io/?url='+encodeURIComponent(u), u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u)];
+  const okRoute = {};
+  async function tfetch(url, opt, kind){
+    const order = okRoute[kind]!=null ? [okRoute[kind], ...ROUTES.keys()].filter((v,i,a)=>a.indexOf(v)===i) : [...ROUTES.keys()];
+    let err;
+    for (const i of order){
+      const ac = new AbortController(); const to = setTimeout(()=>ac.abort(), 8000);
+      try {
+        const r = await fetch(ROUTES[i](url), {...opt, signal:ac.signal, cache:'no-store'});
+        clearTimeout(to);
+        if (!r.ok) throw new Error('HTTP '+r.status);
+        const t = await r.text(); const j = JSON.parse(t);
+        okRoute[kind]=i; return j;
+      } catch(e){ clearTimeout(to); err=e; }
+    }
+    throw err || new Error('連線失敗');
+  }
+
+  const num = v => { const x = parseFloat(String(v).replace(/,/g,'')); return isFinite(x)?x:null; };
+
+  async function getTW(codes){
+    // 每檔同時查上市(tse)與上櫃(otc)，有成交或有昨收的那個為準
+    const ex = ['tse_t00.tw'];
+    codes.forEach(c => { ex.push('tse_'+c+'.tw','otc_'+c+'.tw'); });
+    const out = {};
+    for (let i=0;i<ex.length;i+=40){
+      const url = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch='+ex.slice(i,i+40).join('%7C')+'&_='+Date.now();
+      const j = await tfetch(url, {}, 'mis');
+      (j.msgArray||[]).forEach(m => {
+        const y = num(m.y); if (y==null) return;
+        let z = num(m.z);
+        if (z==null){ const a=num(String(m.a||'').split('_')[0]), b=num(String(m.b||'').split('_')[0]); z = (a!=null&&b!=null)?(a+b)/2:(b!=null?b:a); }
+        const key = m.c;
+        if (!out[key] || (z!=null && out[key].price==null)) out[key] = { price:z, prev:y, open:num(m.o), high:num(m.h), low:num(m.l), vol:num(m.v), time:m.t, name:m.n, live:true };
+      });
+    }
+    return out;
+  }
+
+  async function getFut(){
+    const body = JSON.stringify({MarketType:'0',SymbolType:'F',KindID:'1',CID:'TXF',ExpireMonth:'',RowSize:'全部',PageNo:'',SortColumn:'',AscDesc:'A'});
+    const j = await tfetch('https://mis.taifex.com.tw/futures/api/getQuoteList', {method:'POST',headers:{'Content-Type':'application/json'},body}, 'fut');
+    const list = ((j.RtData||{}).QuoteList||[]).filter(q => /^TXF[A-L]\d-[FM]$/.test(q.SymbolID||'') && num(q.CLastPrice)!=null);
+    if (!list.length) throw new Error('目前無期貨報價');
+    const q = list[0], last = num(q.CLastPrice), ref = num(q.CRefPrice);
+    return { price:last, prev:ref, high:num(q.CHighPrice), low:num(q.CLowPrice), open:num(q.COpenPrice), vol:num(q.CTotalVolume), time:q.CTime, tag:(q.SymbolID.endsWith('-M')?'夜盤':'日盤')+' '+(q.DispCName||q.SymbolID), live:true };
+  }
+
+  async function getUS(sym){
+    const j = await tfetch('https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(sym)+'?interval=1m&range=1d', {}, 'yahoo');
+    const m = (((j.chart||{}).result||[])[0]||{}).meta;
+    if (!m || m.regularMarketPrice==null) throw new Error('無資料');
+    return { price:m.regularMarketPrice, prev:m.chartPreviousClose??m.previousClose, high:m.regularMarketDayHigh, low:m.regularMarketDayLow, time:m.regularMarketTime?new Date(m.regularMarketTime*1000).toLocaleTimeString('zh-TW',{hour12:false,timeZone:'Asia/Taipei'})+'（台北時間）':'', live:true };
+  }
+
+  async function fmClose(code){
+    const s = new Date(Date.now()-10*864e5).toISOString().slice(0,10);
+    const r = await fetch('https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockPrice&data_id='+code+'&start_date='+s);
+    const j = await r.json(); const d = (j.data||[]).slice(-2);
+    if (!d.length) throw new Error('查無資料');
+    const a = d[d.length-1], b = d[d.length-2];
+    return { price:a.close, prev:b?b.close:null, high:a.max, low:a.min, open:a.open, vol:Math.round((a.Trading_Volume||0)/1000), time:a.date, live:false };
+  }
+
+  /* ---------- 顯示 ---------- */
+  const f = (x,d=2) => x==null?'—':Number(x).toLocaleString('zh-TW',{minimumFractionDigits:d,maximumFractionDigits:d});
+  function calc(q){
+    if (!q || q.price==null) return {cls:'fl',chg:'—'};
+    if (q.prev==null) return {cls:'fl',chg:'—'};
+    const d = q.price-q.prev, p = d/q.prev*100, cls = d>0?'up':d<0?'dn':'fl';
+    return { cls, chg:(d>0?'▲ ':d<0?'▼ ':'')+f(Math.abs(d))+'　('+(d>0?'+':d<0?'-':'')+f(Math.abs(p))+'%)' };
+  }
+  function card(id,name,q,err,tag){
+    const c = calc(q);
+    const flash = q && prev[id]!=null && prev[id]!==q.price ? ' flash':'';
+    if (q) prev[id]=q.price;
+    return '<div class="q'+flash+'"><div class="n"><span>'+name+'</span><span>'+(q&&q.tag||tag||'')+'</span></div>'
+      +(q?'<div class="p '+c.cls+'">'+f(q.price)+'</div><div class="c '+c.cls+'">'+c.chg+'</div>'
+          +'<div class="s">'+(q.time?'更新 '+q.time:'')+(q.high!=null?'　高 '+f(q.high,0)+' 低 '+f(q.low,0):'')+'</div>'
+        :'<div class="p fl">—</div><div class="s err">'+(err||'無資料')+'</div>')+'</div>';
+  }
+  function rowHTML(it,q,err){
+    const c = calc(q), flash = q && prev[it.code]!=null && prev[it.code]!==q.price ? ' flash':'';
+    if (q) prev[it.code]=q.price;
+    return '<div class="row'+flash+'"><div class="nm">'+(it.name||(q&&q.name)||it.code)+'<small>'+it.code+'</small>'
+      +(it.held?'':'<span class="tag2">觀察</span>')
+      +(q?'<span class="tag2 '+(q.live?'live':'dly')+'">'+(q.live?'即時':'收盤')+'</span>':'')
+      +'<span class="s">'+(q?((q.time?q.time+'　':'')+(q.vol!=null?'量 '+Math.round(q.vol).toLocaleString('zh-TW')+' 張　':'')+(q.high!=null?'高 '+f(q.high)+' 低 '+f(q.low):'')):'<span class="err">'+(err||'無資料')+'</span>')+'</span></div>'
+      +'<div class="px"><b class="'+c.cls+'">'+(q?f(q.price):'—')+'</b></div><div class="chg '+c.cls+'">'+c.chg+'</div></div>';
+  }
+
+  function shown(){ return $('#onlyheld').checked && items.some(i=>i.held) ? items.filter(i=>i.held) : items; }
+
+  async function refresh(){
+    if (busy) return; busy = true; $('#refresh').disabled = true; $('#status').textContent='更新中…';
+    const list = shown(), codes = list.map(i=>i.code);
+    const [tw, fut, ...us] = await Promise.allSettled([getTW(codes), getFut(), ...US.map(u=>getUS(u[0]))]);
+    const T = tw.status==='fulfilled'?tw.value:{}, terr = tw.status==='rejected'?'台股行情連線失敗':null;
+
+    $('#tw').innerHTML = card('t00','加權指數',T.t00,terr||'非交易時段或無資料')
+      + card('fut','台指期近月（全指數）',fut.status==='fulfilled'?fut.value:null,fut.status==='rejected'?('期貨：'+fut.reason.message):null);
+    $('#us').innerHTML = US.map((u,i)=>card(u[0],u[1],us[i].status==='fulfilled'?us[i].value:null,us[i].status==='rejected'?'美股行情連線失敗':null)).join('');
+
+    // 持股：即時沒抓到的改用收盤價
+    const miss = codes.filter(c=>!T[c]);
+    const fb = {};
+    await Promise.all(miss.map(async c=>{ try{ fb[c]=await fmClose(c);}catch(e){} }));
+    $('#hold').innerHTML = list.length ? list.map(it=>rowHTML(it,T[it.code]||fb[it.code],terr&&!fb[it.code]?terr:null)).join('') : '<div class="loading">清單是空的，到「持股體檢」頁加入標的。</div>';
+
+    const okc = [tw,fut,...us].filter(r=>r.status==='fulfilled').length;
+    $('#status').textContent = '最後更新 '+new Date().toLocaleTimeString('zh-TW',{hour12:false})+(okc<6?'（部分來源失敗）':'');
+    $('#dot').className = 'dot'+(okc?' on':'');
+    $('#refresh').disabled=false; busy=false; left=+$('#every').value;
+  }
+
+  function tick(){
+    if (!$('#auto').checked || document.hidden || busy) return;
+    left -= 1; if (left<=0) refresh();
+  }
+  $('#refresh').onclick = refresh;
+  $('#every').onchange = () => { left = +$('#every').value; };
+  $('#onlyheld').onchange = refresh;
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && $('#auto').checked) refresh(); });
+  setInterval(tick, 1000);
+
+  /* ---------- 清單與登入（沿用持股體檢頁的帳號與清單） ---------- */
+  function renderAuth(){
+    if (user) $('#auth').innerHTML = '<span class="who">'+(user.photoURL?'<img src="'+user.photoURL+'" alt="" referrerpolicy="no-referrer">':'')+'<button class="btn" id="logout" type="button">登出</button></span>';
+    else $('#auth').innerHTML = '<button class="btn primary" id="login" type="button">Google 登入</button>';
+    const li=$('#login'), lo=$('#logout');
+    if (li) li.onclick = () => MAAuth.signIn().catch(e=>alert('登入失敗：'+(e.code||e.message)));
+    if (lo) lo.onclick = () => MAAuth.signOut();
+    $('#banner').innerHTML = user ? '' : '<div class="banner"><span style="flex:1">目前顯示的是<b>示範清單</b>，登入後顯示你自己的持股。</span><button class="btn primary" type="button" onclick="MAAuth.signIn()">Google 登入</button></div>';
+  }
+  async function loadItems(){
+    try { items = (await MA.loadList(userDoc)).items; } catch(e){ items = []; }
+    refresh();
+  }
+  function start(){
+    MAAuth.onChange(async u=>{
+      user=u; renderAuth(); userDoc=null;
+      if (u){ try{ userDoc = await MA.ensureUserDoc(u);}catch(e){} }
+      loadItems();
+    });
+  }
+  if (window.MAAuth) start(); else window.addEventListener('maauth-ready', start, {once:true});
+})();
+</script>
+</body>
+</html>
