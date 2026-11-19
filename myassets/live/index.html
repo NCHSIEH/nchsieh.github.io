@@ -64,7 +64,7 @@ h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter
   <h2 class="sec">我的持股</h2>
   <div id="hold"><div class="loading">載入中…</div></div>
 
-  <p class="foot">資料來源：台股與持股——證交所／櫃買中心基本市況報導（盤中約 5～20 秒延遲）；台指期——期交所行情；美股——Yahoo Finance（延遲約 15 分鐘，視交易所而定）。若即時來源暫時連不上，持股會改用 FinMind 前一收盤價並標示「收盤」。僅供參考，不構成投資建議。紅漲綠跌。</p>
+  <p class="foot">資料來源：鉅亨網報價（加權、台指期、美股四大指數、上市櫃持股；台股盤中約數秒至一分鐘延遲，美股依交易所規定可能延遲）。鉅亨連不上時，依序改用證交所、期交所、Yahoo Finance，最後用 FinMind 前一收盤價並標示「收盤」。僅供參考，不構成投資建議。紅漲綠跌。</p>
 </main>
 
 <script src="../assets/core.js?v=17"></script>
@@ -73,8 +73,9 @@ h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter
 (function(){
   const $ = s => document.querySelector(s);
   const TW_INDEX = { code:'t00', name:'加權指數' };
+  const CN_US = {'^DJI':'GI:DJI:INDEX','^GSPC':'GI:SPX:INDEX','^IXIC':'GI:IXIC:INDEX','^SOX':'GI:SOX:INDEX'};
   const US = [['^DJI','道瓊工業'],['^GSPC','S&P 500'],['^IXIC','那斯達克'],['^SOX','費城半導體']];
-  let user=null, userDoc=null, items=[], timer=null, left=0, busy=false, prev={};
+  let listInfo='', user=null, userDoc=null, items=[], timer=null, left=0, busy=false, prev={};
 
   /* ---------- 抓取：直連失敗時依序改走公開 CORS 中繼 ---------- */
   const ROUTES = [u=>u, u=>'https://corsproxy.io/?url='+encodeURIComponent(u), u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u)];
@@ -96,6 +97,22 @@ h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter
   }
 
   const num = v => { const x = parseFloat(String(v).replace(/,/g,'')); return isFinite(x)?x:null; };
+
+  /* 主要來源：鉅亨網報價（一次查完指數、期貨、美股、上市櫃持股） */
+  const CN_BASE = 'https://ws.api.cnyes.com/ws/api/v1/quote/quotes/';
+  const CN_IDX = 'TWS:TSE01:INDEX', CN_FUT = 'TWF:TXF:FUTURES';
+  const hms = t => t ? new Date(t*1000).toLocaleTimeString('zh-TW',{hour12:false,timeZone:'Asia/Taipei'}) : '';
+  async function getCN(syms){
+    const out = {};
+    for (let i=0;i<syms.length;i+=30){
+      const j = await tfetch(CN_BASE+syms.slice(i,i+30).join(',')+'?_='+Date.now(), {}, 'cnyes');
+      (j.data||[]).forEach(r => {
+        const price = num(r['6']); if (price==null) return;
+        out[r['0']||r['800013']] = { price, prev:num(r['21']), high:num(r['12']), low:num(r['13']), open:num(r['19']), vol:num(r['200013']), time:hms(r['200007']), name:r['200009'], live:true };
+      });
+    }
+    return out;
+  }
 
   async function getTW(codes){
     // 每檔同時查上市(tse)與上櫃(otc)，有成交或有昨收的那個為準
@@ -173,21 +190,27 @@ h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter
   async function refresh(){
     if (busy) return; busy = true; $('#refresh').disabled = true; $('#status').textContent='更新中…';
     const list = shown(), codes = list.map(i=>i.code);
-    const [tw, fut, ...us] = await Promise.allSettled([getTW(codes), getFut(), ...US.map(u=>getUS(u[0]))]);
-    const T = tw.status==='fulfilled'?tw.value:{}, terr = tw.status==='rejected'?'台股行情連線失敗':null;
+    const syms = [CN_IDX, CN_FUT, ...US.map(u=>CN_US[u[0]]), ...codes.map(c=>'TWS:'+c+':STOCK')];
+    let C = {}, cerr = null;
+    try { C = await getCN(syms); } catch(e){ cerr = e.message; }
+    // 備援：鉅亨沒給的項目改用證交所／Yahoo／期交所／FinMind
+    const T = {}, fb = {}; let terr = null;
+    const lackTW = codes.filter(c=>!C['TWS:'+c+':STOCK']);
+    if (lackTW.length || !C[CN_IDX]) { try { Object.assign(T, await getTW(lackTW)); } catch(e){ terr = '台股行情連線失敗'; } }
+    const futQ = C[CN_FUT] ? null : await getFut().then(v=>v, e=>({err:e.message}));
+    const usQ = await Promise.all(US.map(async u => C[CN_US[u[0]]] ? null : await getUS(u[0]).then(v=>v, e=>({err:e.message}))));
+    await Promise.all(lackTW.filter(c=>!T[c]).map(async c=>{ try{ fb[c]=await fmClose(c);}catch(e){} }));
 
-    $('#tw').innerHTML = card('t00','加權指數',T.t00,terr||'非交易時段或無資料')
-      + card('fut','台指期近月（全指數）',fut.status==='fulfilled'?fut.value:null,fut.status==='rejected'?('期貨：'+fut.reason.message):null);
-    $('#us').innerHTML = US.map((u,i)=>card(u[0],u[1],us[i].status==='fulfilled'?us[i].value:null,us[i].status==='rejected'?'美股行情連線失敗':null)).join('');
+    const idx = C[CN_IDX] || T.t00, fq = C[CN_FUT] || (futQ&&!futQ.err?futQ:null);
+    const bad = cerr ? '連線失敗：'+cerr : '目前無資料';
+    $('#tw').innerHTML = card('t00','加權指數',idx,terr||bad)
+      + card('fut','台指期近月（全指數）',fq,futQ&&futQ.err?futQ.err:bad);
+    $('#us').innerHTML = US.map((u,i)=>{ const q = C[CN_US[u[0]]] || (usQ[i]&&!usQ[i].err?usQ[i]:null); return card(u[0],u[1],q,usQ[i]&&usQ[i].err?usQ[i].err:bad); }).join('');
 
-    // 持股：即時沒抓到的改用收盤價
-    const miss = codes.filter(c=>!T[c]);
-    const fb = {};
-    await Promise.all(miss.map(async c=>{ try{ fb[c]=await fmClose(c);}catch(e){} }));
-    $('#hold').innerHTML = list.length ? list.map(it=>rowHTML(it,T[it.code]||fb[it.code],terr&&!fb[it.code]?terr:null)).join('') : '<div class="loading">清單是空的，到「持股體檢」頁加入標的。</div>';
+    $('#hold').innerHTML = list.length ? list.map(it=>rowHTML(it,C['TWS:'+it.code+':STOCK']||T[it.code]||fb[it.code],cerr||terr)).join('') : '<div class="loading">清單是空的（來源：'+listInfo+'）。到「持股體檢」頁加入標的。</div>';
 
-    const okc = [tw,fut,...us].filter(r=>r.status==='fulfilled').length;
-    $('#status').textContent = '最後更新 '+new Date().toLocaleTimeString('zh-TW',{hour12:false})+(okc<6?'（部分來源失敗）':'');
+    const okc = (idx?1:0)+(fq?1:0)+US.filter((u,i)=>C[CN_US[u[0]]]||(usQ[i]&&!usQ[i].err)).length;
+        $('#status').textContent = '最後更新 '+new Date().toLocaleTimeString('zh-TW',{hour12:false})+(okc<6?'（部分來源無資料）':'');
     $('#dot').className = 'dot'+(okc?' on':'');
     $('#refresh').disabled=false; busy=false; left=+$('#every').value;
   }
@@ -212,7 +235,7 @@ h2.sec{font-size:14px;color:var(--mute);margin:18px 0 8px;font-weight:600;letter
     $('#banner').innerHTML = user ? '' : '<div class="banner"><span style="flex:1">目前顯示的是<b>示範清單</b>，登入後顯示你自己的持股。</span><button class="btn primary" type="button" onclick="MAAuth.signIn()">Google 登入</button></div>';
   }
   async function loadItems(){
-    try { items = (await MA.loadList(userDoc)).items; } catch(e){ items = []; }
+    try { const L = await MA.loadList(userDoc); items = L.items; listInfo = L.src; } catch(e){ items = []; listInfo = '讀取失敗 '+(e.code||e.message); }
     refresh();
   }
   function start(){
