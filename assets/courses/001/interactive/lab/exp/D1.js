@@ -240,11 +240,12 @@
         R.trap ? '陷阱範例：' + R.trap.text + '（Conf=' + f(R.trap.conf, 2) + ', Lift=' + f(R.trap.lift, 2) + '）' : '本次規則的 Lift 皆 ≥ 1'
       ]);
 
-      while (steps.length < 10) {
-        add(8, 'Apriori 的缺點', '每往下一層都要重新掃描整份交易資料，交易筆數一多就會很慢——下一個實驗 FP-Growth 會解決這個問題。', [
-          '頻繁項目集共 ' + (R.l1.length + R.l2.length + R.l3.length) + ' 個，規則 ' + R.rules.length + ' 條'
-        ]);
-      }
+      add(8, 'Apriori 掃描成本', '每往下一層（C1 → C2 → C3）都要重新掃描整份交易資料，交易筆數一多就會很慢——下一個實驗 FP-Growth (D2) 會徹底解決此問題。', [
+        '頻繁項目集共 ' + (R.l1.length + R.l2.length + R.l3.length) + ' 個，規則 ' + R.rules.length + ' 條'
+      ]);
+      add(8, '防組合爆炸實務技巧', '大型醫院藥品超過千種，實務常設最大長度 max_len = 3、先濾掉幾乎人人都開的基礎耗材，並搭 D4 Kulczynski 抗零交易！', [
+        '進階零不變指標與負關聯規則見 D4'
+      ]);
       return steps;
     },
 

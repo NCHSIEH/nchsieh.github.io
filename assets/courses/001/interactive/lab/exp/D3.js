@@ -145,32 +145,20 @@
       const topProj = R.projDBs[0] || { prefixLabel: '無', suffixes: [], cand2: [] };
 
       function views(st) {
+        const treeShown = R.treeNodes.filter(nd => {
+          if (nd.id === 'root') return true;
+          if (nd.id.startsWith('p1_')) return st.stage >= 2;
+          if (nd.id.startsWith('p2_')) return st.stage >= 4;
+          if (nd.id.startsWith('p3_')) return st.showTree;
+          return false;
+        }).map(nd => Object.assign({}, nd, {
+          active: (st.hlPrefix && (nd.id === 'p1_' + st.hlPrefix || nd.parent === 'p1_' + st.hlPrefix)) ||
+            (st.hlKey && (nd.id === 'p2_' + st.hlKey || nd.id === 'p3_' + st.hlKey))
+        }));
         const main = {
-          type: 'sets', slot: 'main',
-          title: '序列候選與前綴投影（綠＝頻繁序列、紅＝低於門檻）',
-          groups: [
-            {
-              id: 's1', title: '1-序列〈單一藥品〉',
-              items: R.s1All.map(x => ({
-                id: '1_' + x.key, text: '〈' + x.label + '〉', value: f(x.sup, 2),
-                state: st.stage >= 2 ? (x.cnt >= R.minCnt ? 'keep' : 'cut') : undefined
-              }))
-            },
-            st.stage >= 3 ? {
-              id: 'proj', title: '前綴〈' + topProj.prefixLabel + '〉後綴投影庫',
-              items: topProj.suffixes.slice(0, 7).map(sf => ({
-                id: 'sf_' + sf.id, text: '#' + sf.id + ' 後綴：' + sf.suf.map(LAB.data.rxLabel).join(' → '),
-                state: 'new'
-              }))
-            } : { id: 'wait', title: '等待前綴投影', items: [{ id: 'w', text: '先篩出頻繁 1-序列作為前綴' }] },
-            st.showTree ? {
-              id: 'seq23', title: '挖出的頻繁 2/3-序列',
-              items: R.l2.concat(R.l3).slice(0, 7).map(x => ({
-                id: 'sq_' + x.key, text: '〈' + x.label + '〉', value: f(x.sup, 2),
-                state: st.hlKey === x.key ? 'hl' : 'keep'
-              }))
-            } : { id: 'wait2', title: '待遞迴挖掘', items: [{ id: 'w2', text: '由後綴投影庫統計跨期序列' }] }
-          ]
+          type: 'tree', slot: 'main',
+          title: 'PrefixSpan 前綴序列樹（由上而下＝門診時間順序）',
+          nodes: treeShown
         };
 
         const allSeqPats = R.l2.concat(R.l3);

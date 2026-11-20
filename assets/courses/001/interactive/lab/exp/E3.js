@@ -149,26 +149,28 @@
     ],
     build(rows, p) {
       const R = runW2V(rows, p), steps = [];
-      const showWords = R.vocab.slice(0, 14);
-      const allX = R.snaps.reduce((a, s) => a.concat(showWords.map((_, i) => s.Win[i][0])), []);
-      const allY = R.snaps.reduce((a, s) => a.concat(showWords.map((_, i) => s.Win[i][1])), []);
+      const mustIdx = [R.targetIdx].concat(R.sims.slice(0, 3).map(s => s.i)).concat(R.pairs.slice(0, 3).reduce((a, pr) => a.concat(pr), []));
+      const showIdx = Array.from(new Set(mustIdx.concat(M.range(R.V)))).slice(0, 14);
+      const showIdxSet = new Set(showIdx);
+      const allX = R.snaps.reduce((a, s) => a.concat(showIdx.map(i => s.Win[i][0])), []);
+      const allY = R.snaps.reduce((a, s) => a.concat(showIdx.map(i => s.Win[i][1])), []);
       const bnd = Math.max(1.5, Math.ceil(Math.max(M.max(allX.map(Math.abs)), M.max(allY.map(Math.abs))) * 1.15));
       const AX = { x: { label: '維度 1', min: -bnd, max: bnd }, y: { label: '維度 2', min: -bnd, max: bnd } };
 
       function views(st) {
         const topSimSet = new Set(st.done ? R.sims.slice(0, 2).map(s => s.i) : []);
-        const points = showWords.map((w, i) => ({
+        const points = showIdx.map(i => ({
           id: 'w' + i, x: st.Win[i][0], y: st.Win[i][1],
           cls: i === st.hlA ? 'hl' : (i === st.hlB ? 'c1' : (st.done && i === R.targetIdx ? 'c1' : (topSimSet.has(i) ? 'good' : 'c0'))),
           hl: i === st.hlA || i === st.hlB || topSimSet.has(i),
-          label: w, r: (i === st.hlA || i === st.hlB || topSimSet.has(i) || (st.done && i === R.targetIdx)) ? 8 : 5.5
+          label: R.vocab[i], r: (i === st.hlA || i === st.hlB || topSimSet.has(i) || (st.done && i === R.targetIdx)) ? 8 : 5.5
         }));
         const lines = [];
-        if (st.hlA >= 0 && st.hlB >= 0 && st.hlA < showWords.length && st.hlB < showWords.length) {
+        if (st.hlA >= 0 && st.hlB >= 0 && showIdxSet.has(st.hlA) && showIdxSet.has(st.hlB)) {
           lines.push({ id: 'pair', x1: st.Win[st.hlA][0], y1: st.Win[st.hlA][1], x2: st.Win[st.hlB][0], y2: st.Win[st.hlB][1], cls: 'hl', dash: true, w: 2 });
-        } else if (st.done && R.targetIdx < showWords.length) {
+        } else if (st.done && showIdxSet.has(R.targetIdx)) {
           R.sims.slice(0, 2).forEach((s, idx) => {
-            if (s.i < showWords.length) {
+            if (showIdxSet.has(s.i)) {
               lines.push({ id: 'sim' + idx, x1: st.Win[R.targetIdx][0], y1: st.Win[R.targetIdx][1], x2: st.Win[s.i][0], y2: st.Win[s.i][1], cls: 'good', dash: true, w: 1.8 });
             }
           });
@@ -236,11 +238,12 @@
         '「' + R.targetWord + '」最相近：' + R.sims.slice(0, 3).map(x => x.w + '(' + f(x.sim, 2) + ')').join('、')
       ]);
 
-      while (steps.length < 10) {
-        add(7, '小語料與真實嵌入', '真實 Word2Vec 需要數百萬句語料與 100–300 維向量；這裡用 12 句與 2D 讓你看懂它的訓練機制。', [
-          '配對數 = ' + R.pairs.length + '，最終 Loss = ' + f(R.snaps[R.snaps.length - 1].loss, 3)
-        ]);
-      }
+      add(7, 'Skip-gram 與 CBOW', 'Skip-gram 用「中心詞猜周圍詞」，對罕見醫療詞表現較好；CBOW 則用「周圍詞猜中心詞」，訓練速度較快。', [
+        '配對數 = ' + R.pairs.length + '，最終 Loss = ' + f(R.snaps[R.snaps.length - 1].loss, 3)
+      ]);
+      add(7, '靜態向量的一詞多義限制', 'Word2Vec 每個詞只有唯一靜態向量（無法區分不同語境下的多義詞）；現代 LLM 改以 Self-Attention (H3) 動態產生上下文向量！', [
+        '演進：TF-IDF (E1) → Word2Vec (E3) → Transformer (H2–H4)'
+      ]);
       return steps;
     },
 

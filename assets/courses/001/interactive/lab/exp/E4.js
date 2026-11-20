@@ -209,11 +209,12 @@
         '主題 1：' + R.topWords[1].map(x => x.w + '(' + x.cnt + ')').join('、')
       ]);
 
-      while (steps.length < 10) {
-        add(8, 'LDA vs NMF 差異', 'LDA 是生成式機率模型（用 Dirichlet 先驗＋Gibbs 抽樣）；NMF 是線性代數非負矩陣分解，兩者都能找出主題。', [
-          '主題數 K = ' + R.K + '，迭代 = ' + R.iters + ' 輪'
-        ]);
-      }
+      add(8, '超參數 α 與 β 的直覺', 'α 越小代表每份文件傾向集中於極少數主題；β 越小代表每個主題只由少數專屬關鍵詞主導（主題更尖銳好命名）。', [
+        '本實驗：α = ' + ALPHA + '，β = ' + BETA + '，主題數 K = ' + R.K
+      ]);
+      add(8, 'LDA 與 NMF 主題對照', 'LDA 屬生成式機率模型（Dirichlet 先驗＋Gibbs 抽樣）；NMF（M6 互動站）屬非負矩陣分解，短文本上 NMF 常更銳利且無須抽樣。', [
+        '實務選 K：看主題一致性分數 (Coherence) 與人工可命名性'
+      ]);
       return steps;
     },
 

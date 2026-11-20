@@ -83,6 +83,7 @@
     { id: 'E3', group: 'E', title: 'Word2Vec', brief: '滑動視窗產生詞對，詞向量一步步靠近它的鄰居。', module: m('M6 第 20 節', '../m6/#p20'), status: 'live', tier: 'adv' },
     { id: 'E4', group: 'E', title: '主題模型 LDA', brief: '每個詞反覆重抽主題，主題慢慢成形。', module: m('M6 第 11 節', '../m6/#p11'), status: 'live', tier: 'adv' },
     { id: 'E5', group: 'E', title: 'N-gram 詞組與 BM25 檢索', brief: '建立相鄰雙連詞 Bigram 保留詞序，並用 BM25 詞頻飽和與長度正規化超越 TF-IDF。', module: m('M6 第 05 節', '../m6/#p05'), status: 'live', tier: 'adv' },
+    { id: 'E6', group: 'E', title: '臨床實體 NER 與否定偵測', brief: '以 BIO 序列標註抽取症狀／藥物／劑量，搭配 NegEx 否定視窗消除「否認胸痛」誤報。', module: m('M6 臨床資訊抽取', '../m6/#p09'), status: 'live', tier: 'adv' },
 
     { id: 'F1', group: 'F', title: '神經網路：前向與反向傳播', brief: '2-2-1 網路，每個權重的梯度怎麼算、怎麼更新。', module: m('M5 第 03 節', '../m5/#p03'), status: 'live' },
     { id: 'F2', group: 'F', title: '優化器比較', brief: 'SGD、Momentum、Adam 在同一個損失曲面上各走出什麼路線。', module: m('M5 第 05 節', '../m5/#p05'), status: 'live' },
@@ -173,6 +174,7 @@
     E3: 'Word Embeddings',
     E4: 'Latent Dirichlet Allocation',
     E5: 'N-gram Features & Okapi BM25',
+    E6: 'Clinical NER (BIO) & Negation Detection (NegEx)',
     F1: 'Forward & Backward Propagation',
     F2: 'Optimizer Comparison',
     F3: 'Convolutional Neural Network',
@@ -264,6 +266,7 @@
     E3: { ais: 'Word2Vec (Word2Vec 擴充套件)', py: 'gensim (Word2Vec)' },
     E4: { ais: 'Extract Topics from Documents (LDA)', py: 'scikit-learn (LatentDirichletAllocation) / gensim' },
     E5: { ais: 'Process Documents + Generate n-Grams (Terms)', py: 'scikit-learn (CountVectorizer) + rank_bm25' },
+    E6: { ais: null, py: 'medspaCy / spaCy (NER + ConText/NegEx) / transformers' },
 
     F1: { ais: 'Neural Net', py: 'scikit-learn (MLPClassifier) / PyTorch' },
     F2: { ais: null, py: 'PyTorch (torch.optim.SGD / Adam)' },

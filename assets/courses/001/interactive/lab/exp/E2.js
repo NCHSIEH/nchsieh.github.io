@@ -166,8 +166,8 @@
 
       st.scores = R.priors.map(pr => Math.log(pr));
       add(2, '計算三類先驗機率', '先統計三類各有幾句，取對數作為分數的起點（連乘改相加可避免浮點數下溢）。', [
-        'P(跌倒)=P(疼痛)=P(傷口)=' + R.cCounts[0] + '÷' + rows.length + '=' + f(R.priors[0], 3),
-        '起始對數分數 ln P(c) = ' + f(st.scores[0], 3)
+        '筆數：跌倒 ' + R.cCounts[0] + '、疼痛 ' + R.cCounts[1] + '、傷口 ' + R.cCounts[2] + '（共 ' + rows.length + ' 句）',
+        '先驗：(' + R.priors.map(v => f(v, 3)).join(', ') + ')'
       ]);
 
       st.probReady = true;
@@ -190,11 +190,15 @@
         '預測類別：「' + CLAB[R.pred] + '」'
       ]);
 
-      while (steps.length < 10) {
-        add(7, '為什麼要用 log 相加', '一句話若有 20 個詞，20 個小機率連乘會小到 10⁻³⁰ 造成下溢；取對數改成加法數值就非常穩定。', [
-          '預測：「' + CLAB[R.pred] + '」（信心 ' + LAB.pct(R.post[R.pred], 1) + '）'
-        ]);
-      }
+      add(7, '為何用 log 相加防下溢', '一句話若有 20 個詞，20 個小機率連乘會小到 10⁻³⁰ 造成浮點數歸零下溢；取對數改成加法數值就非常穩定。', [
+        '預測：「' + CLAB[R.pred] + '」（信心 ' + LAB.pct(R.post[R.pred], 1) + '）'
+      ]);
+      add(7, '不平衡用補集貝氏', '當各類病歷句數懸殊時，MultinomialNB 容易偏向多數類；sklearn 的 ComplementNB 改用「非該類語料」估計權重更穩健！', [
+        'sklearn：ComplementNB(alpha=1.0)'
+      ]);
+      add(7, '詞袋的否定詞盲點', '詞袋模型忽略詞序，「無疼痛」與「疼痛」只看詞頻極易誤判，臨床病歷實務需搭配 Bigram (E5) 或否定偵測 (E6)！', [
+        '實務基線：TF-IDF + Bigram + Logistic / LinearSVM'
+      ]);
       return steps;
     },
 

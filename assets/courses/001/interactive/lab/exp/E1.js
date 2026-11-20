@@ -92,7 +92,9 @@
     ],
     build(rows, p) {
       const R = runTFIDF(rows, p), steps = [];
-      const showVocab = R.vocab.slice(0, 8);
+      const qHitIdx = R.query.map(w => R.vocab.indexOf(w)).filter(i => i >= 0);
+      const showIdx = Array.from(new Set(qHitIdx.concat(M.range(R.vocab.length)))).slice(0, 8);
+      const showVocab = showIdx.map(i => R.vocab[i]);
 
       function views(st) {
         const groups = rows.map((r, i) => {
@@ -122,7 +124,7 @@
           title: st.matMode === 'tfidf' ? '正規化 TF-IDF 矩陣' : st.matMode === 'raw' ? '未正規化 TF×IDF' : '詞頻矩陣 (TF)',
           rowLabels: rows.map(r => '#' + r.id),
           colLabels: showVocab,
-          values: st.matShown ? matSrc.map(row => row.slice(0, showVocab.length)) : rows.map(() => showVocab.map(() => 0)),
+          values: st.matShown ? matSrc.map(row => showIdx.map(j => row[j])) : rows.map(() => showVocab.map(() => 0)),
           digits: st.matMode === 'tf' ? 0 : 2,
           heat: true
         };
@@ -194,11 +196,12 @@
         '次高：#' + R.ranked[1].id + '（相似度 ' + f(R.ranked[1].sim, 3) + '）'
       ]);
 
-      while (steps.length < 10) {
-        add(7, 'TF-IDF 的限制', 'TF-IDF 只比對字面完全相同的詞，若寫「跌倒」與「摔倒」不會視為相關；語意相似需要靠 Word2Vec 或 Embedding。', [
-          '詞表共 ' + R.vocab.length + ' 詞'
-        ]);
-      }
+      add(7, 'TF-IDF 的字面限制', 'TF-IDF 只比對字面完全相同的詞，若寫「跌倒」與「摔倒」相似度為 0；跨同義詞語意比對需靠 Word2Vec (E3) 或語意嵌入 (H6)。', [
+        '詞表共 ' + R.vocab.length + ' 詞（優先顯示查詢命中詞）'
+      ]);
+      add(7, '進階檢索：BM25 飽和', 'TF-IDF 的詞頻線性無上限，易被贅詞洗版；現代搜尋引擎與 RAG 實務已升級為含詞頻飽和與長度懲罰的 BM25（見 E5）。', [
+        'sklearn 預設 smooth_idf=True：ln((1+N)/(1+df)) + 1'
+      ]);
       return steps;
     },
 
