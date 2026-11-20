@@ -182,7 +182,9 @@
 
       for (let t = 1; t < 5; t++) {
         st.seqIdx = t; st.pickedIdx = R.seq[t].picked; st.genCount = t + 1;
-        add(7, '接續生成第 ' + (t + 1) + ' 詞', '把新產生的詞接回上下文，用同樣規則產生第 ' + (t + 1) + ' 個 token：「' + R.seq[t].tok + '」。', [
+        add(7, '接續生成第 ' + (t + 1) + ' 詞', t === 4
+          ? '完成第 5 詞「' + R.seq[t].tok + '」。實務建議：臨床病歷抽取／QA 設 T ≤ 0.2 求穩定低幻覺；衛教改寫再調至 T ≈ 0.7。'
+          : '把新產生的詞接回上下文，用同樣規則產生第 ' + (t + 1) + ' 個 token：「' + R.seq[t].tok + '」。', [
           '目前已生成：' + R.seq.slice(0, t + 1).map(x => x.tok).join(' ')
         ]);
       }

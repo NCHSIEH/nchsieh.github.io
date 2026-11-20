@@ -233,11 +233,15 @@
         ], { phase: '第 ' + tr.turn + ' 輪' });
       });
 
-      while (steps.length < 10) {
-        add(6, 'ReAct 與步數上限', '設定 max_steps = ' + R.maxSteps + ' 可防止 Agent 在工具回傳失敗時陷入無窮迴圈；所有資料皆來自真實查詢而非臆測。', [
-          '共執行 ' + R.turns.length + ' 輪｜累計消耗 ' + st.usedTok + ' tokens'
-        ]);
-      }
+      add(6, '步數上限與無窮迴圈防護', '設定 max_steps = ' + R.maxSteps + ' 可防止 Agent 在工具回傳失敗時陷入無窮迴圈；所有數據皆來自外部真實查詢而非臆測。', [
+        '共執行 ' + R.turns.length + ' 輪｜累計消耗 ' + st.usedTok + ' tokens'
+      ]);
+      add(6, '低溫度與結構化工具護欄', '生產環境呼叫 SQL／計算機等工具時，務必將溫度 τ 設低（0–0.2）並搭配 JSON Schema 驗證參數格式，防止語法錯誤與越權查詢。', [
+        '目前溫度 τ = ' + f(R.temp, 1) + '（實務工具呼叫建議 ≤ 0.2）'
+      ]);
+      add(6, '進階：多代理與人機協作', '面對複雜跨科病歷任務，可進一步拆分為多代理協作（Multi-Agent）並在開立處方前加入醫師把關（Human-in-the-Loop，見 S9）。', [
+        '完整 Agent 架構對照：S9 AI Agent 工作流程'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

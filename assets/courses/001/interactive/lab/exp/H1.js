@@ -158,10 +158,7 @@
         return [main, side, bottom];
       }
 
-      const initPairs = [
-        { pair: 'e + r', count: 15 }, { pair: 'r + </w>', count: 14 }, { pair: 'l + o', count: 7 },
-        { pair: 'o + w', count: 7 }, { pair: 'w + e', count: 8 }, { pair: 'n + e', count: 6 }
-      ];
+      const initPairs = R.mergeHistory.length ? R.mergeHistory[0].topPairs : [];
       const st = { words: initWords, topPairs: initPairs, vocab: initVocab, newSym: null, showNewWord: false };
       const add = (line, title, say, calc, extra) => steps.push(Object.assign({ line, title, say, calc: calc || [], views: views(st), focus: [] }, extra));
 
@@ -171,6 +168,10 @@
 
       add(1, '拆成字元與 </w>', '把 7 個詞全部拆成單字元，詞尾加上 </w> 標記，避免跨詞誤合併。', [
         '例：lower → l o w e r </w>'
+      ]);
+
+      add(3, '統計初始相鄰符號對', '掃描全部詞彙並乘上詞頻，統計出最常相鄰的符號對，準備執行第一次合併。', [
+        '最高頻符號對：' + (initPairs[0] ? initPairs[0].pair + '（' + initPairs[0].count + ' 次）' : '無')
       ]);
 
       R.mergeHistory.forEach((mh, idx) => {
@@ -186,16 +187,30 @@
         }
       });
 
-      st.showNewWord = true; st.newSym = null;
-      add(6, '套用規則切分新詞', '遇到訓練沒看過的新詞「newest」，依序套用剛剛學到的合併規則，就能切出有意義的片段！', [
-        'newest → ' + R.newWordSyms.join(' | ')
+      add(6, '遇見未見新詞 newest', '訓練語料裡只有 newer 與 lowest，沒有 newest；先將它拆成字元序列，依序套用學到的合併規則。', [
+        '初始字元：n | e | w | e | s | t | </w>（7 片段）'
       ]);
 
-      while (steps.length < 10) {
-        add(6, '中文 Token 說明', '中文沒有空白分隔且字元多，在常見 LLM（如 GPT/Claude）的 UTF-8 Byte-level BPE 中，一個中文字常占 1–2 個 token。', [
-          '最終詞表共 ' + R.finalVocab.length + ' 個符號'
-        ]);
-      }
+      st.showNewWord = true; st.newSym = null;
+      add(6, '套用規則切分新詞', '依序套用 ' + R.rules.length + ' 條合併規則後，未見新詞「newest」自動被壓縮成有意義的子詞片段！', [
+        'newest → ' + R.newWordSyms.join(' | ') + '（共 ' + R.newWordSyms.length + ' 個 token）'
+      ]);
+
+      add(6, '詞表大小與 OOV 權衡', 'BPE 讓詞表維持在數萬～十幾萬大小，卻幾乎不會遇到無法辨識的 <UNK>，醫療專有名詞也能拆字根理解。', [
+        '最終詞表共 ' + R.finalVocab.length + ' 個符號'
+      ]);
+
+      add(6, '中文與位元組 BPE', '現代 LLM（如 GPT/Claude）採 UTF-8 Byte-level BPE：英文常 1 詞 ≈ 1.3 token，中文 1 字則常占 1–2 token。', [
+        '實務提醒：Token 數直接決定 API 費用與上下文視窗上限'
+      ]);
+
+      add(6, 'BPE vs WordPiece', 'BPE 依頻率貪心合併；BERT 的 WordPiece 改依似然增益合併；SentencePiece Unigram 則從大詞表往下刪減。', [
+        '三者皆屬子詞斷詞（Subword Tokenization）家族'
+      ]);
+
+      add(6, '實驗總結', '斷詞是進入 LLM 的第一關；切好的 Token ID 接下來會送進 H2 查詞嵌入表與加位置編碼。', [
+        '合併次數 = ' + R.rules.length + '｜最終詞表 = ' + R.finalVocab.length
+      ]);
       return steps;
     },
 

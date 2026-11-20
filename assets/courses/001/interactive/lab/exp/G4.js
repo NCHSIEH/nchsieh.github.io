@@ -166,16 +166,17 @@
               }))
         };
 
+        const topResid = R.resid.map((r, i) => ({ i, r, abs: Math.abs(r) })).sort((a, b) => b.abs - a.abs).slice(0, 8);
         const bottom = {
           type: 'bars', slot: 'bottom',
           title: st.stage === 3
-            ? '前 8 期殘差雜訊 Rₜ（超過 ±2σ 可抓出突發疫情／連假異常月）'
+            ? '殘差絕對值 Top-8 月份（超過 ±2σ 可抓出突發疫情／連假異常月）'
             : '12 個月季節效應 Sₘ（冬季 12–1 月正高峰、2 月農曆年低谷）',
           digits: 0,
           items: st.stage === 3
-            ? R.resid.slice(0, 8).map((r, i) => ({
-                id: 'r' + i, label: 't=' + (i + 1), value: Math.abs(r),
-                cls: i === R.anomalyIdx ? 'bad' : 'c0', hl: i === R.anomalyIdx
+            ? topResid.map(o => ({
+                id: 'r' + o.i, label: 't=' + (o.i + 1), value: o.abs,
+                cls: o.i === R.anomalyIdx ? 'bad' : 'c0', hl: o.i === R.anomalyIdx
               }))
             : R.season12.map((s, m) => ({
                 id: 'm' + m, label: (m + 1) + '月', value: Math.abs(s),
@@ -233,7 +234,7 @@
         '目前 MAE = ' + f(R.mae, 2) + ' 人次'
       ]);
 
-      add(6, '時序轉監督式學習總結', '透過 STL 分解看懂趨勢／季節／異常，再透過 Windowing 轉成 Lag 表格，就能把 B 群所有強大的監督式模型（如 GBDT / XGBoost）全部用在時間序列上！', [
+      add(6, '時序轉監督式學習總結', '透過 STL 看懂趨勢／季節／異常並用 Windowing 建 Lag 表格交給 GBDT。切記：實務不可先對全序列做 STL 再切分，須在 G3 訓練窗內分解防洩漏！', [
         '下一期預測 = ' + f(R.nextPred, 0) + ' 人次'
       ]);
 

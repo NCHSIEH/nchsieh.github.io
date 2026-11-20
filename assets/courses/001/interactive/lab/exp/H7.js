@@ -169,11 +169,9 @@
         '4096² = ' + bigFull + ' → 2×4096×8 = ' + bigLora + '（僅 ' + LAB.pct(bigLora / bigFull, 2) + '）'
       ]);
 
-      while (steps.length < 10) {
-        add(6, 'LoRA 部署優勢', '推論時可以把 B·A 直接加回 W（W_new = W + BA），完全不增加任何推論延遲！', [
-          '最終 MSE = ' + f(R.fin.loss, 4)
-        ]);
-      }
+      add(6, '零延遲合併與 QLoRA', '推論時可把 ΔW = (α/r)B·A 直接加回 W（W_new = W + ΔW）實現零延遲；若先把原權重 4-bit 量化再掛 LoRA 即為 QLoRA，單張顯卡即可微調！', [
+        '最終 MSE = ' + f(R.fin.loss, 4) + '｜推論額外延遲 = 0 ms'
+      ]);
       return steps;
     },
 

@@ -169,7 +169,9 @@
           type: 'bars', slot: 'bottom',
           title: st.showCounts
             ? '最終 ' + R.T + ' 位病人分派給各方案的總次數（大部分資源自動集中到最佳方案 B！）'
-            : '第 ' + snap.t + ' 步各方案 UCB 評分（經驗勝率 Q̂ + 探索獎勵 c√(ln t/N)）',
+            : (R.strat === 'ucb'
+              ? '第 ' + snap.t + ' 步各方案 UCB 評分（經驗勝率 Q̂ + 探索獎勵 c√(ln t/N)）'
+              : '第 ' + snap.t + ' 步各方案經驗勝率 Q̂（ε=' + f(R.eps, 1) + ' 隨機探索）'),
           max: st.showCounts ? R.T : 1.8,
           digits: st.showCounts ? 0 : 2,
           items: [0, 1, 2].map(k => ({
@@ -197,7 +199,9 @@
 
       st.tIdx = 3;
       const s4 = R.active.history[3];
-      add(3, '第 4 步：UCB 樂觀公式', 'UCB 不靠盲目丟銅板，而是給每個方案加上「不確定性紅利 c·√(ln t / N)」：越少被試過的藥紅利越大，遵循「面對不確定性保持樂觀」！', [
+      add(3, R.strat === 'ucb' ? '第 4 步：UCB 樂觀公式' : '第 4 步：ε-Greedy', R.strat === 'ucb'
+        ? 'UCB 不靠盲目丟銅板，而是給每個方案加上「不確定性紅利 c·√(ln t / N)」：越少被試過的藥紅利越大，遵循「面對不確定性保持樂觀」！'
+        : 'ε-Greedy 以機率 ε=' + f(R.eps, 1) + ' 隨機探索未知方案，其餘機率則直接選目前經驗勝率 Q̂ 最高的方案！', [
         '第 4 步選出：' + ARMS[s4.chosen].arm + '｜療效 r = ' + s4.rew
       ]);
 
@@ -227,7 +231,7 @@
         '最佳方案 B 獲分派比例 = ' + LAB.pct(fin.counts[1] / R.T, 1)
       ]);
 
-      add(5, '實驗總結', '透過 UCB 信賴上界，我們不必再陷入「盲目隨機探索」與「過早鎖死」的兩難，而是用統計信賴區間優雅解決探索與利用困境。', [
+      add(5, '實驗總結與延伸', 'UCB 用統計信賴上界解決探索利用兩難；臨床實務亦常用貝氏 Thompson Sampling，若依病人體質個人化派藥則升級為 Contextual Bandits！', [
         '當前策略最終累積遺憾 = ' + f(fin.cumRegret, 2)
       ]);
 

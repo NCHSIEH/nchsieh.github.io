@@ -150,7 +150,7 @@
           title: 'DPO 臨床偏好對齊（β = ' + f(R.beta, 1) + '，正確回答勝出機率 = ' + LAB.pct(R.dpoPrefProb, 1) + '）',
           max: 1, digits: 3,
           items: [
-            { id: 'yw', label: '优选回答 y_w（謹慎附排他條款）勝率', value: R.dpoPrefProb, cls: 'good', hl: true },
+            { id: 'yw', label: '優選回答 y_w（謹慎附排他條款）勝率', value: R.dpoPrefProb, cls: 'good', hl: true },
             { id: 'yl', label: '劣選回答 y_l（漏看禁忌症幻覺）殘餘率', value: 1 - R.dpoPrefProb, cls: 'bad' },
             { id: 'loss', label: 'DPO 損失 −ln σ(β·Δ)', value: Math.min(1, R.dpoLoss), cls: 'c0' }
           ]
@@ -189,7 +189,7 @@
       ]);
 
       st.tUpto = R.seqLen;
-      add(2, 'KV Cache 記憶體加速', '把已算過的 K₁..t₋₁ 與 V₁..t₋₁ 存在 GPU 顯存（KV Cache），每步只需拿最新詞的 qₜ 與快取做 t 次內積！', [
+      add(2, 'KV Cache 記憶體加速', '把歷史 K、V 存在顯存，每步只算新詞的 t 次內積！超長文本下 KV Cache 反而會成為顯存瓶頸，故現代推論引擎再搭 GQA 與 PagedAttention。', [
         '生成 ' + R.seqLen + ' 詞總內積：無快取 = ' + R.accNo + ' 次 vs KV Cache = ' + R.accKv + ' 次',
         '運算量縮減為 1 / ' + f(R.speedup, 2) + '（當 T=2048 時可快上千倍！）'
       ]);

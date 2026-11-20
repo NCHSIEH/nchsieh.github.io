@@ -77,10 +77,11 @@
           values: R.PE.map((row, idx) => idx < st.peUpto ? row : [0, 0, 0, 0]),
           digits: 2, heat: 'div'
         };
+        const dispToks = st.swapped ? [R.tokens[0], R.tokens[2], R.tokens[1], R.tokens[3], R.tokens[4], R.tokens[5]] : R.tokens;
         const tokens = {
           type: 'tokens', slot: 'bottom',
-          title: '輸入句子',
-          items: R.tokens.map((t, idx) => ({ id: 't' + idx, text: idx + ':' + t, cls: st.curPos === idx ? 'hl' : 'c0', hl: st.curPos === idx }))
+          title: st.swapped ? '輸入句子（第 1、2 詞已對調）' : '輸入句子',
+          items: dispToks.map((t, idx) => ({ id: 't' + idx, text: idx + ':' + t, cls: st.swapped && (idx === 1 || idx === 2) ? 'c1' : (st.curPos === idx ? 'hl' : 'c0'), hl: st.curPos === idx || (st.swapped && (idx === 1 || idx === 2)) }))
         };
         return [main, side, tokens];
       }
@@ -124,7 +125,7 @@
       ]);
 
       st.swapped = true;
-      add(7, '詞序對調測試', '把第 1 詞與第 2 詞對調後，因為加上的位置編碼不同，送進模型的向量也不同了！', [
+      add(7, '詞序對調測試', '把第 1 詞與第 2 詞對調後，因為加上的位置編碼不同，送進模型的向量也不同了！現代 LLM 進一步使用旋轉位置編碼 RoPE 編碼相對距離。', [
         '原 X[1,0] = ' + f(R.X[1][0], 2) + ' → 對調後 = ' + f(R.swapped[1][0], 2)
       ]);
       return steps;

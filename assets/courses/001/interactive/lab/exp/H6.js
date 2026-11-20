@@ -214,11 +214,16 @@
         '已組裝 ' + R.topK + ' 段進提示詞（請見下方）'
       ]);
 
-      while (steps.length < 10) {
-        add(7, 'Top-K 與切塊的實務提醒', '調整上方「依句／依段」或「Top-K」，看漏掉排他條款 C5 時回答會怎麼出錯（對應 M8 長照 3.0 案例）。', [
-          '目前取回：' + R.topOrder.map(x => 'C' + (x.i + 1)).join('、')
-        ]);
-      }
+      const hasExcl = p.chunk === 'para' ? pickedSet.has(2) : pickedSet.has(4);
+      add(7, '切塊與排他條款陷阱', hasExcl
+        ? '本次檢索成功取回「外籍看護不可重複申請居服」排他條款！若改用依句切塊且 Top-K=1 就可能漏掉它。'
+        : '警戒：本次取回段落漏掉了排他條款！LLM 只看正面條文就會誤答「可以申請居服」，這就是 RAG 檢索失誤幻覺。', [
+        '目前取回：' + R.topOrder.map(x => 'C' + (x.i + 1)).join('、') + '（含排他條款：' + (hasExcl ? '是' : '否') + '）'
+      ]);
+
+      add(7, 'RAG 進階：Rerank 防護', '實務醫療知識庫會在初篩 Top-20 後加上 Cross-Encoder Reranker 精排 Top-3（見 H9），並要求 LLM 標註引用段落編號防幻覺。', [
+        '標準流程：混合檢索 (BM25+向量+RRF) → Cross-Encoder 精排 → 引用生成'
+      ]);
       return steps;
     },
 

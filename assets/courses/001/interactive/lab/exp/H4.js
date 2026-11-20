@@ -176,11 +176,9 @@
         '輸入 (6×4) → 輸出 (6×4)'
       ]);
 
-      while (steps.length < 10) {
-        add(6, '注意力與 FFN 分工', 'Attention 負責「詞與詞之間交換資訊」；FFN 負責「每個詞自己消化並儲存知識」。', [
-          '最終 Norm2 平均 ≈ 0，標準差 ≈ 1'
-        ]);
-      }
+      add(6, '注意力與 FFN 分工', 'Attention 負責「詞與詞之間交換資訊」；FFN 負責「每個詞自己消化並儲存知識」。現代 LLM（如 LLaMA）多改用 Pre-LN＋RMSNorm＋SwiGLU 提升百層穩定度。', [
+        '最終 Norm2 平均 ≈ 0，標準差 ≈ 1'
+      ]);
       return steps;
     },
 

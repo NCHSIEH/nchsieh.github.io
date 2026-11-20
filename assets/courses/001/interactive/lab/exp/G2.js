@@ -83,7 +83,7 @@
     goal: '看懂 ARIMA 如何先用差分（d）消除趨勢變平穩、用自相關 ACF 找滯後關聯，再用前 p 期做 AR(p) 迴歸並累加回原尺度預測。',
     data: {
       name: 'opd_arima',
-      scenario: '月門診量：36 個月門診人次，示範 ARIMA(p, d, 0) 的差分、ACF 與條件最小平方 AR 估計',
+      scenario: '月門診量：24–36 個月門診人次，示範 ARIMA(p, d, 0) 的差分、ACF 與條件最小平方 AR 估計',
       columns: COLS,
       small: seed => LAB.data.opd(seed, 24).map(pick),
       large: seed => LAB.data.opd(seed, 36).map(pick),
@@ -205,11 +205,15 @@
         '第 ' + (R.n + 1) + ' 月預測 = ' + f(R.fcOrig[0], 0) + '，第 ' + (R.n + R.H) + ' 月預測 = ' + f(R.fcOrig[R.H - 1], 0)
       ]);
 
-      while (steps.length < 10) {
-        add(6, 'ARIMA vs 指數平滑', '指數平滑著重把序列拆成水準、趨勢、季節加權平均；ARIMA 則直接對差分後的自相關結構建模。', [
-          '模型：ARIMA(' + R.arP + ', ' + R.d + ', 0)（OLS）'
-        ]);
-      }
+      add(6, 'ARIMA vs 指數平滑', '指數平滑將序列拆成水準、趨勢、季節加權平均；ARIMA 則對差分平穩後的自相關結構建立線性迴歸模型。', [
+        '模型：ARIMA(' + R.arP + ', ' + R.d + ', 0)（OLS）'
+      ]);
+      add(6, 'ADF 檢定與 PACF 定階', '實務先做 ADF 單根檢定決定差分階數 d；再用偏自相關 PACF 截斷階數挑 AR(p)，用 ACF 截斷階數挑 MA(q)。', [
+        '目前 d = ' + R.d + '、AR 階數 p = ' + R.arP + '、ACF(1) = ' + f(R.acf[0], 3)
+      ]);
+      add(6, '季節性 SARIMA 延伸', '醫療門診常具 12 個月週期，可升級為 SARIMA(p,d,q)(P,D,Q)₁₂ 納入季節差分 Δ₁₂yₜ，或搭配 G4 STL＋Lag 機器學習。', [
+        '第 ' + (R.n + 1) + ' 月預測 = ' + f(R.fcOrig[0], 0) + ' 人次'
+      ]);
       return steps;
     },
 
@@ -226,7 +230,7 @@
     explain(steps, rows, p) {
       const R = runARIMA(rows, p);
       return [
-        '對 36 個月門診量做 d = ' + R.d + ' 階差分後，滯後 1 階自相關 ACF(1) = ' + f(R.acf[0], 3) + '。',
+        '對 ' + R.n + ' 個月門診量做 d = ' + R.d + ' 階差分後，滯後 1 階自相關 ACF(1) = ' + f(R.acf[0], 3) + '。',
         '以條件最小平方法估計 AR(' + R.arP + ') 得截距 ' + f(R.coefs[0], 2) + '、係數 (' + R.coefs.slice(1).map(v => f(v, 3)).join(', ') + ')。',
         '注意：本實驗使用條件最小平方法（等同 statsmodels AutoReg），與套件 ARIMA 預設的最大概似法（MLE）數值會略有差異。'
       ];
@@ -240,7 +244,7 @@
       note: 'AI Studio 的 ARIMA 採用最大概似法估計；本實驗為了能逐步列出迴歸式，採用條件最小平方法（OLS）並與 statsmodels AutoReg 對齊。',
       expect: (steps, rows, p) => {
         const R = runARIMA(rows, p);
-        return ['第 37 月預測 = ' + f(R.fcOrig[0], 0) + ' 人次'];
+        return ['第 ' + (R.n + 1) + ' 月預測 = ' + f(R.fcOrig[0], 0) + ' 人次'];
       },
       python: `from statsmodels.tsa.ar_model import AutoReg\nres = AutoReg(series, lags=2, trend='c').fit()`,
       confirmed: false

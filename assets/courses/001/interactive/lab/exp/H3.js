@@ -158,11 +158,9 @@
         '第 1 頭焦點：' + R.tokens[M.argmax(R.h0.A[qi])] + '｜第 2 頭焦點：' + R.tokens[M.argmax(R.h1.A[qi])]
       ]);
 
-      while (steps.length < 10) {
-        add(6, '為什麼要除以 √d_k', '當維度 d_k 很大時內積方差會變大，除以 √d_k 可避免 Softmax 進入梯度極小的飽和區。', [
-          '目前 d_k = 2，縮放因子 = ' + f(Math.sqrt(2), 3)
-        ]);
-      }
+      add(6, '為什麼要除以 √d_k', '當維度 d_k 很大時內積方差會等比例膨脹，除以 √d_k 可避免 Softmax 進入梯度極小的飽和區；另注意全詞注意力有 O(T²) 成本（見 H9）。', [
+        '目前 d_k = 2，縮放因子 = ' + f(Math.sqrt(2), 3)
+      ]);
       return steps;
     },
 

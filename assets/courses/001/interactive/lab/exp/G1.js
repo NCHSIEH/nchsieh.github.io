@@ -66,7 +66,7 @@
     goal: '看懂簡單指數平滑、Holt（加趨勢）與 Holt-Winters（加季節）如何逐期更新水準、趨勢與 12 個月季節指數來預測未來門診量。',
     data: {
       name: 'opd_es',
-      scenario: '月門診量：36 個月門診人次（具上升趨勢與 12 個月季節波動），預測未來幾個月',
+      scenario: '月門診量：24–36 個月門診人次（具上升趨勢與 12 個月季節波動），預測未來幾個月',
       columns: COLS,
       small: seed => LAB.data.opd(seed, 24).map(pick),
       large: seed => LAB.data.opd(seed, 36).map(pick),
@@ -133,7 +133,7 @@
         };
         const bars = {
           type: 'bars', slot: 'bottom',
-          title: '12 個月季節指數（相對於水準的增減人次）',
+          title: R.method === 'hw' ? '12 個月季節指數（相對於水準的增減人次）' : '12 個月季節指數（' + R.method.toUpperCase() + ' 不含季節項）',
           digits: 0,
           items: M.range(12, m => ({
             id: 'm' + m, label: (m + 1) + '月',
@@ -174,7 +174,7 @@
         '第 ' + (R.n + 1) + ' 月預測 = ' + f(R.fc[0], 0) + '，第 ' + (R.n + R.H) + ' 月預測 = ' + f(R.fc[R.H - 1], 0)
       ]);
 
-      add(7, '訓練期誤差 MAE / MAPE', '計算 ' + R.n + ' 個月一步預測的平均絕對誤差（MAE）與平均絕對百分比誤差（MAPE）。', [
+      add(7, '訓練期誤差 MAE / MAPE', '計算 ' + R.n + ' 個月一步預測的 MAE 與 MAPE。若季節震幅隨趨勢等比例放大改用乘法季節；長距外推宜加阻尼趨勢 (Damped)。', [
         'MAE = ' + f(R.mae, 1) + ' 人次，MAPE = ' + f(R.mape, 2) + '%'
       ]);
       return steps;
@@ -198,7 +198,7 @@
     explain(steps, rows, p) {
       const R = runES(rows, p);
       return [
-        '使用 ' + (R.method === 'ses' ? '簡單指數平滑' : R.method === 'holt' ? 'Holt 線性趨勢法' : 'Holt-Winters 加法季節法') + ' 擬合 36 個月門診量，訓練期 MAE = ' + f(R.mae, 1) + ' 人次（MAPE = ' + f(R.mape, 2) + '%）。',
+        '使用 ' + (R.method === 'ses' ? '簡單指數平滑' : R.method === 'holt' ? 'Holt 線性趨勢法' : 'Holt-Winters 加法季節法') + ' 擬合 ' + R.n + ' 個月門診量，訓練期 MAE = ' + f(R.mae, 1) + ' 人次（MAPE = ' + f(R.mape, 2) + '%）。',
         '簡單法預測是水平線；Holt 能外推線性趨勢；Holt-Winters 同時捕捉趨勢與 12 個月淡旺季。',
         '未來 ' + R.H + ' 個月預測範圍為 ' + f(M.min(R.fc), 0) + ' ～ ' + f(M.max(R.fc), 0) + ' 人次。'
       ];
@@ -212,7 +212,7 @@
       note: 'AI Studio 的 Time Series 擴充提供 Holt-Winters 運算子；不同實作的起始值設定（known vs estimated）會造成前幾期數值差異。',
       expect: (steps, rows, p) => {
         const R = runES(rows, p);
-        return ['訓練期 MAE = ' + f(R.mae, 1) + '，第 37 月預測 = ' + f(R.fc[0], 0)];
+        return ['訓練期 MAE = ' + f(R.mae, 1) + '，第 ' + (R.n + 1) + ' 月預測 = ' + f(R.fc[0], 0)];
       },
       python: `from statsmodels.tsa.holtwinters import ExponentialSmoothing\n# 以 initialization_method='known' 固定起始值對照`,
       confirmed: false

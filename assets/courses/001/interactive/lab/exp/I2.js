@@ -172,17 +172,19 @@
         };
 
         const featNames = ['年齡 (+1SD)', 'BMI (+1SD)', '血糖 (+1SD)'];
+        const absSlopes = [1, 2, 3].map(j => Math.abs(R.limeCoefs[j]));
+        const maxLimeJ = 1 + M.argmax(absSlopes);
         const bottom = {
           type: 'bars', slot: 'bottom',
           title: 'LIME 局部線性代理模型斜率（對 #' + R.tid + ' 附近影響最大的特徵）',
-          max: Math.max(0.25, M.max(R.limeCoefs.slice(1).map(Math.abs)) * 1.2),
+          max: Math.max(0.25, M.max(absSlopes) * 1.2),
           digits: 3,
           items: [1, 2, 3].map(j => ({
             id: 'lc' + j,
             label: featNames[j - 1],
             value: Math.abs(R.limeCoefs[j]),
-            cls: j === 3 ? 'hl' : 'c0',
-            hl: j === 3
+            cls: j === maxLimeJ ? 'hl' : 'c0',
+            hl: j === maxLimeJ
           }))
         };
 
@@ -214,7 +216,7 @@
         'PDP 平均風險：血糖 95 時 = ' + f(R.pdpPts[1][1], 3) + ' → 血糖 155 時 = ' + f(R.pdpPts[5][1], 3)
       ]);
 
-      add(3, '個別條件期望曲線 ICE', '只看平均線 PDP 會掩蓋個體差異！粉紅線是 #' + R.tid + ' 自己的 ICE 曲線，綠虛線則是低 BMI 年輕人的曲線，兩者差距展現了「BMI×血糖交互作用」。', [
+      add(3, '個別條件期望曲線 ICE', '只看平均線 PDP 會掩蓋交互作用，且特徵高度相關時會混入不合理組合（實務改用 ALE）；個人 ICE 與低 BMI 曲線差距正好呈現 BMI×血糖交互作用。', [
         '在血糖 140 時：#' + R.tid + ' 風險 = ' + f(R.iceTargetPts[4][1], 3) + ' vs 低BMI組 = ' + f(R.iceLowPts[4][1], 3)
       ]);
 

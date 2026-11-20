@@ -185,8 +185,9 @@
       ]);
 
       R.ep1Steps.forEach(s1 => {
-        st.agent = s1.ns; st.Q = s1.qSnap; st.hlAct = s1.aIdx;
-        add(5, '第 1 回合第 ' + s1.t + ' 步', (s1.explore ? '探索（u=' + f(s1.u, 2) + ' < ε）：隨機選「' : '利用（u=' + f(s1.u, 2) + ' ≥ ε）：選 Q 最高「') + ACTIONS[s1.aIdx].name + '」，得獎勵 ' + f(s1.rew, 1) + '。', [
+        st.agent = s1.s; st.Q = s1.qSnap; st.hlAct = s1.aIdx;
+        const nr = Math.floor(s1.ns / 4), nc = s1.ns % 4;
+        add(5, '第 1 回合第 ' + s1.t + ' 步', (s1.explore ? '探索（u=' + f(s1.u, 2) + ' < ε）：隨機選「' : '利用（u=' + f(s1.u, 2) + ' ≥ ε）：選 Q 最高「') + ACTIONS[s1.aIdx].name + '」移至 (' + nr + ',' + nc + ')，得獎勵 ' + f(s1.rew, 1) + '。', [
           'Q(' + s1.s + ', ' + ACTIONS[s1.aIdx].name + ')：' + f(s1.qOld, 2) + ' → ' + f(s1.qNew, 2)
         ], { phase: '第 1 回合' });
       });
@@ -208,11 +209,9 @@
         '最佳路線：' + R.bestPath.map(s => '(' + Math.floor(s / 4) + ',' + (s % 4) + ')').join('→')
       ]);
 
-      while (steps.length < 10) {
-        add(7, '探索與利用的平衡', 'ε 太小容易卡在次佳路線；ε 太大則已經學會了還一直亂走。實務常隨回合遞減 ε。', [
-          'Q(0, 右) = ' + f(R.Q[0][1], 3) + '，Q(0, 下) = ' + f(R.Q[0][2], 3)
-        ]);
-      }
+      add(7, '探索衰減與 DQN 延伸', '實務常隨回合遞減 ε；Q-learning 屬 Off-Policy（與保守的 On-Policy SARSA 相對），當狀態是連續生理數據或影像時則以神經網路近似 Q 表（DQN）。', [
+        'Q(0, 右) = ' + f(R.Q[0][1], 3) + '，Q(0, 下) = ' + f(R.Q[0][2], 3)
+      ]);
       return steps;
     },
 
