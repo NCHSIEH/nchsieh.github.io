@@ -100,13 +100,20 @@
           heat: true
         };
         if (st.win) main['win' + 'dow'] = st.win;
-        const side = {
+        const side = st.stage === 'pool' ? {
+          type: 'matrix', slot: 'side',
+          title: 'ReLU 特徵圖（2×2 池化輸入）',
+          values: R.relu,
+          digits: 1,
+          heat: 'div'
+        } : {
           type: 'matrix', slot: 'side',
           title: '3×3 卷積核：' + R.ker.name,
           values: R.ker.w,
           digits: p.kernel === 'blur' ? 2 : 0,
           heat: 'div'
         };
+        if (st.stage === 'pool') side['win' + 'dow'] = { r: 0, c: 0, h: 2, w: 2 };
         let bottom;
         if (st.stage === 'pool') {
           bottom = {
@@ -145,8 +152,8 @@
       const add = (line, title, say, calc, extra) => steps.push(Object.assign({ line, title, say, calc: calc || [], views: views(st), focus: [] }, extra));
 
       add(0, '題目', '用 3×3「' + R.ker.name + '」卷積核掃描 6×6 的「' + R.imgObj.name + '」圖，再經 ReLU 與 2×2 池化。', [
-        '卷積核功用：' + R.ker.what,
-        R.pad ? '已開啟 Padding（補零成 8×8 → 輸出 6×6）' : '未補零（6×6 → 輸出 4×4）'
+        '卷積核功用：' + R.ker.what + '（權重共享僅 9+1=10 參數）',
+        '輸出尺寸 O = ⌊(W−K+2P)/S⌋+1 = ' + R.outSize + '×' + R.outSize + (R.pad ? '（P=1）' : '（P=0）')
       ]);
 
       const totalCells = R.outSize * R.outSize;
@@ -165,7 +172,9 @@
             '= ' + f(R.conv[r][c], 2)
           ], { phase: (idx + 1) + ' / ' + totalCells });
         } else if (idx < 10 || idx === totalCells - 1) {
-          add(4, '滑動到 (' + r + ',' + c + ')', '繼續滑動 3×3 視窗，填入特徵圖第 (' + r + ',' + c + ') 格。', [
+          add(4, '滑動到 (' + r + ',' + c + ')', idx === totalCells - 1 && totalCells > 11
+            ? '快轉完成中間各格，滑動至最後一格 (' + r + ',' + c + ') 完成整張特徵圖。'
+            : '繼續滑動 3×3 視窗，填入特徵圖第 (' + r + ',' + c + ') 格。', [
             '特徵圖(' + r + ',' + c + ') = ' + f(R.conv[r][c], 2)
           ], { phase: (idx + 1) + ' / ' + totalCells });
         }
@@ -182,8 +191,9 @@
         '池化後 (' + R.pSize + '×' + R.pSize + ') 左上格 = ' + f(R.pooled[0][0], 2)
       ]);
 
-      add(6, '這張卷積核找到了什麼？', R.ker.what + '。觀察特徵圖亮起的位置，剛好就是圖形上符合這個特徵的區域！', [
-        '輸出形狀：6×6 → 卷積 ' + R.outSize + '×' + R.outSize + ' → 池化 ' + R.pSize + '×' + R.pSize
+      add(6, '這張卷積核找到了什麼？', R.ker.what + '。現代 CNN 常在深層以 Global Average Pooling 取代 Flatten+Dense，大幅降參防過擬合！', [
+        '輸出形狀：6×6 → 卷積 ' + R.outSize + '×' + R.outSize + ' → 池化 ' + R.pSize + '×' + R.pSize,
+        '同一張 3×3 核全圖共享權重，無論影像多大都只需 10 個參數'
       ]);
       return steps;
     },

@@ -169,6 +169,30 @@
         '【病歷第一大坑】切勿直接用單詞關鍵字從病歷抽疾病標籤！「否認發燒／無胸痛」未經 E6 否定偵測會讓訓練標籤嚴重污染。',
         '【檢索黃金搭配】精準藥名與編碼靠 E5 BM25，語意同義改寫靠向量嵌入（E3／H6），兩者混合 RRF 是現代 RAG 標配。'
       ]
+    },
+
+    F: {
+      title: 'F 區深度學習指南：從反向傳播、卷積記憶架構到殘差與遷移學習',
+      summary: '深入神經網路的運作核心與現代訓練四大支柱，掌握表格 MLP、影像 CNN、序列 LSTM、異常 AE 與小樣本遷移學習的架構選型與除錯心法。',
+      overview: '深度學習不再仰賴人工手寫特徵，而是透過多層可微轉換自動學習表徵（Representation Learning）。但網路變深後會立刻遭遇三大瓶頸：狹長損失面震盪（靠 F2 Adam/AdamW）、深層梯度消失與過擬合（靠 F6 ReLU/BN/Dropout 與 F7 殘差捷徑），以及醫療領域最常見的小樣本困境（靠 F7 遷移學習）。表格資料小樣本仍應優先對照 B 區樹集成，影像、生理波形與非結構化資料則是 F 區主場。',
+      workflow: [
+        { step: '1. 依資料型態選架構', cards: ['F1', 'F3', 'F4', 'F5'], desc: '表格用 MLP（對照 GBDT）、影像用 CNN、短中序列用 LSTM/GRU、無異常標籤用 Autoencoder。' },
+        { step: '2. 裝配現代訓練標配', cards: ['F2', 'F6'], desc: '搭配 ReLU/Leaky ReLU、BatchNorm（推論切 eval）、Inverted Dropout 與 AdamW＋學習率排程。' },
+        { step: '3. 突破深度與小樣本瓶頸', cards: ['F7'], desc: '深層網路必加殘差捷徑 y=F(x)+x；醫療影像小樣本改採「先凍結骨幹訓分類頭 → 再小學習率微調」。' }
+      ],
+      cards: [
+        { id: 'F1', when: '建立神經網路底層直覺，親手驗證前向加權、交叉熵與連鎖律梯度更新', how: '固定 2-2-1 MLP 追蹤單筆前向輸出 ŷ、BCE 損失與 9 個權重梯度 ∂L/∂w', read: '權重不可全設 0（會失去對稱性破壞）；BCE+Sigmoid 的輸出誤差簡化為 ŷ−y 避免輸出層飽和。' },
+        { id: 'F2', when: '訓練時 Loss 劇烈震盪、不下降或收斂太慢，需挑選優化器與學習率', how: '在曲率條件數 κ=16 的狹長山谷同場比較 SGD、Momentum 與 Adam 軌跡', read: 'SGD 超過穩定上界 η=2/λ_max 即發散；實務起手首選 AdamW＋Cosine 退火排程。' },
+        { id: 'F3', when: '處理 X 光、CT、眼底鏡或病理切片等 2D/3D 醫療影像空間特徵擷取', how: '用 3×3 卷積核滑動內積（權重共享僅 10 參數），接 Padding、ReLU 與 2×2 池化', read: '記住輸出尺寸 O=⌊(W−K+2P)/S⌋+1；現代 CNN 尾端常用 Global Average Pooling 取代 Flatten 防過擬合。' },
+        { id: 'F4', when: '處理 ICU 連續生理波形、門診量趨勢等具時間先後依賴的序列資料', how: '對照標準 RNN 的導數連乘消失，與 LSTM 透過遺忘／輸入／輸出三閘門維持細胞記憶 cₜ', read: '觀察細胞保留率 ∏fₜ vs RNN 連乘梯度；實務精簡版用 GRU，超長序列則轉向 Transformer（H3）。' },
+        { id: 'F5', when: '只有大量「正常病人」資料、缺乏罕見異常標籤時的無監督異常偵測', how: '強迫 3 維輸入壓進 1 維瓶頸 z 再還原 x̂，以重建誤差 MSE 排序抓出不合群樣本', read: '線性 AE 等價 PCA；上線時「僅用正常樣本訓練」並以驗證集 95%/99% 分位數設告警門檻。' },
+        { id: 'F6', when: '深層網路練不動（梯度消失）或訓練準確率高但驗證集反彈（嚴重過擬合）', how: '切換 Sigmoid/ReLU/Leaky ReLU、開關 BatchNorm 與調整 Inverted Dropout 丟棄率 p', read: '推論期務必呼叫 model.eval() 關閉 Dropout 並讓 BN 改用 running μ/σ；變長序列改用 LayerNorm。' },
+        { id: 'F7', when: '網路疊深出現退化，或醫院僅有數十～數百筆影像標註、無法從零訓練', how: '對照 Plain vs ResNet（y=F(x)+x）4 層梯度流，並比較 Scratch、Freeze 與 Fine-Tune 驗證損失', read: '殘差「+1」打通深層梯度；小樣本醫療 AI 必採兩階段遷移（先 Freeze 訓分類頭，再 1/10 LR 微調）。' }
+      ],
+      pitfalls: [
+        '【忘記呼叫 model.eval()】部署上線若沒切 eval 模式，Dropout 會讓同一病人每次預測結果亂跳，BatchNorm 更會在 batch_size=1 時直接崩潰！',
+        '【小表格迷思】若只有幾百筆表格健檢資料，深層 MLP 往往輸給 B7/B9 樹模型；深度學習的絕對優勢在影像（F3/F7）、波形序列（F4）與文字（H 區）。'
+      ]
     }
   };
 })(typeof window !== 'undefined' ? window : globalThis);

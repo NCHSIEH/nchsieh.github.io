@@ -131,7 +131,21 @@
             ? [{ cls: 'c4', shape: 'line', label: 'SGD' }, { cls: 'c0', shape: 'line', label: 'Momentum' }, { cls: 'c1', shape: 'line', label: 'Adam' }]
             : [{ cls: 'hl', label: '目前位置' }, { cls: 'c2', shape: 'star', label: '谷底 (0,0)' }]
         };
-        const side = {
+        const side = st.compareAll ? {
+          type: 'table', slot: 'side',
+          title: '三種優化器第 ' + R.nSteps + ' 步結果對照',
+          cols: [
+            { key: 'opt', label: '優化器' },
+            { key: 'w1', label: '最終 w₁', num: true, digits: 2 },
+            { key: 'w2', label: '最終 w₂', num: true, digits: 2 },
+            { key: 'l', label: '最終 Loss', num: true, digits: 4 }
+          ],
+          rows: [
+            { id: 'cmp_sgd', cells: ['SGD', R.sgd[R.nSteps].w1, R.sgd[R.nSteps].w2, R.sgd[R.nSteps].loss > 100 ? { v: '發散', cls: 'bad' } : R.sgd[R.nSteps].loss], hl: curOpt === 'sgd' },
+            { id: 'cmp_mom', cells: ['Momentum', R.momentum[R.nSteps].w1, R.momentum[R.nSteps].w2, R.momentum[R.nSteps].loss > 100 ? { v: '發散', cls: 'bad' } : R.momentum[R.nSteps].loss], hl: curOpt === 'momentum' },
+            { id: 'cmp_adam', cells: ['Adam', R.adam[R.nSteps].w1, R.adam[R.nSteps].w2, { v: f(R.adam[R.nSteps].loss, 4), cls: 'good' }], hl: curOpt === 'adam' }
+          ]
+        } : {
           type: 'table', slot: 'side',
           title: curOpt.toUpperCase() + ' 每步位置與損失',
           cols: [
@@ -199,9 +213,16 @@
       });
 
       st.compareAll = true;
-      add(7, '三條路徑總比較', '同一個山谷與同一學習率 η = ' + f(R.lr, 2) + ' 下，比較三種優化器走到第 ' + R.nSteps + ' 步的殘餘損失。', [
-        'SGD 最終 Loss = ' + f(R.sgd[R.nSteps].loss, 4) + '｜Momentum = ' + f(R.momentum[R.nSteps].loss, 4),
-        'Adam 最終 Loss = ' + f(R.adam[R.nSteps].loss, 4)
+      const sgdDiv = R.lr > 0.125;
+      add(7, '三條路徑總比較', sgdDiv
+        ? '目前 η = ' + f(R.lr, 2) + ' 超過 SGD 穩定上界 2/16 = 0.125，故 SGD 指數發散！Adam 靠二階縮放仍穩定到達谷底。'
+        : '曲率條件數 κ = 16、SGD 穩定上界 η < 0.125。同學習率下比較三種優化器第 ' + R.nSteps + ' 步的殘餘損失。', [
+        'SGD Loss = ' + (sgdDiv ? '發散 (>100)' : f(R.sgd[R.nSteps].loss, 4)) + '｜Momentum = ' + f(R.momentum[R.nSteps].loss, 4),
+        'Adam 最終 Loss = ' + f(R.adam[R.nSteps].loss, 4) + '（曲率條件數 κ = 16）'
+      ]);
+      add(7, '學習率排程與 AdamW', '實務訓練常搭配 Warmup 與 Cosine 退火逐步縮小 η，並改用解耦權重衰減的 AdamW 取代經典 Adam 以提升泛化。', [
+        '理論穩定門檻：SGD 需 η < 2/λ_max = 0.125',
+        '現代預設起手：AdamW + Cosine Annealing 學習率排程'
       ]);
       return steps;
     },

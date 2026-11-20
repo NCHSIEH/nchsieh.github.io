@@ -102,7 +102,8 @@
              { id: 'cg', label: '候選 c̃', value: st.tIdx >= 0 ? cur.cand : 0, shape: 'box', cls: act === 'c' ? 'hl' : 'c0', hl: act === 'c' },
              { id: 'og', label: '輸出閘 o', value: st.tIdx >= 0 ? cur.o : 0, shape: 'box', cls: act === 'o' ? 'hl' : 'c3', hl: act === 'o' }],
             [{ id: 'ct', label: '細胞 cₜ', value: st.tIdx >= 0 ? cur.c : 0, shape: 'box', cls: act === 'ct' ? 'hl' : 'c1', hl: act === 'ct' },
-             { id: 'ht', label: '隱藏 hₜ', value: st.tIdx >= 0 ? cur.h : 0, shape: 'box', cls: act === 'ht' ? 'hl' : 'c1', hl: act === 'ht' }]
+             { id: 'ht', label: '隱藏 hₜ', value: st.tIdx >= 0 ? cur.h : 0, shape: 'box', cls: act === 'ht' ? 'hl' : 'c1', hl: act === 'ht' }],
+            [{ id: 'yp', label: '預測 ŷ', value: st.showPred ? R.yPredZ : 0, shape: 'box', cls: st.showPred ? 'c2' : 'c5', hl: st.showPred }]
           ];
           edges = [
             { from: 'xt', to: 'fg', active: act === 'f' }, { from: 'hp', to: 'fg', active: act === 'f' },
@@ -111,7 +112,8 @@
             { from: 'xt', to: 'og', active: act === 'o' }, { from: 'hp', to: 'og', active: act === 'o' },
             { from: 'cp', to: 'ct', active: act === 'ct' }, { from: 'fg', to: 'ct', active: act === 'ct' },
             { from: 'ig', to: 'ct', active: act === 'ct' }, { from: 'cg', to: 'ct', active: act === 'ct' },
-            { from: 'ct', to: 'ht', active: act === 'ht' }, { from: 'og', to: 'ht', active: act === 'ht' }
+            { from: 'ct', to: 'ht', active: act === 'ht' }, { from: 'og', to: 'ht', active: act === 'ht' },
+            { from: 'ht', to: 'yp', active: st.showPred }
           ];
         } else {
           const cur = R.rnnSteps[Math.max(0, st.tIdx)];
@@ -145,14 +147,19 @@
             hl: idx === st.tIdx
           }))
         };
+        const yPredClamped = Math.max(-2.4, Math.min(2.4, R.yPredZ));
+        const lineSeries = [
+          { id: 'zero', label: '0 線', pts: [[1, 0], [9, 0]], cls: 'c5', dash: true, dots: false },
+          { id: 'seq', label: 'Z(門診量)', pts: R.xs.map((x, i) => [i + 1, x]), cls: 'c0', dots: true }
+        ];
+        if (st.showPred) {
+          lineSeries.push({ id: 'pred', label: '第 9 月預測', pts: [[8, R.xs[7]], [9, yPredClamped]], cls: 'c2', dash: true, dots: true });
+        }
         const line = {
-          type: 'line', slot: 'bottom', title: '標準化門診量序列',
+          type: 'line', slot: 'bottom', title: st.showPred ? '標準化門診量序列與第 9 月預測' : '標準化門診量序列',
           axes: { x: { label: '月份 t', min: 1, max: 9 }, y: { label: 'Z(門診量)', min: -2.5, max: 2.5 } },
-          series: [
-            { id: 'zero', label: '0 線', pts: [[1, 0], [9, 0]], cls: 'c5', dash: true, dots: false },
-            { id: 'seq', label: 'Z(門診量)', pts: R.xs.map((x, i) => [i + 1, x]), cls: 'c0', dots: true }
-          ],
-          marker: st.tIdx >= 0 ? { x: st.tIdx + 1, y: R.xs[st.tIdx], label: 't=' + (st.tIdx + 1) } : null
+          series: lineSeries,
+          marker: st.showPred ? { x: 9, y: yPredClamped, label: 'ŷ₉=' + f(R.yPredZ, 2) } : (st.tIdx >= 0 ? { x: st.tIdx + 1, y: R.xs[st.tIdx], label: 't=' + (st.tIdx + 1) } : null)
         };
         return [main, side, line];
       }
@@ -205,9 +212,15 @@
       }
 
       st.showPred = true;
-      add(8, '輸出第 9 個月預測', '把第 8 月的隱藏狀態 h₈ 乘上輸出層權重並反標準化，得到第 9 個月預測門診人次。', [
+      add(8, '輸出第 9 個月預測', '把第 8 月的隱藏狀態 h₈ 乘上輸出層權重並反標準化，得到第 9 個月預測門診人次（見下方綠色虛線點）。', [
         '標準化預測 ẑ = ' + f(R.weights.wy, 2) + '×' + f(R.lastH, 3) + ' = ' + f(R.yPredZ, 3),
         '反標準化預測 = ' + f(R.yPred, 0) + ' 人次'
+      ]);
+      const cellKeep = R.lstmSteps.reduce((a, s) => a * s.f, 1);
+      add(8, 'LSTM、GRU 與轉向自注意力', R.isLstm
+        ? 'LSTM 細胞連乘保留率 ∏fₜ = ' + f(cellKeep, 4) + ' 遠高於 RNN 的 ' + f(R.rnnSteps[7].gradProd, 4) + '。實務亦常用兩閘 GRU；超長序列則轉向可平行運算的 Transformer (H3)。'
+        : 'RNN 梯度連乘僅剩 ' + f(R.rnnSteps[7].gradProd, 4) + '；LSTM（細胞保留 ' + f(cellKeep, 4) + '）與 GRU 可緩解，超長序列則改用 Transformer (H3)。', [
+        '8 步梯度保留：LSTM ∏fₜ = ' + f(cellKeep, 4) + ' vs RNN = ' + f(R.rnnSteps[7].gradProd, 4)
       ]);
       return steps;
     },

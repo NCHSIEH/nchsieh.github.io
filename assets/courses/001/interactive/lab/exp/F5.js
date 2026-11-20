@@ -143,13 +143,14 @@
             hl: i === st.ptIdx || (st.done && i === R.ranked[0].i)
           }))
         };
+        const curRanked = rows.map((r, i) => ({ id: r.id, i, err: sn.fwd[i].err })).sort((a, b) => b.err - a.err);
         const bars = {
           type: 'bars', slot: 'bottom',
-          title: '重建誤差排名（前 6 名，越大越異常）',
-          max: Math.max(1, M.max(R.fin.fwd.map(o => o.err))), digits: 3,
-          items: st.done
-            ? R.ranked.slice(0, 6).map(o => ({ id: 'rk' + o.id, label: '#' + o.id, value: o.err, cls: o.id === R.ranked[0].id ? 'bad' : 'c0', hl: o.id === R.ranked[0].id }))
-            : rows.slice(0, 6).map((r, i) => ({ id: 'w' + r.id, label: '#' + r.id, value: st.showOut ? sn.fwd[i].err : 0, cls: i === st.ptIdx ? 'hl' : 'c0' }))
+          title: '重建誤差排名（當輪前 6 名，越大越異常）',
+          max: Math.max(1, M.max(R.snaps[0].fwd.map(o => o.err)), M.max(R.fin.fwd.map(o => o.err))), digits: 3,
+          items: st.showOut
+            ? curRanked.slice(0, 6).map((o, rank) => ({ id: 'rk' + o.id, label: '#' + o.id, value: o.err, cls: (st.done && rank === 0) ? 'bad' : (o.i === st.ptIdx ? 'hl' : (rank === 0 ? 'c4' : 'c0')), hl: (st.done && rank === 0) || o.i === st.ptIdx }))
+            : rows.slice(0, 6).map((r, i) => ({ id: 'w' + r.id, label: '#' + r.id, value: 0, cls: i === st.ptIdx ? 'hl' : 'c0' }))
         };
         return [main, side, bars];
       }
@@ -189,11 +190,9 @@
         '編碼權重方向 = (' + R.wEnc.map(v => f(v, 3)).join(', ') + ')'
       ]);
 
-      while (steps.length < 10) {
-        add(7, '非線性自編碼器延伸', '若加上 ReLU 激活與多層隱藏層，Autoencoder 就能學到彎曲的非線性流形（PCA 做不到）。', [
-          '最終平均 MSE = ' + f(R.fin.mse, 4)
-        ]);
-      }
+      add(7, '異常門檻與 VAE 延伸', '臨床部署會「只用正常病人訓練」並取驗證集誤差 95%/99% 分位數作告警門檻；加 ReLU 可學非線性流形，進階則為去噪 DAE 與生成式 VAE。', [
+        '最終平均 MSE = ' + f(R.fin.mse, 4) + '｜最高異常 #' + R.ranked[0].id + ' = ' + f(R.ranked[0].err, 3)
+      ]);
       return steps;
     },
 

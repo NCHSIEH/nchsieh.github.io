@@ -21,7 +21,7 @@
     { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A10 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
     { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '線性距離、樹與規則、集成與不平衡 4 條管線，含 K-Fold 調參與 B1–B18 對照。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
     { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '病人分群、異常偵測與降維壓縮 3 條管線，對照 C1–C12 演算法。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
-    { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大架構管線（對照 F1–F6）。', module: m('M5 深度學習', '../m5/'), status: 'live' },
+    { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大架構管線（對照 F1–F7）。', module: m('M5 深度學習', '../m5/'), status: 'live' },
     { id: 'S5', group: 'S', title: 'NLP 與 LLM 處理流程', brief: '傳統 TF-IDF／BM25、Word2Vec 詞向量與現代 LLM＋RAG＋Rerank 3 條文字管線（E1–E5, H1–H9）。', module: m('M6 文字探勘', '../m6/'), status: 'live' },
     { id: 'S6', group: 'S', title: '時間序列預測流程', brief: '統計 ARIMA／指數平滑、STL＋滯後特徵 ML 與 LSTM 序列 3 條滾動驗證流程（G1–G4）。', module: m('M4 時間序列', '../m4/#p15'), status: 'live' },
     { id: 'S7', group: 'S', title: '關聯與序列探勘流程', brief: '比較 Apriori、FP-Growth 與 PrefixSpan 序列 3 條管線，結合 Kulczynski 與負關聯（D1–D4）。', module: m('M4 關聯規則', '../m4/#p12'), status: 'live', tier: 'adv' },
@@ -91,6 +91,7 @@
     { id: 'F4', group: 'F', title: 'RNN 與 LSTM', brief: '沿時間展開，遺忘閘、輸入閘、輸出閘各算出什麼。', module: m('M5 深度學習', '../m5/'), status: 'live', tier: 'adv' },
     { id: 'F5', group: 'F', title: 'Autoencoder', brief: '壓縮再還原，還原不回來的就是異常。', module: m('M5 第 17 節', '../m5/#p17'), status: 'live', tier: 'adv' },
     { id: 'F6', group: 'F', title: '激活函數、BN 與 Dropout', brief: '對比 Sigmoid 梯度消失與 ReLU，透視 BatchNorm 穩定分布與 Inverted Dropout 抗過擬合。', module: m('M5 第 08 節', '../m5/#p08'), status: 'live', tier: 'adv' },
+    { id: 'F7', group: 'F', title: '殘差連接與遷移學習', brief: '透視 ResNet 捷徑 y=F(x)+x 打通深層梯度，並對照小樣本醫療資料的 Scratch、凍結骨幹與微調策略。', module: m('M5 深度架構與遷移', '../m5/#p13'), status: 'live', tier: 'adv' },
 
     { id: 'G1', group: 'G', title: '指數平滑', brief: '簡單、Holt、Holt-Winters 逐期更新水準、趨勢與季節。', module: m('M4 第 15 節', '../m4/#p15'), status: 'live' },
     { id: 'G2', group: 'G', title: 'ARIMA', brief: '差分、自相關，到用過去幾期預測下一期。', module: m('M4 第 15 節', '../m4/#p15'), status: 'live' },
@@ -181,6 +182,7 @@
     F4: 'Recurrent Neural Networks',
     F5: 'Autoencoder Anomaly Detection',
     F6: 'Activation Functions, BatchNorm & Dropout',
+    F7: 'Residual Connections (ResNet) & Transfer Learning',
     G1: 'Exponential Smoothing',
     G2: 'Autoregressive Integrated Moving Average',
     G3: 'Sliding Window Validation',
@@ -274,6 +276,7 @@
     F4: { ais: null, py: 'PyTorch (nn.RNNCell / nn.LSTMCell)' },
     F5: { ais: 'Deep Learning (Autoencoder)', py: 'PyTorch / scikit-learn (MLPRegressor)' },
     F6: { ais: 'Deep Learning (RectifierWithDropout)', py: 'PyTorch (nn.BatchNorm1d / nn.ReLU / nn.Dropout)' },
+    F7: { ais: null, py: 'PyTorch / torchvision (ResNet + Freeze / Fine-Tune)' },
 
     G1: { ais: 'Holt-Winters (Time Series 擴充)', py: 'statsmodels (ExponentialSmoothing)' },
     G2: { ais: 'ARIMA (Time Series 擴充)', py: 'statsmodels (ARIMA / AutoReg)' },

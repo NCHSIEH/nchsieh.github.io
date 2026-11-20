@@ -80,7 +80,7 @@
     });
 
     return {
-      n, actType, dropRate, useBN,
+      n, X, actType, dropRate, useBN,
       Zraw, bnMean, bnStd, Zbn, Zuse,
       z0, act0, mask, scale, hDrop, outTrain, outInfer,
       depthGrads, curvePts
@@ -117,8 +117,8 @@
       function views(st) {
         const layers = [
           [
-            { id: 'x1', label: 'x₁ BMI', value: rows[0].bmi, cls: 'c0' },
-            { id: 'x2', label: 'x₂ 血糖', value: rows[0].glu, cls: 'c0' }
+            { id: 'x1', label: 'x₁ BMI(Z)', value: R.X[0][0], sub: '原 ' + rows[0].bmi, cls: 'c0' },
+            { id: 'x2', label: 'x₂ 血糖(Z)', value: R.X[0][1], sub: '原 ' + rows[0].glu, cls: 'c0' }
           ],
           [0, 1, 2, 3].map(j => {
             const dropped = st.stage >= 4 && !st.infer && R.mask[j] === 0;
@@ -168,7 +168,7 @@
             { key: 'zb', label: R.useBN ? 'BN後 z̃' : '未開BN', num: true, digits: 2 },
             { key: 'a', label: '激活 a', num: true, digits: 2 },
             { key: 'd', label: "導數 f'", num: true, digits: 2 },
-            { key: 'dp', label: 'Drop後', num: true, digits: 2 }
+            { key: 'dp', label: st.infer ? '推論 a' : 'Drop後', num: true, digits: 2 }
           ],
           rows: [0, 1, 2, 3].map(j => ({
             id: 'r' + j,
@@ -178,9 +178,9 @@
               R.z0[j],
               st.stage >= 2 ? R.act0[j].a : null,
               st.stage >= 2 ? { v: f(R.act0[j].d, 2), cls: R.act0[j].d < 0.05 ? 'bad' : 'good' } : null,
-              st.stage >= 4 ? (R.mask[j] === 0 && !st.infer ? { v: '0 (遮罩)', cls: 'bad' } : R.hDrop[j]) : null
+              st.stage >= 4 ? (st.infer ? R.act0[j].a : (R.mask[j] === 0 ? { v: '0 (遮罩)', cls: 'bad' } : R.hDrop[j])) : null
             ],
-            hl: st.stage === 4 && R.mask[j] === 0
+            hl: st.stage === 4 && !st.infer && R.mask[j] === 0
           }))
         };
 
@@ -249,8 +249,8 @@
       ]);
 
       st.infer = true;
-      add(5, '推論期關閉 Dropout', '模型上線預測新病人（model.eval()）時，關閉隨機遮罩、讓全部 4 個神經元共同上場投票，等同於指數個子網路的集成（Ensemble）！', [
-        '推論期全開預測 ŷ_eval = ' + f(R.outInfer, 3)
+      add(5, '推論期關閉 Dropout', '呼叫 model.eval() 上線推論時：Dropout 全開投票，且 BatchNorm 改用訓練期累積的 running μ/σ（防單一病人 batch=1 崩潰）！', [
+        '推論期全開預測 ŷ_eval = ' + f(R.outInfer, 3) + '（見右表「推論 a」欄）'
       ]);
 
       st.showLossCurve = true;
@@ -258,7 +258,7 @@
         'Epoch 50 Val Loss：無正則 = ' + f(R.curvePts[9].vaNoReg, 3) + ' vs 有正則 = ' + f(R.curvePts[9].vaReg, 3)
       ]);
 
-      add(5, 'BN 與 Dropout 順序', '現代實務標準順序為「Linear / Conv → BatchNorm → ReLU → Dropout」，先穩定分布再激活，最後做隨機遮罩。', [
+      add(5, 'BN、LayerNorm 與順序', 'CNN／表格常用「Linear/Conv → BatchNorm → ReLU → Dropout」；批次小或變長序列（如 Transformer H4）則改用跨特徵標準化的 LayerNorm。', [
         '正則化強度 p = ' + f(R.dropRate, 2) + '，BatchNorm = ' + (R.useBN ? '開啟' : '關閉')
       ]);
 

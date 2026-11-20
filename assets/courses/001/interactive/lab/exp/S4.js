@@ -323,8 +323,8 @@
       add(6, '三大訓練支柱 (F6)', '深層網路必備 F6：ReLU／Leaky ReLU 解決 Sigmoid 梯度消失、BatchNorm 穩定各層分布、Inverted Dropout 抑制過擬合！', [
         '對應實驗：F1 反向傳播 · F2 優化器 · F6 激活/BN/Dropout'
       ]);
-      add(6, '四大架構管線選型', 'CNN 靠卷積池化抓空間（F3）、LSTM 靠閘門記時間（F4）、AE 靠瓶頸重建抓異常（F5）、MLP 處理表格（F1/F6）。', [
-        '目前管線：' + R.archName
+      add(6, '四大架構管線選型', 'CNN 抓空間（F3）、LSTM 記時間（F4）、AE 抓異常（F5）、MLP 處理表格（F1/F6），深層與小樣本醫療影像必搭 ResNet 遷移學習（F7）。', [
+        '目前管線：' + R.archName + '（進階殘差與遷移學習見 F7）'
       ]);
       return steps;
     },
