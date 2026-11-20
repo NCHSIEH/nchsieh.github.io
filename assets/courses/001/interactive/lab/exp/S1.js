@@ -60,7 +60,7 @@
   LAB.register({
     id: 'S1', group: 'S', title: '資料前處理流程',
     module: { name: 'M1 資料準備', url: '../m1/' },
-    goal: '透過全寬動畫流程圖對照「線性／距離管線」、「樹模型管線」與「防洩漏嚴格管線」，並標註每步對應的 A1–A9 演算法。',
+    goal: '透過全寬動畫流程圖對照「線性／距離管線」、「樹模型管線」與「防洩漏嚴格管線」，並標註每步對應的 A1–A10 演算法。',
     data: {
       name: 'clinic_prep_flow',
       scenario: '門診健檢原始資料（含缺值、極端血糖 320、文字科別），示範 3 種前處理標準管線',
@@ -83,7 +83,7 @@
       const R = simulate(rows, p), steps = [];
 
       const ALGO_ROWS = [
-        { id: 's0', st: '1. 切分與盤點', alg: 'Train/Test Split', use: R.isStrict ? '必先切分再學任何統計量' : '檢查缺值、極端與文字欄' },
+        { id: 's0', st: '1. 切分與盤點', alg: 'Train/Test Split (A10 防洩漏)', use: R.isStrict ? '必先切分再學任何統計量' : '檢查缺值、極端與文字欄' },
         { id: 's1', st: '2a. 遺失值補值', alg: 'A1 平均/中位/k-NN', use: '偏態用中位數，線性關聯用 k-NN' },
         { id: 's2', st: '2b. 離群值處理', alg: 'A7 IQR 圍籬/縮尾', use: R.isLinear ? '線性模型必處理，防斜率被拉偏' : '樹模型對單調極端較穩健' },
         { id: 's3', st: '3a. 類別與衍生', alg: 'A4 編碼 / A9 衍生特徵', use: '線性用 Dummy；領域公式衍生 BMI 與交互項' },

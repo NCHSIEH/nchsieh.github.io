@@ -127,16 +127,19 @@
             { key: 'id', label: '#' },
             { key: 'raw', label: '原 CRP', num: true, digits: 1 },
             { key: 'z', label: '一般 Z', num: true, digits: 2 },
-            { key: 'rob', label: 'Robust', num: true, digits: 2 },
-            { key: 'ln', label: 'ln(1+x)', num: true, digits: 2 }
+            { key: 'sq', label: '√x', num: true, digits: 2 },
+            { key: 'ln', label: 'ln(1+x)', num: true, digits: 2 },
+            { key: 'rob', label: 'Robust', num: true, digits: 2 }
           ],
+          hlCol: R.method === 'log1p' ? 'ln' : (R.method === 'sqrt' ? 'sq' : 'rob'),
           rows: rows.map((r, i) => ({
             id: r.id,
             cells: [
               r.id, r.crp,
               st.stepStage >= 1 ? R.zVals[i] : null,
-              st.stepStage >= 2 ? R.robVals[i] : null,
-              st.stepStage >= 2 ? R.logVals[i] : null
+              st.stepStage >= 2 ? R.sqrtVals[i] : null,
+              st.stepStage >= 2 ? R.logVals[i] : null,
+              st.stepStage >= 2 ? R.robVals[i] : null
             ],
             hl: st.curIdx === i || i >= rows.length - 2
           }))
@@ -195,11 +198,17 @@
         '偏態係數：原 ' + f(R.skRaw, 2) + ' → √x ' + f(R.skSqrt, 2) + ' → ln(1+x) ' + f(R.skLog, 2)
       ]);
 
-      while (steps.length < 10) {
-        add(6, '實務選用指南', '金額／住院天數／濃度指標呈右偏時，線性迴歸與神經網路先做 ln(1+x)；含極端值但不希望壓平差異時用 RobustScaler。', [
-          '目前方法：' + mName
-        ]);
-      }
+      add(6, 'Yeo-Johnson 轉換', 'ln(1+x) 僅適用非負數；若欄位含負值（如檢驗變化量 Δ），sklearn 的 PowerTransformer(yeo-johnson) 可自動求最佳次方 λ！', [
+        'Box-Cox：僅限 x > 0｜Yeo-Johnson：支援正、零、負數'
+      ]);
+
+      add(6, '預測目標 y 的逆轉換', '若對迴歸目標 y（如醫療費用）做了 y′=ln(1+y)，模型預測完後務必做逆轉換 ŷ = exp(ŷ′) − 1（np.expm1）還原單位。', [
+        '正轉換：np.log1p(y) ↔ 逆轉換：np.expm1(y_pred)'
+      ]);
+
+      add(6, '實務選用指南', '金額／住院天數／濃度右偏時，線性迴歸與神經網路先做 ln(1+x) 或 Yeo-Johnson；含離群值但不需改變形狀時用 RobustScaler。', [
+        '目前方法：' + mName + '（所有轉換參數限訓練集 fit）'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {
@@ -230,7 +239,7 @@
         const R = analyze(rows, p);
         return ['偏態係數由 ' + f(R.skRaw, 2) + ' 降至 ' + f(R.skLog, 2) + '（ln(1+x)）'];
       },
-      python: 'import numpy as np\nfrom sklearn.preprocessing import RobustScaler\nx_log = np.log1p(df[["crp"]])\nx_rob = RobustScaler().fit_transform(df[["crp"]])',
+      python: 'import numpy as np\nfrom sklearn.preprocessing import RobustScaler, PowerTransformer\nx_log = np.log1p(df[["crp"]])\nx_rob = RobustScaler().fit_transform(df[["crp"]])\nx_yj = PowerTransformer(method="yeo-johnson").fit_transform(df[["crp"]])',
       confirmed: false
     }
   });

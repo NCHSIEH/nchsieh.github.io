@@ -213,11 +213,13 @@
         ]);
       }
 
-      while (steps.length < 10) {
-        add(7, '匯出編碼後 CSV', '可點擊上方「匯出 CSV」下載編碼後的數值表（lab_A4_encoded.csv）到 AI Studio 使用。', [
-          '編碼完成：共 ' + rows.length + ' 筆資料'
-        ]);
-      }
+      add(7, '無序 vs 有序編碼', '科別屬「無序類別」，絕不可隨意編成 1/2/3；若為 CKD 1–5 期或疼痛分級等「有序類別」，則適用有序編碼保留大小順序。', [
+        '無序類別（科別／血型）→ One-hot / Dummy / Target',
+        '有序類別（分期／疼痛 1–5）→ Ordinal Encoding'
+      ]);
+      add(7, '防洩漏與匯出應用', '目標編碼動用了標籤 y，務必在訓練折內計算（見 A10 實證）。可點上方「匯出 CSV」下載編碼表到 AI Studio 測試。', [
+        '編碼完成：共 ' + rows.length + ' 筆（lab_A4_encoded.csv）'
+      ]);
       return steps;
     },
 

@@ -180,6 +180,13 @@
         '陽性 ' + R.nPos + ' 筆，陰性 ' + R.nNeg + ' 筆'
       ]);
 
+      st.hlIds = new Set(R.pos.map(x => x.id));
+      add(1, '檢視少數類分布', '先高亮這 ' + R.nPos + ' 位再入院陽性病人，觀察他們在住院天數與共病指數平面上的分布範圍。', [
+        '陽性病人編號：' + R.pos.map(x => '#' + x.id).join('、'),
+        '住院天數範圍 ' + M.min(R.pos.map(x => x.los)) + '–' + M.max(R.pos.map(x => x.los)) + ' 天'
+      ]);
+      st.hlIds = new Set();
+
       if (p.method === 'over') {
         add(2, '計算需複製筆數', '維持陰性 ' + R.nNeg + ' 筆不變，需把陽性補到 ' + (R.nPos + R.nAdd) + ' 筆。', [
           '需複製 ' + R.nAdd + ' 筆陽性樣本'
@@ -257,15 +264,28 @@
 
       st.curSrc = null; st.curNew = null; st.hlIds = new Set();
       if (p.method !== 'smote') st.lines = [];
-      add(8, '比較前後類別比例', '重抽樣只應套用在「訓練集」，絕對不能在切分前對測試集做，否則會造成資料洩漏。', [
+      add(8, '比較前後類別比例', '重抽樣完成！陽性比例從 ' + LAB.pct(R.nPos / rows.length, 1) + ' 提升至 ' + LAB.pct(R.finalPos / (R.finalPos + R.finalNeg), 1) + '，改善分類器忽略少數類的問題。', [
         '原比例：陽性 ' + R.nPos + ' / 陰性 ' + R.nNeg + '（' + LAB.pct(R.nPos / rows.length, 1) + '）',
         '處理後：陽性 ' + R.finalPos + ' / 陰性 ' + R.finalNeg + '（' + LAB.pct(R.finalPos / (R.finalPos + R.finalNeg), 1) + '）'
       ]);
-      while (steps.length < 10) {
-        add(8, '實務提醒', '過抽樣容易讓模型死背少數類；欠抽樣會丟掉多數類資料；SMOTE 則可能在不相連的區域間誤畫橋樑。', [
-          '最終總筆數 = ' + (R.finalPos + R.finalNeg)
-        ]);
-      }
+      const wPos = rows.length / (2 * Math.max(1, R.nPos));
+      const wNeg = rows.length / (2 * Math.max(1, R.nNeg));
+      add(8, '替代法：類別權重', '若不想合成假資料，實務上常先在模型設 class_weight="balanced"，直接放大答錯少數類的懲罰權重！', [
+        '陽性權重 w₁ = N/(2·n₁) = ' + f(wPos, 2) + '｜陰性權重 w₀ = ' + f(wNeg, 2),
+        'Logistic / 決策樹 / XGBoost (scale_pos_weight) 皆原生支援'
+      ]);
+      add(8, '評估指標改看 PR-AUC', '不平衡資料下 Accuracy 容易失真（全猜陰性也有 ' + LAB.pct(R.nNeg / rows.length, 0) + '），應改看 Recall、F1 與 PR-AUC（見 B16）。', [
+        '最終總筆數 = ' + (R.finalPos + R.finalNeg) + '｜優先監控少數類召回率'
+      ]);
+      add(8, 'SMOTE 邊界雜訊風險', '若陽性點孤立在多數類之間，SMOTE 連線可能橫跨陰性區造成雜訊；進階實務可改用 Borderline-SMOTE 或 ADASYN。', [
+        'K = ' + R.kUse + ' 越小越局部，越大連線跨度越廣'
+      ]);
+      add(8, '三法風險與防洩漏', '過抽樣易過擬合、欠抽樣丟資訊、SMOTE 可能跨區造假點；且重抽樣嚴禁在切分前做（見 A10 洩漏實證）！', [
+        '鐵律：先切 Train/Test → 只在訓練折內做 SMOTE'
+      ]);
+      add(8, '臨床實務選用口訣', '大資料可先試欠抽樣加速；中小型醫療表先試 class_weight="balanced"，仍不足再於訓練折內搭 SMOTE。', [
+        '目標陽性比例 = ' + LAB.pct(p.ratio, 0) + '（實務常設 0.3–0.5）'
+      ]);
       return steps;
     },
 

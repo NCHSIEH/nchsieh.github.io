@@ -156,17 +156,19 @@
 
         const main = {
           type: 'bars', slot: 'main',
-          title: '各特徵變異數膨脹因子 VIF（門檻 ≤ ' + R.maxVif + '，淘汰後即時下降）',
-          max: Math.max(15, Math.min(40, Math.max.apply(null, R.vifsFull.map(v => v.vif)))),
-          digits: 2,
+          title: st.showVif
+            ? ('各特徵變異數膨脹因子 VIF（門檻 ≤ ' + R.maxVif + '，淘汰後即時下降）')
+            : '各特徵與糖尿病的相關係數 |r|（建構衍生特徵前後對照）',
+          max: st.showVif ? Math.max(15, Math.min(40, Math.max.apply(null, R.vifsFull.map(v => v.vif)))) : 1,
+          digits: st.showVif ? 2 : 3,
           items: R.ALL_FEATS.map(fObj => {
             const vObj = vifMap[fObj.key];
-            const val = st.showVif ? (vObj ? Math.min(40, vObj.vif) : 0) : R.corY[fObj.key] * 10;
+            const val = st.showVif ? (vObj ? Math.min(40, vObj.vif) : 0) : R.corY[fObj.key];
             return {
               id: fObj.key,
-              label: fObj.label + (vObj ? '' : ' (已剔除)'),
+              label: fObj.label + (st.showVif && !vObj ? ' (已剔除)' : ''),
               value: val,
-              note: st.showVif ? (vObj ? 'VIF=' + f(vObj.vif, 1) : '已剔除') : '|r|=' + f(R.corY[fObj.key], 2),
+              note: st.showVif ? (vObj ? 'VIF=' + f(vObj.vif, 1) : '已剔除') : '|r|=' + f(R.corY[fObj.key], 3),
               cls: !st.showVif ? 'c0' : (!vObj ? 'c5' : (vObj.vif > R.maxVif ? 'bad' : 'good')),
               hl: st.hlKey === fObj.key,
               dim: st.showVif && !vObj
@@ -229,9 +231,15 @@
         '年齡×BMI 與糖尿病 |r| = ' + f(R.corY.interact, 3)
       ]);
 
+      st.hlKey = 'waist';
+      const rWb = R.corrMat[1][4], rWaistB = R.corrMat[2][4];
+      add(4, '4. 檢視成對相關矩陣', '看右側相關矩陣熱圖：體重、腰圍與衍生 BMI 彼此高度正相關，代表它們攜帶高度重疊的資訊！', [
+        'r(體重, BMI) = ' + f(rWb, 2) + '｜r(腰圍, BMI) = ' + f(rWaistB, 2)
+      ]);
+
       st.hlKey = null; st.showVif = true; st.roundIdx = 0;
       const maxInit = Math.max.apply(null, R.vifsFull.map(v => v.vif));
-      add(6, '4. 計算全特徵 VIF', '把原始欄與衍生欄全部放進模型後，因為 BMI 與體重、腰圍高度重疊（R² 接近 1），導致 VIF = 1/(1−R²) 暴衝至 ' + f(maxInit, 1) + '！', [
+      add(6, '5. 計算全特徵 VIF', '把原始欄與衍生欄全部放進模型後，因為 BMI 與體重、腰圍高度重疊（R² 接近 1），導致 VIF = 1/(1−R²) 暴衝至 ' + f(maxInit, 1) + '！', [
         '全放進迴歸時最大 VIF = ' + f(maxInit, 2) + ' ≫ 警戒門檻 ' + R.maxVif,
         '後果：線性／Logistic 迴歸係數標準誤膨脹、正負號可能反轉'
       ]);
@@ -241,21 +249,27 @@
         st.roundIdx = ri; st.hlKey = rd.dropped;
         const fLabel = R.ALL_FEATS.find(x => x.key === rd.dropped).label;
         const maxAfter = Math.max.apply(null, rd.vifs.map(v => v.vif));
-        add(7, '5. 剔除共線：' + fLabel, '因為資訊已被衍生特徵涵蓋，剔除「' + fLabel + '」後重新計算其餘欄位的 VIF，最大 VIF 降至 ' + f(maxAfter, 2) + '。', [
+        add(7, '剔除共線：' + fLabel, '因為資訊已被衍生特徵涵蓋，剔除「' + fLabel + '」後重新計算其餘欄位的 VIF，最大 VIF 降至 ' + f(maxAfter, 2) + '。', [
           '剔除：' + fLabel + ' → 剩餘 ' + rd.keys.length + ' 欄最大 VIF = ' + f(maxAfter, 2)
         ]);
       }
 
       st.hlKey = null;
-      add(7, '6. 完成無共線特徵集', '所有保留特徵的 VIF 皆 ≤ ' + R.maxVif + '，兼具衍生特徵的高預測力與迴歸係數的穩定可解釋性！', [
+      add(7, '完成無共線特徵集', '所有保留特徵的 VIF 皆 ≤ ' + R.maxVif + '，兼具衍生特徵的高預測力與迴歸係數的穩定可解釋性！', [
         '最終保留特徵：' + R.activeKeys.map(k => R.ALL_FEATS.find(x => x.key === k).label).join('、')
       ]);
 
-      while (steps.length < 10) {
-        add(7, '特徵工程與共線性守則', '「先衍生、後篩選」：先用領域知識建構比率與交互項，再用 VIF（線性模型）或排列重要度（樹模型）刪除重疊的原始欄。', [
-          '保留欄數 = ' + R.activeKeys.length + '｜門檻 VIF ≤ ' + R.maxVif
-        ]);
-      }
+      add(7, '線性 vs 樹模型差異', '線性／Logistic 迴歸受共線性影響極大（係數與 p 值失真）；隨機森林與 GBDT 預測不受影響，但特徵重要度會被瓜分。', [
+        '需解釋勝算比 OR 時 → 必控 VIF ≤ 5'
+      ]);
+
+      add(7, '替代解：Ridge 與 PCA', '若不願手動刪欄位，也可用 Ridge L2 正則化（B2）平滑分攤共線係數，或用主成分分析 PCA（C5）壓成正交軸。', [
+        '保留欄數 = ' + R.activeKeys.length + '｜門檻 VIF ≤ ' + R.maxVif
+      ]);
+
+      add(7, '先衍生、後篩選守則', '「先衍生、後篩選」：先用領域知識建構比率與交互項，再用 VIF（線性模型）或排列重要度（樹模型）刪除重疊原始欄。', [
+        '最終最高 VIF = ' + f(Math.max.apply(null, R.finVifs.map(v => v.vif)), 2) + '（安全過關）'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

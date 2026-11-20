@@ -44,6 +44,10 @@
     const hi = q3 + k * iqr;
 
     const flags = rows.map(r => r.sbp < lo || r.sbp > hi);
+    const sbps = rows.map(r => r.sbp);
+    const meanSbp = M.mean(sbps), sdSbp = M.sd(sbps) || 1;
+    const zHi = meanSbp + 3 * sdSbp;
+    const zFlags = rows.map(r => Math.abs((r.sbp - meanSbp) / sdSbp) > 3);
     const olsOrig = fitOLS(rows);
 
     const rowsDrop = rows.filter((_, i) => !flags[i]);
@@ -55,7 +59,7 @@
     }));
     const olsCap = fitOLS(rowsCap);
 
-    return { k, sorted, q1, q3, iqr, lo, hi, flags, olsOrig, rowsDrop, olsDrop, rowsCap, olsCap };
+    return { k, sorted, q1, q3, iqr, lo, hi, flags, meanSbp, sdSbp, zHi, zFlags, olsOrig, rowsDrop, olsDrop, rowsCap, olsCap };
   }
 
   LAB.register({
@@ -111,6 +115,10 @@
         if (st.showOrigLine) {
           lines.push({ id: 'lo', x1: AX.x.min, y1: R.olsOrig.w * AX.x.min + R.olsOrig.b, x2: AX.x.max, y2: R.olsOrig.w * AX.x.max + R.olsOrig.b, cls: 'c4', dash: st.applied, w: 2, label: '處理前斜率=' + f(R.olsOrig.w, 2) });
         }
+        if (st.showZMask) {
+          const zy = Math.min(AX.y.max - 2, R.zHi);
+          lines.push({ id: 'zhi', x1: AX.x.min, y1: zy, x2: AX.x.max, y2: zy, cls: 'c5', dash: true, w: 1.8, label: 'μ+3σ=' + f(R.zHi, 1) });
+        }
         if (st.applied) {
           lines.push({ id: 'la', x1: AX.x.min, y1: olsAfter.w * AX.x.min + olsAfter.b, x2: AX.x.max, y2: olsAfter.w * AX.x.max + olsAfter.b, cls: 'good', w: 2.5, label: '處理後斜率=' + f(olsAfter.w, 2) });
           if (isWin) {
@@ -160,7 +168,7 @@
         return [main, side, bottom];
       }
 
-      const st = { showQuartiles: false, showFence: false, showOrigLine: false, applied: false };
+      const st = { showQuartiles: false, showFence: false, showOrigLine: false, showZMask: false, applied: false };
       const add = (line, title, say, calc) => steps.push({ line, title, say, calc: calc || [], views: views(st), focus: [] });
 
       add(0, '題目', '12 位門診病人中有一位血壓高達 ' + M.max(rows.map(r => r.sbp)) + ' mmHg 的極端值，看看它如何嚴重扭曲資料規律。', [
@@ -193,11 +201,22 @@
         '處理後斜率 w = ' + f(olsAfter.w, 3) + '（恢復正常正相關）'
       ]);
 
-      while (steps.length < 10) {
-        add(5, '刪除 vs 縮尾取捨', '若確認是儀器打錯字應「刪除」；若是真實重症個案且樣本數珍貴，實務常優先用「縮尾截斷」保留其他欄位資訊。', [
-          '刪除後斜率 = ' + f(R.olsDrop.w, 3) + '｜縮尾後斜率 = ' + f(R.olsCap.w, 3)
-        ]);
-      }
+      st.showZMask = true;
+      const nZOut = R.zFlags.filter(Boolean).length;
+      const maxSbp = M.max(rows.map(r => r.sbp));
+      add(3, 'Z 分數 ±3σ 遮蔽效應', '改用「平均 ± 3σ」檢驗時，極端值本身會把 μ 與 σ 一起撐大到 μ+3σ=' + f(R.zHi, 1) + '，反而只抓出 ' + nZOut + ' 筆（遮蔽效應）！', [
+        'μ = ' + f(R.meanSbp, 1) + '，σ = ' + f(R.sdSbp, 1) + ' → μ+3σ = ' + f(R.zHi, 1),
+        '最大血壓 ' + maxSbp + '：IQR 抓 ' + nOut + ' 筆 vs |Z|>3 抓 ' + nZOut + ' 筆'
+      ]);
+
+      add(5, '刪除 vs 縮尾取捨', '若確認是儀器打錯字應「刪除」；若是真實重症個案且樣本數珍貴，實務常優先用「縮尾截斷」保留其他欄位資訊。', [
+        '刪除後斜率 = ' + f(R.olsDrop.w, 3) + '（剩 ' + R.rowsDrop.length + ' 筆）',
+        '縮尾後斜率 = ' + f(R.olsCap.w, 3) + '（保留全部 ' + rows.length + ' 筆）'
+      ]);
+
+      add(5, '臨床判讀與防洩漏', '切記：Q1、Q3 與上下圍籬只能用「訓練集」計算，再套用至測試集截斷，不可在切分前用全資料算（見 A10）。', [
+        '上圍籬 = ' + f(R.hi, 1) + ' mmHg（訓練集 fit → 測試集 clip）'
+      ]);
       return steps;
     },
 

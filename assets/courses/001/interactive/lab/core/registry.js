@@ -17,8 +17,8 @@
   ];
   const m = (name, url) => ({ name, url });
   LAB.registry = [
-    { id: 'S0', group: 'S', title: 'AI 任務選型總覽', brief: '從醫療問題與資料型態出發，依有無標籤一路路由至 S1–S9 管線與 A–J 群 80 個演算法。', module: m('課程總覽地圖', '../m1/'), status: 'live' },
-    { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A9 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
+    { id: 'S0', group: 'S', title: 'AI 任務選型總覽', brief: '從醫療問題與資料型態出發，依有無標籤一路路由至 S1–S9 管線與 A–J 群全站演算法。', module: m('課程總覽地圖', '../m1/'), status: 'live' },
+    { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A10 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
     { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '線性距離、樹與規則、集成與不平衡 4 條管線，含 K-Fold 調參與 B1–B18 對照。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
     { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '病人分群、異常偵測與降維壓縮 3 條管線，對照 C1–C12 演算法。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
     { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大架構管線（對照 F1–F6）。', module: m('M5 深度學習', '../m5/'), status: 'live' },
@@ -37,6 +37,7 @@
     { id: 'A7', group: 'A', title: 'IQR 離群值與縮尾', brief: '用四分位距找出離群點，比較刪除法與縮尾截斷對斜率的影響。', module: m('M1 第 07 節', '../m1/#p07'), status: 'live', tier: 'adv' },
     { id: 'A8', group: 'A', title: '偏態轉換與穩健縮放', brief: '對數 ln(1+x)、平方根 √x 與 RobustScaler，校正右偏長尾並抗離群。', module: m('M1 第 10 節', '../m1/#p10'), status: 'live', tier: 'adv' },
     { id: 'A9', group: 'A', title: '衍生特徵與共線性 VIF', brief: '建構 BMI 與交互作用項提升預測力，再用 VIF 診斷剔除多重共線性。', module: m('M1 第 09 節', '../m1/#p09'), status: 'live', tier: 'adv' },
+    { id: 'A10', group: 'A', title: '資料洩漏實證對照', brief: '切分前 vs 切分後做目標編碼、SMOTE 與標準化，親眼量化測試分數如何被灌水。', module: m('M1 資料防洩漏', '../m1/#p10'), status: 'live', tier: 'adv' },
 
     { id: 'B1', group: 'B', title: '線性迴歸', brief: '最小平方法一次解出，對照梯度下降一步步走下損失曲面。', module: m('M2-1 第 03 節', '../m2-1/#p03'), status: 'live' },
     { id: 'B11', group: 'B', title: '多項式迴歸與過擬合', brief: '調高多項式階數 d，看懂欠擬合、剛好與過擬合的 U 型驗證曲線。', module: m('M2-1 第 09 節', '../m2-1/#p09'), status: 'live' },
@@ -128,6 +129,7 @@
     A7: 'Outlier Detection & Winsorizing',
     A8: 'Skewness Transform & Robust Scaling',
     A9: 'Feature Construction & VIF Multicollinearity',
+    A10: 'Data Leakage Experiment (Pre vs Post Split)',
     B1: 'Linear Regression',
     B2: 'Regularized Regression',
     B3: 'Logistic Regression',
@@ -212,6 +214,7 @@
     A7: { ais: 'Detect Outlier / Filter Examples / Generate Attributes', py: 'numpy (percentile / clip) / scipy.stats' },
     A8: { ais: 'Generate Attributes / Normalize (Robust)', py: 'numpy (log1p / sqrt) / scikit-learn (RobustScaler)' },
     A9: { ais: 'Generate Attributes / Remove Correlated Attributes', py: 'statsmodels (variance_inflation_factor)' },
+    A10: { ais: 'Cross Validation (Training Subprocess) + Apply Model', py: 'scikit-learn / imblearn (Pipeline)' },
 
     B1: { ais: 'Linear Regression', py: 'scikit-learn (LinearRegression / SGDRegressor)' },
     B2: { ais: 'Linear Regression (ridge) / Generalized Linear Model', py: 'scikit-learn (Ridge / Lasso)' },

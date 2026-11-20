@@ -48,11 +48,18 @@
     const n = rows.length;
     let ok = 0;
     for (let i = 0; i < n; i++) {
+      // 僅用其餘 n-1 筆訓練樣本算標準差做 Z 分數縮放（防洩漏且避免大尺度欄位主導距離）
+      const sds = {};
+      featList.forEach(ft => {
+        const tr = [];
+        for (let j = 0; j < n; j++) if (j !== i) tr.push(rows[j][ft]);
+        sds[ft] = M.sd(tr) || 1;
+      });
       const ds = [];
       for (let j = 0; j < n; j++) {
         if (i === j) continue;
         let s = 0;
-        featList.forEach(ft => { const d = rows[i][ft] - rows[j][ft]; s += d * d; });
+        featList.forEach(ft => { const d = (rows[i][ft] - rows[j][ft]) / sds[ft]; s += d * d; });
         ds.push({ d: Math.sqrt(s), dm: rows[j].dm, idx: j });
       }
       ds.sort((a, b) => a.d - b.d || a.idx - b.idx);
@@ -131,7 +138,7 @@
       '  依分數高低排序，取前 K 名',
       '向前選擇（Wrapper）：',
       '  從空集合出發，每輪試加一個特徵',
-      '  用留一法 3-NN 算交叉驗證正確率',
+      '  折內標準化＋留一法 3-NN 算正確率',
       '  加入表現最好者，直到不再進步'
     ],
     build(rows, p) {
@@ -236,12 +243,16 @@
         ]);
       }
 
-      while (steps.length < 10) {
-        add(7, '過濾法 vs 包裹法', '過濾法速度快、與模型無關；向前選擇直接用目標模型評估組合效果，較能避開冗餘特徵，但計算量隨特徵數平方成長。', [
-          '過濾法前 ' + topK + '：' + filterRanked.slice(0, topK).map(s => s.label).join('、'),
-          '向前選擇：' + R.selected.map(x => FLAB[x]).join('、') + '（' + LAB.pct(R.bestAcc, 1) + '）'
-        ]);
-      }
+      add(7, '過濾法 vs 包裹法', '過濾法速度快、與模型無關；向前選擇直接用折內標準化 3-NN 評估組合效果，較能避開冗餘特徵，但計算量隨特徵數平方成長。', [
+        '過濾法前 ' + topK + '：' + filterRanked.slice(0, topK).map(s => s.label).join('、'),
+        '向前選擇：' + R.selected.map(x => FLAB[x]).join('、') + '（' + LAB.pct(R.bestAcc, 1) + '）'
+      ]);
+      add(7, '嵌入法特徵選擇補充', '除了過濾與包裹法，還可在訓練時順便選特徵：例如 Lasso (B2) 用 L1 把無用係數歸零，或用隨機森林 (B7) 看特徵重要度。', [
+        'Filter（快）→ Embedded（Lasso/樹）→ Wrapper（最準但慢）'
+      ]);
+      add(7, '防選擇偏誤與實務守則', '特徵選擇同樣動用了標籤 y，嚴禁在切分測試集前用全資料篩選，必須放進交叉驗證折內（見 A10）。', [
+        '折內標準化 + 折內特徵選擇 = 誠實泛化評估'
+      ]);
       return steps;
     },
 
@@ -284,7 +295,7 @@
         const R = analyze(rows, p);
         return ['向前選擇子集：' + R.selected.join(', ') + '（LOO 正確率 ' + LAB.pct(R.bestAcc, 1) + '）'];
       },
-      python: `from sklearn.model_selection import LeaveOneOut\nfrom sklearn.neighbors import KNeighborsClassifier`,
+      python: `from sklearn.pipeline import make_pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.model_selection import LeaveOneOut, cross_val_score\nfrom sklearn.neighbors import KNeighborsClassifier\npipe = make_pipeline(StandardScaler(), KNeighborsClassifier(3))`,
       confirmed: false
     }
   });

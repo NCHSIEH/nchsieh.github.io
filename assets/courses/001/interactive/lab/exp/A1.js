@@ -130,19 +130,24 @@
           hlCol: st.cur ? st.cur.col : null
         };
         const points = rows.map((r, ri) => {
-          const ageMiss = r.age == null, gluMiss = r.glu == null;
+          const ageMiss = r.age == null, bmiMiss = r.bmi == null, gluMiss = r.glu == null;
           const ageDone = !ageMiss || st.filled.has(ri + '_age');
+          const bmiDone = !bmiMiss || st.filled.has(ri + '_bmi');
           const gluDone = !gluMiss || st.filled.has(ri + '_glu');
           const x = ageDone ? (ageMiss ? R.out[ri].age : r.age) : (AX.x.min + 2.5);
           const y = gluDone ? (gluMiss ? R.out[ri].glu : r.glu) : (AX.y.min + 6);
-          const hasMiss = ageMiss || gluMiss;
-          const allDone = ageDone && gluDone;
+          const hasMiss = ageMiss || bmiMiss || gluMiss;
+          const allDone = ageDone && bmiDone && gluDone;
           const isCur = st.cur && st.cur.id === r.id;
+          const isCurBmi = isCur && st.cur.col === 'bmi';
+          const ptLabel = isCurBmi
+            ? (r.id + (bmiDone ? (' (BMI=' + f(R.out[ri].bmi, 1) + ')') : ' (補BMI)'))
+            : String(r.id);
           return {
             id: 'p' + r.id, x, y,
             cls: isCur ? 'hl' : (hasMiss ? (allDone ? 'good' : 'c1') : 'c0'),
             hollow: !allDone,
-            ring: hasMiss, hl: isCur, label: String(r.id), r: isCur ? 7 : 6
+            ring: hasMiss || isCurBmi, hl: isCur, label: ptLabel, r: isCur ? 8 : 6
           };
         });
         const lines = [];
@@ -250,6 +255,10 @@
         '血糖平均：原 ' + f(R.before.glu.mean, 2) + ' → 均 ' + f(Rmean.after.glu.mean, 2) + '｜中 ' + f(Rmed.after.glu.mean, 2) + '｜kNN ' + f(Rknn.after.glu.mean, 2),
         '血糖標準差：原 ' + f(R.before.glu.sd, 2) + ' → 均 ' + f(Rmean.after.glu.sd, 2) + '｜中 ' + f(Rmed.after.glu.sd, 2) + '｜kNN ' + f(Rknn.after.glu.sd, 2)
       ]);
+      add(7, '缺失機制與指示欄', '醫療資料常屬非隨機缺失（MNAR，如懷疑有病才驗血糖）。補值時可加 0/1 缺失指示欄保留「有缺值」的臨床訊號！', [
+        'MCAR 完全隨機｜MAR 依他欄隨機｜MNAR 與缺值本身有關',
+        '實務：SimpleImputer(add_indicator=True)，且 k-NN 補值前先標準化'
+      ]);
       return steps;
     },
 
@@ -299,7 +308,7 @@
           '血糖補後平均 = ' + f(R.after.glu.mean, 2) + '，標準差 = ' + f(R.after.glu.sd, 2)
         ];
       },
-      python: `from sklearn.impute import SimpleImputer, KNNImputer\nX_mean = SimpleImputer(strategy='mean').fit_transform(X)\nX_med = SimpleImputer(strategy='median').fit_transform(X)\nX_knn = KNNImputer(n_neighbors=3).fit_transform(X)`,
+      python: `from sklearn.impute import SimpleImputer, KNNImputer\nX_mean = SimpleImputer(strategy='mean', add_indicator=True).fit_transform(X_train)\nX_med = SimpleImputer(strategy='median').fit_transform(X_train)\nX_knn = KNNImputer(n_neighbors=3).fit_transform(X_train_scaled)`,
       confirmed: false
     }
   });
