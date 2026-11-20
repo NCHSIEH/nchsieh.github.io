@@ -1,26 +1,8 @@
 /* M1 互動頁 A：導覽、進度、PART 01–05 */
 (function () {
   'use strict';
-  const { h, $, $$, S, fmt, C, Store, quiz } = U;
-  const KEY = 'm1';
-
-  // ================= 導覽與進度 =================
-  const parts = $$('section.part');
-  Store.set(KEY + ':total', parts.length);
-  const side = $('#side');
-  const done = new Set(Store.get(KEY + ':done', []));
-  parts.forEach((p, i) => {
-    const a = h('a', { href: '#' + p.id, 'data-id': p.id }, h('span', { class: 'n' }, String(i + 1).padStart(2, '0')), h('span', null, p.dataset.t), h('span', { class: 'ck' }, '✓'));
-    side.append(a);
-    const b = h('button', { class: 'btn sm mark-done' });
-    const sync = () => { b.textContent = done.has(p.id) ? '✓ 已完成這一節（點擊取消）' : '標記這一節為已完成'; b.classList.toggle('on', done.has(p.id)); a.classList.toggle('done', done.has(p.id)); };
-    b.onclick = () => { done.has(p.id) ? done.delete(p.id) : done.add(p.id); Store.set(KEY + ':done', [...done]); sync(); prog(); };
-    p.append(h('div', { class: 'row', style: { justifyContent: 'flex-end', marginTop: '14px' } }, b)); sync();
-  });
-  function prog() { $('#ptxt').textContent = `完成 ${done.size} / ${parts.length}`; $('#pbar').style.width = (done.size / parts.length * 100) + '%'; }
-  prog();
-  const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { $$('#side a').forEach(a => a.classList.toggle('cur', a.dataset.id === e.target.id)); } }); }, { rootMargin: '-40% 0px -55% 0px' });
-  parts.forEach(p => io.observe(p));
+  const { h, $, S, fmt, C, quiz } = U;
+  U.initModule('m1');
 
   // ================= P01 六維度 =================
   const DIMS = [
@@ -33,15 +15,22 @@
   ];
   (function () {
     const box = h('div', { class: 'grid3' });
+    const cards = [];
     DIMS.forEach(([en, zh, pts], i) => {
       const body = h('ul', { style: { margin: '6px 0 0', paddingLeft: '1.2em', fontSize: '14px', color: 'var(--muted)', display: 'none' } }, pts.map(t => h('li', null, t)));
+      const icon = h('span', { style: { marginLeft: 'auto', fontSize: '12px', color: 'var(--accent)' } }, '＋');
       const c = h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff', cursor: 'pointer' } },
-        h('div', { style: { display: 'flex', alignItems: 'baseline', gap: '8px' } }, h('span', { class: 'mono', style: { fontSize: '11px', color: 'var(--faint)' } }, (i + 1) + ' · ' + en), h('span', { style: { marginLeft: 'auto', fontSize: '12px', color: 'var(--accent)' } }, '＋')),
+        h('div', { style: { display: 'flex', alignItems: 'baseline', gap: '8px' } }, h('span', { class: 'mono', style: { fontSize: '11px', color: 'var(--faint)' } }, (i + 1) + ' · ' + en), icon),
         h('div', { style: { fontWeight: 700, fontSize: '17px' } }, zh), body);
-      c.onclick = () => { const o = body.style.display === 'none'; body.style.display = o ? 'block' : 'none'; c.querySelector('span:last-child').textContent = o ? '－' : '＋'; c.style.borderColor = o ? 'var(--accent)' : 'var(--line)'; };
+      const setOpen = o => { body.style.display = o ? 'block' : 'none'; icon.textContent = o ? '－' : '＋'; c.style.borderColor = o ? 'var(--accent)' : 'var(--line)'; };
+      c.onclick = () => setOpen(body.style.display === 'none');
+      cards.push({ body, setOpen });
       box.append(c);
     });
-    $('#w-dims').append(box);
+    let allOpen = false;
+    const bt = h('button', { class: 'btn sm', style: { marginBottom: '8px' } }, '全部展開');
+    bt.onclick = () => { allOpen = !allOpen; cards.forEach(x => x.setOpen(allOpen)); bt.textContent = allOpen ? '全部收合' : '全部展開'; };
+    $('#w-dims').append(bt, box);
   })();
 
   // ================= P01 找碴 =================
@@ -308,7 +297,7 @@
     function draw() {
       out.innerHTML = '';
       const R = right(), res = join(type), uniq = new Set(res.map(r => r[0])).size;
-      const sel = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', marginBottom: '12px' } });
+      const sel = h('div', { class: 'g4-tabs', style: { gap: '8px', marginBottom: '12px' } });
       TYPES.forEach(([t, l]) => { const c = h('div', { style: { border: '1.5px solid ' + (t === type ? 'var(--accent)' : 'var(--line)'), borderRadius: '10px', padding: '6px', textAlign: 'center', cursor: 'pointer', background: t === type ? 'var(--accent-soft)' : '#fff' } }, venn(t), h('div', { style: { fontWeight: 600, fontSize: '14px' } }, l + ' Join'), h('div', { class: 'mono', style: { fontSize: '12px', color: 'var(--muted)' } }, join(t).length + ' 列')); c.onclick = () => { type = t; draw(); }; sel.append(c); });
       const tg = (label, get, set) => { const c = h('input', { type: 'checkbox' }); c.checked = get(); c.onchange = () => { set(c.checked); draw(); }; return h('label', { class: 'ctl' }, c, label); };
       const lt = h('table', { class: 'dt' }, h('tr', null, h('th', null, '病歷號'), h('th', null, '姓名')), LEFT.map(r => h('tr', null, h('td', { class: 'mono' }, r[0]), h('td', null, r[1]))));
@@ -320,7 +309,7 @@
       if (type === 'left' && res.some(r => r[2] == null)) warn.push('右表沒有資料的病人（如 A003）出現「?」——這是 Left Join 保留下來的正常資訊，不要當成錯誤刪掉。');
       out.append(sel,
         h('div', { class: 'row', style: { marginBottom: '10px' } }, tg('右表鍵值有空白／大小寫不一致', () => dirty, v => dirty = v), tg('Join 前先 Trim＋轉大寫', () => trim, v => trim = v), tg('Join 前先對右表 Aggregate（一列一病人）', () => agg, v => agg = v)),
-        h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr 1.4fr', gap: '14px' } },
+        h('div', { class: 'join-grid' },
           h('div', null, h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, `左表 主檔（${LEFT.length}）`), h('div', { class: 'tscroll' }, lt)),
           h('div', null, h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, `右表 檢驗（${R.length}）`), h('div', { class: 'tscroll' }, rt)),
           h('div', null, h('div', { style: { fontSize: '13px', color: 'var(--accent)', fontWeight: 600 } }, `結果：${res.length} 列 · ${uniq} 位不重複病人`), h('div', { class: 'tscroll' }, ot))),

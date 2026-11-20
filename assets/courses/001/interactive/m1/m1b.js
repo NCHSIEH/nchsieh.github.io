@@ -1,9 +1,7 @@
 /* M1 互動頁 B：PART 06–09 */
 (function () {
   'use strict';
-  const { h, $, S, fmt, C, rng, randn, quiz } = U;
-  const seg = (opts, get, set, redraw) => { const s = h('div', { class: 'seg' }); opts.forEach(([v, l]) => { const b = h('button', { class: get() === v ? 'on' : '' }, l); b.onclick = () => { set(v); redraw(); }; s.append(b); }); return s; };
-  const slider = (label, min, max, step, get, set, redraw, f = v => v) => { const i = h('input', { type: 'range', min, max, step }); i.value = get(); const v = h('span', { class: 'val' }, f(get())); i.oninput = () => { set(+i.value); v.textContent = f(+i.value); redraw(); }; return h('label', { class: 'ctl' }, label, i, v); };
+  const { h, $, S, fmt, C, rng, randn, quiz, seg, slider } = U;
   const pickTop = (scores, n) => { const idx = scores.map((s, i) => [s, i]).sort((a, b) => b[0] - a[0]).slice(0, n).map(x => x[1]); const m = new Array(scores.length).fill(false); idx.forEach(i => m[i] = true); return m; };
 
   // ================= P06 遺失機制模擬器 =================
@@ -182,13 +180,16 @@
     ];
     const ans = {}; const out = h('div');
     function draw() {
-      out.innerHTML = '';
+      out.innerHTML = ''; let okCnt = 0;
       CASES.forEach(([t, ok, why], i) => {
+        if (ans[i] && ok.includes(ans[i])) okCnt++;
         const row = h('div', { style: { padding: '8px 0', borderBottom: '1px solid var(--line)' } }, h('div', { class: 'row' }, h('div', { style: { flex: '1 1 260px', fontWeight: 600, fontSize: '14.5px' } }, t), ...A.map(a => { const b = h('button', { class: 'btn sm' }, a); if (ans[i] === a) { if (ok.includes(a)) b.classList.add('on'); else b.style.cssText = 'background:var(--bad-soft);border-color:var(--bad)'; } b.onclick = () => { ans[i] = a; draw(); }; return b; })));
         if (ans[i]) row.append(h('div', { style: { fontSize: '13px', marginTop: '4px', color: ok.includes(ans[i]) ? 'var(--good)' : 'var(--bad)' } }, (ok.includes(ans[i]) ? '✓ ' : `✗ 建議：${ok.join(' 或 ')}。`) + why));
         out.append(row);
       });
-      out.append(h('p', { class: 'ai' }, '報告中務必說明處理方式與理由。若模型用途是「找出高風險者」，刪掉極端值會直接毀掉目標；建模後要單獨檢視被標記者的預測結果。'));
+      const rst = h('button', { class: 'btn sm' }, '↺ 重設'); rst.onclick = () => { for (const k in ans) delete ans[k]; draw(); };
+      out.append(h('div', { class: 'row', style: { marginTop: '8px' } }, h('span', { class: 'tag ' + (okCnt === CASES.length ? 'good' : 'gray') }, `答對 ${okCnt} / ${CASES.length}`), Object.keys(ans).length ? rst : ''),
+        h('p', { class: 'ai' }, '報告中務必說明處理方式與理由。若模型用途是「找出高風險者」，刪掉極端值會直接毀掉目標；建模後要單獨檢視被標記者的預測結果。'));
     }
     $('#w-outdec').append(out); draw();
   })();
@@ -253,8 +254,14 @@
       out.innerHTML = '';
       const ys = ushape ? ex.map((x, i) => x * x + en[i] * .25) : ex.map((x, i) => target * x + Math.sqrt(Math.max(0, 1 - target * target)) * en[i]);
       const rr = S.r(ex, ys), a = Math.abs(rr), lv = LV.find(l => a >= l[0]);
+      const mx = S.mean(ex), my = S.mean(ys);
+      let sxy = 0, sxx = 0; ex.forEach((x, i) => { sxy += (x - mx) * (ys[i] - my); sxx += (x - mx) ** 2; });
+      const bSlope = sxy / (sxx || 1), aInt = my - bSlope * mx;
       const ch = h('div', { style: { border: a >= .8 ? '2px solid var(--bad)' : '2px solid transparent', borderRadius: '10px' } });
-      U.scatter(ch, ex.map((x, i) => ({ x, y: ys[i] })), { w: 360, h: 280, xmin: -3, xmax: 3, ymin: ushape ? -1 : -3.5, ymax: ushape ? 9 : 3.5, noGrid: true, xlabel: '變數 X', ylabel: '變數 Y' });
+      U.scatter(ch, ex.map((x, i) => ({ x, y: ys[i] })), {
+        w: 360, h: 280, xmin: -3, xmax: 3, ymin: ushape ? -1 : -3.5, ymax: ushape ? 9 : 3.5, noGrid: true, xlabel: '變數 X', ylabel: '變數 Y',
+        over: [(sv, x, y) => U.s('line', { x1: x(-2.8), y1: y(aInt + bSlope * -2.8), x2: x(2.8), y2: y(aInt + bSlope * 2.8), stroke: a >= .8 ? C.bad : C.amber, 'stroke-width': 2, 'stroke-dasharray': ushape ? '5 4' : null }, sv)]
+      });
       const uc = h('input', { type: 'checkbox' }); uc.checked = ushape; uc.onchange = () => { ushape = uc.checked; draw(); };
       const tbl = h('table', { class: 'dt' }, h('tr', null, ['|r|', '強度', '共線性意義', '建議'].map(x => h('th', null, x))), LV.map((l, i) => h('tr', null, h('td', { class: l === lv ? 'hl mono' : 'mono' }, i === 0 ? '0.9–1.0' : `${l[0].toFixed(1)}–${LV[i - 1][0].toFixed(1)}`), h('td', { class: l === lv ? 'hl' : '' }, l[1]), h('td', { class: l === lv ? 'hl' : '' }, l[2]), h('td', { class: l === lv ? 'hl' : '' }, l[3]))));
       out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, slider('目標 r', -1, 1, .01, () => target, v => target = v, draw, v => (+v).toFixed(2)), h('label', { class: 'ctl' }, uc, '改成 U 型關係')),

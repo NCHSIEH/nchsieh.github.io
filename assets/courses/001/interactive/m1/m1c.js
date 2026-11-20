@@ -1,10 +1,7 @@
 /* M1 互動頁 C：PART 10–14（縮放、特徵工程、洩漏、實驗室、作業與回顧） */
 (function () {
   'use strict';
-  const { h, $, S, fmt, C, rng, randn, quiz, Store } = U;
-  const seg = (opts, get, set, redraw) => { const s = h('div', { class: 'seg' }); opts.forEach(([v, l]) => { const b = h('button', { class: get() === v ? 'on' : '' }, l); b.onclick = () => { set(v); redraw(); }; s.append(b); }); return s; };
-  const slider = (label, min, max, step, get, set, redraw, f = v => v) => { const i = h('input', { type: 'range', min, max, step }); i.value = get(); const v = h('span', { class: 'val' }, f(get())); i.oninput = () => { set(+i.value); v.textContent = f(+i.value); redraw(); }; return h('label', { class: 'ctl' }, label, i, v); };
-  const check = (label, get, set, redraw) => { const c = h('input', { type: 'checkbox' }); c.checked = get(); c.onchange = () => { set(c.checked); redraw(); }; return h('label', { class: 'ctl' }, c, label); };
+  const { h, $, S, fmt, C, rng, randn, quiz, Store, seg, slider, check } = U;
 
   // ================= P10 公式實驗 =================
   (function () {
@@ -213,20 +210,33 @@
       '特徵選擇': ['Retrieve', 'Split Data', '僅用訓練集算相關、挑欄位', '同一組欄位套用到測試集', '建模與評估'],
       '時間序列': ['Retrieve', '依時間排序', '前段訓練、後段測試（或 Forward Chaining）', '建模與評估'],
     };
-    let cur = '前處理', order = null, checked = false; const out = h('div');
+    let cur = '前處理', order = null, checked = false, dragIdx = -1; const out = h('div');
     const shuffle = a => { const r = rng(Date.now() % 1e6), b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1));[b[i], b[j]] = [b[j], b[i]]; } return b.join() === a.join() ? shuffle(a) : b; };
     function reset() { order = shuffle(SC[cur]); checked = false; }
     function draw() {
       out.innerHTML = '';
       const right = SC[cur];
-      const list = h('div', { style: { display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '560px' } });
-      order.forEach((s, i) => { const ok = checked && s === right[i]; const bad = checked && s !== right[i];
-        list.append(h('div', { class: 'row', style: { border: '1px solid ' + (ok ? 'var(--good)' : bad ? 'var(--bad)' : 'var(--line2)'), background: ok ? 'var(--good-soft)' : bad ? 'var(--bad-soft)' : '#fff', borderRadius: '8px', padding: '6px 10px', gap: '8px' } }, h('span', { class: 'mono', style: { color: 'var(--faint)', width: '18px' } }, i + 1), h('span', { style: { flex: 1, fontSize: '14.5px', fontWeight: /Split|依時間/.test(s) ? 700 : 400 } }, s),
-          h('button', { class: 'btn sm', disabled: i === 0, onclick: () => { [order[i - 1], order[i]] = [order[i], order[i - 1]]; checked = false; draw(); } }, '↑'), h('button', { class: 'btn sm', disabled: i === order.length - 1, onclick: () => { [order[i + 1], order[i]] = [order[i], order[i + 1]]; checked = false; draw(); } }, '↓'))); });
+      const list = h('div', { style: { display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '580px' } });
+      order.forEach((s, i) => {
+        const ok = checked && s === right[i]; const bad = checked && s !== right[i];
+        const row = h('div', { class: 'row drag-item', draggable: 'true', style: { border: '1px solid ' + (ok ? 'var(--good)' : bad ? 'var(--bad)' : 'var(--line2)'), background: ok ? 'var(--good-soft)' : bad ? 'var(--bad-soft)' : '#fff', borderRadius: '8px', padding: '6px 10px', gap: '8px' } },
+          h('span', { style: { color: 'var(--faint)', userSelect: 'none' }, title: '可拖曳排序' }, '⋮⋮'),
+          h('span', { class: 'mono', style: { color: 'var(--faint)', width: '18px' } }, i + 1),
+          h('span', { style: { flex: 1, fontSize: '14.5px', fontWeight: /Split|依時間/.test(s) ? 700 : 400 } }, s),
+          h('button', { class: 'btn sm', disabled: i === 0, onclick: () => { [order[i - 1], order[i]] = [order[i], order[i - 1]]; checked = false; draw(); } }, '↑'),
+          h('button', { class: 'btn sm', disabled: i === order.length - 1, onclick: () => { [order[i + 1], order[i]] = [order[i], order[i + 1]]; checked = false; draw(); } }, '↓'));
+        row.addEventListener('dragstart', e => { dragIdx = i; row.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+        row.addEventListener('dragend', () => { dragIdx = -1; row.classList.remove('dragging'); });
+        row.addEventListener('dragover', e => { e.preventDefault(); row.classList.add('drag-over'); });
+        row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+        row.addEventListener('drop', e => { e.preventDefault(); row.classList.remove('drag-over'); if (dragIdx >= 0 && dragIdx !== i) { const [item] = order.splice(dragIdx, 1); order.splice(i, 0, item); checked = false; draw(); } });
+        list.append(row);
+      });
       const all = order.join() === right.join();
       const b1 = h('button', { class: 'btn primary sm' }, '檢查順序'); b1.onclick = () => { checked = true; draw(); };
       const b2 = h('button', { class: 'btn sm' }, '重新打亂'); b2.onclick = () => { reset(); draw(); };
-      out.append(h('div', { class: 'row', style: { marginBottom: '10px' } }, seg(Object.keys(SC).map(k => [k, k]), () => cur, v => { cur = v; reset(); }, draw), b1, b2), list,
+      const b3 = h('button', { class: 'btn sm' }, '顯示正確順序'); b3.onclick = () => { order = right.slice(); checked = true; draw(); };
+      out.append(h('div', { class: 'row', style: { marginBottom: '10px' } }, seg(Object.keys(SC).map(k => [k, k]), () => cur, v => { cur = v; reset(); }, draw), b1, b2, b3), list,
         checked ? h('div', { class: 'note ' + (all ? '' : 'warn'), style: { fontSize: '14px' } }, all ? '✓ 正確！正確的那一欄，切分永遠排在第二格。最省事的統一解法：把前處理整包放進 Cross Validation 的訓練子流程內（W5 會示範）。' : '還不對。規律：所有會用到整份資料統計量的動作，都必須發生在切分之後。') : '');
     }
     reset(); $('#w-order').append(out); draw();
@@ -357,6 +367,8 @@
         ['0 不再偽裝成有效值', !['身高cm', '體重kg', '收縮壓', '舒張壓'].some(c => g(c).issues.includes('以 0 代表未量測'))],
         ['出生年不合理值（約 1%）→ 遺失', g('出生年').issues.length === 0],
         ['洩漏誘餌已移除', !Hd.includes('出院後30天門診次數') && !Hd.includes('結案註記')],
+        ['已衍生年齡、BMI、脈壓', Hd.includes('年齡') && Hd.includes('BMI') && Hd.includes('脈壓')],
+        ['就診序號（id）已移出模型特徵', !Hd.includes('就診序號')],
       ];
       const nOK = ANS.filter(a => a[1]).length;
       const ansBox = h('div', { style: { display: 'flex', flexDirection: 'column', gap: '3px', fontSize: '13.5px' } }, ANS.map(([t, ok]) => h('div', { style: { color: ok ? 'var(--good)' : 'var(--muted)' } }, (ok ? '● ' : '○ ') + t)));
@@ -374,9 +386,9 @@
       const items = [...new Set(LB.map(r => r[LH.indexOf('檢驗項目')]))];
       // preview
       const pv = h('table', { class: 'dt' }, h('tr', null, Hd.map(c => h('th', null, c))), B.slice(0, 8).map(r => h('tr', null, r.map(v => h('td', { class: v === '' ? 'miss' : '' }, v === '' ? '?' : v)))));
-      const dl = h('button', { class: 'btn primary sm' }, '下載目前結果 CSV'); dl.onclick = () => { const csv = '﻿' + [Hd, ...B].map(r => r.map(v => /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v).join(',')).join('\n'); const a = h('a', { href: URL.createObjectURL(new Blob([csv], { type: 'text/csv' })), download: 'M1_門診主檔_我的清理版.csv' }); document.body.append(a); a.click(); a.remove(); };
+      const dl = h('button', { class: 'btn primary sm' }, '下載目前結果 CSV'); dl.onclick = () => { const csv = '﻿' + [Hd, ...B].map(r => r.map(v => /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v).join(',')).join('\n'); const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); const a = h('a', { href: url, download: 'M1_門診主檔_我的清理版.csv' }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
       out.append(
-        h('div', { style: { display: 'grid', gridTemplateColumns: 'minmax(300px,1fr) minmax(260px,.8fr)', gap: '16px' } },
+        h('div', { class: 'lab-top' },
           h('div', { class: 'wd', style: { margin: 0 } }, h('div', { class: 'wh' }, h('h3', null, '清理步驟'), ba, br), stepBox),
           h('div', { class: 'wd', style: { margin: 0 } }, h('div', { class: 'wh' }, h('h3', null, '對答案'), h('span', { class: 'tag ' + (nOK === ANS.length ? 'good' : 'amber') }, `${nOK} / ${ANS.length}`)), ansBox,
             h('div', { class: 'kpi', style: { marginTop: '10px' } }, h('div', null, h('div', { class: 'k' }, '列數'), h('div', { class: 'v' }, B.length)), h('div', null, h('div', { class: 'k' }, '欄位數'), h('div', { class: 'v' }, Hd.length))))),
@@ -405,42 +417,26 @@
   })();
 
   // ================= P14 術語翻卡 =================
-  (function () {
-    const G = [['資料工程', 'Data Engineering', '讓資料可用、可信、可取得'], ['探索性資料分析', 'EDA', '建模前先理解資料的分布與關係'], ['資料品質', 'Data Quality', '完整、正確、一致、時效、有效、唯一'], ['遺失值', 'Missing Data', '該有值卻沒有；醫療資料常偽裝成 0'], ['完全隨機遺失', 'MCAR', '缺失與任何變數無關'], ['隨機遺失', 'MAR', '缺失與其他已觀測變數有關'], ['非隨機遺失', 'MNAR', '缺失與缺失值本身有關（最麻煩）'], ['填補', 'Imputation', '以平均、中位數或模型預測補上缺失值'], ['離群值', 'Outlier', '明顯偏離其他資料的觀測值'], ['四分位距', 'IQR', 'Q3−Q1；盒鬚圖判定離群的依據'], ['正規化', 'Min-Max Scaling', '壓縮到 0–1 區間'], ['標準化', 'Z-Score', '轉為平均 0、標準差 1'], ['特徵工程', 'Feature Engineering', '把領域知識變成模型看得懂的欄位'], ['分箱', 'Binning', '連續值切成有意義的區間'], ['虛擬變數', 'One-Hot Encoding', '類別展開成 0/1 欄位'], ['序數編碼', 'Ordinal Encoding', '有序類別編成 1/2/3 保留次序'], ['目標編碼', 'Target Encoding', '以各類別的陽性率取代類別（洩漏風險高）'], ['聚合', 'Aggregation', '把多列壓成一列，改變分析單位'], ['樞紐／重塑', 'Pivot / Reshape', '長寬表互轉'], ['合併', 'Join / Merge', '依鍵值把兩張表接起來'], ['一對多', 'One-to-Many', '右表同鍵值多筆，Join 後筆數增加'], ['資料洩漏', 'Data Leakage', '訓練時用到預測當下拿不到的資訊'], ['共線性', 'Collinearity', '自變數之間高度相關'], ['變異數膨脹因子', 'VIF', '共線性的量化指標，>10 需警覺'], ['醫療資料交換標準', 'FHIR（HL7）', '以 JSON「資源」交換病歷；台灣規範為 TW Core'], ['長表／寬表', 'Long / Wide Format', '一列一筆紀錄 vs 一列一個對象'], ['對數轉換', 'Log Transform', '壓縮右偏長尾，有 0 時用 log(x+1)'], ['群組切分', 'Group Split', '同一對象的紀錄只能在訓練或測試其中一邊']];
-    let front = 'zh'; const out = h('div');
-    function draw() {
-      out.innerHTML = '';
-      const g = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(190px,1fr))', gap: '8px' } });
-      G.forEach(([zh, en, d]) => { const c = h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', minHeight: '86px', background: '#fff', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center' } }); let f = false; const paint = () => { c.innerHTML = ''; c.style.background = f ? 'var(--accent-soft)' : '#fff'; if (!f) c.append(h('div', { style: { fontWeight: 700, fontSize: '15.5px' } }, front === 'zh' ? zh : en)); else c.append(h('div', { style: { fontWeight: 600, fontSize: '13.5px', color: 'var(--accent-ink)' } }, front === 'zh' ? en : zh), h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, d)); }; c.onclick = () => { f = !f; paint(); }; paint(); g.append(c); });
-      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, seg([['zh', '正面：中文'], ['en', '正面：英文']], () => front, v => front = v, draw)), g);
-    }
-    $('#w-cards').append(out); draw();
-  })();
+  U.flashcards('#w-cards', [['資料工程', 'Data Engineering', '讓資料可用、可信、可取得'], ['探索性資料分析', 'EDA', '建模前先理解資料的分布與關係'], ['資料品質', 'Data Quality', '完整、正確、一致、時效、有效、唯一'], ['遺失值', 'Missing Data', '該有值卻沒有；醫療資料常偽裝成 0'], ['完全隨機遺失', 'MCAR', '缺失與任何變數無關'], ['隨機遺失', 'MAR', '缺失與其他已觀測變數有關'], ['非隨機遺失', 'MNAR', '缺失與缺失值本身有關（最麻煩）'], ['填補', 'Imputation', '以平均、中位數或模型預測補上缺失值'], ['離群值', 'Outlier', '明顯偏離其他資料的觀測值'], ['四分位距', 'IQR', 'Q3−Q1；盒鬚圖判定離群的依據'], ['正規化', 'Min-Max Scaling', '壓縮到 0–1 區間'], ['標準化', 'Z-Score', '轉為平均 0、標準差 1'], ['特徵工程', 'Feature Engineering', '把領域知識變成模型看得懂的欄位'], ['分箱', 'Binning', '連續值切成有意義的區間'], ['虛擬變數', 'One-Hot Encoding', '類別展開成 0/1 欄位'], ['序數編碼', 'Ordinal Encoding', '有序類別編成 1/2/3 保留次序'], ['目標編碼', 'Target Encoding', '以各類別的陽性率取代類別（洩漏風險高）'], ['聚合', 'Aggregation', '把多列壓成一列，改變分析單位'], ['樞紐／重塑', 'Pivot / Reshape', '長寬表互轉'], ['合併', 'Join / Merge', '依鍵值把兩張表接起來'], ['一對多', 'One-to-Many', '右表同鍵值多筆，Join 後筆數增加'], ['資料洩漏', 'Data Leakage', '訓練時用到預測當下拿不到的資訊'], ['共線性', 'Collinearity', '自變數之間高度相關'], ['變異數膨脹因子', 'VIF', '共線性的量化指標，>10 需警覺'], ['醫療資料交換標準', 'FHIR（HL7）', '以 JSON「資源」交換病歷；台灣規範為 TW Core'], ['長表／寬表', 'Long / Wide Format', '一列一筆紀錄 vs 一列一個對象'], ['對數轉換', 'Log Transform', '壓縮右偏長尾，有 0 時用 log(x+1)'], ['群組切分', 'Group Split', '同一對象的紀錄只能在訓練或測試其中一邊']]);
 
   // ================= P14 總測驗 =================
-  (function () {
-    const Q = [
-      ['資料品質檢查建議先做哪三項（用 Statistics 就能看出大半）？', ['正確性、時效性、一致性', '有效性、完整性、唯一性', '一致性、正確性、唯一性', '時效性、完整性、有效性'], 1, '順序：有效性 → 完整性 → 唯一性 → 一致性 → 正確性 → 時效性。'],
-      ['病歷號「P0007」在 AI Studio 中應如何設定？', ['integer + regular', 'polynominal + id', 'real + label', 'binominal + regular'], 1, '識別碼是文字、有前導零；不參與建模但保留追溯。'],
-      ['「科別」（內科／外科／急診）最適合的編碼方式？', ['序數編碼 1/2/3', 'One-Hot', '直接刪除', 'Min-Max'], 1, '類別間沒有大小順序；序數編碼會讓模型以為急診 = 內科的三倍。'],
-      ['主檔 751 筆 Left Join 檢驗結果後變成 1,383 筆，原因是？', ['鍵值有空白', '一對多關係', 'Inner Join 用錯', '資料有遺失值'], 1, '同一病人有多筆檢驗，主檔那一列被複製。Join 前先 Aggregate 或 Pivot。'],
-      ['急診體重未量測率 39%、其他科 2–5%，最可能是？', ['MCAR', 'MAR', 'MNAR', '不是遺失'], 1, '缺失可由看得到的「科別」解釋。'],
-      ['右偏的胰島素有 45% 缺失，若要用集中量數填補，較佳選擇？', ['平均數', '中位數', '0', '最大值'], 1, '偏態時平均被長尾拉高；中位數較貼近多數人。仍建議加 is_missing 欄。'],
-      ['預測高風險病人的模型中，舒張壓 138 的病人應該？', ['直接移除', '標記保留，建模後單獨檢視', '改成平均值', '視為遺失'], 1, '生理上可能但罕見——可能正是你要找的重症個案。'],
-      ['r = 0.8 代表兩個變數共享多少變異？', ['80%', '64%', '40%', '8%'], 1, 'r² = 0.64。'],
-      ['下列哪一個演算法「不需要」縮放？', ['k-NN', 'K-Means', 'SVM', '隨機森林'], 3, '樹模型只比大小不比距離。'],
-      ['哪一個流程順序是正確的？', ['Retrieve → Normalize → Split → 建模', 'Retrieve → SMOTE → Split → 建模', 'Retrieve → Split → 訓練集 Normalize → 同參數套用測試集', 'Retrieve → 全部資料挑欄位 → Split'], 2, '所有會用到整份資料統計量的動作，都要在切分之後。'],
-    ];
-    const box = $('#w-final'); let score = 0, ans = 0; const sc = h('div', { class: 'note', style: { display: 'none' } });
-    Q.forEach(([q, o, a, ex], i) => quiz(box, { head: `第 ${i + 1} 題`, q, opts: o, a, ex, onRight: () => { const qb = box.children[i]; if (!qb.dataset.miss) score++; } }));
-    box.addEventListener('click', () => { ans = box.querySelectorAll('.quiz.done').length; if (ans === Q.length) { sc.style.display = 'block'; sc.textContent = `完成！一次答對 ${score} / ${Q.length} 題。${score >= 8 ? '資料工程的觀念很扎實，可以進入 M2。' : '建議回頭看看答錯題目對應的 PART。'}`; } });
-    box.append(sc);
-  })();
+  U.finalQuiz('#w-final', [
+    ['資料品質檢查建議先做哪三項（用 Statistics 就能看出大半）？', ['正確性、時效性、一致性', '有效性、完整性、唯一性', '一致性、正確性、唯一性', '時效性、完整性、有效性'], 1, '順序：有效性 → 完整性 → 唯一性 → 一致性 → 正確性 → 時效性。', 'p01'],
+    ['病歷號「P0007」在 AI Studio 中應如何設定？', ['integer + regular', 'polynominal + id', 'real + label', 'binominal + regular'], 1, '識別碼是文字、有前導零；不參與建模但保留追溯。', 'p03'],
+    ['「科別」（內科／外科／急診）最適合的編碼方式？', ['序數編碼 1/2/3', 'One-Hot', '直接刪除', 'Min-Max'], 1, '類別間沒有大小順序；序數編碼會讓模型以為急診 = 內科的三倍。', 'p03'],
+    ['主檔 751 筆 Left Join 檢驗結果後變成 1,383 筆，原因是？', ['鍵值有空白', '一對多關係', 'Inner Join 用錯', '資料有遺失值'], 1, '同一病人有多筆檢驗，主檔那一列被複製。Join 前先 Aggregate 或 Pivot。', 'p05'],
+    ['急診體重未量測率 39%、其他科 2–5%，最可能是？', ['MCAR', 'MAR', 'MNAR', '不是遺失'], 1, '缺失可由看得到的「科別」解釋。', 'p06'],
+    ['右偏的胰島素有 45% 缺失，若要用集中量數填補，較佳選擇？', ['平均數', '中位數', '0', '最大值'], 1, '偏態時平均被長尾拉高；中位數較貼近多數人。仍建議加 is_missing 欄。', 'p06'],
+    ['預測高風險病人的模型中，舒張壓 138 的病人應該？', ['直接移除', '標記保留，建模後單獨檢視', '改成平均值', '視為遺失'], 1, '生理上可能但罕見——可能正是你要找的重症個案。', 'p07'],
+    ['r = 0.8 代表兩個變數共享多少變異？', ['80%', '64%', '40%', '8%'], 1, 'r² = 0.64。', 'p09'],
+    ['下列哪一個演算法「不需要」縮放？', ['k-NN', 'K-Means', 'SVM', '隨機森林'], 3, '樹模型只比大小不比距離。', 'p10'],
+    ['哪一個流程順序是正確的？', ['Retrieve → Normalize → Split → 建模', 'Retrieve → SMOTE → Split → 建模', 'Retrieve → Split → 訓練集 Normalize → 同參數套用測試集', 'Retrieve → 全部資料挑欄位 → Split'], 2, '所有會用到整份資料統計量的動作，都要在切分之後。', 'p12'],
+  ]);
 
   // ================= P14 重點回顧 =================
   (function () {
     const R = [['資料品質六個維度', '有效性、完整性、唯一性最容易用 Statistics 快速檢查。', 'p01'], ['Join 前後一定要比對筆數', '一對多關係會讓筆數暴增而不報錯。', 'p05'], ['遺失值先問「為什麼缺」', '再決定怎麼補；醫療資料的遺失常偽裝成 0。', 'p06'], ['離群值傾向標記而非刪除', '極端值往往正是目標族群。', 'p07'], ['縮放參數只能從訓練集計算', '且樹模型不需要縮放。', 'p10'], ['資料洩漏不會報錯', '只會給你好看的假分數。指標好到不合理時先查它。', 'p12']];
     const g = h('div', { class: 'grid3' }); R.forEach(([t, d, id], i) => g.append(h('a', { href: '#' + id, style: { textDecoration: 'none', color: 'inherit', border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff', display: 'block' } }, h('div', { class: 'mono', style: { color: 'var(--accent)', fontWeight: 700 } }, i + 1), h('b', null, t), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, d))));
-    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), '第 4 週 M2 監督式學習 I：迴歸。', h('a', { href: '../' }, '回到課程首頁 →')));
+    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), '第 4 週 M2-1 監督式學習 I：迴歸。', h('a', { href: '../m2-1/' }, '前往 M2-1 互動版 →')));
   })();
 })();

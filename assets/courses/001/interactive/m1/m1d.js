@@ -168,7 +168,7 @@
      ==================================================================== */
   (function joinBig() {
     const box = $('#w-joinbig'); if (!box) return;
-    let mode = 'left', pre = 'none';
+    let mode = 'left', pre = 'none', pickIdx = -1;
     const labBy = new Map(); LAB.forEach(l => { if (!labBy.has(l.pid)) labBy.set(l.pid, []); labBy.get(l.pid).push(l); });
     const visits = CLEAN; // 751
     const out = h('div');
@@ -184,10 +184,23 @@
       // 視覺：751 列的主檔，每一格代表 1 列，顏色＝被複製幾次
       const grid = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, 9px)', gap: '2px', margin: '8px 0 6px', maxWidth: '100%' } });
       const colorOf = k => k === 0 ? (mode === 'left' ? '#d9d4c8' : 'transparent') : k === 1 ? C.accent : k === 2 ? '#e0a33a' : k === 3 ? C.amber : C.bad;
-      visits.forEach(v => { const k = per(v.pid); grid.append(h('i', { title: `${v.pid}：主檔這一列 → Join 後 ${k || (mode === 'left' ? 1 : 0)} 列`, style: { width: '9px', height: '9px', borderRadius: '2px', background: colorOf(k), border: k === 0 && mode !== 'left' ? '1px dashed #c9c3b6' : null } })); });
+      visits.forEach((v, idx) => {
+        const k = per(v.pid);
+        const cell = h('i', { title: `${v.pid}（${v.date || '?'}・${v.dept}）：Join 後 ${k || (mode === 'left' ? 1 : 0)} 列`, style: { width: '9px', height: '9px', borderRadius: '2px', background: colorOf(k), border: k === 0 && mode !== 'left' ? '1px dashed #c9c3b6' : null, cursor: 'pointer', outline: idx === pickIdx ? '2px solid var(--ink)' : null } });
+        cell.onclick = () => { pickIdx = idx === pickIdx ? -1 : idx; draw(); };
+        grid.append(cell);
+      });
       const legend = h('div', { class: 'row', style: { gap: '14px', fontSize: '12.5px', color: 'var(--muted)', flexWrap: 'wrap' } },
         ...[[mode === 'left' ? '#d9d4c8' : 'transparent', mode === 'left' ? '沒有檢驗 → 保留 1 列（檢驗欄為 ?）' : '沒有檢驗 → 被丟掉'], [C.accent, '變 1 列'], ['#e0a33a', '被複製成 2 列'], [C.amber, '3 列'], [C.bad, '4 列以上']].map(([c, t]) => h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: '5px' } }, h('i', { style: { width: '10px', height: '10px', borderRadius: '2px', background: c, border: c === 'transparent' ? '1px dashed #c9c3b6' : null, display: 'inline-block' } }), t)));
-      out.append(h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, '每一格＝主檔的 1 次就診（751 格）。滑鼠移到格子上看細節。'), grid, legend);
+      let detail = '';
+      if (pickIdx >= 0) {
+        const v = visits[pickIdx], labs = labBy.get(v.pid) || [], k = per(v.pid), after = k || (mode === 'left' ? 1 : 0);
+        detail = h('div', { style: { marginTop: '8px', padding: '8px 12px', border: '1px solid var(--line)', borderRadius: '8px', background: '#fff', fontSize: '13.5px' } },
+          h('b', null, `${v.pid}`), `（${v.date || '日期格式異常'}・${v.dept}）— 檢驗表有 ${labs.length} 筆紀錄 → 目前設定 Join 後變 `,
+          h('b', { style: { color: after === 1 ? 'var(--good)' : 'var(--bad)' } }, `${after} 列`),
+          labs.length ? h('div', { style: { fontSize: '12.5px', color: 'var(--muted)', marginTop: '2px' } }, '檢驗明細：' + labs.map(l => `${l.item} ${l.val} ${l.unit}`).join('、')) : '');
+      }
+      out.append(h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, '每一格＝主檔的 1 次就診（751 格）。點任一格看該次就診與檢驗明細。'), grid, legend, detail);
       const k = h('div', { class: 'kpi', style: { margin: '14px 0 6px' } }, kpi('Join 前（主檔）', '751'), kpi('Join 後列數', '0', rows === 751 ? 'good' : 'bad'), kpi('不重複病人', fmt(pats, 0)), kpi('列數 ÷ 原本', '—'));
       out.append(k); const vs = k.querySelectorAll('.v'); countUp(vs[1], rows, 800); vs[3].textContent = (rows / 751).toFixed(2) + ' 倍';
       let msg;
@@ -243,9 +256,8 @@
     function draw() {
       out.innerHTML = '';
       const st = states[at];
-      const play = h('button', { class: 'btn primary' }, timer ? '播放中…' : at === states.length - 1 ? '↻ 重播' : '▶ 播放整條前處理鏈');
-      play.disabled = !!timer;
-      play.onclick = () => { at = 0; draw(); timer = setInterval(() => { at++; if (at >= states.length - 1) { at = states.length - 1; clearInterval(timer); timer = null; } draw(); }, 900); draw(); };
+      const play = h('button', { class: 'btn primary' }, timer ? '■ 暫停' : at === states.length - 1 ? '↻ 重播' : '▶ 播放整條前處理鏈');
+      play.onclick = () => { if (timer) { clearInterval(timer); timer = null; draw(); } else { if (at >= states.length - 1) at = 0; draw(); timer = setInterval(() => { at++; if (at >= states.length - 1) { at = states.length - 1; clearInterval(timer); timer = null; } draw(); }, 900); draw(); } };
       const prev = h('button', { class: 'btn sm' }, '← 上一步'), next = h('button', { class: 'btn sm' }, '下一步 →');
       prev.disabled = at === 0 || !!timer; next.disabled = at === states.length - 1 || !!timer;
       prev.onclick = () => { at--; draw(); }; next.onclick = () => { at++; draw(); };
@@ -292,9 +304,14 @@
     }
     function draw() {
       out.innerHTML = '';
-      const inp = h('input', { type: 'text', value: val, style: { width: '220px', fontFamily: 'var(--mono)' } });
+      const inp = h('input', { type: 'text', value: val, style: { width: '200px', fontFamily: 'var(--mono)' } });
       inp.oninput = () => { val = inp.value; res(); };
-      const r1 = h('div'); out.append(h('div', { class: 'row' }, lab('民國年日期'), inp), r1);
+      const presets = ['1150301', '990215', '115/03/01', '115年3月1日', '11503', '1150230'].map(p => {
+        const b = h('button', { class: 'btn sm' + (val === p ? ' on' : '') }, p === '1150230' ? '1150230（錯誤日）' : p);
+        b.onclick = () => { val = p; inp.value = p; draw(); };
+        return b;
+      });
+      const r1 = h('div'); out.append(h('div', { class: 'row' }, lab('民國年日期'), inp, ...presets), r1);
       function res() {
         r1.innerHTML = ''; const nv = naive(val), r = parseROC(val), good = ok(r);
         r1.append(h('div', { class: 'grid2', style: { marginTop: '10px' } },
@@ -306,9 +323,7 @@
       out.append(h('div', { class: 'row', style: { marginTop: '14px' } }, lab('六筆就診日排序方式'), seg([['text', '當文字排序'], ['date', '轉成日期再排序']], () => mode, v => mode = v, draw)), list);
       const rows = SAMPLES.map(s => ({ s, r: parseROC(s) }));
       rows.sort((a, b) => mode === 'text' ? (a.s < b.s ? -1 : 1) : (iso(a.r) < iso(b.r) ? -1 : 1));
-      const inv = rows.some((x, i) => i && iso(x.r) < iso(rows[i - 1].r));
       list.append(h('div', { style: { display: 'flex', gap: '6px', flexWrap: 'wrap' } }, ...rows.map((x, i) => h('div', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '6px 10px', background: (i && iso(x.r) < iso(rows[i - 1].r)) ? 'var(--bad-soft)' : '#fff', fontFamily: 'var(--mono)', fontSize: '13px' } }, (i + 1) + '. ' + x.s, h('div', { style: { color: 'var(--muted)' } }, iso(x.r))))));
-      const firstOld = rows.findIndex(x => x.r.y < 2011);
       out.append(note(mode === 'text'
         ? `當文字排序時，比的是第一個字元：「1」排在「9」前面，所以 7 碼的民國 100 年以後（${rows.filter(x => x.s.length === 7).length} 筆）全排在 6 碼的民國 9x 年（${rows.filter(x => x.s.length === 6).length} 筆）前面——紅底那筆開始，時間順序就倒了。依「最近一次就診」或「前一次就診」做特徵時，會整個抓錯。`
         : `轉成日期後才是真正的時間順序：最早 ${iso(rows[0].r)}、最晚 ${iso(rows[rows.length - 1].r)}。在 AI Studio 是 Generate Attributes 算出西元年月日字串，再用 Nominal to Date（格式 yyyyMMdd）轉型；轉完一定接 Statistics 看最早、最晚日期合不合理。`));

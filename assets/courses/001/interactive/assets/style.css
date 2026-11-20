@@ -167,7 +167,9 @@ label.ctl{white-space:nowrap}
 .g6-tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
 .funnel-row{display:grid;grid-template-columns:100px 1fr 220px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}
 .funnel-row:last-child{border-bottom:0}
-@media (max-width:900px){.concept.c3,.concept.c5{grid-template-columns:repeat(2,1fr)}.g6-tabs{grid-template-columns:repeat(3,1fr)}}
+.join-grid{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:14px}
+.lab-top{display:grid;grid-template-columns:minmax(300px,1fr) minmax(260px,.8fr);gap:16px}
+@media (max-width:900px){.concept.c3,.concept.c5{grid-template-columns:repeat(2,1fr)}.g6-tabs{grid-template-columns:repeat(3,1fr)}.join-grid,.lab-top{grid-template-columns:1fr}}
 @media (max-width:640px){.concept.c3,.concept.c5{grid-template-columns:1fr}.g4-tabs,.g6-tabs{grid-template-columns:repeat(2,1fr)}.funnel-row{grid-template-columns:1fr;gap:6px}input[type=range]{width:130px}}
 
 /* 可折疊講義補充說明 */
