@@ -254,6 +254,37 @@ a.lab-card.is-adv:hover{background:#fff;border-color:var(--accent);border-left-c
   .ais-grid,.lab-how{grid-template-columns:1fr} .lab-params .p input[type=range]{width:110px}
 }
 
+/* ---------- 各區獨立技術導覽卡片 ---------- */
+.grp-guide{margin:10px 0 18px;background:#f7fbfa;border:1px solid #cce3de;border-left:4px solid var(--accent);border-radius:12px;box-shadow:0 2px 8px rgba(13,107,103,.06);overflow:hidden}
+.grp-guide[open]{background:#fff;box-shadow:0 6px 20px rgba(13,107,103,.1)}
+.grp-guide > summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;user-select:none}
+.grp-guide > summary::-webkit-details-marker{display:none}
+.grp-guide .gg-badge{font-size:12px;font-weight:700;color:#fff;background:var(--accent);padding:2px 9px;border-radius:999px;letter-spacing:.03em;flex:none}
+.grp-guide .gg-title{font-size:15.5px;font-weight:700;color:#123836;flex:1;min-width:220px}
+.grp-guide .gg-toggle{font-size:13px;font-weight:600;color:var(--accent-ink);background:#e6f4f1;border:1px solid #b8dfd8;padding:3px 10px;border-radius:8px;flex:none;transition:background .15s}
+.grp-guide > summary:hover .gg-toggle{background:#d4ede8}
+.grp-guide[open] .gg-toggle .t-open{display:none}
+.grp-guide:not([open]) .gg-toggle .t-close{display:none}
+.grp-guide .gg-sum{width:100%;margin:2px 0 0;font-size:14px;line-height:1.55;color:#3d5250}
+.grp-guide .gg-body{padding:4px 16px 16px;border-top:1px dashed #cfe4df;display:flex;flex-direction:column;gap:14px}
+.grp-guide .gg-sec h4{margin:10px 0 6px;font-size:14px;font-weight:700;color:var(--accent-ink);letter-spacing:.02em;display:flex;align-items:center;gap:6px}
+.grp-guide .gg-sec p{margin:0;font-size:14px;line-height:1.65;color:#2c3b42}
+.grp-guide .gg-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:6px}
+.grp-guide .gg-step{background:#f7faf9;border:1px solid #d9eae6;border-radius:10px;padding:10px 12px}
+.grp-guide .gg-step .st-hd{font-size:13.5px;font-weight:700;color:#123836;margin-bottom:5px}
+.grp-guide .gg-step .st-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.grp-guide .gg-step .st-desc{font-size:13px;line-height:1.5;color:#475569}
+.grp-guide .gg-tbl-wrap{overflow-x:auto;border:1px solid #e2e8f0;border-radius:10px}
+.grp-guide .gg-tbl{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.5}
+.grp-guide .gg-tbl th{background:#f1f7f6;color:#123836;font-weight:700;text-align:left;padding:8px 10px;border-bottom:1px solid #d5e6e2;white-space:nowrap}
+.grp-guide .gg-tbl td{padding:8px 10px;border-bottom:1px solid #eef2f5;vertical-align:top;color:#293540}
+.grp-guide .gg-tbl tr:last-child td{border-bottom:none}
+.grp-guide .gg-tbl tr:hover td{background:#fafdfb}
+.grp-guide .gg-card-cell{white-space:nowrap}
+.grp-guide .gg-card-name{display:block;font-size:12.5px;color:#475569;margin-top:3px;white-space:normal;max-width:140px}
+.grp-guide .gg-tips{margin:4px 0 0;padding:10px 14px 10px 30px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;font-size:13.5px;line-height:1.6;color:#78350f}
+.grp-guide .gg-tips li+li{margin-top:4px}
+
 /* ---------- 懸停提示 Tooltip ---------- */
 .lab-params .p.is-off{opacity:.4;transition:opacity .15s}
 .lab-params .p-lbl[data-tip]{border-bottom:1px dotted var(--line2);cursor:help;padding-bottom:1px}

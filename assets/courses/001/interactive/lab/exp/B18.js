@@ -225,11 +225,18 @@
         'Softmax 準確率 = ' + LAB.pct(R.accSm, 1) + '｜OvR 準確率 = ' + LAB.pct(R.accOvr, 1)
       ]);
 
-      while (steps.length < 10) {
-        add(7, 'OvR vs Softmax', 'One-vs-Rest 能把任何二元模型（如 SVM）包裝成多元分類；Softmax 則在同一個交叉熵損失下聯合最佳化，中間過渡類別（如前期）機率校準更準確。', [
-          '試拖曳「新病人 BMI / 血糖」觀察星號跨過三類邊界時的機率消長'
-        ]);
-      }
+      add(7, 'OvR 中間類別的衝突', 'One-vs-Rest 把「前期」單獨與「正常＋確診」對抗，容易在中間過渡帶出現三個分類器同時給低分（拒認）或同時給高分的矛盾！', [
+        'OvR 原始 Sigmoid 總和未必等於 1，需事後硬除以總和'
+      ]);
+      add(7, 'Softmax 聯合交叉熵', 'Softmax 在同一個多元交叉熵損失 L = −ln P(y_true) 下同時更新三組權重，確保機率天然加總為 1 且邊界彼此銜接。', [
+        'Softmax 準確率 = ' + LAB.pct(R.accSm, 1) + '｜OvR 準確率 = ' + LAB.pct(R.accOvr, 1)
+      ]);
+      add(7, '另一種拆法：One-vs-One', '面對 SVM 等二元模型，也可用 One-vs-One（兩兩配對訓練 K(K−1)/2 個分類器再投票），3 類需訓 3 個、10 類則需 45 個。', [
+        'OvR 需 K 個模型｜OvO 需 K(K−1)/2 個模型'
+      ]);
+      add(7, '從臨床分期到 LLM 生成', '這套 Softmax 公式正是深度學習與大型語言模型的核心：把 3 個血糖分期換成 10 萬個詞彙，就是 H5 的下一個字生成機率！', [
+        '試拖曳「新病人 BMI / 血糖」觀察跨過三類邊界的機率消長'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

@@ -199,6 +199,9 @@
       add(0, '題目', '目標是連續數值「收縮壓 (mmHg)」，不能用 Gini，改用「誤差平方和 (SSE)」衡量切分前後的純度提升。', [
         '根節點平均 = ' + f(T.root.meanY, 1) + ' mmHg，總 SSE = ' + f(T.root.sse, 1)
       ]);
+      add(0, '檢視初始常數基準', '在還沒切分之前，對所有 12 位病人都猜全體平均 ' + f(T.root.meanY, 1) + ' mmHg，基準 MSE = ' + f(T.root.sse / rows.length, 1) + '。', [
+        '目標：挑選讓左右子節點 SSE 總和降最多的切點'
+      ]);
 
       st.showLine = true;
       T.internals.forEach((nd, idx) => {
@@ -219,11 +222,22 @@
         '葉節點數 = ' + T.leaves.length + '，訓練 MSE = ' + f(T.trainMse, 2)
       ]);
 
-      while (steps.length < 10) {
-        add(5, '迴歸樹特性提醒', '迴歸樹無法外插（Extrapolation）：BMI 超出訓練範圍時仍只會輸出最邊緣葉節點的常數平均值。', [
-          '訓練 MSE = ' + f(T.trainMse, 2)
-        ]);
-      }
+      add(5, '為何用 SSE 不用 Gini', 'Gini 與 Entropy 只適用離散類別機率；連續目標改用組內變異（SSE）下降量，等同尋找讓組內血壓最接近的切點。', [
+        '根節點 SSE = ' + f(T.root.sse, 1) + ' → 最終訓練 MSE = ' + f(T.trainMse, 2)
+      ]);
+      const rightLeafVal = T.predOne({ bmi: 45, age: M.mean(rows.map(r => r.age)) });
+      add(5, '階梯預測與外插失效', '迴歸樹無法外插（Extrapolation）：即使來一位 BMI=45 的極端肥胖病人，它仍只會輸出最右葉常數 ' + f(rightLeafVal, 1) + ' mmHg！', [
+        '超出訓練範圍時，線性迴歸 (B1) 可外推，樹模型只停在邊緣葉均值'
+      ]);
+      add(5, 'MSE vs MAE 切分準則', 'SSE/MSE（L2）會放大離群血壓的影響；若資料含極端值，sklearn 可設 criterion="absolute_error"（L1），葉節點改輸出中位數。', [
+        'L2 (MSE) → 葉節點平均｜L1 (MAE) → 葉節點中位數'
+      ]);
+      add(5, '預剪枝控制過擬合', '調高 max_depth 或把 min_leaf 降到 1 會切出極細碎的階梯去硬背雜訊；實務務必以 CV（B13）挑選深度上限。', [
+        '目前深度上限 = ' + p.max_depth + '｜最少葉筆數 = ' + p.min_leaf
+      ]);
+      add(5, '從單樹到 GBDT 集成', '單棵迴歸樹預測呈粗糙階梯且變異大；把數百棵淺迴歸樹接力修殘差，就成了超強的梯度提升樹 GBDT（B9）！', [
+        '單棵迴歸樹（高變異）→ 隨機森林 / GBDT（平滑穩健）'
+      ]);
       return steps;
     },
 

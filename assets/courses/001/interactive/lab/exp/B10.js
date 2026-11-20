@@ -202,10 +202,15 @@
         const regions = st.showReg ? LAB.grid((x, y) => R.predictXY(x, y) >= 0 ? 'c1' : 'c0', AX.x.min, AX.x.max, AX.y.min, AX.y.max, 30, 20) : null;
         const leg = [{ cls: 'c1', label: '是' }, { cls: 'c0', label: '否' }, { cls: 'hl', shape: 'ring', label: '支持向量' }];
         if (!R.isRbf) leg.push({ cls: 'c2', shape: 'line', label: '±1 間隔帶' });
+        const baseLines = st.showLines ? linLines(sn.w1, sn.w2, sn.b) : [];
+        if (st.showLines && sn.iIdx >= 0 && sn.jIdx >= 0) {
+          const pi = rows[sn.iIdx], pj = rows[sn.jIdx];
+          baseLines.push({ id: 'smo_pair', x1: pi.bmi, y1: pi.glu, x2: pj.bmi, y2: pj.glu, cls: 'hl', dash: true, w: 2, label: 'SMO 配對' });
+        }
         const main = {
           type: 'scatter', slot: 'main',
           title: (R.isRbf ? 'RBF 核函數' : '線性') + ' SVM（C = ' + R.C + '）',
-          axes: AX, points, lines: st.showLines ? linLines(sn.w1, sn.w2, sn.b) : [], circles: [], regions,
+          axes: AX, points, lines: baseLines, circles: [], regions,
           legend: leg
         };
         const side = {
@@ -266,11 +271,18 @@
         R.isRbf ? '核函數 RBF：K(x, z) = exp(−0.5‖x−z‖²)' : 'w = (' + f(R.w1, 3) + ', ' + f(R.w2, 3) + ')，b = ' + f(R.b, 3)
       ]);
 
-      while (steps.length < 10) {
-        add(8, '支持向量的關鍵角色', '把非支持向量的點拿掉重算，決策邊界完全不會變！這就是為什麼稱為「支持向量」機。', [
-          '支持向量數 = ' + R.svIds.length + ' / ' + rows.length
-        ]);
-      }
+      add(8, '支持向量的關鍵角色', '把非支持向量的點拿掉重算，決策邊界完全不會變！這就是為什麼稱為「支持向量」機。', [
+        '支持向量數 = ' + R.svIds.length + ' / ' + rows.length
+      ]);
+      add(8, '懲罰參數 C 的權衡', 'C 越小代表軟間隔越寬鬆，容許少數點越界以換取更寬間隔；C 越大則嚴懲違規點，邊界緊縮但易過擬合。', [
+        '目前 C = ' + R.C + '（可切換 0.1 ↔ 100 比較支持向量數變化）'
+      ]);
+      add(8, 'RBF 核技巧與 γ 參數', 'RBF 核函數 exp(−γ‖x−z‖²) 不用真的展開高維座標就能算內積；γ 越大每個支持向量影響範圍越窄，容易包出孤島過擬合。', [
+        '線性可分用 Linear；複雜彎曲邊界用 RBF (調 C 與 γ)'
+      ]);
+      add(8, 'SVM 實務前處理鐵律', 'SVM 高度依賴特徵內積與歐氏距離，建模前必先標準化（A2）；若要輸出校準機率需再搭 Platt Scaling（B19）。', [
+        '大樣本（>數萬筆）可改用 LinearSVC 或樹模型加速'
+      ]);
       return steps;
     },
 

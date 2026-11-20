@@ -163,7 +163,7 @@
             cells: [
               md.deg,
               md.trainMse,
-              st.shownDegs >= 7 ? { v: f(md.valMse, 1), cls: md.deg === R.bestDeg ? 'good' : (md.valMse > 100 ? 'bad' : null) } : md.valMse
+              st.shownDegs >= 7 ? { v: f(md.valMse, 1), cls: md.deg === R.best.deg ? 'good' : (md.valMse > 100 ? 'bad' : null) } : md.valMse
             ],
             hl: md.deg === st.deg
           }))
@@ -208,11 +208,12 @@
         '最佳驗證階數：d* = ' + R.best.deg + '（Val MSE = ' + f(R.best.valMse, 2) + '）'
       ]);
 
-      while (steps.length < 10) {
-        add(5, '實務提醒', '訓練誤差隨階數只降不升，不能用來選模型；必須用未看過的驗證誤差挑 U 型谷底。', [
-          'd* = ' + R.best.deg
-        ]);
-      }
+      add(5, '為何不能用訓練誤差選模', '訓練誤差隨階數只降不升（d=7 幾乎貼過每點），絕不能用來選模型；必須用未看過的驗證誤差挑 U 型谷底！', [
+        '最佳驗證階數 d* = ' + R.best.deg + '（Val MSE = ' + f(R.best.valMse, 2) + '）'
+      ]);
+      add(5, '高階震盪的補救對策', '若實務需要非線性彈性又怕高階亂甩，除了調低階數或增加樣本，也可搭 Ridge/Lasso 正則化（B2）壓制高次項係數！', [
+        'Bias–Variance 平衡：低階高偏差 ↔ 高階高變異'
+      ]);
       return steps;
     },
 

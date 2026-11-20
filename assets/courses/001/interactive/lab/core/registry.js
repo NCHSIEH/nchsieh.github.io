@@ -57,6 +57,7 @@
     { id: 'B16', group: 'B', title: 'ROC 與 PR 曲線', brief: '門檻由 1 降到 0 描繪 TPR/FPR 與 Precision–Recall 曲線及 AUC。', module: m('M2-2 第 10 節', '../m2-2/#p10'), status: 'live', tier: 'adv' },
     { id: 'B17', group: 'B', title: '高斯貝氏與線性判別 LDA', brief: '連續特徵高斯分布分類，對照獨立變異 (GNB) 與共用共變異直線判別 (LDA)。', module: m('M2-2 第 05 節', '../m2-2/#p05'), status: 'live', tier: 'adv' },
     { id: 'B18', group: 'B', title: '多元分類：OvR 與 Softmax', brief: '三類別血糖分期，比較一對多 (One-vs-Rest) 與 Softmax 聯合最佳化。', module: m('M2-2 第 04 節', '../m2-2/#p04'), status: 'live', tier: 'adv' },
+    { id: 'B19', group: 'B', title: '機率校準與 Brier 分數', brief: '以可靠性曲線、Brier 分數與 ECE 診斷過度自信模型，比較 Platt Scaling 與保序迴歸校準。', module: m('M2-2 機率校準', '../m2-2/#p10'), status: 'live', tier: 'adv' },
 
     { id: 'C1', group: 'C', title: 'K-Means 分群', brief: '指派、移動質心、再指派，直到沒有人換群。', module: m('M3 第 03 節', '../m3/#p03'), status: 'live' },
     { id: 'C9', group: 'C', title: '手肘法與輪廓係數', brief: '比較 K = 2..5 的 SSE 手肘圖與 Silhouette 分數，選出最佳群數。', module: m('M3 第 04 節', '../m3/#p04'), status: 'live' },
@@ -148,6 +149,7 @@
     B16: 'ROC / PR Curves & Threshold',
     B17: 'Gaussian Naive Bayes & Fisher LDA',
     B18: 'Multiclass Classification (OvR & Softmax)',
+    B19: 'Probability Calibration & Brier Score',
     C1: 'K-Means Clustering',
     C2: 'Hierarchical Clustering',
     C3: 'Density-Based Clustering',
@@ -234,6 +236,7 @@
     B16: { ais: 'Performance (Binominal) / Find Threshold', py: 'scikit-learn (roc_curve / precision_recall_curve)' },
     B17: { ais: 'Naive Bayes / Linear Discriminant Analysis', py: 'scikit-learn (GaussianNB / LinearDiscriminantAnalysis)' },
     B18: { ais: 'Polynominal by Binominal / Logistic Regression', py: 'scikit-learn (OneVsRestClassifier / LogisticRegression)' },
+    B19: { ais: 'Platt Scaling / Performance (Binominal)', py: 'scikit-learn (CalibratedClassifierCV / brier_score_loss)' },
 
     C1: { ais: 'Clustering (k-Means)', py: 'scikit-learn (KMeans)' },
     C2: { ais: 'Agglomerative Clustering + Flatten Clustering', py: 'scipy.cluster.hierarchy (linkage / fcluster)' },

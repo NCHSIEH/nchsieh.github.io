@@ -164,11 +164,18 @@
         'ROC-AUC = ' + f(R.rocAuc, 3) + '｜PR-AUC = ' + f(R.prAuc, 3)
       ]);
 
-      while (steps.length < 10) {
-        add(5, 'ROC vs PR 選擇時機', '正負樣本嚴重不平衡（如罕病篩檢）時，負樣本很多會稀釋 FPR，此時看「PR 曲線」比 ROC 更能誠實反映誤報成本。', [
-          'ROC-AUC = ' + f(R.rocAuc, 3) + '｜PR-AUC = ' + f(R.prAuc, 3)
-        ]);
-      }
+      let bestJ = R.pts[0], bestF1 = R.pts[0];
+      R.pts.forEach(pt => {
+        if ((pt.tpr - pt.fpr) > (bestJ.tpr - bestJ.fpr) + 1e-12) bestJ = pt;
+        if (pt.f1 > bestF1.f1 + 1e-12) bestF1 = pt;
+      });
+      add(5, '最佳門檻：Youden J', '實務挑門檻常用 Youden J = max(TPR − FPR) 找離對角線最遠點，或找最高 F1；篩檢重症怕漏診則會再把門檻往下調。', [
+        '最佳 Youden J 門檻 = ' + f(bestJ.th, 2) + '（J = ' + f(bestJ.tpr - bestJ.fpr, 3) + '）',
+        '最高 F1 門檻 = ' + f(bestF1.th, 2) + '（F1 = ' + f(bestF1.f1, 3) + '）'
+      ]);
+      add(5, 'ROC vs PR 選擇時機', '罕病篩檢（嚴重不平衡）時負樣本會稀釋 FPR，看 PR 曲線比 ROC 更誠實；註：sklearn 的 AP 用階梯右端點，與梯形 PR-AUC 略有微差。', [
+        'ROC-AUC = ' + f(R.rocAuc, 3) + '｜PR-AUC = ' + f(R.prAuc, 3) + '｜機率準度看 B19'
+      ]);
       return steps;
     },
 

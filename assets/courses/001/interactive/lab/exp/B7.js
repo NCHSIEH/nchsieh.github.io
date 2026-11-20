@@ -237,11 +237,12 @@
         '投票：是 ' + R.qYes + ' 票 vs 否 ' + (R.nTrees - R.qYes) + ' 票 → 預測「' + (R.qPred ? '再入院' : '不會再入院') + '」'
       ]);
 
-      while (steps.length < 10) {
-        add(7, '為什麼要隨機挑特徵', '如果每棵樹都看全部特徵，所有樹會長得太像；限制 mtry 讓弱一點的特徵也有機會上場，降低變異度。', [
-          '目前 mtry = ' + R.mtry + ' / ' + FEATS.length + '，樹數 = ' + R.nTrees
-        ]);
-      }
+      add(7, '為什麼要隨機挑特徵', '如果每棵樹都看全部特徵，所有樹會長得太像；限制 mtry 讓弱一點的特徵也有機會上場，降低樹之間的相關性。', [
+        '目前 mtry = ' + R.mtry + ' / ' + FEATS.length + '，樹數 = ' + R.nTrees
+      ]);
+      add(7, 'Bagging vs 隨機森林', '純 Bagging 只做 Bootstrap 抽樣（mtry = 全特徵）；隨機森林多了「節點隨機選特徵」，大幅降低集成變異度！', [
+        '實務預設：分類 mtry ≈ √p，迴歸 mtry ≈ p/3'
+      ]);
       return steps;
     },
 

@@ -114,6 +114,7 @@
       B16: '將分類門檻由 1.00 逐步放寬至 0.00，即時追蹤 TP/FP/TN/FN 消長並連成 ROC 曲線與 Precision–Recall (PR) 曲線，對比 ROC-AUC 與不平衡資料上更誠實的 PR-AUC。',
       B17: '將單純貝氏推廣至連續數值特徵（Gaussian Naive Bayes），並與費雪線性判別分析 (Fisher LDA) 同場對照：觀察各特徵獨立變異的二次曲線邊界，與共用共變異數矩陣 Σ 推導出的最佳直線判別邊界。',
       B18: '面對「正常／糖尿病前期／確診糖尿病」三類別分期任務，比較將問題拆成 3 個獨立二元分類器的 One-vs-Rest (一對多) 策略，與透過 Softmax 交叉熵聯合最佳化三類別邊界的多元邏輯迴歸。',
+      B19: '透過可靠性曲線 (Reliability Diagram)、Brier 分數與預期校準誤差 (ECE) 診斷過度自信模型，對照 Platt Scaling (Sigmoid) 與保序迴歸 (Isotonic Regression) 如何在不傷 ROC-AUC 的前提下讓預測機率回歸真實發病率。',
       C1: '在標準化 BMI × 血糖空間反覆執行「指派最近中心」與「移動中心至成員平均」，透過中心輻射連線與勢力範圍底色觀察 SSE 單調下降；切換 9 組起始中心驗證 K-Means 易受初值影響而落入局部最佳解。',
       C9: '對 K=2..5 執行 K-Means，逐點計算同群平均距離 a(i) 與最近外群距離 b(i) 得出輪廓係數 (Silhouette Score)，並同場繪出 SSE 手肘曲線，解答「分幾群最合適」的實務選擇題。',
       C10: '在含極端高血糖離群點 #12 的資料上以 PAM (Partitioning Around Medoids) 挑選真實病人當群中心，並與 K-Means 幾何平均中心（星號）同場對照，直觀見證 Medoid 抗離群值不被拉偏的優勢。',
@@ -401,6 +402,13 @@
         'curve:roc': '【ROC 曲線 (Receiver Operating Characteristic)】\n座標：FPR (X軸) vs TPR (Y軸)，越靠近左上角越好（AUC → 1）。',
         'curve:pr': '【PR 曲線 (Precision–Recall Curve)】\n座標：Recall (X軸) vs Precision (Y軸)，在正負極度不平衡時比 ROC 更能反映誤報代價。',
         threshold: '【判定門檻 (Threshold)】\n用法：拖曳門檻（0.05–0.95），即時觀看曲線上的紅星移動與 TP/FP/TN/FN 消長。'
+      },
+      B19: {
+        method: '【機率校準方法 (Probability Calibration Method)】\n比較未校準原始機率與兩種主流後處理校準器對 Brier Score 與 ECE 的改善效果。',
+        'method:raw': '【未校準原始機率 (Uncalibrated Raw)】\n現象：Naive Bayes、SVM 與部分 Boosting 常呈現過度自信 S 型失真（高機率高估、低機率低估）。',
+        'method:platt': '【Platt Scaling (Sigmoid 校準)】\n原理：在獨立驗證集上對 logit(p) 擬合 1D Logistic 迴歸；僅 2 個參數，適合樣本數較少（<1000 筆）且保留 100% ROC-AUC。',
+        'method:iso': '【保序迴歸 (Isotonic Regression / PAVA)】\n原理：非參數單調遞增階梯擬合，不假設 S 型形狀，適合大樣本且非對稱機率失真（小樣本易過擬合）。',
+        bins: '【可靠性分箱數 (Calibration Bins)】\n用法：將 0–1 機率切成 3–5 個等寬區間繪製可靠性曲線並計算 ECE。'
       },
       C1: {
         k: '【分群數 K (Number of Clusters)】\n用法：預先指定要切成幾群（2–5）。隨著 K 增加，群內平方誤差和（SSE / Inertia）必單調下降；實務常搭配手肘法（Elbow Method）選折衷點。',

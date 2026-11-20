@@ -218,7 +218,7 @@
         'Logistic 準確率 = ' + LAB.pct(R.accLog, 1)
       ]);
       st.s2 = true;
-      add(1, '基模型 2：決策樹樁', '單層決策樹在 ' + R.bestSt.ft + ' ≤ ' + f(R.bestSt.th, 1) + ' 切一刀。', [
+      add(1, '基模型 2：決策樹樁', '單層決策樹在 ' + (R.bestSt.ft === 'bmi' ? 'BMI' : '空腹血糖') + ' ≤ ' + f(R.bestSt.th, 1) + ' 切一刀。', [
         '決策樹準確率 = ' + LAB.pct(R.accTree, 1)
       ]);
       st.s3 = true;
@@ -245,11 +245,18 @@
         '單模最高 = ' + LAB.pct(Math.max(R.accLog, R.accTree, R.accKnn), 1) + '｜集成 = ' + LAB.pct(isStack ? R.accStack : (p.soft ? R.accSoft : R.accHard), 1)
       ]);
 
-      while (steps.length < 10) {
-        add(6, '實務提醒', 'Stacking 實務上一定要用交叉驗證（Out-of-Fold）產生第一層預測，才不會讓 Meta-Learner 過度相信訓練集過擬合的基模型。', [
-          'Hard Voting = ' + LAB.pct(R.accHard, 1) + '｜Soft = ' + LAB.pct(R.accSoft, 1) + '｜Stack = ' + LAB.pct(R.accStack, 1)
-        ]);
-      }
+      add(6, '基模型多樣性是關鍵', '集成之所以變準，是因為三個模型幾何假設不同（斜線、軸切、局部鄰居），犯錯位置互補；把三個相同模型投票毫無幫助！', [
+        'Logistic ' + LAB.pct(R.accLog, 0) + '｜樹樁 ' + LAB.pct(R.accTree, 0) + '｜3-NN ' + LAB.pct(R.accKnn, 0)
+      ]);
+      add(6, '硬投票 vs 軟機率投票', '硬投票只看 0/1 票數；軟投票平均預測機率，能保留「高信心 vs 勉強過半」的細微差異，實務常勝過硬投票。', [
+        'Hard Voting = ' + LAB.pct(R.accHard, 1) + '｜Soft Voting = ' + LAB.pct(R.accSoft, 1)
+      ]);
+      add(6, '防過擬合：折外預測', '注意：本示範在訓練集直接算 3-NN 會含自身點而偏高！實務 Stacking 必用 K-Fold 折外預測（Out-of-Fold）訓練 Meta-Learner。', [
+        'Stacking Meta 權重 w = (' + R.mw.map(v => f(v, 2)).join(', ') + ')'
+      ]);
+      add(6, '三種集成策略總結', 'Bagging（B7）用同質多樹降變異；Boosting（B8/B9）串行修殘差；Voting/Stacking 則結合異質強模型互補！', [
+        'Hard ' + LAB.pct(R.accHard, 1) + '｜Soft ' + LAB.pct(R.accSoft, 1) + '｜Stack ' + LAB.pct(R.accStack, 1)
+      ]);
       return steps;
     },
 

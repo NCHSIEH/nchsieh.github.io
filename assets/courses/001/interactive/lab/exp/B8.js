@@ -209,16 +209,21 @@
         '集成訓練準確率 = ' + LAB.pct(R.acc, 1) + '（答對 ' + rows.filter((r, i) => R.finalPreds[i] === r.dm).length + ' / ' + n + ' 人）'
       ]);
 
-      while (steps.length < 10) {
-        add(8, '權重演化與極限', '透過逐輪把難分類的病人放大權重，弱分類器（單一切點樹樁）合起來就能畫出非線性的階梯邊界。', [
-          '訓練輪數 T = ' + R.history.length + '，總話語權 Σ αₜ = ' + f(M.sum(R.history.map(h => h.alpha)), 2)
-        ]);
-        if (steps.length < 10) {
-          add(8, '離散 AdaBoost 註記', '本實驗採用教科書離散 AdaBoost（α = ½ ln((1−ε)/ε)），與舊版 SAMME.R 機率版本公式不同。', [
-            '最終分數正負號即為預測類別'
-          ]);
-        }
-      }
+      add(8, '話語權 α 的數學直覺', '當樹樁錯誤率 ε 越低，α = ½ ln((1−ε)/ε) 越大；若 ε = 0.5（等同亂猜）則 α = 0，完全不給投票權！', [
+        '訓練輪數 T = ' + R.history.length + '，總話語權 Σ αₜ = ' + f(M.sum(R.history.map(h => h.alpha)), 2)
+      ]);
+      add(8, '權重演化與非線性邊界', '透過逐輪把難分類的病人放大權重，弱分類器（單一切點樹樁）合起來就能畫出非線性的階梯邊界。', [
+        '第 1 輪 ε = ' + f(R.history[0].eps, 3) + ' → 最終準確率 ' + LAB.pct(R.acc, 1)
+      ]);
+      add(8, '離散 AdaBoost 註記', '本實驗採用教科書離散 AdaBoost（α = ½ ln((1−ε)/ε)），與舊版 SAMME.R 機率版本公式不同。', [
+        '最終分數 Σ αₜ hₜ(x) 正負號即為預測類別'
+      ]);
+      add(8, '對標記雜訊極為敏感', '若資料裡有「貼錯標籤的離群個案」，AdaBoost 會反覆放大它的權重、迫使模型去硬背雜訊，建模前需先清離群值（A7）。', [
+        '雜訊多的資料常改用隨機森林（B7）或較小學習率的 GBDT（B9）'
+      ]);
+      add(8, 'AdaBoost vs 隨機森林', '隨機森林（Bagging）平行建深樹以降低變異度；AdaBoost（Boosting）串行建淺樹樁以降低偏差！', [
+        'Bagging 降 Variance｜Boosting 降 Bias'
+      ]);
       return steps;
     },
 
