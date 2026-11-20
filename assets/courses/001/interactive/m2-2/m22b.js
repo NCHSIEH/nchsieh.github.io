@@ -103,7 +103,8 @@
     [.6, .7, .8, .9, 1].forEach(t => { U.s('line', { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: 'grid' }, sv); U.s('text', { x: m.l - 6, y: y(t) + 4, 'text-anchor': 'end', text: t.toFixed(1) }, sv); }); D.forEach(d => U.s('text', { x: x(Math.log10(d[0])), y: H - m.b + 16, 'text-anchor': 'middle', text: d[0].toLocaleString() }, sv)); U.s('text', { x: (m.l + W - m.r) / 2, y: H - 3, 'text-anchor': 'middle', text: '訓練樣本數（對數軸）', style: 'font-size:12px;fill:#5d6774' }, sv);
     U.s('polygon', { points: [...D.map(d => `${x(Math.log10(d[0]))},${y(d[1])}`), ...D.slice().reverse().map(d => `${x(Math.log10(d[0]))},${y(d[2])}`)].join(' '), fill: C.bad, 'fill-opacity': .1 }, sv);
     [[1, C.gray, '訓練 AUC'], [2, C.blue, '交叉驗證 AUC']].forEach(([k, c]) => { U.s('polyline', { points: D.map(d => `${x(Math.log10(d[0]))},${y(d[k])}`).join(' '), fill: 'none', stroke: c, 'stroke-width': 2.5 }, sv); D.forEach(d => U.s('circle', { cx: x(Math.log10(d[0])), cy: y(d[k]), r: 4, fill: c }, sv)); });
-    $('#w-lc').append(h('div', { class: 'grid2', style: { alignItems: 'center' } }, box, h('div', null, h('div', { class: 'concept' }, h('div', null, h('b', null, '兩線仍在靠攏'), '更多資料仍有幫助 → 繼續收資料'), h('div', null, h('b', null, '已收斂但都低'), '資料夠了、特徵不夠 → 做特徵工程'), h('div', null, h('b', null, '差距持續巨大'), '嚴重過擬合 → 簡化模型或正則化')), h('p', { class: 'ai' }, '本例：差距從 0.27 收斂到 0.03，5,000 → 12,000 筆只多 0.03，再收資料的報酬已遞減。「再收一年資料值得嗎？」用這張圖回答。AI Studio：Loop + Sample。'))));
+    const lcLeg = h('div', { class: 'legend', style: { marginTop: '4px' } }, h('span', null, h('i', { style: { background: C.gray } }), '訓練 AUC'), h('span', null, h('i', { style: { background: C.blue } }), '交叉驗證 AUC'));
+    $('#w-lc').append(h('div', { class: 'grid2', style: { alignItems: 'center' } }, h('div', null, box, lcLeg), h('div', null, h('div', { class: 'concept' }, h('div', null, h('b', null, '兩線仍在靠攏'), '更多資料仍有幫助 → 繼續收資料'), h('div', null, h('b', null, '已收斂但都低'), '資料夠了、特徵不夠 → 做特徵工程'), h('div', null, h('b', null, '差距持續巨大'), '嚴重過擬合 → 簡化模型或正則化')), h('p', { class: 'ai' }, '本例：差距從 0.27 收斂到 0.03，5,000 → 12,000 筆只多 0.03，再收資料的報酬已遞減。「再收一年資料值得嗎？」用這張圖回答。AI Studio：Loop + Sample。'))));
   })();
 
   // ================= P11 Gini =================
@@ -112,7 +113,7 @@
     function draw() { out.innerHTML = ''; const g0 = g(st.k, st.n);
       const cand = [['年齡 ≥ 65', st.an, st.ak], ['糖尿病 = 有', st.bn, st.bk]].map(([nm, ln, lk]) => { const rn = st.n - ln, rk = st.k - lk, gl = g(lk, ln), gr = g(rk, rn), w = (ln * gl + rn * gr) / st.n; return { nm, ln, lk, rn, rk, gl, gr, w, gain: g0 - w }; });
       const win = cand[0].gain >= cand[1].gain ? 0 : 1;
-      const num = (k, a, b) => { const i = h('input', { type: 'number', value: st[k], min: a, max: b, style: { width: '64px' } }); i.onchange = () => { const v = Math.round(+i.value); if (!isNaN(v)) { st[k] = Math.max(a, Math.min(b, v)); draw(); } }; return i; };
+      const num = (k, a, b) => { const i = h('input', { type: 'number', value: st[k], min: a, max: b, style: { width: '64px' } }); i.onchange = () => { const v = Math.round(+i.value); if (!isNaN(v)) { st[k] = Math.max(a, Math.min(b, v)); st.k = Math.min(st.k, st.n); st.an = Math.max(1, Math.min(st.an, st.n - 1)); st.bn = Math.max(1, Math.min(st.bn, st.n - 1)); st.ak = Math.min(st.ak, st.k, st.an); st.bk = Math.min(st.bk, st.k, st.bn); draw(); } }; return i; };
       const t = h('table', { class: 'dt' }, h('tr', null, ['候選切點', '左：人數', '左：再入院', '右（自動）', '左 Gini', '右 Gini', '加權 Gini', '增益'].map(c => h('th', null, c))), cand.map((c, i) => h('tr', null, h('td', { class: i === win ? 'hl' : '', style: { fontWeight: 600 } }, c.nm + (i === win ? ' ★' : '')), h('td', null, num(i ? 'bn' : 'an', 1, st.n - 1)), h('td', null, num(i ? 'bk' : 'ak', 0, Math.min(st.k, i ? st.bn : st.an))), h('td', { class: 'num' }, `${c.rk}/${c.rn}`), h('td', { class: 'num' }, c.gl.toFixed(4)), h('td', { class: 'num' }, c.gr.toFixed(4)), h('td', { class: 'num' }, c.w.toFixed(4)), h('td', { class: 'num ' + (i === win ? 'ok' : '') }, c.gain.toFixed(4)))));
       out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, h('label', { class: 'ctl' }, '母節點人數', num('n', 10, 1000)), h('label', { class: 'ctl' }, '母節點再入院', num('k', 0, st.n)), h('span', { class: 'tag' }, `母節點 Gini = 1 − (${(st.k / st.n).toFixed(2)}² + ${(1 - st.k / st.n).toFixed(2)}²) = ${g0.toFixed(4)}`), h('button', { class: 'btn sm', onclick: () => { Object.assign(st, { n: 100, k: 30, an: 50, ak: 8, bn: 60, bk: 12 }); draw(); } }, '還原講義數字')),
         h('div', { class: 'tscroll' }, t), h('div', { class: 'note', style: { fontSize: '14px' } }, `第一刀切「${cand[win].nm}」，增益 ${cand[win].gain.toFixed(4)} vs ${cand[1 - win].gain.toFixed(4)}。Gini＝隨機抽兩筆、類別不同的機率（0 全純、0.5 最亂）。演算法對每個特徵×每個切點都算一次增益，挑最大的切下去再遞迴。差距很小時換一批資料就可能翻盤——這就是單棵樹不穩定的根源。若第一刀切的是「病歷號 > 5000」，該做的是查洩漏。`)); }
@@ -129,8 +130,12 @@
       const c2 = h('div'); const W = 340, H = 240, mg = { l: 40, r: 12, t: 12, b: 34 }, sv = U.svgBox(c2, W, H), x = U.scale(0, curve.length - 1, mg.l, W - mg.r), y = U.scale(.6, 1, H - mg.b, mg.t);
       [.6, .7, .8, .9, 1].forEach(v => { U.s('line', { x1: mg.l, x2: W - mg.r, y1: y(v), y2: y(v), class: 'grid' }, sv); U.s('text', { x: mg.l - 6, y: y(v) + 4, 'text-anchor': 'end', text: v.toFixed(1) }, sv); }); curve.forEach((c, i) => U.s('text', { x: x(i), y: H - mg.b + 16, 'text-anchor': 'middle', text: c.d }, sv)); U.s('text', { x: (mg.l + W - mg.r) / 2, y: H - 3, 'text-anchor': 'middle', text: 'maximal depth', style: 'font-size:12px;fill:#5d6774' }, sv);
       [['tr', C.gray], ['te', C.blue]].forEach(([k, c]) => U.s('polyline', { points: curve.map((q, i) => `${x(i)},${y(q[k])}`).join(' '), fill: 'none', stroke: c, 'stroke-width': 2.5 }, sv));
+      let di = curve.findIndex(q => q.d >= d); if (di < 0) di = curve.length - 1;
+      const dx = di > 0 && curve[di].d !== d ? (di - 1) + (d - curve[di - 1].d) / (curve[di].d - curve[di - 1].d) : di;
+      U.s('line', { x1: x(dx), x2: x(dx), y1: mg.t, y2: H - mg.b, stroke: C.amber, 'stroke-dasharray': '4 3', 'stroke-width': 2 }, sv);
+      U.s('text', { x: Math.min(W - mg.r - 22, Math.max(mg.l + 22, x(dx))), y: mg.t + 10, 'text-anchor': 'middle', text: `d=${d}`, style: 'fill:#b45309;font-weight:700;font-size:11px' }, sv);
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, slider('樹的最大深度', 1, 10, 1, () => d, v => d = v, draw)),
-        h('div', { class: 'grid2' }, cap(m, 400), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '訓練正確率'), h('div', { class: 'v' }, tr.toFixed(2))), h('div', null, h('div', { class: 'k' }, '測試正確率'), h('div', { class: 'v' }, te.toFixed(2)))), cap(c2, 360),
+        h('div', { class: 'grid2' }, cap(m, 400), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '訓練正確率'), h('div', { class: 'v' }, tr.toFixed(2))), h('div', null, h('div', { class: 'k' }, '測試正確率'), h('div', { class: 'v' }, te.toFixed(2)))), cap(c2, 360), h('div', { class: 'legend' }, h('span', null, h('i', { style: { background: C.gray } }), '訓練'), h('span', null, h('i', { style: { background: C.blue } }), '測試')),
           h('div', { class: 'note ' + (d >= 7 ? 'warn' : ''), style: { fontSize: '14px' } }, '邊界是軸平行的階梯——每一刀只問一個特徵，斜線要切很多刀。第四次見到這條曲線：多項式次數、k、λ、depth，名字不同，物理相同。醫療小資料起手：depth 4–6、minimal leaf size ≥ 20、開啟剪枝；用 Optimize Parameters 包住 CV 掃描。')))); }
     $('#w-depth').append(out); draw();
   })();
@@ -198,8 +203,9 @@
     function draw() { out.innerHTML = '';
       const t = h('table', { class: 'dt' }, h('tr', null, h('th', null, '步驟'), K.map(k => h('th', null, k[1])), h('th', null, 'Recall 變化'), h('th', null, '觀察')), R.map((rn, i) => { const row = st[i] || {}, prev = i ? (st[i - 1] || {}).rec : null, d = prev != null && row.rec != null && prev !== '' && row.rec !== '' ? row.rec - prev : null;
         return h('tr', null, h('td', { style: { fontWeight: 600 } }, rn), K.map(([k]) => { const inp = h('input', { type: 'number', step: 'any', value: row[k] ?? '', style: { width: '70px' } }); inp.onchange = () => { st[i] = { ...(st[i] || {}), [k]: inp.value === '' ? '' : +inp.value }; Store.set('m22:loan', st); draw(); }; return h('td', null, inp); }), h('td', { class: 'num ' + (d == null ? '' : d > 0 ? 'ok' : 'hl') }, d == null ? '—' : (d > 0 ? '+' : '') + d.toFixed(3)), h('td', null, (() => { const i2 = h('input', { type: 'text', value: row.note || '', style: { width: '200px' } }); i2.onchange = () => { st[i] = { ...(st[i] || {}), note: i2.value }; Store.set('m22:loan', st); }; return i2; })())); }));
-      const dl = h('button', { class: 'btn primary sm' }, '下載 CSV'); dl.onclick = () => { const csv = '﻿步驟,Accuracy,Precision,Recall,AUC,觀察\n' + R.map((rn, i) => { const r = st[i] || {}; return [rn, r.acc ?? '', r.prec ?? '', r.rec ?? '', r.auc ?? '', `"${(r.note || '').replace(/"/g, '""')}"`].join(','); }).join('\n'); const a = h('a', { href: URL.createObjectURL(new Blob([csv], { type: 'text/csv' })), download: 'M2-2_LoanRisk六步表.csv' }); document.body.append(a); a.click(); a.remove(); };
-      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, dl), h('div', { class: 'tscroll' }, t), h('p', { class: 'ai' }, '檔案：範例/ML (AI Studio)/M2. 監督式學習/4.3.3 Loan Risk/ Ref 5.1–5.6。5.5 的 CV 分數通常略低——這才是誠實的估計；5.6 的最佳門檻不一定是 0.5。另有 HR Churn（特徵選擇與 Lift Chart）與自動模型選擇八步曲。')); }
+      const dl = h('button', { class: 'btn primary sm' }, '下載 CSV'); dl.onclick = () => { const csv = '﻿步驟,Accuracy,Precision,Recall,AUC,觀察\n' + R.map((rn, i) => { const r = st[i] || {}; return [rn, r.acc ?? '', r.prec ?? '', r.rec ?? '', r.auc ?? '', `"${(r.note || '').replace(/"/g, '""')}"`].join(','); }).join('\n'); const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); const a = h('a', { href: url, download: 'M2-2_LoanRisk六步表.csv' }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+      const cl = h('button', { class: 'btn sm' }, '清空'); cl.onclick = () => { Object.keys(st).forEach(k => delete st[k]); Store.set('m22:loan', st); draw(); };
+      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, dl, cl), h('div', { class: 'tscroll' }, t), h('p', { class: 'ai' }, '檔案：範例/ML (AI Studio)/M2. 監督式學習/4.3.3 Loan Risk/ Ref 5.1–5.6。5.5 的 CV 分數通常略低——這才是誠實的估計；5.6 的最佳門檻不一定是 0.5。另有 HR Churn（特徵選擇與 Lift Chart）與自動模型選擇八步曲。')); }
     $('#w-loan').append(out); draw();
   })();
   (function () {
@@ -211,20 +217,20 @@
   })();
   U.flashcards('#w-cards', [['二元分類', 'Binary Classification', '目標只有兩種值'], ['決策門檻', 'Decision Threshold', '機率高於此值判為陽性；0.5 只是預設'], ['混淆矩陣', 'Confusion Matrix', 'TP、FP、FN、TN 四格'], ['敏感度', 'Sensitivity / Recall', '真的有病的，抓到幾成'], ['特異度', 'Specificity', '沒病的，正確排除幾成'], ['陽性預測值', 'PPV / Precision', '說有病的，幾成真的有'], ['陰性預測值', 'NPV', '說沒病的，幾成真的沒有'], ['盛行率', 'Prevalence', '陽性在母體中的比例；左右 PPV'], ['ROC 曲線', 'ROC Curve', 'FPR 對 TPR，掃過所有門檻'], ['曲線下面積', 'AUC', '隨機一正一負，正例分數較高的機率'], ['PR 曲線', 'Precision-Recall Curve', '不看 TN，不平衡時更誠實'], ['代價比', 'Cost Ratio', '漏一個真陽性＝幾個偽陽性的成本'], ['校準', 'Calibration', '說 70% 就真的 70% 發生'], ['勝算比', 'Odds Ratio', 'e^β；勝算的倍數'], ['類別不平衡', 'Imbalanced Data', '少數類遠少於多數類'], ['過取樣／SMOTE', 'Oversampling / SMOTE', '複製或內插少數類；只在訓練集做'], ['類別權重', 'Class Weight', '加重少數類的錯誤代價'], ['分層切分', 'Stratified Split', '每份維持類別比例'], ['巢狀交叉驗證', 'Nested CV', '內層選參數、外層估效能'], ['學習曲線', 'Learning Curve', '隨樣本數增加的訓練與驗證分數'], ['Gini 不純度', 'Gini Impurity', '隨機抽兩筆類別不同的機率'], ['剪枝', 'Pruning', '限制樹的成長以避免過擬合'], ['特徵重要性', 'Feature Importance', '不純度下降總和；ID 欄位排前面是洩漏警訊'], ['隨機森林', 'Random Forest', 'Bagging＋隨機特徵的樹群投票'], ['梯度提升', 'Gradient Boosting', '序列地修正前面的殘差'], ['袋外驗證', 'Out-of-Bag (OOB)', '用沒抽到該筆的樹驗證它']]);
   U.finalQuiz('#w-final', [
-    ['再入院率 6% 的資料，「全判不會」的 Accuracy 是？', ['0.06', '0.50', '0.94', '1.00'], 2, '所以不平衡時不能用 Accuracy 當主指標。'],
-    ['k-NN 忘了正規化，會發生什麼？', ['跑不動', '距離被值域最大的特徵獨占', '變成 Logistic', 'k 自動變大'], 1, '其他特徵形同虛設。'],
-    ['Logistic 係數 β = 0.693，勝算比約為？', ['0.693', '1.0', '2.0', '6.93'], 2, 'e^0.693 ≈ 2：勝算為 2 倍。'],
-    ['同一模型從醫院（盛行率 10%）搬到社區（1%），哪個指標會大幅下降？', ['敏感度', '特異度', 'PPV', 'AUC'], 2, '健康人變多，誤報的絕對數碾壓真陽性。'],
-    ['盛行率 3% 的問題要比較模型，優先看？', ['Accuracy', 'ROC-AUC 即可', 'PR 曲線／PR-AUC', 'R²'], 2, 'PR 不看 TN，不被龐大負類稀釋。'],
-    ['漏一個再入院的代價是無效追蹤的 20 倍，門檻應該？', ['維持 0.5', '往高調', '往低調', '設成 1'], 2, '代價比越大，越該用誤報買回漏網之魚。'],
-    ['下列哪一種做法會讓 Precision 虛高？', ['只在訓練折做 SMOTE', '測試集也做 SMOTE', '用類別權重', '調門檻'], 1, '測試集陽性比例被人工拉高。'],
-    ['5-fold CV 得到 AUC 0.82 ± 0.09，±0.09 代表？', ['模型很穩', '模型對切分很敏感', 'AUC 被高估 0.09', '應該用 10 折'], 1, '部署後的表現可能落在很寬的範圍。'],
-    ['特徵重要性第一名是「病歷號」，最可能是？', ['病歷號真的很重要', '資料洩漏（隱含時間順序）', 'Gini 算錯', '樹太淺'], 1, '刪掉重跑；排序大變代表原模型是假的。'],
-    ['五個一模一樣的模型投票，正確率會？', ['大幅提升', '不會提升', '下降', '變成 100%'], 1, '集成的關鍵是成員錯得不一樣。'],
+    ['再入院率 6% 的資料，「全判不會」的 Accuracy 是？', ['0.06', '0.50', '0.94', '1.00'], 2, '所以不平衡時不能用 Accuracy 當主指標。', 'p06'],
+    ['k-NN 忘了正規化，會發生什麼？', ['跑不動', '距離被值域最大的特徵獨占', '變成 Logistic', 'k 自動變大'], 1, '其他特徵形同虛設。', 'p03'],
+    ['Logistic 係數 β = 0.693，勝算比約為？', ['0.693', '1.0', '2.0', '6.93'], 2, 'e^0.693 ≈ 2：勝算為 2 倍。', 'p04'],
+    ['同一模型從醫院（盛行率 10%）搬到社區（1%），哪個指標會大幅下降？', ['敏感度', '特異度', 'PPV', 'AUC'], 2, '健康人變多，誤報的絕對數碾壓真陽性。', 'p07'],
+    ['盛行率 3% 的問題要比較模型，優先看？', ['Accuracy', 'ROC-AUC 即可', 'PR 曲線／PR-AUC', 'R²'], 2, 'PR 不看 TN，不被龐大負類稀釋。', 'p08'],
+    ['漏一個再入院的代價是無效追蹤的 20 倍，門檻應該？', ['維持 0.5', '往高調', '往低調', '設成 1'], 2, '代價比越大，越該用誤報買回漏網之魚。', 'p08'],
+    ['下列哪一種做法會讓 Precision 虛高？', ['只在訓練折做 SMOTE', '測試集也做 SMOTE', '用類別權重', '調門檻'], 1, '測試集陽性比例被人工拉高。', 'p09'],
+    ['5-fold CV 得到 AUC 0.82 ± 0.09，±0.09 代表？', ['模型很穩', '模型對切分很敏感', 'AUC 被高估 0.09', '應該用 10 折'], 1, '部署後的表現可能落在很寬的範圍。', 'p10'],
+    ['特徵重要性第一名是「病歷號」，最可能是？', ['病歷號真的很重要', '資料洩漏（隱含時間順序）', 'Gini 算錯', '樹太淺'], 1, '刪掉重跑；排序大變代表原模型是假的。', 'p11'],
+    ['五個一模一樣的模型投票，正確率會？', ['大幅提升', '不會提升', '下降', '變成 100%'], 1, '集成的關鍵是成員錯得不一樣。', 'p12'],
   ]);
   (function () {
     const R = [['先定義目標', '時間窗、事件、分母、預測時點——寫進報告第一節。', 'p02'], ['混淆矩陣家族', 'Accuracy 可能輸給什麼都不做；看 Recall、Precision。', 'p06'], ['盛行率決定 PPV', '換場域就要重估。', 'p07'], ['門檻跟著代價比走', '0.5 只是軟體預設。', 'p08'], ['不平衡三鐵則', '取樣只在訓練折、測試集原分布、不用 Accuracy。', 'p09'], ['解釋與預測可以分開', 'Logistic／樹給解釋，森林／提升拚效能。', 'p13']];
     const g = h('div', { class: 'grid3' }); R.forEach(([t, d, id], i) => g.append(h('a', { href: '#' + id, style: { textDecoration: 'none', color: 'inherit', border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff', display: 'block' } }, h('div', { class: 'mono', style: { color: 'var(--accent)', fontWeight: 700 } }, i + 1), h('b', null, t), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, d))));
-    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), 'M3 非監督式學習：分群與降維。', h('a', { href: '../' }, '回到課程首頁 →')));
+    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), '第 6 週 M3 非監督式學習：分群與降維。', h('a', { href: '../m3/' }, '前往 M3 互動版 →')));
   })();
 })();

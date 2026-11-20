@@ -129,12 +129,14 @@
       out.innerHTML = '';
       const chips = h('div', { style: { display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' } });
       Object.entries(MODELS).forEach(([k, m]) => { const b = h('button', { class: 'btn sm' + (on.has(k) ? ' on' : ''), style: on.has(k) ? { background: m.color, borderColor: m.color } : {} }, (on.has(k) ? '✓ ' : '＋ ') + m.name); b.disabled = busy; b.onclick = () => { on.has(k) ? on.delete(k) : on.add(k); run(); }; chips.append(b); });
+      const bAll = h('button', { class: 'btn sm', disabled: busy }, '一次比較全部 4 個'); bAll.onclick = () => { Object.keys(MODELS).forEach(k => on.add(k)); run(); }; chips.append(bAll);
       out.append(h('div', { class: 'row', style: { gap: '8px', marginBottom: '4px' } }, h('span', { style: { fontSize: '14px', color: 'var(--muted)' } }, '選擇要比較的模型（在你的瀏覽器裡真的訓練）：')), chips);
       if (busy) { out.append(h('div', { class: 'note' }, '⏳ ' + msg)); }
       const ks = [...on].filter(k => res[k]);
       const g = h('div', { class: 'grid2', style: { gap: '18px', alignItems: 'start' } });
       const rc = h('div'); rc.append(h('div', { style: { fontSize: '13px', color: 'var(--muted)', marginBottom: '4px' } }, '測試集 ROC 曲線（越靠左上越好）'));
       U.lc(rc, [{ pts: [[0, 0], [1, 1]], color: C.gray, w: 1.2, dash: '4 3' }, ...ks.map(k => ({ pts: res[k].pts, color: MODELS[k].color, w: 2.4 }))], { w: 440, h: 320, xmin: 0, xmax: 1, ymin: 0, ymax: 1, xl: '1 − 特異度（誤報率）', yl: '敏感度（Recall）' });
+      if (ks.length) rc.append(h('div', { class: 'legend', style: { marginTop: '4px' } }, ...ks.map(k => h('span', null, h('i', { style: { background: MODELS[k].color } }), MODELS[k].name))));
       const tb = h('table', { class: 'dt', style: { fontSize: '13.5px' } }, h('tr', null, ['模型', 'AUC', '前 20% 抓到', '訓練＋預測時間', '能不能解釋'].map(t => h('th', null, t))));
       const ex = { lr: '係數＝勝算比', tree: '印出來就看得懂', knn: '只能說「像誰」', rf: '要靠特徵重要性' };
       const best = ks.length ? Math.max(...ks.map(k => res[k].auc)) : 0;

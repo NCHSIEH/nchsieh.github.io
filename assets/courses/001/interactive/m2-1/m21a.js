@@ -29,7 +29,7 @@
   // ================= P01 工作流程 =================
   (function () {
     const F = [['EDA', '看目標分布、特徵關係'], ['準備資料', '切分、轉換、特徵工程'], ['擬合模型', '從簡單開始，逐步加入變數'], ['檢查假設', '殘差圖、共線性 ★ 正式的一步'], ['評估與調整', 'MAE/RMSE，與基準線比較']];
-    const g = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '8px' } });
+    const g = h('div', { class: 'concept c5', style: { gap: '8px' } });
     F.forEach(([t, d], i) => g.append(h('div', { style: { border: '1px solid ' + (i === 3 ? 'var(--amber)' : 'var(--line)'), borderRadius: '10px', padding: '10px', background: i === 3 ? 'var(--amber-soft)' : '#fff', textAlign: 'center' } }, h('div', { class: 'mono', style: { fontWeight: 700, color: 'var(--accent)', fontSize: '18px' } }, i + 1), h('b', null, t), h('div', { style: { fontSize: '12.5px', color: 'var(--muted)' } }, d))));
     $('#w-flow').append(g, h('p', { class: 'ai' }, '「檢查假設」是迴歸與其他方法最大的差別。迴歸家族：線性（簡單、多元）、非線性形式（多項式、對數、樣條）、正則化（Ridge、Lasso、Elastic Net）、樹與集成（M4）。'));
   })();
@@ -57,8 +57,8 @@
     const D = OLS_D.map(r => r.slice()); let view = 'res'; const out = h('div'); const res = h('div');
     function calc() { res.innerHTML = '';
       const x = D.map(d => d[1]), y = D.map(d => d[2]), mx = S.mean(x), my = S.mean(y);
-      const sxy = S.sum(x.map((v, i) => (v - mx) * (y[i] - my))), sxx = S.sum(x.map(v => (v - mx) ** 2)), b = sxy / sxx, a = my - b * mx;
-      const pr = x.map(v => a + b * v), e = y.map((v, i) => v - pr[i]), sse = S.sum(e.map(v => v * v)), sst = S.sum(y.map(v => (v - my) ** 2)), r2 = 1 - sse / sst;
+      const sxy = S.sum(x.map((v, i) => (v - mx) * (y[i] - my))), sxx = S.sum(x.map(v => (v - mx) ** 2)), b = sxx ? sxy / sxx : 0, a = my - b * mx;
+      const pr = x.map(v => a + b * v), e = y.map((v, i) => v - pr[i]), sse = S.sum(e.map(v => v * v)), sst = S.sum(y.map(v => (v - my) ** 2)), r2 = sst ? 1 - sse / sst : 0;
       const t = h('table', { class: 'dt' }, h('tr', null, ['病人', '年齡 x', '天數 y', 'x−x̄', 'y−ȳ', '(x−x̄)(y−ȳ)', '(x−x̄)²', '預測 ŷ', '殘差 e'].map(c => h('th', null, c))),
         D.map((d, i) => h('tr', null, h('td', null, d[0]), [1, 2].map(j => { const inp = h('input', { type: 'number', value: d[j], style: { width: '58px' } }); inp.onchange = () => { const v = parseFloat(inp.value); if (!isNaN(v)) { D[i][j] = v; calc(); } }; return h('td', null, inp); }), [x[i] - mx, y[i] - my, (x[i] - mx) * (y[i] - my), (x[i] - mx) ** 2, pr[i], e[i]].map((v, k) => h('td', { class: 'num' + (k === 5 ? ' hl' : '') }, (k === 5 && v > 0 ? '+' : '') + fmt(v, k >= 4 ? 2 : 1))))),
         h('tr', null, h('td', { style: { fontWeight: 700 } }, '合計'), h('td', { class: 'num' }, 'x̄=' + fmt(mx, 1)), h('td', { class: 'num' }, 'ȳ=' + fmt(my, 1)), h('td'), h('td'), h('td', { class: 'num', style: { fontWeight: 700 } }, fmt(sxy, 1)), h('td', { class: 'num', style: { fontWeight: 700 } }, fmt(sxx, 1)), h('td'), h('td', { class: 'num' }, 'SSE ' + fmt(sse, 3))));
@@ -174,8 +174,9 @@
       const sdH = S.sd(coefs.map(c => c[0])), sdW = S.sd(coefs.map(c => c[1])), flips = coefs.filter(c => c[0] < 0 || c[1] < 0).length;
       const ch = h('div'); U.scatter(ch, coefs.map(c => ({ x: c[0], y: c[1], c: (c[0] < 0 || c[1] < 0) ? C.bad : C.accent, r: 4 })), { w: 380, h: 300, xmin: -2.5, xmax: 3, ymin: -2.5, ymax: 3, xlabel: '身高係數', ylabel: '體重係數', under: [(sv, x, y) => { U.s('line', { x1: x(0), x2: x(0), y1: y(-2.5), y2: y(3), stroke: C.bad, 'stroke-dasharray': '3 3' }, sv); U.s('line', { x1: x(-2.5), x2: x(3), y1: y(0), y2: y(0), stroke: C.bad, 'stroke-dasharray': '3 3' }, sv); U.s('circle', { cx: x(.4), cy: y(.5), r: 7, fill: 'none', stroke: C.ink, 'stroke-width': 2 }, sv); }] });
       const vif = 1 / (1 - rho * rho);
+      const leg = h('div', { class: 'legend', style: { marginTop: '4px' } }, h('span', null, h('i', { style: { background: C.accent } }), '兩係數皆正'), h('span', null, h('i', { style: { background: C.bad } }), '至少一係數翻負'), h('span', null, '○ 真實係數 (0.4, 0.5)'));
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, slider('身高與體重的相關 r', 0, .99, .01, () => rho, v => rho = v, draw, v => (+v).toFixed(2))),
-        h('div', { class: 'grid2', style: { alignItems: 'center' } }, cap(ch, 400), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, 'VIF ≈ 1/(1−r²)'), h('div', { class: 'v ' + (vif > 10 ? 'bad' : vif > 5 ? '' : 'good') }, fmt(vif, 1))), h('div', null, h('div', { class: 'k' }, '係數標準差（身高／體重）'), h('div', { class: 'v' }, `${sdH.toFixed(2)} / ${sdW.toFixed(2)}`)), h('div', null, h('div', { class: 'k' }, 'R²（全樣本）'), h('div', { class: 'v' }, r2.toFixed(2)))),
+        h('div', { class: 'grid2', style: { alignItems: 'center' } }, h('div', null, cap(ch, 400), leg), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, 'VIF ≈ 1/(1−r²)'), h('div', { class: 'v ' + (vif > 10 ? 'bad' : vif > 5 ? '' : 'good') }, fmt(vif, 1))), h('div', null, h('div', { class: 'k' }, '係數標準差（身高／體重）'), h('div', { class: 'v' }, `${sdH.toFixed(2)} / ${sdW.toFixed(2)}`)), h('div', null, h('div', { class: 'k' }, 'R²（全樣本）'), h('div', { class: 'v' }, r2.toFixed(2)))),
           h('div', { class: 'note ' + (vif > 10 ? 'bad' : ''), style: { fontSize: '14px' } }, `重抽 40 次，有 ${flips} 次至少一個係數翻成負的（紅點）。黑圈是真實係數 (0.4, 0.5)。${vif > 10 ? '資訊高度重疊：係數不穩、正負翻轉，無法回答「哪個比較重要」——但 R² 幾乎沒變。受害的是解釋，不是預測。' : '相關不高時，係數穩定地聚在真實值附近。'}`),
           h('p', { class: 'ai' }, '處理三選一：刪一個、合成新變數（如 BMI）、或改用 Ridge。目的只是預測可以容忍；要解釋因素影響就必須處理。')))); }
     $('#w-coll').append(out); draw();

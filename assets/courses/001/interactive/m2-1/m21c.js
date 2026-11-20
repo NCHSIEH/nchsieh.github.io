@@ -69,8 +69,8 @@
       const ctl = h('div', { class: 'row', style: { gap: '16px', flexWrap: 'wrap', marginBottom: '8px' } },
         U.slider('斜率（每多 1 歲多幾天）', -0.1, 0.3, 0.005, () => b, v => { b = v; trail = []; }, draw, v => (+v).toFixed(3)),
         U.slider('70 歲時的預測天數', 2, 12, 0.05, () => c70, v => { c70 = v; trail = []; }, draw, v => (+v).toFixed(2)));
-      const go = h('button', { class: 'btn primary' }, timer ? '下山中…' : '▶ 讓電腦自己下山（梯度下降）'); go.disabled = !!timer;
-      go.onclick = () => { trail = [[b, c70]]; let k = 0; timer = setInterval(() => {
+      const go = h('button', { class: 'btn primary' }, timer ? '■ 暫停' : '▶ 讓電腦自己下山（梯度下降）');
+      go.onclick = () => { if (timer) { clearInterval(timer); timer = null; draw(); return; } trail = [[b, c70]]; let k = 0; timer = setInterval(() => {
         // 對 (b, c70) 做梯度下降（中心化參數，收斂快）
         const a0 = c70 - b * 70; let gb = 0, gc = 0; D.forEach(d => { const e = (a0 + b * d.x) - d.y; gc += 2 * e; gb += 2 * e * (d.x - 70); });
         c70 -= 0.012 * gc / D.length * 2; b -= 0.00004 * gb / D.length * 10; trail.push([b, c70]); k++;
@@ -118,8 +118,8 @@
       // 欄位開關
       const chips = h('div', { style: { display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' } });
       FEATS.forEach(([k, name]) => { const b = h('button', { class: 'btn sm' + (on.has(k) ? ' on' : '') }, (on.has(k) ? '✓ ' : '＋ ') + name); b.onclick = () => { on.has(k) ? on.delete(k) : on.add(k); path = []; draw(); }; chips.append(b); });
-      const fwd = h('button', { class: 'btn primary sm' }, timer ? '逐步加入中…' : '▶ 逐步加入：每次加最有幫助的一個'); fwd.disabled = !!timer;
-      fwd.onclick = () => { on = new Set(); path = [{ n: 0, rmse: BASE.rmse, add: '（只猜平均）' }]; draw();
+      const fwd = h('button', { class: 'btn primary sm' }, timer ? '■ 停止逐步加入' : '▶ 逐步加入：每次加最有幫助的一個');
+      fwd.onclick = () => { if (timer) { clearInterval(timer); timer = null; draw(); return; } on = new Set(); path = [{ n: 0, rmse: BASE.rmse, add: '（只猜平均）' }]; draw();
         timer = setInterval(() => { const rest = FEATS.map(f => f[0]).filter(k => !on.has(k)); if (!rest.length) { clearInterval(timer); timer = null; draw(); return; }
           let best = null; rest.forEach(k => { const r = fit([...on, k], logY).rmse; if (!best || r < best.r) best = { k, r }; });
           on.add(best.k); path.push({ n: on.size, rmse: best.r, add: FEATS.find(f => f[0] === best.k)[1] }); if (!rest.length || on.size === FEATS.length) { clearInterval(timer); timer = null; } draw(); }, 650); };
@@ -153,7 +153,7 @@
       // 逐步加入的路徑
       if (path.length > 1) {
         const lcb = h('div', { style: { marginTop: '10px' } }); lcb.append(h('div', { style: { fontSize: '13px', color: 'var(--muted)', marginBottom: '4px' } }, '逐步加入欄位時，測試 RMSE 的變化'));
-        U.lc(lcb, [{ pts: path.map(q => [q.n, q.rmse]), color: C.accent, w: 2.4 }], { w: 900, h: 200, xmin: 0, xmax: FEATS.length, ymin: Math.min(...path.map(q => q.rmse)) * .95, ymax: BASE.rmse * 1.02, xt: path.map(q => q.n), xfmt: t => { const q = path.find(z => z.n === t); return q ? (t ? '+' + q.add : '只猜平均') : ''; }, yl: 'RMSE（天）' });
+        U.lc(lcb, [{ pts: path.map(q => [q.n, q.rmse]), color: C.accent, w: 2.4 }], { w: 680, h: 200, xmin: 0, xmax: FEATS.length, ymin: Math.min(...path.map(q => q.rmse)) * .95, ymax: BASE.rmse * 1.02, xt: path.map(q => q.n), xfmt: t => { const q = path.find(z => z.n === t); return q ? (t ? '+' + q.add : '只猜平均') : ''; }, yl: 'RMSE（天）' });
         out.append(lcb);
       }
       // 自動回饋

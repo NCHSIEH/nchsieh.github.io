@@ -90,8 +90,9 @@
       const pf = (hr, age) => b[0] + b[1] * hr + b[2] * age + (inter ? b[3] * hr * age : 0);
       const ch = h('div'); U.scatter(ch, P.map(p => ({ x: p.hr, y: p.y, c: COL[p.age], r: 3 })), { w: 440, h: 280, xmin: 0, xmax: 8, ymin: 0, ymax: 8, xlabel: '每週復健時數', ylabel: '功能恢復分數', over: [(sv, x, y) => [40, 60, 80].forEach(a => U.s('line', { x1: x(0), y1: y(pf(0, a)), x2: x(8), y2: y(pf(8, a)), stroke: COL[a], 'stroke-width': 2.5 }, sv))] });
       const sl = a => inter ? b[1] + b[3] * a : b[1];
+      const leg = h('div', { class: 'legend', style: { marginTop: '4px' } }, h('span', null, h('i', { style: { background: C.good } }), '40 歲'), h('span', null, h('i', { style: { background: C.amber } }), '60 歲'), h('span', null, h('i', { style: { background: C.bad } }), '80 歲'));
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, check('加入交互作用項 時數 × 年齡', () => inter, v => inter = v, draw)),
-        h('div', { class: 'grid2', style: { alignItems: 'center' } }, cap(ch, 460), h('div', null, h('div', { class: 'kpi' }, [40, 60, 80].map(a => h('div', null, h('div', { class: 'k' }, a + ' 歲的復健斜率'), h('div', { class: 'v' }, (sl(a) >= 0 ? '+' : '') + sl(a).toFixed(2))))),
+        h('div', { class: 'grid2', style: { alignItems: 'center' } }, h('div', null, cap(ch, 460), leg), h('div', null, h('div', { class: 'kpi' }, [40, 60, 80].map(a => h('div', null, h('div', { class: 'k' }, a + ' 歲的復健斜率'), h('div', { class: 'v' }, (sl(a) >= 0 ? '+' : '') + sl(a).toFixed(2))))),
           h('div', { class: 'note ' + (inter ? '' : 'warn'), style: { fontSize: '14px' } }, inter ? `dY/d時數 = b₁ + b₃×年齡，b₃ = ${b[3].toFixed(4)}：年齡越大，每小時復健的邊際效果越小。放了交互作用項，主效果必須保留（階層原則）；中心化可緩解 VIF。` : '沒有交互作用項，模型被迫用一條共同斜率代表三群人——三條線平行，對誰都不準。依年齡分組畫散布圖，斜率明顯不同就該加交互作用項。')))); }
     $('#w-inter').append(out); draw();
   })();
@@ -143,8 +144,9 @@
     function draw() { out.innerHTML = ''; const f = v => b[0] + b[1] * v;
       const ch = h('div'); U.scatter(ch, P.map(p => ({ x: p.x, y: p.y, c: C.gray, r: 3 })), { w: 520, h: 300, xmin: 38, xmax: 82, ymin: 2, ymax: 16, xlabel: '年齡', ylabel: '住院天數', under: [(sv, x, y) => { const xs = []; for (let v = 40; v <= 80; v += 1) xs.push(v); U.s('polygon', { points: [...xs.map(v => `${x(v)},${y(f(v) + pi(v))}`), ...xs.slice().reverse().map(v => `${x(v)},${y(f(v) - pi(v))}`)].join(' '), fill: C.amber, 'fill-opacity': .15 }, sv); U.s('polygon', { points: [...xs.map(v => `${x(v)},${y(f(v) + ci(v))}`), ...xs.slice().reverse().map(v => `${x(v)},${y(f(v) - ci(v))}`)].join(' '), fill: C.blue, 'fill-opacity': .35 }, sv); }],
         over: [(sv, x, y) => { U.s('line', { x1: x(40), y1: y(f(40)), x2: x(80), y2: y(f(80)), stroke: C.ink, 'stroke-width': 2 }, sv); U.s('line', { x1: x(age), x2: x(age), y1: y(f(age) - pi(age)), y2: y(f(age) + pi(age)), stroke: C.amber, 'stroke-width': 3 }, sv); U.s('line', { x1: x(age) + 6, x2: x(age) + 6, y1: y(f(age) - ci(age)), y2: y(f(age) + ci(age)), stroke: C.blue, 'stroke-width': 4 }, sv); }] });
+      const leg = h('div', { class: 'legend', style: { marginTop: '4px' } }, h('span', null, h('i', { style: { background: C.blue, opacity: .55 } }), '95% 信賴區間（平均）'), h('span', null, h('i', { style: { background: C.amber, opacity: .4 } }), '95% 預測區間（單一病人）'));
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, slider('年齡', 40, 80, 1, () => age, v => age = v, draw)),
-        h('div', { class: 'grid2', style: { alignItems: 'center' } }, ch, h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '預測值'), h('div', { class: 'v' }, f(age).toFixed(1) + ' 天')), h('div', null, h('div', { class: 'k' }, '信賴區間（平均）'), h('div', { class: 'v', style: { color: C.blue } }, '±' + ci(age).toFixed(2))), h('div', null, h('div', { class: 'k' }, '預測區間（單一病人）'), h('div', { class: 'v', style: { color: C.amber } }, '±' + pi(age).toFixed(2)))),
+        h('div', { class: 'grid2', style: { alignItems: 'center' } }, h('div', null, ch, leg), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '預測值'), h('div', { class: 'v' }, f(age).toFixed(1) + ' 天')), h('div', null, h('div', { class: 'k' }, '信賴區間（平均）'), h('div', { class: 'v', style: { color: C.blue } }, '±' + ci(age).toFixed(2))), h('div', null, h('div', { class: 'k' }, '預測區間（單一病人）'), h('div', { class: 'v', style: { color: C.amber } }, '±' + pi(age).toFixed(2)))),
           h('div', { class: 'note', style: { fontSize: '14px' } }, `寬了約 ${(pi(age) / ci(age)).toFixed(1)} 倍——多的是個體之間的隨機變異，不會因為樣本變多而消失。注意兩條帶子在資料兩端都變寬：離平均年齡越遠，估得越不準。`)))); }
     $('#w-pi').append(out); draw();
   })();
@@ -166,8 +168,9 @@
     function draw() { out.innerHTML = '';
       const t = h('table', { class: 'dt' }, h('tr', null, h('th', null, '輪次'), K.map(k => h('th', null, k[1])), h('th', null, 'RMSE 變化'), h('th', null, '這輪做了什麼／觀察')), R.map((rn, i) => { const row = st[i] || {}; const prev = i ? (st[i - 1] || {}).rmse : null, cur = row.rmse; const d = prev != null && cur != null && prev !== '' && cur !== '' ? (cur - prev) / prev * 100 : null;
         return h('tr', null, h('td', { style: { fontWeight: 600 } }, rn), K.map(([k]) => { const inp = h('input', { type: 'number', step: 'any', value: row[k] ?? '', style: { width: '74px' } }); inp.onchange = () => { st[i] = { ...(st[i] || {}), [k]: inp.value === '' ? '' : +inp.value }; Store.set('m21:rounds', st); draw(); }; return h('td', null, inp); }), h('td', { class: 'num ' + (d == null ? '' : d < 0 ? 'ok' : 'hl') }, d == null ? '—' : (d > 0 ? '+' : '') + d.toFixed(1) + '%'), h('td', null, (() => { const i2 = h('input', { type: 'text', value: row.note || '', style: { width: '220px' } }); i2.onchange = () => { st[i] = { ...(st[i] || {}), note: i2.value }; Store.set('m21:rounds', st); }; return i2; })())); }));
-      const dl = h('button', { class: 'btn primary sm' }, '下載 CSV'); dl.onclick = () => { const csv = '﻿輪次,MAE,RMSE,R2,調整後R2,說明\n' + R.map((rn, i) => { const r = st[i] || {}; return [rn, r.mae ?? '', r.rmse ?? '', r.r2 ?? '', r.adj ?? '', `"${(r.note || '').replace(/"/g, '""')}"`].join(','); }).join('\n'); const a = h('a', { href: URL.createObjectURL(new Blob([csv], { type: 'text/csv' })), download: 'M2-1_五輪改良表.csv' }); document.body.append(a); a.click(); a.remove(); };
-      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, dl), h('div', { class: 'tscroll' }, t), h('p', { class: 'ai' }, '取對數那一輪通常改善最明顯；某一輪變差是正常的——寫下原因與證據。這張表就是 Task 1 的方法論骨架。')); }
+      const dl = h('button', { class: 'btn primary sm' }, '下載 CSV'); dl.onclick = () => { const csv = '﻿輪次,MAE,RMSE,R2,調整後R2,說明\n' + R.map((rn, i) => { const r = st[i] || {}; return [rn, r.mae ?? '', r.rmse ?? '', r.r2 ?? '', r.adj ?? '', `"${(r.note || '').replace(/"/g, '""')}"`].join(','); }).join('\n'); const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); const a = h('a', { href: url, download: 'M2-1_五輪改良表.csv' }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+      const cl = h('button', { class: 'btn sm' }, '清空'); cl.onclick = () => { Object.keys(st).forEach(k => delete st[k]); Store.set('m21:rounds', st); draw(); };
+      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, dl, cl), h('div', { class: 'tscroll' }, t), h('p', { class: 'ai' }, '取對數那一輪通常改善最明顯；某一輪變差是正常的——寫下原因與證據。這張表就是 Task 1 的方法論骨架。')); }
     $('#w-rounds').append(out); draw();
   })();
 
@@ -189,16 +192,16 @@
   })();
   U.flashcards('#w-cards', [['迴歸', 'Regression', '預測連續數值'], ['最小平方法', 'OLS', '讓殘差平方和最小的擬合方法'], ['係數', 'Coefficient', '自變數每增一單位，目標變動多少'], ['截距', 'Intercept', '所有自變數為 0 時的預測值'], ['殘差', 'Residual', '實際值 − 預測值'], ['決定係數', 'R²', '目標變異被模型解釋的比例'], ['調整後 R²', 'Adjusted R²', '對變數個數施加懲罰後的 R²'], ['平均絕對誤差', 'MAE', '誤差絕對值的平均；對大誤差不敏感'], ['均方根誤差', 'RMSE', 'MSE 開根號；與目標同單位'], ['平均絕對百分比誤差', 'MAPE', '百分比誤差，便於跨尺度比較'], ['基準線', 'Baseline', '一律預測平均值的模型；比較的起點'], ['等變異', 'Homoscedasticity', '殘差的散布程度處處相同'], ['異質變異', 'Heteroscedasticity', '殘差呈喇叭狀'], ['過擬合', 'Overfitting', '記住訓練資料的雜訊，新資料表現差'], ['欠擬合', 'Underfitting', '模型太簡單，訓練集就學不好'], ['偏誤-變異取捨', 'Bias-Variance Tradeoff', '太簡單＝高偏誤，太複雜＝高變異'], ['交叉驗證', 'Cross Validation', '切成 k 份輪流驗證，取平均'], ['多項式項', 'Polynomial Term', '加入 x² 以捕捉曲線關係'], ['交互作用', 'Interaction Term', '一個變數的效果依另一個變數而不同'], ['正則化', 'Regularization', '對係數施加懲罰以抑制過擬合'], ['脊迴歸', 'Ridge (L2)', '壓小係數但不歸零；對共線性有效'], ['套索迴歸', 'Lasso (L1)', '把不重要的係數壓到 0'], ['彈性網', 'Elastic Net', 'Ridge 與 Lasso 的混合'], ['變異數膨脹因子', 'VIF', '共線性指標，> 10 警戒']]);
   U.finalQuiz('#w-final', [
-    ['「年齡每多一歲，住院天數增加多少？」屬於迴歸的哪種目標？', ['預測', '解釋', '情境模擬', '分類'], 1, '在乎係數本身的意義與顯著性。'],
-    ['手算例 ŷ = −6.53 + 0.206x，截距 −6.53 天代表什麼？', ['0 歲病人住院 −6.53 天', '數學上的必要項，沒有現實意義', '模型錯了', '平均住院天數'], 1, '而且 0 歲遠在資料範圍外。'],
-    ['樣本很大時 BMI 係數 0.04 變得顯著，該怎麼解讀？', ['BMI 是最重要的因素', '統計顯著但臨床上可能不重要', '應該刪掉 BMI', '模型過擬合'], 1, '顯著 ≠ 效果大。'],
-    ['殘差圖呈喇叭狀（越右越寬），最可能的處方是？', ['加入 x²', '對 y 取對數', '刪掉離群值', '增加變數'], 1, '異質變異——醫療費用的典型。'],
-    ['身高與體重同時放入，身高係數從 +0.42 翻成 −0.18，R² 幾乎不變。代表？', ['身高讓住院變短', '共線性讓係數不可信', '模型預測力變差', '資料錯誤'], 1, '受害的是解釋，不是預測。'],
-    ['兩模型 MAE 相同，B 的 RMSE 明顯較大，代表？', ['B 比較好', 'B 有少數大誤差', '兩者一樣好', 'A 過擬合'], 1, 'RMSE 用平方放大大誤差。'],
-    ['ln(費用) 對共病數的係數 0.18，正確解讀是？', ['每多一項共病，費用多 0.18 元', '每多一項共病，費用約增加 19.7%', '費用增加 18 倍', '無法解讀'], 1, 'e^0.18 ≈ 1.197。'],
-    ['九次多項式訓練 RMSE ≈ 0、測試 RMSE 爆炸，這是？', ['欠擬合', '過擬合', '剛好', '資料洩漏'], 1, '它記住了雜訊。'],
-    ['Lasso 與 Ridge 最大的差別是？', ['Lasso 不需標準化', 'Lasso 會把部分係數壓到 0', 'Ridge 會刪變數', '兩者完全一樣'], 1, 'L1 懲罰＝自動變數選擇。'],
-    ['要告訴病人「像你這樣的人可能住幾天」，應該用？', ['信賴區間', '預測區間', 'R²', 'p 值'], 1, '個人的不確定性大得多。'],
+    ['「年齡每多一歲，住院天數增加多少？」屬於迴歸的哪種目標？', ['預測', '解釋', '情境模擬', '分類'], 1, '在乎係數本身的意義與顯著性。', 'p01'],
+    ['手算例 ŷ = −6.53 + 0.206x，截距 −6.53 天代表什麼？', ['0 歲病人住院 −6.53 天', '數學上的必要項，沒有現實意義', '模型錯了', '平均住院天數'], 1, '而且 0 歲遠在資料範圍外。', 'p03'],
+    ['樣本很大時 BMI 係數 0.04 變得顯著，該怎麼解讀？', ['BMI 是最重要的因素', '統計顯著但臨床上可能不重要', '應該刪掉 BMI', '模型過擬合'], 1, '顯著 ≠ 效果大。', 'p04'],
+    ['殘差圖呈喇叭狀（越右越寬），最可能的處方是？', ['加入 x²', '對 y 取對數', '刪掉離群值', '增加變數'], 1, '異質變異——醫療費用的典型。', 'p05'],
+    ['身高與體重同時放入，身高係數從 +0.42 翻成 −0.18，R² 幾乎不變。代表？', ['身高讓住院變短', '共線性讓係數不可信', '模型預測力變差', '資料錯誤'], 1, '受害的是解釋，不是預測。', 'p06'],
+    ['兩模型 MAE 相同，B 的 RMSE 明顯較大，代表？', ['B 比較好', 'B 有少數大誤差', '兩者一樣好', 'A 過擬合'], 1, 'RMSE 用平方放大大誤差。', 'p07'],
+    ['ln(費用) 對共病數的係數 0.18，正確解讀是？', ['每多一項共病，費用多 0.18 元', '每多一項共病，費用約增加 19.7%', '費用增加 18 倍', '無法解讀'], 1, 'e^0.18 ≈ 1.197。', 'p08'],
+    ['九次多項式訓練 RMSE ≈ 0、測試 RMSE 爆炸，這是？', ['欠擬合', '過擬合', '剛好', '資料洩漏'], 1, '它記住了雜訊。', 'p09'],
+    ['Lasso 與 Ridge 最大的差別是？', ['Lasso 不需標準化', 'Lasso 會把部分係數壓到 0', 'Ridge 會刪變數', '兩者完全一樣'], 1, 'L1 懲罰＝自動變數選擇。', 'p11'],
+    ['要告訴病人「像你這樣的人可能住幾天」，應該用？', ['信賴區間', '預測區間', 'R²', 'p 值'], 1, '個人的不確定性大得多。', 'p12'],
   ]);
   (function () {
     const R = [['三種目標', '預測、解釋、模擬——係數不代表因果。', 'p01'], ['先殘差圖再 R²', '形式對不對，再看解釋力夠不夠。', 'p05'], ['MAE 與 RMSE 併報', '差距大提示少數大誤差，回查個案。', 'p07'], ['淨效果與共線性', '多元迴歸係數是其他不變下的淨效果；共線性讓它不可信。', 'p06'], ['過擬合與正則化', '訓練/測試差距大＝過擬合；正則化給係數加韁繩。', 'p09'], ['永遠跟基準線比', '沒有比較的 RMSE 是沒有意義的數字。', 'p07']];

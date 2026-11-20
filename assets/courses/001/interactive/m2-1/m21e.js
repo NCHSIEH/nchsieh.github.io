@@ -75,12 +75,27 @@
   CaseLinks('w-report', [
     ['Collins et al. BMJ 2024：TRIPOD+AI 臨床預測模型報告準則（原始論文）', 'https://www.bmj.com/content/385/bmj-2023-078378']]);
 
-  function addNote(id, title, body) {
+  function addDetails(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
-    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+    const ul = U.h('ul', null, bullets.map(([k, v]) => U.h('li', null, U.h('b', null, k + '：'), v)));
+    b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), U.h('div', { class: 'dn-body' }, ul)));
   }
-  addNote('w-eda', '本模組 Car Sales（n = 428）EDA 實算：', '① 目標車價 MSRP 嚴重右偏（偏態 2.80，平均 $32,775 > 中位數 $27,635，極大值 $192,465 為 Porsche 911 GT2），取對數 ln(MSRP) 後偏態降為 0.46；② 與車價最強相關為馬力 Horsepower（r = +0.827）；③ 共線性特徵對包含 MPG_City × Highway（r = 0.941）、EngineSize × Cylinders（r = 0.908）、Wheelbase × Length（r = 0.889），而批發價 Invoice 與 MSRP 相關達 r = 0.999 為目標洩漏欄，建模前必刪！（講義 M2-1 第 10 頁）');
-  addNote('w-net', '本模組 University Admission（n = 1,000）實算：', '單放學校評級 University_Rating 的簡單迴歸係數 b = +0.0852（每升一級錄取率 +8.5%）；但同時納入 CGPA、GRE、TOEFL 等 7 個變數後，淨效果驟降 14 倍至 b = +0.0060。此外，刪除不顯著的 SOP（t = 0.50, p = 0.62）後，R² 維持 0.8218，而 Adjusted R² 由 0.8206 微升至 0.8207。（講義 M2-1 第 26 頁）');
-  addNote('w-ridge', '從幾何限制域看懂 Ridge vs Lasso：', 'Ridge（L2 圓形限制域 b₁² + b₂² ≤ t）沒有尖角，等高線切在圓周上，把共線雙胞胎係數一起等比例壓小但不歸零；Lasso（L1 菱形限制域 |b₁| + |b₂| ≤ t）尖角落在座標軸上，直接把不重要係數壓成 0（自動選變數）；Elastic Net 則結合兩者（AI Studio GLM 的 alpha：0＝Ridge、1＝Lasso）。（講義 M2-1 第 58 頁）');
-  addNote('w-tree', '為什麼迴歸樹完全無法外插？', '迴歸樹每個葉節點的預測值都是「該格訓練樣本的平均 y」。若訓練集年齡只到 80 歲，遇到 95 歲新病人也只能給「>75 歲葉節點」的平均數，不會隨年齡繼續往上加。實務黃金組合：先跑線性迴歸建可解釋基準線，再跑隨機森林檢查是否漏掉重大非線性或交互作用。（講義 M2-1 第 62 頁）');
+  addDetails('w-eda', '延伸閱讀：本模組 Car Sales（n = 428）EDA 實算（講義第 10 頁）', [
+    ['① 目標右偏', '車價 MSRP 偏態 2.80（平均 $32,775 > 中位數 $27,635，極大值 $192,465 為 Porsche 911 GT2）；取對數 ln(MSRP) 後偏態降為 0.46。'],
+    ['② 最強相關', '與車價最強相關為馬力 Horsepower（r = +0.827）。'],
+    ['③ 共線性與洩漏', 'MPG_City × Highway（r = 0.941）、EngineSize × Cylinders（r = 0.908）、Wheelbase × Length（r = 0.889）；批發價 Invoice 與 MSRP 相關達 r = 0.999 為目標洩漏欄，建模前必刪！']
+  ]);
+  addDetails('w-net', '延伸閱讀：University Admission（n = 1,000）淨效果實算（講義第 26 頁）', [
+    ['簡單 vs 多元迴歸', '單放學校評級 University_Rating 係數 b = +0.0852（每升一級錄取率 +8.5%）；納入 CGPA、GRE、TOEFL 等 7 個變數後，淨效果驟降 14 倍至 b = +0.0060。'],
+    ['調整後 R² 的意義', '刪除不顯著的 SOP（t = 0.50, p = 0.62）後，R² 維持 0.8218，而 Adjusted R² 由 0.8206 微升至 0.8207。']
+  ]);
+  addDetails('w-ridge', '延伸閱讀：從幾何限制域看懂 Ridge vs Lasso（講義第 58 頁）', [
+    ['Ridge（L2 圓形限制域 b₁² + b₂² ≤ t）', '沒有尖角，等高線切在圓周上，把共線雙胞胎係數一起等比例壓小但不歸零。'],
+    ['Lasso（L1 菱形限制域 |b₁| + |b₂| ≤ t）', '尖角落在座標軸上，直接把不重要係數壓成 0（自動選變數）。'],
+    ['Elastic Net', '結合兩者（AI Studio GLM 的 alpha：0＝Ridge、1＝Lasso）。']
+  ]);
+  addDetails('w-tree', '延伸閱讀：為什麼迴歸樹完全無法外插？（講義第 62 頁）', [
+    ['葉節點機制', '迴歸樹每個葉節點的預測值都是「該格訓練樣本的平均 y」。若訓練集年齡只到 80 歲，遇到 95 歲新病人也只能給「>75 歲葉節點」的平均數。'],
+    ['實務黃金組合', '先跑線性迴歸建可解釋基準線，再跑隨機森林檢查是否漏掉重大非線性或交互作用。']
+  ]);
 })();
