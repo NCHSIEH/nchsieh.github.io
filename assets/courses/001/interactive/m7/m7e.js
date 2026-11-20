@@ -72,17 +72,50 @@
   CaseLinks('w-taide', [
     ['國科會 TAIDE 官方 Hugging Face 模型庫', 'https://huggingface.co/taide']]);
 
-  function addNote(id, title, body) {
+  function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
-    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+    const list = Array.isArray(bullets)
+      ? U.h('ul', { style: { margin: '6px 0 0', paddingLeft: '18px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets.map(t => U.h('li', null, t)))
+      : U.h('div', { style: { marginTop: '6px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets);
+    b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), list));
   }
-  addNote('w-timeline', '三個關鍵轉折（講義 p6）：', '2017 Vaswani et al. Transformer（arXiv:1706.03762）解決長距離注意力瓶頸 → 2022 ChatGPT + RLHF 降低互動門檻 → 2024–26 RAG（Lewis et al., arXiv:2005.11401）與 Agent 讓臨床系統可更新、可追溯。');
-  addNote('w-attn', 'Scaled Dot-Product Attention（講義 p20）：', 'Attention(Q,K,V) = softmax(QKᵀ / √d_k)·V。雖能跨越數百字解決長距離指涉，但 Embedding 空間中「無胸痛」與「有胸痛」餘弦相似度仍可高達 0.90，高風險條件務必搭配否定規則或 Rerank 精排。');
-  addNote('w-cost', '如果改了設定，每月會變多少（示意推算）：', '目前 Top-K = 5 約 US$9.4；Top-K 調到 10（輸入約 4,080 tokens）約 US$12.8；改成 Agent、平均 5 輪約 US$47。召回段落占輸入 58%，真正會爆的是輪數不固定的 Agent。（講義 M7 第 16、46 頁）');
-  addNote('w-cos', '4 維向量手算對照（講義 p28）：', '查詢 Q=[0.8, 0.6, 0.1, 0.0]（||Q||=1.005）vs 段落 A=[0.7, 0.7, 0.1, 0.1]（||A||=1.000）→ 內積 0.990 → cos(Q,A)=0.985（≥ 0.50 召回）；vs 段落 B=[0.1, 0.0, 0.9, 0.4]（||B||=0.990）→ 內積 0.170 → cos(Q,B)=0.171（過濾）。');
-  addNote('w-emb', '「像」不等於「有答案」（示意）：', '問「第 4 級的給付額度是多少？」——段落 A「第 4 級的評估標準……」相似度 0.89 被選為 Top-1，但沒有額度；段落 B「各級每月給付額度上限如附表……」相似度 0.81 落選，答案卻在這裡。Top-K 不要只取 1，並用 Tracing 看召回了哪幾段。（講義 M7 第 29 頁）');
-  addNote('w-ollama', '本機驗證與資安紅線（講義 p53–54）：', '安裝後背景啟動 localhost:11434（相容 OpenAI API）；記憶體估算 RAM(GB) ≈ 參數(B) × (bits/8) × 1.15 + 1 GB（8B Q4 約需 6 GB）。請留意模型名結尾帶「-cloud」會在雲端執行，處理敏感資料務必用純本地模型並測試斷網可用性。');
-  addNote('w-prompt', '同一個需求，改寫前後（講義 p63–64）：', '✘ 層次 1「請說明糖尿病飲食，不要編造。」→ ✔ 層次 4（直接對應 M8 四段式 System Prompt）：① 角色與任務（醫院衛教護理師）→ ② 執行步驟與依據（只據衛教手冊）→ ③ 嚴格限制與越界拒答（嚴禁提藥名劑量，查無資料固定回拒答句）→ ④ 輸出格式、One-Shot 範例與免責聲明。');
-  addNote('w-ctx', 'Lost in the Middle U 型記憶曲線（講義 p66）：', 'Liu et al.（TACL 2024, arXiv:2307.03172）實證：塞給 LLM 20 段檢索資料時，關鍵答案放在第 1 段或第 20 段準確率最高（75–80%），夾在第 10 段中間時準確率暴跌至 50% 以下。應採「Retrieve-20 → Rerank-5」、把過敏史/慢性病釘選在 Session 變數，並把核心指令放在頭尾。');
-  addNote('w-red', '醫療生成式 AI 四條不可逾越紅線（講義 p68）：', '① 不做醫療診斷 ② 不開處方與藥物劑量 ③ 不送入真實個資/PHI ④ 強制標示 AI 生成並附專業諮詢免責聲明。');
+  addNote('w-timeline', '三個關鍵轉折（講義 p6）', [
+    '2017 Transformer（Vaswani et al., arXiv:1706.03762）：以自注意力解決長距離依賴瓶頸。',
+    '2022 ChatGPT + RLHF：對話對齊大幅降低使用門檻。',
+    '2024–26 RAG（Lewis et al.）與 Agent：讓臨床系統可即時更新、可追溯來源並呼叫工具。'
+  ]);
+  addNote('w-attn', 'Scaled Dot-Product Attention 與否定陷阱（講義 p20）', [
+    '公式：Attention(Q,K,V) = softmax(QKᵀ / √d_k)·V，可跨越數百字解析長距離指涉。',
+    '醫療陷阱：Embedding 空間中「無胸痛」與「有胸痛」餘弦相似度仍可高達 0.90，高風險條件務必搭配否定規則或 Rerank 精排。'
+  ]);
+  addNote('w-cost', '改了設定每月會變多少？（講義 p16、46）', [
+    '基準（Top-K = 5）：約 US$9.4／月（召回段落佔輸入 58%）。',
+    'Top-K 調到 10（輸入約 4,080 tokens）：約 US$12.8／月。',
+    '改成 Agent（平均 5 輪）：約 US$47／月——真正會爆預算的是輪數不固定的 Agent。'
+  ]);
+  addNote('w-cos', '4 維向量餘弦相似度手算對照（講義 p28）', [
+    '查詢 Q=[0.8, 0.6, 0.1, 0.0]（‖Q‖=1.005）vs 段落 A=[0.7, 0.7, 0.1, 0.1] → 內積 0.990 → cos = 0.985（≥ 0.50 召回）。',
+    '查詢 Q vs 段落 B=[0.1, 0.0, 0.9, 0.4] → 內積 0.170 → cos = 0.171（過濾）。'
+  ]);
+  addNote('w-emb', '「像」不等於「有答案」（講義 p29）', [
+    '提問「第 4 級的給付額度是多少？」：段落 A「第 4 級的評估標準……」相似度 0.89 排 Top-1，但沒有額度。',
+    '段落 B「各級每月給付額度上限如附表……」相似度 0.81 反而排後面——所以 Top-K 別只取 1，並用 Tracing 檢查召回內容。'
+  ]);
+  addNote('w-ollama', '本機驗證與資安紅線（講義 p53–54）', [
+    '啟動後預設監聽 localhost:11434（相容 OpenAI API）。',
+    '記憶體估算：RAM(GB) ≈ 參數(B) × (bits/8) × 1.15 + 1 GB（8B Q4 約需 6 GB）。',
+    '資安紅線：模型名結尾帶「-cloud」會在雲端執行；處理敏感資料務必選純本地模型並斷網實測。'
+  ]);
+  addNote('w-prompt', '同一個需求，層次 1 vs 層次 4（講義 p63–64）', [
+    '✘ 層次 1：「請說明糖尿病飲食，不要編造。」（約束力不足）',
+    '✔ 層次 4（對應 M8 四段式 System Prompt）：① 角色與任務 → ② 執行步驟與依據（只據衛教手冊）→ ③ 嚴格限制與越界拒答（禁提藥名劑量）→ ④ 輸出格式、One-Shot 範例與免責聲明。'
+  ]);
+  addNote('w-ctx', 'Lost in the Middle U 型記憶曲線（講義 p66）', [
+    'Liu et al.（TACL 2024）實證：塞 20 段資料時，關鍵答案放第 1 或第 20 段準確率 75–80%，夾在第 10 段暴跌至 50% 以下。',
+    '對策：採「Retrieve-20 → Rerank-5」、把過敏史／慢性病釘選在 Session 變數，並把核心指令放在頭尾。'
+  ]);
+  addNote('w-red', '醫療生成式 AI 四條不可逾越紅線（講義 p68）', [
+    '① 不做醫療診斷　② 不開處方與藥物劑量。',
+    '③ 不送入真實個資／PHI　④ 強制標示 AI 生成並附專業諮詢免責聲明。'
+  ]);
 })();

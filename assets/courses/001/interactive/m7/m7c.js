@@ -72,9 +72,9 @@
       mp.append(h('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap', fontSize: '12px', marginTop: '4px' } }, ...Object.entries(TOPIC).map(([t, c]) => h('span', null, h('i', { style: { display: 'inline-block', width: '10px', height: '10px', borderRadius: '50%', background: c, marginRight: '4px' } }), t))));
       const rt = h('div');
       rt.append(sub(`和「${sel}」最像的詞（cosine 相似度）`));
-      const tb = h('div', { style: { display: 'grid', gridTemplateColumns: '90px 1fr 46px 110px', gap: '5px 8px', alignItems: 'center', fontSize: '13px' } });
+      const tb = h('div', { style: { display: 'grid', gridTemplateColumns: '76px 1fr 44px 86px', gap: '5px 8px', alignItems: 'center', fontSize: '13px', minWidth: '280px' } });
       nb.forEach(([w, c]) => tb.append(h('div', { style: { textAlign: 'right', fontWeight: 600 } }, w), h('div', { style: { background: '#efece5', borderRadius: '4px' } }, h('i', { style: { display: 'block', height: '14px', borderRadius: '4px', background: TOPIC[wordTopic[w]], width: Math.max(2, c * 100) + '%' } })), h('div', { style: { fontFamily: 'var(--mono)' } }, c.toFixed(2)), h('div', { style: { fontSize: '11.5px', color: together(sel, w) ? 'var(--muted)' : C.accent } }, together(sel, w) ? '曾同句出現' : '從未同句出現')));
-      rt.append(tb);
+      rt.append(h('div', { class: 'tscroll' }, tb));
       const ctx = Object.entries(M.cnt[sel] || {}).sort((a, b) => b[1] - a[1]).slice(0, 8);
       rt.append(h('div', { style: { marginTop: '12px' } }, sub(`「${sel}」周圍最常出現的詞（向量就是從這些算出來的）`), h('div', null, ...ctx.map(([w, n]) => span(`${w} ×${n}`, { display: 'inline-block', margin: '2px 3px', padding: '2px 8px', borderRadius: '5px', background: '#eef3f2', fontSize: '13px' })))));
       const ex = h('div', { style: { marginTop: '10px', fontSize: '13px' } }, sub('語料裡的例句'), ...SENT.filter(s0 => s0.toks.includes(sel)).slice(0, 3).map(s0 => h('div', null, ...s0.toks.map(w => span(w, w === sel ? { color: C.accent, fontWeight: 700 } : null)))));

@@ -82,18 +82,56 @@
   CaseLinks('w-tl', [
     ['[6] Mei et al. Radiology: AI 2022（RadImageNet 135 萬張醫療影像預訓練遷移學習基準）', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9530756/']]);
 
-  function addNote(id, title, body) {
+  function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
-    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+    const list = Array.isArray(bullets)
+      ? U.h('ul', { style: { margin: '6px 0 0', paddingLeft: '18px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets.map(t => U.h('li', null, t)))
+      : U.h('div', { style: { marginTop: '6px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets);
+    b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), list));
   }
-  addNote('w-vanish', '連乘效應實算與四大現代處方（講義 p22）：', 'Sigmoid 導數最大值僅 0.25，連乘 10 層後只剩 0.25¹⁰ ≈ 9.5×10⁻⁷（梯度消失）；反之若每層因子 > 2，連乘 10 層達 2¹⁰ = 1,024（梯度爆炸，Loss 跳 NaN）。現代標準處方：① 隱藏層改用 ReLU ＋ He 初始化；② 加入 Batch Normalization；③ 超深網路加 ResNet 殘差捷徑 y = F(x)+x（導數恆有 +1 高速公路）；④ 梯度爆炸則加 Gradient Clipping（限制 ‖g‖ ≤ τ）並調降學習率。');
-  addNote('w-arch', '乳癌 WDBC（訓練集約 512 筆、取 10 個平均特徵）參數規模震撼教育（講義 p19）：', 'AI Studio 的 H2O 預設隱藏層 [200, 200] 總參數高達 (10×200+200) + (200×200+200) + (200×2+2) = 42,802 個（樣本數的 84 倍！必死背雜訊）；若務實改為漏斗型 [8, 4]，總參數僅 88 + 36 + 10 = 134 個（約樣本數的 1/4，低於 1/2 護欄），收斂穩定且不易過擬合。');
-  addNote('w-init', '為什麼訓練前必做標準化與對稱破除？（講義 p21）：', '① 若 x₁=年收入(50萬)、x₂=肌酸酐(1.2) 未做 Z-score 標準化，加權和瞬間落入激活函數飽和區（梯度≈0），且損失曲面變成差 40 萬倍的極端峽谷；② 若權重全設 0，同層所有神經元前向輸出與反向梯度完全相同，100 個神經元退化成 1 個！搭配 ReLU 請用 He 初始化 Var(W)=2/n_in；搭配 Sigmoid/Tanh 用 Xavier 初始化 Var(W)=2/(n_in+n_out)。');
-  addNote('w-h2o', 'AI Studio 三種神經網路算子與 H2O 實戰口訣（講義 p30–31）：', 'Operator 搜尋會看到三種：① Neural Net（舊版 Sigmoid，僅供教學）；② Deep Learning (H2O 水滴圖示，表格主力，預設 ADADELTA 自適應學習率）；③ Deep Learning (DL4J 延伸套件，可疊 CNN/LSTM）。使用 H2O 跑中小型表格必做三件事：① 將 hidden_layer_sizes [200, 200] 改小為 [32, 16]；② 勾選 reproducible 並鎖定 local_random_seed；③ 勾選 compute_variable_importances 檢視特徵重要度（欲開 Dropout 需先將 activation 改為 RectifierWithDropout）。');
-  addNote('w-conv', '實算第一層權重數：', '224×224 彩色影像展平後接 1,000 個神經元：224×224×3×1,000 ＝ 150,528,000 個權重；一層 3×3、64 個濾鏡的卷積：3×3×3×64 ＝ 1,728 個（加偏置為 1,792 個），相差約 87,000 倍。（講義 M5 第 34、38 頁）');
-  addNote('w-flow', '必背 CNN 輸出維度公式（講義 p38）：', 'O = ⌊(W − K + 2P) / S⌋ + 1。以 224×224×3 眼底圖為例：經 64 個 3×3 濾鏡（Same Padding P=1, Stride S=1）→ 長寬 (224−3+2)/1 + 1 = 224，輸出 224×224×64（長寬不變、厚度變 64）；再經 2×2 MaxPool（P=0, S=2）→ 長寬 (224−2)/2 + 1 = 112，輸出 112×112×64（長寬折半、0 可學參數）。');
-  addNote('w-tl', '遷移學習三大魔鬼細節（講義 p42）：', '① 領域差距：醫療灰階 CT/超音波與自然貓狗照差異大，除解凍後段卷積層外，Python 生態系可優先選用 135 萬張醫療影像預訓練的 RadImageNet [6]；② 防災難性遺忘：先凍結骨幹用 lr=1e-3 練好新分類頭，再解凍後段並將學習率除以 10（1e-4～1e-5）微調；③ 輸入對齊：單通道灰階需轉 3 通道並套用與預訓練完全一致的 mean/std 正規化。');
-  addNote('w-zoo', '同一個 VGG16 架構、三種預訓練記憶（講義 p48）：', 'DL4J 內建三種 VGG16 權重：① ImageNet（120 萬張 224×224 自然照，通用與一般醫療首選）；② CIFAR-10（6 萬張 32×32 超小圖，切勿誤用於高解析醫療影像）；③ VGGFace（260 萬張人臉，適合病房疼痛微表情與顏面神經麻痺對稱度評估）。架構只是空殼，預訓練資料集才決定它的先驗經驗！');
-  addNote('w-short', '真實數字（Zech 2018）：', '同院測試 AUC 0.931，換到 Indiana 外院只剩 0.815；而 CNN 直接認出影像來自哪家醫院的準確度高達 99.95%（NIH）與 99.98%（Mount Sinai）——模型學會的是醫院與機器的線索。（講義 M5 第 63 頁）');
-  addNote('w-search', '同樣試 9 次：', '3×3 網格在重要參數上只試到 3 個值，另外 6 次花在不重要的參數；隨機搜尋 9 次在重要參數上試到 9 個不同的值（Bergstra & Bengio 2012）。（講義 M5 第 68 頁）');
+  addNote('w-vanish', '連乘效應實算與四大現代處方（講義 p22）', [
+    '梯度消失：Sigmoid 導數最大值僅 0.25，連乘 10 層後只剩 0.25¹⁰ ≈ 9.5×10⁻⁷。',
+    '梯度爆炸：若每層因子 > 2，連乘 10 層達 2¹⁰ = 1,024，Loss 直接跳 NaN。',
+    '現代處方：① 隱藏層用 ReLU＋He 初始化 ② 加 Batch Normalization ③ 超深網路用 ResNet 殘差捷徑 y = F(x)+x ④ 梯度爆炸加 Gradient Clipping 並降學習率。'
+  ]);
+  addNote('w-arch', '乳癌 WDBC（N≈512、10 特徵）參數規模震撼教育（講義 p19）', [
+    'H2O 預設隱藏層 [200, 200]：總參數達 42,802 個（樣本數的 84 倍，必死背雜訊）。',
+    '務實漏斗型 [8, 4]：總參數僅 134 個（約樣本數的 1/4，低於 1/2 護欄），收斂穩定且不易過擬合。'
+  ]);
+  addNote('w-init', '為什麼訓練前必做標準化與對稱破除？（講義 p21）', [
+    '未做 Z-score 標準化（如年收入 50 萬 vs 肌酸酐 1.2）：加權和瞬間落入飽和區（梯度 ≈ 0），損失曲面成極端峽谷。',
+    '權重全設 0：同層所有神經元輸出與梯度完全相同，100 個退化成 1 個。',
+    '初始化原則：ReLU 配 He（Var = 2/n_in）；Sigmoid/Tanh 配 Xavier（Var = 2/(n_in+n_out)）。'
+  ]);
+  addNote('w-h2o', 'AI Studio 三種神經網路算子與 H2O 實戰口訣（講義 p30–31）', [
+    '三種算子：① Neural Net（舊版 Sigmoid，僅教學） ② Deep Learning (H2O，表格主力，預設 ADADELTA) ③ Deep Learning (DL4J 套件，支援 CNN/LSTM)。',
+    'H2O 中小型表格必做三件事：① hidden_layer_sizes 由 [200, 200] 改小為 [32, 16] ② 勾選 reproducible 鎖定種子 ③ 勾選 compute_variable_importances（開 Dropout 需改 RectifierWithDropout）。'
+  ]);
+  addNote('w-conv', '實算第一層權重數：全連接 vs 卷積（講義 p34、38）', [
+    '224×224×3 影像展平接 1,000 個神經元：150,528,000 個權重。',
+    '一層 3×3、64 個濾鏡卷積：3×3×3×64 = 1,728 個權重（含偏置 1,792），相差約 87,000 倍。'
+  ]);
+  addNote('w-flow', '必背 CNN 輸出維度公式（講義 p38）', [
+    '公式：O = ⌊(W − K + 2P) / S⌋ + 1。',
+    '224×224×3 經 64 個 3×3 濾鏡（Same Padding P=1, S=1）→ 輸出 224×224×64（長寬不變、通道變 64）。',
+    '再經 2×2 MaxPool（P=0, S=2）→ 輸出 112×112×64（長寬折半、0 可學參數）。'
+  ]);
+  addNote('w-tl', '遷移學習三大魔鬼細節（講義 p42）', [
+    '領域差距：醫療灰階 CT/超音波與自然照差異大，Python 可優先選用 135 萬張醫療影像預訓練的 RadImageNet [6]。',
+    '防災難性遺忘：先凍結骨幹用 lr=1e-3 練好新分類頭，再解凍後段並把學習率除以 10（1e-4～1e-5）微調。',
+    '輸入對齊：單通道灰階需轉 3 通道，並套用與預訓練一致的 mean/std 正規化。'
+  ]);
+  addNote('w-zoo', '同一個 VGG16 架構、三種預訓練記憶（講義 p48）', [
+    'ImageNet（120 萬張 224×224 自然照）：通用與一般醫療首選。',
+    'CIFAR-10（6 萬張 32×32 超小圖）：切勿誤用於高解析醫療影像。',
+    'VGGFace（260 萬張人臉）：適合病房疼痛微表情與顏面神經麻痺對稱度評估。'
+  ]);
+  addNote('w-short', '捷徑學習真實數字（Zech et al., 2018；講義 p63）', [
+    '同院測試 AUC 0.931，換到 Indiana 外院驟降至 0.815。',
+    'CNN 直接認出影像來自哪家醫院的準確度高達 99.95%（NIH）與 99.98%（Mount Sinai）——學的是醫院與機器線索。'
+  ]);
+  addNote('w-search', '同樣試 9 次：網格搜尋 vs 隨機搜尋（講義 p68）', [
+    '3×3 網格在重要參數上只試到 3 個值，另外 6 次浪費在不重要的參數。',
+    '隨機搜尋 9 次可在重要參數上試到 9 個不同值（Bergstra & Bengio 2012）。'
+  ]);
 })();

@@ -70,11 +70,11 @@
       out.append(h('div', { class: 'kpi', style: { marginBottom: '10px' } }, kpi('測試集', '180 筆'), kpi('準確率', (M.acc * 100).toFixed(1) + '%', 'good'), kpi('Macro F1', M.f1.toFixed(3)), kpi('分錯幾筆', errs + ' 筆'), kpi('其中「標註本身就錯」', noisy + ' 筆', noisy ? 'bad' : '')));
       const g = h('div', { class: 'grid2', style: { gap: '18px', alignItems: 'start' } });
       const cmB = h('div'); cmB.append(sub('混淆矩陣（列＝人工標註、欄＝模型預測）。點格子看是哪幾筆。'));
-      const tb = h('div', { style: { display: 'grid', gridTemplateColumns: `56px repeat(${K},1fr)`, gap: '3px', fontSize: '13px' } });
+      const tb = h('div', { style: { display: 'grid', gridTemplateColumns: `56px repeat(${K},1fr)`, gap: '3px', fontSize: '13px', minWidth: '300px' } });
       tb.append(h('div'), ...CL.map(c => h('div', { style: { textAlign: 'center', fontWeight: 600, color: 'var(--muted)' } }, c)));
       const mx = Math.max(...M.cm.flat().map(x => x.length));
       M.cm.forEach((r, i) => { tb.append(h('div', { style: { fontWeight: 600, color: 'var(--muted)', alignSelf: 'center' } }, CL[i])); r.forEach((x, j) => { const n = x.length, on = cell && cell[0] === i && cell[1] === j; const b = h('div', { style: { textAlign: 'center', padding: '9px 0', borderRadius: '5px', cursor: n ? 'pointer' : 'default', fontFamily: 'var(--mono)', fontWeight: 600, background: i === j ? `rgba(13,107,103,${.12 + .6 * n / mx})` : n ? `rgba(192,57,43,${.15 + .5 * Math.min(1, n / 6)})` : '#f4f2ed', color: i === j && n / mx > .5 ? '#fff' : 'var(--ink)', outline: on ? '2px solid #1c2430' : 'none' } }, n); if (n) b.onclick = () => { cell = [i, j]; draw(); }; tb.append(b); }); });
-      cmB.append(tb);
+      cmB.append(h('div', { class: 'tscroll' }, tb));
       const tw = h('div'); tw.append(sub('每一類模型最看重的詞（相對其他類的對數機率比）'));
       const tg = h('div', { style: { display: 'grid', gridTemplateColumns: '44px 1fr', gap: '5px 8px', fontSize: '13px' } });
       M.top.forEach((ws, k) => tg.append(h('b', null, CL[k]), h('div', null, ...ws.map(([w]) => span(w.replace(/\+/g, ' '), { display: 'inline-block', margin: '1px 3px', padding: '1px 7px', borderRadius: '5px', background: w.includes('未_') ? '#fdf0dc' : '#eef3f2', color: w.includes('未_') ? C.amber : 'inherit' })))));
@@ -136,10 +136,10 @@
       out.innerHTML = '';
       out.append(h('div', { class: 'kpi', style: { marginBottom: '10px' } }, kpi('留言', '1,200 則（每月 100）'), kpi('面向子句', fmt(all.length, 0) + ' 句'), kpi('詞典法完全判對', Math.round(agree * 100) + '%', agree > .8 ? 'good' : ''), kpi('整體情感（全年平均）', (S.mean(overall) >= 0 ? '+' : '') + S.mean(overall).toFixed(2))));
       const hm = h('div'); hm.append(sub('面向 × 月份的淨情感（正面 − 負面）÷ 提及數，詞典法判讀。點格子看原文。'));
-      const g = h('div', { style: { display: 'grid', gridTemplateColumns: '70px repeat(12,1fr)', gap: '2px', fontSize: '12px' } });
+      const g = h('div', { style: { display: 'grid', gridTemplateColumns: '70px repeat(12,1fr)', gap: '2px', fontSize: '12px', minWidth: '580px' } });
       g.append(h('div'), ...Array.from({ length: 12 }, (_, m) => h('div', { style: { textAlign: 'center', color: 'var(--muted)' } }, (m + 1) + '月')));
       ASP.forEach((a, k) => { g.append(h('div', { style: { fontWeight: 600, alignSelf: 'center', cursor: 'pointer', color: k === selA ? C.accent : 'inherit' }, onclick: () => { selA = k; draw(); } }, a.n)); for (let m = 0; m < 12; m++) { const st = stat(k, m, 'lex'), on = k === selA && m === selM; const c0 = h('div', { title: `${a.n} ${m + 1} 月：提及 ${st.cnt}、淨情感 ${st.net.toFixed(2)}`, style: { height: '30px', borderRadius: '4px', background: colr(st.net), cursor: 'pointer', textAlign: 'center', lineHeight: '30px', fontFamily: 'var(--mono)', fontSize: '11px', outline: on ? '2px solid #1c2430' : 'none', color: Math.abs(st.net) > .55 ? '#fff' : 'var(--ink)' } }, (st.net > 0 ? '+' : '') + st.net.toFixed(1)); c0.onclick = () => { selA = k; selM = m; draw(); }; g.append(c0); } });
-      hm.append(g, h('div', { style: { fontSize: '12px', color: 'var(--muted)', marginTop: '4px' } }, '紅＝負面多、綠＝正面多。7–9 月停車場施工；10 月新叫號系統上線。'));
+      hm.append(h('div', { class: 'tscroll' }, g), h('div', { style: { fontSize: '12px', color: 'var(--muted)', marginTop: '4px' } }, '紅＝負面多、綠＝正面多。7–9 月停車場施工；10 月新叫號系統上線。'));
       out.append(hm);
       const g2 = h('div', { class: 'grid2', style: { gap: '18px', alignItems: 'start', marginTop: '12px' } });
       const lcb = h('div'); lcb.append(sub(`「${ASP[selA].n}」每月負面比例：實線＝詞典法、虛線＝真實標記；灰線＝整句判為負面的留言比例`));

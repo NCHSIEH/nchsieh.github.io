@@ -3,7 +3,7 @@
   'use strict';
   const { h, $, S, C, rng, seg, slider, check, lc, Store } = U;
   const { cap, row, lbl, nt, ttl, kpi, tok, tbl } = window.M7;
-  const dl = (name, csv) => { const a = h('a', { href: URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })), download: name }); document.body.append(a); a.click(); a.remove(); };
+  const dl = (name, csv) => { const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); const a = h('a', { href: url, download: name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
   const bars = (items, o = {}) => h('div', null, items.map(([n, p, hi, dim]) => h('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', margin: '4px 0', opacity: dim ? .35 : 1 } }, h('div', { style: { width: o.lw || '56px', fontWeight: 600, fontSize: '14px' } }, n), h('div', { style: { flex: 1, height: '16px', background: 'var(--line)', borderRadius: '8px', overflow: 'hidden' } }, h('div', { style: { width: p * 100 + '%', height: '100%', background: hi ? C.bad : C.accent } })), h('span', { class: 'mono', style: { width: '48px' } }, p.toFixed(2)))));
   const softT = (z, T) => { if (T <= 0.001) { const m = Math.max(...z); return z.map(v => v === m ? 1 : 0); } const e = z.map(v => Math.exp(v / T)), s = S.sum(e); return e.map(v => v / s); };
   const samp = (p, r) => { let u = r(), c = 0; for (let i = 0; i < p.length; i++) { c += p[i]; if (u <= c) return i; } return p.length - 1; };
@@ -136,22 +136,22 @@
   // ================= P18 =================
   U.flashcards('#w-cards', [['生成式模型', 'Generative Model', '學 P(x)，能產生新內容'], ['判別式模型', 'Discriminative Model', '學 P(y|x)，回答屬於哪一類'], ['GAN', 'Generative Adversarial Network', '生成器與鑑別器對抗'], ['VAE', 'Variational Autoencoder', '潛在空間編碼再解碼'], ['擴散模型', 'Diffusion Model', '從雜訊逐步去噪'], ['Transformer', 'Transformer', '注意力機制；所有 LLM 的底層'], ['注意力機制', 'Attention', '每個位置算關聯權重，不受距離衰減'], ['多頭注意力', 'Multi-Head Attention', '同時追蹤多種關係'], ['Token', 'Token', '模型處理文字的最小單位'], ['上下文長度', 'Context Window', '單次能處理的 token 上限'], ['嵌入', 'Embedding', '語意相近則向量相近'], ['餘弦相似度', 'Cosine Similarity', 'RAG 召回排序的指標'], ['向量資料庫', 'Vector Database', '存向量、做最近鄰搜尋'], ['Encoder-only', 'Encoder-only', 'BERT 系；嵌入與分類'], ['Decoder-only', 'Decoder-only', 'GPT 系；所有對話 LLM'], ['Encoder-Decoder', 'Encoder-Decoder', 'T5、BART；翻譯與摘要'], ['預訓練', 'Pretraining', '海量語料、成本極高'], ['微調', 'Fine-tuning', '在既有模型上再調權重'], ['推論', 'Inference', '呼叫模型；權重不變'], ['RLHF', 'RLHF', '以人類偏好優化輸出'], ['RAG', 'Retrieval-Augmented Generation', '先檢索再生成；可標來源'], ['Temperature', 'Temperature', '低溫可重現，高溫多樣'], ['核採樣', 'Top-p', '只從累積機率前 p 的候選取樣'], ['幻覺', 'Hallucination', '挑最像的，不是最對的'], ['推理模型', 'Reasoning Model', '先想再答；貴 5–20 倍'], ['多模態', 'Multimodal', '影像、音訊也能輸入'], ['量化', 'Quantization（GGUF）', '降低精度、縮小模型'], ['上下文工程', 'Context Engineering', '這幾千個 token 怎麼分配'], ['中間迷失', 'Lost in the Middle', '中間的資訊最容易被忽略'], ['重新排序', 'Rerank', '召回多段、精排取少數']]);
   U.finalQuiz('#w-final', [
-    ['為什麼說生成式模型「編」是正常運作？', ['程式有 bug', '它本來就是學資料分布、產生新內容', '訓練資料太少', 'Temperature 太高'], 1, '產生沒見過的內容是設計目的。'],
-    ['講義的月成本估算中，哪一項佔輸入最大宗？', ['System Prompt', '知識庫召回段落', '對話歷史', '使用者提問'], 1, '1,500 / 2,580 ≈ 58%。'],
-    ['LLM 常數不清一句話有幾個字，根本原因是？', ['模型太小', '它看到的是 token 編號而不是字', '中文太難', 'Temperature 設錯'], 1, '一個 token 可能是半個詞或兩個字。'],
-    ['上下文長度變 2 倍，注意力的計算量大約變？', ['2 倍', '4 倍', '不變', '一半'], 1, '計算量隨長度平方成長。'],
-    ['RAG 系統裡，把段落轉成向量的通常是哪一種架構？', ['Decoder-only', 'Encoder-only', 'GAN', 'Diffusion'], 1, '生成答案才用 Decoder-only。'],
-    ['cos(Q,A) = 0.985、閾值 0.5，段落 A 會？', ['被過濾', '被召回', '被改寫', '要人工判斷'], 1, '0.985 > 0.5。'],
-    ['要讓模型回答最新版長照給付標準，首選？', ['重新預訓練', '微調', 'RAG', '調高 Temperature'], 2, '知識會變動 → RAG，且可標註來源。'],
-    ['Temperature 設成 0，就不會產生幻覺了嗎？', ['會完全消除', '不會，只是穩定地挑同一個答案', '會變得更隨機', '會拒絕回答'], 1, '擋內容編造要靠 RAG。'],
-    ['選模型的第一個問題應該是？', ['哪個排行榜最強', '資料能不能出機構', '哪個最便宜', '哪個最新'], 1, '不能出機構就直接排除雲端 API。'],
-    ['一台 16 GB 筆電，最適合在本地跑的是？', ['70B 未量化', '7B–8B 的 4 位元量化版', '175B', '任何大小都行'], 1, '7B–8B 約需 8 GB 可用 RAM。'],
-    ['提示詞「可以放進系統」的分界線是哪一層？', ['層次 1 直接提問', '層次 2 角色', '層次 3 結構與限制', '只有層次 4'], 2, '格式穩定、長度可控、危險內容被擋掉。'],
-    ['「過敏史」只出現在第 1 輪對話，最大的風險是？', ['太貴', '對話變長後被截斷，模型不再知道', '模型會拒答', '沒有風險'], 1, '關鍵資訊要固定寫在 System Prompt。'],
+    ['為什麼說生成式模型「編」是正常運作？', ['程式有 bug', '它本來就是學資料分布、產生新內容', '訓練資料太少', 'Temperature 太高'], 1, '產生沒見過的內容是設計目的。', 'p02'],
+    ['講義的月成本估算中，哪一項佔輸入最大宗？', ['System Prompt', '知識庫召回段落', '對話歷史', '使用者提問'], 1, '1,500 / 2,580 ≈ 58%。', 'p04'],
+    ['LLM 常數不清一句話有幾個字，根本原因是？', ['模型太小', '它看到的是 token 編號而不是字', '中文太難', 'Temperature 設錯'], 1, '一個 token 可能是半個詞或兩個字。', 'p04'],
+    ['上下文長度變 2 倍，注意力的計算量大約變？', ['2 倍', '4 倍', '不變', '一半'], 1, '計算量隨長度平方成長。', 'p05'],
+    ['RAG 系統裡，把段落轉成向量的通常是哪一種架構？', ['Decoder-only', 'Encoder-only', 'GAN', 'Diffusion'], 1, '生成答案才用 Decoder-only。', 'p06'],
+    ['cos(Q,A) = 0.985、閾值 0.5，段落 A 會？', ['被過濾', '被召回', '被改寫', '要人工判斷'], 1, '0.985 > 0.5。', 'p07'],
+    ['要讓模型回答最新版長照給付標準，首選？', ['重新預訓練', '微調', 'RAG', '調高 Temperature'], 2, '知識會變動 → RAG，且可標註來源。', 'p08'],
+    ['Temperature 設成 0，就不會產生幻覺了嗎？', ['會完全消除', '不會，只是穩定地挑同一個答案', '會變得更隨機', '會拒絕回答'], 1, '擋內容編造要靠 RAG。', 'p09'],
+    ['選模型的第一個問題應該是？', ['哪個排行榜最強', '資料能不能出機構', '哪個最便宜', '哪個最新'], 1, '不能出機構就直接排除雲端 API。', 'p11'],
+    ['一台 16 GB 筆電，最適合在本地跑的是？', ['70B 未量化', '7B–8B 的 4 位元量化版', '175B', '任何大小都行'], 1, '7B–8B 約需 8 GB 可用 RAM。', 'p12'],
+    ['提示詞「可以放進系統」的分界線是哪一層？', ['層次 1 直接提問', '層次 2 角色', '層次 3 結構與限制', '只有層次 4'], 2, '格式穩定、長度可控、危險內容被擋掉。', 'p14'],
+    ['「過敏史」只出現在第 1 輪對話，最大的風險是？', ['太貴', '對話變長後被截斷，模型不再知道', '模型會拒答', '沒有風險'], 1, '關鍵資訊要固定寫在 System Prompt。', 'p15'],
   ]);
   (function () {
     const R = [['「編」是正常運作', '生成式學的是資料長什麼樣。', 'p02'], ['Token 決定一切', '帳單、上下文上限、數不清字數。', 'p04'], ['Attention 的代價', '連得上遠距離，計算量隨長度平方成長。', 'p05'], ['RAG 用兩種模型', 'Encoder 做嵌入、Decoder 做生成。', 'p06'], ['提示詞 → RAG → 微調', '讓模型懂你的領域的決策順序。', 'p08'], ['低溫擋不住編造', 'Temperature 穩定用詞；事實要靠 RAG。', 'p09'], ['資料能不能出機構', '選模型的第一個問題。', 'p11'], ['層次 3 才放得進系統', '差別在你給了多少約束。', 'p14'], ['四條紅線', '不診斷、不處方、不用真實資料、要免責。', 'p16']];
     const g = h('div', { class: 'grid3' }); R.forEach(([t, d, id], i) => g.append(h('a', { href: '#' + id, style: { textDecoration: 'none', color: 'inherit', border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff', display: 'block' } }, h('div', { class: 'mono', style: { color: 'var(--accent)', fontWeight: 700 } }, i + 1), h('b', null, t), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, d))));
-    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), 'M8 Dify 應用開發：從 Chatbot 到 Agent。', h('a', { href: '../' }, '回到課程首頁 →')));
+    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), 'M8 Dify 應用開發：從 Chatbot 到 Agent。', h('a', { href: '../m8/', style: { fontWeight: 600 } }, '前往 M8 互動頁 →'), '　', h('a', { href: '../' }, '回到課程首頁')));
   })();
 })();

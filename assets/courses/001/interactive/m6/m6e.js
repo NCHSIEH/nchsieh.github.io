@@ -65,15 +65,44 @@
     ['[5] Blei, Ng & Jordan (JMLR 2003) Latent Dirichlet Allocation (LDA) 主題模型開山論文', 'https://www.jmlr.org/papers/v3/blei03a.html'],
     ['[6] Grootendorst (2022) BERTopic：結合語意嵌入、UMAP/HDBSCAN 與 c-TF-IDF 之現代主題模型論文', 'https://arxiv.org/abs/2203.05794']]);
 
-  function addNote(id, title, body) {
+  function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
-    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+    const list = Array.isArray(bullets)
+      ? U.h('ul', { style: { margin: '6px 0 0', paddingLeft: '18px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets.map(t => U.h('li', null, t)))
+      : U.h('div', { style: { marginTop: '6px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets);
+    b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), list));
   }
-  addNote('w-rule', '高風險臨床篩檢的標準架構——三層縱深防禦（講義 p8）：', '以「自殺意念諮詢紀錄篩檢」為例，實務絕不單靠單一方法：① 第一層（規則安全網）：明確字眼（「不想活、輕生」）配否定排除 100% 觸發，保證零漏判；② 第二層（統計 TF-IDF+LR 或語意模型）：攔截未寫出關鍵字的委婉表達（「把寵物託付好、想永遠睡著」）；③ 第三層（個管師／護理師人工覆核）：做最終臨床決策與關懷介入。');
-  addNote('w-tpr', '數字與一則虛構通報：', '2024 年第 2 季 18,152 件、第 3 季 19,500 件；第 3 季藥物事件 7,495 件（38%）、跌倒事件 4,540 件（23%）。「夜間 2 時病人自行下床如廁，於床旁滑倒，否認頭部撞擊，右膝擦傷，未使用助行器。」→ 文本分類歸為跌倒、主題模型找出夜間／如廁／未用輔具、否定偵測讓「否認頭部撞擊」不算頭部外傷。（講義 M6 第 5 頁）');
-  addNote('w-seg', '建立醫療自訂詞典與同義詞表的四大來源（講義 p18–19）：', '① 官方公開標準表：衛福部健保署 ICD-10 中文診斷名、健保用藥品項檔、LOINC 檢驗表（半天即可匯入打底）；② 語料庫統計挖新詞：掃描被切成連續單字的序列，或計算「點互資訊 PMI(x,y) = log₂[P(xy)/(P(x)P(y))]（內部凝結度）」與「左右鄰字熵（邊界自由度）」自動抓漏網複合詞；③ 科內縮寫與同義詞歸一：建立 synonyms.csv 將「HTN／hypertension／血壓高」統一替換為「高血壓」，讓統計檢定力瞬間放大數倍；④ 持續迭代維護為科內活資產。');
-  addNote('w-tfidf', '從手算發現的前處理關鍵——為什麼 D1 權重最高的是「三 (0.553)」？（講義 p23）：', '因為「三」剛好只在 D1 出現一次（df=1，idf=ln(5/2)+1=1.916 最高），經 L2 正規化（除以長度 √12.016 = 3.466）後搶走第一名！同理，病歷裡的體溫「38.7°C」、血壓「142/88」若不先處理，都會霸佔最高 TF-IDF 權重——因此跑 TF-IDF 前務必先用正則表達式把數字抽成結構化欄位或替換為 <NUM>！');
-  addNote('w-kw', '進階實戰技巧：分類別 c-TF-IDF 與四大抽取法分工（講義 p33）：', '除了單篇 TF-IDF，把「所有 1 星差評」併成一篇大文件、「所有 5 星好評」併成另一篇再算 c-TF-IDF [6]，就能瞬間拉開 1 星特有痛點詞（「批價排隊、冷淡」）與 5 星讚美詞！若是單篇長病摘想直接抽關鍵詞（無語料庫可算 IDF），則可選用圖論共現的 TextRank 或語意向量相似度的 KeyBERT。');
-  addNote('w-taskmap', 'Hugging Face 免標註三超能力與中文模型鐵律（講義 p47）：', '三行程式碼即可呼叫：① zero-shot-classification（以自然語言蘊涵 NLI 判斷無標籤問卷屬於哪類）；② summarization（長篇護理紀錄濃縮交班草稿，但生成式摘要有「無中生有幻覺風險」，必經人工覆核！）；③ ner（自動標出人名地名作去識別化第一步）。★ 注意：不填 model 參數預設會載入英文模型！繁體中文請務必指定 joeddav/xlm-roberta-large-xnli 或中研院 ckiplab/bert-base-chinese-ner [2]。');
-  addNote('w-chal', '醫療 NLP 標準前處理五步防線（講義 p57）：', '把四大挑戰一次排雷：Step 0 去識別化（Regex 抓號碼 ＋ NER [2] 抓人名地址遮蔽或代換）→ Step 1 抽離數值與檢驗值 → Step 2 掛載醫療自訂詞典斷詞 → Step 3 科內縮寫與同義詞歸一（注意跨科撞名如 MS 在神經科為多發性硬化症、心臟科為二尖瓣狹窄）→ Step 4 NegEx / ConText 否定（NEG_）與疑似（UNC_）範圍標記 [4]。');
+  addNote('w-rule', '高風險臨床篩檢標準架構——三層縱深防禦（講義 p8）', [
+    '第一層（規則安全網）：明確字眼（「不想活、輕生」）配否定排除 100% 觸發，保證零漏判。',
+    '第二層（統計 TF-IDF+LR 或語意模型）：攔截未寫出關鍵字的委婉表達（「把寵物託付好、想永遠睡著」）。',
+    '第三層（個管師／護理師人工覆核）：做最終臨床決策與關懷介入。'
+  ]);
+  addNote('w-tpr', '病安通報數字與一則虛構通報拆解（講義 p5）', [
+    '2024 Q2 共 18,152 件、Q3 共 19,500 件；Q3 藥物事件 7,495 件（38%）、跌倒事件 4,540 件（23%）。',
+    '範例：「夜間 2 時病人自行下床如廁，於床旁滑倒，否認頭部撞擊，右膝擦傷，未使用助行器。」',
+    '拆解：文本分類歸「跌倒」→ 主題模型找「夜間／如廁／未用輔具」→ 否定偵測排除「頭部外傷」。'
+  ]);
+  addNote('w-seg', '建立醫療自訂詞典與同義詞表的四大來源（講義 p18–19）', [
+    '官方標準表：健保署 ICD-10 中文診斷名、健保用藥品項檔、LOINC 檢驗表。',
+    '語料統計挖新詞：用點互資訊（PMI，內部凝結度）與左右鄰字熵（邊界自由度）抓漏網複合詞。',
+    '科內縮寫與同義詞歸一：建立 synonyms.csv 將「HTN／hypertension／血壓高」統一替換為「高血壓」。',
+    '持續迭代維護為科內活資產。'
+  ]);
+  addNote('w-tfidf', '手算啟示：為什麼 D1 權重最高的是「三 (0.553)」？（講義 p23）', [
+    '「三」只在 D1 出現一次（df=1，idf 最高），經 L2 正規化後直接搶走第一名。',
+    '同理，病歷裡的體溫「38.7°C」、血壓「142/88」若不先抽離，會霸佔最高 TF-IDF 權重——跑前務必先用 Regex 抽成結構化欄位或替換為 <NUM>。'
+  ]);
+  addNote('w-kw', '進階技巧：分類別 c-TF-IDF 與四大抽取法分工（講義 p33）', [
+    'c-TF-IDF：把所有 1 星差評併成一篇大文件、5 星好評併成另一篇，瞬間拉開 1 星痛點詞（「批價排隊、冷淡」）與 5 星讚美詞。',
+    '單篇長病摘（無語料庫可算 IDF）：可選圖論共現 TextRank 或語意向量 KeyBERT。'
+  ]);
+  addNote('w-taskmap', 'Hugging Face 免標註三超能力與中文模型鐵律（講義 p47）', [
+    '三大管線：① zero-shot-classification（無標籤問卷分類） ② summarization（長紀錄濃縮交班草稿，必人工覆核防幻覺） ③ ner（去識別化第一步）。',
+    '中文鐵律：不填 model 參數預設載入英文模型！繁中務必指定 joeddav/xlm-roberta-large-xnli 或中研院 ckiplab/bert-base-chinese-ner [2]。'
+  ]);
+  addNote('w-chal', '醫療 NLP 標準前處理五步防線（講義 p57）', [
+    'Step 0 去識別化（Regex 抓號碼 ＋ NER 抓人名地址遮蔽或代換）→ Step 1 抽離數值與檢驗值。',
+    'Step 2 掛載醫療自訂詞典斷詞 → Step 3 科內縮寫歸一（留意跨科撞名，如 MS 在神經科＝多發性硬化症、心臟科＝二尖瓣狹窄）。',
+    'Step 4 NegEx / ConText 否定（NEG_）與疑似（UNC_）範圍標記 [4]。'
+  ]);
 })();

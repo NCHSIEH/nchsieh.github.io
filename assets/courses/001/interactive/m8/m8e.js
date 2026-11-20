@@ -98,14 +98,36 @@
     ['n8n Official Documentation', 'https://docs.n8n.io/']
   ]);
 
-  function addNote(id, title, body) {
+  function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
-    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+    const list = Array.isArray(bullets)
+      ? U.h('ul', { style: { margin: '6px 0 0', paddingLeft: '18px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets.map(t => U.h('li', null, t)))
+      : U.h('div', { style: { marginTop: '6px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets);
+    b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), list));
   }
-  addNote('w-swap', '抗改朝換代與黃金測試集（講義 p28）：', '模型名稱不寫死、Embedding 不輕易更換（換了整座知識庫要重算向量），核心金額與規則鎖在 Code 節點與知識庫。留存 5–10 個標準個案（含正常、邊界與拒答題），換新模型 5 分鐘跑完回歸測試再上線。');
-  addNote('w-sp', '四段式 System Prompt 骨架（講義 p35、p55）：', '# 角色 → # 步驟（先讀【參考資料】再判定）→ # 限制（查無資料固定拒答、禁止診斷/處方/推估金額）→ # 格式（固定欄位 + {{#context#}} 動態插槽 + 免責聲明）。');
-  addNote('w-topk', '兩把剪刀（示意）：', '10 段召回依相似度排序 0.82、0.76、0.71、0.66、0.58……，答案在 #2 與 #4。Top-K = 3 只拿到 #1–#3，#4 被剪掉；Top-K = 5 加閾值 0.5 拿到 #1–#5，兩段答案都在。檢索模式：「Metformin」靠向量找到「二甲雙胍」，「第 4 條第 2 項」靠全文比對。（講義 M8 第 42 頁）');
-  addNote('w-code', '防呆正規表達式與三筆 Trace（講義 p57）：', 'Regex 只抓「第 [2-8] 級 / CMS [2-8]」，避免把個案年齡（80 歲）誤抓成等級；「第 4 級」→ 18,580、「CMS 6」→ 28,070、資訊不足 → amount: 0 安全歸零並提示轉照管專員。');
-  addNote('w-nogen', '同一題問五次（示意）：', 'LLM 直接回答：17,960、18,240、18,580、18,240、19,100 元，差到 1,140 元；Code 節點查表：五次都是 18,960 元。數字會變的，就是生成的。（講義 M8 第 48、58 頁）');
-  addNote('w-fallback', '每一種失敗都先接好一條路：', '429／503／逾時 → 失敗分支＋備援模型；API 改版 → 異常回報節點、轉真人；模型拒答 → 備援模型或明確告知；知識庫空結果 → 退回內建知識庫並告知；輸入不足 → 反向提問；Agent 迭代用盡 → 最大迭代次數、轉人工。（講義 M8 第 74 頁）');
+  addNote('w-swap', '抗改朝換代與黃金測試集（講義 p28）', [
+    '模型名稱不寫死、Embedding 不輕易更換（換了整座知識庫需重算向量），核心金額與規則鎖在 Code 節點與知識庫。',
+    '留存 5–10 個標準個案（正常、邊界、拒答題），換新模型 5 分鐘跑完回歸測試再上線。'
+  ]);
+  addNote('w-sp', '四段式 System Prompt 骨架（講義 p35、55）', [
+    '# 角色 → # 步驟（先讀【參考資料】再判定）。',
+    '# 限制（查無資料固定拒答、禁止診斷／處方／推估金額）→ # 格式（固定欄位 + {{#context#}} 動態插槽 + 免責聲明）。'
+  ]);
+  addNote('w-topk', '兩把剪刀：Top-K 與相似度閾值（講義 p42）', [
+    '10 段召回分數排序 0.82、0.76、0.71、0.66、0.58…，答案在 #2 與 #4：Top-K = 3 會剪掉 #4；Top-K = 5 加閾值 0.5 兩段都保留。',
+    '混合檢索：「Metformin」靠向量找到「二甲雙胍」，「第 4 條第 2 項」靠全文比對。'
+  ]);
+  addNote('w-code', '防呆正規表達式與三筆 Trace（講義 p57）', [
+    'Regex 只抓「第 [2-8] 級 / CMS [2-8]」，避免把個案年齡（80 歲）誤抓成等級。',
+    '實測 Trace：「第 4 級」→ 18,580、「CMS 6」→ 28,070、資訊不足 → amount: 0 安全歸零並提示轉照管專員。'
+  ]);
+  addNote('w-nogen', '同一題問五次：LLM 生成 vs Code 查表（講義 p48、58）', [
+    'LLM 直接回答：17,960、18,240、18,580、18,240、19,100 元（落差達 1,140 元）。',
+    'Code 節點查表：五次都是 18,960 元——數字會變的，就是生成的。'
+  ]);
+  addNote('w-fallback', '每一種失敗都先接好一條路（講義 p74）', [
+    '429／503／逾時 → 失敗分支＋備援模型；API 改版 → 異常回報節點、轉真人。',
+    '模型拒答 → 備援模型或明確告知；知識庫空結果 → 退回內建知識庫並告知。',
+    '輸入不足 → 反向提問；Agent 迭代用盡 → 最大迭代次數、轉人工。'
+  ]);
 })();

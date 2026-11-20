@@ -38,17 +38,49 @@
     ['PydanticAI', 'https://ai.pydantic.dev/']
   ], '四個主流 Python Agent 框架；核心永遠是「@tool 確定性查表 ＋ System Prompt ＋ max_turns 護欄」。');
 
-  function addNote(id, title, body) {
+  function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
-    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+    const list = Array.isArray(bullets)
+      ? U.h('ul', { style: { margin: '6px 0 0', paddingLeft: '18px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets.map(t => U.h('li', null, t)))
+      : U.h('div', { style: { marginTop: '6px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets);
+    b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), list));
   }
-  addNote('w-stuck', '升級順序：', '① 給足證據（先用這招）→ 證據給齊仍改錯，② 要它先解釋再動手 → 連改三次還是壞，③ git 退回上一個可運行的 commit、換說法重述 → 仍卡住，④ 換模型或工具。（講義 M10 第 25 頁）');
-  addNote('w-spec', '五行規格＋查表缺一不可（講義 p30、p32）：', '① 做什麼 ② 給誰用（必寫手機也能正常顯示）③ 輸入什麼 ④ 輸出什麼 ⑤ 技術限制（純前端單一 HTML、不接 DB）；並附上完整給付額度查表與「先複述實作計畫」護欄。');
-  addNote('w-calc', '標準答案要自己先算：', '用滿額度時的自負額＝額度 × 比率。例：第 5 級一般戶 24,100 × 16%＝3,856、中低收 1,205。注意 28,070 × 5%＝1,403.5、32,090 × 5%＝1,604.5——四捨五入是 1,404、1,605，無條件捨去是 1,403、1,604；進位規則要寫進指令再驗算。（講義 M10 第 38 頁有 21 格完整答案）');
-  addNote('w-git', '空庫＋存檔點心法（講義 p41）：', 'GitHub 建新庫切記不要勾選 README / .gitignore，否則首次 push 會衝突；每次改完小功能就 git add . && git commit，讓 Git 成為你放手讓 AI 改程式的時光機存檔點。');
-  addNote('w-seven', '30 分鐘端到端節奏（講義 p47）：', '① 想清楚 5m → ② 第一指令 1m → ③ 看懂資料夾 3m → ④ 三輪小步迭代 10m → ⑤ 本機 21 格驗算 3m → ⑥ GitHub 3m → ⑦ 手機實測公開網址 5m。');
-  addNote('w-dfail', '先看哪裡：', '一片空白 → 瀏覽器 F12 的 Console（常見主程式檔 404，多半是 publish directory 沒填 dist）；圖片讀不到 → Network（404 代表路徑錯，改相對路徑或放 public/）；推了沒更新 → 平台 Deploys 頁的建置記錄，或用無痕視窗排除快取。（講義 M10 第 46 頁）');
-  addNote('w-replit', '時間軸：', '12 天公開實驗的第 9 天，宣告凍結後代理仍對正式資料庫下指令，刪除 1,206 位主管、1,196+ 家公司資料；代理宣稱無法還原（錯的）；7/19 使用者自己用回溯救回；7/20 執行長道歉，承諾開發與正式資料庫分開。（講義 M10 第 51 頁）');
-  addNote('w-when', '綠燈 vs 紅燈（講義 p53）：', '✔ 綠燈：衛教試算器、教學原型、單一 HTML、無個資腳本；✘ 紅燈：醫院正式掛號/開藥、含真實 PHI 個資、直接連正式資料庫寫入權限。');
-  addNote('w-guard', 'Python 版必補護欄（講義 p60、p63）：', '@tool 鎖住確定性查表（對應 M8 Code 節點）＋ instructions 寫明不推算金額與附免責聲明 ＋ max_turns=5 防止錯誤工具呼叫無限迴圈燒錢。');
+  addNote('w-stuck', 'AI 卡住時的升級順序（講義 p25）', [
+    '① 給足證據（完整錯誤訊息、截圖、相關檔案）。',
+    '② 證據給齊仍改錯 → 要它先解釋原因再動手。',
+    '③ 連改三次還是壞 → git 退回上一個可運行的 commit，換說法重述；仍卡住再換模型或工具。'
+  ]);
+  addNote('w-spec', '五行規格＋查表缺一不可（講義 p30、32）', [
+    '五行規格：① 做什麼 ② 給誰用（必寫手機正常顯示）③ 輸入什麼 ④ 輸出什麼 ⑤ 技術限制（純前端單一 HTML、不接 DB）。',
+    '防呆護欄：附上完整給付額度查表，並要求 AI「開始前先複述實作計畫」。'
+  ]);
+  addNote('w-calc', '標準答案要自己先算（講義 p38）', [
+    '用滿額度時自負額 ＝ 額度 × 比率（例：第 5 級一般戶 24,100 × 16% = 3,856、中低收 1,205）。',
+    '進位規則須先講清楚：28,070 × 5% = 1,403.5、32,090 × 5% = 1,604.5（四捨五入 vs 無條件捨去不同）。'
+  ]);
+  addNote('w-git', '空庫＋存檔點心法（講義 p41）', [
+    'GitHub 建新庫切記不要勾選 README / .gitignore，否則首次 push 會衝突。',
+    '每次改完小功能就 git add . && git commit，讓 Git 成為你放手讓 AI 改程式的時光機。'
+  ]);
+  addNote('w-seven', '30 分鐘端到端節奏（講義 p47）', [
+    '① 想清楚 5m → ② 第一指令 1m → ③ 看懂資料夾 3m → ④ 三輪小步迭代 10m。',
+    '⑤ 本機 21 格驗算 3m → ⑥ 推上 GitHub 3m → ⑦ 手機實測公開網址 5m。'
+  ]);
+  addNote('w-dfail', '部署失敗先看哪裡？（講義 p46）', [
+    '一片空白 → F12 Console（主程式 404 多半是 publish directory 沒填 dist）。',
+    '圖片讀不到 → Network（404 代表路徑錯，改相對路徑或放 public/）。',
+    '推了沒更新 → 看平台 Deploys 建置記錄，或用無痕視窗排除快取。'
+  ]);
+  addNote('w-replit', 'Replit Agent 誤刪正式資料庫時間軸（講義 p51）', [
+    '12 天公開實驗第 9 天：宣告凍結後代理仍對正式庫下指令，刪除 1,206 位主管、1,196+ 家公司資料，且宣稱無法還原（錯的）。',
+    '7/19 使用者自己用回溯救回；7/20 執行長道歉，承諾強制分離開發與正式資料庫。'
+  ]);
+  addNote('w-when', '綠燈 vs 紅燈應用場景（講義 p53）', [
+    '✔ 綠燈：衛教試算器、教學原型、單一 HTML、無個資腳本。',
+    '✘ 紅燈：醫院正式掛號／開藥、含真實 PHI 個資、直接連正式資料庫寫入權限。'
+  ]);
+  addNote('w-guard', 'Python Agent 版必補護欄（講義 p60、63）', [
+    '@tool 鎖住確定性查表（對應 M8 Code 節點）＋ instructions 寫明不推算金額與附免責聲明。',
+    'max_turns=5 防止錯誤工具呼叫無限迴圈燒錢。'
+  ]);
 })();

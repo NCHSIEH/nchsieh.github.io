@@ -3,7 +3,7 @@
   'use strict';
   const { h, $, S, C, rng, randn, seg, slider, check, lc, Store } = U;
   const { cap, row, lbl, nt, ttl, kpi } = window.M5;
-  const dl = (name, csv) => { const a = h('a', { href: URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })), download: name }); document.body.append(a); a.click(); a.remove(); };
+  const dl = (name, csv) => { const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); const a = h('a', { href: url, download: name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
   const tbl = (head, rows) => h('div', { class: 'tscroll' }, h('table', { class: 'dt' }, h('tr', null, head.map(c => h('th', null, c))), rows.map(r => h('tr', null, r.map((v, j) => v instanceof Node ? h('td', null, v) : h('td', { class: typeof v === 'number' ? 'num' : '', style: { fontWeight: j ? 400 : 600 } }, v))))));
   const fmtN = n => n.toLocaleString();
 
@@ -194,22 +194,22 @@
   // ================= P22 =================
   U.flashcards('#w-cards', [['深度學習', 'Deep Learning', '多層神經網路自動學表徵'], ['表徵學習', 'Representation Learning', '模型自己學特徵'], ['神經元', 'Neuron', '加權求和＋激活'], ['前向傳播', 'Forward Propagation', '輸入逐層算到輸出'], ['反向傳播', 'Backpropagation', '連鎖律把誤差往回傳'], ['梯度下降', 'Gradient Descent', '沿梯度反方向更新權重'], ['學習率', 'Learning Rate', '步伐大小；不穩時先檢查'], ['Adam', 'Adaptive Moment Estimation', '動量＋自適應學習率；預設'], ['激活函數', 'Activation Function', '引入非線性'], ['ReLU', 'Rectified Linear Unit', 'max(0,x)；隱藏層預設'], ['Softmax', 'Softmax', '多分類；機率加總為 1'], ['梯度消失', 'Vanishing Gradient', '梯度傳回時趨近 0'], ['全連接層', 'Dense Layer', '連到前一層所有神經元'], ['Dropout', 'Dropout', '訓練時隨機關閉神經元'], ['批次正規化', 'Batch Normalization', '每層輸出重新標準化'], ['Epoch', 'Epoch', '整個訓練集掃過一次'], ['批次', 'Batch', '一次送入的樣本數'], ['迭代', 'Iteration', '一次權重更新'], ['交叉熵', 'Cross-Entropy', '分類的標準損失'], ['早停', 'Early Stopping', '驗證不再進步就停'], ['嵌入層', 'Embedding', '類別 → 有距離關係的向量'], ['卷積', 'Convolution', '卷積核滑動做局部加權求和'], ['卷積核', 'Kernel / Filter', '學出來的特徵偵測器'], ['特徵圖', 'Feature Map', '卷積的輸出'], ['步幅', 'Stride', '滑動間隔'], ['補零', 'Padding', '邊緣補零維持尺寸'], ['感受野', 'Receptive Field', '一個輸出對應的輸入範圍'], ['池化', 'Pooling', '取最大或平均縮小特徵圖'], ['平移不變性', 'Translation Invariance', '物體移動結果仍相近'], ['展平', 'Flatten', '多維攤成一維'], ['殘差連接', 'Residual Connection', 'x + F(x)，梯度直達前層'], ['遷移學習', 'Transfer Learning', '以預訓練模型為起點'], ['凍結', 'Freezing', '固定權重不訓練'], ['微調', 'Fine-tuning', '解凍並以小學習率續訓'], ['災難性遺忘', 'Catastrophic Forgetting', '學習率太大破壞預訓練知識'], ['資料增強', 'Data Augmentation', '真實世界可能出現的變換'], ['捷徑學習', 'Shortcut Learning', '學到無關但相關的線索'], ['外部驗證', 'External Validation', '換機構、換機型測試'], ['隨機搜尋', 'Random Search', '同預算下常優於網格'], ['資料漂移', 'Data Drift', '上線後輸入分布改變']]);
   U.finalQuiz('#w-final', [
-    ['深度學習與傳統 ML 最核心的差別是？', ['模型比較準', '誰決定特徵', '需要 GPU', '層數比較多'], 1, '把特徵工程交給模型。'],
-    ['講義手算例中，h1 = ReLU(0.54)、h2 = ReLU(0.48)，輸出 z = 1.2×0.54 − 0.7×0.48 + 0.3 = ？', ['0.312', '0.612', '0.948', '1.020'], 1, 'Sigmoid(0.612) = 0.648。'],
-    ['所有隱藏層都不用激活函數，100 層網路等於？', ['100 倍強', '1 層線性模型', '隨機森林', '無法訓練'], 1, '線性疊線性還是線性。'],
-    ['Loss 上下亂跳，第一個該懷疑的是？', ['層數', '學習率', 'Dropout', '標準化'], 1, '先降學習率。'],
-    ['一位病人可能同時有多個診斷，輸出層應該用？', ['1 個 Sigmoid', 'N 個 Softmax', 'N 個 Sigmoid', '不用激活'], 2, 'Softmax 會強迫機率加總為 1。'],
-    ['權重全部初始化為 0，會發生什麼？', ['訓練更快', '所有隱藏神經元學到一模一樣的東西', '梯度爆炸', '沒有影響'], 1, '對稱永遠打不破。'],
-    ['1,000 筆、batch_size = 100、30 個 epoch，權重共更新幾次？', ['30', '100', '300', '3,000'], 2, '10 × 30 = 300。'],
-    ['訓練 Loss 持續降、驗證 Loss 從第 12 epoch 開始升，最先做的是？', ['加 Dropout', '早停在第 12 epoch', '加深網路', '換優化器'], 1, '早停 → 減少容量 → 才加 Dropout。'],
-    ['5×5 輸入、3×3 卷積核、padding 0、stride 1，輸出尺寸是？', ['2×2', '3×3', '4×4', '5×5'], 1, '(5 − 3 + 0) / 1 + 1 = 3。'],
-    ['兩個 3×3 卷積堆疊取代一個 5×5，好處不包括？', ['參數更少', '非線性更多', '感受野相同', '感受野更大'], 3, '感受野相同（都是 5×5）。'],
-    ['醫學影像只有 600 張，遷移學習最合適的策略是？', ['從零訓練', '特徵抽取（凍結全部卷積層）', '全部微調', '不能做'], 1, '資料 < 1,000 張的首選。'],
-    ['X 光模型院內準確率 94%，導入前最不可少的是？', ['再加一層', '外部驗證', '換成 VGG', '提高學習率'], 1, '捷徑學習只有外部驗證會露餡。'],
+    ['深度學習與傳統 ML 最核心的差別是？', ['模型比較準', '誰決定特徵', '需要 GPU', '層數比較多'], 1, '把特徵工程交給模型。', 'p01'],
+    ['講義手算例中，h1 = ReLU(0.54)、h2 = ReLU(0.48)，輸出 z = 1.2×0.54 − 0.7×0.48 + 0.3 = ？', ['0.312', '0.612', '0.948', '1.020'], 1, 'Sigmoid(0.612) = 0.648。', 'p03'],
+    ['所有隱藏層都不用激活函數，100 層網路等於？', ['100 倍強', '1 層線性模型', '隨機森林', '無法訓練'], 1, '線性疊線性還是線性。', 'p04'],
+    ['Loss 上下亂跳，第一個該懷疑的是？', ['層數', '學習率', 'Dropout', '標準化'], 1, '先降學習率。', 'p05'],
+    ['一位病人可能同時有多個診斷，輸出層應該用？', ['1 個 Sigmoid', 'N 個 Softmax', 'N 個 Sigmoid', '不用激活'], 2, 'Softmax 會強迫機率加總為 1。', 'p06'],
+    ['權重全部初始化為 0，會發生什麼？', ['訓練更快', '所有隱藏神經元學到一模一樣的東西', '梯度爆炸', '沒有影響'], 1, '對稱永遠打不破。', 'p07'],
+    ['1,000 筆、batch_size = 100、30 個 epoch，權重共更新幾次？', ['30', '100', '300', '3,000'], 2, '10 × 30 = 300。', 'p09'],
+    ['訓練 Loss 持續降、驗證 Loss 從第 12 epoch 開始升，最先做的是？', ['加 Dropout', '早停在第 12 epoch', '加深網路', '換優化器'], 1, '早停 → 減少容量 → 才加 Dropout。', 'p11'],
+    ['5×5 輸入、3×3 卷積核、padding 0、stride 1，輸出尺寸是？', ['2×2', '3×3', '4×4', '5×5'], 1, '(5 − 3 + 0) / 1 + 1 = 3。', 'p13'],
+    ['兩個 3×3 卷積堆疊取代一個 5×5，好處不包括？', ['參數更少', '非線性更多', '感受野相同', '感受野更大'], 3, '感受野相同（都是 5×5）。', 'p16'],
+    ['醫學影像只有 600 張，遷移學習最合適的策略是？', ['從零訓練', '特徵抽取（凍結全部卷積層）', '全部微調', '不能做'], 1, '資料 < 1,000 張的首選。', 'p15'],
+    ['X 光模型院內準確率 94%，導入前最不可少的是？', ['再加一層', '外部驗證', '換成 VGG', '提高學習率'], 1, '捷徑學習只有外部驗證會露餡。', 'p19'],
   ]);
   (function () {
     const R = [['誰決定特徵', '深度學習＝把特徵工程交給模型。', 'p01'], ['沒有魔法', '加權求和＋非線性，重複幾百萬次。', 'p03'], ['非線性是存在前提', '沒有激活函數，100 層等於 1 層。', 'p04'], ['80% 時間看 Loss 曲線', '四種樣態與處方。', 'p10'], ['過擬合處理順序', '早停 → 減少容量 → Dropout 與正則化。', 'p11'], ['參數量別超過樣本數', '否則是背答案。', 'p06'], ['不要從零訓練', '醫學影像：遷移學習＋資料增強。', 'p17'], ['★ 什麼時候不該用', '表格資料多半是樹模型的主場。', 'p18'], ['外部驗證是必要條件', '捷徑學習只有它會抓出來。', 'p19']];
     const g = h('div', { class: 'grid3' }); R.forEach(([t, d, id], i) => g.append(h('a', { href: '#' + id, style: { textDecoration: 'none', color: 'inherit', border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff', display: 'block' } }, h('div', { class: 'mono', style: { color: 'var(--accent)', fontWeight: 700 } }, i + 1), h('b', null, t), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, d))));
-    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), 'M6 NLP 與文字探勘：讓電腦讀懂文字。', h('a', { href: '../' }, '回到課程首頁 →')));
+    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), 'M6 NLP 與文字探勘：讓電腦讀懂文字。', h('a', { href: '../m6/', style: { fontWeight: 600 } }, '前往 M6 互動頁 →'), '　', h('a', { href: '../' }, '回到課程首頁')));
   })();
 })();

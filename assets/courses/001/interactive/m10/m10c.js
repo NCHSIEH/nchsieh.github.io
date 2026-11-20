@@ -63,11 +63,11 @@
       out.append(h('div', { class: 'kpi', style: { marginBottom: '10px' } }, kpi('手寫 8 個測試（看分期）', `${r.hand.filter(Boolean).length} / 8 通過`, r.hand.every(Boolean) ? 'good' : 'bad'), kpi('一萬組隨機輸入：誤差 > 1', pc(r.bad), r.bad > .01 ? 'bad' : 'good'), kpi('分期判錯', pc(r.mis), r.mis > .005 ? 'bad' : 'good'), kpi('其中「判得比實際輕」', pc(r.dang), r.dang > .005 ? 'bad' : ''), kpi('最大相對誤差', (r.maxE * 100).toFixed(0) + '%')));
       const g = h('div', { class: 'grid2', style: { gap: '18px', alignItems: 'start' } });
       const mx = h('div'); mx.append(sub('手寫測試 × 五個版本（✓＝分期和參考實作一樣）'));
-      const tb = h('div', { style: { display: 'grid', gridTemplateColumns: '120px repeat(5,1fr)', gap: '3px', fontSize: '12.5px' } });
+      const tb = h('div', { style: { display: 'grid', gridTemplateColumns: '120px repeat(5,1fr)', gap: '3px', fontSize: '12.5px', minWidth: '340px' } });
       tb.append(h('b', null, '性別・年齡・肌酸酐'), ...V.map((x, i) => h('b', { style: { textAlign: 'center', color: i === vi ? C.accent : 'inherit' } }, x.n.replace('第 ', 'v').replace(' 版', ''))));
       HAND.forEach(([s0, a, c], t) => { tb.append(h('div', { style: { fontFamily: 'var(--mono)' } }, `${s0 === 'F' ? '女' : '男'} ${a} 歲 ${c}`)); RES.forEach((rr, i) => tb.append(h('div', { style: { textAlign: 'center', borderRadius: '4px', background: rr.hand[t] ? '#e3f1e8' : '#fbe3df', color: rr.hand[t] ? C.good : C.bad, fontWeight: 700, outline: i === vi ? '1.5px solid #1c2430' : 'none' } }, rr.hand[t] ? '✓' : '✗'))); });
       tb.append(h('b', null, '一萬組分期錯'), ...RES.map((rr, i) => h('div', { style: { textAlign: 'center', fontFamily: 'var(--mono)', fontSize: '11.5px', color: rr.mis > .005 ? C.bad : C.good, fontWeight: i === vi ? 700 : 400 } }, pc(rr.mis))));
-      mx.append(tb);
+      mx.append(h('div', { class: 'tscroll' }, tb));
       const hm = h('div'); hm.append(sub(`${v.n}的誤差熱圖（${sex === 'F' ? '女性' : '男性'}）：橫軸年齡、縱軸肌酸酐；紅＝高估、藍＝低估（誤差 10% 以上為最深色）`));
       const W = 420, H = 260, ml = 40, mb = 30, nx = 39, ny = 30, sv = U.svgBox(hm.appendChild(h('div')), W, H);
       const cw = (W - ml - 8) / nx, chh = (H - mb - 8) / ny;
@@ -141,7 +141,7 @@
       out.append(h('div', { class: 'kpi', style: { marginBottom: '10px' } }, kpi('專案檔案', FILES.length + ' 個'), kpi('真正的金鑰', realAll + ' 組'), kpi('掃描抓到', `${found.size} / ${realAll}`, found.size === realAll ? 'good' : 'bad'), kpi('誤報', fp.length + ' 處', fp.length > 3 ? 'bad' : ''), kpi('會被推上 GitHub 且沒被抓到', leak.length + ' 組', leak.length ? 'bad' : 'good')));
       const g = h('div', { class: 'grid2', style: { gap: '18px', alignItems: 'start' } });
       const fl = h('div'); fl.append(sub(`${FILES.length} 個檔案（紅＝含真正金鑰、黃＝只有誤報、灰框＝被 .gitignore 排除不會推上去）。點方塊看內容。`));
-      const grid = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(15,1fr)', gap: '3px' } });
+      const grid = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(18px,1fr))', gap: '3px' } });
       FILES.forEach((f, fi) => { const fh = hits.filter(x => x.fi === fi), hasReal = f.secret.size > 0, caught = [...f.secret].every(li => found.has(fi + ':' + li)), ig = ignored(f.path);
         const b = h('div', { title: f.path, style: { height: '20px', borderRadius: '3px', cursor: 'pointer', background: hasReal ? (caught ? '#e8a397' : C.bad) : fh.length ? '#f2d58a' : '#e5e1d8', outline: sel === fi ? '2px solid #1c2430' : ig ? '2px dashed #8a949f' : 'none', outlineOffset: '-2px', opacity: ig ? .5 : 1 } });
         b.onclick = () => { sel = fi; draw(); }; grid.append(b); });

@@ -44,9 +44,9 @@
     const out = h('div');
     function draw() {
       out.innerHTML = '';
-      const go = h('button', { class: 'btn primary' }, timer ? `訓練中… 第 ${step} 步` : step ? '▶ 再訓練 300 步' : '▶ 開始訓練（300 步）'); go.disabled = !!timer;
-      go.onclick = () => { let k = 0; timer = setInterval(() => { for (let q = 0; q < 3; q++) { train1(); k++; } losses.push([step, loss()]); if (k >= 300) { clearInterval(timer); timer = null; } draw(); }, 30); draw(); };
-      const rs = h('button', { class: 'btn sm' }, '重設成隨機起點'); rs.disabled = !!timer; rs.onclick = () => { reset(); draw(); };
+      const go = h('button', { class: 'btn primary' }, timer ? `⏹ 暫停（第 ${step} 步）` : step ? '▶ 再訓練 300 步' : '▶ 開始訓練（300 步）');
+      go.onclick = () => { if (timer) { clearInterval(timer); timer = null; draw(); return; } let k = 0; timer = setInterval(() => { for (let q = 0; q < 3; q++) { train1(); k++; } losses.push([step, loss()]); if (k >= 300) { clearInterval(timer); timer = null; } draw(); }, 30); draw(); };
+      const rs = h('button', { class: 'btn sm' }, '重設成隨機起點'); rs.onclick = () => { if (timer) { clearInterval(timer); timer = null; } reset(); draw(); };
       out.append(h('div', { class: 'row', style: { gap: '10px', flexWrap: 'wrap', marginBottom: '10px' } }, go, rs));
       const sr = sameRate();
       out.append(h('div', { class: 'kpi', style: { marginBottom: '10px' } }, kpi('訓練步數', step), kpi('損失（每筆平均 log loss）', losses[losses.length - 1][1].toFixed(4)), kpi('最近鄰是同系統的比例', Math.round(sr * 100) + '%', step > 100 && sr > .6 ? 'good' : ''), kpi('瞎猜的期望值', '13%')));
@@ -139,9 +139,11 @@
     function draw() {
       out.innerHTML = '';
       const busy = !!timer, lock = fn => v => { if (!busy) { fn(v); run = null; } };
-      const go = h('button', { class: 'btn primary' }, busy ? `訓練中… epoch ${run.ep}/${EPOCHS}` : '▶ 訓練 120 個 epoch'); go.disabled = busy;
+      const go = h('button', { class: 'btn primary' }, busy ? `⏹ 暫停（epoch ${run.ep}/${EPOCHS}）` : run && run.ep < EPOCHS ? `▶ 繼續訓練（${run.ep}/${EPOCHS}）` : '▶ 訓練 120 個 epoch');
       go.onclick = () => {
-        run = makeRun(); logit(nTr);
+        if (timer) { clearInterval(timer); timer = null; draw(); return; }
+        if (!run || run.ep >= EPOCHS) run = makeRun();
+        logit(nTr);
         timer = setInterval(() => { for (let q = 0; q < 3 && run.ep < EPOCHS; q++) { run.hist.push(run.epoch()); run.ep++; } if (run.ep >= EPOCHS) { clearInterval(timer); timer = null; const b = run.hist.reduce((a, z, i) => z.va < a.z.va ? { z, i } : a, { z: run.hist[0], i: 0 }); log.unshift({ ...run.cfg, best: b.i + 1, auc: b.z.auc, gap: run.hist[EPOCHS - 1].va - run.hist[EPOCHS - 1].tr, lg: logit(run.cfg.nTr).auc }); if (log.length > 8) log.pop(); } draw(); }, 16);
         draw();
       };
@@ -166,7 +168,7 @@
         const tb = h('div', { style: { display: 'grid', gridTemplateColumns: 'auto auto auto auto auto', gap: '4px 10px', fontSize: '12.5px' } });
         ['設定', '早停於', 'MLP AUC', 'Logistic', '差'].forEach(t => tb.append(h('b', null, t)));
         log.forEach(z => { const d = z.auc - z.lg; tb.append(h('div', null, `${fmt(z.nTr, 0)} 筆・${z.H} 個・${REGN[z.reg]}`), h('div', null, `第 ${z.best} 輪`), h('div', { style: { fontFamily: 'var(--mono)' } }, z.auc.toFixed(3)), h('div', { style: { fontFamily: 'var(--mono)' } }, z.lg.toFixed(3)), h('div', { style: { fontFamily: 'var(--mono)', color: d > .01 ? C.good : d < -.01 ? C.bad : C.ink } }, (d >= 0 ? '+' : '') + d.toFixed(3))); });
-        rt.append(tb);
+        rt.append(h('div', { class: 'tscroll' }, tb));
       }
       g.append(lcb, rt); out.append(g);
       let msg = '這是 M4 梯度提升用的同一份 2,000 次出院資料（9 個欄位、再入院率 14%）。按訓練，網路在你的瀏覽器裡用 Adam、batch 32 真的跑 120 個 epoch。';
