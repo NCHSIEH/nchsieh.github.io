@@ -43,8 +43,8 @@
     const out = h('div');
     function draw() {
       out.innerHTML = '';
-      const go = h('button', { class: 'btn primary' }, timer ? `計算 K = ${k} 中…` : res.length ? '↻ 重新計算' : '▶ 從 K = 2 算到 K = 8'); go.disabled = !!timer;
-      go.onclick = () => { res.length = 0; k = 1; timer = setInterval(() => { k++; const km = ML.kmeans(Z, k, { seed: 9, runs: 4 }); res.push({ k, inertia: km.inertia, sil: S.mean(ML.silhouette(Z, km.lab)) }); if (k >= 8) { clearInterval(timer); timer = null; } draw(); }, 350); draw(); };
+      const go = h('button', { class: 'btn primary' }, timer ? `■ 停止（計算 K = ${k}）` : res.length ? '↻ 重新計算' : '▶ 從 K = 2 算到 K = 8');
+      go.onclick = () => { if (timer) { clearInterval(timer); timer = null; draw(); return; } res.length = 0; k = 1; timer = setInterval(() => { k++; const km = ML.kmeans(Z, k, { seed: 9, runs: 4 }); res.push({ k, inertia: km.inertia, sil: S.mean(ML.silhouette(Z, km.lab)) }); if (k >= 8) { clearInterval(timer); timer = null; } draw(); }, 350); draw(); };
       out.append(h('div', { class: 'row', style: { gap: '10px', marginBottom: '10px' } }, go, h('span', { class: 'tag gray' }, '600 位長者 × 9 個欄位（已 Z-Score）')));
       const g = h('div', { class: 'grid2', style: { gap: '18px' } });
       const a = h('div'), b = h('div');
@@ -190,10 +190,11 @@
     function draw() {
       res.innerHTML = '';
       const total = K.reduce((s, k) => s + k[2], 0), bars = h('div');
-      res.append(lab('各群人數（用上方按鈕切換群）'), bars);
-      U.hbars(bars, K.map((k, i) => ({ label: k[0], value: k[2], color: i === sel ? C.accent : '#b8c2cc' })), { w: 760, lw: 70, rowH: 28, max: 4300, fmt: v => fmt(v, 0) + '（' + (v / total * 100).toFixed(0) + '%）' });
+      res.append(lab('各群人數（點上方按鈕或點長條切換群）'), bars);
+      const svBar = U.hbars(bars, K.map((k, i) => ({ label: k[0], value: k[2], color: i === sel ? C.accent : '#b8c2cc' })), { w: 640, lw: 65, rowH: 28, max: 4300, fmt: v => fmt(v, 0) + '（' + (v / total * 100).toFixed(0) + '%）' });
+      K.forEach((_, idx) => { const hit = U.s('rect', { x: 0, y: 4 + idx * 28, width: 640, height: 28, fill: 'transparent', style: 'cursor:pointer' }, svBar); hit.addEventListener('click', () => { sel = idx; draw(); }); });
       const [code, name, n, prof, desc, risk] = K[sel];
-      const pc = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: '6px', marginTop: '8px' } }, ...V.map((v, i) => { const s = prof[i]; const c = s === '↑' || s === '＋' ? 'var(--bad-soft)' : s === '↓' ? 'var(--blue-soft)' : '#f1efe9'; return h('div', { style: { background: c, borderRadius: '8px', padding: '8px 6px', textAlign: 'center' } }, h('div', { style: { fontSize: '12px', color: 'var(--muted)' } }, v), h('div', { style: { fontSize: '20px', fontWeight: 700 } }, s)); }));
+      const pc = h('div', { class: 'g6-tabs', style: { marginTop: '8px' } }, ...V.map((v, i) => { const s = prof[i]; const c = s === '↑' || s === '＋' ? 'var(--bad-soft)' : s === '↓' ? 'var(--blue-soft)' : '#f1efe9'; return h('div', { style: { background: c, borderRadius: '8px', padding: '8px 6px', textAlign: 'center' } }, h('div', { style: { fontSize: '12px', color: 'var(--muted)' } }, v), h('div', { style: { fontSize: '20px', fontWeight: 700 } }, s)); }));
       res.append(h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: '#fff' } }, h('b', null, `${code}　${name}（${fmt(n, 0)} 人）`), pc, h('div', { style: { fontSize: '14px', marginTop: '8px' } }, desc), h('span', { class: 'tag amber', style: { marginTop: '6px' } }, '追蹤結果：' + risk)));
       res.append(note(`演算法只給了編號；「${name}」這個名字，是研究者看了上面這排剖析（相對整體偏高 ↑、偏低 ↓）之後取的——就是本節「看群大小 → 看剖析 → 命名」的流程。這個研究在另外三個世代重跑得到相似的群，是很好的分群示範；但後續研究也發現，直接用診斷年齡、BMI 等連續變數預測病程，效果不輸分群（Dennis et al., 2019）。K-Means 一定會給你 K 群，群是不是「真的存在」，要靠外部資料與臨床結果來檢驗。`));
     }

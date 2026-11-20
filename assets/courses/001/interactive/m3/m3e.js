@@ -62,29 +62,39 @@
       { t: '「腫瘤面積（數百至上千）」和「平滑度（0.05–0.16）」不標準化直接丟進 PCA，PC1 解釋變異高達 98.2%。這代表？', o: ['PCA 壓縮效果超好', '假象！PC1 只是把面積欄位複製一遍，平滑度等小尺度欄被完全忽略'], a: 1, w: '未標準化時大尺度欄位主導共變異數矩陣，必須先做 Z-Score。' }] }
   ], src: '講義 M3 第 50、55 頁（WDBC 與 scikit-learn diabetes 實測；商業資料 Marketing_data 補充：未縮放 PCA 的 PC1 為 47.5%、Z-Score 後 27.3%）。' });
 
-  function addNote(id, title, body) {
+  function addDetails(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
-    b.parentNode.append(U.h('div', { class: 'note', style: { marginTop: '10px' } }, U.h('b', null, title), body));
+    const ul = U.h('ul', null, bullets.map(([k, v]) => U.h('li', null, U.h('b', null, k + '：'), v)));
+    b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), U.h('div', { class: 'dn-body' }, ul)));
   }
 
-  addNote('w-scale', '課程資料集實測（乳癌 WDBC，N = 569、30 欄）：',
-    '未縮放時 worst area 與 mean area 合計佔全表 99.1% 變異，K=2 與診斷一致率僅 85.4%（Silhouette 卻高達 0.70，內部指標被尺度騙了）；K=4 未縮放切出 268 / 181 / 101 / 19 人，Z-Score 後均衡切出 225 / 153 / 109 / 82 人，K=2 一致率升到 90.5%。商業資料補充：Marketing_data（N=8,950）未縮放時 CREDIT_LIMIT 單欄佔 30.1% 變異、PAYMENTS 佔 19.1%。（講義 M3 第 10、18 頁）');
+  addDetails('w-scale', '延伸閱讀：課程資料集實測（乳癌 WDBC，N = 569、30 欄，講義第 10、18 頁）', [
+    ['未縮放陷阱', 'worst area 與 mean area 合計佔全表 99.1% 變異，K=2 與診斷一致率僅 85.4%（Silhouette 卻高達 0.70，內部指標被尺度騙了）。'],
+    ['Z-Score 之後', 'K=4 未縮放切出 268 / 181 / 101 / 19 人；Z-Score 後均衡切出 225 / 153 / 109 / 82 人，K=2 一致率升到 90.5%。'],
+    ['商業資料補充', 'Marketing_data（N=8,950）未縮放時 CREDIT_LIMIT 單欄佔 30.1% 變異、PAYMENTS 佔 19.1%。']
+  ]);
 
-  addNote('w-elbow', '乳癌 WDBC 569 例（30 欄 Z-Score）K = 2..6 三判準實測對照：',
-    'K=2（Inertia 11,596｜Silhouette 0.343★最高｜DBI 1.32★最低，與良性／惡性診斷一致 90.5%）→ K=3（Inertia 10,062 肘點｜Silhouette 0.314｜DBI 1.53；惡性群再拆出「中型凹陷、64% 惡性」的灰色地帶）→ K=4（Silhouette 腰斬到 0.159）→ K=5（0.163）→ K=6（0.162，含 17 人小群）。統計指標用來縮小候選範圍，最終由臨床可解釋性拍板！（講義 M3 第 24 頁）');
+  addDetails('w-elbow', '延伸閱讀：乳癌 WDBC 569 例 K = 2..6 三判準實測對照（講義第 24 頁）', [
+    ['K = 2', 'Inertia 11,596｜Silhouette 0.343（★最高）｜DBI 1.32（★最低），與良性／惡性診斷一致 90.5%。'],
+    ['K = 3（肘點）', 'Inertia 10,062｜Silhouette 0.314｜DBI 1.53；惡性群再拆出「中型凹陷、64% 惡性」的灰色地帶。'],
+    ['K = 4..6', 'Silhouette 腰斬到 0.159–0.163（K=6 出現 17 人小群）。統計指標用來縮小候選範圍，最終由臨床可解釋性拍板！']
+  ]);
   CaseLinks('w-elbow', [['Scikit-learn 官方指南：Clustering Performance Evaluation（Silhouette / DBI 數學定義）', U_SK]],
     '對應講義 M3 第 24、72 頁參考文獻 [6]。');
 
-  addNote('w-dendro', '四種連結法（Linkage）與 O(n²) 記憶體瓶頸：',
-    '① Single（最近點：易產生鏈鎖效應 Chaining） ② Complete（最遠點：群緊湊怕離群值） ③ Average（平均距離：AI Studio 常用） ④ Ward 華德法（組內平方和增量最小，與 K-Means 同目標，最推薦）。實測乳癌 569 例 K=2：Single／Complete 只切下 2 個離群點（與診斷一致 63%），Ward 切出 184 / 385（一致 88%）。距離矩陣：569 例約 16 萬對；n=8,950 需 4,005 萬對。大資料實務採「小樣本 Ward 看樹狀圖定 K → 全量跑 K-Means」二階段組合技。（講義 M3 第 29 頁）');
+  addDetails('w-dendro', '延伸閱讀：四種連結法（Linkage）與 O(n²) 記憶體瓶頸（講義第 29 頁）', [
+    ['四種連結法', '① Single（最近點：易鏈鎖效應）② Complete（最遠點：緊湊但怕離群值）③ Average（平均距離：AI Studio 常用）④ Ward 華德法（組內變異增量最小，最推薦）。'],
+    ['WDBC 569 例實測', 'Single／Complete 只切下 2 個離群點（一致率 63%）；Ward 切出 184 / 385（一致率 88%）。'],
+    ['大資料二階段組合技', '距離矩陣 569 例約 16 萬對、n=8,950 需 4,005 萬對。實務採「小樣本 Ward 看樹狀圖定 K → 全量跑 K-Means」。']
+  ]);
 
-  addNote('w-db', '如何系統化設定 eps 與 minPts？（講義 M3 第 32 頁）：',
-    'Step 1：依維度 D 先鎖定 minPts = 2×D（Sander 1998 法則，2D 資料設 4–6），不讓兩參數同時亂動。 Step 2：務必先做 Z-Score，再算每點到「第 k 近鄰（k=minPts）」距離並由小到大排序畫 k-距離圖（k-distance plot）——平坦段為密集核心、急遽上揚的「膝蓋轉折點（Knee）」即為最佳 eps！');
+  addDetails('w-db', '延伸閱讀：如何系統化設定 eps 與 minPts？（講義第 32 頁）', [
+    ['Step 1 鎖定 minPts', '依維度 D 先鎖定 minPts = 2×D（Sander 1998 法則，2D 資料設 4–6），不讓兩參數同時亂動。'],
+    ['Step 2 畫 k-距離圖', '務必先做 Z-Score，再算每點到第 k 近鄰距離並排序——平坦段為密集核心、急遽上揚的「膝蓋轉折點（Knee）」即最佳 eps。']
+  ]);
   CaseLinks('w-db', [['Ester et al. (KDD 1996)：DBSCAN 密度分群原始論文 PDF', U_DBSCAN]],
     '對應講義 M3 第 32、34、72 頁參考文獻 [4]。');
 
-  addNote('w-ahl', '五群各有多少人（瑞典 ANDIS 世代 8,980 人）：',
-    'SAID 自體免疫 577、SIDD 胰島素嚴重不足 1,575（視網膜病變風險最高）、SIRD 胰島素嚴重阻抗 1,373（腎臟病變風險最高）、MOD 輕度肥胖相關 1,942、MARD 輕度年齡相關 3,513（約 39%）。演算法只給編號，名字是研究者看完剖析後取的。（講義 M3 第 41 頁）');
   CaseLinks('w-ahl', [
     ['Ahlqvist et al. Lancet Diabetes Endocrinol 2018（隆德大學官方論文頁）', U_AHL],
     ['Dennis et al. Lancet Diabetes Endocrinol 2019（PMC 全文：連續變數模型 vs 五群外部驗證）', U_DENNIS]
@@ -96,9 +106,13 @@
   CaseLinks('w-iso', [['Liu, Ting & Zhou (IEEE ICDM 2008)：Isolation Forest 原始論文 PDF', U_IF]],
     'O(n·log n) 時間複雜度、不需算距離矩陣，高維資料異常偵測首選。對應講義 M3 第 46、47、72 頁參考文獻 [5]。');
 
-  addNote('w-scree', '兩個醫療資料集 PCA 實測（講義 M3 第 50、55 頁）：',
-    '① 乳癌 WDBC（30 欄 Z-Score）：PC1 (44.3%) + PC2 (19.0%) = 63.2%（2 維即可畫散布圖），前 7 個主成分累積保留 91.0% 變異（維度減少 77%），10 個保留 95.2%。 ② 糖尿病進展資料（N=442，10 欄）：PC1 單軸濃縮 40.2% 變異，前 4 個主成分保留 76.8%，消除血脂欄位共線性。商業資料補充：Marketing_data（17 欄）7 個 PC 保留 80.8%。');
+  addDetails('w-scree', '延伸閱讀：兩個醫療資料集 PCA 實測（講義第 50、55 頁）', [
+    ['乳癌 WDBC（30 欄 Z-Score）', 'PC1 (44.3%) + PC2 (19.0%) = 63.2%（2D 可視覺化）；前 7 個主成分累積保留 91.0% 變異（維度減少 77%），10 個保留 95.2%。'],
+    ['糖尿病進展資料（N=442，10 欄）', 'PC1 單軸濃縮 40.2% 變異，前 4 個主成分保留 76.8%，消除血脂欄位共線性。商業資料 Marketing_data（17 欄）7 個 PC 保留 80.8%。']
+  ]);
 
-  addNote('w-prep3', '用一份病人資料走一遍（講義 M3 第 13 頁）：',
-    '病歷號 → 移除；年齡 → Z-Score；血清肌酸酐（右偏）→ 先處理極端值再 Z-Score；總膽固醇與 LDL r ≈ 0.9 → 擇一保留；性別 → 0／1；居住地區 5 類 → One-Hot 成 5 欄。順序：去留 → 編碼 → 處理極端值 → 縮放。');
+  addDetails('w-prep3', '延伸閱讀：用一份病人資料走一遍前處理順序（講義第 13 頁）', [
+    ['去留與編碼', '病歷號 → 移除；總膽固醇與 LDL（r ≈ 0.9）→ 擇一保留；性別 → 0／1；居住地區 5 類 → One-Hot 成 5 欄。'],
+    ['極端值與縮放', '年齡 → Z-Score；血清肌酸酐（右偏）→ 先處理極端值再 Z-Score。順序：去留 → 編碼 → 處理極端值 → 縮放。']
+  ]);
 })();

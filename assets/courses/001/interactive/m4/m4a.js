@@ -146,9 +146,11 @@
         w = w.map((v, i) => v * Math.exp(wr.has(i) ? a : -a)); const z = S.sum(w); w = w.map(v => v / z); hist.push({ eps, a, w: w.slice(), before, wr }); }
       return hist; };
     function draw() { out.innerHTML = ''; const H = run(), ok = H.every(x => !x.bad);
-      const g = h('div', { class: 'grid2', style: { gridTemplateColumns: 'repeat(4,1fr)', gap: '8px' } });
-      H.forEach((st, k) => { const b = h('div'), sv = U.svgBox(b, 200, 150), y = U.scale(0, .3, 120, 10), bw = 17; [0, .1, .2, .3].forEach(t => { U.s('line', { x1: 22, x2: 198, y1: y(t), y2: y(t), class: 'grid' }, sv); U.s('text', { x: 19, y: y(t) + 4, 'text-anchor': 'end', text: t.toFixed(1), style: 'font-size:9px' }, sv); });
-        st.w.forEach((v, i) => { const wrong = st.wr && st.wr.has(i); U.s('rect', { x: 25 + i * bw, y: y(Math.min(v, .3)), width: bw - 3, height: y(0) - y(Math.min(v, .3)), fill: wrong ? C.bad : C.accent, rx: 2 }, sv); U.s('text', { x: 25 + i * bw + (bw - 3) / 2, y: 134, 'text-anchor': 'middle', text: i + 1, style: 'font-size:9px' }, sv); });
+      const maxW = Math.max(.3, ...H.flatMap(st => st.w));
+      const yHi = Math.ceil(maxW * 10) / 10, yTicks = [0, yHi / 3, yHi * 2 / 3, yHi];
+      const g = h('div', { class: 'g4-tabs', style: { gap: '8px' } });
+      H.forEach((st, k) => { const b = h('div'), sv = U.svgBox(b, 200, 150), y = U.scale(0, yHi, 120, 10), bw = 17; yTicks.forEach(t => { U.s('line', { x1: 22, x2: 198, y1: y(t), y2: y(t), class: 'grid' }, sv); U.s('text', { x: 19, y: y(t) + 4, 'text-anchor': 'end', text: t.toFixed(1), style: 'font-size:9px' }, sv); });
+        st.w.forEach((v, i) => { const wrong = st.wr && st.wr.has(i); U.s('rect', { x: 25 + i * bw, y: y(v), width: bw - 3, height: y(0) - y(v), fill: wrong ? C.bad : C.accent, rx: 2 }, sv); U.s('text', { x: 25 + i * bw + (bw - 3) / 2, y: 134, 'text-anchor': 'middle', text: i + 1, style: 'font-size:9px' }, sv); });
         g.append(h('div', null, h('b', { style: { fontSize: '13px' } }, k ? `第 ${k} 輪後` : '初始：每筆一樣重'), b, h('div', { class: 'mono', style: { fontSize: '12px', color: 'var(--muted)' } }, k ? (st.bad ? `ε = ${st.eps.toFixed(3)} → 停止` : `ε = ${st.eps.toFixed(3)}　α = ${st.a.toFixed(3)}`) : 'w = 1/10 = 0.100'))); });
       const lines = [h('div', null, '【初始】每筆權重 w = 1/10 = 0.100')]; H.slice(1).forEach((st, k) => { const ws = [...st.wr].map(i => i + 1).join(', ');
         if (st.bad) { lines.push(h('div', { style: { color: 'var(--bad)' } }, `【第 ${k + 1} 輪】分錯 {${ws}}，ε = ${st.eps.toFixed(4)}：${st.eps <= 0 ? '全對，α 無限大——一個分類器就完美，不需要 Boosting' : 'ε ≥ 0.5，比亂猜還差，AdaBoost 會丟棄這個分類器'}。`)); return; }
@@ -157,8 +159,10 @@
       const AL = H.slice(1).filter(x => !x.bad), score = [...Array(10).keys()].map(i => S.sum(AL.map(st => st.wr.has(i) ? -st.a : st.a))), fw = score.map((s, i) => s > 0 ? null : i + 1).filter(Boolean);
       if (ok) lines.push(h('div', { style: { marginTop: '4px', fontWeight: 700 } }, `【最終】H(x) = sign( ${AL.map((st, k) => `${st.a.toFixed(4)}·h${k + 1}`).join(' + ')} )`));
       const sel = h('div', { class: 'row', style: { gap: '4px' } }, lbl(`點樣本切換「第 ${ed + 1} 輪分錯」：`), [...Array(10).keys()].map(i => { const on = W[ed].includes(i); const b = h('button', { class: 'btn sm' + (on ? '' : ''), style: on ? { background: 'var(--bad)', color: '#fff', borderColor: 'var(--bad)' } : {} }, i + 1); b.onclick = () => { W[ed] = on ? W[ed].filter(x => x !== i) : [...W[ed], i].sort((a, b) => a - b); draw(); }; return b; }));
+      const exIdx = fw.length ? fw[0] - 1 : -1;
+      const exExpr = exIdx >= 0 ? AL.map(st => `${st.wr.has(exIdx) ? '−' : '+'}${st.a.toFixed(3)}`).join(' ') : '';
       out.append(sel, g, h('div', { class: 'note', style: { fontFamily: 'var(--mono)', fontSize: '13px' } }, lines),
-        ok ? nt(fw.length ? `最終投票：樣本 ${fw.join('、')} 的加權票 ≤ 0，仍被 H(x) 判錯。例如樣本 7：+${AL[0].a.toFixed(3)} +${AL[1] ? AL[1].a.toFixed(3) : 0} −${AL[2] ? AL[2].a.toFixed(3) : 0} = ${score[6].toFixed(3)}。三輪不夠，Boosting 會繼續加分類器——也說明 ε 逐輪下降只是本例的設計。` : '最終加權投票把十筆都判對了：每一筆被分錯的那一輪，都被其他輪的票數蓋過。', fw.length ? 'warn' : '') : ''); }
+        ok ? nt(fw.length ? `最終投票：樣本 ${fw.join('、')} 的加權票 ≤ 0，仍被 H(x) 判錯。例如樣本 ${exIdx + 1}：${exExpr} = ${score[exIdx].toFixed(3)}。三輪不夠，Boosting 會繼續加分類器——也說明 ε 逐輪下降只是本例的設計。` : '最終加權投票把十筆都判對了：每一筆被分錯的那一輪，都被其他輪的票數蓋過。', fw.length ? 'warn' : '') : ''); }
     ctl.append(row(lbl('編輯'), seg([[0, '第 1 輪'], [1, '第 2 輪'], [2, '第 3 輪']], () => ed, v => ed = v, draw), h('button', { class: 'btn sm', onclick: () => { W = [[0, 1, 2], [3, 4, 5], [6, 7]]; draw(); } }, '↺ 講義例子')));
     $('#w-ada').append(ctl, out); draw();
   })();

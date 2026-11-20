@@ -42,9 +42,9 @@
     const out = h('div');
     function draw() {
       out.innerHTML = '';
-      const go = h('button', { class: 'btn primary' }, timer ? `長第 ${M + 1} 棵…` : M ? '▶ 再長 40 棵' : '▶ 開始，一棵一棵長'); go.disabled = !!timer || M >= 120;
-      go.onclick = () => { let k = 0; timer = setInterval(() => { addTree(); k++; if (k >= 40 || M >= 120) { clearInterval(timer); timer = null; } draw(); }, 60); draw(); };
-      const rs = h('button', { class: 'btn sm' }, '重來'); rs.disabled = !!timer; rs.onclick = () => { reset(); draw(); };
+      const go = h('button', { class: 'btn primary' }, timer ? `⏹ 暫停（第 ${M} 棵）` : M >= 120 ? '已達 120 棵上限' : M ? '▶ 再長 40 棵' : '▶ 開始，一棵一棵長'); go.disabled = !timer && M >= 120;
+      go.onclick = () => { if (timer) { clearInterval(timer); timer = null; draw(); return; } let k = 0; timer = setInterval(() => { addTree(); k++; if (k >= 40 || M >= 120) { clearInterval(timer); timer = null; } draw(); }, 60); draw(); };
+      const rs = h('button', { class: 'btn sm' }, '重來'); rs.onclick = () => { if (timer) { clearInterval(timer); timer = null; } reset(); draw(); };
       out.append(h('div', { class: 'row', style: { gap: '10px', flexWrap: 'wrap', marginBottom: '10px' } }, go, rs,
         h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, '學習率'), seg([[0.1, '0.1'], [0.3, '0.3'], [1.0, '1.0（太大）']], () => lr, v => { if (!timer) { lr = v; reset(); } }, draw),
         h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, '每棵深度'), seg([[1, '1（樁）'], [3, '3'], [6, '6']], () => depth, v => { if (!timer) { depth = v; reset(); } }, draw)));
@@ -104,9 +104,10 @@
     const out = h('div');
     function draw() {
       out.innerHTML = '';
-      const go = h('button', { class: 'btn primary' }, timer ? '播放中…' : '▶ 從頭播放 72 小時'); go.disabled = !!timer;
-      go.onclick = () => { cur = 0; timer = setInterval(() => { cur = Math.min(T, cur + 6); if (cur >= T) { clearInterval(timer); timer = null; } draw(); }, 50); draw(); };
-      out.append(h('div', { class: 'row', style: { gap: '10px', flexWrap: 'wrap', marginBottom: '10px' } }, go, h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, '偵測方法：'), seg(Object.entries(DET).map(([k, d]) => [k, d.name]), () => det, v => det = v, draw)));
+      const go = h('button', { class: 'btn primary' }, timer ? '⏸ 暫停播放' : cur < T ? '▶ 繼續播放' : '▶ 從頭播放 72 小時');
+      go.onclick = () => { if (timer) { clearInterval(timer); timer = null; draw(); return; } if (cur >= T) cur = 0; timer = setInterval(() => { cur = Math.min(T, cur + 6); if (cur >= T) { clearInterval(timer); timer = null; } draw(); }, 50); draw(); };
+      const skip = cur < T ? h('button', { class: 'btn sm', onclick: () => { if (timer) { clearInterval(timer); timer = null; } cur = T; draw(); } }, '⏭ 直接看完整 72 小時') : '';
+      out.append(h('div', { class: 'row', style: { gap: '10px', flexWrap: 'wrap', marginBottom: '10px' } }, go, skip, h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, '偵測方法：'), seg(Object.entries(DET).map(([k, d]) => [k, d.name]), () => det, v => det = v, draw)));
       const flags = []; for (let t = 0; t < cur; t++) if (DET[det].f(t)) flags.push(t);
       const caught = EV.map(e => flags.find(t => t >= e.a && t < e.b + 6));
       const fa = flags.filter(t => !EV.some(e => t >= e.a && t < e.b + 6)).length;

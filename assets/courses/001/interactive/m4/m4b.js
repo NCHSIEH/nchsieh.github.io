@@ -4,7 +4,7 @@
   const { h, $, S, fmt, C, rng, randn, seg, slider, check, Store } = U;
   const { cap, COL, row, lbl, nt, ttl, lc, invNorm } = window.M4;
   const kpi = (...a) => h('div', { class: 'kpi' }, ...a.map(([k, v, c]) => h('div', null, h('div', { class: 'k' }, k), h('div', { class: 'v ' + (c || '') }, v))));
-  const dl = (name, csv) => { const a = h('a', { href: URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })), download: name }); document.body.append(a); a.click(); a.remove(); };
+  const dl = (name, csv) => { const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); const a = h('a', { href: url, download: name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
   const tbl = (head, rows, o = {}) => h('div', { class: 'tscroll' }, h('table', { class: 'dt' }, h('tr', null, head.map(c => h('th', null, c))), rows.map(r => h('tr', null, r.map((v, j) => v instanceof Node ? h('td', null, v) : h('td', { class: typeof v === 'number' ? 'num' : '', style: { fontWeight: j || o.plain ? 400 : 600 } }, v))))));
 
   // ================= P09 三種異常 =================
@@ -231,9 +231,10 @@
     function draw() { out.innerHTML = ''; const t = TH[ti], m = cm(t), accv = (m.TP + m.TN) / 1000, rec = m.TP / NP, prec = m.TP + m.FP ? m.TP / (m.TP + m.FP) : 0, cost = m.FN * cFN + m.FP * cFP;
       const costs = TH.map((tt, i) => { const q = cm(tt); return [i, q.FN * cFN + q.FP * cFP]; }), bi = costs.reduce((a, b) => b[1] < a[1] ? b : a)[0], opt = cFP / (cFP + cFN);
       const mat = h('table', { class: 'dt', style: { maxWidth: '360px' } }, h('tr', null, h('th', null, ''), h('th', null, '預測：會'), h('th', null, '預測：不會')), h('tr', null, h('th', null, '實際會'), h('td', { class: 'num', style: { background: 'var(--good-soft)', fontWeight: 700 } }, m.TP), h('td', { class: 'num', style: { background: 'var(--bad-soft)', fontWeight: 700 } }, m.FN + ' ← 漏掉')), h('tr', null, h('th', null, '實際不會'), h('td', { class: 'num', style: { background: 'var(--amber-soft)' } }, m.FP + ' 誤報'), h('td', { class: 'num' }, m.TN)));
-      const b = h('div'); lc(b, [{ pts: costs.map(([i, c]) => [i, c]), color: C.bad, w: 2.2, dots: true }], { w: 380, h: 220, xmin: 0, xmax: TH.length - 1, ymin: 0, xt: [0, 2, 4, 6, 8, 10, 12, 14], xfmt: i => TH[i], xl: '風險門檻', yl: '總代價', ml: 54, marks: [{ x: ti, color: C.amber, label: '目前' }, { x: bi, color: C.good, label: '最低', dy: 14 }] });
+      const b = h('div'); lc(b, [{ pts: costs.map(([i, c]) => [i, c]), color: C.bad, w: 2.2, dots: true }], { w: 380, h: 220, xmin: 0, xmax: TH.length - 1, ymin: 0, xt: [0, 2, 4, 6, 8, 10, 12, 14], xfmt: i => TH[i], xl: '風險門檻（點圖上圓點可切換）', yl: '總代價', ml: 54, marks: [{ x: ti, color: C.amber, label: '目前' }, { x: bi, color: C.good, label: '最低', dy: 14 }], over: [(sv, x, y) => costs.forEach(([i, c]) => { const dot = U.s('circle', { cx: x(i), cy: y(c), r: 8, fill: 'transparent', style: 'cursor:pointer' }, sv); dot.onclick = () => { ti = i; draw(); }; })] });
+      const optBtn = ti !== bi ? h('button', { class: 'btn primary sm', style: { marginTop: '6px' }, onclick: () => { ti = bi; draw(); } }, `★ 套用最低代價門檻（${TH[bi]}）`) : '';
       out.append(h('div', { class: 'grid2', style: { alignItems: 'start' } }, h('div', null, mat, kpi(['準確率', (accv * 100).toFixed(1) + '%'], ['Recall', (rec * 100).toFixed(0) + '%', rec < .7 ? 'bad' : 'good'], ['Precision', (prec * 100).toFixed(0) + '%'], ['總代價', cost.toLocaleString(), ti === bi ? 'good' : 'bad']),
-        h('div', { class: 'mono', style: { fontSize: '13px', marginTop: '6px' } }, `總代價 = ${m.FN} × ${cFN} + ${m.FP} × ${cFP} = ${cost.toLocaleString()}`)), h('div', null, ttl('不同門檻的總代價'), cap(b, 400))),
+        h('div', { class: 'mono', style: { fontSize: '13px', marginTop: '6px' } }, `總代價 = ${m.FN} × ${cFN} + ${m.FP} × ${cFP} = ${cost.toLocaleString()}`), optBtn), h('div', null, ttl('不同門檻的總代價'), cap(b, 400))),
         nt(`代價比 漏報 : 誤報 = ${cFN} : ${cFP}。模型機率已校準時，理論最佳門檻 = ${cFP} / (${cFP} + ${cFN}) = ${opt.toFixed(3)}；圖上最低點落在 ${TH[bi]}。${ti === bi ? '' : `把門檻從 ${t} 移到 ${TH[bi]}，總代價可從 ${cost.toLocaleString()} 降到 ${costs[bi][1].toLocaleString()}。`}準確率最高的門檻通常不是代價最低的——這是醫療 AI 的核心觀念。`, ti === bi ? '' : 'warn')); }
     ctl.append(row(slider('風險門檻', 0, TH.length - 1, 1, () => ti, v => ti = v, draw, v => TH[v]), slider('漏掉一位的代價', 10, 500, 10, () => cFN, v => cFN = v, draw), slider('一次誤報的代價', 1, 30, 1, () => cFP, v => cFP = v, draw)));
     $('#w-cost').append(ctl, out, h('p', { class: 'ai' }, '講義情境：① 一般訓練 TP 8／FN 12／FP 15，準確率 97.3%、總代價 2,445；② 代價敏感 TP 18／FN 2／FP 140，準確率 85.8%、總代價 820。最實用的組合：class_weight 訓練＋校準＋依代價選門檻；AI Studio 可用 MetaCost 寫入代價矩陣。')); draw();
@@ -261,7 +262,7 @@
       const t = h('table', { class: 'dt' }, h('tr', null, ['方法', '平均準確率', '標準差', '訓練時間（秒）'].map(c => h('th', null, c))), M.map((m, i) => h('tr', null, h('td', { style: { fontWeight: 600 } }, m), ['m', 's', 't'].map(k => { const inp = h('input', { type: 'number', step: 'any', value: (st[i] || {})[k] ?? '', style: { width: '100px' } }); inp.onchange = () => { st[i] = { ...(st[i] || {}), [k]: inp.value === '' ? '' : +inp.value }; Store.set('m4:t1', st); draw(); }; return h('td', null, inp); }))));
       const ok = i => st[i] && st[i].m !== '' && st[i].m != null && st[i].s !== '' && st[i].s != null, have = M.map((_, i) => ok(i));
       let chart = '', msg = '把 AI Studio 10-fold CV 的平均與標準差填進表格（準確率用 0–1 或百分比皆可，但要一致）。';
-      if (have.filter(Boolean).length >= 2) { const vals = M.map((_, i) => have[i] ? st[i] : null), all = vals.filter(Boolean), lo = Math.min(...all.map(v => v.m - v.s)), hi = Math.max(...all.map(v => v.m + v.s)), pad = (hi - lo) * .1 || .01;
+      if (have.filter(Boolean).length >= 2) { const vals = M.map((_, i) => have[i] ? { ...st[i], s: Math.abs(st[i].s) } : null), all = vals.filter(Boolean), lo = Math.min(...all.map(v => v.m - v.s)), hi = Math.max(...all.map(v => v.m + v.s)), pad = (hi - lo) * .1 || .01;
         const b = h('div'), sv = U.svgBox(b, 560, 200), x = U.scale(lo - pad, hi + pad, 170, 540);
         U.ticks(lo - pad, hi + pad, 5).forEach(tk => { U.s('line', { x1: x(tk), x2: x(tk), y1: 6, y2: 180, class: 'grid' }, sv); U.s('text', { x: x(tk), y: 194, 'text-anchor': 'middle', text: +tk.toFixed(3) }, sv); });
         vals.forEach((v, i) => { const y = 22 + i * 34; U.s('text', { x: 164, y: y + 4, 'text-anchor': 'end', text: M[i], style: 'font-weight:600' }, sv); if (!v) return; U.s('line', { x1: x(v.m - v.s), x2: x(v.m + v.s), y1: y, y2: y, stroke: COL[i], 'stroke-width': 3 }, sv); [v.m - v.s, v.m + v.s].forEach(e => U.s('line', { x1: x(e), x2: x(e), y1: y - 6, y2: y + 6, stroke: COL[i], 'stroke-width': 2 }, sv)); U.s('circle', { cx: x(v.m), cy: y, r: 6, fill: COL[i] }, sv); });
@@ -285,22 +286,22 @@
   // ================= P20 =================
   U.flashcards('#w-cards', [['集成學習', 'Ensemble Learning', '組合多個模型以提升表現與穩定性'], ['偏誤', 'Bias', '系統性偏離真實；高偏誤＝欠擬合'], ['變異', 'Variance', '對訓練資料抖動敏感；高變異＝過擬合'], ['多樣性', 'Diversity', '成員錯得不一樣；集成有效的前提'], ['拔靴抽樣', 'Bootstrap', '有放回抽 n 筆'], ['袋外樣本', 'Out-of-Bag', '約 36.8% 沒被抽到，免費驗證集'], ['Bagging', 'Bootstrap Aggregating', '平行訓練再平均；降變異'], ['隨機森林', 'Random Forest', 'Bagging＋每次分裂隨機抽特徵'], ['Extra Trees', 'Extremely Randomized Trees', '分裂點也隨機取'], ['Boosting', 'Boosting', '序列訓練修正前者；降偏誤'], ['弱學習器', 'Weak Learner', '僅略優於隨機猜'], ['決策樁', 'Decision Stump', '只有一層的樹'], ['AdaBoost', 'Adaptive Boosting', '調高分錯樣本的權重'], ['梯度提升', 'Gradient Boosting', '逐棵擬合殘差'], ['學習率', 'Learning Rate', '每棵樹的貢獻比例'], ['早停', 'Early Stopping', '驗證分數不再進步就停'], ['逐葉生長', 'Leaf-wise', 'LightGBM；挑增益最大的葉'], ['軟投票', 'Soft Voting', '平均各成員的機率'], ['堆疊法', 'Stacking', '第二層學怎麼組合'], ['折外預測', 'Out-of-Fold', 'Stacking 避免洩漏的關鍵'], ['點異常', 'Point Anomaly', '單一點明顯偏離'], ['情境異常', 'Contextual Anomaly', '在該情境下不正常'], ['集體異常', 'Collective Anomaly', '一整段序列不正常'], ['四分位距', 'IQR', 'Q1−1.5IQR、Q3+1.5IQR；穩健'], ['中位數絕對離差', 'MAD', '穩健的離散度量'], ['局部離群因子', 'LOF', '≈1 正常、>1 異常'], ['孤立森林', 'Isolation Forest', '切幾刀能孤立'], ['汙染率', 'Contamination', '預期異常比例；決定標出幾筆'], ['精確率@N', 'Precision@N', '前 N 名中真異常的比例'], ['支持度', 'Support', '規則涵蓋的交易比例'], ['信賴度', 'Confidence', 'P(B|A)'], ['提升度', 'Lift', '>1 正相關、<1 負相關'], ['FP-Growth', 'Frequent Pattern Growth', '前綴樹，只掃兩次'], ['滯後特徵', 'Lag Feature', 'n 期前的值'], ['滾動驗證', 'Walk-forward Validation', '測試恆在訓練之後'], ['天真預測', 'Naive Forecast', '明天＝今天；基準線'], ['時間序列分解', 'Decomposition', '趨勢＋季節性＋殘差'], ['機率校準', 'Calibration', '說 70% 就真的 70%'], ['Platt Scaling', 'Platt Scaling', '用邏輯斯迴歸映射分數'], ['代價敏感學習', 'Cost-Sensitive Learning', '把錯誤代價放進模型']]);
   U.finalQuiz('#w-final', [
-    ['訓練 0.99、測試 0.71，最適合的處方是？', ['Boosting', 'Bagging／隨機森林', '加更多特徵', '換更複雜的模型'], 1, '高變異 → 平均掉抖動。'],
-    ['三個模型錯在完全相同的題目，多數決後準確率會？', ['提高', '不變', '下降', '變成 100%'], 1, '沒有多樣性，集成白做。'],
-    ['n 很大時，某筆資料從沒被 bootstrap 抽到的機率約為？', ['10%', '25%', '36.8%', '50%'], 2, '(1−1/n)ⁿ → 1/e。'],
-    ['AdaBoost 某輪加權錯誤率 ε = 0.3，α 約為？', ['0.30', '0.42', '0.85', '1.15'], 1, '0.5 × ln(0.7/0.3) = 0.424。'],
-    ['學習率從 0.1 降到 0.05，棵數大致要？', ['減半', '不變', '加倍', '固定 100'], 2, '學習率與棵數是一組交易。'],
-    ['Stacking 第一層的預測為什麼要用 out-of-fold？', ['算得比較快', '避免第二層學到「第一層記住答案」', '提高多樣性', 'AI Studio 規定'], 1, '否則驗證分數虛高、上線就崩。'],
-    ['36.2°C 本身正常，但病人術後第一天一直這樣，這屬於？', ['點異常', '情境異常', '集體異常', '不是異常'], 1, '要先建立情境才抓得到。'],
-    ['加入一筆極端值後，哪一種門檻最容易被拉走？', ['3σ', 'IQR', 'MAD', '三者一樣'], 0, 'μ 與 σ 本身會被離群值拉走。'],
-    ['異常偵測的門檻最該由什麼決定？', ['3σ', 'contamination 預設值', '專家每天能覆核的筆數', 'AUC'], 2, '設太鬆沒人看，系統形同虛設。'],
-    ['{止痛藥}→{胃藥} confidence 1.0、lift 1.11，應該怎麼解讀？', ['非常強的關聯', '只比隨機好 11%，胃藥本來就很常見', '負相關', '因果關係'], 1, '先看 lift，再看 confidence。'],
-    ['時間序列用隨機切分，最可能的結果是？', ['驗證分數虛高', '驗證分數偏低', '沒有影響', '模型訓練不起來'], 0, '訓練集裡有未來的資料。'],
-    ['漏報代價 200、誤報代價 3，模型已校準，理論最佳門檻約為？', ['0.5', '0.2', '0.015', '0.985'], 2, '3 / (3 + 200) ≈ 0.015。'],
+    ['訓練 0.99、測試 0.71，最適合的處方是？', ['Boosting', 'Bagging／隨機森林', '加更多特徵', '換更複雜的模型'], 1, '高變異 → 平均掉抖動。', 'p02'],
+    ['三個模型錯在完全相同的題目，多數決後準確率會？', ['提高', '不變', '下降', '變成 100%'], 1, '沒有多樣性，集成白做。', 'p03'],
+    ['n 很大時，某筆資料從沒被 bootstrap 抽到的機率約為？', ['10%', '25%', '36.8%', '50%'], 2, '(1−1/n)ⁿ → 1/e。', 'p04'],
+    ['AdaBoost 某輪加權錯誤率 ε = 0.3，α 約為？', ['0.30', '0.42', '0.85', '1.15'], 1, '0.5 × ln(0.7/0.3) = 0.424。', 'p05'],
+    ['學習率從 0.1 降到 0.05，棵數大致要？', ['減半', '不變', '加倍', '固定 100'], 2, '學習率與棵數是一組交易。', 'p06'],
+    ['Stacking 第一層的預測為什麼要用 out-of-fold？', ['算得比較快', '避免第二層學到「第一層記住答案」', '提高多樣性', 'AI Studio 規定'], 1, '否則驗證分數虛高、上線就崩。', 'p07'],
+    ['36.2°C 本身正常，但病人術後第一天一直這樣，這屬於？', ['點異常', '情境異常', '集體異常', '不是異常'], 1, '要先建立情境才抓得到。', 'p09'],
+    ['加入一筆極端值後，哪一種門檻最容易被拉走？', ['3σ', 'IQR', 'MAD', '三者一樣'], 0, 'μ 與 σ 本身會被離群值拉走。', 'p10'],
+    ['異常偵測的門檻最該由什麼決定？', ['3σ', 'contamination 預設值', '專家每天能覆核的筆數', 'AUC'], 2, '設太鬆沒人看，系統形同虛設。', 'p11'],
+    ['{止痛藥}→{胃藥} confidence 1.0、lift 1.11，應該怎麼解讀？', ['非常強的關聯', '只比隨機好 11%，胃藥本來就很常見', '負相關', '因果關係'], 1, '先看 lift，再看 confidence。', 'p12'],
+    ['時間序列用隨機切分，最可能的結果是？', ['驗證分數虛高', '驗證分數偏低', '沒有影響', '模型訓練不起來'], 0, '訓練集裡有未來的資料。', 'p14'],
+    ['漏報代價 200、誤報代價 3，模型已校準，理論最佳門檻約為？', ['0.5', '0.2', '0.015', '0.985'], 2, '3 / (3 + 200) ≈ 0.015。', 'p17'],
   ]);
   (function () {
     const R = [['換一種看資料的角度', '四大主題都不是換更強的模型。', 'p01'], ['先診斷再開藥', 'Bagging 常降變異；Boosting 常先改善偏誤。', 'p02'], ['多樣性是集成的燃料', '成員必須錯得不一樣。', 'p03'], ['Stacking 必用 out-of-fold', '否則嚴重洩漏。', 'p07'], ['這 0.01 值得嗎', '集成的代價是可解釋性。', 'p08'], ['異常有三種型態', '情境與集體異常更重要，也更難抓。', 'p09'], ['先 support、再 lift', '只看 confidence 會把負相關當發現。', 'p12'], ['時間序列不能隨機切', '還要贏過「明天＝今天」。', 'p14'], ['校準＋代價選門檻', '準確率最高的門檻通常不是代價最低的。', 'p17']];
     const g = h('div', { class: 'grid3' }); R.forEach(([t, d, id], i) => g.append(h('a', { href: '#' + id, style: { textDecoration: 'none', color: 'inherit', border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff', display: 'block' } }, h('div', { class: 'mono', style: { color: 'var(--accent)', fontWeight: 700 } }, i + 1), h('b', null, t), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, d))));
-    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), 'M5 深度學習：從神經網路到 CNN。', h('a', { href: '../' }, '回到課程首頁 →')));
+    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步：'), 'M5 深度學習：從神經網路到 CNN。', h('a', { href: '../m5/', style: { fontWeight: 600 } }, '前往 M5 互動頁 →'), '　', h('a', { href: '../' }, '回到課程首頁')));
   })();
 })();

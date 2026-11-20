@@ -5,7 +5,7 @@
   const { cap, COL } = window.M3;
   const pca = X => { const p = X[0].length, m = Array.from({ length: p }, (_, j) => S.mean(X.map(x => x[j]))), E = ML.eigSym(ML.covMatrix(X));
     const vals = E.values, vecs = E.vectors.map(v => { const big = v.reduce((a, b) => Math.abs(b) > Math.abs(a) ? b : a, 0); return big < 0 ? v.map(x => -x) : v; }); return { m, vals, vecs, proj: (x, k = 2) => vecs.slice(0, k).map(v => v.reduce((s, vj, j) => s + vj * (x[j] - m[j]), 0)) }; };
-  const dl = (name, csv) => { const a = h('a', { href: URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })), download: name }); document.body.append(a); a.click(); a.remove(); };
+  const dl = (name, csv) => { const url = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); const a = h('a', { href: url, download: name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
 
   // ================= P08 群組剖析 =================
   (function () {
@@ -24,8 +24,9 @@
           return h('tr', null, h('td', null, h('span', { style: { color: COL[g.c], fontWeight: 700 } }, '● ' + (g.c + 1))), h('td', { class: 'num' + (g.n / X.length < .05 ? ' hl' : '') }, `${g.n}（${Math.round(g.n / X.length * 100)}%）`), g.raw.map((v, j) => h('td', { class: 'num' }, v.toFixed(j === 3 ? 1 : 0))), h('td', null, nm), h('td', null, ac)); }));
       const acts = G.map(g => ((st[k + ':' + g.c] || {}).act || '').trim()).filter(Boolean), dup = acts.length !== new Set(acts).size;
       const msg = k === 3 ? '讀剖析圖：哪幾根特別突出？群內「年齡 +、支出 −」的是年長低支出型；「年齡 −、支出 +」是年輕高支出型；「就診、共病都很高」是高需求族群。' : k === 2 ? 'K = 2 把兩個不同的族群併在一起了——你寫得出兩種行動，但其中一群內部其實需求差很多。' : `K = ${k} 時有群被硬切開：比較它們的長條，是不是幾乎一樣？若寫出來的行動相同，就不需要分開。`;
+      const leg = h('div', { class: 'legend', style: { margin: '4px 0 6px' } }, G.map(g => h('span', null, h('i', { style: { background: COL[g.c] } }), `群 ${g.c + 1}（${g.n} 人）`)));
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, h('span', { style: { fontSize: '14px', color: 'var(--muted)' } }, 'K'), seg([2, 3, 4, 5].map(v => [v, 'K = ' + v]), () => k, v => k = v, draw)),
-        h('b', { style: { fontSize: '14px' } }, '各群在四個特徵上與整體平均的差（Z-Score）'), cap(box, 680), h('div', { class: 'tscroll', style: { marginTop: '8px' } }, tbl),
+        h('b', { style: { fontSize: '14px' } }, '各群在四個特徵上與整體平均的差（Z-Score）'), leg, cap(box, 680), h('div', { class: 'tscroll', style: { marginTop: '8px' } }, tbl),
         h('div', { class: 'note ' + (dup ? 'warn' : ''), style: { fontSize: '14px' } }, dup ? '有兩群寫了相同的行動——代表這兩群其實不需要分開（作業一思考題 Q3）。試著降低 K。' : msg)); }
     $('#w-profile').append(out); draw();
   })();
@@ -165,20 +166,20 @@
   // ================= P14 =================
   U.flashcards('#w-cards', [['非監督式學習', 'Unsupervised Learning', '沒有標籤，找資料本身的結構'], ['分群', 'Clustering', '把相似的個案分成幾群'], ['降維', 'Dimensionality Reduction', '把很多欄位壓成少數幾個'], ['異常偵測', 'Anomaly Detection', '找出不像其他人的個案'], ['K-Means', 'K-Means Clustering', '以中心點與距離反覆指派'], ['中心點', 'Centroid', '一群的平均位置＝典型個案'], ['組內平方和', 'Inertia / WCSS', '各點到自己群中心距離平方的總和'], ['手肘法', 'Elbow Method', 'Inertia 對 K 作圖找轉折'], ['輪廓係數', 'Silhouette', '(b−a)/max(a,b)，越大越好'], ['DB 指數', 'Davies-Bouldin Index', '群內緊密÷群間分離，越小越好'], ['X-Means', 'X-Means', '自動選 K 的 K-Means 變體'], ['凝聚式', 'Agglomerative', '由下而上反覆合併'], ['樹狀圖', 'Dendrogram', '合併順序與距離'], ['單一連結', 'Single Linkage', '兩群最短距離；易成鏈狀'], ['完全連結', 'Complete Linkage', '兩群最長距離；緊密均勻'], ['平均連結', 'Average Linkage', '所有配對距離的平均'], ['Ward 法', "Ward's Method", '合併後組內變異增加最少'], ['DBSCAN', 'Density-Based Clustering', '以密度定義群，可標雜訊'], ['核心點', 'Core Point', '半徑內鄰居數達門檻'], ['邊界點', 'Border Point', '不夠密但在核心點半徑內'], ['雜訊點', 'Noise Point', '不屬於任何群'], ['局部離群因子', 'LOF', '與鄰居相比密度稀疏程度'], ['孤立森林', 'Isolation Forest', '隨機切幾刀能孤立'], ['污染比例', 'Contamination', '預期異常所佔比例'], ['主成分分析', 'PCA', '找變異最大的正交方向'], ['特徵值', 'Eigenvalue', '該主成分方向上的變異量'], ['解釋變異比例', 'Explained Variance Ratio', '各主成分佔總變異的比例'], ['陡坡圖', 'Scree Plot', '各主成分變異的長條圖'], ['t-SNE', 't-SNE', '非線性降維，僅供視覺化'], ['維度詛咒', 'Curse of Dimensionality', '高維時距離失去鑑別力'], ['群組剖析', 'Cluster Profiling', '各群與整體平均的差異']]);
   U.finalQuiz('#w-final', [
-    ['未縮放的年齡（20–80）與收入（100–1400 千元）跑 K-Means，結果會？', ['兩欄等權', '幾乎只依收入分群', '幾乎只依年齡分群', '跑不出來'], 1, '值域大的欄位主導距離。'],
-    ['Inertia 隨 K 增加會？', ['先降後升', '一定下降', '一定上升', '不變'], 1, '所以不能選 Inertia 最小的 K。'],
-    ['某點 a = 2、b = 8，Silhouette 為？', ['0.25', '0.75', '−0.75', '4'], 1, '(8−2)/8 = 0.75。'],
-    ['平均 Silhouette = 0.2 代表？', ['群組結構強', '合理結構', '沒有明顯結構', '分錯了'], 2, '≤ 0.25 無明顯結構。'],
-    ['資料呈兩彎月形，最適合？', ['K-Means', 'DBSCAN', 'PCA', '單一 K-Means 多跑幾次'], 1, 'DBSCAN 順著密度延伸，能抓任意形狀。'],
-    ['AI Studio 的 DBSCAN 輸出 cluster_0 代表？', ['第一群', '雜訊點', '核心點', '最大群'], 1, 'Python 為 −1。'],
-    ['樹狀圖上合併距離從 0.7 跳到 5.6，代表？', ['那裡是自然的切點', '連結方式選錯', '應該用 Ward', '資料有缺失'], 0, '距離大跳＝把兩個本來分開的群硬併在一起。'],
-    ['Isolation Forest 異常分數高的點是？', ['要切很多刀才孤立', '切兩三刀就孤立', '在密集區中央', '離群中心最近'], 1, '稀疏區的點很快被隔離。'],
-    ['PCA 第一主成分的意義？', ['最重要的原始欄位', '投影後變異最大的方向', '相關係數最高的兩欄', '群中心連線'], 1, 'PC 是原始欄位的線性組合，不是某一欄。'],
-    ['兩群命名不同但對應行動一樣，代表？', ['命名要改', '這兩群不需要分開', 'K 太小', '要換演算法'], 1, '分群的最終判準是能不能幫你做決定。'],
+    ['未縮放的年齡（20–80）與收入（100–1400 千元）跑 K-Means，結果會？', ['兩欄等權', '幾乎只依收入分群', '幾乎只依年齡分群', '跑不出來'], 1, '值域大的欄位主導距離。', 'p02'],
+    ['Inertia 隨 K 增加會？', ['先降後升', '一定下降', '一定上升', '不變'], 1, '所以不能選 Inertia 最小的 K。', 'p04'],
+    ['某點 a = 2、b = 8，Silhouette 為？', ['0.25', '0.75', '−0.75', '4'], 1, '(8−2)/8 = 0.75。', 'p04'],
+    ['平均 Silhouette = 0.2 代表？', ['群組結構強', '合理結構', '沒有明顯結構', '分錯了'], 2, '≤ 0.25 無明顯結構。', 'p04'],
+    ['資料呈兩彎月形，最適合？', ['K-Means', 'DBSCAN', 'PCA', '單一 K-Means 多跑幾次'], 1, 'DBSCAN 順著密度延伸，能抓任意形狀。', 'p07'],
+    ['AI Studio 的 DBSCAN 輸出 cluster_0 代表？', ['第一群', '雜訊點', '核心點', '最大群'], 1, 'Python 為 −1。', 'p06'],
+    ['樹狀圖上合併距離從 0.7 跳到 5.6，代表？', ['那裡是自然的切點', '連結方式選錯', '應該用 Ward', '資料有缺失'], 0, '距離大跳＝把兩個本來分開的群硬併在一起。', 'p05'],
+    ['Isolation Forest 異常分數高的點是？', ['要切很多刀才孤立', '切兩三刀就孤立', '在密集區中央', '離群中心最近'], 1, '稀疏區的點很快被隔離。', 'p09'],
+    ['PCA 第一主成分的意義？', ['最重要的原始欄位', '投影後變異最大的方向', '相關係數最高的兩欄', '群中心連線'], 1, 'PC 是原始欄位的線性組合，不是某一欄。', 'p10'],
+    ['兩群命名不同但對應行動一樣，代表？', ['命名要改', '這兩群不需要分開', 'K 太小', '要換演算法'], 1, '分群的最終判準是能不能幫你做決定。', 'p08'],
   ]);
   (function () {
     const R = [['沒有標準答案', '最終判準是「這些群組能不能幫你做決定」。', 'p01'], ['縮放從可選變必要', '距離是所有技術的核心。', 'p02'], ['形狀決定演算法', 'K-Means 只擅長球狀；不規則用 DBSCAN；想看結構用階層式。', 'p07'], ['決定 K 三判準', '手肘看趨勢、Silhouette 看品質、業務可解釋性拍板。', 'p04'], ['分群跑完只是一半', '說不出每群是誰、該做什麼，就等於沒做。', 'p08'], ['PCA 保留變異但難解釋', '要解釋時改用特徵選擇（Weights by PCA）。', 'p10']];
     const g = h('div', { class: 'grid3' }); R.forEach(([t, d, id], i) => g.append(h('a', { href: '#' + id, style: { textDecoration: 'none', color: 'inherit', border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', background: '#fff', display: 'block' } }, h('div', { class: 'mono', style: { color: 'var(--accent)', fontWeight: 700 } }, i + 1), h('b', null, t), h('div', { style: { fontSize: '13.5px', color: 'var(--muted)' } }, d))));
-    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步（第 7 週）：'), 'M4 進階監督式學習：集成、異常偵測與關聯規則。', h('a', { href: '../' }, '回到課程首頁 →')));
+    $('#w-review').append(g, h('div', { class: 'note' }, h('b', null, '下一步（第 7 週）：'), 'M4 進階監督式學習：集成、異常偵測與關聯規則。', h('a', { href: '../m4/' }, '前往 M4 互動版 →')));
   })();
 })();

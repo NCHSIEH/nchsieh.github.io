@@ -69,9 +69,9 @@
     const { X } = M3.blobs, KS = [2, 3, 4, 5, 6, 7, 8, 9];
     const R = KS.map(k => { const km = ML.kmeans(X, k, { seed: 3 }), sil = ML.silhouette(X, km.lab); return { k, km, sil, ms: S.mean(sil), db: ML.daviesBouldin(X, km.lab, km.C) }; });
     let ki = 1; const out = h('div');
-    const line = (key, title, better, color) => { const W = 300, H = 210, m = { l: 44, r: 10, t: 12, b: 34 }, box = h('div'), sv = U.svgBox(box, W, H), vals = R.map(r => r[key]), lo = Math.min(...vals) * (key === 'km' ? 0 : .9), hi = Math.max(...vals) * 1.05, x = U.scale(2, 9, m.l, W - m.r), y = U.scale(lo, hi, H - m.b, m.t);
+    const line = (key, title, better, color) => { const W = 300, H = 210, m = { l: 44, r: 10, t: 12, b: 34 }, box = h('div'), sv = U.svgBox(box, W, H), vals = R.map(r => r[key]), lo = Math.min(...vals) * (key === 'kmI' ? 0 : .9), hi = Math.max(...vals) * 1.05, x = U.scale(2, 9, m.l, W - m.r), y = U.scale(lo, hi, H - m.b, m.t);
       U.ticks(lo, hi, 4).forEach(t => { U.s('line', { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: 'grid' }, sv); U.s('text', { x: m.l - 6, y: y(t) + 4, 'text-anchor': 'end', text: +t.toFixed(2) }, sv); }); KS.forEach(k => U.s('text', { x: x(k), y: H - m.b + 16, 'text-anchor': 'middle', text: k }, sv)); U.s('text', { x: (m.l + W - m.r) / 2, y: H - 3, 'text-anchor': 'middle', text: 'K', style: 'font-size:12px;fill:#5d6774' }, sv);
-      U.s('polyline', { points: R.map(r => `${x(r.k)},${y(r[key])}`).join(' '), fill: 'none', stroke: color, 'stroke-width': 2.5 }, sv); R.forEach((r, i) => U.s('circle', { cx: x(r.k), cy: y(r[key]), r: i === ki ? 7 : 4, fill: i === ki ? C.amber : color }, sv));
+      U.s('polyline', { points: R.map(r => `${x(r.k)},${y(r[key])}`).join(' '), fill: 'none', stroke: color, 'stroke-width': 2.5 }, sv); R.forEach((r, i) => { const c = U.s('circle', { cx: x(r.k), cy: y(r[key]), r: i === ki ? 7 : 4.5, fill: i === ki ? C.amber : color, style: 'cursor:pointer' }, sv); c.addEventListener('click', () => { ki = i; draw(); }); });
       return h('div', null, h('b', { style: { fontSize: '13.5px' } }, title), h('div', { style: { fontSize: '12px', color: 'var(--muted)' } }, better), box); };
     R.forEach(r => r.kmI = r.km.inertia);
     function draw() { out.innerHTML = ''; const cur = R[ki];
@@ -100,7 +100,7 @@
   (function () {
     const P = [[1, 1], [1.5, 1.5], [5, 5], [5.5, 5.2], [9, 1]], N = ['P1', 'P2', 'P3', 'P4', 'P5'];
     let link = 'average', cut = 3; const out = h('div');
-    function draw() { out.innerHTML = ''; const M = ML.agglomerative(P, link), lab = ML.cutTree(5, M, cut), k = Math.max(...lab) + 1, maxH = Math.ceil(M[M.length - 1].d + .8);
+    function draw() { out.innerHTML = ''; const M = ML.agglomerative(P, link), maxH = Math.ceil(M[M.length - 1].d + .8); cut = Math.min(cut, +(maxH - .2).toFixed(1)); const lab = ML.cutTree(5, M, cut), k = Math.max(...lab) + 1;
       const W = 400, H = 300, m = { l: 40, r: 12, t: 14, b: 30 }, box = h('div'), sv = U.svgBox(box, W, H), y = U.scale(0, maxH, H - m.b, m.t);
       U.ticks(0, maxH, 5).forEach(t => { U.s('line', { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: 'grid' }, sv); U.s('text', { x: m.l - 6, y: y(t) + 4, 'text-anchor': 'end', text: t }, sv); });
       const order = M[M.length - 1].m, xs = {}; order.forEach((id, i) => xs[id] = m.l + 30 + i * (W - m.l - m.r - 60) / 4); const pos = {}; order.forEach(id => pos[id] = { x: xs[id], y: y(0) });
@@ -118,15 +118,18 @@
   // ================= P06 DBSCAN =================
   (function () {
     const r = rng(61), X = []; [[2.8, 7, .55, 45], [7.2, 7.2, .5, 40], [5, 2.6, .7, 40]].forEach(([x, y, s, n]) => { for (let i = 0; i < n; i++) X.push([x + s * randn(r), y + s * randn(r)]); }); for (let i = 0; i < 12; i++) X.push([.5 + r() * 9, .5 + r() * 9]);
-    let eps = .7, mp = 5; const out = h('div');
+    let eps = .7, mp = 5, focusPt = -1; const out = h('div');
     function draw() { out.innerHTML = ''; const R = ML.dbscan(X, eps, mp), cnt = { core: 0, border: 0, noise: 0 }; R.type.forEach(t => cnt[t]++);
-      const b = h('div'); U.scatter(b, X.map((p, i) => ({ x: p[0], y: p[1], c: R.lab[i] < 0 ? '#b8bfc6' : COL[R.lab[i] % COL.length], r: R.type[i] === 'core' ? 4.2 : R.type[i] === 'border' ? 3 : 3, op: R.type[i] === 'border' ? .55 : .9, stroke: R.type[i] === 'noise' ? '#5d6774' : null })), { w: 400, h: 340, xmin: 0, xmax: 10, ymin: 0, ymax: 10, noGrid: true, xlabel: '特徵 1', ylabel: '特徵 2', over: [(sv, x, y) => { const ci = R.type.indexOf('core'); if (ci >= 0) U.s('circle', { cx: x(X[ci][0]), cy: y(X[ci][1]), r: x(eps) - x(0), fill: 'none', stroke: C.ink, 'stroke-dasharray': '3 3' }, sv); }] });
+      const ci = focusPt >= 0 ? focusPt : R.type.indexOf('core');
+      const b = h('div'); U.scatter(b, X.map((p, i) => ({ x: p[0], y: p[1], c: R.lab[i] < 0 ? '#b8bfc6' : COL[R.lab[i] % COL.length], r: i === ci ? 5.5 : R.type[i] === 'core' ? 4.2 : 3, op: R.type[i] === 'border' ? .55 : .9, stroke: i === ci ? C.ink : R.type[i] === 'noise' ? '#5d6774' : null, title: '點我檢視 eps 半徑內鄰居', onclick: () => { focusPt = i; draw(); } })), { w: 400, h: 340, xmin: 0, xmax: 10, ymin: 0, ymax: 10, noGrid: true, xlabel: '特徵 1', ylabel: '特徵 2', over: [(sv, x, y) => { if (ci >= 0) U.s('circle', { cx: x(X[ci][0]), cy: y(X[ci][1]), r: x(eps) - x(0), fill: 'none', stroke: C.ink, 'stroke-dasharray': '3 3', 'stroke-width': 1.5 }, sv); }] });
       const kd = X.map(p => X.map(q => Math.sqrt(ML.d2(p, q))).sort((a, c) => a - c)[Math.min(mp, X.length - 1)]).sort((a, c) => a - c);
       const kb = h('div'); const W = 320, H = 200, m = { l: 40, r: 10, t: 10, b: 30 }, sv = U.svgBox(kb, W, H), x = U.scale(0, kd.length, m.l, W - m.r), y = U.scale(0, 3, H - m.b, m.t);
       [0, 1, 2, 3].forEach(t => { U.s('line', { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: 'grid' }, sv); U.s('text', { x: m.l - 6, y: y(t) + 4, 'text-anchor': 'end', text: t }, sv); }); U.s('polyline', { points: kd.map((v, i) => `${x(i)},${y(Math.min(3, v))}`).join(' '), fill: 'none', stroke: C.accent, 'stroke-width': 2.2 }, sv); U.s('line', { x1: m.l, x2: W - m.r, y1: y(eps), y2: y(eps), stroke: C.bad, 'stroke-dasharray': '5 3' }, sv); U.s('text', { x: m.l + 4, y: y(eps) - 4, text: 'eps', style: 'fill:#c0392b;font-weight:600' }, sv); U.s('text', { x: (m.l + W - m.r) / 2, y: H - 4, 'text-anchor': 'middle', text: `各點到第 ${mp} 個鄰居的距離（排序）`, style: 'font-size:11px' }, sv);
-      const msg = cnt.noise > X.length * .4 ? 'eps 太小或 min_samples 太大：大部分點變雜訊。看右邊 k-距離圖，把 eps 設在曲線急速上升的轉折處。' : R.k <= 1 ? 'eps 太大：所有群被併成一群。' : `找到 ${R.k} 群、${cnt.noise} 個雜訊點。不必事先指定群數——密度夠的地方自己長成群。`;
+      const nbCnt = ci >= 0 ? X.filter(q => Math.sqrt(ML.d2(X[ci], q)) <= eps).length : 0;
+      const leg = h('div', { class: 'legend', style: { marginTop: '4px' } }, h('span', null, '大點＝核心點'), h('span', null, '淡點＝邊界點'), h('span', null, h('i', { style: { background: '#b8bfc6' } }), '雜訊'), ci >= 0 ? h('span', { class: 'mono' }, `虛線圓內 ${nbCnt} 點（${R.type[ci]}）`) : '');
+      const msg = cnt.noise > X.length * .4 ? 'eps 太小或 min_samples 太大：大部分點變雜訊。看右邊 k-距離圖，把 eps 設在曲線急速上升的轉折處。' : R.k <= 1 ? 'eps 太大：所有群被併成一群。' : `找到 ${R.k} 群、${cnt.noise} 個雜訊點。點圖上任一點可把 eps 虛線圓移過去檢視半徑內有幾個點。`;
       out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, slider('eps（半徑）', .2, 2.5, .05, () => eps, v => eps = v, draw, v => (+v).toFixed(2)), slider('min_samples', 2, 12, 1, () => mp, v => mp = v, draw)),
-        h('div', { class: 'grid2' }, cap(b, 420), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '群數'), h('div', { class: 'v' }, R.k)), h('div', null, h('div', { class: 'k' }, '核心點'), h('div', { class: 'v' }, cnt.core)), h('div', null, h('div', { class: 'k' }, '邊界點'), h('div', { class: 'v' }, cnt.border)), h('div', null, h('div', { class: 'k' }, '雜訊點'), h('div', { class: 'v ' + (cnt.noise > X.length * .4 ? 'bad' : '') }, cnt.noise))), cap(kb, 340),
+        h('div', { class: 'grid2' }, h('div', null, cap(b, 420), leg), h('div', null, h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '群數'), h('div', { class: 'v' }, R.k)), h('div', null, h('div', { class: 'k' }, '核心點'), h('div', { class: 'v' }, cnt.core)), h('div', null, h('div', { class: 'k' }, '邊界點'), h('div', { class: 'v' }, cnt.border)), h('div', null, h('div', { class: 'k' }, '雜訊點'), h('div', { class: 'v ' + (cnt.noise > X.length * .4 ? 'bad' : '') }, cnt.noise))), cap(kb, 340),
           h('div', { class: 'note ' + (cnt.noise > X.length * .4 || R.k <= 1 ? 'warn' : ''), style: { fontSize: '14px' } }, msg))),
         h('p', { class: 'ai' }, '大點＝核心點（半徑內 ≥ min_samples 個點）；淡色＝邊界點（自己不夠密但落在核心點半徑內）；灰點＝雜訊。AI Studio 把雜訊歸為 cluster_0，別誤讀成第一群（Python 為 −1）。min_samples 經驗值：維度數 × 2；高維時密度概念失效。')); }
     $('#w-db').append(out); draw();
