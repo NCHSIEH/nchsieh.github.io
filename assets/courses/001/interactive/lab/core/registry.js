@@ -71,6 +71,7 @@
     { id: 'C8', group: 'C', title: 'Isolation Forest', brief: '隨機切幾刀就被孤立的點，就是異常。', module: m('M4 第 11 節', '../m4/#p11'), status: 'live', tier: 'adv' },
     { id: 'C11', group: 'C', title: 'K-Means++ 與模糊分群 FCM', brief: '以距離平方 D(x)² 挑選分散起點，並用模糊隸屬度捕捉邊界過渡病人。', module: m('M3 第 03 節', '../m3/#p03'), status: 'live', tier: 'adv' },
     { id: 'C12', group: 'C', title: '馬氏距離與橢圓異常偵測', brief: '納入共變異逆矩陣 Σ⁻¹ 畫出斜橢圓包絡，精準揪出違背相關規律的異常點。', module: m('M4 第 10 節', '../m4/#p10'), status: 'live', tier: 'adv' },
+    { id: 'C13', group: 'C', title: 'UMAP 流形降維', brief: '建構局部模糊鄰域圖並以引力／斥力優化，兼顧局部群聚與全域結構且支援新樣本投影。', module: m('M3 非線性降維', '../m3/#p11'), status: 'live', tier: 'adv' },
 
     { id: 'D1', group: 'D', title: 'Apriori', brief: '一層層產生候選項目集、剪枝，再算 support、confidence、lift。', module: m('M4 第 12 節', '../m4/#p12'), status: 'live' },
     { id: 'D2', group: 'D', title: 'FP-Growth', brief: '把交易壓成一棵 FP-tree，不產生候選就找出頻繁項目集。', module: m('M4 第 13 節', '../m4/#p13'), status: 'live' },
@@ -162,6 +163,7 @@
     C10: 'K-Medoids Clustering (PAM)',
     C11: 'K-Means++ & Fuzzy C-Means Clustering',
     C12: 'Mahalanobis Distance & Elliptic Envelope',
+    C13: 'Uniform Manifold Approximation & Projection (UMAP)',
     D1: 'Apriori Association Rules',
     D2: 'Frequent Pattern Growth',
     D3: 'Sequential Pattern Mining (PrefixSpan)',
@@ -250,6 +252,7 @@
     C10: { ais: 'k-Medoids', py: 'scikit-learn-extra (KMedoids)' },
     C11: { ais: 'k-Means (k-means++) / Fuzzy C-Means', py: 'scikit-learn (KMeans) / scikit-fuzzy' },
     C12: { ais: 'Detect Outlier (Distances / Mahalanobis)', py: 'scikit-learn (EllipticEnvelope) / scipy (mahalanobis)' },
+    C13: { ais: null, py: 'umap-learn (UMAP)' },
 
     D1: { ais: 'FP-Growth + Create Association Rules', py: 'mlxtend (apriori / association_rules)' },
     D2: { ais: 'FP-Growth', py: 'mlxtend (fpgrowth)' },

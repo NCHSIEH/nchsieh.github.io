@@ -196,11 +196,12 @@
         '邊界過渡病人數 = ' + nBorder + ' 人｜最終 J_m = ' + f(R.fin.obj, 3)
       ]);
 
-      while (steps.length < 10) {
-        add(6, '模糊指數 m 的效果', 'm 越接近 1 越像硬分群 K-Means；m 越大（如 2.5–3.0）各群隸屬度越趨近 1/K 平均。實務預設 m = 2.0。', [
-          '目前 K = ' + R.K + '，m = ' + f(R.mFuzzy, 1)
-        ]);
-      }
+      add(6, '模糊指數 m 的效果', 'm 越接近 1 越像硬分群 K-Means；m 越大（如 2.5–3.0）各群隸屬度越趨近 1/K 平均。實務預設 m = 2.0。', [
+        '目前 K = ' + R.K + '，m = ' + f(R.mFuzzy, 1)
+      ]);
+      add(6, 'FCM 與 GMM 比較', '兩者都能輸出軟隸屬度：FCM 只看歐氏距離倒數（適合球狀群）；GMM (C4) 則透過常態協方差捕捉斜橢圓與大小不均的群！', [
+        'scikit-learn KMeans 預設 init="k-means++"（必勝隨機起點）'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

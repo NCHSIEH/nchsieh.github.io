@@ -197,11 +197,15 @@
         '群數 = ' + R.nClusters + '，雜訊點數 = ' + nNoise + '（' + rows.filter((_, i) => R.labels[i] === -1).map(r => '#' + r.id).join('、') + '）'
       ]);
 
-      while (steps.length < 10) {
-        add(7, 'DBSCAN 特性總結', 'DBSCAN 能自動排除離群點並找出非球狀群，但若各群密度差異很大，單一 ε 就很難同時抓準。', [
-          'ε = ' + f(R.eps, 1) + '，minPts = ' + R.minPts + '，群數 = ' + R.nClusters
-        ]);
-      }
+      add(7, '如何挑選半徑 ε？', '實務上會計算每點到第 k 近鄰的距離由小到大繪圖（k-distance 圖），找曲線突然往上折彎的「手肘高度」作為 ε！', [
+        'minPts 經驗法則：約設為 2 × 特徵維度（2D 常用 4）'
+      ]);
+      add(7, '變密度進階：HDBSCAN', '若資料同時存在「超密集小群」與「較鬆散大群」，單一固定 ε 會顧此失彼；進階實務可改用階層密度分群 HDBSCAN。', [
+        '目前 ε = ' + f(R.eps, 1) + '，minPts = ' + R.minPts + '，群數 = ' + R.nClusters
+      ]);
+      add(7, 'DBSCAN 特性總結', 'DBSCAN 不須預先指定 K、能抓任意彎曲形狀且原生標記雜訊（−1），建模前務必先做 Z 分數標準化（A2）。', [
+        '核心點 ' + nCore + ' 個｜群數 ' + R.nClusters + '｜雜訊 ' + nNoise + ' 個'
+      ]);
       return steps;
     },
 

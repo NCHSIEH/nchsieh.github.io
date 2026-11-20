@@ -176,11 +176,12 @@
         '最佳 K* = ' + R.best.K + '（Silhouette = ' + f(R.best.meanSil, 3) + '）'
       ]);
 
-      while (steps.length < 10) {
-        add(5, '手肘 vs 輪廓法', 'SSE 隨 K 變大永遠下降（只能找折彎手肘）；Silhouette 同時懲罰群間太近，因此會有明確峰值。', [
-          '最佳 K* = ' + R.best.K
-        ]);
-      }
+      add(5, '手肘法 vs 輪廓係數', 'SSE 隨 K 變大永遠下降（只能找折彎手肘，較主觀）；Silhouette 同時懲罰群間太近，因此有明確峰值可量化比較。', [
+        '最佳 K* = ' + R.best.K + '（Silhouette = ' + f(R.best.meanSil, 3) + '）'
+      ]);
+      add(5, '負值解讀與臨床命名', '若某點 s(i) < 0 代表它離別群比自己群還近（可能分錯群）；實務選 K 須兼顧輪廓分數、Davies-Bouldin 與臨床可命名性！', [
+        's > 0.5 結構清晰｜0.25–0.5 尚可｜< 0 疑似錯分'
+      ]);
       return steps;
     },
 

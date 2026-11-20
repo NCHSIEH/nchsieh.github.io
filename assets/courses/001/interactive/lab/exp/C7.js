@@ -129,15 +129,17 @@
         };
         const bars = {
           type: 'bars', slot: 'bottom',
-          title: st.allDone ? 'LOF 異常分數排名（前 6 名，≈1 正常，≫1 異常）' : ('觀察點 #' + tid + ' 與 K 鄰居的局部可達密度 lrd 對照'),
-          max: st.allDone ? Math.max(2.5, M.max(R.lof)) : Math.max(2.0, M.max(R.lrd)),
+          title: st.allDone
+            ? 'LOF 異常分數排名（前 6 名，≈1 正常，≫1 異常）'
+            : (st.tLrd ? ('觀察點 #' + tid + ' 與 K 鄰居的局部可達密度 lrd 對照') : ('觀察點 #' + tid + ' 的 k-dist 與到 K 鄰居距離')),
+          max: st.allDone ? Math.max(2.5, M.max(R.lof)) : Math.max(2.0, st.tLrd ? M.max(R.lrd) : R.kDist[ti] * 1.3),
           digits: 2,
           items: st.allDone
             ? R.ranked.slice(0, 6).map(x => ({ id: 'rk' + x.id, label: '#' + x.id, value: x.lof, cls: x.lof > 1.5 ? 'c1' : 'c0', hl: x.id === tid }))
-            : [{ id: 't_lrd', label: '觀察點 #' + tid + ' lrd', value: st.tLrd ? R.lrd[ti] : R.kDist[ti], cls: 'hl', hl: true }].concat(
+            : [{ id: 't_lrd', label: '觀察點 #' + tid + (st.tLrd ? ' lrd' : ' k-dist'), value: st.tLrd ? R.lrd[ti] : (st.showCircle ? R.kDist[ti] : 0), cls: 'hl', hl: true }].concat(
                 R.kNbrs[ti].map(j => ({
                   id: 'nb_lrd_' + j,
-                  label: '鄰居 #' + rows[j].id + (st.showNbLrd ? ' lrd' : ' d'),
+                  label: '鄰居 #' + rows[j].id + (st.showNbLrd ? ' lrd' : ' 距離'),
                   value: st.showNbLrd ? R.lrd[j] : (st.showNbrs ? R.dist[ti][j] : 0),
                   cls: 'c0'
                 }))
@@ -188,11 +190,15 @@
         '前 3 名：' + R.ranked.slice(0, 3).map(x => '#' + x.id + ' (' + f(x.lof, 2) + ')').join('、')
       ]);
 
-      while (steps.length < 10) {
-        add(7, '局部 vs 全域異常', 'LOF 的強項在於能抓出「緊密群旁邊稍微偏離」的局部異常，不會只看離群組中心有多遠。', [
-          '#' + tid + ' 號 LOF = ' + f(R.lof[ti], 3)
-        ]);
-      }
+      add(7, '局部 vs 全域異常', 'LOF 的強項在於能抓出「緊密群旁邊稍微偏離」的局部異常，即使它離全域中心不遠，只要比鄰居稀疏就會被揪出！', [
+        '#' + tid + ' 號 LOF = ' + f(R.lof[ti], 3) + '（實務常設 > 1.5 為異常警戒）'
+      ]);
+      add(7, 'K 值與高維維度災難', 'K 太小易受單一鄰居雜訊干擾，K 太大則退化成全域密度；且高維空間距離趨近相等，維度高時常先做 PCA 或改用 Isolation Forest (C8)。', [
+        '目前 K = ' + R.k + '（sklearn 預設 n_neighbors = 20）'
+      ]);
+      add(7, '線上新病人偵測模式', '預設 LOF 只評估現有樣本；若要預測「新來病人」是否異常，sklearn 須設 novelty=True 並只在乾淨正常資料上 fit！', [
+        'LocalOutlierFactor(n_neighbors=20, novelty=True)'
+      ]);
       return steps;
     },
 

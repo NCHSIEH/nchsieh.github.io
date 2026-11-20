@@ -111,9 +111,10 @@
       const xIdx = R.use4 ? 1 : 0, yIdx = R.use4 ? 2 : 1; // 散佈圖顯示 BMI vs 血糖 或 PC1 vs PC2
 
       function views(st) {
+        const usePcPlane = R.use4 && st.showProj;
         const points = rows.map((r, i) => {
-          const x = st.showRecon ? R.recon[i][xIdx] : R.Z[i][xIdx];
-          const y = st.showRecon ? R.recon[i][yIdx] : R.Z[i][yIdx];
+          const x = usePcPlane ? R.scores[i][0] : (st.showRecon ? R.recon[i][xIdx] : R.Z[i][xIdx]);
+          const y = usePcPlane ? (R.keep >= 2 || !st.showRecon ? R.scores[i][1] : 0) : (st.showRecon ? R.recon[i][yIdx] : R.Z[i][yIdx]);
           return { id: 'p' + r.id, x, y, cls: st.showRecon ? 'c1' : 'c0', label: String(r.id), r: 6 };
         });
         const lines = [];
@@ -127,12 +128,21 @@
             lines.push({ id: 'pr' + r.id, x1: R.Z[i][0], y1: R.Z[i][1], x2: R.recon[i][0], y2: R.recon[i][1], cls: 'c4', dash: true, w: 1.2 });
           });
         }
+        if (usePcPlane && st.showRecon && R.keep === 1) {
+          rows.forEach((r, i) => {
+            lines.push({ id: 'pr4_' + r.id, x1: R.scores[i][0], y1: R.scores[i][1], x2: R.scores[i][0], y2: 0, cls: 'c4', dash: true, w: 1.2 });
+          });
+        }
         const leg = [{ cls: 'c0', label: '原始點' }, { cls: 'c1', label: 'PC1 / 重建點' }];
         if (!R.use4) leg.push({ cls: 'c2', shape: 'line', label: 'PC2' }, { cls: 'c4', shape: 'line', label: '投影誤差' });
+        else if (usePcPlane && st.showRecon && R.keep === 1) leg.push({ cls: 'c4', shape: 'line', label: '丟棄 PC2 誤差' });
+        const axUse = usePcPlane
+          ? { x: { label: 'PC1 主成分分數', min: -3.2, max: 3.2 }, y: { label: 'PC2 主成分分數', min: -3.2, max: 3.2 } }
+          : AX;
         const main = {
           type: 'scatter', slot: 'main',
-          title: R.use4 ? 'BMI × 血糖標準化空間' : '標準化空間與主成分軸 (PC1 / PC2)',
-          axes: AX, points, lines, circles: [],
+          title: usePcPlane ? '4 維投影至 PC1 × PC2 主成分空間' : (R.use4 ? '原始標準化空間（BMI × 血糖切片）' : '標準化空間與主成分軸 (PC1 / PC2)'),
+          axes: axUse, points, lines, circles: [],
           legend: leg
         };
         const side = st.showVec ? {
@@ -208,11 +218,12 @@
         '平均平方重建誤差 = ' + f(R.reconErr, 3)
       ]);
 
-      while (steps.length < 10) {
-        add(7, 'PCA 適用時機', '特徵高度相關時 PCA 能大幅壓縮維度且保留多數變異；但新軸是原特徵的線性組合，可解釋性會下降。', [
-          '保留 ' + R.keep + ' / ' + R.d + ' 維，累計變異 = ' + LAB.pct(cumVar, 1)
-        ]);
-      }
+      add(7, '陡坡圖與 80% 法則', '實務決定保留幾個主成分常看「累計解釋變異 ≥ 80%–90%」，或挑選特徵值 λ > 1（Kaiser 準則）的成分。', [
+        '保留 ' + R.keep + ' / ' + R.d + ' 維，累計變異 = ' + LAB.pct(cumVar, 1)
+      ]);
+      add(7, 'PCA 適用與防洩漏', 'PCA 適合壓縮共線特徵與加速建模，但新軸是線性組合可解釋性較低；且須僅用訓練集 fit 再 transform 測試集（A10）。', [
+        '非線性流形視覺化則可改用 t-SNE (C6) 或 UMAP (C13)'
+      ]);
       return steps;
     },
 

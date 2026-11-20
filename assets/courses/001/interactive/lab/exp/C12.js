@@ -113,30 +113,40 @@
             { key: 'id', label: '#' },
             { key: 'de', label: '歐氏 d_E', num: true, digits: 2 },
             { key: 'dm', label: '馬氏 d_M', num: true, digits: 2 },
-            { key: 'st', label: '馬氏判定' }
+            { key: 'st', label: isMah ? '馬氏判定' : '歐氏判定' }
           ],
-          rows: R.pts.map(pt => ({
-            id: pt.id,
-            cells: [
-              pt.id,
-              st.showEuc ? pt.dEuc : null,
-              st.showMah ? pt.dMah : null,
-              st.showOut ? { v: pt.isOutMah ? '異常' : '正常', cls: pt.isOutMah ? 'bad' : 'good' } : null
-            ],
-            hl: pt.id === 12
-          }))
+          rows: R.pts.map(pt => {
+            const flag = isMah ? pt.isOutMah : pt.isOutEuc;
+            return {
+              id: pt.id,
+              cells: [
+                pt.id,
+                st.showEuc ? pt.dEuc : null,
+                st.showMah ? pt.dMah : null,
+                st.showOut ? { v: flag ? '異常' : '正常', cls: flag ? 'bad' : 'good' } : null
+              ],
+              hl: pt.id === 12
+            };
+          })
         };
+        const barList = isMah ? R.ranked.slice(0, 6) : R.pts.slice().sort((a, b) => b.dEuc - a.dEuc).slice(0, 6);
         const bottom = {
           type: 'bars', slot: 'bottom',
-          title: '馬氏距離異常排名 Top 6（門檻 = ' + f(R.th, 1) + '，#12 因偏離正相關軸而暴衝第一）',
-          max: Math.max(3.5, R.ranked[0].dMah * 1.15), digits: 2,
-          items: R.ranked.slice(0, 6).map(pt => ({
-            id: 'b' + pt.id,
-            label: '#' + pt.id + ' (歐氏=' + f(pt.dEuc, 2) + ')',
-            value: st.showMah ? pt.dMah : (st.showEuc ? pt.dEuc : 0),
-            cls: pt.dMah > R.th ? 'c1' : 'c0',
-            hl: pt.id === 12
-          }))
+          title: isMah
+            ? ('馬氏距離異常排名 Top 6（門檻 = ' + f(R.th, 1) + '，#12 因偏離正相關軸而暴衝第一）')
+            : ('歐氏距離排名 Top 6（門檻 = ' + f(R.th, 1) + '，忽略相關性易誤抓右上正常點）'),
+          max: Math.max(3.5, (isMah ? R.ranked[0].dMah : barList[0].dEuc) * 1.15), digits: 2,
+          items: barList.map(pt => {
+            const vShow = isMah ? (st.showMah ? pt.dMah : (st.showEuc ? pt.dEuc : 0)) : (st.showEuc ? pt.dEuc : 0);
+            const over = isMah ? pt.dMah > R.th : pt.dEuc > R.th;
+            return {
+              id: 'b' + pt.id,
+              label: '#' + pt.id + (isMah ? (' (歐氏=' + f(pt.dEuc, 2) + ')') : (' (馬氏=' + f(pt.dMah, 2) + ')')),
+              value: vShow,
+              cls: over ? 'c1' : 'c0',
+              hl: pt.id === 12
+            };
+          })
         };
         return [main, side, bottom];
       }
@@ -168,11 +178,24 @@
         '歐氏異常點：' + (R.pts.filter(x => x.isOutEuc).map(x => '#' + x.id).join('、') || '無')
       ]);
 
-      while (steps.length < 10) {
-        add(7, '多變量異常偵測總結', '當生理指標之間有強烈相關性（如身高×體重、BMI×血糖、收縮壓×舒張壓）時，務必使用馬氏距離或 EllipticEnvelope 取代歐氏距離。', [
-          '#12：歐氏 d_E = ' + f(p12.dEuc, 2) + ' → 馬氏 d_M = ' + f(p12.dMah, 2)
-        ]);
-      }
+      add(7, '5. 馬氏與 PCA 白化等價', '幾何上，馬氏距離就等同於「先把資料轉到 PCA 主成分軸、再除以各軸標準差（白化）後的歐氏距離」，因此能校正斜向相關！', [
+        '當 Σ = I（特徵完全不相關且同尺度）時，馬氏退化為歐氏'
+      ]);
+      add(7, '6. 卡方 χ² 統計門檻', '若資料服從 p 維常態分布，馬氏距離平方 d_M² 服從自由度 p 的 χ² 分布！p=2 時 95% 信賴橢圓門檻為 √5.99 ≈ 2.45。', [
+        'p=2：95% 門檻 ≈ 2.45｜99% 門檻 ≈ 3.03（目前設 ' + f(R.th, 1) + '）'
+      ]);
+      add(7, '7. 穩健估計 MCD 防污染', '若直接用含離群值的全資料算 Σ，極端點會把橢圓撐大造成遮蔽；sklearn 的 EllipticEnvelope 用最小協方差行列式 (MCD) 穩健估計 Σ！', [
+        'EllipticEnvelope(contamination=0.1) 自動排除極端值估計 Σ'
+      ]);
+      add(7, '8. 適用前提與非線性限制', '馬氏距離假設正常群呈單峰橢球（常態分布）；若正常群有多個子群或呈月牙彎曲，斜橢圓會失效，應改用 LOF (C7) 或 IForest (C8)。', [
+        '單峰相關常態 → 馬氏｜多群局部密度 → LOF｜高維大表 → IForest'
+      ]);
+      add(7, '9. 臨床檢驗多變量異常', '血壓（收縮壓×舒張壓）、腎功能（肌酸酐×eGFR）、BMI×血糖都高度相關，單欄正常但組合異常的個案最靠馬氏距離揪出！', [
+        '#12：歐氏 d_E = ' + f(p12.dEuc, 2) + ' → 馬氏 d_M = ' + f(p12.dMah, 2)
+      ]);
+      add(7, '10. 多變量異常偵測總結', '試切換上方「馬氏距離 ↔ 歐氏距離」並調整門檻滑桿，比較正圓與斜橢圓包絡對 #11 與 #12 的判定差異。', [
+        '馬氏異常：' + (R.pts.filter(x => x.isOutMah).map(x => '#' + x.id).join('、') || '無')
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

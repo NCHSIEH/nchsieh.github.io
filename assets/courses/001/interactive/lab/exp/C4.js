@@ -189,11 +189,12 @@
         ], { phase: it + ' / ' + MAX_ITER });
       });
 
-      while (steps.length < 10) {
-        add(6, '軟分群結果解讀', '靠近兩群交界處的病人責任值會接近 0.5 / 0.5，提醒我們他處於邊界地帶。', [
-          '最終 Log-Likelihood = ' + f(R.fin.ll, 3)
-        ]);
-      }
+      add(6, '軟分群結果解讀', '靠近兩群交界處的病人責任值會接近 0.5 / 0.5，提醒我們他處於邊界地帶，而非硬性歸類。', [
+        '最終 Log-Likelihood = ' + f(R.fin.ll, 3)
+      ]);
+      add(6, 'BIC/AIC 自動選 K', 'K 越大對數概似必上升，實務上透過 BIC 或 AIC 懲罰參數數量，找出最低 BIC 的最佳高斯群數 K，並可選 full/diag 協方差。', [
+        'sklearn：GaussianMixture(n_components=k).bic(Z)'
+      ]);
       return steps;
     },
 

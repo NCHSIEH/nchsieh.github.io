@@ -197,11 +197,18 @@
         '#' + tid + ' 分數 = ' + f(R.scores[ti], 3) + '｜全體最高：#' + R.ranked[0].id + ' (' + f(R.ranked[0].score, 3) + ')'
       ]);
 
-      while (steps.length < 10) {
-        add(6, '孤立森林優勢', '因為只需隨機切少數樣本就能抓出離群點，計算複雜度幾乎與資料筆數線性無關，非常適合大資料異常偵測。', [
-          '#' + tid + ' 異常分數 = ' + f(R.scores[ti], 3)
-        ]);
-      }
+      add(6, '為何無須建正常模型', 'LOF (C7) 需先算兩兩距離矩陣 O(n²)，而 Isolation Forest 直接利用「異常點少且孤立、幾刀就切出」的幾何特性，免算距離！', [
+        '#' + tid + ' 異常分數 = ' + f(R.scores[ti], 3)
+      ]);
+      add(6, '子抽樣防遮蔽效應', '大資料實務每棵樹只隨機抽 max_samples = 256 筆（不必全抽），反而能減少正常點遮住異常點的 Swamping 與 Masking 效應！', [
+        '計算複雜度近線性 O(T · ψ log ψ)，極適合百萬筆資料'
+      ]);
+      add(6, '實務參數設定建議', 'sklearn 中可用 contamination 指定預期異常比例（如 0.05），並注意軸對齊切刀對「斜向相關異常」不如馬氏距離 (C12) 靈敏。', [
+        'IsolationForest(n_estimators=100, max_samples=256)'
+      ]);
+      add(6, '與 LOF 及馬氏對照', '大樣本高維表首選 Isolation Forest；小樣本局部密度異常看 LOF (C7)；高度正相關常態雙變數異常則用馬氏距離 (C12)！', [
+        '孤立森林對特徵縮放不敏感，免做標準化也能切分'
+      ]);
       return steps;
     },
 
