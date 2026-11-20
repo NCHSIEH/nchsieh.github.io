@@ -113,10 +113,19 @@
       });
       sc.append(h('div', { style: { display: 'flex', gap: '12px', fontSize: '12px', marginTop: '4px' } }, ...ORI.map((o, i) => h('span', null, h('i', { style: { display: 'inline-block', width: '10px', height: '10px', borderRadius: '50%', background: OC[i], marginRight: '4px' } }), `${o}（${D.filter(d => d[7] === i).length}）`))));
       const rt = h('div');
-      if (sel != null) { const d = D[sel], pr = f.a + f.b * xs[sel], prv = logY ? Math.exp(pr) : pr; rt.append(h('div', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '8px 10px', marginBottom: '10px', fontSize: '13.5px' } }, h('b', null, d[8]), `（19${d[6]}，${ORI[d[7]]}）`, h('div', null, `${d[1]} 缸・${d[3]} 匹馬力・${fmt(d[4], 0)} 磅`), h('div', null, `實際 ${d[0]} mpg，這條線預測 ${prv.toFixed(1)} mpg，誤差 ${(d[0] - prv >= 0 ? '+' : '') + (d[0] - prv).toFixed(1)}`))); }
-      rt.append(sub('單一欄位能解釋多少（R²）'));
+      if (sel != null) {
+        const d = D[sel], pr = f.a + f.b * xs[sel], prv = logY ? Math.exp(pr) : pr;
+        const clr = h('button', { class: 'btn sm' }, '✕ 清除選取'); clr.onclick = () => { sel = null; draw(); };
+        rt.append(h('div', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '8px 10px', marginBottom: '10px', fontSize: '13.5px', background: '#fff' } }, h('div', { class: 'row', style: { justifyContent: 'space-between', marginBottom: '2px' } }, h('span', null, h('b', null, d[8]), `（19${d[6]}，${ORI[d[7]]}）`), clr), h('div', null, `${d[1]} 缸・${d[3]} 匹馬力・${fmt(d[4], 0)} 磅`), h('div', null, `實際 ${d[0]} mpg，這條線預測 ${prv.toFixed(1)} mpg，誤差 ${(d[0] - prv >= 0 ? '+' : '') + (d[0] - prv).toFixed(1)}`)));
+      }
+      rt.append(sub('單一欄位能解釋多少（R²）— 點長條可直接切換橫軸'));
       const hb = h('div'); rt.append(hb);
-      U.hbars(hb, all.map(z => ({ label: z.n.replace(/（.*）/, ''), value: z.r2, color: z.n === VARS.find(v => v[0] === vx)[1] ? C.accent : C.gray })), { w: 400, lw: 80, fmt: v => v.toFixed(2), max: 1 });
+      const svBar = U.hbars(hb, all.map(z => ({ label: z.n.replace(/（.*）/, ''), value: z.r2, color: z.n === VARS.find(v => v[0] === vx)[1] ? C.accent : C.gray })), { w: 400, lw: 80, rowH: 26, fmt: v => v.toFixed(2), max: 1 });
+      all.forEach((z, idx) => {
+        const k = VARS.find(v => v[1] === z.n)[0];
+        const hit = U.s('rect', { x: 0, y: 4 + idx * 26, width: 400, height: 26, fill: 'transparent', style: 'cursor:pointer' }, svBar);
+        hit.addEventListener('click', () => { vx = k; sel = null; draw(); });
+      });
       g.append(sc, rt); out.append(g);
       const yr = ols1(D.map(d => d[6]), D.map(d => d[0]));
       let msg = `這是真實資料，不是模擬的。車重單獨就能解釋 ${pc(all.find(z => z.n.startsWith('車重')).r2)} 的油耗差異；把 6 個欄位加上產地一起放進多元迴歸，測試集 R² 到 ${(logY ? multi.log : multi.lin).r2.toFixed(2)}，RMSE 從瞎猜的 ${multi.base.toFixed(1)} 降到 ${(logY ? multi.log : multi.lin).rmse.toFixed(1)} mpg。`;
@@ -152,7 +161,7 @@
       if (view === 'us') {
         out.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('累計授權（1995–2026/6）', '1,614 項'), kpi('放射科占比', '76%'), kpi('經 510(k) 等同性審查', '96%', 'bad'), kpi('LLM 生成式 AI 醫材', '0 項')));
         const bars = h('div'); out.append(sub('每年授權數（項）'), bars);
-        U.hbars(bars, YR.map(([l, v], i) => ({ label: l, value: v, color: i === 4 ? C.amber || '#b7791f' : i === 0 ? '#9aa3ad' : C.accent })), { w: 820, lw: 120, rowH: 30 });
+        U.hbars(bars, YR.map(([l, v], i) => ({ label: l, value: v, color: i === 4 ? C.amber || '#b7791f' : i === 0 ? '#9aa3ad' : C.accent })), { w: 640, lw: 115, rowH: 30 });
         const r = (226 + 235 + 335) / 3;
         out.append(note(`1995–2014 年平均每年不到 2 項，2023–2025 年平均每年 ${r.toFixed(0)} 項，是原來的 ${Math.round(r / 1.8)} 倍；2026 上半年已有 181 項，全年可望再創新高。但 96% 是用「與既有器材實質等同」的 510(k) 途徑上市，不需要前瞻性臨床試驗——核准多，不代表證明了對病人有效。至 2026/9 仍沒有任何以 LLM 生成內容為核心功能的醫材獲准，FDA 表示將開始標註含基礎模型的器材。`));
       } else {
@@ -162,8 +171,7 @@
         out.append(row, h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 14px', marginTop: '10px', background: 'var(--paper)' } }, h('b', null, name + '在做什麼'), h('div', { style: { fontSize: '14px', margin: '4px 0 6px' } }, d), h('span', { class: 'tag' }, '本課對應：' + m)));
         out.append(note('三關回答的是三個不同的問題：準不準（取證）、信不信得過（落地）、有沒有幫助（給付）。一個 AI 可以過了第一關卻卡在第三關——這正是美國 FDA 數字「核准多、證據少」的另一面。2024/10 成立，30 家醫院提案、16 家醫院 19 案入選。'));
       }
-      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 三大 AI 中心啟動記者會新聞稿（30 家醫院提 48 案、16 家 19 案入選）；2025/7/24 取證驗證中心聯合啟動大會（首批四項實測）。講義 M0 第 41、43 頁。'));
-      out.append(h('p', { class: 'ai' }, h('b', null, '來源連結（2026/11/13 查核可開啟）：'), h('a', { href: 'https://www.mohw.gov.tw/cp-16-80155-1.html', target: '_blank', rel: 'noopener' }, '衛福部：三大 AI 中心啟動記者會（2024/10/7）'), '　', h('a', { href: 'https://www.mohw.gov.tw/cp-16-83193-1.html', target: '_blank', rel: 'noopener' }, '衛福部：臨床 AI 取證驗證中心聯合啟動大會（2025/7/24）'), '　', h('a', { href: 'https://aicenter.mohw.gov.tw/', target: '_blank', rel: 'noopener' }, '臺灣智慧醫療三大中心官網')));
+      out.append(h('p', { class: 'ai' }, '資料：U.S. FDA AI‑Enabled Medical Device List（2026/9 更新）；衛福部 2024/10/7 三大 AI 中心啟動記者會新聞稿（30 家醫院提 48 案、16 家 19 案入選）；2025/7/24 取證驗證中心聯合啟動大會（首批四項實測）。'));
     }
     box.append(out); draw();
   })();
@@ -193,12 +201,12 @@
       if (view === 'use') {
         out.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('專業上使用 AI 的美國醫師', '81%'), kpi('2023 年', '38%'), kpi('平均用途數', '1.1 → 2.3 項'), kpi('擔心技能流失（程度不一）', '88%', 'bad')));
         const a = h('div'), b = h('div'); out.append(sub('使用 AI 的醫師比例（%）'), a, sub('2026 年最常見的兩種用途（%）'), b);
-        U.hbars(a, USE.map(([l, v], i) => ({ label: l, value: v, color: i ? C.accent : '#9aa3ad' })), { w: 820, lw: 120, rowH: 30, max: 100 });
-        U.hbars(b, TOP.map(([l, v]) => ({ label: l, value: v, color: C.accent })), { w: 820, lw: 260, rowH: 30, max: 100 });
+        U.hbars(a, USE.map(([l, v], i) => ({ label: l, value: v, color: i ? C.accent : '#9aa3ad' })), { w: 640, lw: 90, rowH: 30, max: 100 });
+        U.hbars(b, TOP.map(([l, v]) => ({ label: l, value: v, color: C.accent })), { w: 640, lw: 230, rowH: 30, max: 100 });
         out.append(note('三年內使用比例翻倍，但最常見的用途是整理文獻與寫文件，不是診斷。76% 的醫師認為 AI 有助於照顧病人，85% 希望參與導入決策——工具進來得很快，醫師要的是決定怎麼用的權利。'));
       } else if (view === 'ev') {
         const a = h('div'); out.append(sub('臨床 AI 的證據基礎（%）'), a);
-        U.hbars(a, EV.map(([l, v], i) => ({ label: l, value: v, color: i ? (C.amber || '#b7791f') : '#9aa3ad' })), { w: 820, lw: 300, rowH: 30, max: 100 });
+        U.hbars(a, EV.map(([l, v], i) => ({ label: l, value: v, color: i ? (C.amber || '#b7791f') : '#9aa3ad' })), { w: 640, lw: 270, rowH: 30, max: 100 });
         out.append(note('AI Index 2026 回顧 500 多篇臨床 AI 研究：近半數是用考試式題目評估，只有 5% 用真實臨床資料；有臨床研究的 FDA 授權 AI 醫材中，只有 2.4% 依據隨機試驗。另一方面，健康相關的 Google 搜尋有 84–92% 會出現 AI 生成摘要——民眾拿到的 AI 答案，受到的把關比醫材更少。'));
       } else if (view === 'dm') {
         const row = h('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '10px' } });
@@ -214,6 +222,10 @@
           else r.append(h('div', { style: { fontSize: '14px' } }, h('b', { style: { color: shown[i] === ans ? 'var(--accent-ink)' : '#b42318' } }, (shown[i] === ans ? '對。' : '再想想。') + '這是「' + ans + '」。'), why));
           out.append(r);
         });
+        if (Object.keys(shown).length) {
+          const rst = h('button', { class: 'btn sm', style: { marginTop: '8px' } }, '↺ 重做判斷題'); rst.onclick = () => { shown = {}; draw(); };
+          out.append(rst);
+        }
         if (Object.keys(shown).length === Q.length) out.append(note('效率數字容易量、也最先被公布；效益要等時間、要有對照。看到 AI 成果報導時，先問它量的是哪一種。'));
       }
       out.append(h('p', { class: 'ai' }, '資料：AMA 2026 Physician Survey on Augmented Intelligence（2026/3，1,692 位醫師）；Stanford AI Index 2026 第 6 章；健保署與 Google 2026/3/4 發表（科技新報、CIO Taiwan、GeneOnline 報導）。最後一題的「三年後洗腎比例」為假設情境。講義 M0 第 42、44 頁。'));

@@ -9,7 +9,7 @@
     const T = [['界定問題', 'Scoping', '一句話說清楚：為誰、預測什麼、預測出來要做什麼', '做了一個沒有人會用的預測；準確率很高但沒有對應的行動'], ['蒐集資料', 'Gathering', '資料來源清單、時間範圍、納入排除條件', '沒有問「誰不在這份資料裡」，樣本偏誤從這一步就注定'], ['清理資料', 'Cleaning', '可重現的清理流程與決策紀錄', '把偽裝成 0 的遺失值當有效值；刪掉離群值卻沒發現那正是目標族群'], ['探索分析', 'Exploring', '分布圖、相關矩陣、初步假設清單', '跳過這一步直接建模，結果模型學到什麼你完全無法解釋'], ['建立模型', 'Modeling', '模型、評估指標、與基準線的比較', '只報告最好的結果；沒有基準線，不知道到底有沒有進步'], ['溝通部署', 'Sharing', '決策者看得懂的結論、限制說明、後續行動建議', '只講技術指標，對方聽完不知道自己該做什麼']];
     let sel = 0; const out = h('div');
     function draw() { out.innerHTML = '';
-      const g = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: '6px' } }); T.forEach(([t, en], i) => { const c = h('div', { style: { padding: '8px 4px', textAlign: 'center', borderRadius: '8px', cursor: 'pointer', background: i === sel ? C.accent : '#fff', color: i === sel ? '#fff' : 'var(--ink)', border: '1px solid var(--line)' } }, h('div', { class: 'mono', style: { fontSize: '16px', fontWeight: 700 } }, i + 1), h('b', { style: { fontSize: '13.5px' } }, t), h('div', { style: { fontSize: '11px', opacity: .75 } }, en)); c.onclick = () => { sel = i; draw(); }; g.append(c); });
+      const g = h('div', { class: 'g6-tabs' }); T.forEach(([t, en], i) => { const c = h('div', { style: { padding: '8px 4px', textAlign: 'center', borderRadius: '8px', cursor: 'pointer', background: i === sel ? C.accent : '#fff', color: i === sel ? '#fff' : 'var(--ink)', border: '1px solid var(--line)' } }, h('div', { class: 'mono', style: { fontSize: '16px', fontWeight: 700 } }, i + 1), h('b', { style: { fontSize: '13.5px' } }, t), h('div', { style: { fontSize: '11px', opacity: .75 } }, en)); c.onclick = () => { sel = i; draw(); }; g.append(c); });
       const [t, , o, e] = T[sel];
       out.append(g, h('div', { class: 'grid2', style: { marginTop: '10px' } }, h('div', { class: 'note' }, h('b', null, '應該產出：'), o), h('div', { class: 'note bad' }, h('b', null, '最常見的錯誤：'), e)), h('p', { class: 'ai' }, '六步是 CRISP-DM 的簡化版：①＝業務理解，②–④＝資料理解與準備，⑤＝建模與評估，⑥＝部署。第 10 週期中發表要完整走一遍並說明每一步的判斷理由。')); }
     $('#w-six').append(out); draw();
@@ -20,14 +20,18 @@
     const D = [['P01', 98, '訓練'], ['P02', 105, '訓練'], ['P03', 112, '訓練'], ['P04', null, '訓練'], ['P05', 120, '訓練'], ['P06', 101, '訓練'], ['P07', 130, '訓練'], ['P08', 180, '測試'], ['P09', null, '測試'], ['P10', 165, '測試']];
     const orig = JSON.parse(JSON.stringify(D)); const out = h('div');
     function draw() { out.innerHTML = '';
-      const known = D.filter(d => d[1] != null), tr = known.filter(d => d[2] === '訓練');
-      const wrong = S.mean(known.map(d => d[1])), right = S.mean(tr.map(d => d[1]));
+      const known = D.filter(d => d[1] != null), tr = known.filter(d => d[2] === '訓練'), te = known.filter(d => d[2] === '測試');
+      const wrong = known.length ? S.mean(known.map(d => d[1])) : NaN;
+      const right = tr.length ? S.mean(tr.map(d => d[1])) : NaN;
+      const teMean = te.length ? S.mean(te.map(d => d[1])) : NaN;
       const t = h('table', { class: 'dt' }, h('tr', null, ['病人', '血糖', '分組', '✗ 先補再切', '✓ 先切再補'].map(c => h('th', null, c))), D.map((d, i) => { const inp = h('input', { type: 'text', value: d[1] == null ? '' : d[1], placeholder: '?', style: { width: '60px' } }); inp.onchange = () => { const v = inp.value.trim(); D[i][1] = v === '' || isNaN(+v) ? null : +v; draw(); }; const gb = h('button', { class: 'btn sm' + (d[2] === '測試' ? ' on' : '') }, d[2]); gb.onclick = () => { D[i][2] = d[2] === '訓練' ? '測試' : '訓練'; draw(); }; return h('tr', null, h('td', null, d[0]), h('td', null, inp), h('td', null, gb), h('td', { class: d[1] == null ? 'hl num' : 'num' }, d[1] == null ? fmt(wrong, 1) : ''), h('td', { class: d[1] == null ? 'ok num' : 'num' }, d[1] == null ? fmt(right, 1) : '')); }));
       const rs = h('button', { class: 'btn sm' }, '還原講義數字'); rs.onclick = () => { orig.forEach((o, i) => D[i] = o.slice()); draw(); };
+      const emptyWarn = !tr.length ? h('div', { class: 'note warn', style: { fontSize: '14px' } }, '訓練集目前沒有有值的資料，無法計算訓練平均。請至少保留 1 筆有值的「訓練」列。') : '';
       out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, rs), h('div', { class: 'grid2' }, h('div', { class: 'tscroll' }, t), h('div', null,
-        h('div', { class: 'note bad', style: { fontSize: '14px' } }, h('b', null, '✗ 先補值、再切分：'), `用全部 ${known.length} 筆有值的平均 ${S.sum(known.map(d => d[1]))} ÷ ${known.length} = ${fmt(wrong, 1)}——偷用了測試集的資訊。`),
-        h('div', { class: 'note', style: { fontSize: '14px' } }, h('b', null, '✓ 先切分、再補值：'), `只用訓練集 ${tr.length} 筆：${S.sum(tr.map(d => d[1]))} ÷ ${tr.length} = ${fmt(right, 1)}；測試集的缺值也補這個數字。`),
-        h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '模型「偷看」到的量'), h('div', { class: 'v bad' }, fmt(Math.abs(wrong - right), 1) + ' mg/dL'))),
+        emptyWarn,
+        h('div', { class: 'note bad', style: { fontSize: '14px' } }, h('b', null, '✗ 先補值、再切分：'), known.length ? `用全部 ${known.length} 筆有值的平均 ${S.sum(known.map(d => d[1]))} ÷ ${known.length} = ${fmt(wrong, 1)}——偷用了測試集${te.length ? `（測試平均 ${fmt(teMean, 1)}）` : ''}的資訊。` : '目前沒有有效數值。'),
+        h('div', { class: 'note', style: { fontSize: '14px' } }, h('b', null, '✓ 先切分、再補值：'), tr.length ? `只用訓練集 ${tr.length} 筆：${S.sum(tr.map(d => d[1]))} ÷ ${tr.length} = ${fmt(right, 1)}；測試集的缺值也補這個數字。` : '需至少 1 筆訓練集數值。'),
+        h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '補值差異（偷看到的量）'), h('div', { class: 'v bad' }, tr.length && known.length ? fmt(Math.abs(wrong - right), 1) + ' mg/dL' : '—'))),
         h('p', { class: 'ai' }, 'AI Studio：Replace Missing Values 的 pre 埠輸出補值模型，用 Apply Model 套到測試集（M1 實作）。'))));
     }
     $('#w-impute').append(out); draw();
@@ -82,15 +86,16 @@
       const ch = h('div'); U.scatter(ch, MPG.map(p => ({ x: p.w, y: p.y, c: C.gray, r: 2.8 })), { w: 460, h: 320, xmin: 1.4, xmax: 5.3, ymin: 0, ymax: 45, xlabel: '車重（千磅）', ylabel: '每加侖里程 mpg',
         under: [(sv, x, y) => { if (showRes) MPG.forEach(p => U.s('line', { x1: x(p.w), x2: x(p.w), y1: y(p.y), y2: y(a + b * p.w), stroke: C.amber, 'stroke-opacity': .5 }, sv)); }],
         over: [(sv, x, y) => { U.s('line', { x1: x(1.4), y1: y(a + b * 1.4), x2: x(5.3), y2: y(a + b * 5.3), stroke: C.bad, 'stroke-width': 2.5 }, sv); if (showBest) U.s('line', { x1: x(1.4), y1: y(best.a + best.b * 1.4), x2: x(5.3), y2: y(best.a + best.b * 5.3), stroke: C.accent, 'stroke-width': 2, 'stroke-dasharray': '6 4' }, sv); }] });
-      const my = rmse(MPG, a, b), bb = rmse(MPG, best.a, best.b);
-      const fit = h('button', { class: 'btn sm primary' }, '最小平方法'); fit.onclick = () => { showBest = true; draw(); };
+      const my = rmse(MPG, a, b), bb = rmse(MPG, best.a, best.b), diff = my - bb;
+      const fit = h('button', { class: 'btn sm ' + (showBest ? 'on' : 'primary') }, showBest ? '隱藏最佳解' : '顯示最小平方法'); fit.onclick = () => { showBest = !showBest; draw(); };
       const snap = h('button', { class: 'btn sm' }, '把我的線移到最佳解'); snap.onclick = () => { a = +best.a.toFixed(1); b = +best.b.toFixed(2); draw(); };
-      out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, slider('截距', 25, 60, .1, () => a, v => a = v, draw, v => (+v).toFixed(1)), slider('斜率', -12, 0, .05, () => b, v => b = v, draw, v => (+v).toFixed(2)), check('顯示殘差', () => showRes, v => showRes = v, draw), fit, showBest ? snap : ''),
+      const rst = h('button', { class: 'btn sm' }, '↺ 重設'); rst.onclick = () => { a = 38; b = -4; showBest = false; draw(); };
+      out.append(h('div', { class: 'row', style: { marginBottom: '6px' } }, slider('截距', 25, 60, .1, () => a, v => a = v, draw, v => (+v).toFixed(1)), slider('斜率', -12, 0, .05, () => b, v => b = v, draw, v => (+v).toFixed(2)), check('顯示殘差', () => showRes, v => showRes = v, draw), fit, showBest ? snap : '', rst),
         h('div', { class: 'grid2' }, cap(ch, 480), h('div', null,
           h('div', { class: 'note', style: { fontSize: '15px', fontFamily: 'var(--mono)' } }, `我的模型：mpg = ${a.toFixed(1)} ${b < 0 ? '−' : '+'} ${Math.abs(b).toFixed(2)} × 車重`),
-          h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '我的 RMSE'), h('div', { class: 'v ' + (my - bb < .15 ? 'good' : '') }, fmt(my, 2))), h('div', null, h('div', { class: 'k' }, '我的 R²'), h('div', { class: 'v' }, fmt(r2(MPG, a, b), 3))), showBest ? h('div', null, h('div', { class: 'k' }, '最佳解 RMSE'), h('div', { class: 'v good' }, fmt(bb, 2))) : ''),
-          showBest ? h('div', { class: 'note', style: { fontSize: '14px' } }, `最小平方法：mpg = ${best.a.toFixed(1)} − ${Math.abs(best.b).toFixed(2)} × 車重，R² = ${fmt(r2(MPG, best.a, best.b), 2)}。斜率的意思：車重每多 1 千磅，每加侖少跑約 ${Math.abs(best.b).toFixed(1)} 英里。Linear Regression 就是在找「殘差平方和最小」的那條線。`) : h('div', { class: 'note warn', style: { fontSize: '14px' } }, 'RMSE＝預測誤差的典型大小（單位同 mpg）。R²＝模型解釋了多少變異。試著把 RMSE 壓到 3 左右。'),
-          h('p', { class: 'ai' }, '模擬 MPG 型態資料 200 筆。本週先看懂 RMSE 與 R²，M2 才深入。')))); }
+          h('div', { class: 'kpi' }, h('div', null, h('div', { class: 'k' }, '我的 RMSE'), h('div', { class: 'v ' + (diff < .15 ? 'good' : '') }, fmt(my, 2))), h('div', null, h('div', { class: 'k' }, '我的 R²'), h('div', { class: 'v' }, fmt(r2(MPG, a, b), 3))), showBest ? h('div', null, h('div', { class: 'k' }, '最佳解 RMSE'), h('div', { class: 'v good' }, fmt(bb, 2))) : h('div', null, h('div', { class: 'k' }, '距最佳解差距'), h('div', { class: 'v ' + (diff < .15 ? 'good' : '') }, diff < .05 ? '幾乎完美！' : '+' + fmt(diff, 2)))),
+          showBest ? h('div', { class: 'note', style: { fontSize: '14px' } }, `最小平方法：mpg = ${best.a.toFixed(1)} − ${Math.abs(best.b).toFixed(2)} × 車重，R² = ${fmt(r2(MPG, best.a, best.b), 2)}。斜率的意思：車重每多 1 千磅，每加侖少跑約 ${Math.abs(best.b).toFixed(1)} 英里。Linear Regression 就是在找「殘差平方和最小」的那條線。`) : h('div', { class: 'note warn', style: { fontSize: '14px' } }, 'RMSE＝預測誤差的典型大小（單位同 mpg）。R²＝模型解釋了多少變異。試著把 RMSE 壓到 3 左右（越接近 0 差距代表越貼近最小平方法）。'),
+          h('p', { class: 'ai' }, '模擬 MPG 型態資料 200 筆（橫軸單位：千磅；下方有 392 筆真實 Auto MPG 完整資料）。本週先看懂 RMSE 與 R²，M2 才深入。')))); }
     $('#w-fit').append(out); draw();
   })();
 
@@ -114,13 +119,31 @@
   (function () {
     const R = ['Retrieve：MPG dataset', 'Set Role：mpg → label', 'Split Data：0.8 / 0.2', 'Linear Regression（接訓練集）', 'Apply Model（model＋unl 測試集）', 'Performance (Regression)：RMSE、squared correlation', '接到 res 埠並執行'];
     const STEP = ['2 蒐集資料', '3 清理資料', '5 建立模型', '5 建立模型', '5 建立模型', '5 建立模型', '6 溝通部署（看結果）'];
-    let order = null, checked = false; const out = h('div');
+    let order = null, checked = false, dragIdx = -1; const out = h('div');
     const shuffle = () => { const r = rng(Date.now() % 1e6), b = R.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1));[b[i], b[j]] = [b[j], b[i]]; } return b.join() === R.join() ? shuffle() : b; };
     order = shuffle();
     function draw() { out.innerHTML = ''; const list = h('div', { style: { display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '640px' } });
-      order.forEach((s, i) => { const ok = checked && s === R[i], bad = checked && s !== R[i]; list.append(h('div', { class: 'row', style: { border: '1px solid ' + (ok ? 'var(--good)' : bad ? 'var(--bad)' : 'var(--line2)'), background: ok ? 'var(--good-soft)' : bad ? 'var(--bad-soft)' : '#fff', borderRadius: '8px', padding: '6px 10px', gap: '8px' } }, h('span', { class: 'mono', style: { color: 'var(--faint)', width: '18px' } }, i + 1), h('span', { style: { flex: 1, fontSize: '14.5px' } }, s), checked && ok ? h('span', { class: 'tag gray' }, '工作流程 ' + STEP[i]) : '', h('button', { class: 'btn sm', disabled: i === 0, onclick: () => { [order[i - 1], order[i]] = [order[i], order[i - 1]]; checked = false; draw(); } }, '↑'), h('button', { class: 'btn sm', disabled: i === order.length - 1, onclick: () => { [order[i + 1], order[i]] = [order[i], order[i + 1]]; checked = false; draw(); } }, '↓'))); });
-      const all = order.join() === R.join(); const b1 = h('button', { class: 'btn primary sm' }, '檢查順序'); b1.onclick = () => { checked = true; draw(); }; const b2 = h('button', { class: 'btn sm' }, '重新打亂'); b2.onclick = () => { order = shuffle(); checked = false; draw(); };
-      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, b1, b2), list, checked ? h('div', { class: 'note ' + (all ? '' : 'warn'), style: { fontSize: '14px' } }, all ? '✓ 正確！這條流程刻意省略了工作流程的第 1（界定問題）、4（探索分析）、6（溝通部署）步——整學期就是把這三步逐一補回來。' : '還不對。提示：要先告訴 AI Studio 哪一欄是答案，才能切分與訓練；Apply Model 需要先有模型。') : '',
+      order.forEach((s, i) => {
+        const ok = checked && s === R[i], bad = checked && s !== R[i];
+        const row = h('div', { class: 'row drag-item', draggable: 'true', style: { border: '1px solid ' + (ok ? 'var(--good)' : bad ? 'var(--bad)' : 'var(--line2)'), background: ok ? 'var(--good-soft)' : bad ? 'var(--bad-soft)' : '#fff', borderRadius: '8px', padding: '6px 10px', gap: '8px' } },
+          h('span', { style: { color: 'var(--faint)', userSelect: 'none' }, title: '可拖曳排序' }, '⋮⋮'),
+          h('span', { class: 'mono', style: { color: 'var(--faint)', width: '18px' } }, i + 1),
+          h('span', { style: { flex: 1, fontSize: '14.5px' } }, s),
+          checked && ok ? h('span', { class: 'tag gray' }, '工作流程 ' + STEP[i]) : '',
+          h('button', { class: 'btn sm', disabled: i === 0, onclick: () => { [order[i - 1], order[i]] = [order[i], order[i - 1]]; checked = false; draw(); } }, '↑'),
+          h('button', { class: 'btn sm', disabled: i === order.length - 1, onclick: () => { [order[i + 1], order[i]] = [order[i], order[i + 1]]; checked = false; draw(); } }, '↓'));
+        row.addEventListener('dragstart', e => { dragIdx = i; row.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+        row.addEventListener('dragend', () => { dragIdx = -1; row.classList.remove('dragging'); });
+        row.addEventListener('dragover', e => { e.preventDefault(); row.classList.add('drag-over'); });
+        row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+        row.addEventListener('drop', e => { e.preventDefault(); row.classList.remove('drag-over'); if (dragIdx >= 0 && dragIdx !== i) { const [item] = order.splice(dragIdx, 1); order.splice(i, 0, item); checked = false; draw(); } });
+        list.append(row);
+      });
+      const all = order.join() === R.join();
+      const b1 = h('button', { class: 'btn primary sm' }, '檢查順序'); b1.onclick = () => { checked = true; draw(); };
+      const b2 = h('button', { class: 'btn sm' }, '重新打亂'); b2.onclick = () => { order = shuffle(); checked = false; draw(); };
+      const b3 = h('button', { class: 'btn sm' }, '顯示正確順序'); b3.onclick = () => { order = R.slice(); checked = true; draw(); };
+      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, b1, b2, b3, h('span', { style: { fontSize: '12.5px', color: 'var(--muted)' } }, '可直接拖曳項目或按 ↑ ↓ 調整')), list, checked ? h('div', { class: 'note ' + (all ? '' : 'warn'), style: { fontSize: '14px' } }, all ? '✓ 正確！這條流程刻意省略了工作流程的第 1（界定問題）、4（探索分析）、6（溝通部署）步——整學期就是把這三步逐一補回來。' : '還不對。提示：要先告訴 AI Studio 哪一欄是答案，才能切分與訓練；Apply Model 需要先有模型。') : '',
         h('p', { class: 'ai' }, '檔案：範例/ML (AI Studio)/M0. 導論與工具鏈/ 的 (empty).rmp 為課堂填空版、無後綴者為完成版；資料 MPG dataset.rmhdf5table。')); }
     $('#w-proc').append(out); draw();
   })();
@@ -147,10 +170,14 @@
     function checks() { const c = []; const t = st.tech || '';
       c.push([!!(st.who && st.predict && st.action), '一句話說清楚：為誰、預測什麼、可以做什麼']);
       c.push([!!st.unit, '寫下「一列 = 一個什麼」']);
-      c.push([t.startsWith('監督式') ? !!st.target : t ? !st.target || /無|不適用/.test(st.target) : false, t.startsWith('監督式') ? '監督式需要目標變數 y' : '非監督式不需要目標變數 y']);
+      if (t.startsWith('監督式')) c.push([!!st.target, '監督式需要明確的目標變數 y']);
+      else if (t.startsWith('非監督式') || t === '不需要模型') c.push([!st.target || /無|不適用/.test(st.target), '非監督式／不建模不需要目標變數 y']);
+      else if (t) c.push([true, 'NLP／生成式任務可依子任務決定是否設定目標變數 y']);
+      else c.push([false, '請先選擇「技術」類別']);
       c.push([/\d|採用|願意/.test(st.success || ''), '成功定義有可檢驗的門檻（數字或採用條件）']);
       c.push([!!st.src && !/實習|病歷號|真實個案/.test(st.src), '資料為公開或模擬資料，不使用實習或工作場域的真實個案']);
       c.push([!!st.err, '想過錯誤的代價與承擔者']); return c; }
+    function buildMd() { return `# 問題陳述與專案範圍\n\n我想為【${st.who || ''}】預測【${st.predict || ''}】，預測出來之後他可以【${st.action || ''}】。\n\n` + F.filter(f => !['who', 'predict', 'action'].includes(f[0])).map(([k, l]) => `- **${l}**：${st[k] || ''}`).join('\n') + '\n'; }
     function render() { prev.innerHTML = ''; const v = k => st[k] ? st[k] : h('span', { style: { color: 'var(--faint)' } }, '（未填）');
       prev.append(h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '12px 14px', background: '#fff', fontSize: '14px' } }, h('div', { style: { fontWeight: 700, marginBottom: '6px' } }, '問題陳述'), h('p', null, '我想為【', v('who'), '】預測【', v('predict'), '】，預測出來之後他可以【', v('action'), '】。'),
         ...F.filter(f => !['who', 'predict', 'action'].includes(f[0])).map(([k, l]) => h('div', { style: { display: 'grid', gridTemplateColumns: '130px 1fr', gap: '8px', padding: '3px 0', borderTop: '1px solid var(--line)' } }, h('span', { style: { color: 'var(--muted)' } }, l), h('span', null, v(k))))));
@@ -159,8 +186,9 @@
       F.forEach(([k, l, ph]) => { let inp; if (k === 'tech') { inp = h('select', null, h('option', { value: '' }, '— 選擇 —'), TECH.map(t => h('option', null, t))); inp.value = st[k] || ''; inp.onchange = () => { st[k] = inp.value; Store.set('m0:scope', st); render(); }; } else { inp = h(k === 'now' || k === 'feat' || k === 'err' ? 'textarea' : 'input', { type: 'text', placeholder: ph, rows: 2, style: { width: '100%', font: 'inherit', fontSize: '14px', padding: '5px 7px', border: '1px solid var(--line2)', borderRadius: '6px' } }); inp.value = st[k] || ''; inp.oninput = () => { st[k] = inp.value; Store.set('m0:scope', st); render(); }; } form.append(h('label', { style: { fontSize: '13px', color: 'var(--muted)' } }, l, h('div', null, inp))); });
       const ex = h('button', { class: 'btn sm' }, '載入範例'); ex.onclick = () => { Object.assign(st, EX); Store.set('m0:scope', st); draw(); };
       const cl = h('button', { class: 'btn sm' }, '清空'); cl.onclick = () => { Object.keys(st).forEach(k => delete st[k]); Store.set('m0:scope', st); draw(); };
-      const dl = h('button', { class: 'btn primary sm' }, '下載（Markdown）'); dl.onclick = () => { const md = `# 問題陳述與專案範圍\n\n我想為【${st.who || ''}】預測【${st.predict || ''}】，預測出來之後他可以【${st.action || ''}】。\n\n` + F.filter(f => !['who', 'predict', 'action'].includes(f[0])).map(([k, l]) => `- **${l}**：${st[k] || ''}`).join('\n') + '\n'; const a = h('a', { href: URL.createObjectURL(new Blob([md], { type: 'text/markdown' })), download: 'M0_問題陳述.md' }); document.body.append(a); a.click(); a.remove(); };
-      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, ex, cl, dl), h('div', { class: 'grid2' }, form, prev)); render(); }
+      const cp = h('button', { class: 'btn sm' }, '複製 Markdown'); cp.onclick = () => { try { navigator.clipboard.writeText(buildMd()); cp.textContent = '✓ 已複製'; setTimeout(() => cp.textContent = '複製 Markdown', 1600); } catch (e) { cp.textContent = '請使用下載'; } };
+      const dl = h('button', { class: 'btn primary sm' }, '下載（Markdown）'); dl.onclick = () => { const url = URL.createObjectURL(new Blob([buildMd()], { type: 'text/markdown' })); const a = h('a', { href: url, download: 'M0_問題陳述.md' }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, ex, cl, cp, dl), h('div', { class: 'grid2' }, form, prev)); render(); }
     $('#w-scope').append(out); draw();
   })();
 
@@ -191,16 +219,16 @@
   // ================= P12 =================
   U.flashcards('#w-cards', [['資料科學', 'Data Science', '用資料回答「接下來會怎樣、該怎麼做」'], ['資料探勘', 'Data Mining', '從大量資料中找出先前未知的模式'], ['知識發現', 'KDD', '資料 → 知識的完整流程（Fayyad 等人，1996）'], ['商業智慧', 'Business Intelligence, BI', '回答「過去發生了什麼」的報表與儀表板'], ['描述性分析', 'Descriptive Analytics', '發生了什麼事'], ['預測性分析', 'Predictive Analytics', '接下來會發生什麼'], ['指示性分析', 'Prescriptive Analytics', '我們該怎麼做'], ['監督式學習', 'Supervised Learning', '資料有標準答案，學輸入到答案的對應'], ['非監督式學習', 'Unsupervised Learning', '沒有答案，只找資料本身的結構'], ['強化學習', 'Reinforcement Learning', '從互動與回饋中學策略（本課程不含）'], ['標籤', 'Label / Target / y', '你想預測的那一欄'], ['特徵', 'Feature / Input / x', '餵給模型的欄位'], ['人工智慧', 'AI', '讓機器展現智慧行為的所有方法'], ['機器學習', 'Machine Learning', '從資料自動學規律，不寫死規則'], ['深度學習', 'Deep Learning', '以多層神經網路自動學特徵表示'], ['生成式 AI', 'Generative AI', '能產生新內容的深度學習模型'], ['自然語言處理', 'NLP', '讓電腦處理人類語言'], ['電腦視覺', 'Computer Vision', '讓電腦「看懂」影像'], ['基礎模型', 'Foundation Model', '大規模預訓練、可適應多種任務的通用模型'], ['檢索增強生成', 'RAG', '先檢索文件再生成，可標註來源'], ['提示詞工程', 'Prompt Engineering', '以指令設計引導模型行為'], ['專案界定', 'Scoping', '動手前先定義問題、使用者與資料需求'], ['最小可行產品', 'MVP', '先做出最小可用版本再擴充'], ['混淆因子', 'Confounder', '同時影響兩個變數，造成假性相關的第三者'], ['推理模型', 'Reasoning Model', '先產生思考步驟再作答'], ['模型上下文協定', 'MCP', '讓 AI 以統一方式連接外部工具與資料的開放標準'], ['資料洩漏', 'Data Leakage', '測試資料的資訊混進訓練過程，使評估過度樂觀']]);
   U.finalQuiz('#w-final', [
-    ['會寫程式又懂領域、卻缺統計，落在文氏圖的哪一區？', ['機器學習', '傳統研究', '危險區', '資料科學'], 2, '做得出東西，卻可能誤讀結果。'],
-    ['「依預測結果建議下週護理人力配置」屬於哪種分析？', ['描述性', '診斷性', '預測性', '指示性'], 3, '指示性回答「我們該怎麼做」。'],
-    ['「把病人依生活型態與共病分成幾個族群」是？', ['監督式分類', '監督式迴歸', '非監督式分群', '強化學習'], 2, '沒有預先定義的族群 → 沒有 y。'],
-    ['1990 年代 KDD 的核心主張是？', ['人提出假設、電腦驗證', '電腦從資料中找出假設', '以神經網路取代統計', '把資料存進資料倉儲'], 1, '這是從統計推論走向資料探勘的轉折。'],
-    ['推動 AI 演進的三個力量不包含？', ['資料變多', '算力變便宜', '演算法突破', '法規放寬'], 3, '三個推力：資料、算力、演算法。'],
-    ['多數 AI 專案失敗最常卡在哪裡？', ['演算法不夠新', '拿不到可用資料、做出來沒人用', '模型參數太少', 'GPU 不夠'], 1, '技術只佔漏斗中間三層，而那正是最容易的部分。'],
-    ['用藥項目數與住院天數 r=0.87，最合理的解讀是？', ['減少用藥可縮短住院', '兩者可能都被疾病嚴重度推高', '住院越久導致用藥越多', 'r 太高代表資料錯誤'], 1, '相關不等於因果——混淆因子。'],
-    ['要預測住院天數，下列哪個最合適？', ['GPT 類 LLM', '擴散模型', '迴歸或決策樹', 'A* 搜尋'], 2, '生成式 AI 擅長的是不同的事。'],
-    ['補值的正確順序是？', ['先用全部資料算平均補值，再切分', '先切分，只用訓練集算平均，同一數字補測試集', '訓練集與測試集各自算平均補', '直接刪掉所有缺值'], 1, '否則測試集的資訊會滲入訓練。'],
-    ['專案範圍表中最容易漏掉、卻最關鍵的是？', ['演算法名稱', '成功定義', '軟體版本', '資料筆數'], 1, '不是「模型很準」，而是「達到什麼程度才算有用」。'],
+    ['會寫程式又懂領域、卻缺統計，落在文氏圖的哪一區？', ['機器學習', '傳統研究', '危險區', '資料科學'], 2, '做得出東西，卻可能誤讀結果。', 'p01'],
+    ['「依預測結果建議下週護理人力配置」屬於哪種分析？', ['描述性', '診斷性', '預測性', '指示性'], 3, '指示性回答「我們該怎麼做」。', 'p01'],
+    ['「把病人依生活型態與共病分成幾個族群」是？', ['監督式分類', '監督式迴歸', '非監督式分群', '強化學習'], 2, '沒有預先定義的族群 → 沒有 y。', 'p02'],
+    ['1990 年代 KDD 的核心主張是？', ['人提出假設、電腦驗證', '電腦從資料中找出假設', '以神經網路取代統計', '把資料存進資料倉儲'], 1, '這是從統計推論走向資料探勘的轉折。', 'p03'],
+    ['推動 AI 演進的三個力量不包含？', ['資料變多', '算力變便宜', '演算法突破', '法規放寬'], 3, '三個推力：資料、算力、演算法。', 'p03'],
+    ['多數 AI 專案失敗最常卡在哪裡？', ['演算法不夠新', '拿不到可用資料、做出來沒人用', '模型參數太少', 'GPU 不夠'], 1, '技術只佔漏斗中間三層，而那正是最容易的部分。', 'p04'],
+    ['用藥項目數與住院天數 r=0.87，最合理的解讀是？', ['減少用藥可縮短住院', '兩者可能都被疾病嚴重度推高', '住院越久導致用藥越多', 'r 太高代表資料錯誤'], 1, '相關不等於因果——混淆因子。', 'p05'],
+    ['要預測住院天數，下列哪個最合適？', ['GPT 類 LLM', '擴散模型', '迴歸或決策樹', 'A* 搜尋'], 2, '生成式 AI 擅長的是不同的事。', 'p06'],
+    ['補值的正確順序是？', ['先用全部資料算平均補值，再切分', '先切分，只用訓練集算平均，同一數字補測試集', '訓練集與測試集各自算平均補', '直接刪掉所有缺值'], 1, '否則測試集的資訊會滲入訓練。', 'p07'],
+    ['專案範圍表中最容易漏掉、卻最關鍵的是？', ['演算法名稱', '成功定義', '軟體版本', '資料筆數'], 1, '不是「模型很準」，而是「達到什麼程度才算有用」。', 'p10'],
   ]);
   (function () {
     const R = [['三個支柱', '統計、工具、領域知識三者兼備，你們的優勢在第三項。', 'p01'], ['三個推力', '資料變多、算力變便宜、演算法有突破。', 'p03'], ['多了一個選項', '新技術很少取代舊技術——決策樹在 2026 年仍然好用。', 'p06'], ['能用、能信、能負責', '2026 年的重點不是更準的演算法。', 'p04'], ['時間分配', '資料準備約佔四成五，是單一最大宗；建模相關約三成。', 'p07'], ['今天最重要的事', '選定貫穿主線，完成一頁問題陳述作業。', 'p10']];

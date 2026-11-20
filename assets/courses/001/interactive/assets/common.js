@@ -115,21 +115,32 @@
   function parseCSV(text) { const rows = []; let row = [], f = '', q = false; for (let i = 0; i < text.length; i++) { const c = text[i]; if (q) { if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; } else if (c === '"') q = true; else if (c === ',') { row.push(f); f = ''; } else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; } else f += c; } if (f !== '' || row.length) { row.push(f); rows.push(row); } return rows.filter(r => r.length > 1 || r[0] !== ''); }
 
 
-  // ---------- 單元頁共用：側欄導覽、完成標記、進度條 ----------
+  // ---------- 單元頁共用：側欄導覽、行動版跳轉、完成標記、進度條 ----------
   function initModule(KEY) {
     const parts = $$('section.part'); Store.set(KEY + ':total', parts.length);
     const side = $('#side'); const done = new Set(Store.get(KEY + ':done', []));
+    const topIn = $('.topbar .in');
+    const mob = topIn ? h('select', { class: 'mob-nav', 'aria-label': '快速跳轉段落' }) : null;
+    if (mob) { mob.onchange = () => { const el = $('#' + mob.value); if (el) el.scrollIntoView({ behavior: 'smooth' }); }; topIn.append(mob); }
     const prog = () => { $('#ptxt').textContent = `完成 ${done.size} / ${parts.length}`; $('#pbar').style.width = (done.size / parts.length * 100) + '%'; };
     parts.forEach((p, i) => {
-      const a = h('a', { href: '#' + p.id, 'data-id': p.id }, h('span', { class: 'n' }, String(i + 1).padStart(2, '0')), h('span', null, p.dataset.t), h('span', { class: 'ck' }, '✓'));
+      const num = String(i + 1).padStart(2, '0');
+      const a = h('a', { href: '#' + p.id, 'data-id': p.id }, h('span', { class: 'n' }, num), h('span', null, p.dataset.t), h('span', { class: 'ck' }, '✓'));
       side.append(a);
+      const opt = mob ? h('option', { value: p.id }, `${num} ${p.dataset.t}`) : null;
+      if (opt) mob.append(opt);
       const b = h('button', { class: 'btn sm mark-done' });
-      const sync = () => { b.textContent = done.has(p.id) ? '✓ 已完成這一節（點擊取消）' : '標記這一節為已完成'; b.classList.toggle('on', done.has(p.id)); a.classList.toggle('done', done.has(p.id)); };
+      const sync = () => {
+        const isD = done.has(p.id);
+        b.textContent = isD ? '✓ 已完成這一節（點擊取消）' : '標記這一節為已完成';
+        b.classList.toggle('on', isD); a.classList.toggle('done', isD);
+        if (opt) opt.textContent = `${num} ${p.dataset.t}${isD ? ' ✓' : ''}`;
+      };
       b.onclick = () => { done.has(p.id) ? done.delete(p.id) : done.add(p.id); Store.set(KEY + ':done', [...done]); sync(); prog(); };
       p.append(h('div', { class: 'row', style: { justifyContent: 'flex-end', marginTop: '14px' } }, b)); sync();
     });
     prog();
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) $$('#side a').forEach(a => a.classList.toggle('cur', a.dataset.id === e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { $$('#side a').forEach(a => a.classList.toggle('cur', a.dataset.id === e.target.id)); if (mob) mob.value = e.target.id; } }), { rootMargin: '-40% 0px -55% 0px' });
     parts.forEach(p => io.observe(p));
   }
   const seg = (opts, get, set, redraw) => { const sg = h('div', { class: 'seg' }); opts.forEach(([v, l]) => { const b = h('button', { class: get() === v ? 'on' : '' }, l); b.onclick = () => { set(v); sg.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on'); redraw(); }; sg.append(b); }); return sg; };
@@ -140,12 +151,12 @@
       mv(e); const up = () => { document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up); }; document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up); });
     return h('label', { class: 'ctl' }, label, i, v); };
   const check = (label, get, set, redraw) => { const c = h('input', { type: 'checkbox' }); c.checked = get(); c.onchange = () => { set(c.checked); redraw(); }; return h('label', { class: 'ctl' }, c, label); };
-  /* 選擇題分類卡：items=[[text, answer, why]], choices=[...] */
-  function sorter(container, items, choices, foot) {
+  /* 選擇題分類卡：items=[[text, answer, why]], choices=[...], onPick(choice, isRight, idx, ansMap) */
+  function sorter(container, items, choices, foot, onPick) {
     const ans = {}; const out = h('div');
     function draw() { out.innerHTML = ''; let ok = 0;
       items.forEach(([t, a, why], i) => { const row = h('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 0', borderBottom: '1px solid var(--line)', flexWrap: 'wrap' } }, h('div', { style: { flex: '1 1 280px', fontSize: '14.5px' } }, t));
-        choices.forEach(m => { const b = h('button', { class: 'btn sm' }, m); if (ans[i] === m) { if (m === a) b.classList.add('on'); else b.style.cssText = 'background:var(--bad-soft);border-color:var(--bad)'; } b.onclick = () => { ans[i] = m; draw(); }; row.append(b); });
+        choices.forEach(m => { const b = h('button', { class: 'btn sm' }, m); if (ans[i] === m) { if (m === a) b.classList.add('on'); else b.style.cssText = 'background:var(--bad-soft);border-color:var(--bad)'; } b.onclick = () => { ans[i] = m; draw(); if (onPick) onPick(m, m === a, i, ans); }; row.append(b); });
         if (ans[i]) { if (ans[i] === a) ok++; row.append(h('div', { style: { flexBasis: '100%', fontSize: '13px', color: ans[i] === a ? 'var(--good)' : 'var(--bad)' } }, (ans[i] === a ? '✓ ' : `✗ 應為 ${a}：`) + why)); }
         out.append(row); });
       out.append(h('div', { class: 'row', style: { marginTop: '10px' } }, h('span', { class: 'tag ' + (ok === items.length ? 'good' : 'gray') }, `答對 ${ok} / ${items.length}`), foot ? h('span', { style: { fontSize: '13px', color: 'var(--muted)' } }, foot) : ''));
@@ -153,17 +164,49 @@
     (typeof container === 'string' ? $(container) : container).append(out); draw();
   }
   function flashcards(container, G) {
-    let front = 'zh'; const out = h('div');
-    function draw() { out.innerHTML = ''; const g = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(190px,1fr))', gap: '8px' } });
-      G.forEach(([zh, en, d]) => { const c = h('div', { style: { border: '1px solid var(--line)', borderRadius: '10px', padding: '10px 12px', minHeight: '86px', background: '#fff', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center' } }); let f = false; const paint = () => { c.innerHTML = ''; c.style.background = f ? 'var(--accent-soft)' : '#fff'; if (!f) c.append(h('div', { style: { fontWeight: 700, fontSize: '15.5px' } }, front === 'zh' ? zh : en)); else c.append(h('div', { style: { fontWeight: 600, fontSize: '13.5px', color: 'var(--accent-ink)' } }, front === 'zh' ? en : zh), h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, d)); }; c.onclick = () => { f = !f; paint(); }; paint(); g.append(c); });
-      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, seg([['zh', '正面：中文'], ['en', '正面：英文']], () => front, v => front = v, draw)), g); }
+    let front = 'zh', allOpen = false, pick = -1; const out = h('div');
+    function draw() { out.innerHTML = '';
+      const g = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(190px,1fr))', gap: '8px' } });
+      G.forEach(([zh, en, d], idx) => {
+        const isPick = idx === pick;
+        const c = h('div', { style: { border: (isPick ? '2px solid var(--amber)' : '1px solid var(--line)'), borderRadius: '10px', padding: '10px 12px', minHeight: '86px', background: '#fff', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center', boxShadow: isPick ? '0 0 0 3px var(--amber-soft)' : 'none' } });
+        let f = allOpen;
+        const paint = () => { c.innerHTML = ''; c.style.background = f ? 'var(--accent-soft)' : '#fff'; if (!f) c.append(h('div', { style: { fontWeight: 700, fontSize: '15.5px' } }, front === 'zh' ? zh : en)); else c.append(h('div', { style: { fontWeight: 600, fontSize: '13.5px', color: 'var(--accent-ink)' } }, front === 'zh' ? en : zh), h('div', { style: { fontSize: '13px', color: 'var(--muted)' } }, d)); };
+        c.onclick = () => { f = !f; paint(); }; paint(); g.append(c);
+      });
+      const toggleAll = h('button', { class: 'btn sm' }, allOpen ? '全部蓋上' : '全部翻開'); toggleAll.onclick = () => { allOpen = !allOpen; pick = -1; draw(); };
+      const randBtn = h('button', { class: 'btn sm' }, '🎲 隨機抽考一張'); randBtn.onclick = () => { allOpen = false; pick = Math.floor(Math.random() * G.length); draw(); const el = g.children[pick]; if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+      out.append(h('div', { class: 'row', style: { marginBottom: '8px' } }, seg([['zh', '正面：中文'], ['en', '正面：英文']], () => front, v => front = v, draw), toggleAll, randBtn, pick >= 0 ? h('span', { class: 'tag amber' }, `已抽中第 ${pick + 1} 張，點卡片看答案`) : ''), g);
+    }
     (typeof container === 'string' ? $(container) : container).append(out); draw();
   }
   function finalQuiz(box, Q) {
-    box = typeof box === 'string' ? $(box) : box; let score = 0; const sc = h('div', { class: 'note', style: { display: 'none' } });
-    Q.forEach(([q, o, a, ex], i) => quiz(box, { head: `第 ${i + 1} 題`, q, opts: o, a, ex, onRight: () => { if (!box.children[i].dataset.miss) score++; } }));
-    box.addEventListener('click', () => { if (box.querySelectorAll('.quiz.done').length === Q.length) { sc.style.display = 'block'; sc.textContent = `完成！一次答對 ${score} / ${Q.length} 題。${score >= Q.length * .8 ? '觀念扎實，可以進入下一個單元。' : '建議回頭看看答錯題目對應的段落。'}`; } });
-    box.append(sc);
+    box = typeof box === 'string' ? $(box) : box;
+    function render() {
+      box.innerHTML = '';
+      let score = 0; const missed = new Set();
+      const sc = h('div', { class: 'note', style: { display: 'none' } });
+      const retry = h('button', { class: 'btn sm', style: { marginTop: '8px' } }, '↺ 重新測驗');
+      retry.onclick = render;
+      Q.forEach(([q, o, a, ex, partId], i) => quiz(box, { head: `第 ${i + 1} 題`, q, opts: o, a, ex, onRight: () => { if (!box.children[i].dataset.miss) score++; } }));
+      const checkDone = () => {
+        if (box.querySelectorAll('.quiz.done').length === Q.length) {
+          missed.clear();
+          Q.forEach((item, i) => { if (+box.children[i].dataset.miss > 0) missed.add(i); });
+          sc.innerHTML = '';
+          sc.style.display = 'block';
+          sc.append(h('div', null, `完成！一次答對 ${score} / ${Q.length} 題。${score >= Q.length * .8 ? '觀念扎實，可以進入下一個單元。' : '建議回頭看看答錯題目對應的段落。'}`));
+          if (missed.size) {
+            const links = [...missed].map(i => Q[i][4] ? h('a', { href: '#' + Q[i][4], style: { marginRight: '8px' } }, `第 ${i + 1} 題（前往複習）`) : `第 ${i + 1} 題`);
+            sc.append(h('div', { style: { fontSize: '13.5px', marginTop: '6px' } }, '需複習：', ...links));
+          }
+          sc.append(h('div', null, retry));
+        }
+      };
+      box.onclick = checkDone;
+      box.append(sc);
+    }
+    render();
   }
 
   /* 通用折線圖（M4 起使用） */
