@@ -193,6 +193,8 @@ table.kv td.m{font-family:var(--mono)}
 .lv-table tr.is-dim td{opacity:.38} .lv-table tr.is-cut td{opacity:.45;text-decoration:line-through}
 .lv-table tr[class*=k-] td:first-child{box-shadow:inset 4px 0 var(--k)}
 .lv-table td.lv-flash{animation:lvflashbg .8s}
+.exp-pill{display:inline-block;padding:0 5px;margin:0 1px;border-radius:5px;background:var(--accent-soft);color:var(--accent-ink);font-family:var(--mono);font-size:12.5px;font-weight:700;text-decoration:none;border:1px solid rgba(13,107,103,.24);line-height:1.45;transition:background .15s,color .15s,transform .12s}
+.exp-pill:hover{background:var(--accent);color:#fff;transform:translateY(-1px)}
 .lv-cap{font-size:13px;color:var(--faint);margin-top:5px}
 
 .lv-tokens{display:grid;gap:8px}

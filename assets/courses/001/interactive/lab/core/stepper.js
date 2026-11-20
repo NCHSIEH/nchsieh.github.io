@@ -76,14 +76,15 @@
     const exBody = h('div', { class: 'body' }), exSec = h('section', { class: 'lab-sec lock' }, h('h2', null, '看懂了什麼'), exBody);
     const aisSec = h('section', { class: 'lab-sec' });
     const GOALS = {
+      S0: '全站 80 個演算法的總導覽地圖！依「資料型態（表格／影像／時序／文字／互動）」與「有無標籤 y」動態分流，帶你快速鎖定 S1–S9 標準管線，且對照表內所有實驗編號皆可直接點擊跳轉。',
       S1: '透過 6 階段全寬動畫流程圖，對照「線性／距離模型」、「樹與集成模型」與「防資料洩漏嚴格管線」三條標準資料前處理路徑，清楚標示 A1–A9 各演算法的介入時機與 Train fit → Test transform 鐵律。',
       S2: '完整走過監督式學習 6 階段：80/20 封存測試集、依四大主流管線（線性距離、單一決策樹、Bagging/Boosting/Stacking 集成、不平衡折內 SMOTE）做專屬前處理、K-Fold 交叉驗證網格調參、全訓練集重訓與最終驗收（對照 B1–B18）。',
-      S3: '針對無標籤 y 的資料，透過 6 階段動畫流程圖比較「病人亞型分群 (C1–C4, C9–C10)」、「無監督異常偵測 (C7–C8, F5)」與「高維降維壓縮 (C5 PCA, C6 t-SNE)」三條探勘管線與臨床落地方式。',
-      S4: '透過 6 階段架構動畫流程圖，同場對照深度學習 4 大主流神經網路管線：MLP 表格全連接網路、CNN 2D 醫療影像卷積池化、LSTM 生理序列記憶胞與 Autoencoder 無監督瓶頸重建（標註 F1–F5 演算法與橙色反向傳播回流）。',
-      S5: '對照文字探勘三個世代的 6 階段管線：傳統斷詞＋TF-IDF＋貝氏分類／LDA（E1, E2, E4）、Word2Vec Skip-gram 稠密詞向量（E3），以及現代 Transformer LLM＋RAG 混合檢索＋LoRA 微調（H1–H7）。',
-      S6: '展示時間序列預測不可隨機打亂的 6 階段流程：對比「統計 ETS／ARIMA (G1, G2)」、「滯後特徵 Lag-k 機器學習」與「LSTM 深度序列 (F4)」，並以 G3 滑動／擴張視窗往前滾動驗證。',
-      S7: '從門診處方交易籃出發，透過 6 階段流程圖對照 Apriori 逐層候選剪枝（D1）與 FP-Growth 前綴樹壓縮（D2），並示範為何通過 Support 與 Confidence 後還必須用 Lift > 1 剔除熱門藥品假關聯。',
-      S8: '模型通過測試集驗收後的 6 階段臨床落地管線：結合 I1 全域排列重要度與單筆 SHAP 瀑布歸因、機率校準與 B16 醫療成本門檻調整，以及上線後 PSI 分布飄移監控與觸發滾動重訓閉環。',
+      S3: '針對無標籤 y 的資料，透過 6 階段動畫流程圖比較「病人亞型分群 (C1–C4, C9–C11)」、「無監督異常偵測 (C7–C8, C12, F5)」與「高維降維壓縮 (C5 PCA, C6 t-SNE)」三條探勘管線與臨床落地方式。',
+      S4: '透過 6 階段架構動畫流程圖，同場對照深度學習 4 大主流神經網路管線：MLP 表格全連接網路、CNN 2D 醫療影像卷積池化、LSTM 生理序列記憶胞與 Autoencoder 無監督瓶頸重建（標註 F1–F6 演算法與橙色反向傳播回流）。',
+      S5: '對照文字探勘三個世代的 6 階段管線：傳統斷詞＋TF-IDF／BM25＋貝氏分類／LDA（E1–E5）、Word2Vec Skip-gram 稠密詞向量（E3），以及現代 Transformer LLM＋RAG＋Cross-Encoder Rerank＋DPO（H1–H9）。',
+      S6: '展示時間序列預測不可隨機打亂的 6 階段流程：對比「統計 ETS／ARIMA (G1, G2)」、「STL 分解＋滯後特徵 Lag-k 機器學習 (G4)」與「LSTM 深度序列 (F4)」，並以 G3 滑動／擴張視窗往前滾動驗證。',
+      S7: '從門診處方籃與跨次就醫序列出發，對照 Apriori 逐層剪枝（D1）、FP-Growth 前綴樹（D2）與 PrefixSpan 序列樣式探勘（D3）三條管線，並結合 D4 零不變指標 Kulczynski 與負關聯規則剔除假關聯。',
+      S8: '模型通過測試集驗收後的 6 階段臨床落地管線：結合 I1 排列重要度與 SHAP、I2 LIME／PDP／反事實處方、B16 醫療成本門檻校正，以及上線後 PSI 分布飄移監控、滾動重訓與 J2 UCB 適應性線上驗證。',
       S9: '透過 6 階段全寬動畫流程圖，拆解最新生成式 AI Agent 三大主流架構：ReAct 單代理推理與工具呼叫迴圈（H8）、Coordinator + 平行專才 + Critic 的 Multi-Agent 多代理協作，以及結合 JSON Schema 護欄與醫師把關的混合工作流。',
       A1: '對同一份含遺失值的健檢資料，實測「平均數 (Mean)」、「中位數 (Median)」與「k-NN 鄰居補值 (k-NN Imputation)」如何填補空格；觀察平均數法如何人為壓低標準差 (SD)，而 k-NN 如何在散佈圖上依最近鄰居保留原始分佈。',
       A2: '將年齡（歲）與空腹血糖（mg/dL）換算為 Z 分數 (Z-score) 或 Min-Max [0, 1] 區間；觀察未縮放前血糖如何主導歐氏距離 (Euclidean Distance)，以及縮放後病人 A 的最近鄰居是否翻轉。',
@@ -181,54 +182,63 @@
     /* ---------- 參數列 ---------- */
     /* ---------- 參數與選項提示字典 ---------- */
     const TIPS = {
+      S0: {
+        scenario: '【醫療任務情境 (Clinical AI Scenario)】\n切換 5 種常見資料型態與學習範式，即時觀看從原始問題一路路由到對應 S1–S9 管線與 A–J 群演算法。',
+        'scenario:tabular': '【表格健檢預測 (Tabular Supervised: S1 → S2)】\n適用：糖尿病預測、再入院風險、血壓數值預測（有歷史標準答案 y）。\n路線：S1 無洩漏前處理 → S2 監督學習與 CV（B1–B18）→ S8 解釋落地。',
+        'scenario:unsup': '【無標籤探索、分群與處方籃 (Unsupervised & Rules: S3 / S7)】\n適用：病人亞型分群、罕見異常偵測、處方共現與跨次就醫序列。\n路線：S3 非監督探勘（C1–C12）或 S7 關聯與序列探勘（D1–D4）。',
+        'scenario:seq_img': '【時間序列預測與醫療影像 (Time Series & Vision: S6 / S4)】\n適用：月門診人次預測（嚴禁打亂順序）、X 光影像病灶辨識。\n路線：S6 時序滾動驗證（G1–G4）或 S4 CNN／LSTM 深度學習（F3–F6）。',
+        'scenario:text_agent': '【病歷文字、LLM 與 Agent (NLP / LLM / Agent: S5 / S9)】\n適用：護理紀錄分類、長照衛教 RAG 問答、會查 SQL 與算數的門診智能助理。\n路線：S5 文字三世代（E1–E5, H1–H9）與 S9 AI Agent 架構（H8）。',
+        'scenario:rl': '【互動試錯決策與適應性試驗 (Reinforcement Learning: J1 / J2)】\n適用：無固定標籤、只能透過環境獎勵回饋學習的策略最佳化。\n路線：J1 Q-Learning 路徑規劃、J2 UCB 多臂老虎機臨床適應性試驗。'
+      },
       S1: {
-        mode: '【前處理參考管線 (Preprocessing Pipeline)】\n切換不同下游模型家族所需的前處理步驟組合。',
-        'mode:linear': '【線性／距離模型管線 (Linear / Distance Pipeline)】\n適用：線性迴歸、Logistic、k-NN、SVM、PCA、神經網路。\n重點：必做離群值縮尾 (A7)、偏態轉換 (A8)、Dummy 去共線編碼 (A4)、Z 分數標準化 (A2) 與 VIF 共線性檢查 (A9)。',
-        'mode:tree': '【樹與集成模型管線 (Tree & Ensemble Pipeline)】\n適用：決策樹、隨機森林、AdaBoost、GBDT/XGBoost。\n重點：樹模型只看特徵排序切點，可省略 Z 分數縮放保留原始臨床單位，並支援 One-Hot 全欄與等頻/依熵分箱 (A3)。',
-        'mode:leak_safe': '【防資料洩漏嚴格管線 (Leakage-Safe Pipeline)】\n鐵律：第一步先切分訓練集與測試集！補值中位數、縮放 μ/σ、目標編碼與 SMOTE 全都只能在訓練集 fit，再單向 transform 套用至驗證與測試集。'
+        model: '【前處理參考管線 (Preprocessing Pipeline)】\n切換不同下游模型家族所需的前處理步驟組合。',
+        'model:linear': '【線性／距離模型管線 (Linear / Distance Pipeline)】\n適用：線性迴歸、Logistic、k-NN、SVM、PCA、神經網路。\n重點：必做離群值縮尾 (A7)、偏態轉換 (A8)、Dummy 去共線編碼 (A4)、Z 分數標準化 (A2) 與 VIF 共線性檢查 (A9)。',
+        'model:tree': '【樹與集成模型管線 (Tree & Ensemble Pipeline)】\n適用：決策樹、隨機森林、AdaBoost、GBDT/XGBoost。\n重點：樹模型只看特徵排序切點，可省略 Z 分數縮放保留原始臨床單位，並支援 One-Hot 全欄與等頻/依熵分箱 (A3)。',
+        'model:leak_safe': '【防資料洩漏嚴格管線 (Leakage-Safe Pipeline)】\n鐵律：第一步先切分訓練集與測試集！補值中位數、縮放 μ/σ、目標編碼與 SMOTE 全都只能在訓練集 fit，再單向 transform 套用至驗證與測試集。'
       },
       S2: {
-        mode: '【監督式學習管線 (Supervised Pipeline)】\n依模型原理與資料特性選擇四條標準訓練與驗證管線。',
-        'mode:clf': '【線性／距離與機率模型 (Linear / Distance / Probabilistic)】\n涵蓋：B1–B5、B10 SVM、B17 LDA、B18 Softmax。\n重點：對特徵尺度與共線性敏感，必先標準化並在 K-Fold 內調正則化參數 λ 或 C。',
-        'mode:tree': '【單一決策樹與規則歸納 (Decision Tree & Rule Induction)】\n涵蓋：B6 分類樹、B14 迴歸樹、B15 RIPPER 規則。\n重點：白箱可解釋性最高（直接產出樹狀圖或 IF-THEN 規則），調參重在限制 max_depth 與 min_leaf 防過擬合。',
-        'mode:ensemble': '【集成學習管線 (Bagging / Boosting / Stacking)】\n涵蓋：B7 隨機森林、B8 AdaBoost、B9 GBDT、B12 Voting/Stacking。\n重點：表格資料競賽與實務準確率最高，結合同質多樹或異質模型，最後搭配 I1 SHAP 補回可解釋性。',
-        'mode:imbalance': '【極度不平衡分類管線 (Imbalanced Classification)】\n涵蓋：A5 折內 SMOTE + 類別加權 + B16 PR 曲線門檻校正。\n重點：嚴禁在 K-Fold 切分前做 SMOTE，且改看 PR-AUC 與 Recall 取代易被多數類稀釋的 Accuracy。',
-        k: '【K-Fold 交叉驗證折數 (Number of CV Folds)】\n用法：將 80% 訓練開發集均分為 K 折（3–10 折，常用 5 或 10 折）輪流當驗證集，穩定評估超參數。'
+        task: '【監督式學習管線 (Supervised Pipeline)】\n依模型原理與資料特性選擇四條標準訓練與驗證管線。',
+        'task:clf': '【線性／距離與機率模型 (Linear / Distance / Probabilistic)】\n涵蓋：B1–B5、B10 SVM、B17 LDA、B18 Softmax。\n重點：對特徵尺度與共線性敏感，必先標準化並在 K-Fold 內調正則化參數 λ 或 C。',
+        'task:tree': '【單一決策樹與規則歸納 (Decision Tree & Rule Induction)】\n涵蓋：B6 分類樹、B14 迴歸樹、B15 RIPPER 規則。\n重點：白箱可解釋性最高（直接產出樹狀圖或 IF-THEN 規則），調參重在限制 max_depth 與 min_leaf 防過擬合。',
+        'task:ensemble': '【集成學習管線 (Bagging / Boosting / Stacking)】\n涵蓋：B7 隨機森林、B8 AdaBoost、B9 GBDT、B12 Voting/Stacking。\n重點：表格資料競賽與實務準確率最高，結合同質多樹或異質模型，最後搭配 I1/I2 SHAP 補回可解釋性。',
+        'task:imbalance': '【極度不平衡分類管線 (Imbalanced Classification)】\n涵蓋：A5 折內 SMOTE + 類別加權 + B16 PR 曲線門檻校正。\n重點：嚴禁在 K-Fold 切分前做 SMOTE，且改看 PR-AUC 與 Recall 取代易被多數類稀釋的 Accuracy。',
+        folds: '【K-Fold 交叉驗證折數 (Number of CV Folds)】\n用法：將 80% 訓練開發集均分為 K 折（3–10 折，常用 5 或 10 折）輪流當驗證集，穩定評估超參數。'
       },
       S3: {
-        mode: '【非監督式探勘管線 (Unsupervised Pipeline)】\n在沒有標準答案標籤 y 的情況下，依探勘目的選擇三條主流管線。',
-        'mode:cluster': '【病人亞型分群管線 (Patient Subtyping / Clustering)】\n涵蓋：C1 K-Means、C2 階層式、C3 DBSCAN、C4 GMM、C10 K-Medoids。\n重點：先標準化與 PCA 去噪，再用 C9 手肘法與輪廓係數挑出最佳群數 K，最後依各群臨床特徵均值命名。',
-        'mode:anomaly': '【無監督異常偵測管線 (Unsupervised Anomaly Detection)】\n涵蓋：C7 LOF 局部密度比、C8 Isolation Forest 隨機孤立樹、F5 Autoencoder 重建誤差。\n重點：挑出異常分數最高的極端個案交由臨床專家複核（區分登錄錯誤或罕見重症）。',
-        'mode:dimred': '【高維降維與視覺化管線 (Dimensionality Reduction)】\n涵蓋：C5 PCA 線性正交主成分、C6 t-SNE 非線性流形鄰居對齊。\n重點：PCA 依累積解釋變異（≥80%）壓縮去共線供下游建模；t-SNE 專用於 2D 視覺化探索群聚結構。'
+        goal: '【非監督式探勘管線 (Unsupervised Pipeline)】\n在沒有標準答案標籤 y 的情況下，依探勘目的選擇三條主流管線。',
+        'goal:cluster': '【病人亞型分群管線 (Patient Subtyping / Clustering)】\n涵蓋：C1/C11 K-Means++ 與模糊分群 FCM、C2 階層式、C3 DBSCAN、C4 GMM、C10 K-Medoids。\n重點：先標準化與 PCA 去噪，再用 C9 手肘法與輪廓係數挑出最佳群數 K，最後依各群臨床特徵均值命名。',
+        'goal:anomaly': '【無監督異常偵測管線 (Unsupervised Anomaly Detection)】\n涵蓋：C7 LOF 局部密度比、C8 Isolation Forest 隨機孤立樹、C12 馬氏距離橢圓、F5 Autoencoder 重建誤差。\n重點：挑出異常分數最高的極端個案交由臨床專家複核（區分登錄錯誤或罕見重症）。',
+        'goal:dimred': '【高維降維與視覺化管線 (Dimensionality Reduction)】\n涵蓋：C5 PCA 線性正交主成分、C6 t-SNE 非線性流形鄰居對齊。\n重點：PCA 依累積解釋變異（≥80%）壓縮去共線供下游建模；t-SNE 專用於 2D 視覺化探索群聚結構。'
       },
       S4: {
         arch: '【深度學習主流架構管線 (Deep Learning Architecture)】\n依輸入資料型態（表格、影像、序列、無標籤）切換四種神經網路架構與專屬訓練流程。',
-        'arch:mlp': '【MLP 多層感知器 — 表格資料 (Tabular MLP)】\n架構：輸入層 → 全連接隱藏層 (Dense + ReLU + Dropout) → 輸出層 ŷ。\n搭配：F1 反向傳播連鎖律 + F2 Adam 自適應更新。',
+        'arch:mlp': '【MLP 多層感知器 — 表格資料 (Tabular MLP)】\n架構：輸入層 → 全連接隱藏層 (Dense + F6 BatchNorm + ReLU + Dropout) → 輸出層 ŷ。\n搭配：F1 反向傳播連鎖律 + F2 Adam 自適應更新。',
         'arch:cnn': '【CNN 卷積神經網路 — 醫療影像 (2D Medical Imaging)】\n架構：影像增強 → F3 平行 3×3 卷積核提取邊緣/紋理 → MaxPool 空間降維 → Flatten + Dense 分類頭 + Grad-CAM 熱圖歸因。',
         'arch:lstm': '【LSTM 長短期記憶 — 生理時序 (Sequential / Time-Series)】\n架構：滑動視窗切分 → F4 記憶胞 (遺忘閘 f、輸入閘 i、輸出閘 o) 跨時間步傳遞 → BPTT 跨時反向傳播與梯度裁剪。',
         'arch:ae': '【Autoencoder 自編碼器 — 無監督異常偵測 (Bottleneck Reconstruction)】\n架構：僅用正常樣本訓練「編碼壓縮 → F5 低維瓶頸 z → 解碼還原」，以重建誤差 ‖x−x̂‖² 抓出無法還原的異常病況。'
       },
       S5: {
-        mode: '【NLP 與文字處理管線 (NLP & LLM Pipeline)】\n比較三個世代的醫療文本處理流程。',
-        'mode:classic': '【傳統統計管線：斷詞 + TF-IDF + 分類/主題】\n涵蓋：E1 中文最大匹配斷詞、停用詞過濾、TF-IDF 稀疏矩陣，接 E2 單純貝氏分類或 E4 LDA 主題探勘。',
-        'mode:embed': '【詞向量管線：Word2Vec 稠密語意空間】\n涵蓋：E3 Skip-gram 滑動視窗預測上下文 + 負採樣，將同義醫療詞（如頭暈↔眩暈）映射到相近餘弦距離。',
-        'mode:llm': '【現代生成式管線：Transformer + RAG + LoRA】\n涵蓋：H1 BPE 子詞、H2 位置編碼、H3/H4 自注意力、H6 BM25+向量混合檢索 (RRF)、H7 LoRA 微調與 H5 Top-p 解碼。'
+        era: '【NLP 與文字處理管線 (NLP & LLM Pipeline)】\n比較三個世代的醫療文本處理流程。',
+        'era:classic': '【傳統統計管線：斷詞 + TF-IDF / BM25 + 分類/主題】\n涵蓋：E1 中文最大匹配斷詞、停用詞過濾、E5 N-gram Bigram 與 BM25 飽和評分，接 E2 單純貝氏分類或 E4 LDA 主題探勘。',
+        'era:embed': '【詞向量管線：Word2Vec 稠密語意空間】\n涵蓋：E3 Skip-gram 滑動視窗預測上下文 + 負採樣，將同義醫療詞（如頭暈↔眩暈）映射到相近餘弦距離。',
+        'era:llm': '【現代生成式管線：Transformer + RAG + Rerank + DPO】\n涵蓋：H1 BPE、H2 位置編碼、H3/H4 自注意力、H6 混合檢索、H7 LoRA、H8 Agent 與 H9 KV Cache / Cross-Encoder / DPO 對齊。'
       },
       S6: {
-        mode: '【時間序列預測管線 (Time Series Pipeline)】\n依資料規模與變數多寡選擇三條標準時序預測流程（皆嚴守 G3 時間序滾動驗證）。',
-        'mode:stat': '【經典統計管線：指數平滑 ETS 與 ARIMA】\n涵蓋：G1 SES/Holt/Holt-Winters 季節平滑、G2 一階差分平穩化 + ACF 診斷 + AR(p) 自迴歸。適合單變數中短期預測。',
-        'mode:ml_lag': '【機器學習管線：Lag 滯後特徵工程 + GBDT/迴歸】\n作法：將過去 t−1, t−2 期數值、滾動平均與假日外生變數轉為表格欄位，交給 B1 迴歸或 B9 GBDT 預測。',
-        'mode:dl_seq': '【深度序列管線：視窗標準化 + LSTM 閘門網路】\n作法：以訓練段統計量標準化後切為固定長度序列視窗，交給 F4 LSTM 捕捉複雜長期非線性動態。'
+        method: '【時間序列預測管線 (Time Series Pipeline)】\n依資料規模與變數多寡選擇三條標準時序預測流程（皆嚴守 G3 時間序滾動驗證）。',
+        'method:stat': '【經典統計管線：指數平滑 ETS 與 ARIMA】\n涵蓋：G1 SES/Holt/Holt-Winters 季節平滑、G2 一階差分平穩化 + ACF 診斷 + AR(p) 自迴歸。適合單變數中短期預測。',
+        'method:ml_lag': '【機器學習管線：G4 STL 分解 + Lag 滯後特徵 + GBDT/迴歸】\n作法：透過 G4 Windowing 將過去 t−1, t−2 期數值、季節項與外生變數轉為表格欄位，交給 B1 迴歸或 B9 GBDT 預測。',
+        'method:dl_seq': '【深度序列管線：視窗標準化 + LSTM 閘門網路】\n作法：以訓練段統計量標準化後切為固定長度序列視窗，交給 F4 LSTM 捕捉複雜長期非線性動態。'
       },
       S7: {
-        mode: '【關聯規則探勘管線 (Association Rule Mining)】\n比較兩種挖掘頻繁處方／共病組合的演算法流程（找出的頻繁集與規則完全相同）。',
-        'mode:apriori': '【D1 Apriori 逐層候選剪枝管線】\n原理：利用「不頻繁項目的超集必不頻繁」反單調性，由 L₁ → C₂ → L₂ → C₃ 逐層產生候選集並掃描資料庫計數。',
-        'mode:fpgrowth': '【D2 FP-Growth 頻繁模式樹壓縮管線】\n原理：只掃描資料庫 2 次，將交易壓縮進前綴樹 (FP-Tree) 並由條件模式基直接遞迴挖掘，免產生龐大候選集、速度極快。'
+        algo: '【關聯與序列探勘管線 (Association & Sequential Mining)】\n比較三種挖掘頻繁處方共現與跨次就醫軌跡的演算法流程。',
+        'algo:apriori': '【D1 Apriori 逐層候選剪枝管線】\n原理：利用「不頻繁項目的超集必不頻繁」反單調性，由 L₁ → C₂ → L₂ → C₃ 逐層產生候選集並掃描資料庫計數，再搭配 D4 Kulczynski 驗收。',
+        'algo:fpgrowth': '【D2 FP-Growth 頻繁模式樹壓縮管線】\n原理：只掃描資料庫 2 次，將交易壓縮進前綴樹 (FP-Tree) 並由條件模式基直接遞迴挖掘，免產生龐大候選集、速度極快。',
+        'algo:prefixspan': '【D3 PrefixSpan 序列樣式探勘管線】\n原理：保留跨次門診時間先後順序，對頻繁前綴建立後綴投影資料庫（Suffix Database），挖出有序的〈A → B → C〉臨床病程軌跡。'
       },
       S8: {
-        mode: '【模型臨床落地與監控管線 (Deployment, XAI & MLOps)】\n切換模型上線前解讀校準與上線後持續監控兩大重點。',
-        'mode:xai': '【XAI 可解釋性與醫療門檻校準管線】\n涵蓋：I1 全域排列重要度（排查資料洩漏假線索）、單筆 SHAP 瀑布圖（向醫師解釋個別病人風險來源）與 B16 成本門檻校正。',
-        'mode:mlops': '【MLOps 線上飄移監控與滾動重訓閉環】\n涵蓋：比較線上輸入分布與訓練期基準的 PSI 指標（偵測季節或人口結構飄移），一旦效能衰退即觸發 G3 滾動重訓。'
+        focus_mode: '【模型臨床落地與監控管線 (Deployment, XAI & MLOps)】\n切換模型上線前解讀校準與上線後持續監控兩大重點。',
+        'focus_mode:xai': '【XAI 可解釋性、反事實與醫療門檻校準管線】\n涵蓋：I1 排列重要度與單筆 SHAP 瀑布圖、I2 LIME 局部代理／PDP 曲線／反事實改善處方，以及 B16 醫療成本門檻校正。',
+        'focus_mode:mlops': '【MLOps 線上飄移監控、重訓與適應性試驗閉環】\n涵蓋：比較線上輸入分布與訓練期基準的 PSI 指標，效能衰退即觸發 G3 滾動重訓，並以 J2 多臂老虎機（UCB）平滑分流驗證新版模型。'
       },
       S9: {
         mode: '【AI Agent 智能體架構管線 (AI Agent Architecture)】\n比較三種主流 LLM Agent 系統設計模式。',
@@ -692,9 +702,9 @@
       '折數 K-Fold': 'Folds', '評估指標': 'Metric', '觀察群數 K': 'Clusters K', '分群數 K': 'Clusters K', '對照 K-Means 平均中心': 'Compare K-Means',
       '處理方式': 'Handling', 'IQR 倍數 k': 'IQR Multiplier', '最多規則數': 'Max Rules', '單條最少涵蓋數': 'Min Coverage',
       '曲線類型': 'Curve', 'ROC 曲線': 'ROC', 'PR 曲線': 'PR', '視窗模式': 'Window Mode', '訓練窗長 W': 'Window W', '每次驗證期數 H': 'Horizon H',
-      '前處理管線': 'Pipeline', '監督式管線': 'Pipeline', '交叉驗證 K': 'CV Folds K', '非監督管線': 'Pipeline',
-      '網路架構': 'Architecture', '文字處理管線': 'NLP Pipeline', '預測管線': 'TS Pipeline', '探勘管線': 'Mining Pipeline',
-      '落地管線': 'Deployment', 'Agent 架構管線': 'Agent Mode', '轉換方法': 'Transform', 'VIF 警戒門檻': 'VIF Threshold',
+      '前處理管線': 'Pipeline', '監督學習管線': 'Supervised Pipeline', '交叉驗證折數 K': 'CV Folds K', '非監督管線': 'Unsupervised Pipeline',
+      '深度學習管線': 'DL Architecture', 'NLP 處理管線': 'NLP Pipeline', '時間序列管線': 'TS Pipeline', '探勘演算法管線': 'Mining Pipeline',
+      '落地管線類型': 'Deployment Mode', 'Agent 架構管線': 'Agent Mode', '醫療任務情境': 'Clinical Scenario', '轉換方法': 'Transform', 'VIF 警戒門檻': 'VIF Threshold',
       '生成式模型': 'Generative Model', '多元分類法': 'Multiclass Strategy', '新病人 BMI': 'Query BMI', '新病人血糖': 'Query Glucose',
       '臨床任務': 'Agent Task', '溫度係數 τ': 'Temperature τ', '最大步數上限': 'Max Steps',
       '模糊指數 m': 'Fuzziness m', '距離度量': 'Distance Metric', '異常門檻距離': 'Threshold',

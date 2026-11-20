@@ -60,7 +60,7 @@
   LAB.register({
     id: 'S1', group: 'S', title: '資料前處理流程',
     module: { name: 'M1 資料準備', url: '../m1/' },
-    goal: '透過全寬動畫流程圖對照「線性／距離管線」、「樹模型管線」與「防洩漏嚴格管線」，並標註每步對應的 A1–A7 演算法。',
+    goal: '透過全寬動畫流程圖對照「線性／距離管線」、「樹模型管線」與「防洩漏嚴格管線」，並標註每步對應的 A1–A9 演算法。',
     data: {
       name: 'clinic_prep_flow',
       scenario: '門診健檢原始資料（含缺值、極端血糖 320、文字科別），示範 3 種前處理標準管線',
@@ -126,9 +126,9 @@
           { from: 'raw', to: 'imp', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'raw', to: 'out', active: st.stage === 2, cls: done(1) ? 'good' : 'c5' },
           { from: 'imp', to: 'enc', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
-          { from: 'out', to: 'bin', active: st.stage === 3 && !R.isLinear, dim: R.isLinear, cls: done(2) ? 'good' : 'c5' },
+          { from: 'out', to: 'bin', active: st.stage === 3, cls: done(2) ? 'good' : 'c5' },
           { from: 'imp', to: 'scl', active: st.stage === 4 && R.isLinear, dim: !R.isLinear, cls: done(3) ? 'good' : 'c5' },
-          { from: 'out', to: 'scl', active: st.stage === 4 && R.isLinear, dim: !R.isLinear, cls: done(3) ? 'good' : 'c5' },
+          { from: 'bin', to: 'scl', active: st.stage === 4 && R.isLinear, dim: !R.isLinear, cls: done(3) ? 'good' : 'c5' },
           { from: 'bin', to: 'raws', active: st.stage === 4 && !R.isLinear, dim: R.isLinear, cls: done(3) ? 'good' : 'c5' },
           { from: 'enc', to: 'sel', active: st.stage === 5, cls: done(4) ? 'good' : 'c5' },
           { from: 'scl', to: 'sel', active: st.stage === 5 && R.isLinear, dim: !R.isLinear, cls: done(4) ? 'good' : 'c5' },
@@ -208,11 +208,15 @@
       add(6, '5. 輸出乾淨矩陣', '所有欄位皆完整、無極端扭曲、全數值化且尺度一致，可封裝進 Pipeline 套用到測試集與新病人！', [
         '原則：fit on train → transform on val/test'
       ]);
-      while (steps.length < 10) {
-        add(6, '管線設計總結', '線性／k-NN／SVM／NN 務必完整走完補值＋縮尾＋編碼＋縮放；樹模型則可省去縮放步驟。', [
-          '目前選擇：' + (R.mode === 'tree' ? '樹模型管線' : R.isStrict ? '防洩漏嚴格管線' : '線性／距離管線')
-        ]);
-      }
+      add(6, '偏態與共線 (A8/A9)', '右偏長尾臨床指標（如 CRP）先做 ln(1+x) 或 RobustScaler（A8）；並建構 BMI 衍生特徵與剔除 VIF > 5 共線欄（A9）。', [
+        '點擊下方表格中的 A8、A9 編號可直接跳轉演練'
+      ]);
+      add(6, '常見踩雷：資料洩漏', '切忌先用全體資料算平均、標準差或做 SMOTE 再切分測試集！這樣會讓模型偷看到測試集分布而驗證失真。', [
+        '解法：一律用 Pipeline / Group Models 封裝在訓練折內 fit'
+      ]);
+      add(6, '三條管線選用速查', '線性／k-NN／SVM／NN 必走補值＋縮尾＋對數＋標準化；樹模型免縮放；高標準臨床專案必走防洩漏嚴格管線。', [
+        '目前選擇：' + (R.mode === 'tree' ? '樹模型管線' : R.isStrict ? '防洩漏嚴格管線' : '線性／距離管線')
+      ]);
       return steps;
     },
     keys(steps, rows, p) {
@@ -222,8 +226,8 @@
     explain(steps, rows, p) {
       const R = simulate(rows, p);
       return [
-        '資料前處理有三種常見實務考量：線性／距離模型必須縮放（A2）與處理離群（A7）；樹模型可免縮放；嚴格防洩漏管線必須先切分再 fit。',
-        '每一步都有對應的交互實驗：A1 補值、A2 縮放、A3 離散化、A4 編碼、A5 平衡、A6 選特徵、A7 離群值。',
+        '資料前處理有三種常見實務考量：線性／距離模型必須縮放（A2/A8）與處理離群（A7）及共線性（A9）；樹模型可免縮放；嚴格防洩漏管線必須先切分再 fit。',
+        '每一步都有對應的交互實驗：A1 補值、A2 縮放、A3 離散化、A4 編碼、A5 平衡、A6 選特徵、A7 離群值、A8 偏態轉換、A9 衍生特徵與 VIF。',
         '務必把前處理步驟打包成 Pipeline，確保測試集與未來線上新資料使用完全相同的平均、標準差與編碼字典。'
       ];
     },

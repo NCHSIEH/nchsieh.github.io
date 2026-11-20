@@ -67,8 +67,8 @@
             { id: 'exo', label: '1b. 外生/日曆特徵', value: (R.isMl || R.isDl) ? '假日/氣溫' : '純單變數', shape: 'box', w: 142, cls: (R.isMl || R.isDl) ? clsOf(0) : 'c5', hl: act(0) && (R.isMl || R.isDl), dim: !(R.isMl || R.isDl), sub: '多變數時間對齊' }
           ],
           [
-            { id: 'dec', label: '2a. 趨勢季節分解', value: st.stage >= 1 ? 'Trend+Season' : '檢查結構', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: '辨識週期與跳躍點' },
-            { id: 'prep', label: R.isMl ? '2b. 建 Lag 滯後欄' : R.isDl ? '2b. 切窗＋標準化' : '2b. 一次差分平穩', value: st.stage >= 1 ? '已轉換' : '非平穩', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: R.isMl ? 'Lag1, Lag2, MA' : R.isDl ? 'A2 僅用訓練段' : 'G2 yₜ−yₜ₋₁ · ACF' }
+            { id: 'dec', label: '2a. STL 趨勢季節分解', value: st.stage >= 1 ? 'G4 T+S+R' : '檢查結構', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: 'G4 拆趨勢/季節/異常' },
+            { id: 'prep', label: R.isMl ? '2b. G4 Windowing' : R.isDl ? '2b. 切窗＋標準化' : '2b. 一次差分平穩', value: st.stage >= 1 ? '已轉換' : '非平穩', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: R.isMl ? 'Lag1, Lag2, 季節Sₜ' : R.isDl ? 'A2 僅用訓練段' : 'G2 yₜ−yₜ₋₁ · ACF' }
           ],
           [
             { id: 'trw', label: '3a. 過去訓練視窗', value: 't = 1..k', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'G3 滑動/擴張視窗' },
@@ -157,11 +157,18 @@
       add(5, '6. 還原尺度與未來預測', '若有做差分或標準化，最後務必累加還原成真實門診人次，再與「上期直接當本期」基準比較。', [
         '滾動平均 MAE = ' + f(R.meanMae, 1) + ' 人次'
       ]);
-      while (steps.length < 10) {
-        add(5, '三條時序管線取捨', '單變數、期數少（<100）選 G1/G2 統計法；有大量外生特徵（天氣/門診表）選 Lag+GBDT；長序列多維訊號選 LSTM。', [
-          '目前管線：' + (R.isMl ? '滯後特徵 ML' : R.isDl ? 'LSTM 序列' : '統計 ETS/ARIMA')
-        ]);
-      }
+      add(5, 'STL 分解與滯後 (G4)', '實務強烈建議先跑 G4：拆出趨勢 Tₜ、季節 Sₜ 與突發異常殘差 Rₜ，再用 Windowing 轉成 Lag-1/Lag-2 表格特徵！', [
+        '對應實驗：G4 季節分解 STL 與滯後特徵工程'
+      ]);
+      add(5, '常見踩雷：未來洩漏', '切忌用隨機 K-Fold 或拿整條序列算平均標準差！這樣等於拿明天的門診量去預測昨天，上線表現必崩盤。', [
+        '嚴格紀律：一律用 G3 滑動／擴張視窗往前滾動驗證'
+      ]);
+      add(5, '三條時序管線選型', '單變數期數少（<100）選 G1/G2 統計法；含外生特徵（天氣/連假）選 G4 Lag+GBDT；長序列多維訊號選 F4 LSTM。', [
+        '目前管線：' + (R.isMl ? '滯後特徵 ML' : R.isDl ? 'LSTM 序列' : '統計 ETS/ARIMA')
+      ]);
+      add(5, '點擊編號直達實驗', '下方對照表的 G1–G4 與 F4 編號皆可直接點擊進入實驗，親自切換滑動／擴張視窗比較 MAE！', [
+        '建議路線：G4 STL 分解 → G1 指數平滑 → G2 ARIMA → G3 滑動驗證'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

@@ -209,12 +209,27 @@
             : ['1. 任務與記憶', '2. 推理與路由', '3. 外部工具呼叫', '4. 觀察寫回', '5. 完備性與上限', '6. 最終回答輸出'],
           layers, edges
         };
+        const traceRows = R.isMulti ? [
+          { turn: 1, phase: 'Thought', tool: 'Coordinator 拆解3子任務', tokens: rows[0].tokens },
+          { turn: 1, phase: 'Action', tool: '平行：SQL+RAG+Python', tokens: rows[1].tokens },
+          { turn: 1, phase: 'Observation', tool: '彙整 HbA1c 與指引段落', tokens: rows[2].tokens },
+          { turn: 2, phase: 'Action', tool: 'Critic 交叉查核矛盾', tokens: rows[3].tokens },
+          { turn: 2, phase: 'Observation', tool: '補查飲食禁忌條款通過', tokens: rows[4].tokens },
+          { turn: 3, phase: 'Final', tool: '產出溯源報告供醫師簽核', tokens: rows[5].tokens }
+        ] : R.isMix ? [
+          { turn: 1, phase: 'Thought', tool: 'Router 判為高風險查詢', tokens: rows[0].tokens },
+          { turn: 1, phase: 'Action', tool: 'JSON Schema 結構化抽取', tokens: rows[1].tokens },
+          { turn: 1, phase: 'Observation', tool: 'Guardrail 劑量/格式驗證', tokens: rows[2].tokens },
+          { turn: 2, phase: 'Action', tool: '送交醫師人工審核把關', tokens: rows[3].tokens },
+          { turn: 2, phase: 'Observation', tool: '醫師點擊核准並註記', tokens: rows[4].tokens },
+          { turn: 3, phase: 'Final', tool: '寫入病歷＋留存 Audit Log', tokens: rows[5].tokens }
+        ] : rows;
         const side = {
           type: 'table', slot: 'side',
-          title: 'Agent 執行軌跡紀錄（Trace Log）',
+          title: 'Agent 執行軌跡紀錄（' + (R.isMulti ? 'Multi-Agent' : R.isMix ? '混合護欄' : 'ReAct') + ' Trace）',
           cols: [{ key: 't', label: '輪', num: true, digits: 0 }, { key: 'ph', label: '階段' }, { key: 'tl', label: '動作/結果' }, { key: 'tk', label: 'Tok', num: true, digits: 0 }],
-          rows: rows.map((r, i) => ({
-            id: r.id,
+          rows: traceRows.map((r, i) => ({
+            id: 'tr' + i,
             cells: [
               r.turn,
               { v: r.phase, cls: r.phase === 'Thought' ? 'c2' : r.phase === 'Action' ? 'c1' : r.phase === 'Observation' ? 'c0' : 'good' },
@@ -263,11 +278,18 @@
       add(5, '6. 安全輸出最終答案', '資訊齊全並通過護欄檢查後，才生成附帶數據與指南出處的最終回覆。', [
         '總耗用 ≈ ' + R.totTokens + ' tokens｜共 ' + R.nTurns + ' 輪完成'
       ]);
-      while (steps.length < 10) {
-        add(5, 'Agent 設計安全原則', '能用固定工作流（Workflow）解決的就別讓 Agent 亂繞；必須用 ReAct 時務必限制最大步數與寫入權限。', [
-          '目前管線：' + pipeName
-        ]);
-      }
+      add(5, '實作體驗：H8 工具呼叫', '想看每一輪 LLM 如何用 Softmax(z/τ) 挑選 SQL / RAG / Python 工具，請直接點開下方或目錄的 H8 互動實驗！', [
+        '對應實驗：H8 AI Agent：ReAct 工具呼叫'
+      ]);
+      add(5, '常見踩雷：無窮迴圈', '若外部 API 失敗或 RAG 查無資料，沒設 max_steps 上限的 Agent 會不斷重試燒光 Token 預算，且高風險動作絕不可跳過人工審核。', [
+        '醫療護欄三要素：低溫 τ (0–0.2) · max_steps 上限 · Human-in-the-Loop'
+      ]);
+      add(5, '三種架構選用速查', '單純固定流程用「混合工作流 (Workflow+Guardrail)」最穩；開放式多步查詢用「ReAct」；跨科別複雜報告再用「Multi-Agent」。', [
+        '目前管線：' + pipeName
+      ]);
+      add(5, '點擊編號直達實驗', '點擊下方對照表的 H5、H6、H8、E2 編號可直接跳轉，動手調整溫度 τ 觀察工具路由機率變化！', [
+        '建議路線：H6 RAG → H8 ReAct 工具呼叫 → H9 KV Cache / DPO'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

@@ -24,7 +24,7 @@
   LAB.register({
     id: 'S8', group: 'S', title: '可解釋性與上線監控',
     module: { name: 'M9 可解釋性', url: '../m9/#p11' },
-    goal: '透過全寬動畫流程圖展示模型訓練完後的最後一哩路：「XAI 臨床可解釋與門檻校正 (I1 + B16)」以及「上線飄移監控與重訓 (MLOps)」。',
+    goal: '透過全寬動畫流程圖展示模型訓練完後的最後一哩路：「XAI 臨床可解釋與反事實處方 (I1 / I2 + B16)」以及「上線飄移監控、重訓與適應性驗證 (MLOps + J2)」。',
     data: {
       name: 'xai_mlops_flow',
       scenario: '8 位門診病人模型預測機率，示範訓練完成後如何解釋、校準門檻並監控上線表現',
@@ -63,12 +63,12 @@
             { id: 'base', label: '1b. 基準特徵分布', value: 'PSI 基準線', shape: 'box', w: 142, cls: R.isOps ? clsOf(0) : 'c5', hl: act(0), dim: !R.isOps, sub: '存訓練期分布快照' }
           ],
           [
-            { id: 'glb', label: '2a. 全域排列重要度', value: st.stage >= 1 ? '血糖最關鍵' : '待分析', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: 'I1 打亂欄位看掉分' },
+            { id: 'glb', label: '2a. 全域重要度/PDP', value: st.stage >= 1 ? '血糖最關鍵' : '待分析', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: 'I1 排列 · I2 PDP 曲線' },
             { id: 'leak', label: '2b. 假線索稽核', value: '排除洩漏欄', shape: 'box', w: 142, cls: clsOf(1), hl: act(1), sub: '防學到病床號等雜訊' }
           ],
           [
-            { id: 'loc', label: '3a. 單筆 SHAP 瀑布', value: st.stage >= 2 ? 'φ=+' + f(R.topShap, 2) : '待歸因', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'I1 基準值+各特徵貢獻' },
-            { id: 'rsn', label: '3b. 臨床理由摘要', value: '呈現正負因子', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: '供醫師向病人溝通' }
+            { id: 'loc', label: '3a. SHAP / LIME 歸因', value: st.stage >= 2 ? 'φ=+' + f(R.topShap, 2) : '待歸因', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'I1 SHAP · I2 LIME 代理' },
+            { id: 'rsn', label: '3b. 反事實處方建議', value: '最小改變目標', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'I2 減重/控糖翻轉風險' }
           ],
           [
             { id: 'cal', label: '4a. 預測機率校準', value: st.stage >= 3 ? '對齊真實率' : '校準檢查', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: '確保 p=0.8 即 80% 風險' },
@@ -155,11 +155,18 @@
       add(5, '6. 安全重訓與 A/B 驗證', '重訓後的新版本模型需先經過與舊版對照（Shadow / A/B 測試），確認更穩定才正式切換。', [
         '完整閉環：前處理(S1) → 訓練(S2) → 解釋與監控(S8)'
       ]);
-      while (steps.length < 10) {
-        add(5, '臨床 AI 落地三原則', '可解釋（I1 SHAP）、可校準（B16 門檻）、可監控（G3 飄移追蹤），缺一不可。', [
-          '目前管線：' + (R.isOps ? 'MLOps 飄移監控' : 'XAI 解釋與門檻校正')
-        ]);
-      }
+      add(5, '反事實處方建議 (I2)', '除了 I1 SHAP 說明「為何高風險」，更可結合 I2 LIME、PDP 與反事實解釋，直接告訴病人「減多少 BMI 與血糖就能降回低風險」！', [
+        '對應實驗：I2 LIME、PDP 與反事實解釋'
+      ]);
+      add(5, '線上適應性驗證 (J2)', '傳統線上 A/B 測試需固定分流一半流量給舊版；若改用 J2 多臂老虎機（UCB 信賴上界），可邊驗證邊自動把更多病人導向較優模型！', [
+        '對應實驗：J2 多臂老虎機：UCB 與適應性試驗'
+      ]);
+      add(5, '臨床 AI 落地三原則', '可解釋（I1/I2）、可校準（B16 門檻）、可監控與適應（G3 滾動重訓＋J2 線上試驗），缺一不可。', [
+        '目前管線：' + (R.isOps ? 'MLOps 飄移監控' : 'XAI 解釋與門檻校正')
+      ]);
+      add(5, '點擊編號直達實驗', '點擊下方對照表的 I1、I2、B16、G3、J2 編號，即可動手計算 SHAP 瀑布圖與反事實減重處方！', [
+        '建議路線：I1 SHAP → I2 反事實解釋 → B16 PR 門檻 → J2 UCB 試驗'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

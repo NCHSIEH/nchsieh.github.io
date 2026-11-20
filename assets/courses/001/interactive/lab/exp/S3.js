@@ -27,7 +27,7 @@
   LAB.register({
     id: 'S3', group: 'S', title: '非監督式學習流程',
     module: { name: 'M3 非監督式學習', url: '../m3/' },
-    goal: '透過全寬動畫流程圖對照「分群探索」、「異常偵測」與「高維降維壓縮」3 條無標籤管線，標註各步可用的 C1–C10 演算法。',
+    goal: '透過全寬動畫流程圖對照「分群探索」、「異常偵測」與「高維降維壓縮」3 條無標籤管線，標註各步可用的 C1–C12 演算法。',
     data: {
       name: 'unsup_flow',
       scenario: '8 位無標籤門診病人，示範標準化 → 降維 → 分群／異常偵測 → 評估與臨床解讀流程',
@@ -240,11 +240,18 @@
       add(5, '6. 臨床命名與落地', '回頭比較各群的平均年齡、BMI、血糖，將群組編號命名為有臨床意義的風險族群！', [
         '常作為精準衛教分眾或下游特徵工程的起點'
       ]);
-      while (steps.length < 10) {
-        add(5, '演算法挑選總結', '有離群值干擾用 K-Medoids (C10) 或 DBSCAN (C3)；想知道「多像某群」用 GMM 軟分群 (C4)。', [
-          '目前管線：' + (R.isAnom ? '異常偵測' : R.isDim ? '降維壓縮' : '病人分群')
-        ]);
-      }
+      add(5, '進階分群：C11 模糊邊界', 'K-Means 易受隨機起點影響且硬切邊界；實務改用 C11 的 K-Means++ 選起點，並以模糊分群 (FCM) 找出亞型過渡病人。', [
+        '有離群值拉偏質心時改用 C10 K-Medoids 或 C3 DBSCAN'
+      ]);
+      add(5, '進階異常：C12 馬氏橢圓', 'BMI 與血糖正相關時，單欄不極端卻偏離對角線的病人會被歐氏圓漏抓，需用 C12 馬氏距離斜橢圓或 F5 Autoencoder 揪出。', [
+        '異常偵測三強：C7 LOF · C8 Isolation Forest · C12 馬氏距離'
+      ]);
+      add(5, '非監督管線選用速查', '找亞型看 C1/C2/C3/C4/C11＋C9 輪廓係數；抓極端看 C7/C8/C12/F5；壓縮去共線看 C5 PCA、2D 視覺探索看 C6 t-SNE。', [
+        '目前管線：' + (R.isAnom ? '異常偵測' : R.isDim ? '降維壓縮' : '病人分群')
+      ]);
+      add(5, '點擊編號直達實驗', '下方對照表的 C1–C12 與 F5 編號皆可直接點擊開啟對應互動實驗，立即動手調參數！', [
+        '建議起手：先玩 C1 K-Means → C9 輪廓係數 → C12 馬氏橢圓'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {
@@ -257,8 +264,8 @@
     explain(steps, rows, p) {
       return [
         '非監督式學習依目標分為「病人分群」、「異常偵測」與「降維壓縮」三條管線，共同前置條件都是標準化（A2）。',
-        '分群可用 C1 K-Means、C2 階層、C3 DBSCAN、C4 GMM、C10 K-Medoids，並用 C9 輪廓係數挑 K。',
-        '異常偵測可用 C7 LOF、C8 Isolation Forest 或 F5 Autoencoder，找出異常後須人工複核原因。'
+        '分群可用 C1/C11 K-Means++ 與模糊分群、C2 階層、C3 DBSCAN、C4 GMM、C10 K-Medoids，並用 C9 輪廓係數挑 K。',
+        '異常偵測可用 C7 LOF、C8 Isolation Forest、C12 馬氏距離橢圓或 F5 Autoencoder，找出異常後須人工複核原因。'
       ];
     },
     aistudio: {

@@ -17,15 +17,16 @@
   ];
   const m = (name, url) => ({ name, url });
   LAB.registry = [
+    { id: 'S0', group: 'S', title: 'AI 任務選型總覽', brief: '從醫療問題與資料型態出發，依有無標籤一路路由至 S1–S9 管線與 A–J 群 80 個演算法。', module: m('課程總覽地圖', '../m1/'), status: 'live' },
     { id: 'S1', group: 'S', title: '資料前處理流程', brief: '對照線性模型、樹模型與防洩漏 3 種管線，標註各步可用 A1–A9 演算法。', module: m('M1 資料準備', '../m1/'), status: 'live' },
     { id: 'S2', group: 'S', title: '監督式學習流程（含 CV）', brief: '線性距離、樹與規則、集成與不平衡 4 條管線，含 K-Fold 調參與 B1–B18 對照。', module: m('M2 監督式學習', '../m2-2/#p08'), status: 'live' },
     { id: 'S3', group: 'S', title: '非監督式學習流程', brief: '病人分群、異常偵測與降維壓縮 3 條管線，對照 C1–C12 演算法。', module: m('M3 非監督式學習', '../m3/'), status: 'live' },
-    { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大主流架構管線。', module: m('M5 深度學習', '../m5/'), status: 'live' },
-    { id: 'S5', group: 'S', title: 'NLP 與 LLM 處理流程', brief: '傳統 TF-IDF、Word2Vec 詞向量與現代 LLM＋RAG 3 條文字管線。', module: m('M6 文字探勘', '../m6/'), status: 'live' },
-    { id: 'S6', group: 'S', title: '時間序列預測流程', brief: '統計 ARIMA／指數平滑、滯後特徵 ML 與 LSTM 序列 3 條滾動驗證流程。', module: m('M4 時間序列', '../m4/#p15'), status: 'live' },
-    { id: 'S7', group: 'S', title: '關聯規則探勘流程', brief: '比較 Apriori 逐層剪枝與 FP-Growth 前綴樹 2 條關聯探勘與 Lift 篩選流程。', module: m('M4 關聯規則', '../m4/#p12'), status: 'live', tier: 'adv' },
-    { id: 'S8', group: 'S', title: '可解釋性與上線監控', brief: 'SHAP 歸因與醫療門檻校正、上線飄移監控與重訓 2 條落地管線。', module: m('M9 可解釋性', '../m9/#p11'), status: 'live', tier: 'adv' },
-    { id: 'S9', group: 'S', title: 'AI Agent 工作流程', brief: 'ReAct 工具迴圈、Multi-Agent 協作與 Guardrail 混合工作流 3 條主流管線。', module: m('M8 生成式 AI 應用', '../m8/'), status: 'live', tier: 'adv' },
+    { id: 'S4', group: 'S', title: '深度學習流程', brief: '涵蓋 MLP、CNN 影像、LSTM 序列與 Autoencoder 異常 4 大架構管線（對照 F1–F6）。', module: m('M5 深度學習', '../m5/'), status: 'live' },
+    { id: 'S5', group: 'S', title: 'NLP 與 LLM 處理流程', brief: '傳統 TF-IDF／BM25、Word2Vec 詞向量與現代 LLM＋RAG＋Rerank 3 條文字管線（E1–E5, H1–H9）。', module: m('M6 文字探勘', '../m6/'), status: 'live' },
+    { id: 'S6', group: 'S', title: '時間序列預測流程', brief: '統計 ARIMA／指數平滑、STL＋滯後特徵 ML 與 LSTM 序列 3 條滾動驗證流程（G1–G4）。', module: m('M4 時間序列', '../m4/#p15'), status: 'live' },
+    { id: 'S7', group: 'S', title: '關聯與序列探勘流程', brief: '比較 Apriori、FP-Growth 與 PrefixSpan 序列 3 條管線，結合 Kulczynski 與負關聯（D1–D4）。', module: m('M4 關聯規則', '../m4/#p12'), status: 'live', tier: 'adv' },
+    { id: 'S8', group: 'S', title: '可解釋性與上線監控', brief: 'SHAP／LIME／反事實與門檻校正、上線飄移監控、重訓與 UCB 適應性驗證（I1–I2, J2）。', module: m('M9 可解釋性', '../m9/#p11'), status: 'live', tier: 'adv' },
+    { id: 'S9', group: 'S', title: 'AI Agent 工作流程', brief: 'ReAct 工具迴圈、Multi-Agent 協作與 Guardrail 混合工作流 3 條主流管線（H8）。', module: m('M8 生成式 AI 應用', '../m8/'), status: 'live', tier: 'adv' },
 
     { id: 'A1', group: 'A', title: '遺失值補值', brief: '平均數、中位數、k-NN 三種補法，逐格算給你看。', module: m('M1 第 06 節', '../m1/#p06'), status: 'live' },
     { id: 'A2', group: 'A', title: '標準化與正規化', brief: 'Z 分數與 Min-Max 逐欄計算，看距離怎麼被單位左右。', module: m('M1 第 10 節', '../m1/#p10'), status: 'live' },
@@ -108,6 +109,7 @@
     { id: 'J2', group: 'J', title: '多臂老虎機：UCB 與適應性試驗', brief: '在臨床適應性試驗中比較 ε-Greedy 與 UCB 信賴上界，平衡探索與利用並降低病患遺憾。', module: m('延伸參考', ''), status: 'live', tier: 'adv' }
   ];
   LAB.EN_TITLES = {
+    S0: 'AI Task & Pipeline Selection Map',
     S1: 'Data Preprocessing Pipeline',
     S2: 'Supervised Learning & CV Pipeline',
     S3: 'Unsupervised Learning Pipeline',
@@ -190,6 +192,7 @@
     J2: 'Multi-Armed Bandit (UCB & Adaptive Trials)'
   };
   LAB.TOOLS = {
+    S0: { ais: 'Auto Model / Turbo Prep', py: 'scikit-learn / PyTorch / statsmodels / transformers' },
     S1: { ais: 'Read CSV / Replace Missing / Normalize', py: 'scikit-learn (Pipeline / SimpleImputer / StandardScaler)' },
     S2: { ais: 'Cross Validation / Optimize Parameters', py: 'scikit-learn (GridSearchCV / StratifiedKFold)' },
     S3: { ais: 'k-Means / PCA / Cluster Performance', py: 'scikit-learn (KMeans / PCA / IsolationForest)' },

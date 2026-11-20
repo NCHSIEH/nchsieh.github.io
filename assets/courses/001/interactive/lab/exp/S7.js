@@ -18,21 +18,22 @@
 
   function simulate(rows, p) {
     const isFp = p.algo === 'fpgrowth';
-    return { isFp, nTx: rows.length, minSup: 0.25, minConf: 0.6, topLift: 1.85 };
+    const isSeq = p.algo === 'prefixspan';
+    return { isFp, isSeq, nTx: rows.length, minSup: 0.25, minConf: 0.6, topLift: 1.85 };
   }
 
   LAB.register({
     id: 'S7', group: 'S', title: '關聯規則探勘流程',
     module: { name: 'M4 關聯規則', url: '../m4/#p12' },
-    goal: '透過全寬動畫流程圖比較「Apriori 逐層候選剪枝 (D1)」與「FP-Growth 前綴樹壓縮 (D2)」2 條關聯探勘管線，並強調用 Lift 過濾假關聯。',
+    goal: '透過全寬動畫流程圖比較「Apriori 逐層剪枝 (D1)」、「FP-Growth 前綴樹 (D2)」與「PrefixSpan 序列探勘 (D3)」3 條管線，並結合 D4 零不變指標 Kulczynski 與負關聯規則過濾假關聯。',
     data: {
       name: 'assoc_flow',
-      scenario: '8 張門診處方籃交易資料，示範從交易籃整理到 Lift 篩選高價值用藥規則的全流程',
+      scenario: '8 張門診處方籃交易資料，示範從交易籃／序列整理到 Lift、Kulczynski 與負關聯篩選的全流程',
       columns: COLS,
       small: makeRows
     },
     params: [
-      { key: 'algo', label: '探勘演算法管線', type: 'choice', value: 'apriori', options: [{ v: 'apriori', label: 'Apriori 逐層剪枝 (D1)' }, { v: 'fpgrowth', label: 'FP-Growth 前綴樹 (D2)' }] }
+      { key: 'algo', label: '探勘演算法管線', type: 'choice', value: 'apriori', options: [{ v: 'apriori', label: 'Apriori 逐層剪枝 (D1)' }, { v: 'fpgrowth', label: 'FP-Growth 前綴樹 (D2)' }, { v: 'prefixspan', label: 'PrefixSpan 序列探勘 (D3)' }] }
     ],
     pseudo: [
       '1. 整理交易籃 / 處方籃資料格式',
@@ -67,23 +68,24 @@
             { id: 'flt', label: '2b. 剪除罕見單項', value: 'sup < 0.25', shape: 'box', w: 142, cls: st.stage >= 1 ? 'c4' : 'c5', hl: act(1), sub: '防後續組合指數爆炸' }
           ],
           [
-            { id: 'ap', label: '3a. Apriori 逐層', value: !R.isFp && st.stage >= 2 ? 'C₂→L₂→L₃' : '候選剪枝', shape: 'box', w: 142, cls: !R.isFp ? clsOf(2) : 'c5', hl: !R.isFp && act(2), dim: R.isFp, sub: 'D1 子集不頻繁即剪' },
-            { id: 'fp', label: '3b. FP-Growth 樹', value: R.isFp && st.stage >= 2 ? '只掃 2 次' : '前綴樹壓縮', shape: 'box', w: 142, cls: R.isFp ? clsOf(2) : 'c5', hl: R.isFp && act(2), dim: !R.isFp, sub: 'D2 免生龐大候選集' }
+            { id: 'ap', label: '3a. Apriori 逐層', value: !R.isFp && !R.isSeq && st.stage >= 2 ? 'C₂→L₂→L₃' : '候選剪枝', shape: 'box', w: 142, cls: !R.isFp && !R.isSeq ? clsOf(2) : 'c5', hl: !R.isFp && !R.isSeq && act(2), dim: R.isFp || R.isSeq, sub: 'D1 子集不頻繁即剪' },
+            { id: 'fp', label: '3b. FP-Growth 樹', value: R.isFp && st.stage >= 2 ? '只掃 2 次' : '前綴樹壓縮', shape: 'box', w: 142, cls: R.isFp ? clsOf(2) : 'c5', hl: R.isFp && act(2), dim: !R.isFp, sub: 'D2 免生龐大候選集' },
+            { id: 'ps', label: '3c. PrefixSpan 投影', value: R.isSeq && st.stage >= 2 ? '有序 A→B→C' : '後綴投影庫', shape: 'box', w: 142, cls: R.isSeq ? clsOf(2) : 'c5', hl: R.isSeq && act(2), dim: !R.isSeq, sub: 'D3 保留跨次門診時序' }
           ],
           [
-            { id: 'freq', label: '4a. 頻繁項目集 Lk', value: '共現藥品組', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: '兩演算法結果完全相同' },
-            { id: 'rule', label: '4b. 拆解規則 A→B', value: '枚舉前提/結果', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: '雙向不對稱條件機率' }
+            { id: 'freq', label: R.isSeq ? '4a. 頻繁時序樣式' : '4a. 頻繁項目集 Lk', value: R.isSeq ? '〈A → B → C〉' : '共現藥品組', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: R.isSeq ? '區分先 A 後 B 順序' : 'D1/D2 結果完全相同' },
+            { id: 'rule', label: '4b. 拆解規則 A→B', value: '枚舉前提/結果', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: '含負關聯 A→¬B (D4)' }
           ],
           [
             { id: 'conf', label: '5a. 信賴度達標', value: 'conf ≥ 0.60', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'P(B|A) = Sup(AB)/Sup(A)' },
             { id: 'wkr', label: '5b. 剔除低信賴規則', value: 'conf < 0.60', shape: 'box', w: 142, cls: st.stage >= 3 ? 'c4' : 'c5', hl: act(3), sub: '條件機率過低不採納' }
           ],
           [
-            { id: 'lift', label: '6a. Lift > 1 真關聯', value: st.stage >= 4 ? 'Lift=' + R.topLift : '算增益度', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'Conf ÷ Sup(B) 正相關' },
-            { id: 'drop', label: '6b. 剔除 Lift ≤ 1', value: '獨立或互斥', shape: 'box', w: 142, cls: st.stage >= 4 ? 'bad' : 'c5', hl: act(4), sub: '破除熱門藥品假關聯' }
+            { id: 'lift', label: '6a. Lift / Kulc 驗收', value: st.stage >= 4 ? 'Lift=' + R.topLift : '抗零交易', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'D4 Kulczynski / Zhang' },
+            { id: 'drop', label: '6b. 負關聯 / 假關聯', value: 'A→¬B 互斥', shape: 'box', w: 142, cls: st.stage >= 4 ? 'bad' : 'c5', hl: act(4), sub: 'D4 區分假關聯與禁忌' }
           ]
         ];
-        const activeMine = R.isFp ? 'fp' : 'ap';
+        const activeMine = R.isSeq ? 'ps' : R.isFp ? 'fp' : 'ap';
         const edges = [
           { from: 'tx', to: 'sup', active: st.stage === 1, cls: done(0) ? 'good' : 'c5' },
           { from: 'cln', to: 'flt', active: st.stage === 1, cls: done(0) ? 'c4' : 'c5' },
@@ -97,9 +99,9 @@
           { from: 'conf', to: 'drop', active: st.stage === 4, cls: st.stage >= 4 ? 'bad' : 'c5' }
         ];
         const main = {
-          type: 'network', slot: 'main', w: 1480, h: 225,
-          title: '關聯規則探勘全流程圖（' + (R.isFp ? 'FP-Growth 管線' : 'Apriori 管線') + '）',
-          layerLabels: ['1. 交易籃整理', '2. 支持度剪枝', '3. 頻繁集演算法', '4. 規則拆解', '5. 信賴度過濾', '6. Lift 增益驗收'],
+          type: 'network', slot: 'main', w: 1480, h: 250,
+          title: '關聯與序列探勘全流程圖（' + (R.isSeq ? 'PrefixSpan 序列管線' : R.isFp ? 'FP-Growth 管線' : 'Apriori 管線') + '）',
+          layerLabels: ['1. 交易籃/序列', '2. 支持度剪枝', '3. 探勘演算法', '4. 規則拆解', '5. 信賴度過濾', '6. 多指標驗收'],
           layers, edges
         };
         const side = {
@@ -150,11 +152,18 @@
       add(5, '6. 臨床檢核部署', '高 Lift 規則還要經藥師／醫師檢核（區分「標準併用療法」與「潛在交互作用提醒」）。', [
         '共現 ≠ 因果，部署前務必做領域專家審查'
       ]);
-      while (steps.length < 10) {
-        add(5, '演算法選用比較', '單次處方看 D1 Apriori / D2 FP-Growth；跨次門診時序看 D3 PrefixSpan；抗零交易與互斥規則看 D4 進階指標。', [
-          '目前管線：' + (R.isFp ? 'FP-Growth' : 'Apriori') + '（搭配 D3 序列與 D4 Kulczynski）'
-        ]);
-      }
+      add(5, '時序進化：D3 序列探勘', 'Apriori 與 FP-Growth 不分先後順序；若要挖跨次門診的「先開 A 後開 B」病程軌跡，必用 D3 PrefixSpan 前綴投影！', [
+        '切換上方管線至「PrefixSpan 序列探勘 (D3)」即可查看完整流程'
+      ]);
+      add(5, '常見踩雷：零交易膨脹', '大型醫院跨科資料庫有大量「兩藥皆無」的零交易，會讓傳統 Lift 嚴重暴漲失真；務必加看 D4 零不變指標 Kulczynski！', [
+        '對應實驗：D4 進階評估指標與負關聯規則 A → ¬B'
+      ]);
+      add(5, '三條探勘管線選型', '教學理解用 D1 Apriori；大數據無序處方籃用 D2 FP-Growth；跨次門診時序用 D3 PrefixSpan；防假關聯與禁忌看 D4。', [
+        '目前管線：' + (R.isSeq ? 'PrefixSpan 序列' : R.isFp ? 'FP-Growth' : 'Apriori')
+      ]);
+      add(5, '點擊編號直達實驗', '點擊下方對照表的 D1–D4 編號即可直接開啟互動實驗，體驗零交易如何讓 Lift 膨脹而 Kulczynski 恆定不變！', [
+        '建議路線：D1 Apriori → D2 FP-Growth → D3 PrefixSpan → D4 進階指標'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {

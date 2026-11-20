@@ -305,9 +305,36 @@
   };
 
   /* ---------- table 表格 ---------- */
+  const EXP_ID_RE = /(^|[^A-Za-z0-9_])([A-JS](?:1[0-8]|[0-9]))(?![A-Za-z0-9_])/g;
+  function fillCell(td, t, allowLinks) {
+    if (!allowLinks || !LAB.entry || !t || typeof t !== 'string') { td.textContent = t; return; }
+    let last = 0, m, found = false;
+    const frag = document.createDocumentFragment();
+    EXP_ID_RE.lastIndex = 0;
+    while ((m = EXP_ID_RE.exec(t)) !== null) {
+      const pre = m[1], id = m[2], ent = LAB.entry(id);
+      if (!ent || ent.status !== 'live') continue;
+      found = true;
+      const start = m.index + pre.length;
+      if (start > last) frag.appendChild(document.createTextNode(t.slice(last, start)));
+      const a = document.createElement('a');
+      a.className = 'exp-pill';
+      a.href = 'exp.html?id=' + id;
+      a.textContent = id;
+      a.setAttribute('data-tip', '點擊前往 ' + id + ' ' + ent.title);
+      frag.appendChild(a);
+      last = start + id.length;
+    }
+    if (!found) { td.textContent = t; return; }
+    if (last < t.length) frag.appendChild(document.createTextNode(t.slice(last)));
+    td.textContent = '';
+    td.appendChild(frag);
+  }
   R.table = function (box, spec) {
     const sc = H('div', 'lv-tscroll' + (spec.slot ? ' s-' + spec.slot : ''), null, box), tb = H('table', 'lv-table', null, sc), th = H('thead', null, null, tb), bd = H('tbody', null, null, tb), m = new Map(); let hsig = '';
+    const isStartPage = typeof location !== 'undefined' && /[?&]id=S\d/i.test(location.search);
     return function (sp, an) {
+      const allowLinks = sp.linkIds != null ? !!sp.linkIds : isStartPage;
       const cols = sp.cols || [], hs = JSON.stringify(cols) + '|' + (sp.hlCol || '');
       if (hs !== hsig) { hsig = hs; th.textContent = ''; const tr = H('tr', null, null, th); cols.forEach(c => { const e = H('th', (c.num ? 'num' : '') + (sp.hlCol === c.key ? ' hc' : ''), c.label, tr); if (c.sub) H('small', null, c.sub, e); }); }
       const hc = new Set((sp.hlCells || []).map(p => p[0] + '|' + p[1]));
@@ -318,7 +345,7 @@
             let td = tr.__c[j]; if (!td) { td = tr.__c[j] = H('td', null, null, tr); }
             let v = r.cells[j], o = null; if (v && typeof v === 'object') { o = v; v = o.v; }
             const t = v == null ? '' : typeof v === 'number' ? LAB.f(v, c.digits == null ? (c.num ? 2 : 0) : c.digits) : String(v);
-            if (td.textContent !== t) { td.textContent = t; if (!isNew) flash(td, a); }
+            if (td.__raw !== t) { td.__raw = t; fillCell(td, t, allowLinks && !c.num); if (!isNew) flash(td, a); }
             const cl = (c.num ? 'num' : '') + (sp.hlCol === c.key ? ' hc' : '') + (hc.has(r.id + '|' + c.key) || (o && o.hl) ? ' is-hl' : '') + (o && o.cls ? ' k-' + o.cls + ' tint' : '') + (o && o.tag ? ' tagc' : ''); if (td.className !== cl) td.className = cl;
           });
           while (tr.__c.length > cols.length) tr.__c.pop().remove();

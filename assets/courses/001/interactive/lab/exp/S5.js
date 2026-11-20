@@ -25,7 +25,7 @@
   LAB.register({
     id: 'S5', group: 'S', title: 'NLP 與 LLM 處理流程',
     module: { name: 'M6 文字探勘', url: '../m6/' },
-    goal: '透過全寬動畫流程圖對照「傳統 TF-IDF」、「Word2Vec 詞向量」與「現代 LLM＋RAG」3 條文字處理管線，標註 E1–E4 與 H1–H7 演算法。',
+    goal: '透過全寬動畫流程圖對照「傳統 TF-IDF／BM25」、「Word2Vec 詞向量」與「現代 LLM＋RAG＋Rerank」3 條文字處理管線，標註 E1–E5 與 H1–H9 演算法。',
     data: {
       name: 'nlp_flow',
       scenario: '6 筆中文門診／護理紀錄，比較傳統文字探勘、詞向量與現代 LLM/RAG 處理管線',
@@ -223,13 +223,20 @@
       ]);
       st.stage = 5;
       add(5, '6. 評估與否定詞檢核', '分類看 F1 / AUC，檢索看 Recall@K；醫療 NLP 務必檢查否定詞（「無疼痛」≠「疼痛」）。', [
-        '建議：先建立 TF-IDF 基線，再依需求升級 Word2Vec 或 LLM'
+        '建議：先建立 TF-IDF / BM25 基線，再依需求升級 Word2Vec 或 LLM'
       ]);
-      while (steps.length < 10) {
-        add(5, '三條管線選用建議', '固定分類與關鍵字比對用 TF-IDF；需要近義詞泛化用詞向量；複雜問答與摘要再用 LLM＋RAG。', [
-          '目前選擇：' + (R.isLLM ? '現代 LLM＋RAG' : R.isEmb ? 'Word2Vec 詞向量' : '傳統 TF-IDF')
-        ]);
-      }
+      add(5, '檢索升級：E5 N-gram', '傳統單詞袋會遺失詞序搭配；加入 Bigram 雙連詞與 Okapi BM25 飽和評分（E5）可防止贅詞洗版與長文偏誤。', [
+        '對應實驗：E5 N-gram 詞組與 BM25 檢索'
+      ]);
+      add(5, 'LLM 落地：H9 三關鍵', '現代 LLM 上線必配 H9：KV Cache 把生成加速至 O(T²)、Cross-Encoder 二階段精排救回排他條款、DPO 壓低幻覺！', [
+        '對應實驗：H8 ReAct Agent · H9 KV Cache / Rerank / DPO'
+      ]);
+      add(5, '三條管線選用速查', '固定分類與關鍵字比對用 E1/E2/E5；近義詞語意泛化用 E3 詞向量；複雜問答與多步推理用 LLM＋RAG＋Agent（H1–H9）。', [
+        '目前選擇：' + (R.isLLM ? '現代 LLM＋RAG' : R.isEmb ? 'Word2Vec 詞向量' : '傳統 TF-IDF')
+      ]);
+      add(5, '點擊編號直達實驗', '下方對照表的 E1–E5 與 H1–H9 編號皆可直接點擊開啟互動實驗，親眼看斷詞、Attention 與 RAG 檢索！', [
+        '建議路線：E1 TF-IDF → E5 BM25 → H3 Attention → H6 RAG → H9 Rerank'
+      ]);
       return steps;
     },
     keys(steps, rows, p) {
@@ -238,9 +245,9 @@
     },
     explain(steps, rows, p) {
       return [
-        'NLP 管線依技術演進分為「傳統 TF-IDF」、「Word2Vec 詞向量」與「現代 LLM＋RAG」三條路線。',
-        '傳統路線對應 E1–E4（斷詞、TF-IDF、Naive Bayes、Word2Vec、LDA）；現代路線對應 H1–H7（BPE、位置編碼、Attention、解碼、RAG、LoRA）。',
-        '實務建議先用 TF-IDF 建立快速基準，若需跨詞彙語意理解或生成問答再升級至 LLM＋RAG。'
+        'NLP 管線依技術演進分為「傳統 TF-IDF／BM25」、「Word2Vec 詞向量」與「現代 LLM＋RAG」三條路線。',
+        '傳統路線對應 E1–E5（斷詞、TF-IDF、Naive Bayes、Word2Vec、LDA、N-gram/BM25）；現代路線對應 H1–H9（BPE、位置編碼、Attention、解碼、RAG、LoRA、Agent、KV Cache/Rerank/DPO）。',
+        '實務建議先用 TF-IDF / BM25 建立快速基準，若需跨詞彙語意理解或生成問答再升級至 LLM＋RAG＋Reranker。'
       ];
     },
     aistudio: {
