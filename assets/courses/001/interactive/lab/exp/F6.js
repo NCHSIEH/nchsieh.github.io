@@ -186,7 +186,7 @@
 
         const bottom = st.showLossCurve ? {
           type: 'line', slot: 'bottom',
-          title: '訓練 vs 驗證損失曲線（對照無正則化過擬合 vs 加入 BN+Dropout）',
+          title: '損失曲線（示意，公式繪製非實測）',
           axes: { x: { label: '訓練輪數 Epoch', min: 5, max: 50 }, y: { label: 'Loss', min: 0, max: 0.65 } },
           series: [
             { id: 'vn', label: '無正則 Val Loss (過擬合)', pts: R.curvePts.map(c => [c.ep, c.vaNoReg]), cls: 'c4', dash: true, dots: false },
@@ -249,13 +249,13 @@
       ]);
 
       st.infer = true;
-      add(5, '推論期關閉 Dropout', '呼叫 model.eval() 上線推論時：Dropout 全開投票，且 BatchNorm 改用訓練期累積的 running μ/σ（防單一病人 batch=1 崩潰）！', [
+      add(5, '推論期關閉 Dropout', '呼叫 model.eval() 上線推論時：Dropout 關閉（所有神經元都參與、不再隨機丟棄），且 BatchNorm 改用訓練期累積的 running μ/σ（防單一病人 batch=1 崩潰）！', [
         '推論期全開預測 ŷ_eval = ' + f(R.outInfer, 3) + '（見右表「推論 a」欄）'
       ]);
 
       st.showLossCurve = true;
-      add(5, '抑制驗證集過擬合', '看下方損失曲線：不加正則化時 Val Loss（紅虛線）在 20 輪後反彈飆高；加入 BatchNorm + Dropout 後（綠線）穩定收斂！', [
-        'Epoch 50 Val Loss：無正則 = ' + f(R.curvePts[9].vaNoReg, 3) + ' vs 有正則 = ' + f(R.curvePts[9].vaReg, 3)
+      add(5, '抑制驗證集過擬合（示意）', '下方損失曲線是用公式畫的示意曲線，不是真的訓練結果：典型情況下，不加正則化的 Val Loss（紅虛線）訓練久了會反彈（過擬合），加入 BatchNorm + Dropout（綠線）反彈較小。真實效果要用自己的資料驗證。', [
+        '示意：Epoch 50 Val Loss 無正則 ≈ ' + f(R.curvePts[9].vaNoReg, 3) + ' vs 有正則 ≈ ' + f(R.curvePts[9].vaReg, 3)
       ]);
 
       add(5, 'BN、LayerNorm 與順序', 'CNN／表格常用「Linear/Conv → BatchNorm → ReLU → Dropout」；批次小或變長序列（如 Transformer H4）則改用跨特徵標準化的 LayerNorm。', [
@@ -263,7 +263,7 @@
       ]);
 
       add(5, '現代神經網路標配總結', '從 F1 的基礎反向傳播到現代深度網路，正是靠 ReLU（保梯度）、BatchNorm（穩分布）與 Dropout（抗過擬合）三大支柱才得以訓練百層模型。', [
-        '最終驗證損失 Val Loss = ' + f(R.curvePts[9].vaReg, 3)
+        '示意曲線末端 Val Loss ≈ ' + f(R.curvePts[9].vaReg, 3)
       ]);
 
       return steps;
@@ -300,7 +300,7 @@
       note: 'AI Studio 的 Deep Learning 運算子支援選擇 RectifierWithDropout 並設定 hidden_dropout_ratios；PyTorch 則以 nn.BatchNorm1d、nn.ReLU 與 nn.Dropout 串接，且務必在推論時呼叫 model.eval()。',
       expect: (steps, rows, p) => {
         const R = runRegNN(rows, p);
-        return ['推論期輸出 ŷ = ' + f(R.outInfer, 3) + '，驗證集 Val Loss = ' + f(R.curvePts[9].vaReg, 3)];
+        return ['推論期輸出 ŷ = ' + f(R.outInfer, 3) + '，示意曲線末端 Val Loss ≈ ' + f(R.curvePts[9].vaReg, 3)];
       },
       python: 'import torch.nn as nn\nmodel = nn.Sequential(\n    nn.Linear(2, 4),\n    nn.BatchNorm1d(4),\n    nn.ReLU(),\n    nn.Dropout(p=0.25),\n    nn.Linear(4, 1),\n    nn.Sigmoid()\n)',
       confirmed: false

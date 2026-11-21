@@ -209,7 +209,7 @@
         if (idx < R.T) {
           st.tIdx = idx;
           const sn = R.active.history[idx];
-          add(4, '第 ' + sn.t + ' 位病人分派', '隨著方案 C 多次失敗且被試過幾次後，它的 Q̂ 與不確定紅利雙雙下降，演算法自動停止把病人分給 C！', [
+          add(4, '第 ' + sn.t + ' 位病人分派', 'UCB 每次挑「經驗勝率 Q̂ ＋ 不確定紅利」最高的方案；被試得少的方案紅利大，試過幾次就下降。看下方 N 與 Q̂：目前分派最多的是方案 ' + ARMS[sn.counts.indexOf(Math.max.apply(null, sn.counts))].arm + '。', [
             '目前分派次數 N = (' + sn.counts.join(', ') + ')｜經驗勝率 Q̂ = (' + sn.qHat.map(v => f(v, 2)).join(', ') + ')'
           ]);
         }
@@ -217,13 +217,13 @@
 
       st.tIdx = R.T - 1;
       const fin = R.active.history[R.T - 1];
-      add(5, '完成全部 ' + R.T + ' 人分派', '到達第 ' + R.T + ' 位病人時，經驗勝率 Q̂ 已收斂接近真實值，且絕大多數病人都享受到最佳方案 B！', [
+      add(5, '完成全部 ' + R.T + ' 人分派', '到第 ' + R.T + ' 位病人時，方案 B 獲得 ' + LAB.pct(fin.counts[1] / R.T, 0) + ' 的分派。' + (fin.counts[1] / R.T >= 0.5 ? '多數病人用到最佳方案。' : '樣本只有 ' + R.T + ' 人，Q̂ 還有很大抽樣誤差，UCB 仍在探索，並未集中到 B；調大 T 才看得到收斂。'), [
         '最終分派次數：A=' + fin.counts[0] + ' 人, B=' + fin.counts[1] + ' 人, C=' + fin.counts[2] + ' 人',
         '總治癒人數 = ' + fin.cumReward + ' / ' + R.T + ' 人'
       ]);
 
       st.showCounts = true;
-      add(5, '比較三種策略遺憾', '看主圖三條線：純貪婪（紅虛線）若前兩次最佳藥剛好沒效就會永遠鎖死在次佳藥；ε-Greedy（藍線）後期仍會固定比例亂試差藥；UCB（綠線）遺憾成長最平緩！', [
+      add(5, '比較三種策略遺憾', '看主圖三條線：純貪婪（紅虛線）若前兩次最佳藥剛好沒效就會永遠鎖死在次佳藥；ε-Greedy（藍線）後期仍會固定比例亂試差藥；UCB（綠線）' + (R.resUcb.cumRegret <= Math.min(R.resEps.cumRegret, R.resPure.cumRegret) ? '本次遺憾最低。' : '本次遺憾並非最低（單次隨機試驗的差異大，需多次重複才能比較）。'), [
         '累積遺憾 Regret：UCB = ' + f(R.resUcb.cumRegret, 2) + '｜ε-Greedy = ' + f(R.resEps.cumRegret, 2) + '｜純貪婪 = ' + f(R.resPure.cumRegret, 2)
       ]);
 

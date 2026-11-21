@@ -199,8 +199,8 @@
         '初篩向量第 1 名：C3 (0.85，答非所問)｜關鍵排他條款 C2 僅排第 3 (0.76)'
       ]);
 
-      add(3, 'Cross-Encoder 精排', '第二階段 Reranker 把「[問題 + 段落]」拼在一起送進 Transformer 做全詞交叉注意力，識破 C3 文不對題（降至 0.35），並把關鍵排他條款 C2 推上第 1 名（0.96）！', [
-        'Cross-Encoder 精排後：#1 C2 (0.96) + #2 C1 (0.86) → 完美涵蓋正面與排他規定'
+      add(3, 'Cross-Encoder 精排', '第二階段 Reranker 把「[問題 + 段落]」拼在一起送進 Transformer 做交叉注意力。此處分數為教學預設，真實分數由 Reranker 模型算出。', [
+        '精排後（預設分數）：' + R.crossOrder.slice(0, 2).map((d, i) => '#' + (i + 1) + ' ' + d.id + ' (' + f(d.crossScore, 2) + ')').join(' + ')
       ]);
 
       add(3, '為何分兩階段檢索', 'Cross-Encoder 雖準，但面對 10 萬篇病歷每篇都要跟問題重跑一次 Transformer 太慢；因此實務必採「Bi-Encoder 粗篩 Top-50 → Cross-Encoder 精排 Top-3」。', [

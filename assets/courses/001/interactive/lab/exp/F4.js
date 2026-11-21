@@ -218,7 +218,7 @@
       ]);
       const cellKeep = R.lstmSteps.reduce((a, s) => a * s.f, 1);
       add(8, 'LSTM、GRU 與轉向自注意力', R.isLstm
-        ? 'LSTM 細胞連乘保留率 ∏fₜ = ' + f(cellKeep, 4) + ' 遠高於 RNN 的 ' + f(R.rnnSteps[7].gradProd, 4) + '。實務亦常用兩閘 GRU；超長序列則轉向可平行運算的 Transformer (H3)。'
+        ? 'LSTM 細胞連乘保留率 ∏fₜ = ' + f(cellKeep, 4) + (cellKeep > R.rnnSteps[7].gradProd * 1.5 ? ' 明顯高於 RNN 的 ' : ' 與 RNN 的 ') + f(R.rnnSteps[7].gradProd, 4) + (cellKeep > R.rnnSteps[7].gradProd * 1.5 ? '' : ' 差不多（這組未訓練的權重下，優勢不明顯）') + '。實務亦常用兩閘 GRU；超長序列則轉向可平行運算的 Transformer (H3)。'
         : 'RNN 梯度連乘僅剩 ' + f(R.rnnSteps[7].gradProd, 4) + '；LSTM（細胞保留 ' + f(cellKeep, 4) + '）與 GRU 可緩解，超長序列則改用 Transformer (H3)。', [
         '8 步梯度保留：LSTM ∏fₜ = ' + f(cellKeep, 4) + ' vs RNN = ' + f(R.rnnSteps[7].gradProd, 4)
       ]);

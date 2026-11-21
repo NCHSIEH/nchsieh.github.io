@@ -310,12 +310,12 @@
       ]);
 
       st.stage = 5; st.epCap = R.epochs;
-      add(5, '策略三：小步微調', 'Fine-Tune 以較小學習率（0.1 vs 分類頭 0.5）微調骨幹，既保留通用特徵又適應本院病患分佈，往往拿下最低 Val Loss。', [
+      add(5, '策略三：小步微調', 'Fine-Tune 以較小學習率（0.1 vs 分類頭 0.5）微調骨幹，既保留通用特徵又適應本院病患分佈。' + (R.resFinetune.vaLoss <= Math.min(R.resScratch.vaLoss, R.resFreeze.vaLoss) ? '本例它拿到最低 Val Loss。' : '但本例它不是 Val Loss 最低的策略。'), [
         '第 ' + R.epochs + ' 輪 Val Loss：Fine-Tune = ' + f(R.resFinetune.vaLoss, 3) + '｜Val Acc = ' + f(R.resFinetune.vaAcc * 100, 0) + '%'
       ]);
 
       st.stage = 6;
-      add(6, '三策略驗證集總結', '看右表與下方曲線：預訓練遷移學習（Freeze / Fine-Tune）在極小樣本上遠勝從零訓練，這正是醫療影像 AI 落地的關鍵！', [
+      add(6, '三策略驗證集總結', (function () { const s = R.resScratch.vaLoss, b = Math.min(R.resFreeze.vaLoss, R.resFinetune.vaLoss); return b < s - 1e-3 ? '看右表與曲線：預訓練遷移（Freeze / Fine-Tune）的 Val Loss 低於從零訓練，小樣本時預訓練特徵是醫療影像 AI 的關鍵。' : '看右表與曲線：本例從零訓練的 Val Loss 不比遷移學習差。這裡的「預訓練」只是示意用的小網路；真實的預訓練來自大量資料，在小樣本時優勢才明顯。'; })(), [
         'Val Loss：Scratch ' + f(R.resScratch.vaLoss, 3) + '｜Freeze ' + f(R.resFreeze.vaLoss, 3) + '｜Fine-Tune ' + f(R.resFinetune.vaLoss, 3)
       ]);
 

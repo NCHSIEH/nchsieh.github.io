@@ -192,7 +192,7 @@
       ]);
 
       st.showNewWord = true; st.newSym = null;
-      add(6, '套用規則切分新詞', '依序套用 ' + R.rules.length + ' 條合併規則後，未見新詞「newest」自動被壓縮成有意義的子詞片段！', [
+      add(6, '套用規則切分新詞', '依序套用 ' + R.rules.length + ' 條合併規則後，未見新詞「newest」被切成 ' + R.newWordSyms.length + ' 個片段。' + (R.newWordSyms.length < 7 ? '已合併出較長的子詞，不會變成無法辨識的 <UNK>。' : '一條規則都沒套用到，只能退回單字元，所以仍不會出現 <UNK>；加大合併次數或換含 est 的語料才會學到詞根。'), [
         'newest → ' + R.newWordSyms.join(' | ') + '（共 ' + R.newWordSyms.length + ' 個 token）'
       ]);
 
