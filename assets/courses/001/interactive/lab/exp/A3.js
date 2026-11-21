@@ -241,8 +241,13 @@
           '目前切點：' + R.cuts.map(c => f(c, 1)).join('、')
         ]);
         if (steps.length < 10) {
-          add(7, '血糖臨床切點對照', '實務上空腹血糖常用 100、126 mg/dL 作為臨床切點，也可以對照演算法自動切出的位置。', [
-            '區間數 = ' + R.bins.length + '，切點數 = ' + R.cuts.length
+          const clin = [[-Infinity, 100, '<100'], [100, 126, '100–125'], [126, Infinity, '≥126']].map(([lo, hi, lb]) => {
+            const sub = rows.filter(r => r.glu >= lo && r.glu < hi), pos = sub.filter(r => r.dm === 1).length;
+            return lb + '：' + sub.length + ' 人（陽性 ' + pos + '）';
+          });
+          add(7, '血糖臨床切點對照', '臨床常用空腹血糖 100、126 mg/dL 當切點。拿來分組，和上面演算法切出的結果比一比人數與陽性分布。', [
+            '臨床切點 ' + clin.join('｜'),
+            '演算法切點 ' + R.cuts.map(c => f(c, 1)).join('、') + '（' + R.bins.map(b => b.n).join('/') + ' 人）'
           ]);
         }
         if (steps.length < 10) {

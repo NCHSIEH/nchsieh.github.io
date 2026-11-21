@@ -12,13 +12,25 @@
     return LAB.data.notes(seed, 6);
   }
 
+  /* 正向最大匹配斷詞：依 LAB.data.dict 由長到短比對，查無詞條就以單字切出，標點略過 */
+  function segment(text) {
+    const dict = LAB.data.dict, maxLen = Math.max(...dict.map(w => w.length)), out = [];
+    let i = 0;
+    while (i < text.length) {
+      let hit = null;
+      for (let L = Math.min(maxLen, text.length - i); L >= 1; L--) { const w = text.substr(i, L); if (dict.includes(w)) { hit = w; break; } }
+      if (hit) { out.push(hit); i += hit.length; }
+      else { const ch = text[i]; if (!/[，。、；！？,.\s]/.test(ch)) out.push(ch); i += 1; }
+    }
+    return out;
+  }
+
   function simulate(rows, p) {
     const era = p.era || 'classic';
     const isLLM = era === 'llm';
     const isEmb = era === 'embed';
     const sample = rows[0].text;
-    const toks = ['病人', '主訴', '傷口', '紅腫', '疼痛'];
-    const cleanToks = ['主訴', '傷口', '紅腫', '疼痛'];
+    const toks = segment(sample), cleanToks = toks.filter(t => !LAB.data.stop.includes(t));
     return { era, isLLM, isEmb, sample, toks, cleanToks };
   }
 
@@ -172,7 +184,7 @@
         const toksShow = st.stage === 0
           ? [{ id: 'raw', text: R.sample, cls: 'c5' }]
           : R.toks.map((t, idx) => {
-              const isStop = t === '病人';
+              const isStop = LAB.data.stop.includes(t);
               const cut = !R.isLLM && st.stage >= 2 && isStop;
               return {
                 id: 't' + idx, text: t,
@@ -210,7 +222,7 @@
         '切分結果：' + R.toks.join(' / ')
       ]);
       st.stage = 2;
-      add(2, R.isLLM ? '3. 嵌入與位置編碼' : '3. 過濾停用詞', R.isLLM ? '查表得語意向量 E 並加上正弦位置編碼 PE（H2），讓模型分出詞序前後。' : '去掉「病人、已、有」等高頻功能詞（標紅刪除），保留診斷關鍵詞。', [
+      add(2, R.isLLM ? '3. 嵌入與位置編碼' : '3. 過濾停用詞', R.isLLM ? '查表得語意向量 E 並加上正弦位置編碼 PE（H2），讓模型分出詞序前後。' : '去掉高頻功能詞（本句：' + (R.toks.filter(t => !R.cleanToks.includes(t)).join('、') || '無') + '，標紅刪除），保留診斷關鍵詞。', [
         R.isLLM ? 'X = E + PE（詞義＋位置）' : '保留關鍵詞：' + R.cleanToks.join('、')
       ]);
       st.stage = 3;
@@ -239,6 +251,7 @@
       ]);
       return steps;
     },
+    inputs(rows, p) { return { dict: LAB.data.dict, stop: LAB.data.stop }; },
     keys(steps, rows, p) {
       const R = simulate(rows, p);
       return { n_docs: rows.length, n_toks: R.toks.length, n_clean_toks: R.cleanToks.length, sample_len: R.sample.length, is_llm: R.isLLM ? 1 : 0 };

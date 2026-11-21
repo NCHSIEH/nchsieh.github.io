@@ -193,18 +193,18 @@
 
       st.showOrigLine = true;
       add(5, '處理前的迴歸線（被拉偏）', '如果不處理離群值直接算線性迴歸，單一極端點就把整條直線的斜率拉偏了！', [
-        '處理前斜率 w = ' + f(R.olsOrig.w, 3) + '（明顯失真）'
+        '處理前斜率 w = ' + f(R.olsOrig.w, 3) + '（含極端值；處理後再比較）'
       ]);
 
       st.applied = true;
       add(4, isWin ? '套用縮尾截斷' : '套用刪除法', isWin ? '縮尾法不丟掉病人，而是把超出上圍籬的血壓壓回上圍籬 ' + f(R.hi, 1) + '，保留樣本數。' : '刪除法直接把離群病人移出資料集，樣本數減少為 ' + R.rowsDrop.length + ' 筆。', [
-        '處理後斜率 w = ' + f(olsAfter.w, 3) + '（恢復正常正相關）'
+        '處理後斜率 w = ' + f(olsAfter.w, 3) + '（處理前 ' + f(R.olsOrig.w, 3) + '，差 ' + f(Math.abs(olsAfter.w - R.olsOrig.w), 3) + '）'
       ]);
 
       st.showZMask = true;
       const nZOut = R.zFlags.filter(Boolean).length;
       const maxSbp = M.max(rows.map(r => r.sbp));
-      add(3, 'Z 分數 ±3σ 遮蔽效應', '改用「平均 ± 3σ」檢驗時，極端值本身會把 μ 與 σ 一起撐大到 μ+3σ=' + f(R.zHi, 1) + '，反而只抓出 ' + nZOut + ' 筆（遮蔽效應）！', [
+      add(3, 'Z 分數 ±3σ 遮蔽效應', (nZOut < nOut ? '改用「平均 ± 3σ」檢驗時，極端值把 μ 與 σ 撐大到 μ+3σ=' + f(R.zHi, 1) + '，只抓出 ' + nZOut + ' 筆（遮蔽效應）！' : '改用「平均 ± 3σ」時，極端值也把 μ+3σ 撐高到 ' + f(R.zHi, 1) + '；本例兩法都抓到 ' + nZOut + ' 筆，但極端值再多一個就可能被遮蔽。'), [
         'μ = ' + f(R.meanSbp, 1) + '，σ = ' + f(R.sdSbp, 1) + ' → μ+3σ = ' + f(R.zHi, 1),
         '最大血壓 ' + maxSbp + '：IQR 抓 ' + nOut + ' 筆 vs |Z|>3 抓 ' + nZOut + ' 筆'
       ]);

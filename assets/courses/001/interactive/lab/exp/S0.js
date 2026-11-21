@@ -10,24 +10,24 @@
   ];
 
   const CASES = [
-    { id: 1, task: '糖尿病風險預測', dtype: '表格數值', has_y: 1, pipe: 'S1 → S2 (B1–B18)' },
-    { id: 2, task: '慢性病患亞型分群', dtype: '無標籤表格', has_y: 0, pipe: 'S1 → S3 (C1–C12)' },
-    { id: 3, task: '門診處方併用規則', dtype: '交易籃/序列', has_y: 0, pipe: 'S7 (D1–D4)' },
-    { id: 4, task: '護理紀錄自動分類', dtype: '中文短文', has_y: 1, pipe: 'S5 (E1–E5)' },
-    { id: 5, task: 'X光病灶影像辨識', dtype: '2D影像', has_y: 1, pipe: 'S4 CNN (F3/F6)' },
-    { id: 6, task: '下季門診人次預測', dtype: '時間序列', has_y: 1, pipe: 'S6 (G1–G4)' },
-    { id: 7, task: '衛教問答與智能助理', dtype: '文件+工具', has_y: 0, pipe: 'S5/S9 (H1–H9)' },
-    { id: 8, task: '適應性新藥臨床試驗', dtype: '動態互動', has_y: 2, pipe: 'J2 UCB / J1 RL' }
+    { id: 1, task: '糖尿病風險預測', dtype: '表格數值', has_y: 1, pipe: 'S1 → S2 (B1–B18)', val: '分層 K-Fold、ROC/PR', trap: '標準化在切分前做（洩漏）' },
+    { id: 2, task: '慢性病患亞型分群', dtype: '無標籤表格', has_y: 0, pipe: 'S1 → S3 (C1–C12)', val: 'Silhouette、臨床可解釋', trap: '沒縮放，大單位欄位主導距離' },
+    { id: 3, task: '門診處方併用規則', dtype: '交易籃/序列', has_y: 0, pipe: 'S7 (D1–D4)', val: 'Support、Confidence、Lift', trap: '只看 Confidence，忽略熱門藥' },
+    { id: 4, task: '護理紀錄自動分類', dtype: '中文短文', has_y: 1, pipe: 'S5 (E1–E5)', val: '各類 Recall、混淆矩陣', trap: '斷詞字典缺醫療用語' },
+    { id: 5, task: 'X光病灶影像辨識', dtype: '2D影像', has_y: 1, pipe: 'S4 CNN (F3/F6)', val: '依病人切分、Val Loss', trap: '同一病人影像分到訓練與測試' },
+    { id: 6, task: '下季門診人次預測', dtype: '時間序列', has_y: 1, pipe: 'S6 (G1–G4)', val: '滑動視窗、MAE', trap: '隨機打亂（偷看未來）' },
+    { id: 7, task: '衛教問答與智能助理', dtype: '文件+工具', has_y: 0, pipe: 'S5/S9 (H1–H9)', val: 'Recall@K、人工抽查、護欄', trap: '答案沒有依據（幻覺）' },
+    { id: 8, task: '適應性新藥臨床試驗', dtype: '動態互動', has_y: 2, pipe: 'J2 UCB / J1 RL', val: '累積遺憾 Regret', trap: '太早放棄探索其他療法' }
   ];
 
   function simulate(rows, p) {
     const sc = p.scenario || 'tabular';
     const map = {
-      tabular: { name: '表格預測 (監督式)', startId: 'S2', grp: 'B1–B18', val: 'K-Fold CV (B13)', idx: 0 },
-      unsup: { name: '無標籤探索與處方籃', startId: 'S3 / S7', grp: 'C1–C12 · D1–D4', val: 'Silhouette (C9) / Kulc (D4)', idx: 1 },
-      seq_img: { name: '時間序列與醫療影像', startId: 'S6 / S4', grp: 'G1–G4 · F3–F6', val: '滑動視窗 (G3) / Val Loss', idx: 4 },
-      text_agent: { name: '病歷文字、LLM 與 Agent', startId: 'S5 / S9', grp: 'E1–E5 · H1–H9', val: 'Recall@K / Rerank / 護欄', idx: 6 },
-      rl: { name: '互動試錯與適應性試驗 (RL)', startId: 'J1 / J2', grp: 'J1 Q-Learning · J2 UCB', val: '累積獎勵 / 累積遺憾 Regret', idx: 7 }
+      tabular: { name: '表格預測 (監督式)', startId: 'S2', grp: 'B1–B18', val: 'K-Fold CV (B13)', idx: 0, idxs: [0] },
+      unsup: { name: '無標籤探索與處方籃', startId: 'S3 / S7', grp: 'C1–C12 · D1–D4', val: 'Silhouette (C9) / Kulc (D4)', idx: 1, idxs: [1, 2] },
+      seq_img: { name: '時間序列與醫療影像', startId: 'S6 / S4', grp: 'G1–G4 · F3–F6', val: '滑動視窗 (G3) / Val Loss', idx: 4, idxs: [4, 5] },
+      text_agent: { name: '病歷文字、LLM 與 Agent', startId: 'S5 / S9', grp: 'E1–E5 · H1–H9', val: 'Recall@K / Rerank / 護欄', idx: 6, idxs: [3, 6] },
+      rl: { name: '互動試錯與適應性試驗 (RL)', startId: 'J1 / J2', grp: 'J1 Q-Learning · J2 UCB', val: '累積獎勵 / 累積遺憾 Regret', idx: 7, idxs: [7] }
     };
     const info = map[sc] || map.tabular;
     return Object.assign({ sc, nCases: rows.length, nGroups: 10 }, info);
@@ -89,7 +89,7 @@
           ],
           [
             { id: 'sup', label: '2a. 有標籤 y (監督)', value: '分類 / 迴歸 / 影像', shape: 'box', w: 142, cls: (isTab || isSeq) ? clsOf(1) : 'c5', hl: act(1) && (isTab || isSeq), dim: !(isTab || isSeq), sub: 'S2 · S4 · S6 管線' },
-            { id: 'uns', label: '2b. 無標籤 (探勘/生成)', value: '分群 / 關聯 / RAG', shape: 'box', w: 142, cls: (isUns || isTxt) ? clsOf(1) : 'c5', hl: act(1) && (isUns || isTxt), dim: !(isUns || isTxt), sub: 'S3 · S5 · S7 · S9' },
+            { id: 'uns', label: '2b. 無標籤 / 自監督', value: '分群 / 關聯 / LLM 預訓練', shape: 'box', w: 142, cls: (isUns || isTxt) ? clsOf(1) : 'c5', hl: act(1) && (isUns || isTxt), dim: !(isUns || isTxt), sub: 'S3 · S5 · S7 · S9' },
             { id: 'rl0', label: '2c. 獎勵回饋 (試錯)', value: '探索 vs 利用', shape: 'box', w: 142, cls: isRl ? clsOf(1) : 'c5', hl: act(1) && isRl, dim: !isRl, sub: 'J1 路徑 · J2 試驗' }
           ],
           [
@@ -135,12 +135,12 @@
 
         const side = {
           type: 'table', slot: 'side',
-          title: '8 大臨床問題路由速查（點擊編號可直達）',
-          cols: [{ key: 't', label: '臨床問題' }, { key: 'd', label: '資料型態' }, { key: 'p', label: '推薦管線' }],
+          title: '8 大臨床問題：怎麼驗證、最常踩的坑',
+          cols: [{ key: 't', label: '臨床問題' }, { key: 'v', label: '首要驗證' }, { key: 'x', label: '最常踩的坑' }],
           rows: rows.map((r, i) => ({
             id: r.id,
-            cells: [r.task, r.dtype, { v: r.pipe, cls: i === R.idx ? 'good' : 'c0' }],
-            hl: i === R.idx
+            cells: [r.task, r.val, { v: r.trap, cls: R.idxs.includes(i) ? 'bad' : 'c5' }],
+            hl: R.idxs.includes(i)
           }))
         };
 
@@ -164,7 +164,7 @@
         '當前演練情境：' + R.name + '（全站共涵蓋 10 大領域、80 個演算法）'
       ]);
       st.stage = 1;
-      add(1, '2. 判斷有無標準答案 y', '有明確歷史結果 y → 走監督式學習（S2/S4/S6）；無標籤找結構 → 非監督/關聯（S3/S7）；邊互動邊拿獎勵 → 強化學習（J1/J2）。', [
+      add(1, '2. 判斷有無標準答案 y', '有歷史答案 y→監督式（S2/S4/S6；文字分類 E 群也是）；沒答案找結構→S3/S7；LLM 先自監督預訓練→S5/S9；邊試邊拿獎勵→J1/J2。', [
         '推薦切入流程：' + R.startId + '｜對應演算法群：' + R.grp
       ]);
       st.stage = 2;

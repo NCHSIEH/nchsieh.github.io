@@ -4,24 +4,76 @@
   const M = LAB.M, f = LAB.f;
   const COLS = [
     { key: 'id', label: '#', type: 'int' },
+    { key: 'age', label: '年齡', type: 'num' },
     { key: 'bmi', label: 'BMI', type: 'num' },
-    { key: 'glu', label: '血糖', type: 'num' },
-    { key: 'cluster', label: '分群', type: 'int' }
+    { key: 'glu', label: '血糖', type: 'num' }
   ];
 
   function makeRows(seed) {
     return LAB.data.clinic(seed, 8).map((o, i) => ({
-      id: o.id, bmi: o.bmi, glu: o.glu, cluster: i % 3
+      id: o.id, age: o.age, bmi: o.bmi, glu: o.glu
     }));
   }
 
+  /* 以下全部由資料實算：標準化 → 相關矩陣特徵分解（PCA）→ K-Means（farthest-first 起點）＋輪廓係數 → 近鄰距離異常分數 */
+  function jacobiEig(A) {
+    const n = A.length, a = A.map(r => r.slice());
+    for (let it = 0; it < 80; it++) {
+      let p = 0, q = 1, m = 0;
+      for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (Math.abs(a[i][j]) > m) { m = Math.abs(a[i][j]); p = i; q = j; }
+      if (m < 1e-12) break;
+      const th = (a[q][q] - a[p][p]) / (2 * a[p][q]), t = (th >= 0 ? 1 : -1) / (Math.abs(th) + Math.sqrt(th * th + 1)), c = 1 / Math.sqrt(t * t + 1), sn = t * c;
+      for (let k = 0; k < n; k++) if (k !== p && k !== q) { const x = a[k][p], y = a[k][q]; a[k][p] = a[p][k] = c * x - sn * y; a[k][q] = a[q][k] = sn * x + c * y; }
+      const app = a[p][p], aqq = a[q][q], apq = a[p][q];
+      a[p][p] = app - t * apq; a[q][q] = aqq + t * apq; a[p][q] = a[q][p] = 0;
+    }
+    return a.map((r, i) => r[i]).sort((x, y) => y - x);
+  }
+  function kmeansRun(Z, k) {
+    const n = Z.length, d2 = (u, v) => u.reduce((s0, x, j) => s0 + (x - v[j]) * (x - v[j]), 0);
+    const start = [0];
+    while (start.length < k) {
+      let best = -1, bd = -1;
+      for (let i = 0; i < n; i++) { if (start.includes(i)) continue; const dm = Math.min(...start.map(c => d2(Z[i], Z[c]))); if (dm > bd + 1e-12) { bd = dm; best = i; } }
+      start.push(best);
+    }
+    let cen = start.map(i => Z[i].slice()), lab = new Array(n).fill(-1);
+    for (let it = 0; it < 100; it++) {
+      const nl = Z.map(z => { let b = 0, bd = Infinity; cen.forEach((c, j) => { const dd = d2(z, c); if (dd < bd - 1e-12) { bd = dd; b = j; } }); return b; });
+      const same = nl.every((v, i) => v === lab[i]); lab = nl;
+      cen = cen.map((c, j) => { const m = Z.filter((z, i) => lab[i] === j); return m.length ? c.map((_, q) => M.mean(m.map(z => z[q]))) : c; });
+      if (same) break;
+    }
+    return { start, lab };
+  }
+  function silhouette(Z, lab) {
+    const n = Z.length, dist = (u, v) => Math.sqrt(u.reduce((s0, x, j) => s0 + (x - v[j]) * (x - v[j]), 0));
+    const ks = [...new Set(lab)];
+    return M.mean(Z.map((z, i) => {
+      const own = lab.filter((l, j) => l === lab[i] && j !== i).length;
+      if (!own) return 0;
+      const mean = k => { const idx = Z.map((_, j) => j).filter(j => lab[j] === k && j !== i); return M.mean(idx.map(j => dist(z, Z[j]))); };
+      const a0 = mean(lab[i]), b0 = Math.min(...ks.filter(k => k !== lab[i]).map(mean));
+      return (b0 - a0) / Math.max(a0, b0);
+    }));
+  }
   function simulate(rows, p) {
     const goal = p.goal || 'cluster';
     const isAnom = goal === 'anomaly';
     const isDim = goal === 'dimred';
-    const pcaVar = 0.84;
-    const sils = [0.41, 0.56, 0.48, 0.39];
-    return { goal, isAnom, isDim, pcaVar, sils, bestK: 3, topAnomaly: rows[rows.length - 1].id };
+    const cols = ['age', 'bmi', 'glu'], n = rows.length;
+    const mu = cols.map(c => M.mean(rows.map(r => r[c]))), sd = cols.map(c => M.sd(rows.map(r => r[c]), 0));
+    const Z = rows.map(r => cols.map((c, j) => (r[c] - mu[j]) / sd[j]));
+    const R = cols.map((_, a) => cols.map((_, b) => M.mean(Z.map(z => z[a] * z[b]))));
+    const ev = jacobiEig(R), tot = ev[0] + ev[1] + ev[2];
+    const pc1Var = ev[0] / tot, pcaVar = (ev[0] + ev[1]) / tot;
+    const ks = [2, 3, 4, 5], runs = ks.map(k => kmeansRun(Z, k)), sils = runs.map(r => silhouette(Z, r.lab));
+    let bi = 0; sils.forEach((v, i) => { if (v > sils[bi] + 1e-12) bi = i; });
+    const bestK = ks[bi], labels = runs[bi].lab;
+    const dist = (u, v) => Math.sqrt(u.reduce((s0, x, j) => s0 + (x - v[j]) * (x - v[j]), 0));
+    const knn = Z.map((z, i) => M.mean(Z.map((w, j) => j === i ? null : dist(z, w)).filter(v => v != null).sort((x, y) => x - y).slice(0, 3)));
+    const ta = M.argmax(knn);
+    return { goal, isAnom, isDim, sd, pc1Var, pcaVar, sils, ks, runs, bestK, labels, bestSil: sils[bi], knn, topAnomaly: rows[ta].id, topScore: knn[ta] };
   }
 
   LAB.register({
@@ -100,11 +152,11 @@
             { id: 'tsn', label: '3b. t-SNE 鄰居對齊', value: 'KL 散度最小化', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'C6 保留局部流形結構' }
           ],
           [
-            { id: 'pc1', label: '4a. PC1 第一主軸', value: '解釋 62%', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '變異最大方向' },
+            { id: 'pc1', label: '4a. PC1 第一主軸', value: '解釋 ' + LAB.pct(R.pc1Var, 0), shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '變異最大方向' },
             { id: 'pc2', label: '4b. PC2 正交次軸', value: '解釋 22%', shape: 'box', w: 140, cls: clsOf(3), hl: act(3), sub: '與 PC1 垂直無關' }
           ],
           [
-            { id: 'scr', label: '5a. 陡坡圖 Scree', value: '累積 84%', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '確認保留 ≥ 80% 變異' },
+            { id: 'scr', label: '5a. 陡坡圖 Scree', value: '累積 ' + LAB.pct(R.pcaVar, 0), shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '看累積是否 ≥ 80% 變異' },
             { id: 'drp', label: '5b. 捨棄雜訊尾軸', value: '濾除 16% 雜訊', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: '達到壓縮去共線' }
           ],
           [
@@ -121,7 +173,7 @@
             { id: 'mtx', label: '2b. 成對距離矩陣', value: '歐氏 / 曼哈頓', shape: 'box', w: 140, cls: clsOf(1), hl: act(1), sub: '衡量病人間相似度' }
           ],
           [
-            { id: 'dim', label: '3a. PCA 降維壓縮', value: st.stage >= 2 ? '保留 84%' : '高維空間', shape: 'box', w: 140, cls: clsOf(2), hl: act(2), sub: 'C5 去雜訊加速分群' },
+            { id: 'dim', label: '3a. PCA 降維壓縮', value: st.stage >= 2 ? '前 2 軸 ' + LAB.pct(R.pcaVar, 0) : '高維空間', shape: 'box', w: 140, cls: clsOf(2), hl: act(2), sub: 'C5 去雜訊加速分群' },
             { id: 'vis', label: '3b. t-SNE 2D 預視', value: '觀察群狀', shape: 'box', w: 140, cls: clsOf(2), hl: act(2), sub: 'C6 球狀 vs 任意形狀' }
           ],
           [
@@ -131,7 +183,7 @@
           ],
           [
             { id: 'elb', label: '5a. 手肘法 SSE', value: '找轉折點', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: 'C9 群內緊密度' },
-            { id: 'sil', label: '5b. 輪廓係數挑 K', value: st.stage >= 4 ? 'Sil=0.56 (K=3)' : '待評估', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: 'C9 兼顧群內外距離' }
+            { id: 'sil', label: '5b. 輪廓係數挑 K', value: st.stage >= 4 ? 'Sil=' + f(R.bestSil, 2) + ' (K=' + R.bestK + ')' : '待評估', shape: 'box', w: 140, cls: clsOf(4), hl: act(4), sub: 'C9 兼顧群內外距離' }
           ],
           [
             { id: 'int', label: '6a. 亞型特徵剖析', value: '比對各群均值', shape: 'box', w: 140, cls: clsOf(5), hl: act(5), sub: '高/中/低代謝風險群' },
@@ -196,7 +248,7 @@
             id: r.id,
             cells: [
               r.id, r.bmi, r.glu,
-              st.stage >= 3 ? (R.isAnom ? (r.id === R.topAnomaly ? { v: '異常', cls: 'bad' } : { v: '正常', cls: 'good' }) : (R.isDim ? { v: '已投影', cls: 'c2' } : { v: '群 ' + (i % 3 + 1), cls: 'c' + (i % 3) })) : null
+              st.stage >= 3 ? (R.isAnom ? (r.id === R.topAnomaly ? { v: '異常', cls: 'bad' } : { v: '正常', cls: 'good' }) : (R.isDim ? { v: '已投影', cls: 'c2' } : { v: '群 ' + (R.labels[i] + 1), cls: 'c' + R.labels[i] })) : null
             ],
             hl: st.stage >= 3 && R.isAnom && r.id === R.topAnomaly
           }))
@@ -222,19 +274,19 @@
       ]);
       st.stage = 1;
       add(1, '2. 必做特徵標準化 (A2)', '幾乎所有非監督演算法都算歐氏距離或共變異數，不標準化會讓血糖完全壓過 BMI。', [
-        '轉為平均 0、標準差 1 的 Z 分數（A2）'
+        '標準差：年齡 ' + f(R.sd[0], 1) + '、BMI ' + f(R.sd[1], 1) + '、血糖 ' + f(R.sd[2], 1) + ' → 轉為 Z 分數（A2）'
       ]);
       st.stage = 2;
       add(2, '3. 降維探索 (C5/C6)', '用 PCA（C5，保留線性最大變異）或 t-SNE（C6，保留局部鄰居關係）把高維資料壓到 2D 檢查結構。', [
-        '前兩個主成分保留變異 = ' + LAB.pct(R.pcaVar, 0)
+        '三欄標準化後，PC1 = ' + LAB.pct(R.pc1Var, 0) + '，前兩軸累積 = ' + LAB.pct(R.pcaVar, 0)
       ]);
       st.stage = 3;
       add(3, R.isAnom ? '4. 異常偵測 (C7/C8)' : R.isDim ? '4. 挑選主成分維度' : '4. 分群演算法 (C1–C4)', R.isAnom ? '局部密度稀疏用 LOF（C7）、隨機切割孤立用 Isolation Forest（C8）、重建誤差用 Autoencoder（F5）。' : R.isDim ? '依累積解釋變異（如 ≥ 80%）決定保留前 K 個主成分，可再送入下游模型訓練。' : '球狀群用 K-Means（C1/C10）、要層次看樹狀圖用階層（C2）、任意形狀用 DBSCAN（C3）、軟機率用 GMM（C4）。', [
-        R.isAnom ? '標出最異常候選 #' + R.topAnomaly : (R.isDim ? '保留 2 維主成分（84% 變異）' : '分出 3 個潛在病人亞型')
+        R.isAnom ? '標出最異常候選 #' + R.topAnomaly + '（3 近鄰平均距離 ' + f(R.topScore, 2) + '）' : (R.isDim ? '保留 2 維主成分（' + LAB.pct(R.pcaVar, 0) + ' 變異）' : '分出 ' + R.bestK + ' 個潛在病人亞型')
       ]);
       st.stage = 4;
-      add(4, '5. 內部指標評估 (C9)', R.isAnom ? '依異常分數由高到低排序抽檢，交給臨床專家判斷是輸入錯誤還是罕見病例。' : R.isDim ? '注意：PCA 主成分是線性組合，能壓縮去共線但較難對病人直接解釋單一欄位。' : '用 C9 手肘法（SSE）與輪廓係數（Silhouette）選出最佳群數 K=3。', [
-        R.isAnom ? '異常點不可盲目刪除，須查明來源' : (R.isDim ? '累積解釋變異 = 84%' : 'K = 3 輪廓係數 = 0.56（最高）')
+      add(4, '5. 內部指標評估 (C9)', R.isAnom ? '依異常分數由高到低排序抽檢，交給臨床專家判斷是輸入錯誤還是罕見病例。' : R.isDim ? '注意：PCA 主成分是線性組合，能壓縮去共線但較難對病人直接解釋單一欄位。' : '用 C9 手肘法（SSE）與輪廓係數（Silhouette）選出最佳群數（本資料實算 K=' + R.bestK + '）。', [
+        R.isAnom ? '異常點不可盲目刪除，須查明來源' : (R.isDim ? '累積解釋變異 = ' + LAB.pct(R.pcaVar, 0) : 'K=' + R.ks.map((k, i) => k + ':' + f(R.sils[i], 2)).join(' ') + ' → 取 K=' + R.bestK)
       ]);
       st.stage = 5;
       add(5, '6. 臨床命名與落地', '回頭比較各群的平均年齡、BMI、血糖，將群組編號命名為有臨床意義的風險族群！', [
@@ -257,12 +309,15 @@
     keys(steps, rows, p) {
       const R = simulate(rows, p);
       return {
-        pca_var: R.pcaVar, best_k: R.bestK, best_sil: R.sils[1],
+        pca_var: R.pcaVar, pc1_var: R.pc1Var, best_k: R.bestK, best_sil: R.bestSil, sil_k2: R.sils[0], sil_k3: R.sils[1], sil_k4: R.sils[2], sil_k5: R.sils[3], top_anom: R.topAnomaly, top_score: R.topScore,
         n_rows: rows.length, mean_bmi: M.mean(rows.map(r => r.bmi)), mean_glu: M.mean(rows.map(r => r.glu))
       };
     },
+    inputs(rows, p) { const R = simulate(rows, p), o = {}; R.ks.forEach((k, i) => { o['init_k' + k] = R.runs[i].start.map(j => rows[j].id); }); return o; },
     explain(steps, rows, p) {
+      const R = simulate(rows, p);
       return [
+        '本頁數字都由這 ' + rows.length + ' 位病人的年齡、BMI、血糖實算：前兩個主成分累積 ' + LAB.pct(R.pcaVar, 0) + ' 變異；K-Means 試 K=2–5，輪廓係數最高為 K=' + R.bestK + '（' + f(R.bestSil, 2) + '）；3 近鄰平均距離最大的是 #' + R.topAnomaly + '。',
         '非監督式學習依目標分為「病人分群」、「異常偵測」與「降維壓縮」三條管線，共同前置條件都是標準化（A2）。',
         '分群可用 C1/C11 K-Means++ 與模糊分群、C2 階層、C3 DBSCAN、C4 GMM、C10 K-Medoids，並用 C9 輪廓係數挑 K。',
         '異常偵測可用 C7 LOF、C8 Isolation Forest、C12 馬氏距離橢圓或 F5 Autoencoder，找出異常後須人工複核原因。'
@@ -270,9 +325,9 @@
     },
     aistudio: {
       operators: ['Read CSV', 'Normalize', 'PCA', 'k-Means', 'Cluster Distance Performance'],
-      params: [['Normalize', 'Z-transformation'], ['k-Means › k', '3']],
+      params: [['Normalize', 'Z-transformation'], ['k-Means › k', p => String(simulate(makeRows(1), p).bestK) + '（種子 1 的最佳 K；換資料會變）']],
       note: 'AI Studio 的 Cluster Distance Performance 可計算群內平均距離協助挑選群數 K。',
-      expect: () => ['前 2 主成分約保留 84% 變異；K=3 輪廓係數最佳'],
+      expect: (steps, rows, p) => { const R = simulate(rows, p); return ['前 2 主成分累積約 ' + LAB.pct(R.pcaVar, 0) + ' 變異；輪廓係數最佳 K=' + R.bestK + '（' + f(R.bestSil, 2) + '）']; },
       python: 'from sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\nfrom sklearn.cluster import KMeans',
       confirmed: false
     }

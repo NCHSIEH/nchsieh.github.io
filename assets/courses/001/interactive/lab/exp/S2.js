@@ -110,7 +110,7 @@
             { id: 'm3', label: '3c. 異質基模型', value: 'Log+樹+kNN', shape: 'box', w: 140, cls: clsOf(1), hl: act(1), sub: 'B12 多樣性互補' }
           ],
           [
-            { id: 'cv', label: '4a. ' + R.k + '-Fold 評估', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: '折外預測防洩漏' },
+            { id: 'cv', label: '4a. ' + R.k + '-Fold 評估', value: st.stage >= 2 ? metric + '≈' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: '折外預測防洩漏' },
             { id: 'tune', label: '4b. B13 網格調參', value: st.cvLoop ? '調樹數/學習率' : '超參數空間', shape: 'box', w: 142, cls: st.cvLoop ? 'hl' : clsOf(2), hl: st.cvLoop, sub: 'n_trees · lr · depth' }
           ],
           [
@@ -118,7 +118,7 @@
             { id: 'meta', label: '5b. Meta-Learner', value: st.stage >= 3 ? 'Stacking 二層' : '待堆疊', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: 'B12 邏輯迴歸整合' }
           ],
           [
-            { id: 'eval', label: '6a. 測試集驗收', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 142, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c5'), hl: act(5), sub: 'B16 ROC/PR 曲線' },
+            { id: 'eval', label: '6a. 測試集驗收', value: st.stage >= 5 ? metric + '≈' + f(R.testScore, 3) : '待解封', shape: 'box', w: 142, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c5'), hl: act(5), sub: 'B16 ROC/PR 曲線' },
             { id: 'xai', label: '6b. SHAP 歸因', value: st.stage >= 5 ? '補回解釋力' : '黑箱拆解', shape: 'box', w: 142, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c5'), hl: act(5), sub: 'I1 排列重要度+SHAP' }
           ]
         ] : [
@@ -135,7 +135,7 @@
             { id: 'mod2', label: R.isTree ? '3b. B14 迴歸樹/B15' : R.isImb ? '3b. B7/B9 樹集成' : '3b. B4 k-NN / B10 SVM', value: R.isTree ? 'IF-THEN 規則' : R.isImb ? 'PR-AUC 導向' : '距離 / 最大邊界', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: R.isTree ? '階梯預測與規則集' : R.isImb ? '抓非線性少數類' : '歐氏距離與核函數' }
           ],
           [
-            { id: 'cv', label: '4a. ' + R.k + '-Fold 驗證', value: st.stage >= 2 ? metric + '=' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'K 折平均防運氣偏差' },
+            { id: 'cv', label: '4a. ' + R.k + '-Fold 驗證', value: st.stage >= 2 ? metric + '≈' + f(R.meanCv, 3) : '待驗證', shape: 'box', w: 142, cls: clsOf(2), hl: act(2), sub: 'K 折平均防運氣偏差' },
             { id: 'tune', label: '4b. B13 網格調參', value: st.cvLoop ? '搜尋最佳組合' : '超參數空間', shape: 'box', w: 142, cls: st.cvLoop ? 'hl' : clsOf(2), hl: st.cvLoop, sub: R.isTree ? '調 max_depth 剪枝' : '調 λ / K / C 參數' }
           ],
           [
@@ -143,7 +143,7 @@
             { id: 'cal', label: R.isImb ? '5b. B16 門檻下修' : '5b. 係數/規則鎖定', value: R.isImb ? 'p ≥ 0.30' : '模型定型', shape: 'box', w: 142, cls: clsOf(3), hl: act(3), sub: R.isImb ? '提高篩檢 Recall' : (R.isTree ? '提取臨床規則' : '計算勝算比 OR') }
           ],
           [
-            { id: 'eval', label: '6a. 測試集驗收', value: st.stage >= 5 ? metric + '=' + f(R.testScore, 3) : '待解封', shape: 'box', w: 142, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c5'), hl: act(5), sub: 'B16 混淆矩陣/AUC' },
+            { id: 'eval', label: '6a. 測試集驗收', value: st.stage >= 5 ? metric + '≈' + f(R.testScore, 3) : '待解封', shape: 'box', w: 142, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c5'), hl: act(5), sub: 'B16 混淆矩陣/AUC' },
             { id: 'xai', label: '6b. 臨床決策解讀', value: st.stage >= 5 ? '可解釋輸出' : '待產出', shape: 'box', w: 142, cls: act(5) ? 'hl' : (done(5) ? 'good' : 'c5'), hl: act(5), sub: R.isTree ? '白箱路徑透明' : '係數正負與風險倍數' }
           ]
         ];
@@ -185,10 +185,10 @@
         const side = {
           type: 'table', slot: 'side',
           title: R.k + '-Fold 各折驗證與測試對照',
-          cols: [{ key: 'fd', label: '資料集 / 折次' }, { key: 'n', label: '筆數', num: true, digits: 0 }, { key: 'sc', label: metric, num: true, digits: 3 }],
-          rows: R.cvScores.slice(0, 5).map((sc, i) => ({
+          cols: [{ key: 'fd', label: '資料集 / 折次' }, { key: 'n', label: '筆數', num: true, digits: 0 }, { key: 'sc', label: metric + '（示意）', num: true, digits: 3 }],
+          rows: R.cvScores.map((sc, i) => ({
             id: 'f' + i,
-            cells: ['CV 第 ' + (i + 1) + ' 折', Math.round(96 / R.k), st.stage >= 2 ? { v: f(sc, 3), cls: 'c0' } : null],
+            cells: ['CV 第 ' + (i + 1) + ' 折', Math.floor(96 / R.k) + (i < 96 % R.k ? 1 : 0), st.stage >= 2 ? { v: f(sc, 3), cls: 'c0' } : null],
             hl: st.stage === 2 && st.cvLoop
           })).concat([{
             id: 'test',
@@ -213,7 +213,8 @@
       const add = (line, title, say, calc) => steps.push({ line, title, say, calc: calc || [], views: views(st), focus: [] });
 
       add(0, '1. 準備 X 與標籤 y', '監督式學習有標準答案 y。依「線性距離 / 樹規則 / 集成 / 不平衡」選對管線，從源頭決定前處理與調參策略。', [
-        '目前選擇：' + pipeName + '｜指標：' + metric
+        '目前選擇：' + pipeName + '｜指標：' + metric,
+        '注意：本頁各分數是示意值；真正的 CV 實算請做 B13（K-Fold）與 B16（PR/ROC）'
       ]);
       st.stage = 1;
       add(1, '2. 切分與專屬前處理', R.isTree ? '切分 80/20 後，樹模型可免縮放直接保留原單位；線性與距離模型則必做標準化（A2）。' : R.isImb ? '分層切分保留少數類比例；SMOTE（A5）只能寫在 CV 訓練折內。' : '切分後在訓練集做 Z 分數標準化（A2）、Dummy 編碼（A4）與離群縮尾（A7）。', [
@@ -221,7 +222,7 @@
       ]);
       st.stage = 2;
       add(2, '3a. K-Fold 交叉驗證', '在訓練集內切成 ' + R.k + ' 折輪流驗證，算出平均 ' + metric + ' 評估模型穩定度。', [
-        R.k + '-Fold 平均 ' + metric + ' = ' + f(R.meanCv, 3)
+        R.k + '-Fold 平均 ' + metric + ' ≈ ' + f(R.meanCv, 3) + '（示意）'
       ]);
       st.cvLoop = true;
       add(4, '3b. 網格搜尋調參 (B13)', R.isTree ? '調整樹深 max_depth 與葉節點最小樣本，防止決策樹過擬合（B6/B14/B15）。' : R.isEns ? '調整樹數、學習率（B9 GBDT）或訓練多異質基模型（B12 Stacking）。' : '搜尋正則化強度 λ（B2）、k-NN 的 K（B4）或 SVM 的 C/Kernel（B10）。', [
@@ -233,10 +234,10 @@
       ]);
       st.stage = 4;
       add(5, '5a. 過擬合與解釋檢查', R.isEns ? '集成模型準確率高但較黑箱，建議搭配 I1 SHAP 與排列重要度檢查特徵合理性。' : '比較訓練分數與 CV 分數落差（B11），確認無嚴重過擬合。', [
-        'CV 平均 ' + metric + ' = ' + f(R.meanCv, 3)
+        'CV 平均 ' + metric + ' ≈ ' + f(R.meanCv, 3) + '（示意）'
       ]);
       st.stage = 5;
-      add(6, '5b. 解封測試集驗收', '最後一次解封 24 筆測試集測出真實泛化表現 ' + metric + ' = ' + f(R.testScore, 3) + '！', [
+      add(6, '5b. 解封測試集驗收', '最後一次解封 24 筆測試集測出泛化表現（本頁示意值 ' + metric + ' ≈ ' + f(R.testScore, 3) + '）。', [
         'CV = ' + f(R.meanCv, 3) + ' vs 測試 = ' + f(R.testScore, 3)
       ]);
       add(6, '生成式與多元分類', '連續特徵的貝氏與線性判別見 B17（GNB / Fisher LDA）；三類別以上疾病分期見 B18（OvR 與 Softmax 聯合最佳化）。', [
@@ -252,7 +253,8 @@
     },
     keys(steps, rows, p) {
       const R = simulate(p);
-      return { k_folds: R.k, mean_cv: R.meanCv, test_score: R.testScore, cv_0: R.cvScores[0], cv_1: R.cvScores[1], cv_2: R.cvScores[2] };
+      const nTrain = Math.round(120 * 0.8);
+      return { k_folds: R.k, n_total: 120, n_train: nTrain, n_test: 120 - nTrain, fold_size: Math.floor(nTrain / R.k), fold_extra: nTrain % R.k };
     },
     explain(steps, rows, p) {
       const R = simulate(p);
@@ -268,7 +270,7 @@
       note: 'AI Studio 的 Cross Validation 內可自由替換單一模型或集成運算子（Random Forest / GBDT / Vote / Stacking）。',
       expect: (steps, rows, p) => {
         const R = simulate(p);
-        return [R.k + '-Fold 平均 ≈ ' + f(R.meanCv, 3) + '，測試驗收 ≈ ' + f(R.testScore, 3)];
+        return ['切分 96 / 24 筆；' + R.k + ' 折每折約 ' + Math.floor(96 / R.k) + ' 筆（分數為示意值）'];
       },
       python: 'from sklearn.model_selection import train_test_split, GridSearchCV\n# 依模型家族組合 Pipeline 與 GridSearchCV',
       confirmed: false

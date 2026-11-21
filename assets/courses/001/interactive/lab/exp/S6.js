@@ -21,8 +21,12 @@
     const method = p.method || 'stat';
     const isMl = method === 'ml_lag';
     const isDl = method === 'dl_seq';
-    const maes = [14.2, 11.8, 12.5];
-    return { method, isMl, isDl, maes, meanMae: M.mean(maes) };
+    /* 滾動起點驗證（真的算）：用前 t 期做簡單指數平滑（α=0.5）預測第 t+1 期，t = 3、4、5 共 3 折；基準線＝上期直接當本期 */
+    const y = rows.map(r => r.visits), alpha = 0.5;
+    const level = t => { let l = y[0]; for (let i = 1; i < t; i++) l = alpha * y[i] + (1 - alpha) * l; return l; };
+    const folds = [3, 4, 5].map(t => ({ t, fc: level(t), act: y[t], naive: y[t - 1] }));
+    const maes = folds.map(o => Math.abs(o.act - o.fc)), naiveMaes = folds.map(o => Math.abs(o.act - o.naive));
+    return { method, isMl, isDl, folds, maes, naiveMaes, meanMae: M.mean(maes), naiveMae: M.mean(naiveMaes), alpha };
   }
 
   LAB.register({
@@ -151,11 +155,11 @@
       ]);
       st.rollLoop = true;
       add(4, '5. 滾動多折驗證 (G3)', '沿時間軸往前滾動多折，計算每折前瞻預測誤差並取平均 MAE。', [
-        '3 折滾動 MAE = (' + R.maes.join(', ') + ')，平均 = ' + f(R.meanMae, 1)
+        '3 折誤差 = (' + R.maes.map(v => f(v, 1)).join(', ') + ')，平均 MAE = ' + f(R.meanMae, 1) + '（指數平滑 α=' + R.alpha + '）'
       ]);
       st.rollLoop = false; st.stage = 4;
       add(5, '6. 還原尺度與未來預測', '若有做差分或標準化，最後務必累加還原成真實門診人次，再與「上期直接當本期」基準比較。', [
-        '滾動平均 MAE = ' + f(R.meanMae, 1) + ' 人次'
+        '指數平滑 MAE = ' + f(R.meanMae, 1) + ' vs 上期當本期 = ' + f(R.naiveMae, 1) + ' 人次' + (R.meanMae < R.naiveMae ? '（較準）' : '（沒有比基準線好）')
       ]);
       add(5, 'STL 分解與滯後 (G4)', '實務強烈建議先跑 G4：拆出趨勢 Tₜ、季節 Sₜ 與突發異常殘差 Rₜ，再用 Windowing 轉成 Lag-1/Lag-2 表格特徵！', [
         '對應實驗：G4 季節分解 STL 與滯後特徵工程'
@@ -174,7 +178,7 @@
     keys(steps, rows, p) {
       const R = simulate(rows, p);
       return {
-        n_rows: rows.length, mean_mae: R.meanMae,
+        n_rows: rows.length, mean_mae: R.meanMae, naive_mae: R.naiveMae,
         mae_0: R.maes[0], mae_1: R.maes[1], mae_2: R.maes[2],
         mean_visits: M.mean(rows.map(r => r.visits))
       };

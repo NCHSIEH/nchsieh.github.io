@@ -245,10 +245,10 @@
         '單模最高 = ' + LAB.pct(Math.max(R.accLog, R.accTree, R.accKnn), 1) + '｜集成 = ' + LAB.pct(isStack ? R.accStack : (p.soft ? R.accSoft : R.accHard), 1)
       ]);
 
-      add(6, '基模型多樣性是關鍵', '集成之所以變準，是因為三個模型幾何假設不同（斜線、軸切、局部鄰居），犯錯位置互補；把三個相同模型投票毫無幫助！', [
+      add(6, '基模型多樣性是關鍵', (Math.max(R.accHard, R.accSoft, R.accStack) > Math.max(R.accLog, R.accTree, R.accKnn) + 1e-9 ? '集成超過最佳單模，因為三個模型幾何假設不同（斜線、軸切、局部鄰居），犯錯位置互補；三個相同模型投票毫無幫助！' : '本例集成沒有超過最佳單模（最高 ' + LAB.pct(Math.max(R.accLog, R.accTree, R.accKnn), 1) + '）。這是訓練集上的準確率，集成的價值多在新資料上更穩定；三個模型假設不同才有互補空間。'), [
         'Logistic ' + LAB.pct(R.accLog, 0) + '｜樹樁 ' + LAB.pct(R.accTree, 0) + '｜3-NN ' + LAB.pct(R.accKnn, 0)
       ]);
-      add(6, '硬投票 vs 軟機率投票', '硬投票只看 0/1 票數；軟投票平均預測機率，能保留「高信心 vs 勉強過半」的細微差異，實務常勝過硬投票。', [
+      add(6, '硬投票 vs 軟機率投票', '硬投票只看 0/1 票數；軟投票平均預測機率，保留「高信心 vs 勉強過半」的差異。' + (R.accSoft > R.accHard + 1e-9 ? '本例軟投票較準。' : R.accSoft < R.accHard - 1e-9 ? '本例硬投票反而較準（只有 ' + rows.length + ' 筆，差一筆就差 ' + LAB.pct(1 / rows.length, 0) + '）。' : '本例兩者一樣準。'), [
         'Hard Voting = ' + LAB.pct(R.accHard, 1) + '｜Soft Voting = ' + LAB.pct(R.accSoft, 1)
       ]);
       add(6, '防過擬合：折外預測', '注意：本示範在訓練集直接算 3-NN 會含自身點而偏高！實務 Stacking 必用 K-Fold 折外預測（Out-of-Fold）訓練 Meta-Learner。', [

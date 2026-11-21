@@ -177,10 +177,10 @@
           h('span', { class: 'tag gray', 'data-tip': '本實驗使用固定亂數種子產生的教學模擬資料，可點「換一組資料」或直接修改表格數值' }, '模擬資料'),
           h('span', { class: 'tag blue' }, def.data.scenario || '')))),
       elParams, ctl, elErr,
-      ...(isWideMain ? [h('div', { style: 'margin-bottom:14px' }, pMain)] : []),
-      h('div', { class: 'lab-work' },
+      ...(isWideMain ? [h('div', { style: 'margin-bottom:14px' }, pMain, h('div', { style: 'margin-top:14px' }, pBottom))] : []),
+      h('div', { class: 'lab-work' + (isWideMain ? ' wm' : '') },
         h('div', { class: 'col l' }, h('div', { class: 'pane' }, h('h3', null, '資料', canEdit ? h('span', { class: 'tag gray', style: 'margin-left:6px;font-weight:500', 'data-tip': '點擊表格內的數值即可直接修改，即時測試極端值或邊界個案對結果的影響' }, '可改值') : null, elDataCnt), elData, elDataNote), h('div', { class: 'pane' }, h('h3', null, '演算法步驟'), elPseudo)),
-        h('div', { class: 'col c' }, isWideMain ? null : pMain, pBottom),
+        isWideMain ? null : h('div', { class: 'col c' }, pMain, pBottom),
         h('div', { class: 'col r' }, stepBox, pSide)),
       exSec, aisSec, navRow());
 

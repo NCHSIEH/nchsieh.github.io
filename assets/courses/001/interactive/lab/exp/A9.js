@@ -53,6 +53,7 @@
     return Maug.map(row => row[m]);
   }
 
+  /* VIF_j = 相關矩陣反矩陣的第 j 個對角元（等同「第 j 欄對其他欄做迴歸的 1/(1−R²)」），不設上限 */
   function computeVifs(featMap, keys) {
     const k = keys.length;
     if (k <= 1) return keys.map(fk => ({ key: fk, r2: 0, vif: 1 }));
@@ -61,15 +62,9 @@
       const xs = featMap[fk], m = M.mean(xs), s = M.sd(xs) || 1;
       Z[fk] = xs.map(v => (v - m) / s);
     });
-    return keys.map(targetKey => {
-      const others = keys.filter(x => x !== targetKey);
-      const m = others.length;
-      const G = M.range(m, i => M.range(m, j => corr(Z[others[i]], Z[others[j]]) + (i === j ? 1e-6 : 0)));
-      const rhs = others.map(ok => corr(Z[ok], Z[targetKey]));
-      const beta = solveLinear(G, rhs);
-      const r2 = Math.max(0, Math.min(0.995, M.sum(beta.map((b, i) => b * rhs[i]))));
-      return { key: targetKey, r2, vif: 1 / (1 - r2) };
-    });
+    const C = M.range(k, i => M.range(k, j => corr(Z[keys[i]], Z[keys[j]])));
+    const cols = M.range(k, j => solveLinear(C, M.range(k, i => (i === j ? 1 : 0))));
+    return keys.map((key, i) => { const v = Math.max(1, cols[i][i]); return { key, r2: 1 - 1 / v, vif: v }; });
   }
 
   function analyze(rows, p) {

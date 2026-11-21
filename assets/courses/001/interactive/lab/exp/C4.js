@@ -183,7 +183,7 @@
       [2, 4, 7, 11, 15].forEach(it => {
         st.iter = it;
         const h = R.hist[it];
-        add(5, '第 ' + it + ' 輪 EM', it === 15 ? '經過 15 輪 EM 迭代，對數概似收斂，各群高斯曲線貼合資料分布。' : '繼續交替 E 步與 M 步，曲線逐步移往資料密集處。', [
+        add(5, '第 ' + it + ' 輪 EM', it === 15 ? '經過 15 輪 EM，對數概似最後一輪只變動 ' + f(Math.abs(R.hist[15].ll - R.hist[14].ll), 4) + (Math.abs(R.hist[15].ll - R.hist[14].ll) < 1e-3 ? '，已大致收斂。' : '，尚未完全收斂；實務會跑到變動小於門檻才停。') : '繼續交替 E 步與 M 步，曲線逐步移往資料密集處。', [
           'μ = (' + h.means.map(v => f(v, 2)).join(', ') + ')｜π = (' + h.weights.map(v => f(v, 2)).join(', ') + ')',
           'Log-Likelihood = ' + f(h.ll, 3)
         ], { phase: it + ' / ' + MAX_ITER });

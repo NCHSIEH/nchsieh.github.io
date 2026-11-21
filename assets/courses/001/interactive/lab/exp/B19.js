@@ -262,7 +262,7 @@
 
       st.showCal = true;
       if (R.method === 'platt') {
-        add(6, '6. Platt 校準', '對原始機率的 log-odds 再擬合一層 1D Logistic 迴歸 p′ = σ(a·logit(p) + b)，斜率 a < 1 把過度極端的機率溫和拉回中間！', [
+        add(6, '6. Platt 校準', '對原始機率的 log-odds 再擬合 1D Logistic 迴歸 p′ = σ(a·logit(p) + b)。' + (R.platt.a < 1 ? 'a < 1：把過度極端的機率拉回中間。' : 'a > 1：把過度保守的機率拉開。'), [
           '學得參數：a = ' + f(R.platt.a, 3) + '，b = ' + f(R.platt.b, 3),
           'Platt Brier = ' + f(R.bsPlatt, 4) + '｜ECE = ' + f(R.relPlatt.ece, 4)
         ]);

@@ -224,10 +224,15 @@
         );
       });
 
+      const calcDone = new Set();
       R.details.forEach((d, idx) => {
         st.cur = { idx: d.idx, id: d.id, col: d.col };
         st.barCol = d.col;
-        if (p.method === 'mean') {
+        const reuse = p.method !== 'knn' && calcDone.has(d.col);
+        calcDone.add(d.col);
+        if (reuse) {
+          /* 平均數／中位數：同一欄的補值都一樣，不重算，直接填入 */
+        } else if (p.method === 'mean') {
           add(3, '計算：' + d.id + '號' + FLAB[d.col], '將' + FLAB[d.col] + '現有 ' + d.st.vals.length + ' 筆數值相加除以筆數。', [
             '總和 ÷ ' + d.st.vals.length + ' = ' + f(M.sum(d.st.vals), 1) + ' ÷ ' + d.st.vals.length,
             '補值 = ' + f(d.val, 2)
@@ -245,7 +250,7 @@
           ], { phase: (idx + 1) + ' / ' + R.details.length });
         }
         st.filled.add(d.idx + '_' + d.col);
-        add(6, '填入：' + d.id + '號' + FLAB[d.col], '將算出的 ' + f(d.val, 2) + ' 填入 ' + d.id + ' 號病人的' + FLAB[d.col] + '欄。', [
+        add(6, '填入：' + d.id + '號' + FLAB[d.col], reuse ? FLAB[d.col] + '的補值對每位病人都一樣（同一欄只算一次），直接把 ' + f(d.val, 2) + ' 填入 ' + d.id + ' 號。' : '將算出的 ' + f(d.val, 2) + ' 填入 ' + d.id + ' 號病人的' + FLAB[d.col] + '欄。', [
           d.id + '號 ' + FLAB[d.col] + ' ← ' + f(d.val, 2)
         ], { phase: (idx + 1) + ' / ' + R.details.length });
       });

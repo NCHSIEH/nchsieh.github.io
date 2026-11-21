@@ -407,7 +407,7 @@
         ]);
 
         st.phase = 'compare'; st.showDiff = true;
-        add(6, '8. 量化樂觀灌水偏差', '比較兩條管線：錯誤作法讓測試分數虛高了 ' + LAB.pct(Math.max(0, RT.bias), 1) + '！上線後準確率會瞬間雪崩。', [
+        add(6, '8. 量化樂觀灌水偏差', '比較兩條管線：錯誤作法讓測試分數虛高 ' + LAB.pct(Math.max(0, RT.bias), 1) + '。測試集只有 6 筆（1 筆 = 16.7 個百分點），重點看方向，不看精確數字。', [
           '❌ 洩漏 ' + LAB.pct(RT.accLeak, 1) + ' vs ✅ 真實 ' + LAB.pct(RT.accClean, 1) + '（灌水 +' + LAB.pct(Math.max(0, RT.bias), 1) + '）'
         ]);
       } else if (mode === 'smote') {

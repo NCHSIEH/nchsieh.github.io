@@ -32,6 +32,7 @@ body.lab{font-size:17px}
 
 /* ---------- 三欄工作區 ---------- */
 .lab-work{display:grid;grid-template-columns:320px minmax(0,1fr) 380px;gap:14px;align-items:start}
+.lab-work.wm{grid-template-columns:380px minmax(0,1fr)}
 .pane{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;min-width:0}
 .pane>h3{font-size:13px;letter-spacing:.08em;color:var(--faint);margin:0 0 8px;font-weight:700;display:flex;align-items:center;gap:8px}
 .pane>h3 .cnt{margin-left:auto;font-weight:500;letter-spacing:0}
@@ -183,7 +184,7 @@ table.kv td.m{font-family:var(--mono)}
 .lv-bar .bt{background:#f1eee7;border-radius:999px;height:18px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.05)} .lv-bar i{display:block;height:100%;background:var(--k,var(--accent));border-radius:999px;transition:width .45s var(--ease),background .3s}
 .lv-bar .bv{font-family:var(--mono);min-width:3.4em;text-align:right} .lv-bar.is-hl .bl{font-weight:700;color:var(--k,var(--hl))} .lv-bar.is-hl .bt{outline:2px solid var(--k,var(--hl));outline-offset:1px} .lv-bar.is-dim{opacity:.35}
 
-.lv-tscroll{overflow:auto;border:1px solid var(--line);border-radius:8px;max-height:430px} .lv-tscroll.s-side{max-height:292px} .lv-tscroll.s-bottom{max-height:260px}
+.lv-tscroll{overflow:auto;border:1px solid var(--line);border-radius:8px;max-height:430px} .lv-tscroll.s-side{max-height:292px} .lv-tscroll.s-bottom{max-height:340px}
 .lv-table{border-collapse:collapse;width:100%;font-size:14.5px}
 .lv-table th{position:sticky;top:0;z-index:1;background:#f1eee7;font-size:12.5px;font-weight:600;color:var(--muted);padding:5px 8px;text-align:left;white-space:nowrap;line-height:1.3}
 .lv-table th small{display:block;font-weight:400;font-size:11px;color:var(--faint)} .lv-table th.num{text-align:right} .lv-table th.hc{background:var(--hls);color:var(--hl)}

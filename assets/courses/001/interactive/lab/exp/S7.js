@@ -19,7 +19,30 @@
   function simulate(rows, p) {
     const isFp = p.algo === 'fpgrowth';
     const isSeq = p.algo === 'prefixspan';
-    return { isFp, isSeq, nTx: rows.length, minSup: 0.25, minConf: 0.6, topLift: 1.85 };
+    /* 真的跑一次 Apriori：逐層找 support ≥ minSup 的項目集，再拆成規則 A→B 算 confidence、lift */
+    const minSup = 0.25, minConf = 0.6, n = rows.length;
+    const tx = rows.map(r => r.items.split('、'));
+    const sup = set => tx.filter(t => set.every(x => t.includes(x))).length / n;
+    let level = [...new Set(tx.flat())].sort().map(x => [x]).filter(s0 => sup(s0) >= minSup), freq = level.slice();
+    while (level.length) {
+      const next = [], seen = new Set();
+      level.forEach(a => level.forEach(b => {
+        const u = [...new Set([...a, ...b])].sort();
+        if (u.length === a.length + 1 && !seen.has(u.join('|')) && sup(u) >= minSup) { seen.add(u.join('|')); next.push(u); }
+      }));
+      freq = freq.concat(next); level = next;
+    }
+    const rules = [];
+    freq.filter(s0 => s0.length >= 2).forEach(s0 => {
+      for (let mask = 1; mask < (1 << s0.length) - 1; mask++) {
+        const A = s0.filter((_, i) => mask & (1 << i)), B = s0.filter((_, i) => !(mask & (1 << i)));
+        const conf = sup(s0) / sup(A), lift = conf / sup(B);
+        if (conf >= minConf) rules.push({ A, B, sup: sup(s0), conf, lift });
+      }
+    });
+    rules.sort((a, b) => b.lift - a.lift || b.conf - a.conf || b.sup - a.sup);
+    const top = rules[0] || null;
+    return { isFp, isSeq, nTx: n, minSup, minConf, nFreq: freq.length, nRules: rules.length, top, topLift: top ? top.lift : 0, topConf: top ? top.conf : 0 };
   }
 
   LAB.register({
@@ -81,7 +104,7 @@
             { id: 'wkr', label: '5b. 剔除低信賴規則', value: 'conf < 0.60', shape: 'box', w: 142, cls: st.stage >= 3 ? 'c4' : 'c5', hl: act(3), sub: '條件機率過低不採納' }
           ],
           [
-            { id: 'lift', label: '6a. Lift / Kulc 驗收', value: st.stage >= 4 ? 'Lift=' + R.topLift : '抗零交易', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'D4 Kulczynski / Zhang' },
+            { id: 'lift', label: '6a. Lift / Kulc 驗收', value: st.stage >= 4 ? (R.top ? 'Lift=' + f(R.topLift, 2) : '無規則') : '抗零交易', shape: 'box', w: 142, cls: clsOf(4), hl: act(4), sub: 'D4 Kulczynski / Zhang' },
             { id: 'drop', label: '6b. 負關聯 / 假關聯', value: 'A→¬B 互斥', shape: 'box', w: 142, cls: st.stage >= 4 ? 'bad' : 'c5', hl: act(4), sub: 'D4 區分假關聯與禁忌' }
           ]
         ];
@@ -146,7 +169,7 @@
       ]);
       st.stage = 4;
       add(4, '5. Lift 過濾陷阱', '計算增益度 Lift = Confidence ÷ Support(B)。只有 Lift > 1 才代表開 A 真的會提高開 B 的機率！', [
-        '範例強規則 Lift = ' + R.topLift + '（> 1，具正關聯）'
+        R.top ? ('最強規則 ' + R.top.A.join('+') + ' → ' + R.top.B.join('+') + '：Conf ' + f(R.top.conf, 2) + '、Lift ' + f(R.top.lift, 2) + (R.top.lift > 1 ? '（> 1，正關聯）' : '（≤ 1，沒有關聯）')) : '這 ' + R.nTx + ' 張處方沒有規則達到門檻，可調低 min_sup 或 min_conf'
       ]);
       st.stage = 5;
       add(5, '6. 臨床檢核部署', '高 Lift 規則還要經藥師／醫師檢核（區分「標準併用療法」與「潛在交互作用提醒」）。', [
@@ -170,7 +193,7 @@
       const R = simulate(rows, p);
       return {
         n_tx: R.nTx, min_sup: R.minSup, min_conf: R.minConf,
-        top_lift: R.topLift, mean_items: M.mean(rows.map(r => r.n_items))
+        top_lift: R.topLift, top_conf: R.topConf, n_freq: R.nFreq, n_rules: R.nRules, mean_items: M.mean(rows.map(r => r.n_items))
       };
     },
     explain(steps, rows, p) {

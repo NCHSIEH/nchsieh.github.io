@@ -179,7 +179,7 @@
       st.foldShown = R.nFolds;
       add(5, '最佳網格組合', '網格搜尋選出平均 ' + mName + ' 最高的超參數組合：「' + R.best.label + '」。', [
         '最佳平均 ' + mName + ' = ' + f(R.best.meanScore, 3),
-        '標準化後再用全體訓練集重訓即可部署'
+        R.best.scale ? '最佳組合含標準化：用全體訓練集的平均與標準差縮放後重訓即可部署' : '最佳組合用原始單位，不需縮放；同分時取先評估的組合'
       ]);
       return steps;
     },

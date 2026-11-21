@@ -6,19 +6,26 @@
     { key: 'id', label: '#', type: 'int' },
     { key: 'bmi', label: 'BMI', type: 'num' },
     { key: 'glu', label: '血糖', type: 'num' },
-    { key: 'prob', label: '預測機率', type: 'num' }
+    { key: 'prob', label: '預測機率', type: 'num' },
+    { key: 'dm', label: '糖尿病', type: 'bin' }
   ];
 
   function makeRows(seed) {
     return LAB.data.clinic(seed, 8).map(o => ({
-      id: o.id, bmi: o.bmi, glu: o.glu,
+      id: o.id, bmi: o.bmi, glu: o.glu, dm: o.dm,
       prob: Number(M.clamp((o.glu - 85) / 80, 0.08, 0.95).toFixed(2))
     }));
   }
 
   function simulate(rows, p) {
     const isOps = p.focus_mode === 'mlops';
-    return { isOps, baseVal: 0.38, topShap: 0.29, optTh: 0.40, driftScore: 0.18 };
+    /* 都由資料實算：基準值＝平均預測機率；此模型的機率只由血糖決定，BMI 不影響輸出，
+       所以 BMI 的 SHAP＝0、血糖的 SHAP＝該病人機率−基準值（精確解）；門檻在 0.10–0.90 之間找「5×漏診＋1×誤報」最小者（同分取較小門檻） */
+    const baseVal = M.mean(rows.map(r => r.prob));
+    const ti = M.argmax(rows.map(r => r.prob)), topId = rows[ti].id, topShap = rows[ti].prob - baseVal;
+    const costAt = t => rows.reduce((s0, r) => s0 + (r.prob >= t ? (r.dm === 1 ? 0 : 1) : (r.dm === 1 ? 5 : 0)), 0);
+    let optTh = 0.10; for (let t = 0.10; t <= 0.9001; t += 0.05) { const tt = Math.round(t * 100) / 100; if (costAt(tt) < costAt(optTh) - 1e-9) optTh = tt; }
+    return { isOps, baseVal, topShap, topId, optTh, cost50: costAt(0.5), costOpt: costAt(optTh), driftScore: 0.18 };
   }
 
   LAB.register({
@@ -141,11 +148,11 @@
       ]);
       st.stage = 2;
       add(2, '3. 單筆 SHAP 歸因', '面對個別病人，用 SHAP 把預測機率拆成基準 φ₀ 加上每個特徵的貢獻，讓醫師知道風險來源。', [
-        '例：基準 ' + f(R.baseVal, 2) + ' + 血糖貢獻 +' + f(R.topShap, 2)
+        '例：#' + R.topId + ' 基準 ' + f(R.baseVal, 2) + ' + 血糖貢獻 +' + f(R.topShap, 2) + '（BMI 貢獻 0）'
       ]);
       st.stage = 3;
-      add(3, '4. 醫療門檻校正 (B16)', '不盲從預設 p ≥ 0.50！篩檢任務漏診代價高，依 B16 PR/ROC 曲線把門檻調降至 0.40 提高 Recall。', [
-        '門檻 0.50 → 0.40，及時攔截邊緣高風險病人'
+      add(3, '4. 醫療門檻校正 (B16)', '不盲從預設 p ≥ 0.50！篩檢任務漏診代價高（本頁設漏診 5 倍於誤報），依成本找到門檻 ' + f(R.optTh, 2) + '。', [
+        '門檻 0.50 → ' + f(R.optTh, 2) + '：總成本 ' + R.cost50 + ' → ' + R.costOpt + '（8 人小樣本，僅示範算法）'
       ]);
       st.stage = 4;
       add(4, '5. 上線監控資料飄移', '上線後定期監控新進病人的特徵分布是否偏移（Data Drift）或效能是否下降（Concept Drift）。', [
@@ -173,7 +180,7 @@
       const R = simulate(rows, p);
       return {
         n_rows: rows.length, base_val: R.baseVal, top_shap: R.topShap,
-        opt_th: R.optTh, mean_prob: M.mean(rows.map(r => r.prob))
+        opt_th: R.optTh, cost_050: R.cost50, cost_opt: R.costOpt, mean_prob: M.mean(rows.map(r => r.prob))
       };
     },
     explain(steps, rows, p) {

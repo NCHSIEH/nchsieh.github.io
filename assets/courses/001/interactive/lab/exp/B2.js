@@ -205,7 +205,7 @@
       st.cur = curIdx;
       const sel = path[curIdx];
       const zeros = [0, 1, 2].filter(j => Math.abs(sel.w[j]) < 1e-6).map(j => FLAB[j]);
-      add(7, '指定 λ 總結 (λ=' + sel.lam + ')', '回到你選定的 λ = ' + sel.lam + '。' + (isLasso ? (zeros.length ? '已有係數被壓為 0：' + zeros.join('、') : '目前尚未有係數歸零，再加大 λ 就會開始歸零。') : 'Ridge 會把係數縮得很小，但不會剛好變成 0。'), [
+      add(7, '指定 λ 總結 (λ=' + sel.lam + ')', '回到你選定的 λ = ' + sel.lam + '。' + (isLasso ? (zeros.length ? '已有係數被壓為 0：' + zeros.join('、') : '目前尚未有係數歸零，再加大 λ 就會開始歸零。') : 'Ridge 把係數整體縮到 λ 最小時的 ' + LAB.pct(Math.hypot(...sel.w) / Math.hypot(...path[0].w), 0) + '，但不會剛好變成 0。'), [
         '選定 λ = ' + sel.lam + '｜係數 = (' + sel.w.map(v => f(v, 2)).join(', ') + ')',
         '訓練 MSE = ' + f(sel.mse, 2)
       ]);

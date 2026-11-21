@@ -153,9 +153,9 @@
             { key: 'fit', label: '最適合模型與防呆重點' }
           ],
           rows: [
-            { id: 'oh', cells: ['One-hot', 'k = 3 欄', { v: '有 (Σ欄=1)', cls: 'bad' }, { v: '無 (不用 y)', cls: 'good' }, '決策樹／隨機森林／有 L2 正則之模型'], hl: p.method === 'onehot' },
-            { id: 'dm', cells: ['Dummy (去一欄)', 'k − 1 = 2 欄', { v: '無 (內科作基準)', cls: 'good' }, { v: '無 (不用 y)', cls: 'good' }, 'OLS 線性迴歸／Logistic 迴歸（可解讀相對於基準組之勝算比）'], hl: p.method === 'dummy' },
-            { id: 'tg', cells: ['目標編碼 (m=' + R.m + ')', '1 欄 (連續值)', { v: '無 (單一欄)', cls: 'good' }, { v: '高 (必折內算)', cls: 'bad' }, '高基數類別（如數百個診斷碼 ICD）；嚴禁切分前用全資料計算'], hl: p.method === 'target' }
+            { id: 'oh', cells: ['One-hot', 'k = 3 欄', { v: '有 (Σ欄=1)', cls: 'bad' }, { v: '無 (不用 y)', cls: 'good' }, '樹模型、有 L2 正則的模型'], hl: p.method === 'onehot' },
+            { id: 'dm', cells: ['Dummy (去一欄)', 'k − 1 = 2 欄', { v: '無 (內科作基準)', cls: 'good' }, { v: '無 (不用 y)', cls: 'good' }, '線性／Logistic 迴歸（勝算比對基準組）'], hl: p.method === 'dummy' },
+            { id: 'tg', cells: ['目標編碼 (m=' + R.m + ')', '1 欄 (連續值)', { v: '無 (單一欄)', cls: 'good' }, { v: '高 (必折內算)', cls: 'bad' }, '高基數類別（如 ICD）；須折內計算'], hl: p.method === 'target' }
           ]
         };
         return [main, side, bottom];
