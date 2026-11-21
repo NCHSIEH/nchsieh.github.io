@@ -260,6 +260,35 @@ button,input,select,textarea{font:inherit;color:inherit}
 @media (max-width:640px){.story-grid{grid-template-columns:1fr}}
 
 @media(max-width:760px){body *{min-width:0}.head,.head-top,.rm-box,.rm-flow,.rm-fstep,.rm-ftxt,.rm-box h3,.pill{max-width:100%;white-space:normal;overflow-wrap:anywhere}.head-top{flex-wrap:wrap}table.tbl,table.rm-data-tbl{display:block;overflow-x:auto;max-width:100%}}
+
+/* 頂欄跨工作台導航與一鍵清除高對比按鈕 */
+.oneclick.nav-hub{text-decoration:none;border:1.5px solid var(--brand);background:var(--brand);color:#fff!important;font-weight:700}
+.oneclick.nav-hub:hover{background:var(--brand-deep,#142943);border-color:var(--brand-deep,#142943);color:#fff!important}
+.oneclick.nav-sib{text-decoration:none;border:1.5px solid var(--brand);background:var(--brand-soft,var(--brand-tint));color:var(--brand-deep,var(--brand))!important;font-weight:700}
+.oneclick.nav-sib:hover{background:var(--brand);color:#fff!important}
+.oneclick.clr{border:1.5px solid #b91c1c!important;background:#fee2e2!important;color:#991b1b!important;font-weight:700!important}
+.oneclick.clr:hover{background:#b91c1c!important;color:#fff!important;border-color:#991b1b!important}
+@media (prefers-color-scheme: dark){
+  .oneclick.nav-hub{background:#2563eb;border-color:#60a5fa;color:#fff!important}
+  .oneclick.nav-sib{background:rgba(122,167,217,.16);border-color:#7aa7d9;color:#e2eefc!important}
+  .oneclick.clr{background:rgba(220,38,38,.25)!important;border-color:#f87171!important;color:#fecaca!important}
+  .oneclick.clr:hover{background:#dc2626!important;color:#fff!important}
+}
+
+
+.rm-focus-hd{background:var(--brand-soft);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.rm-focus-btns{display:flex;gap:8px;flex-wrap:wrap}
+button[data-clear-all],#btn_reset{border:1.5px solid #b91c1c!important;background:#fee2e2!important;color:#991b1b!important;font-weight:700!important}
+button[data-clear-all]:hover,#btn_reset:hover{background:#b91c1c!important;color:#fff!important;border-color:#991b1b!important}
+button[data-clear-step]{border:1.5px solid #b45309!important;background:#fef3c7!important;color:#92400e!important;font-weight:700!important}
+button[data-clear-step]:hover{background:#b45309!important;color:#fff!important;border-color:#92400e!important}
+@media (prefers-color-scheme: dark){
+  button[data-clear-all],#btn_reset{background:rgba(220,38,38,.25)!important;border-color:#f87171!important;color:#fecaca!important}
+  button[data-clear-all]:hover,#btn_reset:hover{background:#dc2626!important;color:#fff!important}
+  button[data-clear-step]{background:rgba(217,119,6,.25)!important;border-color:#fbbf24!important;color:#fde68a!important}
+  button[data-clear-step]:hover{background:#d97706!important;color:#fff!important}
+}
+
 </style>
 </head>
 <body>
@@ -267,11 +296,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 <button id="menu" type="button" aria-expanded="false" aria-controls="side-nav">步驟</button>
 <div class="brand">質性研究設計與分析工作台<small>研究方法論 · 3.1–3.2</small></div>
 <div id="who"></div>
-<a id="hublink" class="oneclick" href="research-workbench.html" title="回 0.0W 研究計畫整合台：看整體路線、方法帶入與跨台一致性檢查" style="text-decoration:none;border:1px solid #b3c3d3;background:rgba(255,255,255,.12);color:#fff;font-weight:700">🧭 0.0W 整合台</a><a class="oneclick" href="proposal-workbench.html" title="前往 6.0W 研究計畫書工作台" style="text-decoration:none;border:1px solid rgba(179,195,211,.55);background:transparent;color:#e8eef4">📘 6.0W 計畫書</a><a class="oneclick" href="quant-workbench.html" title="前往 2.0W 量性研究設計工作台" style="text-decoration:none;border:1px solid rgba(179,195,211,.55);background:transparent;color:#e8eef4">📊 2.0W 量性</a>
+<a id="hublink" class="oneclick nav-hub" href="research-workbench.html" title="回 0.0W 研究計畫整合台：看整體路線、方法帶入與跨台一致性檢查">🧭 0.0W 整合台</a><a class="oneclick nav-sib" href="proposal-workbench.html" title="前往 6.0W 研究計畫書工作台">📘 6.0W 計畫書</a><a class="oneclick nav-sib" href="quant-workbench.html" title="前往 2.0W 量性研究設計工作台">📊 2.0W 量性</a>
 <div class="prog" id="prog"><i></i><span id="progt"></span></div>
 <button type="button" id="btn_readme" class="oneclick" style="border-color:var(--brand);background:var(--brand-soft);color:var(--brand-deep)">📖 9種取徑 README 總覽</button>
 <button type="button" id="oneclick" class="oneclick">⚡ 一鍵匯入目前取徑範例</button>
-<button type="button" id="btn_clear_all" class="oneclick" style="border-color:var(--bad);background:var(--bad-soft);color:var(--bad)">🗑️ 一鍵清除</button>
+<button type="button" id="btn_clear_all" class="oneclick clr">🗑️ 一鍵清除</button>
 <label class="vh" for="sy">我卡在哪裡</label><select id="sy"></select>
 </div></header>
 <div class="shell"><nav id="side-nav" aria-label="設計步驟"><div id="stepnav"></div><p class="saved" id="saved"></p></nav><main id="work"></main></div>
@@ -547,7 +576,7 @@ function renderTop(){
     who.innerHTML = `<span class="pill ac">${esc(d.short)}</span>
       <span class="pill">${esc(d.cat)}</span>
       <span class="pill ok">${esc(d.guideline.split("／")[0].split(" ")[0])}</span>` +
-      (filled(S.title) ? `<span class="pill" style="background:${isSamp?"rgba(217,119,6,.22)":"rgba(16,185,129,.22)"};color:#fff;border:1px solid rgba(255,255,255,.35)">${isSamp?"📌 範例演練中":"✓ 自訂草稿"}</span>` : "");
+      (filled(S.title) ? `<span class="pill ${isSamp?"ac":"ok"}">${isSamp?"📌 範例演練中":"✓ 自訂草稿"}</span>` : "");
   }
   const pr = totalProg();
   const bar = document.querySelector("#prog i");

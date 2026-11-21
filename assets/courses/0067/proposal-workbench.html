@@ -278,6 +278,21 @@ body::before{background:var(--panel)}
 .pcard-meta{font-size:12.8px;color:var(--muted);line-height:1.55;background:var(--field);padding:7px 9px;border-radius:7px;border:1px solid var(--line)}
 .pcard-acts{display:flex;gap:6px;flex-wrap:wrap}
 
+
+/* 頂欄跨工作台導航與一鍵清除高對比按鈕 */
+.oneclick.nav-hub{text-decoration:none;border:1.5px solid var(--brand);background:var(--brand);color:#fff!important;font-weight:700}
+.oneclick.nav-hub:hover{background:var(--brand-deep,#142943);border-color:var(--brand-deep,#142943);color:#fff!important}
+.oneclick.nav-sib{text-decoration:none;border:1.5px solid var(--brand);background:var(--brand-soft,var(--brand-tint));color:var(--brand-deep,var(--brand))!important;font-weight:700}
+.oneclick.nav-sib:hover{background:var(--brand);color:#fff!important}
+.oneclick.clr{border:1.5px solid #b91c1c!important;background:#fee2e2!important;color:#991b1b!important;font-weight:700!important}
+.oneclick.clr:hover{background:#b91c1c!important;color:#fff!important;border-color:#991b1b!important}
+@media (prefers-color-scheme: dark){
+  .oneclick.nav-hub{background:#2563eb;border-color:#60a5fa;color:#fff!important}
+  .oneclick.nav-sib{background:rgba(122,167,217,.16);border-color:#7aa7d9;color:#e2eefc!important}
+  .oneclick.clr{background:rgba(220,38,38,.25)!important;border-color:#f87171!important;color:#fecaca!important}
+  .oneclick.clr:hover{background:#dc2626!important;color:#fff!important}
+}
+
 </style>
 </head>
 <body>
@@ -285,12 +300,12 @@ body::before{background:var(--panel)}
 <button id="menu" type="button" aria-expanded="false" aria-controls="side-nav">步驟</button>
 <div class="brand">研究計畫書工作台<small>研究方法論 · 6.0</small></div>
 <div id="who"></div>
-<a id="hublink" class="oneclick" href="research-workbench.html" title="回 0.0W 研究計畫整合台：看整體路線、方法帶入與跨台一致性檢查" style="text-decoration:none;border:1px solid #b3c3d3;background:rgba(255,255,255,.12);color:#fff;font-weight:700">🧭 0.0W 整合台</a>
-<a class="oneclick" href="quant-workbench.html" title="前往 2.0W 量性研究設計工作台" style="text-decoration:none;border:1px solid rgba(179,195,211,.55);background:transparent;color:#e8eef4">📊 2.0W 量性</a>
-<a class="oneclick" href="qual-workbench.html" title="前往 3.0W 質性研究設計工作台" style="text-decoration:none;border:1px solid rgba(179,195,211,.55);background:transparent;color:#e8eef4">🎙️ 3.0W 質性</a>
+<a id="hublink" class="oneclick nav-hub" href="research-workbench.html" title="回 0.0W 研究計畫整合台：看整體路線、方法帶入與跨台一致性檢查">🧭 0.0W 整合台</a>
+<a class="oneclick nav-sib" href="quant-workbench.html" title="前往 2.0W 量性研究設計工作台">📊 2.0W 量性</a>
+<a class="oneclick nav-sib" href="qual-workbench.html" title="前往 3.0W 質性研究設計工作台">🎙️ 3.0W 質性</a>
 <div class="prog" id="prog"><i></i><span id="progt"></span></div>
 <button type="button" id="oneclick" class="oneclick">⚡ 一鍵匯入範例</button>
-<button type="button" id="btn_clear_all" class="oneclick" style="border-color:#e2a0a0;background:rgba(155,44,44,.18);color:#ffdcdc">🗑️ 一鍵清除</button>
+<button type="button" id="btn_clear_all" class="oneclick clr">🗑️ 一鍵清除</button>
 <label class="vh" for="sy">我卡在哪裡</label><select id="sy"></select>
 </div></header>
 <div class="shell"><nav id="side-nav" aria-label="撰寫步驟"><div id="stepnav"></div><p class="saved" id="saved"></p></nav><main id="work"></main></div>
@@ -878,7 +893,7 @@ body::before{background:var(--panel)}
     });
     h += '<section class="card soft" id="demo"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">' +
       '<h3 style="margin:0">⚡ 一鍵匯入完整範例：21 套 100% 填好且通過檢核的計畫書</h3>' +
-      '<button type="button" class="btn ghost small" id="setup-clr" style="border-color:var(--bad);color:var(--bad)">🗑️ 清空全部已填內容（從零開始）</button></div>' +
+      '<button type="button" class="btn ghost small" id="setup-clr" class="btn small oneclick clr">🗑️ 清空全部已填內容（從零開始）</button></div>' +
       '<p style="margin-top:6px">每套範例均完整填妥 S1 構想表、M1–M10 各章節、變項表、偏差表、甘特圖、中英文摘要、IRB 送審文件與 APA 7 參考文獻（一致性檢查 0 缺失）。點選即可匯入對照模仿或直接匯出 Word。</p>' +
       '<div class="p-flts">' + flts.map(function (f) { return '<button type="button" class="p-flt' + (curFlt === f[0] ? ' on' : '') + '" data-pflt="' + f[0] + '">' + esc(f[1]) + '</button>'; }).join('') + '</div>' +
       '<span class="confirm" id="loadq-c" hidden style="margin-bottom:10px"><span id="loadq-t"></span><button type="button" class="btn small" id="loadq-y">確定匯入</button><button type="button" class="btn ghost small" id="loadq-n">取消</button></span>' +
@@ -912,7 +927,7 @@ body::before{background:var(--panel)}
       (c ? '<span class="fine">參考範例：<b>' + esc(c.label) + '</b></span>' : '') +
       '</div><div class="ctx-acts">' +
       (c ? '<button type="button" class="btn ghost small" id="ctx-fill" title="只將「' + esc(c.label) + '」在此步驟的內容帶入下方欄位，不影響其他步驟">⚡ 帶入本型範例至本步</button>' : '') +
-      '<button type="button" class="btn ghost small" id="ctx-clr" style="color:var(--bad);border-color:var(--line-strong)">🧹 清空本步欄位</button>' +
+      '<button type="button" class="btn ghost small" id="ctx-clr" class="btn small oneclick clr">🧹 清空本步欄位</button>' +
       '</div></div>';
   }
   function fillStepFromCase(id, pk) {
