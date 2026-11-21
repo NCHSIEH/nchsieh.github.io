@@ -193,3 +193,9 @@ details.details-note li{margin-bottom:4px}
 .labbox .sec{display:block;margin-top:2px}
 .lablink{margin:16px 0 4px;padding:9px 14px;border:1px dashed #9cc7bd;border-radius:10px;background:#f6fbf9;font-size:14px;line-height:1.8}
 .lablink b{color:#0d747e}
+/* 2026-11-21 響應式修正：互動框內容過寬時在框內左右捲動，不讓整頁橫移 */
+.wd{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+section.part{min-width:0}
+.layout>*{min-width:0}
+@media (max-width:640px){label.ctl{white-space:normal;flex-wrap:wrap;row-gap:4px}.wd{padding:12px 10px}table.dt{font-size:13px}table.dt th,table.dt td{padding:4px 6px}}
+@media (max-width:640px){.tag{white-space:normal;max-width:100%;display:inline-block}}

@@ -141,7 +141,7 @@ function render(){ const box=$('#mods'); box.innerHTML=''; MODULES.filter(m=>cur
   $('#filters').innerHTML=''; tags.forEach(t=>$('#filters').append(h('button',{class:'btn sm'+(t===cur?' on':''),onclick:()=>{cur=t;render();}},t))); }
 render();
 EXTRAS.forEach(m=>$('#extras').append(card(m)));
-$('#sum').textContent=`共 ${MODULES.length} 個單元 · ${MODULES.filter(m=>m.status==='live').length} 個互動版上線 · 子單元入口已預留`;
+$('#sum').textContent=`共 ${MODULES.length} 個單元 · ${MODULES.filter(m=>m.status==='live').length} 個互動版上線 · 點子單元可直接跳到該節`;
 </script>
 </body>
 </html>

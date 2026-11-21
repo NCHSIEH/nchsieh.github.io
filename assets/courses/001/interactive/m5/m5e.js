@@ -80,7 +80,7 @@
   CaseLinks('w-opt', [
     ['[5] Kingma & Ba ICLR 2015（Adam 自適應動量優化器原始論文）', 'https://arxiv.org/abs/1412.6980']]);
   CaseLinks('w-tl', [
-    ['[6] Mei et al. Radiology: AI 2022（RadImageNet 135 萬張醫療影像預訓練遷移學習基準）', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9530756/']]);
+    ['[6] Mei et al. Radiology: AI 2022（RadImageNet 135 萬張醫療影像預訓練遷移學習基準）', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9530758/']]);
 
   function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
