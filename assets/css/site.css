@@ -919,6 +919,10 @@ a.file-name.file-web { color: var(--accent-deep, var(--accent)); }
 a.file-name.file-web::after { content: "網頁 ↗"; display: inline-block; margin-left: 8px; padding: 0 7px; border-radius: 999px;
   font-size: 11px; font-weight: 700; line-height: 1.7; vertical-align: 1px; color: var(--accent); background: var(--accent-tint); }
 a.file-name.file-web:hover { color: var(--accent); }
+/* 緊接在講義列之後的網頁教材（如導讀與練習資料）視為附屬：縮排、縮小、不加粗，避免壓過講義主列 */
+.file-item:not(.file-item-web) + .file-item-web { padding: 2px 0 8px 14px; border-bottom-style: solid; }
+.file-item:not(.file-item-web) + .file-item-web a.file-name.file-web { font-size: 12.5px; font-weight: 500; opacity: .85; }
+.file-item:not(.file-item-web) + .file-item-web a.file-name.file-web::after { font-size: 10px; font-weight: 600; padding: 0 6px; background: transparent; border: 1px solid var(--accent-tint); }
 .materials-preview .file-name { overflow-wrap: anywhere; }
 .materials-preview-note { color: var(--faint); font-size: 12px; margin-top: 10px; }
 .file-size { color: var(--faint); font-size: 11.5px; font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
