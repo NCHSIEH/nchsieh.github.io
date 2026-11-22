@@ -73,18 +73,20 @@
       [15, '1.15', '2026/6', '安全', '修補外掛服務路徑穿越漏洞 CVE-2026-41948；docker-compose 設定檔有變，自訂過的要重新套用'],
       [16, '1.16', '2026/7', '新功能', '支援新版 MCP 協定（2025-06-18）；1.16.1 另有多項安全強化'],
       [17, '1.17', '2026/9', '要處理', '1.17.1 修正匯入時文件內容被悄悄改動——只對新匯入有效，舊文件要重新匯入；API 金鑰可限定單一知識庫'],
-      [18, '1.18', '2026/10', '行為改變', 'Agent 輸出路由、Agent 知識庫（Beta）；移除舊 Agent 的 AskHuman 工具，舊表單不能續跑']];
+      [18, '1.18', '2026/10', '行為改變', 'Agent 輸出路由、Agent 知識庫（Beta）；移除舊 Agent 的 AskHuman 工具，舊表單不能續跑'],
+      [19, '1.19', '2026/11', '要處理', 'App 匯出改為 package v2 格式（舊版匯入器可能拒收）；巢狀 Workflow Tool 的執行步驟可被外部追蹤；追蹤相關設定改名、有 6 個資料庫遷移；EPUB／EML／DOCX／CSV／Markdown／Notion 解析有修正，受影響的文件要重新匯入；另含數項安全強化', true],
+      [20, '1.20', '2026/11', '行為改變', 'shared.env 不再載入（設定要搬到 api-worker.env）、OPENAPI_ENABLED 預設改為 true；新增 Slack／Teams 等人工審核通知、OpenTelemetry 追蹤、知識庫上傳掃毒（預設關閉）；Langfuse 舊端點 11/16 已停用，要升級才送得出追蹤；另含數項安全強化', true]];
     const TC = { '安全': C.bad, '要處理': '#b7791f', '行為改變': '#b7791f', '新功能': 'var(--muted)' };
     let v = 12; const res = h('div');
     function draw() {
       res.innerHTML = '';
-      const L = R.filter(r => r[0] > v), sec = L.filter(r => r[3] === '安全').length, act = L.filter(r => r[3] === '要處理' || r[3] === '行為改變').length;
+      const L = R.filter(r => r[0] > v), sec = L.filter(r => r[3] === '安全' || r[5]).length, act = L.filter(r => r[3] === '要處理' || r[3] === '行為改變').length;
       res.append(h('div', { class: 'kpi', style: { margin: '10px 0' } }, kpi('落後的版本', L.length + ' 個', L.length > 2 ? 'bad' : L.length ? '' : 'good'), kpi('錯過的安全修補', sec + ' 個', sec ? 'bad' : 'good'), kpi('升級後要手動處理', act + ' 項', act ? 'bad' : 'good')));
-      if (!L.length) { res.append(note('已是這個工具涵蓋的最新版 v1.18；官方已出到 v1.19 以上，升級前仍要讀 Release Notes：每一兩個月一個新版本，中間還有多次修補版。')); return; }
+      if (!L.length) { res.append(note('已是這個工具涵蓋的最新版 v1.20（2026/11 查核）；之後的新版本升級前仍要讀 Release Notes：每一兩個月一個新版本，中間還有多次修補版。')); return; }
       const tb = h('table', { class: 'dt' }, h('tr', null, h('th', null, '版本'), h('th', null, '時間'), h('th', null, '類型'), h('th', null, '內容')));
       L.forEach(r => tb.append(h('tr', null, h('td', { class: 'mono' }, 'v' + r[1]), h('td', null, r[2]), h('td', null, h('b', { style: { color: TC[r[3]] } }, r[3])), h('td', null, r[4]))));
       res.append(tb, note('升級前讀每一版的 Upgrade 段落、備份 .env 與 volumes；用 git checkout 指定版本再 docker compose pull，不要追 main。升完用第 46 頁的三個測試指令重跑' + (L.some(r => r[0] === 17) ? '，並把知識庫文件重新匯入。' : '。') + ' 放病歷或長照評估資料的自架系統，錯過安全修補就是帶著已公開的漏洞上線。'));
     }
-    box.append(h('div', { class: 'row' }, lab('你目前的版本：'), seg([[12, 'v1.12 以前'], [13, '1.13'], [14, '1.14'], [15, '1.15'], [16, '1.16'], [17, '1.17'], [18, '1.18']], () => v, x => v = x, draw)), res); draw();
+    box.append(h('div', { class: 'row' }, lab('你目前的版本：'), seg([[12, 'v1.12 以前'], [13, '1.13'], [14, '1.14'], [15, '1.15'], [16, '1.16'], [17, '1.17'], [18, '1.18'], [19, '1.19'], [20, '1.20']], () => v, x => v = x, draw)), res); draw();
   })();
 })();
