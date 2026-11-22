@@ -73,7 +73,7 @@ a{color:var(--navy2)}
       <li>上課前：瀏覽本週段落與每段的一句話重點</li>
       <li>課堂中：跟著老師調整模擬器、完成判斷練習</li>
       <li>課後：做總測驗，用評估表整理小組結論</li>
-      <li>延伸：每週<a href="../supplement/">導讀、延伸閱讀與練習資料</a></li>
+      <li>延伸：每週<a href="../supplement/index.html">導讀、延伸閱讀與練習資料</a>（修課學生登入後閱讀）</li>
     </ol>
   </aside>
 </header>
@@ -130,7 +130,7 @@ UNITS.forEach(U=>{
     const p=live?prog(w):null;
     c.innerHTML=`${st}<div class="wk">W${String(w.w).padStart(2,'0')}${w.hands?'　★ 課堂實作週':''}</div><h3>${w.t}</h3><div class="en">${w.en}</div><p class="desc">${w.d}</p>`+
       (p!=null?`<div class="prog"><i style="width:${Math.round(p*100)}%"></i></div><div class="pt">你的進度 ${Math.round(p*100)}%</div>`:'')+
-      `<div class="acts">${live?`<a class="btn pri" href="${w.url}">進入互動頁</a>`:w.exam?'':`<span class="btn off">互動頁製作中</span>`}${w.pdf?`<a class="btn" href="${P(w.pdf)}" target="_blank" rel="noopener">講義 PDF</a>`:''}${(w.pdf&&!w.exam)?`<a class="btn" href="../supplement/w${String(w.w).padStart(2,'0')}/">導讀與練習資料</a>`:''}</div>`;
+      `<div class="acts">${live?`<a class="btn pri" href="${w.url}">進入互動頁</a>`:w.exam?'':`<span class="btn off">互動頁製作中</span>`}${w.pdf?`<a class="btn" href="${P(w.pdf)}" target="_blank" rel="noopener">講義 PDF</a>`:''}${(w.pdf&&!w.exam)?`<a class="btn" href="../supplement/w${String(w.w).padStart(2,'0')}.html">導讀與練習資料（修課學生）</a>`:''}</div>`;
     box.appendChild(c);
   });
   root.appendChild(sec);
