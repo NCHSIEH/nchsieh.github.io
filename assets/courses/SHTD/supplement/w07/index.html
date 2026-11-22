@@ -1,0 +1,32 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>W7 導讀與延伸閱讀 · AI Agent 與臨床流程自動化</title><style>body{font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;color:#1b2435;background:#f7f5f0;margin:0;line-height:1.8}main{max-width:980px;margin:auto;padding:40px 32px 80px}h1{font-size:34px;line-height:1.35;margin:.2em 0}h2{font-size:24px;margin-top:44px;color:#1e3a8a;border-top:2px solid #d6d3d1;padding-top:18px}h3{font-size:19px;color:#c2410c;margin:22px 0 6px}p,li{font-size:17.5px}a{color:#1e3a8a;text-underline-offset:3px}table{border-collapse:collapse;width:100%;background:#fff;margin:16px 0}th,td{border:1px solid #d6d3d1;padding:9px 13px;text-align:left;vertical-align:top;font-size:16px}th{background:#111827;color:#fff}.meta{font-size:14px;color:#57534e}.lead{font-size:20px}.callout{border-left:5px solid #c2410c;padding:10px 20px;background:#efebe3;margin:16px 0}.pg{display:inline-block;font-size:13px;background:#1e3a8a;color:#fff;border-radius:4px;padding:0 7px;margin-left:6px;vertical-align:2px}.src{font-size:14px;color:#57534e}.nav{display:flex;gap:8px 18px;flex-wrap:wrap;font-size:15px}.file{background:#fff;border:1px solid #d6d3d1;border-left:5px solid #3f6212;padding:12px 18px;margin:12px 0}.file b{font-size:17px}.dl{display:inline-block;background:#3f6212;color:#fff;padding:2px 12px;border-radius:4px;text-decoration:none;font-size:14px;margin-left:8px}.read{background:#fff;border:1px solid #d6d3d1;padding:12px 18px;margin:12px 0}.q{color:#c2410c;font-weight:700}code{font-family:Consolas,monospace;background:#efebe3;padding:0 4px}.top{font-size:14px}@media print{body{background:#fff}main{padding:0;max-width:none}h1{font-size:24px}h2{font-size:19px;margin-top:22px}p,li,td,th{font-size:11pt}.noprint{display:none}@page{size:A4;margin:16mm}}</style><main>
+<p class="meta top noprint"><a href="../">← 補充教材總覽</a>　｜　<a href="../../interactive/w07/">W7 互動學習頁</a></p>
+<p class="meta">智慧醫療與科技發展　W7　AI Agent 與臨床流程自動化　·　導讀與延伸閱讀（2026-11-22）</p><h1>讓 AI 去「做事」之前，要先決定什麼？</h1><p class="lead">上週 AI 寫錯，醫師改掉就好；這週 AI 會<b>動手做事</b>——查資料、填表、送轉介。本週學會判斷：哪些事交給 Agent、人站在哪裡、出錯時怎麼停，以及為什麼常常應該<b>先再造流程，再自動化</b>。</p>
+<nav class="nav noprint"><a href="#g">白話導讀</a><a href="#d">練習資料</a><a href="#r">延伸閱讀</a><a href="#c">自我檢核</a></nav>
+<h2 id="g">白話導讀</h2><p class="src">頁碼為講義頁腳頁碼（學生版與教師版相同）。</p>
+<h3>1. Agent 是什麼，不是什麼<span class="pg">講義 p.6–12</span></h3>
+<p>Agent ＝ LLM（大腦）＋工具（手）＋記憶＋規劃，能「思考 → 行動 → 觀察」反覆進行。它不等於 RPA（照固定腳本點按），也不等於聊天機器人（只給建議）。市場上有不少「Agent 洗白」。</p>
+<p>醫療的原則：<b>能用固定工作流解決的，就不用 Agent</b>；外層用確定性流程鎖住安全步驟，內層局部節點才呼叫權限受限的 Agent。</p>
+<p class="src">來源：<a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener">Anthropic（2024-12）. Building Effective Agents</a></p>
+<h3>2. 每一步都對，串起來就不一定對<span class="pg">講義 p.15–16</span></h3>
+<p>MedAgentBench 在模擬電子病歷中測試：最佳模型成功率約 70%，查詢類較高、寫入類（下醫囑）較低。若每一步成功率 95%，串 10 步全對只剩約 60%——交接越多，錯誤越可能在交接處發生。</p>
+<p class="src">來源：<a href="https://arxiv.org/abs/2501.14654" target="_blank" rel="noopener">Jiang 等 MedAgentBench（arXiv）</a></p>
+<h3>3. 人在哪裡：決策權限矩陣<span class="pg">講義 p.18–19</span></h3>
+<p>用兩個問題決定 AI 可以做到哪裡：<b>影響大不大？做錯能不能撤回？</b></p>
+<table><tr><th></th><th>可撤回</th><th>難撤回</th></tr><tr><td>影響小</td><td>自動執行（整理文件、預填表單）</td><td>執行後通知（寄出衛教簡訊）</td></tr><tr><td>影響大</td><td>人核准後執行（送出轉介）</td><td>禁止 AI 執行（變更處方、告知預後）</td></tr></table>
+<p>同一個 Agent 可以混用「人在迴圈中／上／外」三種模式，依每個動作分別設定。</p>
+<h3>4. Agent 會怎麼出錯<span class="pg">講義 p.20–23</span></h3>
+<p>五種常見失誤：工具誤用、資訊過時、目標錯置、權限越界、被提示注入。nH Predict 案例顯示：當演算法輸出被當成「決定」，人就從迴圈消失。EchoLeak 則提醒：Agent 讀到的外部內容一律要當成「資料」，不是「指令」。</p>
+<p class="src">來源：<a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">OWASP Top 10 for LLM Applications 2025</a></p>
+<h3>5. 先再造，再自動化<span class="pg">講義 p.25–28</span></h3>
+<p>Project RED 是<b>沒有 AI</b> 的出院流程再造，就讓 30 天急診與再入院顯著下降約 30%。台灣出院準備銜接長照從平均 51 天縮短到 4 天，也是先把評估前移到住院中。AI Agent 的價值，常常在流程再造之後的「施力點」：首日篩選、跨系統預填、進度追蹤。</p>
+<p class="src">來源：<a href="https://doi.org/10.7326/0003-4819-150-3-200902030-00007" target="_blank" rel="noopener">Jack 等 2009 Project RED</a>；<a href="https://mohw.gov.tw/cp-16-85726-1.html" target="_blank" rel="noopener">衛福部：出院準備銜接長照</a></p>
+<h2 id="d">練習資料</h2><p>以下檔案皆為<b>教學合成資料</b>，不對應任何真實個人或機構；可用 Excel、Google 試算表或文字編輯器開啟。</p>
+<div class="file"><b>W07_出院流程任務紀錄.csv</b><a class="dl" href="W07_出院流程任務紀錄.csv" download>下載</a><p>一位模擬病人從「決定出院」到「長照服務第一次到宅」的 14 筆任務紀錄（開始、完成時間、負責角色、等待原因）。</p><ol><li>算出每筆任務的「實際處理時間」與「等待時間」。總時程中，等待占幾成？</li><li>找出等待最久的三段：它們卡在資訊、交接、還是核准？</li><li>哪一段適合交給 Agent？哪一段應該先改流程（例如評估前移），而不是自動化？</li></ol></div>
+<div class="file"><b>W07_權限設計表.csv</b><a class="dl" href="W07_權限設計表.csv" download>下載</a><p>Agent 權限設計範本：可讀、可寫、禁止、人核准點、停止與轉人工條件。已示範一列。</p><ol><li>替「長照轉介 Agent」與「衛教簡訊 Agent」各填一列。</li><li>「禁止」欄一定要寫；寫不出來，代表範圍還沒想清楚。</li></ol></div>
+<h2 id="r">延伸閱讀</h2><p>每篇先讀摘要或重點段落即可；讀完用「閱讀提問」檢查自己是否抓到重點。</p>
+<div class="read"><a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener"><b>Anthropic（2024-12）. Building Effective Agents.</b></a><p>以實作經驗說明工作流（提示鏈、路由、平行）與 Agent 的差別，以及何時才需要 Agent。</p><p><span class="q">閱讀提問：</span>醫院的哪一個流程，用「提示鏈」就足夠了？</p></div>
+<div class="read"><a href="https://doi.org/10.7326/0003-4819-150-3-200902030-00007" target="_blank" rel="noopener"><b>Jack 等（2009）. A reengineered hospital discharge program（Project RED）. Ann Intern Med.</b></a><p>沒有 AI 的出院流程再造隨機試驗，是本週「先再造」的核心證據。</p><p><span class="q">閱讀提問：</span>Project RED 的哪些元素，未來適合由 Agent 協助？</p></div>
+<div class="read"><a href="https://www.ahrq.gov/patient-safety/settings/hospital/red/toolkit/index.html" target="_blank" rel="noopener"><b>AHRQ：Re-Engineered Discharge（RED）Toolkit</b></a><p>把 Project RED 做成可直接使用的工具包。</p><p><span class="q">閱讀提問：</span>工具包裡哪一項，你的單位目前最缺？</p></div>
+<div class="read"><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener"><b>OWASP Top 10 for LLM Applications（2025）</b></a><p>LLM 應用的十大資安風險，提示注入排第一。</p><p><span class="q">閱讀提問：</span>如果 Agent 會讀病人上傳的文件，要防哪一種攻擊？</p></div>
+<h2 id="c">自我檢核</h2><ol><li>給一個 Agent 動作，能用決策權限矩陣判斷它屬於哪一格。</li><li>能說明為什麼「每步 95% 成功率」串起來會變低。</li><li>能舉例說明「先再造、再自動化」比「直接自動化舊流程」好在哪裡。</li></ol>
+<p class="src">查核日：2026-11-22。連結取自講義講者備註所列來源；網站改版時，請以講義參考資料頁的書目搜尋。練習資料為授課教師以程式產生之合成資料。</p></main></html>

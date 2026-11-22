@@ -1,0 +1,31 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>W5 導讀與延伸閱讀 · 醫療 AI 方法論與模型生命週期</title><style>body{font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;color:#1b2435;background:#f7f5f0;margin:0;line-height:1.8}main{max-width:980px;margin:auto;padding:40px 32px 80px}h1{font-size:34px;line-height:1.35;margin:.2em 0}h2{font-size:24px;margin-top:44px;color:#1e3a8a;border-top:2px solid #d6d3d1;padding-top:18px}h3{font-size:19px;color:#c2410c;margin:22px 0 6px}p,li{font-size:17.5px}a{color:#1e3a8a;text-underline-offset:3px}table{border-collapse:collapse;width:100%;background:#fff;margin:16px 0}th,td{border:1px solid #d6d3d1;padding:9px 13px;text-align:left;vertical-align:top;font-size:16px}th{background:#111827;color:#fff}.meta{font-size:14px;color:#57534e}.lead{font-size:20px}.callout{border-left:5px solid #c2410c;padding:10px 20px;background:#efebe3;margin:16px 0}.pg{display:inline-block;font-size:13px;background:#1e3a8a;color:#fff;border-radius:4px;padding:0 7px;margin-left:6px;vertical-align:2px}.src{font-size:14px;color:#57534e}.nav{display:flex;gap:8px 18px;flex-wrap:wrap;font-size:15px}.file{background:#fff;border:1px solid #d6d3d1;border-left:5px solid #3f6212;padding:12px 18px;margin:12px 0}.file b{font-size:17px}.dl{display:inline-block;background:#3f6212;color:#fff;padding:2px 12px;border-radius:4px;text-decoration:none;font-size:14px;margin-left:8px}.read{background:#fff;border:1px solid #d6d3d1;padding:12px 18px;margin:12px 0}.q{color:#c2410c;font-weight:700}code{font-family:Consolas,monospace;background:#efebe3;padding:0 4px}.top{font-size:14px}@media print{body{background:#fff}main{padding:0;max-width:none}h1{font-size:24px}h2{font-size:19px;margin-top:22px}p,li,td,th{font-size:11pt}.noprint{display:none}@page{size:A4;margin:16mm}}</style><main>
+<p class="meta top noprint"><a href="../">← 補充教材總覽</a>　｜　<a href="../../interactive/w05/">W5 互動學習頁</a></p>
+<p class="meta">智慧醫療與科技發展　W5　醫療 AI 方法論與模型生命週期　·　導讀與延伸閱讀（2026-11-22）</p><h1>「我們的 AI 準確率 90%」，你該追問什麼？</h1><p class="lead">本週不寫程式，但要學會檢驗一個預測模型：<b>它在哪裡驗證、驗證到哪一層、在本院準不準、閾值怎麼選、上線後誰顧</b>。</p>
+<nav class="nav noprint"><a href="#g">白話導讀</a><a href="#d">練習資料</a><a href="#r">延伸閱讀</a><a href="#c">自我檢核</a></nav>
+<h2 id="g">白話導讀</h2><p class="src">頁碼為講義頁腳頁碼（學生版與教師版相同）。</p>
+<h3>1. 資料、標籤與切分<span class="pg">講義 p.14–16</span></h3>
+<p>一筆出院紀錄要變成機器能學的資料，先要定義<b>特徵</b>（出院時已知的資訊）與<b>標籤</b>（30 天內非計畫性再入院）。標籤要先講清楚：含不含計畫性入院？跨院急診算不算？院外死亡怎麼處理？</p>
+<p>訓練、驗證、測試要分開；依病人、依時間、依醫院切分，回答的是不同的泛化問題。內部切分只能證明「在同一家醫院有效」。</p>
+<h3>2. 模型很準，但學錯了東西<span class="pg">講義 p.17–19</span></h3>
+<p>Caruana 等的肺炎模型「學到」氣喘病人死亡率較低——因為他們被送進加護病房；Zech 等的胸部 X 光模型部分靠醫院標記辨認來源。這不是偷看答案，而是學到<b>捷徑</b>。</p>
+<p>判斷資料洩漏的方法：看時間軸，不看變數名稱——預測時點之後才會出現的資訊，都不能當特徵。</p>
+<p class="src">來源：<a href="https://doi.org/10.1145/2783258.2788613" target="_blank" rel="noopener">Caruana 等 2015</a>；<a href="https://doi.org/10.1371/journal.pmed.1002683" target="_blank" rel="noopener">Zech 等 2018</a></p>
+<h3>3. 驗證到哪一層？<span class="pg">講義 p.23–26</span></h3>
+<p>驗證層級由弱到強：內部驗證 → 時間外部驗證 → 地理外部驗證 → 前瞻驗證 → 隨機試驗。廠商的 0.85 若只是內部驗證，就要在本院重驗。上線後世界會變（資料集偏移），需要 MLOps 持續監測。</p>
+<p class="src">來源：<a href="https://doi.org/10.1136/bmj-2023-078378" target="_blank" rel="noopener">TRIPOD+AI 2024</a>；<a href="https://doi.org/10.1056/NEJMc2104626" target="_blank" rel="noopener">Finlayson 等 2021 資料集偏移</a></p>
+<h3>4. 混淆矩陣與四個指標<span class="pg">講義 p.30–32</span></h3>
+<p>敏感度回答「真的再入院的人抓到多少」，特異度回答「沒再入院的人放過多少」，<b>PPV</b> 回答「被警示的人有多少真的再入院」——臨床人員最該看 PPV，因為它決定工作量是否值得。</p>
+<div class="callout">準確率陷阱：盛行率 16% 時，全部猜「不會再入院」準確率就有 84%，但敏感度是 0%。</div>
+<h3>5. 鑑別力、校準度與閾值<span class="pg">講義 p.33–41</span></h3>
+<p><b>AUROC</b> 看模型能不能把高低風險排開；<b>校準度</b>看「模型說 30%，是不是真的約 30%」。兩者是不同的準：校準度可以用本院資料重新校準。</p>
+<p>閾值其實是在選工作量：從個管師人力倒推閾值，再看抓到多少人、漏掉多少人。決策曲線分析則回答「依模型介入，是否比全介入或全不介入更好」。</p>
+<p class="src">來源：<a href="https://doi.org/10.1186/s12916-019-1466-7" target="_blank" rel="noopener">Van Calster 等 2019 校準度</a>；<a href="https://doi.org/10.1177/0272989X06295361" target="_blank" rel="noopener">Vickers、Elkin 2006 決策曲線</a></p>
+<h2 id="d">練習資料</h2><p>以下檔案皆為<b>教學合成資料</b>，不對應任何真實個人或機構；可用 Excel、Google 試算表或文字編輯器開啟。</p>
+<div class="file"><b>W05_再入院預測練習.csv</b><a class="dl" href="W05_再入院預測練習.csv" download>下載</a><p>600 位模擬出院病人（約一季的出院量）：模型預測風險與 30 天實際是否再入院。模型刻意設計為「排序還可以、但系統性高估」。</p><ol><li>以閾值 30% 建立混淆矩陣，算敏感度、特異度、PPV、NPV。</li><li>把閾值改成 20%、40%：被標記的人數如何變化？若個管師這一季最多只能追蹤 180 人，閾值該設多少？會漏掉多少位真正再入院的病人？</li><li>把預測風險分成 5 組（0–10%、10–20%…），比較每組「平均預測風險」與「實際再入院率」：模型高估還是低估？</li></ol></div>
+<h2 id="r">延伸閱讀</h2><p>每篇先讀摘要或重點段落即可；讀完用「閱讀提問」檢查自己是否抓到重點。</p>
+<div class="read"><a href="https://doi.org/10.1136/bmj-2023-078378" target="_blank" rel="noopener"><b>Collins 等（2024）. TRIPOD+AI statement. BMJ.</b></a><p>預測模型研究的報告準則。讀清單本身就能學到：一篇好研究該交代哪些事。</p><p><span class="q">閱讀提問：</span>清單裡哪一項最常被廠商簡報省略？</p></div>
+<div class="read"><a href="https://doi.org/10.1186/s12916-019-1466-7" target="_blank" rel="noopener"><b>Van Calster 等（2019）. Calibration: the Achilles heel of predictive analytics. BMC Medicine.</b></a><p>用很多圖解說明為什麼「校準度」常被忽略、卻直接影響臨床決策。</p><p><span class="q">閱讀提問：</span>AUROC 很高的模型，可能出什麼校準問題？</p></div>
+<div class="read"><a href="https://doi.org/10.1056/NEJMc2104626" target="_blank" rel="noopener"><b>Finlayson 等（2021）. The clinician and dataset shift in AI. NEJM.</b></a><p>資料集偏移的常見來源與臨床人員該注意的訊號。</p><p><span class="q">閱讀提問：</span>你的單位最近有什麼改變（儀器、流程、族群），可能讓模型失準？</p></div>
+<div class="read"><a href="https://doi.org/10.2196/15182" target="_blank" rel="noopener"><b>Sendak 等（2020）. Real-world integration of a sepsis deep learning technology（Duke Sepsis Watch）. JMIR Med Inform.</b></a><p>一個深度學習模型從提案到上線的完整生命週期紀錄。</p><p><span class="q">閱讀提問：</span>讓模型能上線的，有哪些不是模型本身的因素？</p></div>
+<h2 id="c">自我檢核</h2><ol><li>給一組 2×2 數字，能算出敏感度、特異度、PPV、NPV，並說明各回答什麼問題。</li><li>能分辨鑑別力與校準度，並說出校準不佳時可以怎麼辦。</li><li>能從人力倒推閾值，並說出代價（漏掉多少人）。</li></ol>
+<p class="src">查核日：2026-11-22。連結取自講義講者備註所列來源；網站改版時，請以講義參考資料頁的書目搜尋。練習資料為授課教師以程式產生之合成資料。</p></main></html>
