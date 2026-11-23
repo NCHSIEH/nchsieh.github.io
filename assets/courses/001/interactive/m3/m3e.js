@@ -1,4 +1,4 @@
-/* M3 互動站強化（2026-11-15）：講義第 7、10、13、18、24、29、32、40、41、42、47、48、50、55、72 頁實證數據與文獻連結同步 */
+/* M3 互動站強化（2026-11-15）：講義第 7、10、13、18、24、29、32、40、41、42、48、49、51、56、73 頁實證數據與文獻連結同步 */
 (function () {
   'use strict';
   const $ = U.$;
@@ -45,12 +45,12 @@
   CaseW($('#w-anom3'), { tabs: [
     { id: 't', label: '三個提醒與四種方法', cards: [
       ['異常 ≠ 錯誤（Domain Check 先行）', '被標記的個案可能是輸入錯誤（血壓 0），也可能是真實重症（血壓 210）。先用單欄規則清掉不可能的錯誤，再用多維方法抓高危組合。', ''],
-      ['單欄 Z-Score vs 多維 Isolation Forest', 'WDBC 30 欄實測：單一欄位 |Z|>3 最多只抓出 12 人（2.1%），但 30 欄任一 |Z|>3 的聯集達 74 人（13.0%）；Isolation Forest（污染率 5%）標出 29 人，其中 86% 為惡性（全體僅 37%）。', '講義第 47 頁'],
+      ['單欄 Z-Score vs 多維 Isolation Forest', 'WDBC 30 欄實測：單一欄位 |Z|>3 最多只抓出 12 人（2.1%），但 30 欄任一 |Z|>3 的聯集達 74 人（13.0%）；Isolation Forest（污染率 5%）標出 29 人，其中 86% 為惡性（全體僅 37%）。', '講義第 48 頁'],
       ['污染率配額與專家命中率驗證', 'contamination 設 5% 就標出 5%，必須由領域知識設定；驗證時把前 20 名最異常個案交給臨床／稽核人員判讀，計算真實命中率（Precision@20）。', '']],
       note: '異常偵測的結果是「請專家優先檢視」的預警名單，不是自動刪除或自動處置。' },
     { id: 'q', label: '判斷', quiz: [
       { t: '高齡患者「心跳 105、體溫 35.8°C、血壓微降」，單看每一欄都沒超過 3 個標準差，卻是早期休克訊號。哪種方法抓得到？', o: ['單欄 Z-Score / IQR', '多維異常偵測（LOF / Isolation Forest）'], a: 1, w: '單欄各自正常但組合反常，屬於多維交互異常，需靠 LOF 或 Isolation Forest。' }] }
-  ], src: '講義 M3 第 47–48 頁。' });
+  ], src: '講義 M3 第 48–49 頁。' });
 
   CaseW($('#w-pcalim'), { tabs: [
     { id: 'l', label: '三個限制與實證對策', cards: [
@@ -60,7 +60,7 @@
       note: '進 PCA 前一律先做 Z-Score 標準化！不要被未標準化時虛高的「解釋變異比例」騙了。' },
     { id: 'q', label: '判斷', quiz: [
       { t: '「腫瘤面積（數百至上千）」和「平滑度（0.05–0.16）」不標準化直接丟進 PCA，PC1 解釋變異高達 98.2%。這代表？', o: ['PCA 壓縮效果超好', '假象！PC1 只是把面積欄位複製一遍，平滑度等小尺度欄被完全忽略'], a: 1, w: '未標準化時大尺度欄位主導共變異數矩陣，必須先做 Z-Score。' }] }
-  ], src: '講義 M3 第 50、55 頁（WDBC 與 scikit-learn diabetes 實測；商業資料 Marketing_data 補充：未縮放 PCA 的 PC1 為 47.5%、Z-Score 後 27.3%）。' });
+  ], src: '講義 M3 第 51、56 頁（WDBC 與 scikit-learn diabetes 實測；商業資料 Marketing_data 補充：未縮放 PCA 的 PC1 為 47.5%、Z-Score 後 27.3%）。' });
 
   function addDetails(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
@@ -80,7 +80,7 @@
     ['K = 4..6', 'Silhouette 腰斬到 0.159–0.163（K=6 出現 17 人小群）。統計指標用來縮小候選範圍，最終由臨床可解釋性拍板！']
   ]);
   CaseLinks('w-elbow', [['Scikit-learn 官方指南：Clustering Performance Evaluation（Silhouette / DBI 數學定義）', U_SK]],
-    '對應講義 M3 第 24、72 頁參考文獻 [6]。');
+    '對應講義 M3 第 24、73 頁參考文獻 [6]。');
 
   addDetails('w-dendro', '延伸閱讀：四種連結法（Linkage）與 O(n²) 記憶體瓶頸（講義第 29 頁）', [
     ['四種連結法', '① Single（最近點：易鏈鎖效應）② Complete（最遠點：緊湊但怕離群值）③ Average（平均距離：AI Studio 常用）④ Ward 華德法（組內變異增量最小，最推薦）。'],
@@ -93,20 +93,20 @@
     ['Step 2 畫 k-距離圖', '務必先做 Z-Score，再算每點到第 k 近鄰距離並排序——平坦段為密集核心、急遽上揚的「膝蓋轉折點（Knee）」即最佳 eps。']
   ]);
   CaseLinks('w-db', [['Ester et al. (KDD 1996)：DBSCAN 密度分群原始論文 PDF', U_DBSCAN]],
-    '對應講義 M3 第 32、34、72 頁參考文獻 [4]。');
+    '對應講義 M3 第 32、34、73 頁參考文獻 [4]。');
 
   CaseLinks('w-ahl', [
     ['Ahlqvist et al. Lancet Diabetes Endocrinol 2018（隆德大學官方論文頁）', U_AHL],
     ['Dennis et al. Lancet Diabetes Endocrinol 2019（PMC 全文：連續變數模型 vs 五群外部驗證）', U_DENNIS]
-  ], '對應講義 M3 第 41、72 頁參考文獻 [2][3]。');
+  ], '對應講義 M3 第 41、73 頁參考文獻 [2][3]。');
 
   CaseLinks('w-sepsis', [['Seymour et al. JAMA 2019（PMC 官方免費全文：敗血症四型 α/β/γ/δ）', U_SEPSIS]],
-    '對應講義 M3 第 7、42、72 頁參考文獻 [1]。');
+    '對應講義 M3 第 7、42、73 頁參考文獻 [1]。');
 
   CaseLinks('w-iso', [['Liu, Ting & Zhou (IEEE ICDM 2008)：Isolation Forest 原始論文 PDF', U_IF]],
-    'O(n·log n) 時間複雜度、不需算距離矩陣，高維資料異常偵測首選。對應講義 M3 第 46、47、72 頁參考文獻 [5]。');
+    'O(n·log n) 時間複雜度、不需算距離矩陣，高維資料異常偵測首選。對應講義 M3 第 47、48、73 頁參考文獻 [5]。');
 
-  addDetails('w-scree', '延伸閱讀：兩個醫療資料集 PCA 實測（講義第 50、55 頁）', [
+  addDetails('w-scree', '延伸閱讀：兩個醫療資料集 PCA 實測（講義第 51、56 頁）', [
     ['乳癌 WDBC（30 欄 Z-Score）', 'PC1 (44.3%) + PC2 (19.0%) = 63.2%（2D 可視覺化）；前 7 個主成分累積保留 91.0% 變異（維度減少 77%），10 個保留 95.2%。'],
     ['糖尿病進展資料（N=442，10 欄）', 'PC1 單軸濃縮 40.2% 變異，前 4 個主成分保留 76.8%，消除血脂欄位共線性。商業資料 Marketing_data（17 欄）7 個 PC 保留 80.8%。']
   ]);
