@@ -1,4 +1,4 @@
-/* M2-2 互動站強化（2026-11-13）：講義第 63、64、72、82、120 頁的互動版；再入院實例來源連結 */
+/* M2-2 互動站強化（2026-11-25 同步）：講義第 63、64、72、82、122 頁的互動版；再入院實例來源連結 */
 (function () {
   'use strict';
   const $ = U.$;
@@ -24,7 +24,7 @@
     { id: 'i', label: '三個鐵則', cards: [
       ['取樣只能在訓練集做', '切分前取樣，同一筆的複本會同時進訓練與測試，分數虛高。AI Studio：取樣 Operator 放進 Cross Validation 的訓練子流程。', ''],
       ['測試集維持原始分布', '平衡過的測試集等於假設盛行率 50%，所有 Precision 都是幻覺。評估必須反映真實世界的類別比例。', ''],
-      ['不平衡時不用 Accuracy 當主指標', '本講義 P7 已示範 0.925 輸給全判陰性的 0.940。改用 Recall、Precision、PR-AUC，並附上類別比例。', '']],
+      ['不平衡時不用 Accuracy 當主指標', '本講義 PART 07（第 47 頁）已示範 0.925 輸給全判陰性的 0.940。改用 Recall、Precision、PR-AUC，並附上類別比例。', '']],
       note: '三個鐵則是作業必查項目。' },
     { id: 'q', label: '判斷', quiz: [
       { t: '陽性只有 6%，你把測試集也做成 50% 陽性再算 Precision。問題是？', o: ['沒問題，這樣比較公平', 'Precision 反映的是 50% 盛行率，不是真實情境'], a: 1, w: 'Precision 隨盛行率而變，測試集必須維持原始分布。' }] }
@@ -58,7 +58,7 @@
       ['關聯不是因果', '特徵重要性與樹路徑是預測性關聯，不是介入因果。', ''],
       ['多次住院', '同一病人多次住院需 group split；仍應報告殘餘限制。', '']],
       note: '這是 Take-Home Assignment 報告最後一節的模板；數字與規則必須換成你的資料與驗證結果。' }
-  ], src: '講義 M2-2 第 120 頁（教學模板）。' });
+  ], src: '講義 M2-2 第 122 頁（教學模板）。' });
 
   CaseLinks('w-roc', [
     ['Saito & Rehmsmeier PLOS ONE 2015：不平衡資料下 PR 圖比 ROC 圖更具資訊量（原始論文）', 'https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432']]);
@@ -104,4 +104,20 @@
     ['陪審團定理', '單一模型準確率 0.70，5 個獨立成員多數決升至 0.837、25 個達 0.983；但若成員完全複製則永遠卡在 0.70（所以隨機森林靠 Bootstrap＋隨機特徵打破相關性）。'],
     ['OOB 免費驗證的限制', '每次 Bootstrap 約有 (1−1/n)ⁿ ≈ 1/e ≈ 36.8% 樣本未被抽中（Out-of-Bag）；但若同一病人有多次就診紀錄，OOB 會因同人跨袋而虛高，仍須以病歷號做 Group Split！']
   ]);
+  addDetails('w-loan', '延伸閱讀：AI Studio 分類評估、ROC 疊圖與門檻最佳化三組標準接線（講義第 115 頁）', [
+    ['藍圖 A｜防洩漏分層交叉驗證', 'Cross Validation 左欄 Training 內鎖死 Normalize (pre)＋SMOTE / Sample＋分類器，並用 Group Models 打包送到右欄 Testing（維持原始盛行率！），搭配 Performance (Binominal Classification) 同時勾 accuracy、precision、recall、f_measure、AUC。'],
+    ['藍圖 B｜多模型同場對決', 'Multiply 分流乾淨資料 → Compare ROCs（stratified，內放 4–6 個分類器同基準疊圖）＋Create Lift Chart（檢驗前 20% 名單涵蓋率）。'],
+    ['藍圖 C｜決策門檻與代價矩陣', 'Create Threshold（或 Find Threshold）→ Apply Threshold 套用新門檻 τ → Performance (Costs) 填入代價矩陣算平均每筆期望成本。切記門檻也算超參數，不可看著最終測試集調！']
+  ]);
+  addDetails('w-loan', '延伸閱讀：實作 3 Customer Churn（n = 900）六模型與門檻成本實算（講義第 121 頁）', [
+    ['先濾除待預測列', '原始 customer-churn-data.xlsx 共 996 列，其中 96 列 Churn 為空白（供 03-apply the model.rmp 預測用），評估前必先用 Filter Examples 濾除，得有效樣本 n = 900（流失 35.8% vs 忠誠 64.2%）。'],
+    ['5-Fold 分層 CV 六模型對照', '多數類基準 Accuracy 64.2% → k-NN (k=9, Z-Score) 82.6% (AUC 0.853) → Naive Bayes 82.6% (AUC 0.867) → Logistic 84.0% (AUC 0.869) → Decision Tree (depth=4) 84.9% (F1 0.788, AUC 0.867) → Random Forest 84.6% (AUC 0.864) → GBT 84.8% (AUC 0.862)。4 層決策樹直接抓出「女性且年齡 >31 歲流失率 79.1%」的強交互規則！'],
+    ['Accuracy 下降反而省 $31,500', '設漏失流失客 FN 損失 $3,000、挽留券 FP 成本 $500（代價比 6:1）：Random Forest 門檻由預設 0.50 降至成本最佳 τ = 0.25 時，Accuracy 雖從 84.6% 降為 78.8%，Recall 卻升至 85.1%（多攔住 23 位流失客），總成本由 $247,000 降至 $215,500！']
+  ]);
+  CaseLinks('w-calib', [
+    ['Van Calster et al. BMC Medicine 2019：Calibration — The Achilles heel of predictive analytics（開放全文）', 'https://bmcmedicine.biomedcentral.com/articles/10.1186/s12916-019-1466-7']
+  ], '對應講義 M2-2 第 61–63、150 頁參考文獻 [7]。');
+  CaseLinks('w-imb', [
+    ['Chawla et al. JAIR 2002：SMOTE 合成少數類過取樣原始論文（開放全文 PDF）', 'https://jair.org/index.php/jair/article/view/10302']
+  ], '對應講義 M2-2 第 70、150 頁參考文獻 [12]。');
 })();

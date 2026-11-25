@@ -1,9 +1,9 @@
-/* M3 互動站強化（2026-11-15）：講義第 7、10、13、18、24、29、32、40、41、42、48、49、51、56、73 頁實證數據與文獻連結同步 */
+/* M3 互動站強化（2026-11-25）：講義第 7、10、13、18、24、29、32、40–43、48–49、51、56、61、63、80–81 頁實證數據與文獻連結同步 */
 (function () {
   'use strict';
   const $ = U.$;
   const U_SEPSIS = 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6547137/';
-  const U_AHL    = 'https://portal.research.lu.se/en/publications/novel-subgroups-of-adult-onset-diabetes-and-their-association-wit';
+  const U_AHL    = 'https://doi.org/10.1016/S2213-8587(18)30051-2';
   const U_DENNIS = 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6527883/';
   const U_DBSCAN = 'https://cdn.aaai.org/KDD/1996/KDD96-037.pdf';
   const U_IF     = 'https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf';
@@ -19,7 +19,7 @@
     { id: 'q', label: '判斷', quiz: [
       { t: '想找出「常和糖尿病一起出現的共病組合」，屬於哪一類？', o: ['分群', '降維', '關聯規則'], a: 2, w: '找「常一起出現」的組合是關聯規則，M4 專章實作。' },
       { t: '想把 30 項腫瘤細胞影像特徵濃縮成 2 個正交座標軸畫散布圖，屬於哪一類？', o: ['降維（PCA）', '異常偵測'], a: 0, w: '把很多欄位線性組合成少數幾個主成分是降維。' }] }
-  ], src: '講義 M3 第 7 頁（原講義 ML 3.4 p14）。' });
+  ], src: '講義 M3 第 7 頁。' });
 
   CaseW($('#w-prep3'), { tabs: [
     { id: 'p', label: '三個決策', cards: [
@@ -29,7 +29,7 @@
       note: '三個決策都在建模前做，且都會直接改變分群結果。' },
     { id: 'q', label: '判斷', quiz: [
       { t: '資料裡有病歷號欄位，要拿去分群。你會？', o: ['保留，它是獨特的識別', '移除，它只會引入雜訊'], a: 1, w: 'ID 類欄位沒有分群意義，一律移除。' }] }
-  ], src: '講義 M3 第 10、13 頁（原講義 ML 3.4 pp16–17、45–49）。' });
+  ], src: '講義 M3 第 10、13 頁。' });
 
   CaseW($('#w-four'), { tabs: [
     { id: 's', label: '四步驟與乳癌實戰', cards: [
@@ -60,7 +60,7 @@
       note: '進 PCA 前一律先做 Z-Score 標準化！不要被未標準化時虛高的「解釋變異比例」騙了。' },
     { id: 'q', label: '判斷', quiz: [
       { t: '「腫瘤面積（數百至上千）」和「平滑度（0.05–0.16）」不標準化直接丟進 PCA，PC1 解釋變異高達 98.2%。這代表？', o: ['PCA 壓縮效果超好', '假象！PC1 只是把面積欄位複製一遍，平滑度等小尺度欄被完全忽略'], a: 1, w: '未標準化時大尺度欄位主導共變異數矩陣，必須先做 Z-Score。' }] }
-  ], src: '講義 M3 第 51、56 頁（WDBC 與 scikit-learn diabetes 實測；商業資料 Marketing_data 補充：未縮放 PCA 的 PC1 為 47.5%、Z-Score 後 27.3%）。' });
+  ], src: '講義 M3 第 51、56、63 頁（WDBC 與 scikit-learn diabetes 實測；商業資料 Marketing_data 與 CraftBeer 實算見第 63 頁）。' });
 
   function addDetails(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
@@ -80,7 +80,7 @@
     ['K = 4..6', 'Silhouette 腰斬到 0.159–0.163（K=6 出現 17 人小群）。統計指標用來縮小候選範圍，最終由臨床可解釋性拍板！']
   ]);
   CaseLinks('w-elbow', [['Scikit-learn 官方指南：Clustering Performance Evaluation（Silhouette / DBI 數學定義）', U_SK]],
-    '對應講義 M3 第 24、73 頁參考文獻 [6]。');
+    '對應講義 M3 第 24、80 頁參考文獻 [6]。');
 
   addDetails('w-dendro', '延伸閱讀：四種連結法（Linkage）與 O(n²) 記憶體瓶頸（講義第 29 頁）', [
     ['四種連結法', '① Single（最近點：易鏈鎖效應）② Complete（最遠點：緊湊但怕離群值）③ Average（平均距離：AI Studio 常用）④ Ward 華德法（組內變異增量最小，最推薦）。'],
@@ -93,18 +93,18 @@
     ['Step 2 畫 k-距離圖', '務必先做 Z-Score，再算每點到第 k 近鄰距離並排序——平坦段為密集核心、急遽上揚的「膝蓋轉折點（Knee）」即最佳 eps。']
   ]);
   CaseLinks('w-db', [['Ester et al. (KDD 1996)：DBSCAN 密度分群原始論文 PDF', U_DBSCAN]],
-    '對應講義 M3 第 32、34、73 頁參考文獻 [4]。');
+    '對應講義 M3 第 32、34、80 頁參考文獻 [4]。');
 
   CaseLinks('w-ahl', [
-    ['Ahlqvist et al. Lancet Diabetes Endocrinol 2018（隆德大學官方論文頁）', U_AHL],
+    ['Ahlqvist et al. Lancet Diabetes Endocrinol 2018（DOI 官方論文頁）', U_AHL],
     ['Dennis et al. Lancet Diabetes Endocrinol 2019（PMC 全文：連續變數模型 vs 五群外部驗證）', U_DENNIS]
-  ], '對應講義 M3 第 41、73 頁參考文獻 [2][3]。');
+  ], '對應講義 M3 第 41、80 頁參考文獻 [2][3]。');
 
   CaseLinks('w-sepsis', [['Seymour et al. JAMA 2019（PMC 官方免費全文：敗血症四型 α/β/γ/δ）', U_SEPSIS]],
-    '對應講義 M3 第 7、42、73 頁參考文獻 [1]。');
+    '對應講義 M3 第 7、42、80 頁參考文獻 [1]。');
 
   CaseLinks('w-iso', [['Liu, Ting & Zhou (IEEE ICDM 2008)：Isolation Forest 原始論文 PDF', U_IF]],
-    'O(n·log n) 時間複雜度、不需算距離矩陣，高維資料異常偵測首選。對應講義 M3 第 47、48、73 頁參考文獻 [5]。');
+    'O(n·log n) 時間複雜度、不需算距離矩陣，高維資料異常偵測首選。對應講義 M3 第 47、48、80 頁參考文獻 [5]。');
 
   addDetails('w-scree', '延伸閱讀：兩個醫療資料集 PCA 實測（講義第 51、56 頁）', [
     ['乳癌 WDBC（30 欄 Z-Score）', 'PC1 (44.3%) + PC2 (19.0%) = 63.2%（2D 可視覺化）；前 7 個主成分累積保留 91.0% 變異（維度減少 77%），10 個保留 95.2%。'],
@@ -114,5 +114,27 @@
   addDetails('w-prep3', '延伸閱讀：用一份病人資料走一遍前處理順序（講義第 13 頁）', [
     ['去留與編碼', '病歷號 → 移除；總膽固醇與 LDL（r ≈ 0.9）→ 擇一保留；性別 → 0／1；居住地區 5 類 → One-Hot 成 5 欄。'],
     ['極端值與縮放', '年齡 → Z-Score；血清肌酸酐（右偏）→ 先處理極端值再 Z-Score。順序：去留 → 編碼 → 處理極端值 → 縮放。']
+  ]);
+
+  addDetails('w-tsne', '延伸閱讀：t-SNE 與 UMAP 的視覺化陷阱與正確初始化（講義第 57、81 頁）', [
+    ['距離與群大小無意義', 't-SNE 只重現局部鄰近機率：圖上兩團相距多遠、面積多大，不代表原始空間的真實群間距離或變異大小（Wattenberg et al., 2016）。'],
+    ['初始化決定全域結構', 'Kobak & Linderman (Nature Biotech 2021) 實證：t-SNE 與 UMAP 能否保留大尺度結構，關鍵在於使用 PCA 初始化而非演算法本身。'],
+    ['嚴禁當預測特徵', 't-SNE 沒有可套用到新病人的座標轉換公式（Out-of-sample 映射），只能畫圖探索，不可放進監督式模型當特徵。']
+  ]);
+  CaseLinks('w-tsne', [
+    ['Wattenberg et al. (Distill 2016)：How to Use t-SNE Effectively（互動圖解必讀）', 'https://distill.pub/2016/misread-tsne/'],
+    ['McInnes et al. (2018)：UMAP 流形降維論文（arXiv）', 'https://arxiv.org/abs/1802.03426'],
+    ['Kobak & Linderman (Nature Biotech 2021)：t-SNE / UMAP 的全域結構與 PCA 初始化', 'https://doi.org/10.1038/s41587-020-00809-z']
+  ], '對應講義 M3 第 57、81 頁參考文獻 [8][9][12]。');
+
+  addDetails('w-labs', '延伸閱讀：AI Studio 三條標準接線藍圖與除錯錦囊（講義第 61 頁）', [
+    ['管線 ① K=2..6 自動掃描', 'Select Attributes（排除 ID）→ Normalize（Z-transformation）→ Optimize Parameters (Grid: k=2..6) 內包 k-Means (runs=10)＋Cluster Distance Performance（main criterion 選 Davies Bouldin）＋Log。注意：若勾 maximize，AI Studio 會把 DBI 加上負號（如 −1.32），報告請取絕對值並註明越接近 0 越好。'],
+    ['管線 ② X-Means＋決策樹側寫', 'Data Prep 子流程 → X-Means（k_min=3, k_max=20 以 BIC 自動搜尋群數）→ 將 cluster 設為 label → 接 Decision Tree（criterion 必選 gain_ratio、depth=4，選 least_square 會因類別標籤報錯）自動萃取出白話分群規則。'],
+    ['管線 ③ 降維雙軌（HR Churn A2 / A3）', '必先 Normalize！A2 特徵萃取：接 PCA (variance=0.80) 產出 pc_1, pc_2 消除共線；A3 特徵選擇：接 Weight by PCA＋Select by Weights 保留原始欄位名稱，臨床最好解釋。']
+  ]);
+
+  addDetails('w-labs', '延伸閱讀：商業資料集實算對照——信用卡客群與精釀啤酒分群（講義第 63 頁）', [
+    ['實證 A｜信用卡 Marketing_data（n=8,950，17 欄）', '未縮放時額度（29.9%）＋還款（18.9%）＋最低應繳（12.6%）吃掉 61.4% 變異，K=3 切成 6,526 / 2,294 / 130 人（僅切出超高額戶）；Z-Score 後 PC1（27.2% 刷卡活躍度）＋PC2（20.4% 預借現金傾向），K=3 均衡切出「分期常客 6,119／預借高息族 1,596／高額全額繳 VIP 1,235 人」（Silhouette = 0.251）。'],
+    ['實證 B｜精釀啤酒 CraftBeer（n=300，12 道 1–5 分量表 Z-Score）', 'K=2 雖有最高 Silhouette（0.315），但只切出「愛喝 vs 不愛喝」；選定 K=3（Sil 0.228、DBI 1.59）拆出 ① 熱衷品飲社交派 46.7%（外部驗證：IPA 偏好 85%）、② 清爽解渴日常派 42.7%（偏好 Blonde 70%）、③ 低涉入價格敏感派 10.7%（IPA 僅 18%），完美示範「統計指標縮小範圍＋業務行動拍板＋外部欄位驗證」！']
   ]);
 })();

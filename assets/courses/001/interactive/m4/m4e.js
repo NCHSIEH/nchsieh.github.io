@@ -1,8 +1,8 @@
-/* M4 互動站強化（2026-11-15）：講義第 4、5、15、18、19、22、25、27、28、34、41、48、49、54、55、58、59、63、66、78 頁實證數據與文獻連結同步 */
+/* M4 互動站強化（2026-11-25）：講義第 4、5、15、18、19、22、25、27、28、34、41、48、49、54、55、58、59、63、66、69、70、87–88 頁實證數據與文獻連結同步 */
 (function () {
   'use strict';
   const $ = U.$;
-  const U_GFT     = 'https://www.networkscienceinstitute.org/publications/the-parable-of-google-flu-traps-in-big-data-analysis-2';
+  const U_GFT     = 'https://doi.org/10.1126/science.1248506';
   const U_TABULAR = 'https://arxiv.org/abs/2207.08815';
   const U_TABPFN  = 'https://www.nature.com/articles/s41586-024-08328-6';
   const U_XGB     = 'https://arxiv.org/abs/1603.02754';
@@ -110,7 +110,7 @@
     ['Grinsztajn et al. (NeurIPS 2022)：為何樹模型在表格資料仍勝過深度學習（45 資料集基準）', U_TABULAR],
     ['Hollmann et al. (Nature 2025)：TabPFN 表格基礎模型（2.8 秒免調參 In-Context 預測）', U_TABPFN],
     ['Chen & Guestrin (KDD 2016)：XGBoost 二階梯度提升原始論文', U_XGB]
-  ], '對應講義 M4 第 19、22、78 頁參考文獻 [2][3][4]。');
+  ], '對應講義 M4 第 19、22、87 頁參考文獻 [2][3][4]。');
 
   addNote('w-vote', '異質集成實務順序（講義 M4 第 25 頁）', [
     '先試軟投票（Soft Voting）：保留各模型預測機率把握度（如 [48%, 48%, 96%] 平均 64% 翻轉硬投票誤判），但各模型機率需先校準。',
@@ -129,10 +129,10 @@
   ]);
 
   CaseLinks('w-cap', [['Liu, Ting & Zhou (IEEE ICDM 2008)：Isolation Forest 孤立森林原始論文 PDF', U_IF]],
-    '對應講義 M4 第 4、36、37、78 頁參考文獻 [5]。');
+    '對應講義 M4 第 4、36、37、87 頁參考文獻 [5]。');
 
   CaseLinks('w-gft', [
-    ['Lazer et al. Science 2014（作者單位頁：The Parable of Google Flu）', U_GFT],
+    ['Lazer et al. Science 2014（DOI 原文：The Parable of Google Flu）', U_GFT],
     ['BigDATAwire 報導', 'https://bigdatawire.com/2014/03/14/google_s_flu_analytics_fail_highlights_big_data_s_shortcomings'],
     ['TIME 報導', 'https://time.com/23782/google-flu-trends-big-data-problems']]);
 
@@ -142,10 +142,36 @@
     '三切分鐵律：絕不可在原訓練集擬合校準器，必切「訓練集 60% → 校準集 20% → 測試集 20%（算 Brier Score）」。'
   ]);
   CaseLinks('w-cal', [['Scikit-learn 官方指南：Probability Calibration（可靠性圖與 Brier Score）', U_CAL]],
-    '對應講義 M4 第 62–64、78 頁參考文獻 [6]。');
+    '對應講義 M4 第 62–64、87 頁參考文獻 [6]。');
 
   addNote('w-ask', '臨床落地黃金三部曲與最佳門檻公式（講義 M4 第 66、67 頁）', [
     '公式實例：敗血症漏報代價 C_FN = 200、誤報代價 C_FP = 3 → 理論最佳門檻 p* = 3 ÷ (3 + 200) ≈ 1.5%。',
     '落地三部曲：① 訓練模型（排風險高低）→ ② 獨立校準集做機率校準（對準真實發病率）→ ③ 套用 p* 調低門檻（免重訓模型，總代價由 2,445 大砍 67% 至 819；AI Studio 亦可用 MetaCost 嵌入代價矩陣）。'
   ]);
+
+  addNote('w-labs', '實戰接線：AI Studio 四大主題與校準代價標準管線（講義 M4 第 69 頁）', [
+    '管線 ① 集成比較：Retrieve → Set Role (label) → Cross Validation (10-Fold Stratified)，訓練子流程內嵌 Bagging / AdaBoost / Vote / Stacking（Stacking 內建 K-Fold 折外預測防洩漏）。',
+    '管線 ② 異常偵測：Select Attributes（純特徵、移除 ID）→ Normalize（Z-Score，距離法必做）→ Detect Outlier (LOF) 或 Isolation Forest → Sort (outlier 降冪) → Filter Example Range (1..50 依每日覆核人力截斷)。',
+    '管線 ③ 關聯規則：Aggregate / Pivot（轉購物籃寬表）→ Numerical to Binominal（0/1 轉 true/false，FP-Growth 必備前置！）→ FP-Growth (min_support = 0.01) → Create Association Rules → Filter (Lift ≥ 1.2)。',
+    '管線 ④ 時間序列與代價門檻：Sort (日期升冪) → Windowing / Lag（造滯後特徵）→ Sliding Window Validation（嚴禁隨機 K-Fold！）；代價敏感可用 MetaCost 包住分類器，或 Create Threshold (p*) → Apply Threshold。'
+  ]);
+
+  addNote('w-t1', '實證對照：顧客流失、門診異常與 1,200 張處方實算基準（講義 M4 第 70 頁）', [
+    '表 A｜顧客流失（customer-churn-data，N = 900）分層 10-Fold CV：單一決策樁 66.6% ± 3.9% → 深決策樹 78.4% ± 3.8% → Bagging 80.6% ± 3.4% → 隨機森林 80.9% ± 2.8%（標準差最小）→ AdaBoost 78.9% ± 3.2% → GBDT 81.3% ± 3.4% → Soft Voting 81.8% ± 3.1% → OOF Stacking 82.0% ± 3.0%（反觀未做折外預測的 Leaky Stacking 訓練 99.8%、測試崩跌至 74.2%！）。',
+    '表 B｜門診主檔乾淨版（N = 751，5 項生理指標）Isolation Forest：contamination 設 0.01 / 0.05 / 0.10 分別抓出 8 / 38 / 75 筆；5 組亂數種子重跑 Top-5% 重疊率 86.2%，與單欄 IQR 交集 26 筆（68%），多抓出 12 筆「單欄正常但組合異常」個案。',
+    '表 C｜1,200 張處方關聯規則：按 Confidence 排名前段全被「→ 制酸劑（Lift ≈ 1.00）」霸榜；改篩 Lift ≥ 1.2 後，止咳藥 → 抗組織胺（Lift = 5.10）、Metformin → Statin（Lift = 2.02）與出血交互作用警示 Warfarin → NSAID（Lift = 1.48）才浮現。'
+  ]);
+
+  CaseLinks('w-bag', [['Breiman (Machine Learning 2001)：Random Forests 隨機森林與 OOB 原始論文', 'https://doi.org/10.1023/A:1010933404324']],
+    '對應講義 M4 第 15、16、88 頁參考文獻 [9]。');
+  CaseLinks('w-ada', [['Freund & Schapire (JCSS 1997)：AdaBoost 權重更新定理原始論文', 'https://doi.org/10.1006/jcss.1997.1504']],
+    '對應講義 M4 第 17、18、88 頁參考文獻 [10]。');
+  CaseLinks('w-apriori', [['Han, Pei & Yin (SIGMOD 2000)：FP-Growth 不產生候選集之前綴樹原始論文', 'https://doi.org/10.1145/335191.335372']],
+    '對應講義 M4 第 47、88 頁參考文獻 [11]。');
+  CaseLinks('w-lag', [
+    ['Das et al. (ICML 2024)：TimesFM 時間序列基礎模型（Zero-Shot 預測）', 'https://arxiv.org/abs/2310.10688'],
+    ['Ansari et al. (TMLR 2024)：Chronos 時間序列語言化預訓練模型', 'https://arxiv.org/abs/2403.07815']
+  ], '延伸視野：2024–2026 時間序列基礎模型仍須通過季節性基準線與 Walk-forward 檢驗。對應講義 M4 第 58、88 頁參考文獻 [7][8]。');
+  CaseLinks('w-cal', [['Niculescu-Mizil & Caruana (ICML 2005)：Predicting Good Probabilities with Supervised Learning', 'https://doi.org/10.1145/1102351.1102430']],
+    '實證解析為何隨機森林分數擠向中間、Naive Bayes 推向極端，以及 Platt vs Isotonic 的樣本數分界。對應講義 M4 第 62–63、88 頁參考文獻 [12]。');
 })();

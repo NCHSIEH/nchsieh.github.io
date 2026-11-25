@@ -1,4 +1,4 @@
-/* M1 互動站強化（2026-11-13）：講義第 7、43、77 頁的互動版；實例來源連結 */
+/* M1 互動站強化（2026-11-13）：講義第 7、43、79 頁的互動版；實例來源連結 */
 (function () {
   'use strict';
   const $ = U.$;
@@ -33,7 +33,7 @@
     { id: 'q', label: '判斷', quiz: [
       { t: '模型 AUC 0.99，第一個反應應該是？', o: ['慶祝並直接上線', '先假設有洩漏，逐項排查', '再加幾個特徵'], a: 1, w: '醫療預測難有這麼高，先查洩漏。' },
       { t: '特徵重要性第一名是「出院後 30 天內是否回診」，要預測的是再入院。你怎麼做？', o: ['保留，它最有用', '拿掉重跑，它是目標的另一種寫法'], a: 1, w: '那一欄預測當下拿不到，或本身就是目標，屬於洩漏。' }] }
-  ], src: '講義 M1 第 77 頁。' });
+  ], src: '講義 M1 第 79 頁。' });
 
   CaseLinks('w-cascade', [
     ['Sambasivan et al. 論文頁（Google Research）', 'https://research.google/pubs/pub49953/'],
@@ -47,10 +47,10 @@
     ], '講義 M1 第 15 頁。');
     CaseLinks('w-bmi', [
       ['衛福部國民健康署：成人健康體位標準（BMI 切點 18.5 / 24 / 27）', 'https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=542&pid=9737']
-    ], '講義 M1 第 68 頁。');
+    ], '講義 M1 第 69 頁。');
     CaseLinks('w-leakdemo', [
       ['Kapoor & Narayanan, Patterns 2023：Leakage and the Reproducibility Crisis in ML-Based Science', 'https://arxiv.org/abs/2207.07048']
-    ], '盤點 17 個科學領域近 300 篇因資料洩漏導致結果無法重現的論文。講義 M1 第 73 頁。');
+    ], '盤點 17 個科學領域近 300 篇因資料洩漏導致結果無法重現的論文。講義 M1 第 74 頁。');
   }
 
   function addDetails(id, title, bullets) {
@@ -96,16 +96,25 @@
     ['② 鍵值重複', '751 筆就診來自 300 位病人（232 人就診 ≥ 2 次），這是一對多粒度而非錯誤，病人層級建模前要依病歷號 Aggregate 成 300 列。'],
     ['③ 語意重複', '臺北市(161)、台北市(113)、台北市 (26)、TAIPEI(13) 四種寫法指同一縣市，需用 Trim＋Replace/Map 合併為 313 筆。']
   ]);
-  addDetails('w-order', '延伸閱讀：五種常見洩漏來源與切分防火牆（講義第 73 頁）', [
+  addDetails('w-order', '延伸閱讀：五種常見洩漏來源與切分防火牆（講義第 74 頁）', [
     ['① 前處理洩漏', '切分前做 Normalize／填補／篩特徵。'],
     ['② 時間洩漏', '放入出院後30天門診次數 → Accuracy 100%。'],
     ['③ 目標洩漏', '放入結案註記 → Accuracy 100%。'],
     ['④ 重複樣本洩漏', '751 筆隨機切 7:3，測試集約 81% 就診的病人已在訓練集出現過。'],
     ['⑤ 過取樣洩漏', '切分前做 SMOTE。黃金律：把 Split / Cross Validation 當成防火牆，所有跨列算統計量或合成樣本的動作只能在訓練集做。']
   ]);
-  addDetails('w-tasks', '延伸閱讀：繳交前三大自我檢查（講義第 90 頁）', [
+  addDetails('w-tasks', '延伸閱讀：繳交前三大自我檢查（講義第 92 頁）', [
     ['① 方法面', '填補與縮放都在切分之後、病歷號設 id、洩漏欄已移除、Join 前後對過 Statistics 筆數。'],
     ['② 報告面', '列出偽裝成 0 的遺失欄清單、附上填補前後平均／中位數／標準差對照、寫出離群值處理的臨床理由。'],
     ['③ 檔案面', '關掉 AI Studio 重開 .rmp 確認無斷線與絕對路徑錯誤、嚴禁使用真實病歷個資。']
   ]);
+  addDetails('w-order', '延伸閱讀：AI Studio 實戰接線——用 pre 埠與 Group Models 鎖死防洩漏（講義第 78 頁）', [
+    ['寫法 A｜單次切分（Split Data 70/30）', 'par 1（70% 訓練集）依序接 Replace Missing Values（算中位數）→ Normalize（算 μ, σ），兩者的 pre（前處理模型埠）用 Group Models 打包後，連進 Apply Model 的 mod 埠，並把 par 2（30% 測試集）連進 unl 埠！切記別把縮放後的訓練集誤連 unl，否則測試集消失且訓練集被縮放兩次。'],
+    ['寫法 B｜交叉驗證黃金標準（Cross Validation）', '雙擊進入雙欄子流程：左側 Training 將「補值 pre ＋ 縮放 pre ＋ 預測模型 mod」透過 Group Models 綁成單一組合模型送到右側；右側 Testing 只需一顆 Apply Model 即可對驗證折自動完成補值→縮放→預測，且部署上線面對單一新病人時可直接重用同一顆組合模型（呼應 TRIPOD+AI 27a）。']
+  ]);
+  if (window.CaseLinks) {
+    CaseLinks('w-tasks', [
+      ['Collins et al., BMJ 2024：TRIPOD+AI 臨床預測模型報告準則（含前處理與缺值處理項目）', 'https://www.bmj.com/content/385/bmj-2023-078378']
+    ], '對應講義 M1 第 35、78、102 頁參考文獻 [8]。');
+  }
 })();

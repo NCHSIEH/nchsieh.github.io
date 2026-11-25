@@ -98,7 +98,7 @@
       ['Obermeyer et al., Science 2019（全文 PDF）', 'https://www.ftc.gov/system/files/documents/public_events/1548288/privacycon-2020-ziad_obermeyer.pdf'],
       ['Zech et al., PLOS Med 2018（arXiv 全文）', 'https://arxiv.org/pdf/1807.00431v2.pdf'],
       ['Wong et al., JAMA Intern Med 2021', 'https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/2781307']
-    ], '講義 M0 第 47 頁。');
+    ], '講義 M0 第 48 頁。');
     CaseLinks('w-law', [
       ['衛福部：醫療機構應用生成式人工智慧指引（2026/5/29）', 'https://www.mohw.gov.tw/cp-18-86695-1.html']
     ], '衛部醫字第 1151663164 號函。講義 M0 第 33 頁。');
@@ -131,17 +131,17 @@
     ['② 算力變便宜', '大模型預訓練需雲端數千張 GPU，但 7B–12B 小模型在單張消費級顯卡或筆電即可用 Ollama 本地推論。'],
     ['③ 演算法突破', '非結構化資料由深度學習與 Transformer 勝出；但結構化表格上決策樹與梯度提升樹仍常勝過深度學習（Grinsztajn et al., NeurIPS 2022）。']
   ]);
-  addDetails('w-nest', '延伸閱讀：三種學習方式的「答案」從哪裡來？（講義第 51 頁）', [
+  addDetails('w-nest', '延伸閱讀：三種學習方式的「答案」從哪裡來？（講義第 52 頁）', [
     ['監督式學習', '歷史資料自帶人工或制度標好的標準答案 y（分類預測再入院、迴歸預測住院天數）。'],
     ['非監督式學習', '只有特徵 X 沒有答案 y，改找資料本身的分群、降維主軸或異常點。'],
     ['自監督學習', '把句子遮住一部分讓模型自己猜被遮住的字，不靠人工逐筆標註就能讀巨量文本學會語言規律（BERT 與 GPT 預訓練核心）。']
   ]);
-  addDetails('w-scope', '延伸閱讀：專案界定實例（再入院預測 vs 居家退案，講義第 76–80 頁）', [
+  addDetails('w-scope', '延伸閱讀：專案界定實例（再入院預測 vs 居家退案，講義第 79–83 頁）', [
     ['步驟一（使用者角度）', '從技術出發丟進 80 欄、混入出院結帳欄位（時間洩漏）、只給「高風險 0.84」→ 上線即閒置；改從出院準備個管師早交班限制出發，每天 8 點產出「優先訪視前 5 床＋前 3 大原因」。'],
     ['步驟二與三（先比解法）', '居家個案無預警退案，先比較 ① 電話訪談 10 位家屬（1 週・極低）、② 結案表單加填退出原因（1 個月・低）、③ 滿 14 天未派案自動提醒（2 週・低）、④ 資料科學預測模型（2–3 月・高）。'],
     ['步驟五（資料需求三面向）', '先把「一列＝一次就診」Aggregate 彙總成「一列＝一位病人」防洩漏；盤點現成／衍生／難拿欄位，先用單一系統近 2 年 5 個核心欄位做 MVP。']
   ]);
-  addDetails('w-thread', '延伸閱讀：同一個貫穿題目走完三個階段（長照新收個案為例，講義第 83–84 頁）', [
+  addDetails('w-thread', '延伸閱讀：同一個貫穿題目走完三個階段（長照新收個案為例，講義第 86–87 頁）', [
     ['Phase A（W1–W6，AI Studio）', '用年齡、CMS 等級、ADL 分數預測三個月內服務時數是否增加逾 30%，建立邏輯斯迴歸／決策樹基準線。'],
     ['Phase B（W7–W10，AI Studio）', '同一份資料公平比較隨機森林、梯度提升與深度學習（小樣本表格簡單模型贏是正常的，說出原因就是好答案）。'],
     ['Phase C（W11–W16，Dify）', '放進長照 3.0 給付基準與照護指引，個管師輸入高風險情境 → RAG 檢索法規條文＋Code 節點查表試算額度。'],
@@ -182,7 +182,7 @@
           h('div', null, h('b', { style: { fontSize: '14.5px' } }, '同一句病歷，兩套 NLP 管線怎麼處理？'), '　', h('code', null, '「病患否認胸痛，但訴呼吸喘三日」')),
           seg([['trad', '傳統 NLP（白箱）'], ['mod', '現代 NLP（黑箱）']], () => mode, v => mode = v, draw)),
         flow,
-        h('div', { class: 'ai' }, h('span', { class: 'tag ' + (mode === 'mod' ? 'blue' : '') }, p.tag), '　', p.summary, '（講義 M0 第 55 頁）')
+        h('div', { class: 'ai' }, h('span', { class: 'tag ' + (mode === 'mod' ? 'blue' : '') }, p.tag), '　', p.summary, '（講義 M0 第 56 頁）')
       );
     }
     b.parentNode.append(out); draw();
@@ -193,7 +193,7 @@
     const b = document.getElementById('w-studio'); if (!b || !b.parentNode) return;
     const PORTS = [['exa', 'ExampleSet 資料表'], ['mod', '訓練好的模型'], ['unl', '待預測資料'], ['lab', '預測結果（Labeled）'], ['per', '評估指標（Performance）'], ['res', '結果輸出埠（必接！）']];
     const box = h('div', { style: { marginTop: '12px', borderTop: '1px dashed var(--line2)', paddingTop: '12px' } },
-      h('div', { style: { fontWeight: 700, fontSize: '14.5px', marginBottom: '6px' } }, 'AI Studio 畫面配置與連接埠速查（講義第 66 頁）'),
+      h('div', { style: { fontWeight: 700, fontSize: '14.5px', marginBottom: '6px' } }, 'AI Studio 畫面配置與連接埠速查（講義第 68 頁）'),
       h('div', { class: 'grid3', style: { gap: '8px' } },
         h('div', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '8px 10px', background: '#fff', fontSize: '13px' } }, h('b', { style: { color: 'var(--accent-ink)' } }, '左側面板'), h('div', null, '左上 Repository（拖資料自動變 Retrieve）'), h('div', null, '左下 Operators（關鍵字搜尋節點）')),
         h('div', { style: { border: '1.5px solid var(--accent)', borderRadius: '8px', padding: '8px 10px', background: 'var(--accent-soft)', fontSize: '13px' } }, h('b', { style: { color: 'var(--accent-ink)' } }, '中央 Process 畫布 ＋ 上方切換'), h('div', null, '上方切換 Design / Results；最後節點務必連到右側 res 埠，Split Data 上下輸出別接反。')),

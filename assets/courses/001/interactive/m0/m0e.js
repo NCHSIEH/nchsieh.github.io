@@ -1,4 +1,4 @@
-/* M0 第二輪內容強化（2026-11-23）：醫院導入生成式 AI 五關（講義第 34 頁）、健康資料來源地圖與「一列是什麼」（講義第 86 頁） */
+/* M0 第二輪內容強化與進階優化同步（2026-11-25）：醫院導入生成式 AI 五關（講義第 34 頁）、Auto MPG 實證對照（第 73 頁）、健康資料來源地圖與「一列是什麼」（第 83、89 頁） */
 (function () {
   'use strict';
   const { h, seg, $ } = U;
@@ -97,8 +97,29 @@
     out.append(strip(st));
     out.append(h('div', { class: 'note', style: { marginTop: '10px' } }, h('b', null, '看懂了什麼：'),
       mode === 'adm' ? `依住院切分時，測試集 ${st.nTest} 筆裡有 ${st.seen} 筆（${st.pct.toFixed(1)}%）屬於訓練時已經見過的病人——模型可能是「認得這個人」而不是學會規律，測試分數會偏樂觀。`
-        : `改依病人切分後，同一人的所有住院都在同一邊，測試集「見過的病人」是 0%，分數才代表面對新病人的表現。Diabetes 130 實際上 101,766 筆住院只來自約 7.15 萬位病人，切分前要先決定「一列＝一次住院還是一位病人」（講義第 80 頁）。`));
-    out.append(h('p', { class: 'ai' }, '資料來源說明見講義 M0 第 86 頁。病人與住院次數為模擬資料（固定亂數種子）；Diabetes 130 筆數取自 UCI 資料頁，病人數取自使用該資料集的論文描述。'));
+        : `改依病人切分後，同一人的所有住院都在同一邊，測試集「見過的病人」是 0%，分數才代表面對新病人的表現。Diabetes 130 實際上 101,766 筆住院只來自約 7.15 萬位病人，切分前要先決定「一列＝一次住院還是一位病人」（講義第 83 頁）。`));
+    out.append(h('p', { class: 'ai' }, '資料來源說明見講義 M0 第 89 頁。病人與住院次數為模擬資料（固定亂數種子）；Diabetes 130 筆數取自 UCI 資料頁，病人數取自使用該資料集的論文描述。'));
   }
   draw();
+
+  /* ③ Auto MPG 實證對照與經典文獻連結（講義第 53、61、73、100–101 頁） */
+  function addDetails(id, title, bullets) {
+    const b = document.getElementById(id); if (!b || !b.parentNode) return;
+    const ul = h('ul', null, bullets.map(([k, v]) => h('li', null, h('b', null, k + '：'), v)));
+    b.parentNode.append(h('details', { class: 'details-note' }, h('summary', null, title), h('div', { class: 'dn-body' }, ul)));
+  }
+  addDetails('w-mpgreal', '延伸閱讀：UCI Auto MPG（392 輛車）進 AI Studio 的三個關鍵發現（講義第 73 頁）', [
+    ['① 永遠要報基準線', '80/20 切分下，全部瞎猜訓練集平均（23.4 mpg）的基準線 RMSE = 7.8；只放車重降為 RMSE = 4.3（R² = 0.69）；6 數值欄＋產地虛擬變數降為 RMSE = 3.3（R² = 0.82，誤差減半）。'],
+    ['② 非線性彎曲與對數轉換', '車重 1,613–5,140 磅對油耗呈曲線下降，直線在極輕與極重兩端皆低估；對目標取 log(mpg) 後彎曲拉直，測試集 R² 再升至 0.87（預告 M2 特徵轉換）。'],
+    ['③ 代理變數陷阱（相關 ≠ 因果）', 'model year 係數約 +0.75（每晚一年多跑 0.75 mpg），背後真因是 1973、1979 石油危機與美國 CAFE 燃油法規迫使車廠造輕型小車，而非時間本身讓引擎省油。'],
+    ['④ 真實欄位預告 W2–W3 資料工程', '原始 398 筆中馬力有 6 筆缺值、車名 name 為純文字識別碼應排除、產地 origin 為類別需轉虛擬變數——完成版 .rmp 已把完整前處理與 10 折 CV 接好。']
+  ]);
+  if (window.CaseLinks) {
+    CaseLinks('w-simpson', [
+      ['Charig et al., BMJ 1986：腎結石開放手術 vs 經皮取石辛普森悖論原始論文（PMC 全文）', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC1339981/']
+    ], '對應講義 M0 第 47、101 頁參考文獻 [28]。');
+    CaseLinks('w-mpgreal', [
+      ['Quinlan (1993)：UCI Auto MPG Dataset 官方資料集頁（DOI）', 'https://doi.org/10.24432/C5859H']
+    ], '對應講義 M0 第 73、101 頁參考文獻 [30]。');
+  }
 })();

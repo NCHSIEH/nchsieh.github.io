@@ -30,7 +30,7 @@
         <li>說出哪些演算法需要縮放，且縮放參數只從訓練集計算　<a href="#p10">第 10 節</a></li>
         <li>逐欄判斷預測當下拿不到的欄位，避開五種資料洩漏　<a href="#p12">第 12 節</a></li>
       </ol>
-      <span style="font-size:13.5px;color:var(--muted)">需要先會：M0 的專案流程（先補值再切分）與 AI Studio 基本操作。</span>
+      <span style="font-size:13.5px;color:var(--muted)">需要先會：M0 的專案流程（先切分再補值）與 AI Studio 基本操作。</span>
     </div>
     <!--lab-box-->
     <div class="note labbox"><b>演算法實驗室：這個單元有 9 個實驗可以一步一步跑</b>（按「下一步」看每個中間數字，可改資料、匯出 CSV 到 AI Studio 對答案）<span class="sec">核心：<a href="../lab/exp.html?id=S1">S1 資料前處理流程</a>、<a href="../lab/exp.html?id=A1">A1 遺失值補值</a>、<a href="../lab/exp.html?id=A2">A2 標準化與正規化</a>、<a href="../lab/exp.html?id=A3">A3 離散化</a>、<a href="../lab/exp.html?id=A4">A4 類別編碼</a>、<a href="../lab/exp.html?id=A6">A6 特徵選擇</a></span><span class="sec adv">進階：<a href="../lab/exp.html?id=A7">A7 IQR 離群值與縮尾</a>、<a href="../lab/exp.html?id=A8">A8 偏態轉換與穩健縮放</a>、<a href="../lab/exp.html?id=A9">A9 衍生特徵與共線性 VIF</a></span><span class="sec"><a href="../lab/">→ 看全部 80 個實驗</a></span></div>
@@ -158,7 +158,7 @@
   <!-- ============ P09 ============ -->
   <section class="part" id="p09" data-t="相關與共線性">
     <div class="ph"><span class="num">09</span><div><h2>相關與共線性</h2><div class="en">CORRELATION &amp; COLLINEARITY</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 54–57 頁（PART 09）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 54–58 頁（PART 09）</p>
     <p class="one">兩個欄位講的是同一件事，迴歸就分不清效果歸誰。|r| ≥ 0.8 是警戒區；更嚴謹看 VIF（&gt;10，嚴格用 5）。</p>
     <div class="wd"><div class="wh"><h3>|r| 長什麼樣？</h3><span class="tag amber">互動</span></div><div id="w-rslider"></div></div>
     <div class="wd"><div class="wh"><h3>手算 r：六位病人</h3></div><p class="hint">直接改表格裡的血壓數字，每一步會即時重算。</p><div id="w-hand"></div></div>
@@ -171,7 +171,7 @@
   <!-- ============ P10 ============ -->
   <section class="part" id="p10" data-t="正規化與標準化">
     <div class="ph"><span class="num">10</span><div><h2>正規化與標準化</h2><div class="en">NORMALIZATION &amp; STANDARDIZATION</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 59–64 頁（PART 10）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 60–65 頁（PART 10）</p>
     <p class="one">用到「距離」或「權重大小」的演算法需要縮放；樹模型只比大小，不需要。縮放參數只能從訓練集計算。</p>
     <div class="wd"><div class="wh"><h3>公式實驗：Min-Max、Z-Score、Robust</h3></div><div id="w-scalef"></div></div>
     <div class="wd"><div class="wh"><h3>不縮放時，年齡等於不存在（k-NN）</h3><span class="tag amber">互動</span></div>
@@ -186,7 +186,7 @@
   <!-- ============ P11 ============ -->
   <section class="part" id="p11" data-t="特徵工程">
     <div class="ph"><span class="num">11</span><div><h2>特徵工程</h2><div class="en">FEATURE ENGINEERING · 把領域知識變成欄位</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 66–71 頁（PART 11）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 67–72 頁（PART 11）</p>
     <p class="one">好的特徵來自領域知識，不是來自演算法。演算法不知道 BMI 24 那裡有一條線，但你知道。</p>
     <div class="wd"><div class="wh"><h3>六種手法：用一位病人看衍生欄位</h3></div><div id="w-fe"></div></div>
     <div class="wd"><div class="wh"><h3>分箱：等距、等頻、臨床切點</h3><span class="tag amber">互動</span></div><div id="w-bin"></div></div>
@@ -200,20 +200,20 @@
   <!-- ============ P12 ============ -->
   <section class="part" id="p12" data-t="資料洩漏">
     <div class="ph"><span class="num">12</span><div><h2>資料洩漏</h2><div class="en">DATA LEAKAGE · 做對每一步卻得到假的好成績</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 73–78 頁（PART 12）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 74–80 頁（PART 12）</p>
     <p class="one">每一步都做對了，指標卻好得不合理——八成是洩漏，而且它不會報錯。</p>
     <div class="wd"><div class="wh"><h3>時間洩漏：預測那一刻拿得到嗎？</h3><span class="tag amber">互動</span></div><p class="hint">預測時點＝出院。點每個欄位，標成「可以用」或「洩漏」。</p><div id="w-time"></div></div>
     <div class="wd"><div class="wh"><h3>流程排序挑戰</h3></div><p class="hint">用 ↑↓ 排出正確順序。規律：所有會用到整份資料統計量的動作，都要在切分之後。</p><div id="w-order"></div></div>
     <div class="wd"><div class="wh"><h3>同一位病人不能同時出現在訓練與測試</h3></div><div id="w-group"></div></div>
     <div class="wd"><div class="wh"><h3>實測：洩漏誘餌讓 Accuracy 變多少？</h3><span class="tag blue">用貫穿資料即時計算</span></div><div id="w-leakdemo"></div></div>
     <div class="note warn"><b>三個「好到不合理」的警訊：</b>① Accuracy／AUC 超過 0.98　② 某一個特徵的重要性遠高於其他　③ 訓練與測試分數幾乎一樣好且異常高。</div>
-    <div class="wd"><div class="wh"><h3>三個「好到不合理」的警訊</h3><span class="tag blue">講義第 77 頁</span></div><div id="w-redflags"></div></div>
+    <div class="wd"><div class="wh"><h3>三個「好到不合理」的警訊</h3><span class="tag blue">講義第 79 頁</span></div><div id="w-redflags"></div></div>
   </section>
 
   <!-- ============ P13 ============ -->
   <section class="part" id="p13" data-t="門診資料健檢實驗室">
     <div class="ph"><span class="num">13</span><div><h2>實驗室：門診資料健檢與清理</h2><div class="en">HANDS-ON LAB · M1_門診主檔.csv ＋ M1_檢驗結果.csv</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 80–84 頁（PART 13）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 82–86 頁（PART 13）</p>
     <p class="one">用貫穿資料把整條前處理鏈跑一次，右側「對答案」會隨你的步驟亮燈。完成後可下載清理後的 CSV，與 AI Studio 結果比對。</p>
     <div class="wd"><div class="wh"><h3>先看一遍：一鍵播放整條前處理鏈</h3><span class="tag blue">用貫穿資料即時計算</span></div><p class="hint">按播放，看每一步之後列數、寫法種類與「還沒處理的問題」怎麼變；也可以點步驟條跳到任一步。看完再到下面自己動手做。</p><div id="w-pipe"></div></div>
     <div id="w-lab"></div>
@@ -223,7 +223,7 @@
   <!-- ============ P14 ============ -->
   <section class="part" id="p14" data-t="作業與重點回顧">
     <div class="ph"><span class="num">14</span><div><h2>作業、術語與回顧</h2><div class="en">TAKE-HOME · GLOSSARY · REVIEW</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 85–95 頁（PART 14、術語、回顧）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M1：第 87–104 頁（PART 14、實驗室、術語、回顧）</p>
     <p class="one">帶回家作業：選一份有品質問題的公開資料集，完成從原始資料到可建模的完整前處理。第 4 週上課前繳交。</p>
     <div class="wd"><div class="wh"><h3>七個必做任務（進度清單）</h3></div><div id="w-tasks"></div></div>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
