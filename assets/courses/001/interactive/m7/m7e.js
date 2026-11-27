@@ -1,4 +1,4 @@
-/* M7 互動站強化（2026-11-15）：對應講義第 6、12、20、24、28、32、34、37、40、45–46、50、53–54、56、58、63、66、68、69、80 頁強化內容與官方實例連結 */
+/* M7 互動站強化（2026-11-27）：與 90 頁進階優化版講義（新增第 61–62 頁 AI Studio 生成式接線與長照 BPE/RAG/LoRA 實證、第 88–89 頁雙頁文獻）同步 */
 (function () {
   'use strict';
   const $ = U.$;
@@ -62,15 +62,30 @@
       note: '流暢不等於正確；這兩件事在 LLM 裡是分開的。' },
     { id: 'q', label: '判斷', quiz: [
       { t: '模型回答語氣專業、條理分明。這代表內容比較可信嗎？', o: ['是，專業的語氣來自知識', '否，流暢度與正確性無關'], a: 1, w: '兩件事分開，要靠來源與驗證。' }] }
-  ], src: '講義 M7 第 69 頁。' });
+  ], src: '講義 M7 第 72 頁。' });
 
   CaseLinks('w-whisper', [
-    ['Koenecke et al. Careless Whisper（arXiv 2024）', 'https://arxiv.org/abs/2402.08021'],
+    ['[1] Koenecke et al. Careless Whisper（ACM FAccT 2024）', 'https://arxiv.org/abs/2402.08021'],
     ['Cornell Chronicle 報導', 'https://news.cornell.edu/index%2ephp/node/328846']]);
   CaseLinks('w-ambient', [
-    ['ClinicalTrials.gov NCT06792890（UCLA Ambient AI Scribes RCT）', 'https://clinicaltrials.gov/study/NCT06792890']]);
+    ['[2] ClinicalTrials.gov NCT06792890（UCLA Ambient AI Scribes RCT, NEJM AI 2025）', 'https://clinicaltrials.gov/study/NCT06792890']]);
   CaseLinks('w-taide', [
-    ['國科會 TAIDE 官方 Hugging Face 模型庫', 'https://huggingface.co/taide']]);
+    ['[6] 國科會 TAIDE 官方 Hugging Face 模型庫', 'https://huggingface.co/taide'],
+    ['[8] 數位發展部 AI 產品與系統評測中心（AIEC）', 'https://aiec.moda.gov.tw/']]);
+  CaseLinks('w-token', [
+    ['[9] Sennrich et al. (ACL 2016) Byte Pair Encoding (BPE) 子詞斷詞開山論文', 'https://aclanthology.org/P16-1162/']]);
+  CaseLinks('w-attn', [
+    ['[3] Vaswani et al. (NeurIPS 2017) Attention Is All You Need', 'https://arxiv.org/abs/1706.03762']]);
+  CaseLinks('w-emb', [
+    ['[4] Lewis et al. (NeurIPS 2020) Retrieval-Augmented Generation (RAG) 原始論文', 'https://arxiv.org/abs/2005.11401']]);
+  CaseLinks('w-ft5', [
+    ['[10] Hu et al. (ICLR 2022) LoRA 低秩適配微調原始論文', 'https://arxiv.org/abs/2106.09685'],
+    ['[11] Ouyang et al. (NeurIPS 2022) InstructGPT 與 RLHF 人類回饋強化學習論文', 'https://arxiv.org/abs/2203.02155']]);
+  CaseLinks('w-ctx', [
+    ['[5] Liu et al. (TACL 2024) Lost in the Middle 長上下文 U 型記憶曲線論文', 'https://arxiv.org/abs/2307.03172']]);
+  CaseLinks('w-red', [
+    ['[12] 衛生福利部（2026/05/29）：醫療機構應用生成式人工智慧指引', 'https://www.mohw.gov.tw/cp-18-86695-1.html'],
+    ['[7] Google DeepMind (2025) MedGemma 醫療多模態開放模型與安全規範卡', 'https://deepmind.google/models/gemma/medgemma/']]);
 
   function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
@@ -106,16 +121,22 @@
     '記憶體估算：RAM(GB) ≈ 參數(B) × (bits/8) × 1.15 + 1 GB（8B Q4 約需 6 GB）。',
     '資安紅線：模型名結尾帶「-cloud」會在雲端執行；處理敏感資料務必選純本地模型並斷網實測。'
   ]);
-  addNote('w-prompt', '同一個需求，層次 1 vs 層次 4（講義 p63–64）', [
+  addNote('w-prompt', '同一個需求，層次 1 vs 層次 4（講義第 65–66 頁）', [
     '✘ 層次 1：「請說明糖尿病飲食，不要編造。」（約束力不足）',
     '✔ 層次 4（對應 M8 四段式 System Prompt）：① 角色與任務 → ② 執行步驟與依據（只據衛教手冊）→ ③ 嚴格限制與越界拒答（禁提藥名劑量）→ ④ 輸出格式、One-Shot 範例與免責聲明。'
   ]);
-  addNote('w-ctx', 'Lost in the Middle U 型記憶曲線（講義 p66）', [
+  addNote('w-ctx', 'Lost in the Middle U 型記憶曲線（講義第 68 頁）', [
     'Liu et al.（TACL 2024）實證：塞 20 段資料時，關鍵答案放第 1 或第 20 段準確率 75–80%，夾在第 10 段暴跌至 50% 以下。',
     '對策：採「Retrieve-20 → Rerank-5」、把過敏史／慢性病釘選在 Session 變數，並把核心指令放在頭尾。'
   ]);
-  addNote('w-red', '醫療生成式 AI 四條不可逾越紅線（講義 p68）', [
+  addNote('w-red', '醫療生成式 AI 四條不可逾越紅線（講義第 71 頁）', [
     '① 不做醫療診斷　② 不開處方與藥物劑量。',
-    '③ 不送入真實個資／PHI　④ 強制標示 AI 生成並附專業諮詢免責聲明。'
+    '③ 不送入真實個資／PHI　④ 強制標示 AI 生成並附專業諮詢免責聲明（衛福部 2026 指引 [12]）。'
+  ]);
+  addNote('w-labs', 'AI Studio 生成式算子接線與長照 BPE／RAG／LoRA 實證對照（講義第 61–62 頁）', [
+    '環境防呆：首次執行 Generative Models 算子請確認 Preferences ▸ Python 指向含 torch 與 transformers 之 rm_genai 環境，並將 RAG 範例之 Read CSV 改指向教材庫 RAG-restaurant new data.csv（後接 Nominal to Text）。',
+    '長照基準＋CMS 語料（5,778 字）BPE 實算：從單字元（M=0，4,947 tokens）經 400 次合併自動長出「協助、照顧、失能、額度、部分協助」，Token 數壓縮至 3,292（省 33.5%），O(n²) 注意力計算量直降 55.7%！',
+    'RAG 防幻覺與 Top-1 陷阱實證：餐廳 CSV 問「信義區牛牛燒肉」可精準召回「分店已關閉」；長照語料問「輔具每三年額度」時 Top-1 被總綱搶走（無金額）、真答案「40,000 元」在 Top-2，實證 Top-K 必設 ≥ 3–5！',
+    'Llama-3.1-8B（8,030M 參數）LoRA 實算：r=8 掛載 Q/K/V/O 僅 8.39M 可訓練參數（0.104%），全 7 線性層僅 22.54M（0.281%），單卡即可微調。'
   ]);
 })();

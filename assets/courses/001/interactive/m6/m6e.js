@@ -1,4 +1,4 @@
-/* M6 互動站強化（2026-11-15）：講義第 4、8、13、16、18、19、23、24、28、29、33、36、39、42、47、57、77 頁強化同步 */
+/* M6 互動站強化（2026-11-26）：與 85 頁進階優化版講義（新增第 56–57 頁 AI Studio 接線與 Alexa/垃圾信實證、第 83–84 頁雙頁文獻）同步 */
 (function () {
   'use strict';
   const $ = U.$;
@@ -49,21 +49,28 @@
       ['M8（第 13 週）：RAG 檢索增強生成', '切塊（Chunking）就是文本前處理，召回（Retrieval）就是餘弦相似度計算！現代醫療知識庫常採「TF-IDF/BM25 精確字面匹配 ＋ Embedding 語意檢索」混合搜尋（Hybrid Search）。', '表示法：字面＋語意雙路檢索']],
       note: '三週是同一條主線：M6 學的前處理、TF-IDF、餘弦相似度與 Kappa 標註品質，是 M7 與 M8 RAG 系統不可或缺的地基。' },
     { id: 'q', label: '判斷', quiz: [
-      { t: '為什麼現代醫療 RAG 知識庫（M8）常同時保留 M6 的 TF-IDF/BM25 與 M7 的 Embedding（Hybrid Search）？', o: ['只是為了耗費更多算力', 'Embedding 懂模糊同義語意，但面對精確藥品批號、基因型（如 EGFR L858R）或法條編號時，TF-IDF/BM25 字面匹配反而更精準'], a: 1, w: '字面精確匹配與稠密語意檢索互補，是工業界標準架構（講義 p24, p68–69）。' }] }
-  ], src: '講義 M6 第 24、67–69 頁。' });
+      { t: '為什麼現代醫療 RAG 知識庫（M8）常同時保留 M6 的 TF-IDF/BM25 與 M7 的 Embedding（Hybrid Search）？', o: ['只是為了耗費更多算力', 'Embedding 懂模糊同義語意，但面對精確藥品批號、基因型（如 EGFR L858R）或法條編號時，TF-IDF/BM25 字面匹配反而更精準'], a: 1, w: '字面精確匹配與稠密語意檢索互補，是工業界標準架構（講義第 24、70–71 頁）。' }] }
+  ], src: '講義 M6 第 24、69–71 頁。' });
 
   CaseLinks('w-nursing', [
-    ['[1] 工商時報：高雄榮總導入生成式 AI 輔助護理交班與病歷文書報導（2025/05/14）', 'https://www.ctee.com.tw/news/20250514701484-431207']],
+    ['[1] 工商時報：高雄榮總導入生成式 AI 輔助護理交班與病歷文書報導（2025/05/14）', 'https://www.ctee.com.tw/news/20250514701484-431207'],
+    ['[8] 衛生福利部（2026/05/29）：醫療機構應用生成式人工智慧指引', 'https://www.mohw.gov.tw/cp-18-86695-1.html']],
     '三家醫院共同原則：「AI 寫草稿、護理師確認修改並簽名後才寫回 HIS」；評估時必問遺漏率、幻覺錯誤率與去識別化部署位置。');
   CaseLinks('w-seg', [
     ['[2] 中研院資訊所詞庫小組 CKIP Transformers 繁體中文斷詞／POS／NER 官方開源專案', 'https://github.com/ckiplab/ckip-transformers']]);
   CaseLinks('w-tfidf', [
-    ['[3] Scikit-learn User Guide：Text Feature Extraction（TF-IDF 平滑公式與 L2 正規化官方指南）', 'https://scikit-learn.org/stable/modules/feature_extraction.html']]);
+    ['[3] Scikit-learn User Guide：Text Feature Extraction（TF-IDF 平滑公式與 L2 正規化官方指南）', 'https://scikit-learn.org/stable/modules/feature_extraction.html'],
+    ['[12] Manning, Raghavan & Schütze (2008) Introduction to Information Retrieval（TF-IDF 與 Naive Bayes 經典教材）', 'https://nlp.stanford.edu/IR-book/']]);
   CaseLinks('w-neg', [
-    ['[4] Harkema & Chapman et al. (J. Biomed. Inform. 2009) ConText / NegEx 臨床病歷否定與時態演算法論文', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC2757457/']]);
+    ['[4] Harkema & Chapman et al. (J. Biomed. Inform. 2009) ConText 臨床病歷否定與時態演算法論文', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC2757457/'],
+    ['[9] Chapman et al. (J. Biomed. Inform. 2001) NegEx 臨床出院病摘否定偵測原始論文', 'https://doi.org/10.1006/jbin.2001.1029']]);
   CaseLinks('w-nmf', [
     ['[5] Blei, Ng & Jordan (JMLR 2003) Latent Dirichlet Allocation (LDA) 主題模型開山論文', 'https://www.jmlr.org/papers/v3/blei03a.html'],
     ['[6] Grootendorst (2022) BERTopic：結合語意嵌入、UMAP/HDBSCAN 與 c-TF-IDF 之現代主題模型論文', 'https://arxiv.org/abs/2203.05794']]);
+  CaseLinks('w-ner', [
+    ['[7] U.S. HHS HIPAA Safe Harbor 18 類個人健康識別資訊去識別化官方規範', 'https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html']]);
+  CaseLinks('w-kappa', [
+    ['[10] Landis & Koch (Biometrics 1977) Cohen\'s Kappa 標註一致性係數分級標準原始論文', 'https://doi.org/10.2307/2529310']]);
 
   function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
@@ -100,9 +107,15 @@
     '三大管線：① zero-shot-classification（無標籤問卷分類） ② summarization（長紀錄濃縮交班草稿，必人工覆核防幻覺） ③ ner（去識別化第一步）。',
     '中文鐵律：不填 model 參數預設載入英文模型！繁中務必指定 joeddav/xlm-roberta-large-xnli 或中研院 ckiplab/bert-base-chinese-ner [2]。'
   ]);
-  addNote('w-chal', '醫療 NLP 標準前處理五步防線（講義 p57）', [
+  addNote('w-chal', '醫療 NLP 標準前處理五步防線（講義第 59 頁）', [
     'Step 0 去識別化（Regex 抓號碼 ＋ NER 抓人名地址遮蔽或代換）→ Step 1 抽離數值與檢驗值。',
     'Step 2 掛載醫療自訂詞典斷詞 → Step 3 科內縮寫歸一（留意跨科撞名，如 MS 在神經科＝多發性硬化症、心臟科＝二尖瓣狹窄）。',
-    'Step 4 NegEx / ConText 否定（NEG_）與疑似（UNC_）範圍標記 [4]。'
+    'Step 4 NegEx / ConText 否定（NEG_）與疑似（UNC_）範圍標記 [4] [9]。'
+  ]);
+  addNote('w-labs', 'AI Studio 接線防呆與 Alexa（N=3,150）／垃圾信（N=5,728）5-Fold 實證對照（講義第 56–57 頁）', [
+    '頭號卡關：Read CSV 讀入預設為 Nominal，務必先接 Nominal to Text，否則 Process Documents 會直接跳過不處理！',
+    '致命漏接：對新文件推論時，務必把訓練端 Process Documents 輸出的 wor（詞表埠）連進測試端 wor 輸入埠，確保欄位對齊。',
+    'Alexa 任務一實測（正評 91.8% / 差評 8.2%，TF-IDF＋平衡 L2 邏輯斯迴歸）：(a) 原字串差評 Recall 66.9%（F1=0.567）→ (b) 斷詞轉小寫躍升至 78.2%（F1=0.598，提升最大 ★）→ (c) 套用預設停用詞因刪掉 not 倒退至 73.6%（F1=0.556）→ 加掛 NegEx＋Bigram 創最高 F1=0.605（AUC=0.950）；若未開平衡權重，準確率雖有 91.9%，差評 Recall 卻僅 1.2%！',
+    'emails.csv 垃圾信（98.5% 稀疏 TF-IDF）：Linear SVM（F1=0.984）、L2 邏輯斯（0.978）、Naive Bayes（0.974）全面領先單棵決策樹（0.912）。'
   ]);
 })();

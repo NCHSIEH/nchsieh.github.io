@@ -1,4 +1,4 @@
-/* M5 互動站強化（2026-11-15）：講義第 7、14、19、21、22、24、25、30、31、38、42、48、54、64、86 頁強化同步 */
+/* M5 互動站強化（2026-11-25）：對應 95 頁進階優化版講義（含 p71 接線藍圖、p72 Pima/Titanic 5-Fold 實證與 [1]–[12] 文獻） */
 (function () {
   'use strict';
   const $ = U.$;
@@ -74,13 +74,24 @@
     ['[1] Lin et al. Nature Medicine 2024（三總 15,965 人 AI-ECG 隨機臨床試驗原始論文）', 'https://www.nature.com/articles/s41591-024-02961-4']]);
   CaseLinks('w-dr', [
     ['[2] Abràmoff et al. npj Digital Medicine 2018（FDA 首款全自動眼底 AI IDx-DR 900 人臨床試驗）', 'https://www.nature.com/articles/s41746-018-0040-6'],
-    ['[3] Beede et al. ACM CHI 2020（Google Health 泰國 11 家診所實地部署研究：逾 20% 影像因光線被拒判）', 'https://research.google/pubs/a-human-centered-evaluation-of-a-deep-learning-system-deployed-in-clinics-for-the-detection-of-diabetic-retinopathy/']]);
+    ['[3] Beede et al. ACM CHI 2020（Google Health 泰國 11 家診所實地部署研究：逾 20% 影像因光線被拒判）', 'https://doi.org/10.1145/3313831.3376718']]);
   CaseLinks('w-res', [
     ['[4] He et al. CVPR 2016（ResNet 殘差學習 y = F(x) + x 原始論文）', 'https://arxiv.org/abs/1512.03385']]);
   CaseLinks('w-opt', [
     ['[5] Kingma & Ba ICLR 2015（Adam 自適應動量優化器原始論文）', 'https://arxiv.org/abs/1412.6980']]);
   CaseLinks('w-tl', [
-    ['[6] Mei et al. Radiology: AI 2022（RadImageNet 135 萬張醫療影像預訓練遷移學習基準）', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9530758/']]);
+    ['[6] Mei et al. Radiology: AI 2022（RadImageNet 135 萬張醫療影像預訓練遷移學習基準）', 'https://doi.org/10.1148/ryai.210315']]);
+  CaseLinks('w-evo', [
+    ['[7] Dosovitskiy et al. ICLR 2021（Vision Transformer ViT 16×16 圖塊注意力原始論文）', 'https://arxiv.org/abs/2010.11929'],
+    ['[8] Google DeepMind 2025（MedGemma 開放醫療多模態視覺語言模型）', 'https://deepmind.google/models/gemma/medgemma/']]);
+  CaseLinks('w-short', [
+    ['[9] Zech et al. PLOS Medicine 2018（胸腔 X 光肺炎 CNN 跨院捷徑學習經典研究）', 'https://doi.org/10.1371/journal.pmed.1002683']]);
+  CaseLinks('w-gate', [
+    ['[10] Grinsztajn et al. NeurIPS 2022（為什麼樹模型在典型表格資料上仍勝過深度學習？）', 'https://arxiv.org/abs/2207.08815']]);
+  CaseLinks('w-search', [
+    ['[11] Bergstra & Bengio JMLR 2012（超參數隨機搜尋優於網格搜尋之經典理論與實證）', 'https://jmlr.org/papers/v13/bergstra12a.html']]);
+  CaseLinks('w-ovf', [
+    ['[12] Srivastava et al. JMLR 2014（Dropout 隨機丟棄神經元防過擬合原始論文）', 'https://jmlr.org/papers/v15/srivastava14a.html']]);
 
   function addNote(id, title, bullets) {
     const b = document.getElementById(id); if (!b || !b.parentNode) return;
@@ -130,8 +141,19 @@
     '同院測試 AUC 0.931，換到 Indiana 外院驟降至 0.815。',
     'CNN 直接認出影像來自哪家醫院的準確度高達 99.95%（NIH）與 99.98%（Mount Sinai）——學的是醫院與機器線索。'
   ]);
-  addNote('w-search', '同樣試 9 次：網格搜尋 vs 隨機搜尋（講義 p68）', [
+  addNote('w-search', '同樣試 9 次：網格搜尋 vs 隨機搜尋（講義 p68–69）', [
     '3×3 網格在重要參數上只試到 3 個值，另外 6 次浪費在不重要的參數。',
-    '隨機搜尋 9 次可在重要參數上試到 9 個不同值（Bergstra & Bengio 2012）。'
+    '隨機搜尋 9 次可在重要參數上試到 9 個不同值（Bergstra & Bengio 2012 [11]）。'
+  ]);
+  addNote('w-labs', '實戰接線藍圖：AI Studio 四大標準管線（講義 p71）', [
+    '管線 A（表格 H2O）：Retrieve → Set Role → Cross Validation（折內獨立 Replace Missing + Normalize + H2O Deep Learning [32,16] 對決 GBT）。',
+    '管線 B（DL4J 疊積木與 Loss 監控）：Nominal to Numerical → Normalize → DL4J Sequential（內嵌 Dense + Dropout + Output Layer）→ 開啟 Training UI 截圖 Loss 曲線。',
+    '管線 C（DL4J 影像 CNN）：Read Image Meta Data → Pre-Process Images（縮放 0..1）→ DL4J Tensor（Conv→Pool→FC）→ Group Models 綁定前處理與 CNN → Apply Model (Generic)。',
+    '管線 D（預訓練微調與自動調參）：載入預訓練架構 → Fine-Tune Model（凍結前段、小學習率續訓）＋ Optimize Parameters（Grid vs Evolutionary）。'
+  ]);
+  addNote('w-t1', '實證對照：Pima（N=768）與 Titanic（N=891）分層 5-Fold CV 實算（講義 p72）', [
+    'Pima 糖尿病（偽裝 0 轉缺失折內補中位數）：Logistic 迴歸 CV 77.2%±1.7%（AUC 0.837，差距僅 +0.4%）最穩；淺層 MLP [16] 達 76.2%±1.7%（AUC 0.838）唯一追平基準。',
+    '容量過大與漏做標準化慘況：4 層深網 [200×4]（12.3 萬參數）訓練衝上 96.5%、CV 卻崩跌至 70.1%（差距 +26.4%）；漏做 Z-score 標準化時 MLP [32,16] 的 AUC 從 0.826 摔至 0.704！',
+    'Titanic（N=891）結論完全一致：GBT 達 83.3%±1.5%（AUC 0.873）奪冠，MLP 由 [10] 加深至 [200×4] 時訓練升至 91.2%、CV 反退至 80.9%；唯獨換成 MNIST 影像時 2 層 CNN 逾 98.5% 逆轉勝。'
   ]);
 })();

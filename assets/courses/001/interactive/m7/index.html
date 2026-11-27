@@ -162,38 +162,38 @@
 
   <section class="part" id="p13" data-t="Hugging Face 與 AI Studio">
     <div class="ph"><span class="num">13</span><div><h2>Hugging Face 與 AI Studio 生成式範例</h2><div class="en">MODEL HUB · GGUF · HANDS-ON</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 58–60 頁（PART 09）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 58–62 頁（PART 09）</p>
     <p class="one">Hugging Face 是找模型的第一站：看任務標籤、看模型卡（訓練資料、預期用途、已知限制）——授權條款一定要看。Ollama 下載的就是量化（GGUF）版本，所以筆電也跑得動。</p>
     <div class="wd"><div class="wh"><h3>課堂實作</h3><span class="tag">可勾選進度</span></div><div id="w-labs"></div></div>
   </section>
 
   <section class="part" id="p14" data-t="提示詞四層次">
     <div class="ph"><span class="num">14</span><div><h2>提示詞的四個層次</h2><div class="en">PROMPTING FUNDAMENTALS</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 62–64 頁（PART 10）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 64–66 頁（PART 10）</p>
     <p class="one">多數人停在層次 1–2，然後抱怨「AI 不好用」——差別不在模型，在你給了多少約束。層次 3 是「可以放進系統」與「不行」的分界線；層次 4 就是 M8 的四段式 System Prompt。</p>
     <div class="wd"><div class="wh"><h3>一層一層加上約束</h3><span class="tag amber">核心互動</span></div><p class="hint">需求：向 70 歲高血壓長者說明飲食注意事項。右邊是講義的節錄輸出。</p><div id="w-prompt"></div></div>
   </section>
 
   <section class="part" id="p15" data-t="上下文工程">
     <div class="ph"><span class="num">15</span><div><h2>上下文工程：這 5,000 個 token 怎麼分配</h2><div class="en">CONTEXT ENGINEERING · LOST IN THE MIDDLE · RERANK</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 65–66 頁</p>
-    <p class="one">System Prompt、召回段落、對話歷史、工具結果都在搶同一個空間。放在正中間的資訊最容易被忽略（Liu et al., 2023）——重要的東西放頭尾；召回段落要精不要多。</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 67–69 頁</p>
+    <p class="one">System Prompt、召回段落、對話歷史、工具結果都在搶同一個空間。放在正中間的資訊最容易被忽略（Liu et al., 2024）——重要的東西放頭尾；召回段落要精不要多。</p>
     <div class="wd"><div class="wh"><h3>上下文預算模擬器</h3><span class="tag amber">核心互動</span></div><div id="w-ctx"></div></div>
   </section>
 
   <section class="part" id="p16" data-t="四條紅線">
     <div class="ph"><span class="num">16</span><div><h2>生成式 AI 在醫療場域的四條紅線</h2><div class="en">ETHICS · BRIDGE TO M8</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 68–70 頁（PART 11）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 71–73 頁（PART 11）</p>
     <p class="one">不得提供診斷、不得提供處方與劑量、不得使用真實個案資料、輸出必須標示 AI 生成與免責。這四條在期末專題屬於「不符即扣分」項目。</p>
     <div class="wd"><div class="wh"><h3>你的衛教機器人該怎麼回應？</h3><span class="tag amber">練習</span></div><div id="w-red"></div></div>
         <div class="wd"><div class="wh"><h3>找出 AI 草稿裡的錯</h3><span class="tag amber">練習</span></div><p class="hint">依據：UCLA 的環境語音病歷隨機試驗（NEJM AI 2025；講義 M7 第 50 頁）。醫師回報草稿偶爾有臨床上有意義的錯誤，多為遺漏與人物、左右弄錯。以下對話與草稿為虛構。</p><div id="w-scribe"></div></div>
     <div class="wd"><div class="wh"><h3>M7 的概念在 M8 變成什麼</h3></div><div id="w-bridge"></div></div>
-    <div class="wd"><div class="wh"><h3>還有兩個容易忽略的問題</h3><span class="tag blue">講義第 69 頁</span></div><div id="w-two"></div></div>
+    <div class="wd"><div class="wh"><h3>還有兩個容易忽略的問題</h3><span class="tag blue">講義第 72 頁</span></div><div id="w-two"></div></div>
   </section>
 
   <section class="part" id="p17" data-t="隨堂 Lab">
     <div class="ph"><span class="num">17</span><div><h2>Take-Home：M7 隨堂 Lab</h2><div class="en">W13 上課前繳交 · 不另計分</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 71–73 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 74–76 頁</p>
     <p class="one">任務一：建立自己的模型評測基準（40%）；任務二：幻覺觀察（30%）；任務三：Ollama 本地部署（30%）。不得使用任何真實病歷或個案資料，違者本次作業不計分。</p>
     <div class="wd"><div class="wh"><h3>任務一：10 題評測表（雲端 vs 本地）</h3><span class="tag amber">可填寫、可下載</span></div><div id="w-bench"></div></div>
     <div class="wd"><div class="wh"><h3>任務二：幻覺觀察紀錄（3 題 × 5 次）</h3><span class="tag amber">可填寫、可下載</span></div><div id="w-hlog"></div></div>
@@ -202,7 +202,7 @@
 
   <section class="part" id="p18" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">18</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 74–79 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M7：第 77–90 頁（回顧、實驗室、名詞速查表與參考文獻）</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>

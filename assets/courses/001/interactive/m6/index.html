@@ -151,7 +151,7 @@
 
   <section class="part" id="p13" data-t="NER 與去識別化">
     <div class="ph"><span class="num">13</span><div><h2>命名實體辨識與去識別化</h2><div class="en">NER · REDACTION · SURROGATE</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 46、59–60 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 46、61–62 頁</p>
     <p class="one">NER 是「病歷結構化」與「去識別化」共用的核心技術：把敘述變成可統計的欄位；也要先把人名、病歷號找出來才能遮蔽。不做去識別化，資料根本不能拿來分析。</p>
     <div class="wd"><div class="wh"><h3>規則式 NER：抽欄位、遮蔽、代換</h3><span class="tag amber">核心互動</span></div><p class="hint">文字可直接修改（請勿貼上真實病歷）。</p><div id="w-ner"></div></div>
   </section>
@@ -180,7 +180,7 @@
 
   <section class="part" id="p17" data-t="醫療文本的挑戰">
     <div class="ph"><span class="num">17</span><div><h2>醫療文本的四個特殊挑戰</h2><div class="en">NEGATION · ABBREVIATION · SEGMENTATION · DE-IDENTIFICATION</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 57–58 頁（PART 09）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 59–60 頁（PART 09）</p>
     <p class="one">一個沒處理否定的醫療文本分類器，可能把「否認自殺意念」判成高風險，也可能反過來漏掉真正的個案。</p>
     <div class="wd"><div class="wh"><h3>這是哪一種挑戰？</h3><span class="tag amber">練習</span></div><div id="w-chal"></div></div>
     <div class="note warn"><b>去識別化不等於絕對安全：</b>罕見疾病＋特定年齡＋就診地區的組合仍可能識別出個人；自由文本的敘述（「本院唯一的某某手術個案」）也可能洩漏身分。★ 課程要求：一律使用公開資料集或完全虛構的資料，不碰真實病歷。</div>
@@ -188,17 +188,17 @@
 
   <section class="part" id="p18" data-t="應用與五個問題">
     <div class="ph"><span class="num">18</span><div><h2>醫護應用與開題前的五個問題</h2><div class="en">APPLICATIONS · PROJECT CHECKLIST</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 62–66 頁（PART 10）</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 64–68 頁（PART 10）</p>
     <p class="one">文字探勘的價值：把「一個分數」變成「一份可以據以改善的診斷」。開始一個專題前，先過五個問題——前兩題過不了就換題目，不要硬做。</p>
     <div class="wd"><div class="wh"><h3>六個可執行的應用方向</h3></div><div id="w-apps"></div></div>
     <div class="wd"><div class="wh"><h3>我的題目做得成嗎？</h3><span class="tag amber">互動</span></div><div id="w-five"></div></div>
-    <div class="wd"><div class="wh"><h3>台灣醫院的護理紀錄 AI：文字生成走進護理站</h3><span class="tag blue">高雄榮總・阮綜合・中山附醫</span></div><p class="hint">三家醫院的做法、評估時要問什麼，以及去識別化與人在迴路。對應講義 M6 第 64 頁。</p><div id="w-nursing"></div></div>
+    <div class="wd"><div class="wh"><h3>台灣醫院的護理紀錄 AI：文字生成走進護理站</h3><span class="tag blue">高雄榮總・阮綜合・中山附醫</span></div><p class="hint">三家醫院的做法、評估時要問什麼，以及去識別化與人在迴路。對應講義 M6 第 66 頁。</p><div id="w-nursing"></div></div>
   </section>
 
   <section class="part" id="p19" data-t="AI Studio 與作業">
     <div class="ph"><span class="num">19</span><div><h2>AI Studio 實作與隨堂 Lab</h2><div class="en">AMAZON ALEXA SENTIMENT · TAKE-HOME</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 54–55、70–71 頁</p>
-    <p class="one">Repository ▸ 7. Text Mining（需安裝 Text Processing 擴充）。作業三個任務：前處理影響實驗（40%）、中文斷詞與自訂詞典（35%）、主題模型探索（25%）。一律使用公開或虛構資料。</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 54–57、72–73 頁</p>
+    <p class="one">範例 ▸ ML (AI Studio) ▸ M6. NLP 與文字探勘（需安裝 Text Processing 擴充）。作業三個任務：前處理影響實驗（40%）、中文斷詞與自訂詞典（35%）、主題模型探索（25%）。一律使用公開或虛構資料。</p>
     <div class="wd"><div class="wh"><h3>課堂實作步驟</h3><span class="tag">可勾選進度</span></div><div id="w-labs"></div></div>
     <div class="wd"><div class="wh"><h3>任務一紀錄表：四組前處理</h3><span class="tag amber">可填寫、可下載</span></div><div id="w-t1"></div></div>
     <div class="wd"><div class="wh"><h3>任務二工作台：自訂詞典前後對照</h3><span class="tag amber">可填寫、可下載</span></div><p class="hint">輸入你的 10 句虛構句子（一行一句）與自訂詞典（一行一詞），用本頁的迷你斷詞器產生前後對照表。正式作業仍請用 jieba。</p><div id="w-t2"></div></div>
@@ -207,12 +207,12 @@
 
   <section class="part" id="p20" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">20</span><div><h2>從 TF-IDF 到詞向量：術語、測驗與回顧</h2><div class="en">M6 → M7 → M8</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 67–69、72–76 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M6：第 69–71、74–85 頁（回顧、實驗室、名詞速查表與參考文獻）</p>
     <div class="wd"><div class="wh"><h3>三種文本表示法</h3></div><div id="w-repr"></div></div>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧</h3></div><div id="w-review"></div></div>
-    <div class="wd"><div class="wh"><h3>M6 → M7 → M8：同一條線的三個階段</h3><span class="tag blue">講義第 69 頁</span></div><div id="w-line"></div></div>
+    <div class="wd"><div class="wh"><h3>M6 → M7 → M8：同一條線的三個階段</h3><span class="tag blue">講義第 71 頁</span></div><div id="w-line"></div></div>
     <!--lab-sec-->
     <p class="lablink"><b>→ 到實驗室逐步跑：</b><a href="../lab/exp.html?id=E3">E3 Word2Vec</a></p>
     <!--/lab-sec-->
