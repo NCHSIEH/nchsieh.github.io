@@ -42,17 +42,23 @@
   ], src: '講義 M9 第 49 頁。' });
 
   CaseLinks('w-label', [
+    ['Obermeyer et al., Science 2019 原文（DOI）', 'https://doi.org/10.1126/science.aax2342'],
     ['Obermeyer et al., Science 2019 摘要（UC Berkeley CHMI）', 'https://chmi.berkeley.edu/news/dissecting-racial-bias-in-an-algorithm-used-to-manage-the-health-of-populations']
   ], 'Obermeyer et al., Science 366:447–453（2019）；改用生理健康指標而非醫療花費後，應納入照護的黑人病患比例從 17.7% 升至 46.5%。');
+  CaseLinks('w-shortcut', [
+    ['Zech et al., PLOS Medicine 2018：胸部 X 光跨院捷徑學習（DOI）', 'https://doi.org/10.1371/journal.pmed.1002683']
+  ]);
   CaseLinks('w-watson', [
-    ['Healthcare Dive 報導（STAT 調查摘要）', 'https://www.healthcaredive.com/news/stat-ibms-watson-gave-unsafe-and-incorrect-cancer-treatment-advice/528666/'],
+    ['Healthcare Dive 報導（STAT 調查摘要）', 'https://www.healthcaredive.com/news/stat-ibms-watson-gave-unsafe-and-incorrect-cancer-recommendations/528571/'],
     ['STAT News：Watson 建議不安全且不正確的治療（2018/7/25，STAT+ 訂閱）', 'https://www.statnews.com/2018/07/25/ibm-watson-recommended-unsafe-incorrect-treatments/']
   ], '報導指出問題主要來自以少量「合成」個案訓練；STAT 稱無病人因此死亡。');
   CaseLinks('w-fair', [
-    ['Kleinberg et al., ITCS 2017：公平性三大定義不可能定理（arXiv）', 'https://arxiv.org/abs/1609.05807']
+    ['Kleinberg et al., ITCS 2017：公平性三大定義不可能定理（arXiv）', 'https://arxiv.org/abs/1609.05807'],
+    ['Chouldechova, Big Data 2017：預測平價與誤判率衝突（DOI）', 'https://doi.org/10.1089/big.2016.0047']
   ]);
   CaseLinks('w-card', [
-    ['Mitchell et al., FAT* 2019：Model Cards for Model Reporting（arXiv）', 'https://arxiv.org/abs/1810.03993']
+    ['Mitchell et al., FAT* 2019：Model Cards for Model Reporting（DOI）', 'https://doi.org/10.1145/3287560.3287596'],
+    ['Gebru et al., CACM 2021：Datasheets for Datasets（DOI）', 'https://doi.org/10.1145/3458723']
   ]);
   CaseLinks('w-cam', [
     ['Selvaraju et al., ICCV 2017：Grad-CAM 原始論文（arXiv）', 'https://arxiv.org/abs/1610.02391']
@@ -68,38 +74,39 @@
       : U.h('div', { style: { marginTop: '6px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets);
     b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), list));
   }
-  addNote('w-shortcut', '跨院驗證與表格洩漏（講義 p8）', [
+  addNote('w-shortcut', '跨院驗證與表格洩漏（講義第 8 頁）', [
     '影像捷徑：肺部 X 光模型單院 AUC > 90%，Grad-CAM 卻顯示模型在看角落的攜帶式 X 光機標記。',
     '表格洩漏：若把「已開立會診單」等事後欄位放進特徵，模型就靠 Target Leakage 作弊。'
   ]);
-  addNote('w-alloc', '支持性 vs 懲罰性使用（講義 p9）', [
+  addNote('w-alloc', '支持性 vs 懲罰性使用（講義第 9 頁）', [
     '模型回答的是「30 天再入院機率」，不是「資源該給誰」。',
     '同樣的分數用來加派個管訪視是支持；用來抽走高風險病患資源（Cream-Skimming）則造成系統性傷害。'
   ]);
-  addNote('w-spo2', '血氧計偏誤的數字與傳遞鏈（講義 p16）', [
+  addNote('w-spo2', '血氧計偏誤的數字與傳遞鏈（講義第 16 頁）', [
     '血氧計顯示 92–96% 時，動脈血氧實際 < 88% 的比例：黑人 11.7%、白人 3.6%（約 3 倍；NEJM 2020，PMID: 33326721）；2024 統合分析約 1.7 倍。',
     '傳遞鏈：量測工具偏高 → 輸入特徵歪 → 「需要給氧」標籤也歪 → 模型在同一群人一起歪。'
   ]);
-  addNote('w-proxy', '代理變數：欄位悄悄攜帶的敏感資訊（講義 p18）', [
-    '郵遞區號 → 族群、社經、居住區域；保險別 → 經濟狀況；院所層級 → 城鄉與可近性。',
-    '過去醫療花費 → 就醫可近性（非健康需求）；教育與職業 → 社經地位；手機型號與上網時間 → 消費能力。'
+  addNote('w-proxy', '代理變數：欄位悄悄攜帶的敏感資訊（講義第 18–19 頁）', [
+    '郵遞區號 → 族群、社經、居住區域（單欄預測非都會區平衡準確率達 0.90）；保險別 → 經濟狀況；院所層級 → 城鄉與可近性（0.75）。',
+    '過去醫療花費 → 就醫可近性（非健康需求）；教育與職業 → 社經地位；BMI 分級（0.52）則接近隨機基準 0.50。'
   ]);
-  addNote('w-subaudit', '子群體稽核表必看指標（講義 p26）', [
+  addNote('w-subaudit', '子群體稽核表與 AI Studio 實戰管線（講義第 26、54–55 頁）', [
     '整體 AUC 0.842 看似漂亮，拆開卻發現 80 歲以上僅 0.771（差距 0.090 > 0.07 警戒線）、非都會區 0.782。',
-    '實務對策：對這兩群預測加註「建議人工覆核」，並將稽核表完整放進 Model Card 與發表簡報。'
+    'AI Studio 實作：用 Multiply 分流接 Filter Examples 比較各群指標，再以 Explain Predictions 檢視局部歸因，並搭配 Create Threshold (0.35) + Apply Threshold 補償弱勢群體 Recall（實證非都會區 Recall 由 0.458 升至 0.617）。',
+    '小樣本提醒：拆成 24 個交織子群時，最小格 95% Wilson CI 寬度可達 0.559，報告務必同時列出樣本數 n 與信賴區間。'
   ]);
-  addNote('w-auto', '介面設計對照：放大偏誤 vs 減緩偏誤（講義 p34）', [
+  addNote('w-auto', '介面設計對照：放大偏誤 vs 減緩偏誤（講義第 34 頁）', [
     '放大偏誤：只顯示紅色分數「高風險 0.87」、預設按鈕就是採納、「不採納」藏在角落。',
     '減緩偏誤：先填自己的判斷，再看 AI 建議與區間（0.71–0.93）、依據與「資料不完整」提示，「採納」與「不採納（寫理由）」同等好按。'
   ]);
-  addNote('w-myth', '破除四大法規誤解（講義 p45）', [
+  addNote('w-myth', '破除四大法規誤解（講義第 45 頁）', [
     '① 只刪姓名不是不可逆匿名（PDPA）。',
-    '② 「僅供參考」不免除機構合理注意義務。',
+    '② 「僅供參考」不免除機構合理注意義務（Air Canada 案，M8 第 49 頁）。',
     '③ 不收費也可能落入 TFDA SaMD 判定（看預期醫療用途）。',
-    '④ 用雲端 LLM API 時，提問與 RAG 段落仍會送到境外伺服器。'
+    '④ 用雲端 LLM API 時，提問與 RAG 段落仍會送到境外伺服器（機敏資料須改走本地 Ollama，M7 第 53 頁）。'
   ]);
-  addNote('w-check', 'W10 與 W16 發表前最後確認（講義 p52–53）', [
-    '資料來源與標籤審查 → Baseline 與子群體表現 → SHAP / Grad-CAM 捷徑檢查。',
-    '醫療四條紅線＋數字不生成（同題問 5 次一致）＋ Model Card 誠實揭露未竟事項。'
+  addNote('w-check', 'W10 與 W16 發表前最後確認（講義第 52–55 頁）', [
+    '資料來源與標籤審查 → Baseline 與子群體表現（含 95% CI） → SHAP / Grad-CAM 捷徑與共線性檢查。',
+    '醫療四條紅線＋數字不生成（同題問 5 次一致）＋ Model Card 誠實揭露未竟事項（可直接套用範例資料夾內的 Markdown 範本）。'
   ]);
 })();

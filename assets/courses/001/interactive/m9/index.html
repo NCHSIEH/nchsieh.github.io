@@ -21,7 +21,7 @@
     <div class="code">MODULE 9 · 第 10 週與第 16 週 · 貫穿全課程</div>
     <h1>醫療 AI 的倫理、偏誤與可解釋性</h1>
     <p class="lead">前八個模組教你「做得出來」。這一個模組問三個不同的問題：這樣做對嗎？對誰不公平？出事了誰負責？這一頁把標籤偏誤、代理變數、公平性的不可能定理、子群體稽核、SHAP 與自動化偏誤都做成可以自己調、自己看數字的模擬，最後附發表前檢核清單與模型卡產生器。</p>
-    <div class="chips"><span class="tag">W10 講前半（偏誤與公平性）・W16 講後半（責任與檢核）</span><span class="tag amber">四條紅線屬「不符即扣分」</span><span class="tag gray">模擬資料皆為虛構；法規為 2026 年 9 月概況，非法律意見</span></div>
+    <div class="chips"><span class="tag">W10 講前半（偏誤與公平性）・W16 講後半（責任與檢核）</span><span class="tag amber">四條紅線屬「不符即扣分」</span><span class="tag gray">模擬資料皆為虛構；法規為 2026 年 11 月查核概況，非法律意見</span></div>
       <div class="note" id="outcomes"><b>學完這個單元，你要能做到</b>
       <ol style="margin:6px 0 4px 1.3em;padding:0">
         <li>說出偏誤進入系統的六個環節，並說明刪掉敏感欄位為什麼不夠　<a href="#p05">第 05 節</a>、<a href="#p06">第 06 節</a>、<a href="#p07">第 07 節</a></li>
@@ -105,7 +105,7 @@
 
   <section class="part" id="p09" data-t="子群體稽核">
     <div class="ph"><span class="num">09</span><div><h2>子群體稽核：交付前一定要做的一張表</h2><div class="en">SUBGROUP AUDIT</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M9：第 25–26 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M9：第 25–26、54–55 頁</p>
     <p class="one">整體 AUC 0.842 看起來不錯，但 80 歲以上只有 0.771、非都會區只有 0.782——而這兩群往往正是最需要這個模型的人。這張表不難做，但很少人做。</p>
     <div class="wd"><div class="wh"><h3>拆到子群體看</h3><span class="tag amber">核心互動</span></div><div id="w-audit"></div></div>
     <div class="wd"><div class="wh"><h3>放大到 24 個子群體：最差的那組是真的差嗎？</h3><span class="tag blue">12,000 位病人 × 24 個子群體</span></div><p class="hint">性別 × 年齡層 × 地區。比較「模型對每群都一樣好」與「對某一群真的較差」兩種情境下，點估計和信賴區間各告訴你什麼。</p><div id="w-subaudit"></div></div>
@@ -131,7 +131,7 @@
 
   <section class="part" id="p12" data-t="SHAP 怎麼用">
     <div class="ph"><span class="num">12</span><div><h2>SHAP：怎麼用、以及不能怎麼用</h2><div class="en">CONTRIBUTION, NOT CAUSATION</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M9：第 29 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M9：第 29、54–55 頁</p>
     <p class="one">SHAP 只回答「在這個模型裡，哪些欄位把這一筆的分數推高或拉低」，它不回答「改變這個欄位會不會改變真實世界的結果」。不能拿來說「讓他不獨居就會降低風險」。</p>
     <div class="wd"><div class="wh"><h3>瀑布圖：這一位病人為什麼被判高風險</h3><span class="tag amber">核心互動</span></div><p class="hint">取消勾選某個因素＝假設這筆資料沒有該因素時的示意貢獻（真實 SHAP 值會隨其他特徵與參照資料集改變）。</p><div id="w-shap"></div></div>
     <div class="wd"><div class="wh"><h3>重要性不是因果：代理特徵與相關特徵</h3><span class="tag blue">2,000 次出院資料集</span></div><p class="hint">與 M4、M5 同一份資料（多加一個「前一年急診次數」）。我們知道資料是怎麼產生的，所以能檢查模型給的重要性對不對。勾選或取消欄位，即時重訓並計算置換重要性。</p><div id="w-perm"></div></div>
@@ -184,7 +184,7 @@
 
   <section class="part" id="p19" data-t="討論情境與檢核清單">
     <div class="ph"><span class="num">19</span><div><h2>五個討論情境與 ★ 發表前自我檢核清單</h2><div class="en">W10 AND W16</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M9：第 46–47、49、51–54 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M9：第 46–47、49、51–56 頁</p>
     <p class="one">情境沒有標準答案——但你要能說出你的理由。檢核清單的前四大項有任一未打勾，發表時請主動說明原因。</p>
     <div class="wd"><div class="wh"><h3>五個討論情境</h3></div><div id="w-disc"></div></div>
     <div class="wd"><div class="wh"><h3>發表前自我檢核清單</h3><span class="tag amber">可勾選進度</span></div><div id="w-check"></div></div>
@@ -194,7 +194,7 @@
 
   <section class="part" id="p20" data-t="術語、測驗與回顧">
     <div class="ph"><span class="num">20</span><div><h2>術語、測驗與回顧</h2><div class="en">GLOSSARY · QUIZ · REVIEW</div></div></div>
-    <p class="ai" style="margin:-2px 0 8px">對應講義 M9：第 55–60 頁</p>
+    <p class="ai" style="margin:-2px 0 8px">對應講義 M9：第 57–66 頁</p>
     <div class="wd"><div class="wh"><h3>術語翻卡</h3><span class="tag">點卡片翻面</span></div><div id="w-cards"></div></div>
     <div class="wd"><div class="wh"><h3>總測驗（12 題）</h3></div><div id="w-final"></div></div>
     <div class="wd"><div class="wh"><h3>本模組重點回顧與這門課想留給你的三件事</h3></div><div id="w-review"></div></div>

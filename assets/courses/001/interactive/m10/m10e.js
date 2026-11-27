@@ -23,14 +23,23 @@
       { t: '試算器查表程式用 < 而不是 <=。哪一種測試最容易抓到？', o: ['邊界值測試（最低與最高級別）', '手機畫面測試'], a: 0, w: '很多錯誤只在邊界出現。' }] }
   ], src: '講義 M10 第 38 頁。' });
 
+  CaseLinks('w-era', [
+    ['Karpathy, 2025/02：Vibe Coding 原始貼文（X）', 'https://x.com/karpathy/status/1886192184808149383']
+  ]);
   CaseLinks('w-metr', [
     ['METR 2025 RCT 原始論文（arXiv:2507.09089）', 'https://arxiv.org/abs/2507.09089']
   ], '16 位資深開源開發者、246 個任務隨機對照實驗：預期快 24%、自評快 20%，實際量測慢 19%。');
   CaseLinks('w-mcp', [
     ['Model Context Protocol (MCP) Official Spec', 'https://modelcontextprotocol.io/']
   ]);
+  CaseLinks('w-egfr', [
+    ['Inker et al., NEJM 2021：CKD-EPI 2021 無種族係數公式原始論文（DOI）', 'https://doi.org/10.1056/NEJMoa2102953']
+  ]);
   CaseLinks('w-git', [
     ['GitHub Pages Official Docs', 'https://docs.github.com/en/pages']
+  ]);
+  CaseLinks('w-secret', [
+    ['GitGuardian 2025：State of Secrets Sprawl 報告', 'https://www.gitguardian.com/state-of-secrets-sprawl-report-2025']
   ]);
   CaseLinks('w-routes', [
     ['OpenAI Agents SDK', 'https://openai.github.io/openai-agents-python/'],
@@ -45,42 +54,42 @@
       : U.h('div', { style: { marginTop: '6px', fontSize: '13.5px', lineHeight: 1.6 } }, bullets);
     b.parentNode.append(U.h('details', { class: 'details-note' }, U.h('summary', null, title), list));
   }
-  addNote('w-stuck', 'AI 卡住時的升級順序（講義 p25）', [
+  addNote('w-stuck', 'AI 卡住時的升級順序（講義第 25 頁）', [
     '① 給足證據（完整錯誤訊息、截圖、相關檔案）。',
     '② 證據給齊仍改錯 → 要它先解釋原因再動手。',
     '③ 連改三次還是壞 → git 退回上一個可運行的 commit，換說法重述；仍卡住再換模型或工具。'
   ]);
-  addNote('w-spec', '五行規格＋查表缺一不可（講義 p30、32）', [
+  addNote('w-spec', '五行規格＋查表缺一不可（講義第 30、32、69 頁）', [
     '五行規格：① 做什麼 ② 給誰用（必寫手機正常顯示）③ 輸入什麼 ④ 輸出什麼 ⑤ 技術限制（純前端單一 HTML、不接 DB）。',
-    '防呆護欄：附上完整給付額度查表，並要求 AI「開始前先複述實作計畫」。'
+    '防呆護欄：附上完整給付額度查表，並搭配範例資料夾內 AGENTS.md 要求 AI「開始前先複述實作計畫」。'
   ]);
-  addNote('w-calc', '標準答案要自己先算（講義 p38）', [
-    '用滿額度時自負額 ＝ 額度 × 比率（例：第 5 級一般戶 24,100 × 16% = 3,856、中低收 1,205）。',
-    '進位規則須先講清楚：28,070 × 5% = 1,403.5、32,090 × 5% = 1,604.5（四捨五入 vs 無條件捨去不同）。'
+  addNote('w-calc', '標準答案與跨語言 .5 進位陷阱（講義第 38、70 頁）', [
+    '用滿額度時自負額 ＝ 額度 × 比率（例：第 5 級一般戶 24,100 × 16% = 3,856、第 2 類 1,205）。',
+    '跨語言進位陷阱：第 7 級第 2 類 32,090 × 5% = 1,604.5，JS Math.round() 得 1,605，Python 預設 round()（偶數進位）卻得 1,604！務必明確指定四捨五入規則並全測 21 格。'
   ]);
-  addNote('w-git', '空庫＋存檔點心法（講義 p41）', [
+  addNote('w-git', '空庫＋存檔點心法（講義第 41 頁）', [
     'GitHub 建新庫切記不要勾選 README / .gitignore，否則首次 push 會衝突。',
     '每次改完小功能就 git add . && git commit，讓 Git 成為你放手讓 AI 改程式的時光機。'
   ]);
-  addNote('w-seven', '30 分鐘端到端節奏（講義 p47）', [
+  addNote('w-seven', '30 分鐘端到端節奏（講義第 47 頁）', [
     '① 想清楚 5m → ② 第一指令 1m → ③ 看懂資料夾 3m → ④ 三輪小步迭代 10m。',
     '⑤ 本機 21 格驗算 3m → ⑥ 推上 GitHub 3m → ⑦ 手機實測公開網址 5m。'
   ]);
-  addNote('w-dfail', '部署失敗先看哪裡？（講義 p46）', [
+  addNote('w-dfail', '部署失敗先看哪裡？（講義第 46 頁）', [
     '一片空白 → F12 Console（主程式 404 多半是 publish directory 沒填 dist）。',
     '圖片讀不到 → Network（404 代表路徑錯，改相對路徑或放 public/）。',
     '推了沒更新 → 看平台 Deploys 建置記錄，或用無痕視窗排除快取。'
   ]);
-  addNote('w-replit', 'Replit Agent 誤刪正式資料庫時間軸（講義 p51）', [
+  addNote('w-replit', 'Replit Agent 誤刪正式資料庫時間軸（講義第 51 頁）', [
     '12 天公開實驗第 9 天：宣告凍結後代理仍對正式庫下指令，刪除 1,206 位主管、1,196+ 家公司資料，且宣稱無法還原（錯的）。',
     '7/19 使用者自己用回溯救回；7/20 執行長道歉，承諾強制分離開發與正式資料庫。'
   ]);
-  addNote('w-when', '綠燈 vs 紅燈應用場景（講義 p53）', [
+  addNote('w-when', '綠燈 vs 紅燈應用場景（講義第 53 頁）', [
     '✔ 綠燈：衛教試算器、教學原型、單一 HTML、無個資腳本。',
     '✘ 紅燈：醫院正式掛號／開藥、含真實 PHI 個資、直接連正式資料庫寫入權限。'
   ]);
-  addNote('w-guard', 'Python Agent 版必補護欄（講義 p60、63）', [
-    '@tool 鎖住確定性查表（對應 M8 Code 節點）＋ instructions 寫明不推算金額與附免責聲明。',
+  addNote('w-guard', 'Python Agent 版必補護欄（講義第 60、63、69 頁）', [
+    '@tool 鎖住確定性查表（對應 M8 Code 節點）＋ instructions 寫明不推算金額與附免責聲明（可參照 ltc_agent_skeleton.py）。',
     'max_turns=5 防止錯誤工具呼叫無限迴圈燒錢。'
   ]);
 })();

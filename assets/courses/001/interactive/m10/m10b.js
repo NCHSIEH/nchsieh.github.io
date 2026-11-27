@@ -166,7 +166,7 @@
     const L = [['選一個你實際會用到的小需求', '例如把一疊 Excel 合併成一張總表'], ['安裝一套工具並完成設定', 'Cursor、Claude Code 或 Copilot 皆可'], ['寫一份一頁的 PRD.md', '目標、輸入、輸出、不做什麼'], ['建立 Git 儲存庫並完成第一次 commit', ''], ['用三到五個 Prompt 完成核心功能', '每一步都執行確認並 commit'], ['至少經歷一次「AI 卡住 → 你用四個手法之一解決」', '記錄下來'], ['請 AI 逐段解釋你不懂的部分', '直到你能說明整段在做什麼'], ['撰寫自學紀錄並上傳', '見下一節']];
     const st = Store.get('m10:lab', {}); const out = h('div');
     function draw() { out.innerHTML = ''; L.forEach(([t, d], i) => { const c = h('input', { type: 'checkbox' }); c.checked = !!st[i]; c.onchange = () => { st[i] = c.checked; Store.set('m10:lab', st); draw(); }; out.append(h('label', { style: { display: 'flex', gap: '10px', padding: '7px 2px', borderBottom: '1px solid var(--line)', fontSize: '14.5px' } }, c, h('span', null, h('b', null, `${i + 1}. ${t}`), d ? h('span', null, '　', lbl(d)) : ''))); });
-      const n = L.filter((_, i) => st[i]).length; out.append(row(h('span', { class: 'tag ' + (n === L.length ? 'good' : 'gray') }, `完成 ${n} / ${L.length}`), lbl('原始教材：Vibe Coding - AI Driven Software Development.pptx（37 頁）與中文精簡版（22 頁），位於課程根目錄。'))); }
+      const n = L.filter((_, i) => st[i]).length; out.append(row(h('span', { class: 'tag ' + (n === L.length ? 'good' : 'gray') }, `完成 ${n} / ${L.length}`), lbl('隨附實作範例包：範例 / 其他 / M10. Vibe Coding /（內含 PRD_一頁規格範本.md、AGENTS.md、ltc_calculator_v3.html 與自動驗算腳本）。'))); }
     $('#w-lab').append(out); draw();
   })();
 
@@ -182,7 +182,7 @@
   })();
 
   // ================= P19 =================
-  U.flashcards('#w-cards', [['氛圍編程', 'Vibe Coding', '以自然語言描述需求，由 LLM 生成程式碼'], ['行內補全', 'Inline Completion', 'Level 1：AI 補完當前這一行'], ['代理協作', 'Agentic Coding', 'Level 3：AI 讀懂整個專案、改多個檔案'], ['差異', 'diff', '這次改了哪些行；代理模式審查的對象'], ['產品需求文件', 'PRD', '一頁寫清楚目標、範圍、不做什麼'], ['專案規則檔', 'CLAUDE.md / AGENTS.md', '技術棧、風格、禁止事項'], ['提交', 'commit', '一個可退回的版本點'], ['推送', 'push', '把本機 commit 送上 GitHub'], ['忽略清單', '.gitignore', '不追蹤 node_modules、dist、.env'], ['環境變數', '.env', '金鑰只留在本機，部署平台另外填'], ['建置成品', 'dist/', 'npm run build 產生，部署上傳這個'], ['持續整合', 'CI/CD', '每次推送自動跑測試與部署'], ['模型情境協定', 'MCP', '把外部工具接給 AI 用的開放協定'], ['護欄', 'Guardrails', '最大輪數、白名單、成本上限、逾時'], ['最大輪數', 'max_turns', '程式碼版的「最大迭代次數」']]);
+  U.flashcards('#w-cards', [['氛圍編程', 'Vibe Coding', '以自然語言描述需求，由 LLM 生成程式碼'], ['行內補全', 'Inline Completion', 'Level 1：AI 補完當前這一行'], ['代理協作', 'Agentic Coding', 'Level 3：AI 讀懂整個專案、改多個檔案'], ['差異', 'diff', '這次改了哪些行；代理模式審查的對象'], ['產品需求文件', 'PRD', '一頁寫清楚目標、範圍、不做什麼'], ['專案規則檔', 'CLAUDE.md / AGENTS.md', '技術棧、風格、醫療紅線禁止事項'], ['確定性查表', 'Deterministic Lookup Table', '將額度寫死於字典查表，確保數值零幻覺'], ['邊界值測試', 'Boundary Value Testing', '針對最低／最高級與 .5 進位臨界點驗算'], ['回歸測試', 'Regression Testing', '每次修改後重跑全部測試，防止改 A 壞 B'], ['提交', 'commit', '一個可退回的版本點'], ['推送', 'push', '把本機 commit 送上 GitHub'], ['忽略清單', '.gitignore', '不追蹤 node_modules、dist、.env'], ['環境變數', '.env', '金鑰只留在本機，部署平台另外填'], ['金鑰亂度掃描', 'Secret & Entropy Scanning', '推送前以格式與亂度偵測暗藏金鑰'], ['建置成品', 'dist/', 'npm run build 產生，部署上傳這個'], ['持續整合', 'CI/CD', '每次推送自動跑測試與部署'], ['模型情境協定', 'MCP', '把外部工具接給 AI 用的開放協定'], ['護欄', 'Guardrails', '最大輪數、白名單、成本上限、逾時'], ['工具白名單', 'Tool Allowlist', '僅授予最小唯讀工具，寫入刪除須人工確認'], ['結構化輸出驗證', 'Structured Output (Pydantic)', '以嚴格 Schema 驗證模型輸出欄位與型別'], ['權限物理隔離', 'Environment Isolation', '讓開發中 AI 連不到正式營運資料庫'], ['最大輪數', 'max_turns', '程式碼版的「最大迭代次數」']]);
   U.finalQuiz('#w-final', [
     ['真正的 Karpathy 式 vibe coding 指的是光譜的哪一段？', ['Level 0–1', 'Level 1–2', 'Level 3–4', '只有 Level 4'], 2, '實務上多數人在 Level 2–3 游走，依風險調整。', 'p02'],
     ['對健康照護背景的人，Vibe Coding 的價值是？', ['打字更快', '原本做不到的事現在做得到（質的改變）', '不需要再驗證', '可以取代工程師'], 1, '所以「怎麼驗證」比「怎麼生成」更重要。', 'p03'],
