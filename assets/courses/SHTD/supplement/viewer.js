@@ -28,7 +28,7 @@ async function main(){
       const mats=det.materials.filter(m=>m.kind==='supplement');
       if(!WEEK){
         $('#app').innerHTML='<h1>每週導讀、延伸閱讀與練習資料</h1><p class="lead">每週一頁：白話導讀、可下載的練習資料（教學合成資料）與 4 篇延伸閱讀。已依新版講義及互動頁校對（2026-11-28），附主檔／學生 PDF 雙頁碼。先讀導讀，再做練習並核對本週互動頁；課內繳交及評分依講義。W9、W18 為評量週，不提供。</p>'+
-          '<div class="callout"><b>獨立補充單元</b>：<a href="../interactive/s01/">S1 居家感測與穿戴裝置的量測品質</a>，附導讀、學生PDF、練習資料與互動頁；原有18週及配分不變，不另計分。</div>'+
+          '<div class="callout"><b>獨立補充單元</b>：<a href="../interactive/s01/">S1 居家感測與穿戴裝置的量測品質</a>，附導讀、學生PDF、練習資料與互動頁；<a href="../interactive/s02/">S2 急診到診量預估</a> 附合成資料、研究計畫與時間回測。原有18週及配分不變，不另計分。</div>'+
           mats.sort((a,b)=>a.week.localeCompare(b.week)).map(m=>`<div class="read"><a href="w${m.week}.html"><b>W${+m.week}　${TITLES[m.week]||''}</b></a></div>`).join('');
         return;
       }
