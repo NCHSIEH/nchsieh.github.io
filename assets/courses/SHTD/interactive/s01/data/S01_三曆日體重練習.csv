@@ -1,0 +1,12 @@
+﻿量測日期,個案代碼(合成),體重kg(空白為缺測),裝置代碼,條件代碼,情境註記,三曆日前日期(填),可比較否與理由(填),差值kg(可比才填),課堂燈號(填)
+2026-10-01,SIM-WANG,68,SCALE-A,standard,相近時段、衣著及程序,,,,
+2026-10-02,SIM-WANG,68.4,SCALE-A,standard,相近時段、衣著及程序,,,,
+2026-10-03,SIM-WANG,68.7,SCALE-A,standard,相近時段、衣著及程序,,,,
+2026-10-04,SIM-WANG,70,SCALE-A,standard,相近時段、衣著及程序,,,,
+2026-10-05,SIM-WANG,70.5,SCALE-A,standard,相近時段、衣著及程序,,,,
+2026-10-06,SIM-WANG,72.2,SCALE-A,coat,穿外套,,,,
+2026-10-07,SIM-WANG,,SCALE-A,standard,缺測，不補零,,,,
+2026-10-08,SIM-WANG,71,SCALE-B,standard,改用B裝置；新比較序列,,,,
+2026-10-09,SIM-WANG,70.8,SCALE-B,standard,相近時段、衣著及程序,,,,
+2026-10-10,SIM-WANG,70.6,SCALE-B,standard,相近時段、衣著及程序,,,,
+2026-10-11,SIM-WANG,70.5,SCALE-B,standard,相近時段、衣著及程序,,,,
