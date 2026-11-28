@@ -45,6 +45,8 @@ function paintShift(){
     const reason=h.eligible?String(p.y): Date.parse(p.finalized_at)>Date.parse(s.issue)?'當時尚未結案':p.status==='partial'?'部分觀測':'停傳';
     row($('history'),[h.lag,labelTime(p.shift_start),labelTime(p.finalized_at),reason]);
   }
+  $('calculation').hidden=true;
+  $('modelsteps').replaceChildren();
   $('guess').value='';$('answer').textContent='';$('feedback').textContent='';
 }
 function grade(abstain){
@@ -58,6 +60,23 @@ function grade(abstain){
 }
 function reveal(){
   const s=selected(),{base,trend}=predict(s,minimum());
+  const usable=history(s).filter(h=>h.eligible);
+  const sum=(fn)=>usable.reduce((v,h)=>v+fn(h),0);
+  const n=usable.length, sy=sum(h=>h.prior.y), sx=sum(h=>h.lag);
+  const sxy=sum(h=>h.lag*h.prior.y), sxx=sum(h=>h.lag*h.lag);
+  const medianInput=usable.filter(h=>h.lag<=4).map(h=>h.prior.y).sort((a,b)=>a-b);
+  const modelSteps=$('modelsteps');
+  modelSteps.replaceChildren();
+  row(modelSteps,['四週中位數',medianInput.join('、')+'（已排序）',base===null?'有效歷史不足':fmt(base)+' 人次']);
+  if(n>=4){
+    const slope=(sxy-sx*sy/n)/(sxx-sx*sx/n);
+    const intercept=sy/n-slope*sx/n;
+    row(modelSteps,['八週局部直線','n='+n+'，Σx='+sx+'，Σy='+sy+'，Σxy='+sxy+'，Σx²='+sxx,'斜率 '+slope.toFixed(3)+'；截距 '+fmt(intercept)+'；預報 '+fmt(trend)]);
+    row(modelSteps,['探索性 Poisson 速率',sy+' 人次 ÷ '+(8*n)+' 小時 × 8 小時',fmt(sy/n)+' 人次']);
+  }else{
+    for(const name of ['八週局部直線','探索性 Poisson 速率'])row(modelSteps,[name,n+' 個完整歷史班','未滿四筆，未發布']);
+  }
+  $('calculation').hidden=false;
   const text=(v)=>v===null?'未發布':fmt(v)+' 人次';
   $('answer').textContent='四週中位數 '+text(base)+'；八週趨勢 '+text(trend)+'。'+
     (s.y===null?'該班觀測不完整，實際人次未知。':'結案後實際 '+s.y+' 人次。')+
