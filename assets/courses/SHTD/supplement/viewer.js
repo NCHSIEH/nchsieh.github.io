@@ -27,13 +27,14 @@ async function main(){
       if(!det.allowed){msg('這門課不在你的修課範圍內。<a href="/courses.html">回課程頁</a>');return}
       const mats=det.materials.filter(m=>m.kind==='supplement');
       if(!WEEK){
-        $('#app').innerHTML='<h1>每週導讀、延伸閱讀與練習資料</h1><p class="lead">每週一頁：白話導讀、可下載的練習資料（教學合成資料）與 4 篇延伸閱讀。W9、W18 為評量週，不提供。</p>'+
+        $('#app').innerHTML='<h1>每週導讀、延伸閱讀與練習資料</h1><p class="lead">每週一頁：白話導讀、可下載的練習資料（教學合成資料）與 4 篇延伸閱讀。已依新版講義及互動頁校對（2026-11-28），附主檔／學生 PDF 雙頁碼。先讀導讀，再做練習並核對本週互動頁；課內繳交及評分依講義。W9、W18 為評量週，不提供。</p>'+
           mats.sort((a,b)=>a.week.localeCompare(b.week)).map(m=>`<div class="read"><a href="w${m.week}.html"><b>W${+m.week}　${TITLES[m.week]||''}</b></a></div>`).join('');
         return;
       }
       const m=mats.find(x=>x.week===WEEK);
       if(!m){msg('找不到本週補充教材。');return}
       const r=await fetch(`enc/w${WEEK}.bin`,{cache:'no-store'});
+      if(!r.ok)throw new Error(`教材讀取失敗：HTTP ${r.status}`);
       const data=await decrypt(m.k,await r.arrayBuffer());
       document.title=data.title;
       $('#app').innerHTML=`<p class="meta top noprint"><a href="index.html">← 補充教材總覽</a>　｜　<a href="../interactive/w${WEEK}/">W${+WEEK} 互動學習頁</a></p>`+data.html;
