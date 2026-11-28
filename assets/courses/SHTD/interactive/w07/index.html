@@ -391,6 +391,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="chips"><a class="tag" href="../../W07_AI_Agent與臨床流程自動化_AI_Agents_and_Clinical_Workflow_Automation.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W7）</a><span class="tag o">課前準備：帶一個你單位最繁瑣的跨部門流程</span><span class="tag a">標「教學假設」的數字為示意，不是研究數據</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
 </header>
 
+<aside class="alignment-note" style="margin:16px 0;padding:16px 18px;border-left:4px solid var(--ochre);background:var(--paper,#f7f5ef);line-height:1.8"><b>本週與講義一起完成</b><p style="margin:6px 0">為跨角色流程畫出權限、後果發生前授權、失效停止與具名人工接手。</p><p style="margin:6px 0">承接 W6 的內容查核，延伸到可執行動作；下一站 <a href="../w08/">W8</a>。本頁自測與示意試算供練習，正式繳交與計分依講義。</p></aside>
 <section class="part" id="p01" data-t="開場：王伯伯出院那一天">
   <div class="ph"><span class="num">01</span><div><h2>王伯伯出院那一天：8 個角色、5 套系統</h2><div class="en">ONE DISCHARGE · MANY HANDS</div></div></div>
   <p class="one">出院準備是典型的「跨角色、跨系統、時間緊」流程——正是 AI Agent <b>最被期待、也最需要謹慎</b>的場域。</p>
@@ -816,7 +817,7 @@ const kpi=(v,l,c="")=>`<div class="kpi ${c}"><div class="v">${v}</div><div class
 
 /* 01 roles */
 const SYS=["醫院 HIS","護理資訊系統","藥局系統","長照服務管理系統","門診預約系統"];
-const ROLES=[["主治醫師","出院醫囑、處方",[0,2,4]],["護理師","衛教、出院護理摘要",[0,1]],["藥師","用藥整合、藥物諮詢",[0,2]],["出院準備個管師","評估、轉介、協調",[0,1,3,4]],["社工師","經濟與家庭支持",[0,3]],["長照管理專員","長照需要評估、核定",[3]],["女兒（主要照顧者）","居家照顧、量體重",[]],["診所醫師","後續慢性病追蹤",[]]];
+const ROLES=[["主治醫師","出院醫囑、處方",[0,2,4]],["護理師","衛教、出院護理摘要",[0,1]],["藥師","用藥整合、藥物諮詢",[0,2]],["出院準備個管師","評估、轉介、協調",[0,1,3,4]],["社工師","經濟與家庭支持",[0,3]],["長照管理專員","長照需要評估、核定",[3]],["女兒（遠距支持）","依意願協助、週末探視",[]],["診所醫師","後續慢性病追蹤",[]]];
 let rSel=-1;
 function drawRoles(){const r=$("#roles");r.innerHTML="";ROLES.forEach(([n,t],i)=>{const d=h("div",{class:"role"+(rSel===i?" on":rSel>=0?" dim":"")},`<b>${n}</b>${t}`);d.onclick=()=>{rSel=rSel===i?-1:i;drawRoles()};r.appendChild(d)});
  const s=$("#rsvg");let g="";const ry=i=>18+i*35,sy=j=>40+j*55;

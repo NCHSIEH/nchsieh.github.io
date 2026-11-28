@@ -446,6 +446,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="chips"><a class="tag" id="pdflink" href="../../W15_智慧醫療的組織治理與變革管理_Governance_and_Change_Management.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W15）</a><span class="tag o">對應評量：期末 Q4（治理與變革）</span><span class="tag a">擬真演練與討論不在本頁公布參考答案；練習系統為本頁虛構</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
 </header>
 
+<aside class="alignment-note" style="margin:16px 0;padding:16px 18px;border-left:4px solid var(--ochre);background:var(--paper,#f7f5ef);line-height:1.8"><b>本週與講義一起完成</b><p style="margin:6px 0">提出90天計畫與治理表；具名責任、值勤、事件控制、恢復及退場一起安排。</p><p style="margin:6px 0">承接 W14 的完整成本及有條件導入建議；下一站 <a href="../w16/">W16</a>。本頁自測與示意試算供練習，正式繳交與計分依講義。</p></aside>
 <section class="part" id="p01" data-t="開場：七套 AI 的盤點">
   <div class="ph"><span class="num">01</span><div><h2>北城區域醫院的 AI 盤點：買了七套，真正在用的只有三套</h2><div class="en">AI INVENTORY · NORTH-CITY HOSPITAL (FICTIONAL)</div></div></div>
   <p class="one">問題不在任何一套 AI 本身，而在醫院缺少<b>「誰決定、誰負責、怎麼監測」</b>的組織機制。</p>
@@ -558,7 +559,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="ph"><span class="num">08</span><div><h2>台灣的制度環境：一部基本法，三個 AI 中心</h2><div class="en">AI BASIC ACT · MOHW RESPONSIBLE AI CENTRES (2024-10)</div></div></div>
   <p class="one">國家層級定原則與風險框架，<b>醫院層級要自建執行機制</b>。「未達下限就下架」寫進制度，就是停用條件的台灣版。</p>
   <div class="grid3">
-    <div class="kpi"><div class="l">人工智慧基本法</div><div style="font-weight:700">2025-12-23 三讀；國科會主管；七大原則；數位部推動風險分類，高風險須標示並明確責任歸屬</div></div>
+    <div class="kpi"><div class="l">人工智慧基本法</div><div style="font-weight:700">2026-01-14 公布；國科會主管，政府治理與七原則。醫材、個資及 GenAI 行政指導各按範圍，不能一概推出所有院內 AI 同一套法定標示義務。</div></div>
     <div class="kpi o"><div class="v">30 → 16 → 10</div><div class="l">家醫院申請 → 通過評選 → 設負責任 AI 執行中心（2024-10）</div></div>
     <div class="kpi"><div class="l">三大 AI 中心</div><div style="font-weight:700">負責任 AI 執行中心｜臨床 AI 取證驗證中心｜AI 影響性研究中心</div></div>
   </div>
@@ -739,7 +740,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="wd form">
     <div class="wh"><h3>演練三：替 W14 的環境式 AI 記錄寫一張治理表</h3><span class="tag gray">第一列為講義示例；每一列都要寫到「處置」</span></div>
     <table class="pb" id="gt"></table>
-    <div class="note">使用率警戒線可直接引用 W14 的損益兩平。只寫「委員會討論」不算處置；至少一列是可以立刻執行的暫停或撤回條件。</div>
+    <div class="note">W14 的 u 是效益實現率；使用量或人數警戒線須另定分母，不能直接當成 64% 損益兩平。只寫「委員會討論」不算處置；至少一列是可以立刻執行的暫停或撤回條件。</div>
   </div>
   <div class="wd form">
     <div class="wh"><h3>課堂討論：你的機構，治理缺口在哪裡？</h3><span class="tag o">分組 15 分鐘</span></div>
@@ -886,11 +887,11 @@ rng("sm1",sm,v=>fmt(v,1)+"%");rng("sm2",sm,v=>v+"%");rng("sm3",sm,v=>fmt(v,1)+"%
 /* 07 frameworks + gap */
 const FW=[["自願框架","NIST AI RMF 1.0（2023）","四大功能：治理、對應、量測、管理"],["倫理原則","WHO 衛生 AI 倫理與治理（2021）","六大原則：自主、安全、透明、問責、公平、永續"],["醫院指引","TJC＋CHAI 負責任使用指引（2025）","七項要素，可作院內政策骨架"],["可驗證標準","ISO/IEC 42001（2023）","比照 ISO 品質系統建立 AI 管理制度"],["法律","台灣人工智慧基本法（2026 公布）","七大原則、風險分級、高風險問責"]];
 let fwI=-1;function fw(){$("#fw").innerHTML=FW.map((f,i)=>`<div class="${i===fwI?"on":""}" data-i="${i}"><b>${f[0]}</b>${f[1]}</div>`).join("");$$("#fw div").forEach(d=>d.onclick=()=>{fwI=+d.dataset.i;fw();$("#fwtxt").innerHTML=`<b>${FW[fwI][1]}</b>：${FW[fwI][2]}。`})}fw();
-const GP=[["1 建立治理結構","跨專業委員會，明定權責",0,"無"],["2 保護病人隱私","告知 AI 使用、資料最小化",1,"僅一般個資告知"],["3 確保資料安全","供應商資安評估、存取控管",1,"資安由資訊室處理"],["4 持續品質監測","上線後定期驗證與監測",0,"再入院模型兩年未驗證"],["5 通報 AI 安全事件","建立 AI 相關事件通報管道",0,"無專屬類別"],["6 評估風險與偏誤","次族群表現、風險分級",0,"未做"],["7 教育與訓練","依角色提供 AI 素養訓練",1,"僅廠商操作說明"]],GL3=["✕ 未做","△ 部分","✓ 完成"];
-const myG=LS.get("gap",GP.map(()=>-1));let gpI=0;
-function gap(){$("#gap").innerHTML=`<tr><th style="width:170px">要素</th><th>要求</th><th style="width:${gpI?"260px":"220px"}">${gpI?"我的機構":"北城現況"}</th></tr>`+GP.map(([a,b,s,t],i)=>`<tr><td class="f">${a}</td><td>${b}</td><td>${gpI?`<div class="seg" style="display:flex;width:fit-content">${GL3.map((l,k)=>`<button data-i="${i}" data-k="${k}" class="${myG[i]===k?"on":""}">${l}</button>`).join("")}</div>`:`<b style="color:${s?C.amber:C.ochre}">${s?"△":"✕"}</b> ${t}`}</td></tr>`).join("");
- if(gpI)$$("#gap button").forEach(b=>b.onclick=()=>{myG[+b.dataset.i]=+b.dataset.k;LS.set("gap",myG);gap()});
- const arr=gpI?myG:GP.map(x=>x[2]);$("#gapkpi").innerHTML=kpi(arr.filter(x=>x===0).length,"✕ 未做","o")+kpi(arr.filter(x=>x===1).length,"△ 部分")+kpi(arr.filter(x=>x===2).length,"✓ 完成","g")}
+const GP=[["1 AI 政策與治理","章程、授權、清冊與院務報告",-1,"須查章程與具名授權"],["2 保護病人隱私","告知 AI 使用、資料最小化",1,"僅一般個資告知"],["3 確保資料安全","供應商資安評估、存取控管",1,"資安由資訊室處理"],["4 持續品質監測","上線後定期驗證與監測",0,"再入院模型兩年未驗證"],["5 自願、隱去識別的安全事件分享","院內紀錄、法定通報與自願去識別分享分開",-1,"分享機制未提供，先查證"],["6 評估風險與偏誤","次族群表現、風險分級",0,"未做"],["7 教育與訓練","依角色提供 AI 素養訓練",1,"僅廠商操作說明"]],GL3=["✕ 未做","△ 部分","✓ 完成"];
+const myG=LS.get("gap-v2",GP.map(()=>-1));let gpI=0;
+function gap(){$("#gap").innerHTML=`<tr><th style="width:170px">要素</th><th>要求</th><th style="width:${gpI?"260px":"220px"}">${gpI?"我的機構":"北城現況"}</th></tr>`+GP.map(([a,b,s,t],i)=>`<tr><td class="f">${a}</td><td>${b}</td><td>${gpI?`<div class="seg" style="display:flex;width:fit-content">${GL3.map((l,k)=>`<button data-i="${i}" data-k="${k}" class="${myG[i]===k?"on":""}">${l}</button>`).join("")}</div>`:`<b style="color:${s?C.amber:C.ochre}">${s<0?"待查":s?"△":"✕"}</b> ${t}`}</td></tr>`).join("");
+ if(gpI)$$("#gap button").forEach(b=>b.onclick=()=>{myG[+b.dataset.i]=+b.dataset.k;LS.set("gap-v2",myG);gap()});
+ const arr=gpI?myG:GP.map(()=>-1);$("#gapkpi").innerHTML=kpi(arr.filter(x=>x===0).length,"✕ 未做","o")+kpi(arr.filter(x=>x===1).length,"△ 部分")+kpi(arr.filter(x=>x===2).length,"✓ 完成","g")+kpi(arr.filter(x=>x<0).length,"待查／未評；非合規總分")}
 segInit("#gapseg",d=>{gpI=+d.v;gap()});gap();
 $("#gapcopy").onclick=()=>copyText(["TJC＋CHAI 七要素差距分析（我的機構）",...GP.map(([a],i)=>`${a}：${myG[i]>=0?GL3[myG[i]]:"未評"}`)].join("\n"),"#gapmsg");
 
@@ -934,7 +935,7 @@ const MD=[["技術表現","PPV（%）",[31,29,27,24,22,19,18,23],"PPV 連續兩�
  ["病人結果","30 天再入院（%）",[18,17,16.5,16,16.2,16.4,16.6,15.8],"連續兩季未改善","每季",(v,q)=>q>1&&v[q]>=v[q-1]&&v[q-1]>=v[q-2]],
  ["公平性","次族群敏感度差距（百分點）",[9,10,12,13,16,17,14,11],"> 15 個百分點","每半年",(v,q)=>v[q]>15]];
 const QN=["Q1：上線","Q2","Q3：流程改造","Q4","Q5：換量測設備","Q6","Q7","Q8：介接修正"];
-const QT=["上線第一季：警示寄信箱，夜間未查看 22%——超過警戒線。","夜間仍有 18% 未及時查看。","流程改造：警示進 HIS 待辦、夜間由值班護理師初判，未查看率降到 9%。","各項指標都在警戒線內。","改用另一家血壓計：缺值率升高，次族群差距超過 15 個百分點（部分長者的量測較常上傳失敗）。","缺值率 17% 超標；PPV 掉到 19%；再入院連續兩季未改善；次族群差距擴大到 17 個百分點。先查資料，不急著怪模型。","PPV 連續兩季 < 20% 觸發；再入院仍未改善；夜間未查看回升到 12%。依停用條件送委員會決定：暫停、調整或重新驗證。","修正介接欄位與單位，缺值率回到 8%，PPV 回升。變更有測試紀錄與回復方法。"];
+const QT=["上線第一季：警示寄信箱，夜間未查看 22%——超過警戒線。","夜間仍有 18% 未及時查看。","流程改造：警示進 HIS 待辦、夜間由值班護理師初判，未查看率降到 9%。","各項指標都在警戒線內。","改用另一家血壓計：缺值率升高，次族群差距超過 15 個百分點（部分長者的量測較常上傳失敗）。","缺值率 17% 超標；PPV 掉到 19%；再入院連續兩季未改善；次族群差距擴大到 17 個百分點。先查資料，不急著怪模型。","PPV 連續兩季 < 20% 觸發；再入院仍未改善；夜間未查看回升到 12%。依預先授權先控制風險並具名接手，通報後決定調整、重驗或退場，不等開會才處置。","修正介接欄位與單位，缺值率回到 8%，PPV 回升。變更有測試紀錄與回復方法。"];
 let qI=6;function mon(){$("#qsel").innerHTML=QN.map((n,i)=>{const al=MD.some(m=>m[5](m[2],i));return `<button class="${i===qI?"on":""}" data-i="${i}"><b>${n.split("：")[0]}</b>${al?"<span style='color:var(--ochre)'>● 警戒</span>":"正常"}</button>`}).join("");$$("#qsel button").forEach(b=>b.onclick=()=>{qI=+b.dataset.i;mon()});
  $("#mon").innerHTML=MD.map(([a,b,v,t,f,ck])=>{const al=ck(v,qI);return `<div class="mcell ${al?"al":""}"><b>${a}</b>${b}<div class="big" style="color:${al?C.ochre:C.navy}">${fmt(v[qI],1)}</div><div style="color:var(--mute)">警戒線：${t}｜${f}</div><svg viewBox="0 0 120 30" style="width:100%;height:30px">${(()=>{const mn=Math.min(...v),mx=Math.max(...v);return `<polyline fill="none" stroke="${al?C.ochre:C.navy}" stroke-width="2" points="${v.map((x,i)=>(i*120/7)+","+(26-(x-mn)/((mx-mn)||1)*22)).join(" ")}"/><circle cx="${qI*120/7}" cy="${26-(v[qI]-mn)/((mx-mn)||1)*22}" r="3.5" fill="${al?C.ochre:C.navy}"/>`})()}</svg></div>`}).join("");
  const trig=MD.filter(m=>m[5](m[2],qI)).map(m=>m[0]);$("#montxt").innerHTML=`<b>${QN[qI]}</b>：${QT[qI]}`+(trig.length?`<br><span style="color:var(--ochre);font-weight:700">觸發：${trig.join("、")}。</span>超過時誰收到通知、幾天內回應，要在上線前寫好。`:"")}
@@ -1012,7 +1013,7 @@ mcq("#final",[
  {q:"科部自行採購、資訊室不知情，屬於哪種失敗樣態？",o:["外掛系統","孤兒模型","影子 AI","一次性專案"],a:2,e:"解方：AI 清冊＋提案關卡。"},
  {q:"Nong 等（2025）：使用預測模型的美國醫院中，在本地驗證準確度的比例約為？",o:["44%","61%","65%","80%"],a:1,e:"近四成用了卻沒驗證；本地評估偏誤只有 44%。"},
  {q:"每一套 AI 都應指定的兩位具名負責人是？",o:["院長與資訊長","臨床負責人與模型負責人","廠商與資訊室","主治醫師與護理長"],a:1,e:"不能只寫「資訊室」。"},
- {q:"「背景執行不通知臨床，比對真實結果」是哪一道關卡？",o:["評估","靜默測試","上線","監測"],a:1,e:"不影響病人，卻能在本院資料上看見真實表現。"},
+ {q:"「背景執行不通知臨床，比對真實結果」是哪一道關卡？",o:["評估","靜默測試","上線","監測"],a:1,e:"不讓輸出影響當下臨床決策，仍有資料與資安風險；不能驗證臨床回應及病人受益。"},
  {q:"AI 自動調整用藥劑量，依影響 × 自主分級屬於？",o:["低風險：登錄即可","中風險：快速審查","高風險：完整審查＋六道關卡","不需審查"],a:2,e:"臨床影響高且自動執行。"},
  {q:"監測指標的警戒線應該什麼時候寫好？",o:["出事之後","上線前","合約到期時","年度報告時"],a:1,e:"並指定超過時誰收到通知、幾天內要回應。"},
  {q:"換了居家血壓計廠牌，上線前最該做的是？",o:["什麼都不用做","單位、欄位、缺值檢核","重新訓練模型","只通知病人"],a:1,e:"資料來源或介接變更：資訊室＋模型負責人核准。"},

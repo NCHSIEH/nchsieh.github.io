@@ -428,6 +428,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="chips"><a class="tag" id="pdflink" href="../../W12_醫療AI實證評估_Evidence_Appraisal_of_Medical_AI.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W12）</a><span class="tag o">期末考同樣的能力：算出差值，並說明它還不能證明什麼</span><span class="tag a">DiD 練習與 SepsiNet-TW 演練不在本頁公布答案</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
 </header>
 
+<aside class="alignment-note" style="margin:16px 0;padding:16px 18px;border-left:4px solid var(--ochre);background:var(--paper,#f7f5ef);line-height:1.8"><b>本週與講義一起完成</b><p style="margin:6px 0">100分鐘：講授55、DiD練習5、MASAI證據表15、SepsiNet評讀20、回顧5。</p><p style="margin:6px 0">承接 W11 的機構自報與比較研究；下一站 <a href="../w13/">W13</a>。本頁自測與示意試算供練習，正式繳交與計分依講義。</p></aside>
 <section class="part" id="p01" data-t="開場：要不要買？">
   <div class="ph"><span class="num">01</span><div><h2>北城區域醫院院長收到一份廠商簡報</h2><div class="en">"95% ACCURATE · PUBLISHED · BETTER THAN DOCTORS"</div></div></div>
   <p class="one">「我們的敗血症 AI 準確率 95%，論文已發表，優於醫師判斷。」——要不要買？<b>先記住你的直覺</b>，第 15 段再投一次。</p>
@@ -477,15 +478,15 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   </div>
 </section>
 
-<section class="part" id="p04" data-t="證據階梯">
-  <div class="ph"><span class="num">04</span><div><h2>醫療 AI 的證據階梯：結論不可越級</h2><div class="en">INTERNAL → EXTERNAL → EARLY CLINICAL → RCT → POST-MARKET</div></div></div>
-  <p class="one">最常見的過度推論：<b>拿第 1 層的研究，下第 4 層的結論</b>（「建議全面導入」）。</p>
+<section class="part" id="p04" data-t="評估任務">
+  <div class="ph"><span class="num">04</span><div><h2>五種評估任務：依問題選證據</h2><div class="en">INTERNAL · EXTERNAL · EARLY CLINICAL · INTERVENTION EFFECTS · MONITORING</div></div></div>
+  <p class="one">最常見的過度推論：<b>用模型效能直接推論病人受益</b>（「建議全面導入」）。</p>
   <div class="grid2">
     <div class="ladder5" id="lad5"></div>
-    <div class="detail" id="lad5txt" style="margin-top:0">點一層看它要回答的問題、常見設計與可以下的結論。</div>
+    <div class="detail" id="lad5txt" style="margin-top:0">點選評估任務，看問題、設計與解讀邊界；任務可反覆進行。</div>
   </div>
   <div class="wd">
-    <div class="wh"><h3>這項研究在第幾層？</h3><span class="scoreline" id="lvscore"></span></div>
+    <div class="wh"><h3>這項研究主要回答哪個問題？</h3><span class="scoreline" id="lvscore"></span></div>
     <div id="lvq"></div>
   </div>
   <div class="wd">
@@ -494,12 +495,12 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   </div>
 </section>
 
-<section class="part" id="p05" data-t="第 3 層與試驗設計">
+<section class="part" id="p05" data-t="人因與試驗設計">
   <div class="ph"><span class="num">05</span><div><h2>實驗室超過 90%，到了泰國診所呢？</h2><div class="en">GOOGLE DIABETIC RETINOPATHY AI · BEEDE ET AL., CHI 2020</div></div></div>
-  <p class="one">第 1、2 層看不到的問題——光線、網路、轉介路程——<b>只有走進診所的第 3 層評估才會發現</b>。</p>
+  <p class="one">離線效能不足以回答光線、網路、轉介與工作負擔；<b>需要現場人因與流程評估</b>。</p>
   <div class="wd">
     <div class="wh"><h3>同一個 AI，兩個場景</h3><span class="tag gray">數字依 MIT Technology Review（2020-04-27）報導；原論文為質性研究</span></div>
-    <div class="seg" id="gseg" style="display:flex;width:fit-content;margin-bottom:8px"><button class="on" data-v="0">實驗室（第 1–2 層）</button><button data-v="1">泰國 11 家診所（第 3 層）</button></div>
+    <div class="seg" id="gseg" style="display:flex;width:fit-content;margin-bottom:8px"><button class="on" data-v="0">離線效能</button><button data-v="1">泰國 11 家診所的真實工作流程</button></div>
     <div class="grid4" id="gkpi"></div>
   </div>
   <div class="wd">
@@ -559,7 +560,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 
 <section class="part" id="p08" data-t="TRIPOD+AI 與 PROBAST+AI">
   <div class="ph"><span class="num">08</span><div><h2>預測模型研究最該寫清楚的事，與讀者用的偏誤評讀</h2><div class="en">TRIPOD+AI (COLLINS 2024) · PROBAST+AI (MOONS 2025)</div></div></div>
-  <p class="one">TRIPOD+AI 特別新增<b>「公平性」與「開放科學」</b>；PROBAST+AI 依四個面向評為低／高／不清楚偏誤風險，並另評適用性。</p>
+  <p class="one">TRIPOD+AI 特別新增<b>「公平性」與「開放科學」</b>；PROBAST+AI 分模型開發的品質疑慮、效能評估的偏誤風險；兩部分共享四面向，另評適用性。完整判定需回原文訊號問題。</p>
   <div class="wd">
     <div class="wh"><h3>TRIPOD+AI 評讀時最關鍵的八項：沒寫會怎樣？</h3><span class="tag gray">點一張卡</span></div>
     <div class="forms" id="tri" style="grid-template-columns:repeat(4,1fr)"></div>
@@ -682,10 +683,10 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div class="wd" style="margin:0">
       <div class="wh"><h3>台灣 AI 心電圖警示：降低住院死亡率的隨機試驗</h3><span class="tag gray">國防醫學院／三總；Nature Medicine 2024</span></div>
       <div class="grid3"><div class="kpi"><div class="v" style="font-size:20px">15,965 人</div><div class="l">納入的住院病人；39 位醫師隨機分組</div></div><div class="kpi g"><div class="v" style="font-size:20px">3.6% vs 4.3%</div><div class="l">90 天死亡率（警示組 vs 對照組），HR 0.83</div></div><div class="kpi g"><div class="v" style="font-size:20px">HR 0.69</div><div class="l">預先設定之高風險心電圖次族群</div></div></div>
-      <p class="note">證據等級做到第 4 層：以醫師為單位隨機、看病人結果。</p>
+      <p class="note">醫師群集隨機試驗，估計指定流程的 90 日結果；仍查偏誤、區間與適用性。</p>
     </div>
     <div class="wd" style="margin:0">
-      <div class="wh"><h3>瑞典 MASAI：兩個分析階段分開讀</h3><span class="tag gray">105,934 名婦女隨機分派</span></div>
+      <div class="wh"><h3>瑞典 MASAI：兩個分析階段分開讀</h3><span class="tag gray">105,934 名隨機分派；2026 分析 105,915 人</span></div>
       <div class="grid3"><div class="kpi"><div class="v" style="font-size:20px">6.4 vs 5.0</div><div class="l">每千人癌症偵出（2025，約 +29%）</div></div><div class="kpi"><div class="v" style="font-size:20px">1.55 vs 1.76</div><div class="l">每千人間隔癌（2026）；比值 0.88</div></div><div class="kpi g"><div class="v" style="font-size:20px">−44%</div><div class="l">判讀工作量（2025）</div></div></div>
       <p class="note">只看「偵出更多」可能是過度診斷；關鍵是兩次篩檢之間冒出的間隔癌有沒有變多。</p>
     </div>
@@ -704,7 +705,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div class="detail" id="nitxt"></div>
   </div>
   <div class="wd">
-    <div class="wh"><h3>四個案例放在證據階梯上：先自己判讀，再對照講義</h3><span class="tag o">點格子切換</span></div>
+    <div class="wh"><h3>四個案例按研究問題比較，避免勾選排名</h3><span class="tag o">點格子切換</span></div>
     <div class="cmpg" id="cmpg" style="grid-template-columns:170px repeat(5,1fr)"></div>
     <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="cmpshow">對照講義判讀</button><span id="cmpmsg" style="font-size:13.5px"></span></div>
     <p class="note" id="cmpleg"></p>
@@ -713,7 +714,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 
 <section class="part" id="p15" data-t="演練：SepsiNet-TW">
   <div class="ph"><span class="num">15</span><div><h2>演練：用 PROBAST+AI 拆解 SepsiNet-TW</h2><div class="en">SIMULATED APPRAISAL · RISK OF BIAS · APPLICABILITY</div></div></div>
-  <p class="one">提示：這份摘要至少藏了 <b>8 個問題</b>，分布在 PROBAST+AI 的四個面向與「結論」本身。先獨立閱讀 5 分鐘，再分組 15 分鐘。</p>
+  <p class="one">提示：這份摘要含有<b>多個待查疑點</b>，分布在 PROBAST+AI 的四個面向與「結論」本身。先獨立閱讀 5 分鐘，再分組 15 分鐘。</p>
   <div class="wd">
     <div class="wh"><h3>SepsiNet-TW 研究摘要（虛構）</h3><span class="tag o">點句子標記你覺得可疑的地方</span><span class="tag a">本頁不公布答案</span></div>
     <div class="abs" id="sep"></div>
@@ -747,8 +748,8 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div class="form" style="margin-top:8px"><label>決策點：你是給付單位——上市與給付十多年後才出現負面證據，現在該怎麼做？</label><textarea id="cad-dp" placeholder="我的選擇與理由……"></textarea></div>
   </div>
   <div class="wd form">
-    <div class="wh"><h3>課後延伸：你單位正在用的 AI，證據在第幾層？</h3><span class="tag gray">下週開場每組 1 分鐘分享</span><span class="tag a">本頁不公布參考答案</span></div>
-    <label>Q1 盤點：用過或聽過哪一個 AI 工具？證據大約在第幾層？（答「不知道」也是答案）</label><textarea id="dq-1"></textarea>
+    <div class="wh"><h3>課後延伸：你單位正在用的 AI，證據回答哪個問題？</h3><span class="tag gray">課後選讀；是否分享依下週安排，不另增加課堂時間</span><span class="tag a">本頁不公布參考答案</span></div>
+    <label>Q1 盤點：用過或聽過哪一個 AI 工具？證據回答哪個評估問題？（答「不知道」也是答案）</label><textarea id="dq-1"></textarea>
     <label>Q2 指標：廠商或論文報告的是哪些指標？缺了哪一個最讓你擔心？</label><textarea id="dq-2"></textarea>
     <label>Q3 公平：若這個 AI 決定誰得到額外照護，你最想保障哪一群？避免漏掉，還是避免誤納？</label><textarea id="dq-3"></textarea>
     <label>Q4 行動：主持本地驗證時，你會選哪兩個指標當「通過標準」？</label><textarea id="dq-4"></textarea>
@@ -758,7 +759,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
   <div class="take">
     <div><b>在誰身上</b>資料從哪來、像不像我們的病人、次族群準不準？</div>
-    <div><b>跟什麼比</b>第幾層證據、對照組是誰、區間跨過 1 了嗎？</div>
+    <div><b>跟什麼比</b>研究設計、比較方案、偏誤與區間能支持什麼？</div>
     <div><b>病人變好了嗎</b>準確率之外，校準、淨效益、病人結果？</div>
   </div>
   <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">準確，是證據的起點，不是終點</h2><p style="color:var(--mute)">會問「在誰身上、跟什麼比、最後病人有沒有變好」的人，才是醫療 AI 時代最需要的把關者。<br>下週 W13：醫療 AI 法規、倫理與資料治理——找一個你用過的健康相關 App 或 AI 工具，想想它算不算醫療器材。</p></div>
@@ -846,24 +847,35 @@ choiceRows("#c5q",[
  ["前面都做到了，研究卻只報 AUROC，不知道病人有沒有變好",4,"缺病人結果的證據：無法宣稱有效。"]
 ],CH5.map(c=>c[0]),"#c5score");
 
-/* 04 ladder */
-const LD5=[["第 1 層　內部驗證","在開發資料上準不準？","回溯世代、資料切分、交叉驗證","「有潛力」"],["第 2 層　外部驗證","換醫院、換時間還準嗎？","多中心回溯、時間驗證","「可推論到類似場域」"],["第 3 層　早期臨床評估","實際使用安全嗎？人怎麼用？","前瞻觀察、靜默測試、可用性研究","「可以進一步試驗」"],["第 4 層　隨機對照試驗","用了之後病人結果更好嗎？","個人或群集隨機、階梯式","「具臨床效益」"],["第 5 層　上市後監測","長期是否仍安全有效？","真實世界資料、登錄系統","「持續有效」或需修正"]];
-let ldI=-1;function lad(){$("#lad5").innerHTML=LD5.map((l,i)=>`<div class="${i===ldI?"on":""}" data-i="${i}"><b>${l[0]}</b>${l[1]}</div>`).join("");$$("#lad5 div").forEach(d=>d.onclick=()=>{ldI=+d.dataset.i;lad();const l=LD5[ldI];$("#lad5txt").innerHTML=`<b>${l[0]}</b><br>要回答：${l[1]}<br>常見設計：${l[2]}<br>可以下的結論：<b style="color:var(--green)">${l[3]}</b><br><span style="font-size:13px;color:var(--mute)">W8 的 Epic 敗血症模型停在第 1 層就上市；TREWS 做到第 3 層。</span>`})}
+/* 04 assessment tasks: categories answer different questions, not guaranteed levels */
+const LD5=[
+ ["內部驗證","開發資料來源下的效能如何？","獨立測試、交叉驗證；先查病人切分及洩漏","僅支持該來源下的效能估計"],
+ ["外部驗證","在指定他院或後續時期表現如何？","他院或時間驗證，含校準、區間及工作量","結果限指定場域；也可能揭露失準"],
+ ["早期臨床","實際流程可行嗎？人如何使用？","靜默測試與實際人機互動要分開","靜默只能看資料、效能與負荷，不能驗證臨床反應"],
+ ["比較介入效果","相對現行照護，效益與傷害如何改變？","隨機或適當準實驗；查偏誤、終點及區間","指定用途、流程與族群下的效果估計"],
+ ["持續監測","版本、偏移、不良事件及接手是否改變？","在地監測、登錄及事件資料","持續發現問題；另判因果與修正成效"]
+];
+let ldI=-1;
+function lad(){
+ $("#lad5").style.alignItems="stretch";
+ $("#lad5").innerHTML=LD5.map((l,i)=>`<div class="${i===ldI?"on":""}" data-i="${i}" style="height:auto;min-height:110px"><b>${l[0]}</b>${l[1]}</div>`).join("");
+ $$("#lad5 div").forEach(d=>d.onclick=()=>{ldI=+d.dataset.i;lad();const l=LD5[ldI];$("#lad5txt").innerHTML=`<b>${l[0]}</b><br>要回答：${l[1]}<br>常見設計：${l[2]}<br>解讀邊界：${l[3]}<br><span class="note">任務可反覆進行；研究名稱不保證低偏誤或臨床受益。Epic 有外部驗證研究；TREWS 為非隨機實施研究。</span>`});
+}
 lad();
 choiceRows("#lvq",[
- ["從開發醫院資料切出 20% 當測試集，AUROC 0.90",0,"第 1 層：內部驗證。"],
- ["用另一家醫院 2024 年的資料驗證",1,"第 2 層：外部（他院、他時段）驗證。"],
- ["在兩個病房靜默測試 3 個月，記錄警示量與醫師回應",2,"第 3 層：前瞻性早期臨床評估。"],
- ["以醫師為單位隨機分組，比較 90 天死亡率",3,"第 4 層：群集隨機試驗、看病人結果。"],
- ["上市後以全國登錄資料追蹤效能與不良事件",4,"第 5 層：上市後監測。"]
-],["第 1 層","第 2 層","第 3 層","第 4 層","第 5 層"],"#lvscore");
+ ["從開發醫院資料保留獨立測試集，估計 AUROC",0,"內部驗證；先查切分、調參與資料處理是否獨立。"],
+ ["用另一家醫院的資料檢查校準、警示量及區間",1,"外部驗證；不能外推到所有醫院。"],
+ ["靜默運行三個月，記錄效能及警示量，不讓輸出影響臨床",2,"早期場域評估；不能因此聲稱醫師有回應或病人受益。"],
+ ["以醫師群集隨機分組，比較 90 天死亡率與傷害",3,"比較介入效果；還要查設計、執行、估計與區間。"],
+ ["上市後追蹤版本、族群差異、不良事件與停用機制",4,"持續監測；監測資料本身未必能識別因果。"]
+],LD5.map(x=>x[0]),"#lvscore");
 choiceRows("#ocq",[
- ["內部驗證 AUROC 0.94，建議全院導入",1,"第 1 層證據下第 4 層結論：越級。"],
- ["外部驗證效能接近，可以進一步做前瞻性評估",0,"結論與證據層級相符。"],
- ["靜默測試顯示警示量可負荷，可以規劃隨機試驗",0,"第 3 層 → 規劃第 4 層：合理。"],
- ["回溯研究準確率很高，證明可以降低死亡率",1,"回溯準確率不能證明病人結果改善。"],
- ["隨機試驗顯示 90 天死亡率下降，但仍需上市後監測",0,"第 4 層結論，並提到第 5 層：合理。"]
-],["合理","越級"],"#ocscore");
+ ["內部驗證 AUROC 0.94，所以已證明全院使用會降低死亡",1,"效能估計不能直接支持介入效果與全院擴大。"],
+ ["外部驗證顯示指定場域效能接近，可規劃前瞻評估",0,"有條件延續；仍查校準、區間、安全及接手。"],
+ ["靜默顯示警示量可負荷，因此可規劃實際人機流程與效果評估",0,"規劃下一步合理；尚未證明醫師回應或病人受益。"],
+ ["回溯準確率高，所以已證明降低死亡",1,"研究問題與結論不相符。"],
+ ["隨機試驗在指定流程顯示死亡下降，仍需看區間、傷害與持續監測",0,"效果有適用範圍，不是永久普遍有效的保證。"]
+],["結論有據且有限定","超過資料支持"],"#ocscore");
 
 /* 05 Google + trial design */
 const GK=[[["&gt; 90%","準確度",""],["專科水準","「達到專科醫師水準」","g"],["回溯影像","品質良好、經篩選",""],["—","光線、網路、轉介都不在研究範圍",""]],[["&gt; 1／5","影像品質不符門檻被拒絕，常因光線不足","o"],["網路慢","雲端判讀延遲","o"],["改天轉診","被拒絕者要改天到另一家診所看專科","o"],["流程打亂","護理師工作量與排程被打亂","o"]]];
@@ -989,13 +1001,22 @@ function ni(){const p=+$("#ni-p").value,l=+$("#ni-l").value,u=+$("#ni-u").value,
  const lo=Math.min(l,u),hi=Math.max(l,u);let v;if(hi<1)v=`<span style="color:var(--green);font-weight:700">優越：</span>整段區間都在 1 的左邊，可以說間隔癌較少。`;else if(lo>m)v=`<span style="color:var(--ochre);font-weight:700">劣於對照：</span>整段區間超過非劣性界值。`;else if(hi<m)v=`<span style="color:var(--navy);font-weight:700">非劣性成立：</span>上限 ${hi.toFixed(2)} 低於界值 ${m.toFixed(2)}，支持「不比雙人判讀差」；區間跨過 1，<b>不能說已證實減少 ${fmt((1-p)*100,0)}%</b>。`;else v=`<span style="color:var(--ochre);font-weight:700">非劣性未成立：</span>上限 ${hi.toFixed(2)} 超過界值 ${m.toFixed(2)}，無法排除比對照差。`;
  $("#nitxt").innerHTML=v+`<br><span style="font-size:13px;color:var(--mute)">MASAI 間隔癌每千人 1.55 vs 1.76；絕對差每千人 0.21（−0.28 至 0.70）；也不能推論已降低死亡率。</span>`}
 ["ni-p","ni-l","ni-u","ni-m"].forEach(id=>rng(id,ni,v=>v.toFixed(2)));ni();
-const CR=["台灣 AI-ECG 警示","瑞典 MASAI 乳房攝影","美國照護管理演算法","Epic 敗血症模型（W8）"],CCOL=["外部／多中心","前瞻或隨機","病人結果指標","次族群分析","流程設計"],CANS=[[2,1,1,1,1],[2,1,2,2,1],[3,3,3,1,2],[3,3,3,3,2]];
-let cmpS=LS.get("cmp",CR.map(()=>CCOL.map(()=>0))),cmpShow=false;
-function drawCmpg(){let g=`<div></div>`+CCOL.map(c=>`<div class="h">${c}</div>`).join("");CR.forEach((r,i)=>{g+=`<div class="rn">${r}</div>`;CCOL.forEach((_,j)=>{const v=cmpS[i][j],ok=cmpShow&&v===CANS[i][j];g+=`<div style="text-align:center"><button data-i="${i}" data-j="${j}" style="${cmpShow?(ok?"background:var(--green-l)":"background:var(--ochre-l)"):""};width:100%">${SV(v)}</button>${cmpShow?`<div class="ans">講義：${SV(CANS[i][j])}</div>`:""}</div>`})});$("#cmpg").innerHTML=g;
- $$("#cmpg button").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,j=+b.dataset.j;cmpS[i][j]=(cmpS[i][j]+1)%4;LS.set("cmp",cmpS);drawCmpg()});
- if(cmpShow){let m=0;CR.forEach((_,i)=>CCOL.forEach((_,j)=>{if(cmpS[i][j]===CANS[i][j])m++}));$("#cmpmsg").innerHTML=`和講義判讀相同 <b>${m} / 20</b> 格。照護管理演算法的問題，是獨立研究者做次族群分析後才發現。`}}
-$("#cmpleg").innerHTML=`${SV(1)} 明顯具備　${SV(2)} 部分具備　${SV(3)} 不足（教學判讀，依研究發表當時）。獨立驗證很重要：這正是「AI 取證驗證中心」要扮演的角色（W2）。`;
-drawCmpg();$("#cmpshow").onclick=()=>{cmpShow=!cmpShow;$("#cmpshow").textContent=cmpShow?"隱藏講義判讀":"對照講義判讀";if(!cmpShow)$("#cmpmsg").textContent="";drawCmpg()};
+const CR=["台灣 AI-ECG","瑞典 MASAI","照護管理演算法","Epic 敗血症模型"],
+ CDES=["醫師群集隨機；90 日全因死亡","個人隨機；間隔癌非劣性","成本代理標籤與族群差異評估","Wong 等外部驗證（2021）"],
+ CREF=["指定照護流程的效果及不確定性","指定篩檢策略在預設界值內；未證實優越或死亡下降","同分者需求與資源分配偏差","指定外部醫院的效能、校準與警示負荷；表現差不等於沒有外部研究"];
+let cmpS=LS.get("compare-evidence-v2",CR.map(()=>"")),cmpShow=false;
+function drawCmpg(){
+ $("#cmpg").style.display="block";
+ $("#cmpg").innerHTML=`<div style="overflow-x:auto"><table class="pb" style="width:100%;min-width:600px"><tr><th>案例</th><th>設計與問題</th><th>我的結論與限制</th></tr>${CR.map((r,i)=>`<tr><td>${r}</td><td>${CDES[i]}</td><td><textarea data-i="${i}" aria-label="${r}的結論與限制" style="width:100%;min-height:70px">${esc(cmpS[i]||"")}</textarea>${cmpShow?`<p>${CREF[i]}</p>`:""}</td></tr>`).join("")}</table></div>`;
+ $$("#cmpg textarea").forEach(e=>e.oninput=()=>{cmpS[+e.dataset.i]=e.value;LS.set("compare-evidence-v2",cmpS)});
+ $("#cmpmsg").textContent=cmpShow?"依研究問題比較；不以勾選數、分數或單一階梯排名。":"先寫自己認為可以回答的問題與限制。";
+}
+$("#cmpleg").textContent="同一案例可同時有模型驗證、實施研究與效果評估。資訊不足時提出補查需求。";
+drawCmpg();$("#cmpshow").onclick=()=>{cmpShow=!cmpShow;$("#cmpshow").textContent=cmpShow?"隱藏判讀提示":"對照判讀提示";drawCmpg()};
+// The 15-minute lecture activity is an evidence table, not another scored quiz.
+$("#cmpleg").insertAdjacentHTML("beforebegin",`<div class="wd" id="masai-evidence"><h3>MASAI 原始研究證據表（15 分鐘）</h3><p>以 2026 間隔癌分析為主，2025 偵出與工作量另列；由講義 W12 的原始文獻回查，寫出版本、分母與出處。</p>${["問題與比較方案","設計、人群與分析分母","點估計、區間及非劣性界值","2025 偵出與判讀量：能支持什麼","本院適用限制與下一步"].map((s,i)=>`<label style="display:block;margin:10px 0">${s}<textarea id="masai-${i}" style="display:block;width:100%;min-height:60px"></textarea></label>`).join("")}<button class="btn" id="masai-copy">複製證據表</button><span id="masai-msg"></span></div>`);
+const MA=Array.from({length:5},(_,i)=>"masai-"+i);persist(MA,"masai-evidence-v2");
+$("#masai-copy").onclick=()=>copyText(["W12 MASAI 原始研究證據表",...MA.map((id,i)=>`${i+1}. ${$("#"+id).value||"（未填）"}`)].join("\n\n"),"#masai-msg");
 
 /* 15 SepsiNet */
 const SP=["目的：建立深度學習模型，預測住院病人 6 小時內發生敗血症。","方法：回溯某醫學中心 2018–2023 年 52,310 次成人住院。","敗血症以出院 ICD-10 申報碼定義（事件率 6.1%）。","排除缺值超過 30% 的住院（18%）。","以 112 項變數建模，含生命徵象、檢驗、「血液培養醫囑」與「抗生素開立」（未說明是否限於預測時點前）。","所有住院紀錄隨機切分為訓練 80%、測試 20%。","結果：測試集準確率 95.2%、AUROC 0.94。","另選 100 個案例，請 3 位住院醫師僅依生命徵象判斷，模型準確率高於醫師（95% vs 81%）。","結論：SepsiNet-TW 優於醫師判斷，建議全面導入臨床。"];
@@ -1021,7 +1042,7 @@ const GL=[["差異中的差異","Difference-in-differences","導入組前後變�
 (function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}<small>${b}</small></div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
 mcq("#final",[
  {q:"Wu 等（2021）分析 130 項 FDA 核准 AI 醫材，有幾項只有回溯性評估？",o:["26","66","126","130"],a:2,e:"多數上市證據停在「回溯資料上算得準」。"},
- {q:"「建議全院導入」這類結論，至少需要證據階梯第幾層？",o:["第 1 層內部驗證","第 2 層外部驗證","第 3 層早期臨床","第 4 層隨機對照試驗"],a:3,e:"拿第 1 層的研究下第 4 層結論，是最常見的過度推論。"},
+ {q:"哪個說法最符合本週的評估路徑？",o:["RCT 名稱保證可全院使用","上市後資料一定最可靠","每種研究都能回答所有問題","按問題選設計，另查偏誤、區間、安全與本院條件"],a:3,e:"沒有單一研究名稱能自動保證可信或可擴大。"},
  {q:"6A：8.0 → 5.0；6B：7.5 → 6.5。DiD（後減前）是？",o:["−3.0","−2.0","−1.0","+2.0"],a:1,e:"（5.0−8.0）−（6.5−7.5）＝−2.0 個百分點；只看前後會高估 1.0。"},
  {q:"DiD 估計要成立，最關鍵的前提是？",o:["樣本數超過 1 萬","平行趨勢","一定要用 AI","兩組人數相同"],a:1,e:"沒導入時兩組原本會同方向、同幅度變化；要多個導入前時點檢查。"},
  {q:"事件率 6% 時，「全部猜沒事」的準確率約為？",o:["6%","50%","94%","100%"],a:2,e:"不平衡資料只報準確率，幾乎可以視為警訊。"},

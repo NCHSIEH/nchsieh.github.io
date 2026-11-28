@@ -430,21 +430,22 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div style="font-size:12.5px;color:var(--ochre);font-weight:700;letter-spacing:1.5px">WEEK 14 · ★ 實作週 · 值不值得、推不推得動</div>
   <h1>數位健康經濟評估與導入策略</h1>
   <div class="en">Economic Evaluation &amp; Implementation of Digital Health</div>
-  <p class="lead">W12 問「有沒有用」、W13 問「合不合法」，這週問<b>「值不值得、推不推得動」</b>。你會拉一拉使用率看 ROI 怎麼翻盤、在成本效果平面上放一個點、手算一次 ICER 與預算衝擊、為導入方案標 NASSS 複雜度，最後完成實作四的手算核對與給院長的建議。</p>
+  <p class="lead">W12 問「有沒有用」、W13 問「合不合法」，這週問<b>「值不值得、推不推得動」</b>。你會調整效益實現率 u 看 ROI 如何改變、在成本效果平面上放一個點、手算一次 ICER 與預算衝擊、為導入方案標 NASSS 複雜度，最後完成實作四的手算核對與給院長的建議。</p>
   <div class="chips"><a class="tag" id="pdflink" href="../../W14_數位健康經濟評估與導入策略_Economic_Evaluation_and_Implementation.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W14）</a><span class="tag o">對應評量：★ 實作四（10%）、期末 Q3（經濟評估）</span><span class="tag a">練習試算用虛構「南城醫院」；實作四與討論不在本頁公布參考答案</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
 </header>
 
+<aside class="alignment-note" style="margin:16px 0;padding:16px 18px;border-left:4px solid var(--ochre);background:var(--paper,#f7f5ef);line-height:1.8"><b>本週與講義一起完成</b><p style="margin:6px 0">實作四：效益實現率u的手算／工具核對、ROI與NPV、三情境及零效益、一頁有條件建議。</p><p style="margin:6px 0">承接 W12 證據及 W13 用途與法規；下一站 <a href="../w15/">W15</a>。本頁自測與示意試算供練習，正式繳交與計分依講義（本週實作占學期10%；講授20＋實作80分鐘）。</p></aside>
 <section class="part" id="p01" data-t="開場：院長的問題">
   <div class="ph"><span class="num">01</span><div><h2>院長的問題：「一年 144 萬，值得嗎？」</h2><div class="en">AMBIENT AI SCRIBE · 40 OUTPATIENT DOCTORS (FICTIONAL)</div></div></div>
-  <p class="one">北城區域醫院評估為 40 位門診醫師導入環境式 AI 記錄（W6）。<b>答案會隨「使用率」大幅改變</b>——先寫下你的直覺。</p>
+  <p class="one">北城區域醫院評估為 40 位門診醫師導入環境式 AI 記錄（W6）。<b>答案會隨「效益實現率 u」大幅改變</b>——先寫下你的直覺。</p>
   <div class="grid3">
     <div class="kpi o"><div class="v">144<small> 萬／年</small></div><div class="l">授權費：40 位醫師 × 每月 3,000 元｜另有一次性建置 120 萬、每年維運 40 萬</div></div>
     <div class="kpi"><div class="v">1<small> 分鐘／人次</small></div><div class="l">廠商宣稱醫師可省下的病歷時間——省下的時間，會變成收入嗎？</div></div>
-    <div class="kpi o"><div class="v">？<small> %</small></div><div class="l">實際會有多少醫師持續使用——多數 ROI 試算最常忽略的變數</div></div>
+    <div class="kpi o"><div class="v">？<small> %</small></div><div class="l">本題 u 將名目現金效益線性折算；不能直接當成醫師人數或啟用門診比例</div></div>
   </div>
   <div class="wd">
-    <div class="wh"><h3>我的直覺：使用率至少要多少，3 年才會回本？</h3><span class="tag o">先猜</span><span class="tag gray">第 13 段手算後會對照</span></div>
-    <div class="ctl"><span>我猜的使用率</span><input type="range" id="guess" min="0" max="100" step="1" value="50"><output></output></div>
+    <div class="wh"><h3>我的直覺：效益實現率 u至少要多少，3 年才會回本？</h3><span class="tag o">先猜</span><span class="tag gray">第 13 段手算後會對照</span></div>
+    <div class="ctl"><span>我猜的效益實現率 u</span><input type="range" id="guess" min="0" max="100" step="1" value="50"><output></output></div>
     <div class="detail" id="guesstxt"></div>
   </div>
 </section>
@@ -462,7 +463,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 
 <section class="part" id="p03" data-t="效益硬軟、成本水面下">
   <div class="ph"><span class="num">03</span><div><h2>效益要分「硬」與「軟」，成本要看「水面下」</h2><div class="en">HARD vs SOFT BENEFITS · HIDDEN COSTS</div></div></div>
-  <p class="one">ROI 最容易高估的兩個地方：<b>把軟性效益算成現金、漏算隱藏成本</b>。只算硬性仍划算，才是真的划算。</p>
+  <p class="one">ROI 最容易高估的兩個地方：<b>把軟性效益算成現金、漏算隱藏成本</b>。現金與其他價值分開呈現；正 ROI 不代表安全、合規或整體一定值得。</p>
   <div class="wd"><div class="wh"><h3>這一筆該放哪一欄？</h3><span class="scoreline" id="hsscore"></span></div><div id="hsq"></div></div>
 </section>
 
@@ -476,16 +477,16 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   </div>
   <div class="wd">
     <div class="wh"><h3>練習試算：南城醫院胸部 X 光 AI 分流</h3><span class="tag o">核心互動</span><span class="tag a">虛構案例；數字為教學設定（萬元）</span></div>
-    <div class="note" style="margin-top:0">12 位放射科醫師，授權每人每月 0.5 萬；一次性建置 80 萬、年維運 20 萬。全員使用時年效益：減少夜間外包判讀 90 萬、急診滯留縮短增加收床 45 萬、減少重複攝影 15 萬，共 150 萬；效益與使用率成正比（模型假設）。這不是實作四的北城醫院。</div>
+    <div class="note" style="margin-top:0">12 位放射科醫師，授權每人每月 0.5 萬；一次性建置 80 萬、年維運 20 萬。全員使用時年效益：減少夜間外包判讀 90 萬、急診滯留縮短增加收床 45 萬、減少重複攝影 15 萬，共 150 萬；效益與效益實現率 u成正比（模型假設）。這不是實作四的北城醫院。</div>
     <div class="grid2" style="margin-top:10px">
       <div>
-        <div class="ctl"><span>使用率</span><input type="range" id="ru" min="0" max="100" step="1" value="90"><output></output></div>
+        <div class="ctl"><span>效益實現率 u</span><input type="range" id="ru" min="0" max="100" step="1" value="90"><output></output></div>
         <div class="ctl"><span>評估年數</span><input type="range" id="ry" min="1" max="5" step="1" value="3"><output></output></div>
         <div class="ctl"><span>折現率</span><input type="range" id="rr" min="0" max="8" step="0.5" value="3"><output></output></div>
         <div class="tog" id="ropt"></div>
         <div class="grid2" id="rkpi"></div>
       </div>
-      <div><svg viewBox="0 0 400 250" class="chart" id="cfsvg"></svg><div style="font-size:12.5px;color:var(--mute);text-align:center">累積淨現金流（未折現，萬元）：線穿過 0 的那一年就是回本</div></div>
+      <div><svg viewBox="0 0 400 250" class="chart" id="cfsvg"></svg><div style="font-size:12.5px;color:var(--mute);text-align:center">累積淨現金流（未折現，萬元）：跨零表示累計回收；年內插值假設現金均勻發生</div></div>
     </div>
     <div class="detail" id="rtxt"></div>
   </div>
@@ -597,7 +598,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="spec5" id="pay4"></div>
   <div class="detail" id="pay4txt">從左（額外給付較多）到右（沒有額外給付），點一種看例子。</div>
   <div class="wd"><div class="wh"><h3>這屬於哪一種給付模式？</h3><span class="scoreline" id="payscore"></span><span class="tag a">練習情境為本頁示例</span></div><div id="payq"></div></div>
-  <div class="wd"><div class="wh"><h3>CPT Appendix S：這個 AI 做的是哪一類工作？</h3><span class="scoreline" id="cptscore"></span><span class="tag gray">2026-05 修訂強化定義</span></div><div id="cptq"></div>
+  <div class="wd"><div class="wh"><h3>CPT Appendix S：這個 AI 做的是哪一類工作？</h3><span class="scoreline" id="cptscore"></span><span class="tag gray">2026-05 通過修訂，列入 CPT 2027；2027-01 生效</span></div><div id="cptq"></div>
   <div class="note">越自主，越像付錢給機器——也越需要 W13 的醫材與治理把關。連結：W7 Agent 自主分級、W8 FDA CDS 四條件、W13 IMDRF 風險矩陣。</div></div>
 </section>
 
@@ -630,7 +631,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
         <div class="kpi o"><div class="v">89%</div><div class="l">前三分之一使用者貢獻的啟用次數</div></div>
       </div>
     </div>
-    <div class="note">高頻使用者每份病歷省下的時間是低頻者的兩倍以上；文章未提供成本或 ROI。ROI 的使用率要用「實際啟用次數」，不是「授權人數」。</div>
+    <div class="note">高頻使用者每份病歷省下的時間是低頻者的兩倍以上；文章未提供成本或 ROI。活躍醫師、使用門診及使用強度要分母清楚；本題 u 是效益實現率，不可直接套人數或門診比例。</div>
   </div>
   <div class="wd">
     <div class="wh"><h3>試點三個月後：繼續、調整，還是停？</h3><span class="tag o">拉桿</span><span class="tag a">門檻依講義第 24 頁路線圖；數字為情境推演</span></div>
@@ -659,7 +660,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
         <tr><th>效益項目（全員使用時／年）</th><th>金額</th></tr>
         <tr><td>多看病人：每人每月 10 人次 × 淨收益 0.05</td><td>240</td></tr><tr><td>減少病歷整理人力加班</td><td>60</td></tr><tr><td>病歷完整，申報核減減少</td><td>50</td></tr><tr><td>軟性：醫師文書時間、倦怠</td><td>另列不計</td></tr>
       </table>
-      <div class="note">效益與使用率成正比（模型假設）；授權費依合約 40 人全額計價。</div>
+      <div class="note">效益與效益實現率 u成正比（模型假設）；授權費依合約 40 人全額計價。</div>
     </div>
     <div class="wd" style="margin-top:12px">
       <div class="wh"><h3>步驟二：Vibe Coding 指令</h3><span class="tag gray">講義第 33 頁</span></div>
@@ -671,11 +672,11 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div class="wh"><h3>步驟一：手算核對表</h3><span class="tag o">填完按核對</span><span class="tag a">只顯示對或錯，不顯示答案</span></div>
     <table class="pb" id="hc"></table>
     <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">
-      <label style="font-size:13.5px">3 年損益兩平使用率（%）<input id="be3" style="width:80px;margin-left:6px"></label>
-      <label style="font-size:13.5px">逐年淨效益為正的最低使用率（%）<input id="be1" style="width:80px;margin-left:6px"></label>
+      <label style="font-size:13.5px">3 年損益兩平效益實現率 u（%）<input id="be3" style="width:80px;margin-left:6px"></label>
+      <label style="font-size:13.5px">年度淨現金恰為零的臨界 u（%）<input id="be1" style="width:80px;margin-left:6px"></label>
     </div>
     <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn oc" id="hcck">核對</button><span id="hcmsg" style="font-weight:700"></span></div>
-    <div class="note">ROI 填百分比（取一位小數）；回收期填「年」（一位小數），年淨效益 ≤ 0 時填「無法回收」。容許四捨五入誤差。</div>
+    <div class="note">ROI 填百分比（取一位小數）；回收期填「年」（一位小數），年淨效益 ≤ 0 時填「無法回收」。NPV 為 3 年、折現率 3%；年度淨現金為正須嚴格高於臨界 u，三年回本門檻不同。容許四捨五入誤差。</div>
   </div>
   <div class="wd form">
     <div class="wh"><h3>步驟四：給院長的一頁建議</h3><span class="tag gray">草稿自動儲存</span></div>
@@ -695,7 +696,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 
 <section class="part" id="p14" data-t="Sleepio：NICE 以省錢推薦">
   <div class="ph"><span class="num">14</span><div><h2>Sleepio：NICE 以「省錢」為由推薦的數位療法</h2><div class="en">NICE HTG624 (FORMERLY MTG70) · 2022-05-20 · CBT-I PROGRAMME</div></div></div>
-  <p class="one">NICE 沒有用 QALY 證明「值得」，而是證明<b>「不會多花錢」</b>：比較對象決定結論。</p>
+  <p class="one">NICE 的推薦依比較方案及成本模型估計，<b>不是保證實際不會多花錢</b>；長期外推仍有不確定性。</p>
   <div class="grid4">
     <div class="kpi"><div class="l">問題</div><div style="font-weight:700">失眠常見；一般照護多為睡眠衛教或安眠藥，面對面 CBT-I 資源有限</div></div>
     <div class="kpi"><div class="l">證據</div><div style="font-weight:700">廠商提交 28 項研究，其中 12 項為隨機對照試驗</div></div>
@@ -734,7 +735,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 
 <section class="part" id="p15" data-t="名詞、總測驗與回顧">
   <div class="ph"><span class="num">15</span><div><h2>本週回顧：算價值的三個習慣</h2><div class="en">PERSPECTIVE · HARD vs SOFT · SENSITIVITY</div></div></div>
-  <p class="one">先寫觀點、再分硬軟效益、最後做敏感度分析。<b>使用率是第一變數。</b></p>
+  <p class="one">先寫觀點、再分硬軟效益、最後做敏感度分析。<b>敏感度排序依設定範圍與合約而變，不能只看使用率。</b></p>
   <div class="wd"><div class="wh"><h3>名詞翻卡</h3><span class="tag gray">點卡片翻面</span></div><div class="cards" id="cards"></div></div>
   <div class="wd"><div class="wh"><h3>總測驗（10 題）</h3><span class="scoreline" id="finalscore"></span></div><div id="final"></div></div>
   <div class="take">
@@ -742,7 +743,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div><b>算什麼</b>硬性效益才算現金；軟性另列；別漏水面下的成本。</div>
     <div><b>推得動嗎</b>NASSS 看複雜度；試點、以使用人數計價、設暫停門檻。</div>
   </div>
-  <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">科技的價值，在被持續使用的那一天</h2><p style="color:var(--mute)">算得清楚成本效益、推得動組織變革的人，才能讓好的 AI 真正走進醫院。<br>下週 W15：智慧醫療的組織治理與變革管理——帶著 W13 的 AI 採購檢核表與本週的導入建議，想想誰該在醫院裡為 AI 負責。</p></div>
+  <div class="closing"><div class="tag o">CLOSING</div><h2 style="margin-top:8px">科技的價值，在被持續使用的那一天</h2><p style="color:var(--mute)">算得清楚成本效益、推得動組織變革的人，才能讓好的 AI 真正走進醫院。<br>下週 W15：智慧醫療的組織治理與變革管理——帶著 W13 的用途判定與模型卡補件清單與本週的導入建議，想想誰該在醫院裡為 AI 負責。</p></div>
 </section>
 
 </main>
@@ -964,25 +965,25 @@ const PROMPT=`請做一個單一 HTML 檔的「AI 導入 ROI 試算」網頁，�
 1. 左側輸入（含預設值）：醫師數 40、每人每月授權費 0.3 萬、
    一次性建置 120 萬、年維運 40 萬、每月加診 10 人次、
    每人次淨收益 0.05 萬、減少加班 60 萬、減少核減 50 萬、
-   使用率 70%（滑桿 0–100%）、評估年數 3、折現率 3%。
-2. 公式：年效益＝(醫師數×加診×12×淨收益＋加班＋核減)×使用率；
+   效益實現率 u 70%（滑桿 0–100%）、評估年數 3、折現率 3%。
+2. 公式：年效益＝(醫師數×加診×12×淨收益＋加班＋核減)×效益實現率 u；
    年成本＝醫師數×授權費×12＋年維運。
-3. 右側輸出：ROI、回收期、NPV、損益兩平使用率。
+3. 右側輸出：未折現ROI、簡單回收期、NPV、期間損益兩平效益實現率 u；現金發生時點及單位標明。
    年淨效益 ≤ 0 時，回收期顯示「設定下無法回收」，不可出現負數。
 4. 並列較低 50%、基準 70%、較高 100% 三情境與累積淨現金流圖。
-5. 預設值下 ROI 應為 9.4%、回收期約 2.0 年，請自我驗算。`;
+5. 固定測例 u=0/50/64/70/100%；r=0 與 r=3% 分開。先用獨立手算核對；拒絕無效輸入，成本0顯示ROI不定義，年淨≤0顯示不回收。`;
 $("#prompt").textContent=PROMPT;$("#prcopy").onclick=()=>copyText(PROMPT,"#prmsg");
-const HU=[100,70,50,0],HK=["c","b","r","p"],HN=["年成本（萬）","年效益（萬）","3 年 ROI（%）","回收期（年）"];
-function lab(u){const c=40*0.3*12+40,b=350*u/100,net=b-c,roi=(b*3-(120+c*3))/(120+c*3)*100;return{c,b,r:roi,p:net>0?120/net:null}}
-$("#hc").innerHTML=`<tr><th>使用率</th>${HN.map(n=>`<th>${n}</th>`).join("")}</tr>`+HU.map(u=>`<tr><td class="f">${u}%${u===70?"（基準）":u===0?"（零效益測試）":""}</td>${HK.map(k=>`<td><input id="hc-${u}-${k}"></td>`).join("")}</tr>`).join("");
+const HU=[100,70,50,0],HK=["c","b","r","p","n"],HN=["年成本（萬）","年效益（萬）","3 年 ROI（%）","回收期（年）","3 年 NPV（萬；r=3%）"];
+function lab(u){const c=40*0.3*12+40,b=350*u/100,net=b-c,roi=(b*3-(120+c*3))/(120+c*3)*100;return{c,b,r:roi,p:net>0?120/net:null,n:-120+[1,2,3].reduce((s,t)=>s+net/1.03**t,0)}}
+$("#hc").innerHTML=`<tr><th>效益實現率 u</th>${HN.map(n=>`<th>${n}</th>`).join("")}</tr>`+HU.map(u=>`<tr><td class="f">${u}%${u===70?"（基準）":u===0?"（零效益測試）":""}</td>${HK.map(k=>`<td><input id="hc-${u}-${k}"></td>`).join("")}</tr>`).join("");
 const HCI=[...HU.flatMap(u=>HK.map(k=>`hc-${u}-${k}`)),"be3","be1"];persist(HCI,"hc");
 const num=s=>{const x=parseFloat(String(s).replace(/[,，%％年萬−]/g,m=>m==="−"?"-":""));return isNaN(x)?null:x};
 $("#hcck").onclick=()=>{let ok=0,tot=0;HU.forEach(u=>{const a=lab(u);HK.forEach(k=>{const e=$(`#hc-${u}-${k}`);const s=e.value.trim();e.classList.remove("hcok","hcno");if(!s)return;tot++;let good;if(k==="p"){good=a.p==null?/無法/.test(s):(num(s)!=null&&Math.abs(num(s)-a.p)<=0.06)}else{const tol=k==="r"?0.3:0.6;good=num(s)!=null&&Math.abs(num(s)-a[k])<=tol}if(good)ok++;e.classList.add(good?"hcok":"hcno")})});
  [["be3",672/1050*100],["be1",184/350*100]].forEach(([id,v])=>{const e=$("#"+id);e.classList.remove("hcok","hcno");if(!e.value.trim())return;tot++;const g=num(e.value)!=null&&Math.abs(num(e.value)-v)<=1;if(g)ok++;e.classList.add(g?"hcok":"hcno")});
  const gs=LS.get("guess",null),beOk=$("#be3").classList.contains("hcok");
- $("#hcmsg").innerHTML=tot?`${ok} / ${tot} 格正確${ok===18?"　✓ 全部正確，可以拿去核對你的網頁了":""}${beOk&&gs!=null?`<br><span style="font-weight:500">你在第 01 段猜的是 ${gs}%——${Math.abs(gs-num($("#be3").value))<=5?"很接近":"和手算差了 "+fmt(Math.abs(gs-num($("#be3").value)),0)+" 個百分點"}。</span>`:""}`:"先填幾格再核對。";$("#hcmsg").style.color=ok===tot&&tot?C.green:C.navy};
+ $("#hcmsg").innerHTML=tot?`${ok} / ${tot} 格正確${ok===22?"　✓ 全部正確，可以拿去核對你的網頁了":""}${beOk&&gs!=null?`<br><span style="font-weight:500">你在第 01 段猜的是 ${gs}%——${Math.abs(gs-num($("#be3").value))<=5?"很接近":"和手算差了 "+fmt(Math.abs(gs-num($("#be3").value)),0)+" 個百分點"}。</span>`:""}`:"先填幾格再核對。";$("#hcmsg").style.color=ok===tot&&tot?C.green:C.navy};
 const LB=["lb-1","lb-2","lb-3","lb-4","lb-5"];persist(LB,"lb");
-$("#lbcopy").onclick=()=>{const v=id=>$("#"+id).value.trim()||"（未填）";copyText(["W14 實作四：北城醫院環境式 AI 記錄 ROI 試算","【手算核對表】",...HU.map(u=>`${u}%：`+HK.map((k,i)=>`${HN[i]} ${v(`hc-${u}-${k}`)}`).join("｜")),`3 年損益兩平使用率：${v("be3")}｜逐年淨效益為正的最低使用率：${v("be1")}`,...["結論","關鍵假設與最敏感的變數","暫停或擴大的門檻","軟性效益（另列）","AI 使用紀錄"].map((n,i)=>`【${n}】\n${v(LB[i])}`)].join("\n\n"),"#lbmsg")};
+$("#lbcopy").onclick=()=>{const v=id=>$("#"+id).value.trim()||"（未填）";copyText(["W14 實作四：北城醫院環境式 AI 記錄 ROI 試算","【手算核對表】",...HU.map(u=>`${u}%：`+HK.map((k,i)=>`${HN[i]} ${v(`hc-${u}-${k}`)}`).join("｜")),`3 年損益兩平效益實現率 u：${v("be3")}｜年度淨現金恰為零的臨界 u：${v("be1")}`,...["結論","關鍵假設與最敏感的變數","暫停或擴大的門檻","軟性效益（另列）","AI 使用紀錄"].map((n,i)=>`【${n}】\n${v(LB[i])}`)].join("\n\n"),"#lbmsg")};
 const RB=[["算式與單位正確性",25,"手算與核對基準一致；單位、期間、觀點寫清楚"],["可重算的成果",10,"網頁或試算表可調參數，結果與手算一致"],["情境與敏感度分析",25,"三情境＋零或負淨效益正確顯示；指出最關鍵變數"],["證據、假設及導入建議",30,"分清收入、可實現節省與時間節省；有條件的建議與暫停門檻"],["個人說明及 AI 紀錄",10,"能解釋一個數字怎麼來；工具、提示與修正處具體"]];
 (function(){let x=0,g="";const cs=[C.navy,C.gray,C.navy2,C.ochre,C.amber];RB.forEach(([n,p,d],i)=>{const w=p/100*760;g+=`<g data-i="${i}" style="cursor:pointer"><rect x="${x}" y="8" width="${w-3}" height="54" rx="6" fill="${cs[i]}"/><text x="${x+w/2}" y="32" font-size="${w>100?13:11}" font-weight="700" fill="#fff" text-anchor="middle">${w>100?n:n.slice(0,4)}</text><text x="${x+w/2}" y="51" font-size="13" fill="#fff" text-anchor="middle">${p}%</text></g>`;x+=w});$("#rbsvg").innerHTML=g;$$("#rbsvg g").forEach(e=>e.onclick=()=>{const r=RB[+e.dataset.i];$("#rbtxt").innerHTML=`<b>${r[0]}（${r[1]}%）</b>：${r[2]}`})})();
 

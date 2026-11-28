@@ -416,6 +416,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="chips"><a class="tag" href="../../W10_遠距病人監測與數位療法_Remote_Patient_Monitoring_and_Digital_Therapeutics.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W10）</a><span class="tag o">實作三 占學期成績 10%</span><span class="tag a">固定測例 T1–T5、E1–E5 不在本頁公布答案</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
 </header>
 
+<aside class="alignment-note" style="margin:16px 0;padding:16px 18px;border-left:4px solid var(--ochre);background:var(--paper,#f7f5ef);line-height:1.8"><b>本週與講義一起完成</b><p style="margin:6px 0">實作三：規則與資料處理、T1–T5／E1–E5共10例、容量與失聯接手；依講義提供的60人×30日資料。</p><p style="margin:6px 0">接續 W3 的資料條件及 W8 的警示與容量；下一站 <a href="../w11/">W11</a>。本頁自測與示意試算供練習，正式繳交與計分依講義（本週實作占學期10%；講授20＋實作80分鐘）。</p></aside>
 <section class="part" id="p01" data-t="開場：週末沒人看">
   <div class="ph"><span class="num">01</span><div><h2>出院第 9 天：王伯伯的體重悄悄多了 2 公斤</h2><div class="en">THE DATA ARRIVED · NOBODY WAS LOOKING</div></div></div>
   <p class="one">他每天量、資料每天傳——但週末沒人看。週一早上，他被救護車送回急診。</p>
@@ -532,14 +533,14 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div id="clq"></div>
   </div>
   <div class="wd">
-    <div class="wh"><h3>數位療法里程碑：走完一輪炒作週期</h3><span class="tag gray">點一個年份</span></div>
+    <div class="wh"><h3>數位療法里程碑：研究、許可與營運各有風險</h3><span class="tag gray">點一個年份</span></div>
     <div class="tl7" id="ms"></div>
     <div class="detail" id="mstxt">數位療法的瓶頸早已不是技術，而是「誰付錢」——這正是 W14 數位健康經濟評估要處理的問題。</div>
   </div>
 </section>
 
 <section class="part" id="p08" data-t="DiGA、Pear 與 DMHT">
-  <div class="ph"><span class="num">08</span><div><h2>證據是上市的門票，給付才是活下去的條件</h2><div class="en">GERMANY DiGA · PEAR THERAPEUTICS · MEDICARE DMHT</div></div></div>
+  <div class="ph"><span class="num">08</span><div><h2>許可、支付、採用與持續營運要分開查核</h2><div class="en">GERMANY DiGA · PEAR THERAPEUTICS · MEDICARE DMHT</div></div></div>
   <div class="grid2">
     <div class="wd" style="margin:0">
       <div class="wh"><h3>德國 DiGA：先給付、再證明</h3><span class="tag gray">2019《數位醫療照護法》</span></div>
@@ -611,7 +612,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
       <svg viewBox="0 0 380 260" class="chart" id="rasvg"></svg>
     </div>
     <div class="detail" id="ratxt"></div>
-    <p class="note">講義以實作三練習資料計算：規則 A 129 則、規則 B 10 則，差 13 倍；A 只有 19% 來自惡化病人，B 有 60%。本頁用另一份示範資料重現同樣的取捨，數字不同。</p>
+    <p class="note">講義以實作三練習資料計算：規則 A 129 則、規則 B 10 則，約為 13 倍；A 只有 19% 來自惡化病人，B 有 60%。本頁用另一份示範資料重現同樣的取捨，數字不同。</p>
   </div>
 </section>
 
@@ -704,8 +705,8 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div class="grid2">
       <div><label>病人體驗：每天量測的負擔如何降低？</label><textarea id="qa-1"></textarea></div>
       <div><label>族群健康：惡化能提早幾天被發現？規則漏掉了誰？</label><textarea id="qa-2"></textarea></div>
-      <div><label>降低成本：避免一次住院的價值，能否支付設備與人力？</label><textarea id="qa-3"></textarea></div>
-      <div><label>照護者福祉：每天警示數多少？林個管師看得完嗎？</label><textarea id="qa-4"></textarea></div>
+      <div><label>每人成本：指定期間每人總成本含設備、人力與醫療費用；與現況相比如何？</label><textarea id="qa-3"></textarea></div>
+      <div><label>工作者福祉：每天警示數多少？林個管師看得完嗎？</label><textarea id="qa-4"></textarea></div>
     </div>
     <label>健康公平：常漏傳的病人是誰？為什麼？系統是否排除了他們？</label><textarea id="qa-5"></textarea>
   </div>
@@ -1000,7 +1001,7 @@ function rub(){let s=0,n=0;RB.forEach(([,,w],i)=>{if(rbS[i]>=0){s+=w*rbS[i]/2;n+
 (function(){const r=$("#rub");RB.forEach(([n,d,w],i)=>{r.innerHTML+=`<div class="q" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><div><b>${n}</b>（${w}%）<div style="font-size:13px;color:var(--mute)">${d}</div></div><div class="seg" data-rb="${i}" style="display:flex">${["未達","部分","達成"].map((t,k)=>`<button data-v="${k}" class="${rbS[i]===k?"on":""}">${t}</button>`).join("")}</div></div>`});$$("[data-rb]").forEach(sg=>sg.querySelectorAll("button").forEach(b=>b.onclick=()=>{sg.querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");rbS[+sg.dataset.rb]=+b.dataset.v;LS.set("rub",rbS);rub()}));rub()})();
 const QA=["qa-1","qa-2","qa-3","qa-4","qa-5"],AI=["ai-who","ai-tool","ai-n","ai-fix","ai-me"];persist(QA,"qa");persist(AI,"ai");
 $("#subcopy").onclick=()=>{const v=id=>$("#"+id).value.trim()||"（未填）";
- const t=["W10 實作三繳交包","","【一、警示規則表】",...RT.map(r=>`${r[0]}｜條件：${r[1]}｜行動：${r[2]}｜時限：${r[3]}`),"修改紀錄："+v("rt-why"),"","【二、固定測例紀錄】（以 2026/10/12 判定）",...TC.map(([id,p],i)=>{const s=tcS[i];return `${id} ${p}｜手判：${s.h||"—"}${s.m?"（"+s.m+"）":""}｜儀表板：${s.d||"—"}｜${s.h&&s.d?(s.h===s.d?"一致":"不一致"):"未完成"}${s.f?"｜修正："+s.f:""}`}),"","【三、照護流程】","誰接收："+v("cf-1"),"多快處理："+v("cf-2"),"接不到："+v("cf-3"),"容量："+v("cf-4"),"","【四、五重目標反思】",...["病人體驗","族群健康","降低成本","照護者福祉","健康公平"].map((n,i)=>n+"："+v(QA[i])),"","【五、AI 使用紀錄】","組員："+v("ai-who"),"工具："+v("ai-tool"),"提示輪數："+v("ai-n"),"AI 做錯並修正："+v("ai-fix"),"個人說明："+v("ai-me")].join("\n");copyText(t,"#submsg")};
+ const t=["W10 實作三繳交包","","【一、警示規則表】",...RT.map(r=>`${r[0]}｜條件：${r[1]}｜行動：${r[2]}｜時限：${r[3]}`),"修改紀錄："+v("rt-why"),"","【二、固定測例紀錄】（以 2026/10/12 判定）",...TC.map(([id,p],i)=>{const s=tcS[i];return `${id} ${p}｜手判：${s.h||"—"}${s.m?"（"+s.m+"）":""}｜儀表板：${s.d||"—"}｜${s.h&&s.d?(s.h===s.d?"一致":"不一致"):"未完成"}${s.f?"｜修正："+s.f:""}`}),"","【三、照護流程】","誰接收："+v("cf-1"),"多快處理："+v("cf-2"),"接不到："+v("cf-3"),"容量："+v("cf-4"),"","【四、五重目標反思】",...["病人體驗","族群健康","每人成本","工作者福祉","健康公平"].map((n,i)=>n+"："+v(QA[i])),"","【五、AI 使用紀錄】","組員："+v("ai-who"),"工具："+v("ai-tool"),"提示輪數："+v("ai-n"),"AI 做錯並修正："+v("ai-fix"),"個人說明："+v("ai-me")].join("\n");copyText(t,"#submsg")};
 
 /* 15 Heart Safe Motherhood */
 choiceRows("#hsq",[

@@ -84,7 +84,7 @@ a{color:var(--navy2)}
   <span style="font-size:14px">生活目標：<b>少跑醫院，維持自主生活</b></span>
 </div></div>
 
-<main class="wrap" id="units"></main>
+<main class="wrap"><section class="unit" id="assessment-guide"><div class="unit-h"><span class="u">課程導覽</span><h2>每週累積判斷，評量檢查能否提出有據的決策</h2><small>依 2026-11-27 新版講義校對</small></div><p>先從需求與價值出發，再查資料、模型與流程；W12–W15 接證據、法規、經濟與治理，W16–W17 整合研發、產業化與前瞻。三項能力是趨勢洞察、技術應用、實證評估。</p><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;line-height:1.8"><thead><tr><th style="text-align:left">評量</th><th style="text-align:left">比重</th><th style="text-align:left">主要產出</th></tr></thead><tbody><tr><td>課堂參與</td><td>10%</td><td>依課程講義的參與要求</td></tr><tr><td>W4 實作一</td><td>10%</td><td>體重提醒或 FRAIL 示範二選一；設計理由、原型與測試</td></tr><tr><td>W6 實作二</td><td>10%</td><td>固定 SOAP 草稿查核、同輸入受控提示比較、溯源紀錄</td></tr><tr><td>W10 實作三</td><td>10%</td><td>規則與資料處理、T1–T5／E1–E5、容量與接手流程</td></tr><tr><td>W14 實作四</td><td>10%</td><td>手算與工具核對、ROI／NPV、情境與有條件建議</td></tr><tr><td>W9 期中評量</td><td>20%</td><td>依正式講義的個案分析規格；以當次教師公告及正式評量規格為準</td></tr><tr><td>W18 期末評量</td><td>30%</td><td>依正式講義的整合分析規格；以當次教師公告及正式評量規格為準</td></tr></tbody></table></div><p>四次實作週為講授 20＋實作 80 分鐘。網頁自測及試算供練習，不另設第五次計分實作；可用講義允許的網頁、試算表或手算替代方式。W9、W18 不在此提供正式考題或答案。</p></section><div id="units"></div></main>
 <p class="foot">教學用網站 · 所有擬真個案與模擬資料皆非真實病人資料 · 學習進度只存在你自己的瀏覽器</p>
 
 <script>
@@ -96,7 +96,7 @@ const P = s => '../' + s;
 const UNITS = [
  {u:'單元一', t:'全局與發展脈絡', s:'問題與價值、案例證據、資料條件與使用者驗證', weeks:[
   {w:1, t:'智慧醫療的範疇與價值框架', en:'Scope & Value Frameworks', d:'四層系統與範疇地圖、五重目標指標配對、WSD 成本效益拉桿、王伯伯三方案模擬器、VA CCHT 回歸平均模擬。', url:'w01/', lsKey:'shtd-w1-seen', total:16, pdf:'W01_智慧醫療的範疇與價值框架_Scope_and_Value_Frameworks.pdf'},
-  {w:2, t:'智慧醫療科技演進與國際趨勢', en:'Evolution & Global Trends', d:'HF-Guard 預期用途產生器、擴散曲線與炒作週期、風險×自主矩陣、Agent 錯誤注入、IDx-DR 篩檢試算、MASAI 信賴區間、FDA 決策樹、歐盟時程拖拉。', url:'w02/', lsKey:'shtd-w2-seen', total:19, pdf:'W02_智慧醫療科技演進與國際趨勢_Evolution_and_Global_Trends.pdf'},
+  {w:2, t:'智慧醫療科技演進與國際趨勢', en:'Evolution & Global Trends', d:'HF-Guard 預期用途產生器、擴散曲線與期望曲線、風險×自主矩陣、Agent 錯誤注入、IDx-DR 篩檢試算、MASAI 信賴區間、FDA 決策樹、歐盟時程拖拉。', url:'w02/', lsKey:'shtd-w2-seen', total:19, pdf:'W02_智慧醫療科技演進與國際趨勢_Evolution_and_Global_Trends.pdf'},
   {w:3, t:'醫療資料互通與數位成熟度', en:'Interoperability & Digital Maturity', d:'急診需求接住了沒、互通四層診斷、介面爆炸試算、讀 FHIR 找六個答案、查詢組合器、CQL 規則試跑、四筆資料處置表（課堂交付）、ETL 紀錄產生器。', url:'w03/', lsKey:'shtd-w3-seen', total:17, pdf:'W03_醫療資料互通與數位成熟度_Interoperability_and_Digital_Maturity.pdf'},
   {w:4, t:'使用者中心設計與健康行為改變', en:'User-Centred Design & Behaviour Change', d:'通知規則模擬器、同理心地圖、COM-B 診斷、Fogg 模型、術語偵測器、對比與按鈕檢查器、SUS 計算器、提示詞產生器、AI 第一版測試台、80 分鐘計時器與繳交包。', hands:true, url:'w04/', lsKey:'shtd-w4-seen', total:17, pdf:'W04_使用者中心設計與健康行為改變_User-Centred_Design_and_Behaviour_Change.pdf'} ]},
  {u:'單元二', t:'醫療 AI 與臨床應用', s:'模型驗證、生成內容查核、流程權限與警示工作量', weeks:[
@@ -107,15 +107,15 @@ const UNITS = [
   {w:9, t:'期中評量：個案分析', en:'Midterm Case Analysis', d:'期中複習頁（不含考題）：作答四構面、各週回顧、2×2 表與盛行率計算、互通與資料品質、生成式 AI 檢查、決策權限、W1–W8 題庫與公式卡。', exam:true, url:'w09/', lsKey:'shtd-w09-seen', total:10} ]},
  {u:'單元三', t:'連網照護與新興服務模式', s:'警示處理、服務容量、失聯處置與照護責任', weeks:[
   {w:10, t:'遠距病人監測與數位療法', en:'Remote Patient Monitoring & Digital Therapeutics', d:'週末沒人看的王伯伯、RPM 四層開關、Apple Heart Study 接手量、BEAT-HF 與 TIM-HF2、GUIDE-HF 森林圖、DTx 宣稱判斷、RPM 給付碼試算、通訊診察處方判斷、規則 A／B 示範資料；實作三工作台：計時器、規則表、固定測例紀錄（不公布答案）、容量估算與繳交包。', hands:true, url:'w10/', lsKey:'shtd-w10-seen', total:16, pdf:'W10_遠距病人監測與數位療法_Remote_Patient_Monitoring_and_Digital_Therapeutics.pdf'},
-  {w:11, t:'智慧醫院、數位孿生與居家醫院', en:'Smart Hospitals, Digital Twins & Hospital at Home', d:'拆解等床 14 小時、五層架構、病床流動鏈、Johns Hopkins vs Bradford、RTLS 選型、明日床位帳本（練習病房）、自動上傳省時、離床警示設計、模型／影子／孿生、會動的迷你數位孿生、機器人證據判讀、case-mix 標準化、居家醫院配對研究、服務藍圖與證據階梯。', url:'w11/', lsKey:'shtd-w11-seen', total:15, pdf:'W11_智慧醫院_數位孿生與居家醫院_Smart_Hospitals,_Digital_Twins_and_Hospital_at_Home.pdf'} ]},
+  {w:11, t:'智慧醫院、數位孿生與居家醫院', en:'Smart Hospitals, Digital Twins & Hospital at Home', d:'拆解等床 14 小時、五層架構、病床流動鏈、Johns Hopkins vs Bradford、RTLS 選型、明日床位帳本（練習病房）、自動上傳省時、離床警示設計、模型／影子／孿生、會動的迷你數位孿生、機器人證據判讀、case-mix 標準化、居家醫院配對研究、服務藍圖與證據類型。', url:'w11/', lsKey:'shtd-w11-seen', total:15, pdf:'W11_智慧醫院_數位孿生與居家醫院_Smart_Hospitals,_Digital_Twins_and_Hospital_at_Home.pdf'} ]},
  {u:'單元四', t:'評估、治理與落地', s:'評讀原始研究，法規、經濟與治理接續同一導入決策', weeks:[
-  {w:12, t:'醫療 AI 實證評估', en:'Evidence Appraisal of Medical AI', d:'證據落差、因果鏈五環、證據階梯與結論越級、DiD 計算器與五個前提、報告指引選用、TRIPOD+AI 與練習摘要評讀、準確率陷阱、校準與重新校準、即時決策曲線、偏誤來源、兩群公平性閾值、非劣性區間、SepsiNet-TW 評讀表與七份證據。', url:'w12/', lsKey:'shtd-w12-seen', total:16, pdf:'W12_醫療AI實證評估_Evidence_Appraisal_of_Medical_AI.pdf'},
+  {w:12, t:'醫療 AI 實證評估', en:'Evidence Appraisal of Medical AI', d:'證據落差、因果鏈五環、五種評估任務與推論界線、DiD 計算器與五個前提、報告指引選用、TRIPOD+AI 與練習摘要評讀、準確率陷阱、校準與重新校準、即時決策曲線、偏誤來源、兩群公平性閾值、非劣性區間、SepsiNet-TW 評讀表與七份證據。', url:'w12/', lsKey:'shtd-w12-seen', total:16, pdf:'W12_醫療AI實證評估_Evidence_Appraisal_of_Medical_AI.pdf'},
   {w:13, t:'醫療 AI 法規、倫理與資料治理', en:'Regulation, Ethics & Data Governance', d:'SaMD 判定精靈、IMDRF 矩陣、PCCP、模型卡找碴、再識別風險計算與 23andMe 放大效應。', pdf:'W13_醫療AI法規_倫理與資料治理_Regulation,_Ethics_and_Data_Governance.pdf', url:'w13/', lsKey:'shtd-w13-seen', total:15},
   {w:14, t:'數位健康經濟評估與導入策略', en:'Economic Evaluation & Implementation', d:'ROI 試算與龍捲風圖、成本效果平面、ICER 與預算衝擊、HPI 給付、NASSS 盤點；實作四手算核對。', hands:true, pdf:'W14_數位健康經濟評估與導入策略_Economic_Evaluation_and_Implementation.pdf', url:'w14/', lsKey:'shtd-w14-seen', total:15},
   {w:15, t:'智慧醫療的組織治理與變革管理', en:'Governance & Change Management', d:'七套 AI 盤點、靜默測試、七要素差距分析、監測儀表板、流程改造試算與 RACI 檢查器。', pdf:'W15_智慧醫療的組織治理與變革管理_Governance_and_Change_Management.pdf', url:'w15/', lsKey:'shtd-w15-seen', total:15} ]},
  {u:'單元五', t:'產業化與前瞻', s:'成熟度、採購條件與可撤回的投資決策', weeks:[
-  {w:16, t:'技術成熟度與產業化路徑', en:'Technology Readiness & Commercialization', d:'TRL 排序、死亡之谷缺口、五種成熟度、需求陳述檢查、FDA 路徑判斷、付費方式誘因試算。', pdf:'W16_技術成熟度與產業化路徑_Technology_Readiness_and_Commercialization.pdf', url:'w16/', lsKey:'shtd-w16-seen', total:15},
-  {w:17, t:'前瞻科技趨勢', en:'Emerging Technologies & Health Foresight', d:'成熟度曲線定位、三地平線資源分配、情境軸挑選、五問拆新聞、定序成本 vs 摩爾定律、2035 情境與科技雷達。', pdf:'W17_前瞻科技趨勢_Emerging_Technologies_and_Health_Foresight.pdf', url:'w17/', lsKey:'shtd-w17-seen', total:15},
+  {w:16, t:'技術成熟度與產業化路徑', en:'Technology Readiness & Commercialization', d:'TRL 排序、死亡之谷缺口、五個評估面向、需求陳述檢查、FDA 路徑判斷、付費方式誘因試算。', pdf:'W16_技術成熟度與產業化路徑_Technology_Readiness_and_Commercialization.pdf', url:'w16/', lsKey:'shtd-w16-seen', total:15},
+  {w:17, t:'前瞻科技趨勢', en:'Emerging Technologies & Health Foresight', d:'期望曲線與技術證據定位、三地平線資源分配、情境軸挑選、五問拆新聞、定序成本 vs 摩爾定律、2035 情境與科技雷達。', pdf:'W17_前瞻科技趨勢_Emerging_Technologies_and_Health_Foresight.pdf', url:'w17/', lsKey:'shtd-w17-seen', total:15},
   {w:18, t:'期末評量：個案分析', en:'Final Case Analysis', d:'期末複習頁（不含考題）：八週重點速覽、四步作答練習、PPV／DiD／ICER 隨機計算練習、判斷題庫、治理與三年路線寫作檢查、公式卡。', exam:true, url:'w18/', lsKey:'shtd-w18-seen', total:10} ]}
 ];
 function prog(w){if(!w.lsKey)return null;try{const v=JSON.parse(localStorage.getItem(w.lsKey)||"[]");return Math.min(1,v.length/w.total)}catch(e){return null}}

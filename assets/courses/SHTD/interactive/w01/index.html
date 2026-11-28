@@ -245,6 +245,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 </header>
 
 <!-- 01 -->
+<aside class="alignment-note" style="margin:16px 0;padding:16px 18px;border-left:4px solid var(--ochre);background:var(--paper,#f7f5ef);line-height:1.8"><b>本週與講義一起完成</b><p style="margin:6px 0">提出可驗證的問題卡，分清比較方案、指標、證據缺口與接手。</p><p style="margin:6px 0">從需求與價值開始；下一站 <a href="../w02/">W2</a>。本頁自測與示意試算供練習，正式繳交與計分依講義。</p></aside>
 <section class="part" id="p01" data-t="認識王伯伯">
   <div class="ph"><span class="num">01</span><div><h2>認識王伯伯：先問他想怎麼生活</h2><div class="en">SIMULATED CASE · 全學期共用擬真人物</div></div></div>
   <p class="one">先了解王伯伯的<b>目標、意願與可接受負擔</b>，再討論科技。</p>
@@ -743,7 +744,7 @@ function upWSD(){const p=+$("#w-p").value/100,u=+$("#w-u").value/100;$("#w-p-o")
  const dev=WM.D*(1-p),svc=WM.S*WM.u0/u,icer=dev+svc-WM.O;
  const s=$("#wsd2"),W=760,L=150,R=730,max=100000;const X=v=>L+Math.max(0,v)/max*(R-L);let g="";
  for(let v=0;v<=max;v+=20000){g+=`<line x1="${X(v)}" x2="${X(v)}" y1="20" y2="210" stroke="${C.line}"/><text x="${X(v)}" y="228" font-size="11" fill="${C.mute}" text-anchor="middle">£${v/1000}k</text>`}
- g+=`<rect x="${X(20000)}" y="20" width="${X(30000)-X(20000)}" height="190" fill="#E1EEE6"/><text x="${X(25000)}" y="246" font-size="11" fill="${C.green}" text-anchor="middle" font-weight="700">NICE 門檻 £20k–30k</text>`;
+ g+=`<rect x="${X(20000)}" y="20" width="${X(30000)-X(20000)}" height="190" fill="#E1EEE6"/><text x="${X(25000)}" y="246" font-size="11" fill="${C.green}" text-anchor="middle" font-weight="700">研究時門檻 £20–30k</text>`;
  const rows=[["設備",dev,C.navy2],["服務人力",svc,C.amber],["減少住院抵銷",-WM.O,C.green]];
  rows.forEach(([n,v],i)=>{});
  // stacked waterfall

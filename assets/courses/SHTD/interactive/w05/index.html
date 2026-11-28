@@ -317,6 +317,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="chips"><a class="tag" href="../../W05_醫療AI方法論與模型生命週期_Medical_AI_Methods_and_Model_Lifecycle.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 講義 PDF（W5）</a><span class="tag o">ReAdmit-X 與北城區域醫院為虛構</span><span class="tag a">所有指標在瀏覽器即時計算</span><span class="tag gray">進度與草稿只存在這台電腦的瀏覽器</span></div>
 </header>
 
+<aside class="alignment-note" style="margin:16px 0;padding:16px 18px;border-left:4px solid var(--ochre);background:var(--paper,#f7f5ef);line-height:1.8"><b>本週與講義一起完成</b><p style="margin:6px 0">用同一出院事件分母解讀閾值、校準、負荷與採購條件。</p><p style="margin:6px 0">承接 W4 的需求、規格與測試；下一站 <a href="../w06/">W6</a>。本頁自測與示意試算供練習，正式繳交與計分依講義。</p></aside>
 <section class="part" id="p01" data-t="開場：AUROC 0.85">
   <div class="ph"><span class="num">01</span><div><h2>廠商說：「我們的再入院預測 AI，AUROC 0.85」</h2><div class="en">REaDMIT-X · 北城區域醫院評估小組</div></div></div>
   <p class="one">下課前要能逐一回答右欄五個問題，<b>這就是醫療 AI 的識讀能力</b>。</p>
@@ -397,7 +398,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     <div class="detail" id="lctxt"></div>
   </div>
   <div class="wd">
-    <div class="wh"><h3>這份證據在哪一層？</h3><span class="tag a">5 題</span><span class="scoreline" id="vlscore"></span></div>
+    <div class="wh"><h3>這項研究主要回答哪個評估問題？</h3><span class="tag a">5 題</span><span class="scoreline" id="vlscore"></span></div>
     <div class="lead2" id="ladder"></div>
     <div id="vlq" style="margin-top:12px"></div>
   </div>
@@ -495,7 +496,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
   <div class="ph"><span class="num">11</span><div><h2>決策曲線分析：模型有沒有用</h2><div class="en">VICKERS &amp; ELKIN 2006 · NET BENEFIT</div></div></div>
   <p class="one">AUROC 說模型好不好，<b>決策曲線說模型有沒有用</b>。線越高越有用；低於 0 表示弊大於利。</p>
   <div class="wd">
-    <div class="wh"><h3>每 100 次出院，淨多抓到幾位？</h3><span class="tag o">滑鼠移到曲線上</span></div>
+    <div class="wh"><h3>每 100 次出院的決策淨效益是多少？</h3><span class="tag o">滑鼠移到曲線上</span></div>
     <svg viewBox="0 0 760 290" class="chart" id="dca"></svg>
     <div class="detail" id="dcatxt"></div>
     <p class="note">淨效益＝真陽性率 − 偽陽性率 × 閾值／(1−閾值)。以北城合成資料計算；講義三個閾值：依模型介入 9.3、4.9、2.5，全部介入 6.9、−4.7、−19.7。</p>
@@ -654,13 +655,13 @@ mcq("#scq",[
 /* 05 lifecycle + ladder */
 const LC=[["問題","預測出來之後，誰要做什麼？沒有行動的預測沒有價值。"],["資料","資料代表我們的病人嗎？標籤怎麼定義（含不含計畫性住院、他院住院）？"],["特徵","有沒有洩漏？預測當下拿得到嗎？"],["訓練","依病人、依時間切分；避免過度擬合。"],["驗證","在本院資料上準不準？各族群是否一樣準？"],["部署","放在哪個畫面、誰看？光線、網路、轉診流程都會改變結果。"],["監測","上線後表現有沒有下滑？誰負責、多久一次？"]];
 (function(){const g=$("#lc");LC.forEach(([n,d],i)=>{const c=h("div",{class:"kpi",style:`cursor:pointer;text-align:center;border-top:4px solid ${i===0?C.ochre:C.navy2}`},`<div style="font-weight:900;color:var(--navy)">${i+1}</div><div style="font-size:13.5px;font-weight:700">${n}</div>`);c.onclick=()=>$("#lctxt").innerHTML=`<b>${i+1} ${n}：</b>${d}`;g.appendChild(c)});$("#lctxt").innerHTML="最常被跳過的是第一步。點任一階段。"})();
-const VL=[["內部驗證","同一資料隨機切分","#9A9CA4",60],["時間驗證","較新年份資料","#7A8BAA",90],["外部驗證","其他醫院資料","#4F6390",120],["前瞻性評估","上線後即時追蹤","#2E4470",150],["隨機對照試驗","改善病人結果","#B5442A",180]];
-$("#ladder").innerHTML=VL.map(([n,d,c,hgt])=>`<div><div class="lv" style="background:${c};height:${hgt}px;display:flex;flex-direction:column;justify-content:flex-end">${n}<span style="font-weight:400;font-size:11.5px">${d}</span></div></div>`).join("");
-choiceRows("#vlq",[["廠商：用同一家醫院資料 70/15/15 切分，測試集 AUROC 0.85",0,"內部驗證——對北城的證據力有限。"],["用 2025 年的新病人測試 2023–2024 年訓練的模型",1,"時間驗證。"],["北城用自己 2,000 次出院資料驗證 ReAdmit-X，AUROC 0.76",2,"本地外部驗證：不靠廠商的數字。"],["Duke Sepsis Watch 靜默運行 3 個月，以即時資料比對",3,"前瞻性評估（不發警示的靜默期）。"],["隨機分派一半病房使用模型，比較再入院率",4,"隨機對照試驗：證明改善病人結果。"]],VL.map(v=>v[0]),"#vlscore");
+const VL=[["內部驗證","來源內獨立評估；先查洩漏","#9A9CA4",60],["時間驗證","較新年份資料","#7A8BAA",90],["外部驗證","其他醫院資料","#4F6390",120],["前瞻性評估","靜默與實際互動分開","#2E4470",150],["比較介入效果","查估計、區間與傷害","#B5442A",180]];
+$("#ladder").innerHTML=VL.map(([n,d,c,hgt])=>`<div><div class="lv" style="background:${c};height:130px;display:flex;flex-direction:column;justify-content:flex-end">${n}<span style="font-weight:400;font-size:11.5px">${d}</span></div></div>`).join("");
+choiceRows("#vlq",[["廠商：用同一家醫院資料 70/15/15 切分，測試集 AUROC 0.85",0,"內部驗證——對北城的證據力有限。"],["用 2025 年的新病人測試 2023–2024 年訓練的模型",1,"時間驗證。"],["北城用自己 2,000 次出院資料驗證 ReAdmit-X，AUROC 0.76",2,"本地外部驗證：核對原模型表現；同批重新校準結果另需獨立驗證。"],["Duke Sepsis Watch 靜默運行 3 個月，以即時資料比對",3,"前瞻性評估（不發警示的靜默期）。"],["隨機分派一半病房使用模型，比較再入院率",4,"隨機試驗可估計介入效果；仍需看偏誤、終點、區間及傷害。"]],VL.map(v=>v[0]),"#vlscore");
 (function(){const s=$("#wusvg");const R=[["只用回溯性資料評估",126,130],["未公開報告多院評估",93,130],["高風險醫材有前瞻評估",0,54]];const L=150,RR=360;let g="";R.forEach(([n,v,t],i)=>{const y=20+i*60;g+=`<text x="${L-8}" y="${y+18}" font-size="12.5" text-anchor="end" font-weight="700" fill="${C.navy}">${n}</text><rect x="${L}" y="${y}" width="${RR-L}" height="28" rx="4" fill="#EFEAE0"/><rect x="${L}" y="${y}" width="${(RR-L)*v/t}" height="28" rx="4" fill="${i===2?C.ochre:C.navy2}"/><text x="${L+6}" y="${y+19}" font-size="14" font-weight="900" fill="${v/t>0.3?"#fff":C.ochre}">${v}／${t}</text>`});s.innerHTML=g})();
 
 /* 06 shift + MLOps */
-function ds(){const p=+$("#ds-p").value/100;$("#ds-p").nextElementSibling.textContent=Math.round(p*100)+"%";const se=190/324,sp=1304/1676;const tp=p*se,fp=(1-p)*(1-sp);const ppv=tp/(tp+fp);const flag=(tp+fp)*2000;$("#dskpi").innerHTML=`<div class="kpi ${ppv<0.25?"o":""}"><div class="v">${(ppv*100).toFixed(0)}%</div><div class="l">PPV：被標記者真的再入院</div></div><div class="kpi"><div class="v">${fmt(flag)}</div><div class="l">每 2,000 次出院被標記人數</div></div><div class="kpi"><div class="v">${fmt(flag-tp*2000)}</div><div class="l">其中虛驚（偽陽性）</div></div>`}
+function ds(){const p=+$("#ds-p").value/100;$("#ds-p").nextElementSibling.textContent=Math.round(p*100)+"%";const se=190/324,sp=1304/1676;const tp=p*se,fp=(1-p)*(1-sp);const ppv=tp/(tp+fp);const flag=(tp+fp)*2000;$("#dskpi").innerHTML=`<div class="kpi ${ppv<0.25?"o":""}"><div class="v">${(ppv*100).toFixed(0)}%</div><div class="l">PPV：被標記者真的再入院</div></div><div class="kpi"><div class="v">${fmt(flag)}</div><div class="l">每 2,000 次出院被標記出院事件數</div></div><div class="kpi"><div class="v">${fmt(flag-tp*2000)}</div><div class="l">其中虛驚（偽陽性）</div></div>`}
 $("#ds-p").oninput=ds;ds();
 choiceRows("#dsq",[["模型從醫學中心移到區域醫院，病人更老、共病更多",0,"病人組成改變。"],["推出出院後追蹤計畫，再入院率下降 → PPV 改變",1,"盛行率改變（上面的模擬）。"],["新藥上市，心衰竭與再入院的關聯減弱",2,"關係改變。"],["換 HIS、ICD 規則或檢驗儀器，同一欄位意義悄悄改變",3,"流程與編碼改變。COVID-19 期間許多模型同時失準。"]],["病人組成","盛行率","關係","流程與編碼"]);
 const MLI=["每季監測 AUROC、校準度與各族群表現","每月回報警示量與個管師工作量","輸入資料分布與訓練時比較（偏移偵測）","表現低於約定門檻時，廠商依預定程序重新校準或訓練","每一版模型可追溯（版本紀錄），出事可回溯","更新前通知醫院並提供驗證報告；醫院可拒絕或回退","揭露開發資料來源、標籤定義與驗證層級","若屬醫療器材，提供許可文件與預定變更計畫（PCCP，W2）"];const mlS=LS.get("ml",[0,1,3,4,5]);
@@ -671,8 +672,8 @@ let TH=0.2;
 function thUI(){$("#th").value=Math.round(TH*100);$("#th2").value=Math.round(TH*100);$("#th").nextElementSibling.textContent="≥"+Math.round(TH*100)+"%";$("#th2").nextElementSibling.textContent="≥"+Math.round(TH*100)+"%";const m=at(TH),cap=+$("#cmn").value*25;$("#cmn").nextElementSibling.textContent=$("#cmn").value+" 名";
  $("#cm").innerHTML=`<div></div><div class="h">實際：再入院</div><div class="h">實際：未再入院</div><div class="h" style="display:flex;align-items:center">預測：高風險</div><div class="c" style="background:#E1EEE6"><div class="n" style="color:${C.green}">${m.tp}</div><div class="t">真陽性 TP</div></div><div class="c" style="background:#FBF4E4"><div class="n" style="color:#8A5F17">${m.fp}</div><div class="t">偽陽性 FP：個管師白打電話</div></div><div class="h" style="display:flex;align-items:center">預測：低風險</div><div class="c" style="background:#F6E3DA"><div class="n" style="color:${C.ochre}">${m.fn}</div><div class="t">偽陰性 FN：漏掉王伯伯</div></div><div class="c" style="background:#EFEAE0"><div class="n" style="color:${C.mute}">${m.tn}</div><div class="t">真陰性 TN</div></div>`;
  $("#mets").innerHTML=[["敏感度",m.sens,"真的再入院的人，抓到幾成"],["特異度",m.spec,"沒再入院的人，正確排除幾成"],["PPV",m.ppv,"被標高風險的人，真的再入院幾成"],["NPV",m.npv,"被標低風險的人，真的沒事幾成"]].map(([n,v,d],i)=>`<div class="kpi ${i===2?"o":""}"><div class="l">${n}</div><div class="v">${(v*100).toFixed(0)}%</div><div class="l">${d}</div></div>`).join("");
- const mo=m.flag/12,over=mo>cap;$("#wl").innerHTML=`<div class="kpi ${over?"o":"g"}"><div class="l">每月被標記（全院估計）</div><div class="v">${mo.toFixed(0)}<small> 人／月</small></div><div class="l">個管師量能 ${cap} 人／月（${$("#cmn").value} 名 × 25）${over?`——<b style="color:var(--ochre)">超出 ${(mo/cap).toFixed(1)} 倍</b>`:"——接得住"}</div></div>`;
- $("#thtxt").innerHTML=`閾值 ≥${Math.round(TH*100)}%：標記 <b>${m.flag}</b> 人（${(m.flag/N*100).toFixed(0)}%），抓到 ${m.tp}／324 位再入院者，漏掉 <b style="color:var(--ochre)">${m.fn}</b> 位；準確率 ${(m.acc*100).toFixed(1)}%（全猜不會：83.8%）。`;drawROC();}
+ const mo=m.flag/12,over=mo>cap;$("#wl").innerHTML=`<div class="kpi ${over?"o":"g"}"><div class="l">每月被標記（全院估計）</div><div class="v">${mo.toFixed(0)}<small> 次出院／月</small></div><div class="l">個管師量能 ${cap} 次出院／月（${$("#cmn").value} 名 × 25）${over?`——<b style="color:var(--ochre)">超出 ${(mo/cap).toFixed(1)} 倍</b>`:"——月平均總量可容納，仍查尖峰與持續在案"}</div></div>`;
+ $("#thtxt").innerHTML=`閾值 ≥${Math.round(TH*100)}%：標記 <b>${m.flag}</b> 次出院（${(m.flag/N*100).toFixed(0)}%），抓到 ${m.tp}／324 次再入院事件，漏掉 <b style="color:var(--ochre)">${m.fn}</b> 次事件；準確率 ${(m.acc*100).toFixed(1)}%（全猜不會：83.8%）。`;drawROC();}
 $("#th").oninput=()=>{TH=+$("#th").value/100;thUI()};$("#th2").oninput=()=>{TH=+$("#th2").value/100;thUI()};$("#cmn").oninput=thUI;$$("[data-th]").forEach(b=>b.onclick=()=>{TH=+b.dataset.th/100;thUI()});
 function fitTh(){const cap=+$("#cmn").value*25*12;let best=0.6;for(let t=2;t<=60;t++){if(at(t/100).flag<=cap){best=t/100;break}}return best}
 $("#thfit").onclick=()=>{TH=fitTh();thUI();pcOut()};

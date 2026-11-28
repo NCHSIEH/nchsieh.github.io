@@ -292,6 +292,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 </header>
 
 <!-- 01 -->
+<aside class="alignment-note" style="margin:16px 0;padding:16px 18px;border-left:4px solid var(--ochre);background:var(--paper,#f7f5ef);line-height:1.8"><b>本週與講義一起完成</b><p style="margin:6px 0">寫清 HF-Guard 用途、比較各地條件，分開許可、效益與支付。</p><p style="margin:6px 0">承接 W1 的價值與比較方案；下一站 <a href="../w03/">W3</a>。本頁自測與示意試算供練習，正式繳交與計分依講義。</p></aside>
 <section class="part" id="p01" data-t="HF-Guard：先界定用途">
   <div class="ph"><span class="num">01</span><div><h2>開場：HF-Guard 要先界定用途</h2><div class="en">INTENDED USE FIRST · 虛構產品，尚無試驗結果</div></div></div>
   <p class="one">先界定<b>用途</b>與<b>誰會據此行動</b>，之後才討論分類、證據與許可。</p>
@@ -355,7 +356,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
 </section>
 
 <!-- 05 -->
-<section class="part" id="p05" data-t="創新擴散與炒作週期">
+<section class="part" id="p05" data-t="創新擴散與期望曲線">
   <div class="ph"><span class="num">05</span><div><h2>影響採用速度的五個特性</h2><div class="en">ROGERS DIFFUSION OF INNOVATIONS · HYPE CYCLE</div></div></div>
   <p class="one">把特性轉為可測問題：<b>學多久、改多少、節省多少時間？</b></p>
   <div class="wd">
@@ -374,7 +375,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
     </div>
   </div>
   <div class="wd">
-    <div class="wh"><h3>炒作週期：每一階段該問什麼？</h3><span class="tag o">點選階段</span><span class="tag a">曲線為概念示意</span></div>
+    <div class="wh"><h3>期望曲線：每一階段該問什麼？</h3><span class="tag o">點選階段</span><span class="tag a">曲線為概念示意</span></div>
     <svg viewBox="0 0 760 230" class="chart" id="hypesvg"></svg>
     <div class="detail" id="hypetxt"></div>
     <p class="note">不是每項技術都會走完五階段；病歷草稿與自主診斷要分開放，不把整個生成式 AI 醫療領域放在單一位置。可以回答「無法判定」，但要提出證據缺口。</p>
@@ -406,7 +407,7 @@ details.adv summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1
       <p class="note">Flan-PaLM 67.6%（Nature 2023）→ Med-PaLM 2 最佳設定 86.5%（統一模型另報告 85.4%，Nature Medicine 2025）。不同設定不可混讀；非正式執照考試成績。</p>
     </div>
     <div class="wd" style="margin:0">
-      <div class="wh"><h3>MAI-DxO：304 個 NEJM 困難病例</h3><span class="tag gray">2025-06 預印本</span></div>
+      <div class="wh"><h3>MAI-DxO：304 個 NEJM 困難病例</h3><span class="tag gray">2025-06 歷史設定；2026 更新見 W17</span></div>
       <svg viewBox="0 0 360 220" class="chart" id="maisvg"></svg>
       <p class="hint" style="margin-top:6px">翻開每一張「解讀前先問」：</p>
       <div id="maicav" style="display:flex;flex-wrap:wrap;gap:6px"></div>
@@ -832,10 +833,10 @@ $("#g-copy").onclick=()=>{const t=gText();const done=()=>{$("#g-msg").textConten
 const GEN=[["聽寫","Dragon Medical：口述轉文字（語音辨識）",[["辨識準確率（口音、術語）",1],["生成內容的幻覺查核",0],["寫入病歷與下單的權限",0],["資安與錄音保存",1]]],["環境式記錄","DAX Copilot：聆聽對話、生成病歷草稿",[["病人知情同意（被錄音）",1],["生成內容的幻覺與遺漏查核",1],["醫師審閱責任與時間",1],["自動送出醫囑的授權",0]]],["任務自動化","Dragon Copilot：聽寫＋環境記錄＋任務自動化",[["動作範圍、確認點與回退",1],["錯誤行動的責任歸屬",1],["生成內容查核",1],["只要沿用上一代評估即可",0]]]];
 (function(){const r=$("#gen");GEN.forEach(([n,d,items],gi)=>{const c=h("div",{class:"gc2"},`<h4>${gi+1}　${n}</h4><div style="font-size:12.5px;color:var(--mute);margin-bottom:6px">${d}</div>`);items.forEach(([t],k)=>{const l=h("label",{},`<input type="checkbox" data-g="${gi}" data-k="${k}"> <span>${t}</span>`);c.appendChild(l)});r.appendChild(c)})})();
 $("#genchk").onclick=()=>{let ok=0,tot=0;$$("#gen input").forEach(i=>{const it=GEN[+i.dataset.g][2][+i.dataset.k];tot++;const right=(i.checked?1:0)===it[1];if(right)ok++;i.parentElement.style.color=right?C.green:C.ochre;i.parentElement.style.fontWeight="700"});$("#genres").innerHTML=`<div class="${ok===tot?"okmsg":"detail"}">勾選判斷 ${ok} / ${tot} 項與參考方向一致（綠色＝一致，赭紅＝再想想）。<br><b>重點：</b>聽寫要看辨識準確率；環境式記錄多了<b>知情同意</b>與<b>生成內容查核</b>（W6）；任務自動化再多了<b>授權與責任</b>（W7）。技術世代可以疊加，但每一代都要針對新的錯誤型態重新評估。</div>`};
-mcq("#q-nu",[{q:"廠商自述「每次省 5 分鐘」，你要看到哪一種研究才比較能採信？",o:["更多使用者的滿意度調查","有同期對照（最好隨機）的研究，客觀量測工時與病歷品質","廠商提供的個案故事","使用人數持續成長的報告"],a:1,e:"擴散很快，但成效數字多來自廠商調查（約 900 人自述）。需要獨立、有對照、客觀量測的研究——證據成熟度（第 05 段、W12）。"}]);
+mcq("#q-nu",[{q:"廠商自述「每次省 5 分鐘」，你要看到哪一種研究才比較能採信？",o:["更多使用者的滿意度調查","有同期對照（最好隨機）的研究，客觀量測工時與病歷品質","廠商提供的個案故事","使用人數持續成長的報告"],a:1,e:"擴散很快，但成效數字多來自廠商調查（約 900 人自述）。需要獨立、有對照、客觀量測的研究——研究設計與效益證據（W12）。"}]);
 
 /* 19 glossary + quiz */
-const GL=[["SaMD","醫療器材軟體","不作為硬體醫材一部分即可完成醫療目的"],["510(k)","上市前通知","證明與合法比較器材實質相等"],["De Novo","新類別申請","無合適比較器材的中低風險產品路徑"],["PCCP","預定變更計畫","預先界定修改及驗證，限已授權範圍"],["MDR／IVDR","歐盟醫材法規","一般醫材／體外診斷器材的法規"],["EHDS","健康資料空間","照護使用與資料再利用的制度框架"],["Hype Cycle","炒作週期","描述期待與成熟度的分析框架"],["AI Agent","AI 代理系統","依授權結合模型與工具執行任務"]];
+const GL=[["SaMD","醫療器材軟體","不作為硬體醫材一部分即可完成醫療目的"],["510(k)","上市前通知","證明與合法比較器材實質相等"],["De Novo","新類別申請","無合適比較器材的中低風險產品路徑"],["PCCP","預定變更控制計畫","預先界定修改及驗證，限已授權範圍"],["MDR／IVDR","歐盟醫材法規","一般醫材／體外診斷器材的法規"],["EHDS","健康資料空間","照護使用與資料再利用的制度框架"],["Hype Cycle","期望曲線","描述期望變化的框架；非 TRL"],["AI Agent","AI 代理系統","依授權結合模型與工具執行任務"]];
 (function(){const r=$("#cards");GL.forEach(([a,b,c])=>{const d=h("div",{class:"fc"},`<div class="in"><div class="f">${a}<small>${b}</small></div><div class="bk">${c}</div></div>`);d.onclick=()=>d.classList.toggle("flip");r.appendChild(d)})})();
 mcq("#final",[
  {q:"HF-Guard 討論分類、證據與許可之前，最先要做的是？",o:["選擇模型架構","界定用途與誰會據此行動","申請 FDA","計算 ROI"],a:1,e:"先界定用途（資料、輸出、行動、回應時限），才能判斷分類與證據要求。"},
