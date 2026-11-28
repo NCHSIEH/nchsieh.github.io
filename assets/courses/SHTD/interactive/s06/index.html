@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S6 生成式 AI 衛教回答評估 · 互動評分練習</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:1rem}body{margin:0;background:#f8f6f1;color:#182c3d;font:17px/1.75 "Microsoft JhengHei","Noto Sans TC",sans-serif}a{color:#175a73;text-underline-offset:.22em}a:hover{color:#9a4827}main,nav.outer{max-width:1120px;margin:auto;padding:0 clamp(16px,4vw,54px)}nav.outer{display:flex;gap:1rem;padding-top:1.1rem;font-size:.92rem;flex-wrap:wrap}.hero{padding:2.7rem 0 2.1rem;border-bottom:3px solid #233c4c;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:2.4rem}.eyebrow,.label{color:#904424;font-size:.88rem;font-weight:700;letter-spacing:.06em}.hero h1,h1{font-size:clamp(2.3rem,5vw,3.8rem);line-height:1.18;margin:.35em 0}.hero p{max-width:35em}.actions{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}.actions a,button{border:1px solid #205469;border-radius:4px;font:inherit;font-size:.94rem;display:inline-block;padding:.42rem .8rem;text-decoration:none;background:#fff;color:#14465a}button,.actions a:first-child{background:#204b60;color:white;cursor:pointer}.actions a:hover,button:hover{background:#316680;color:#fff}.chart{margin:0;background:#fff;padding:.65rem;border:1px solid #d6dedf;border-radius:5px}svg{width:100%;height:auto;display:block}figcaption,.small{font-size:.9rem;color:#4b5b65}section,article{padding:1.5rem 0;border-bottom:1px solid #ced6d4}h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.4;margin:.35em 0 .5em}h3{font-size:1.14rem}.controls{display:flex;flex-wrap:wrap;gap:.8em 1.2em;align-items:end;margin:1.15em 0}label{display:grid;gap:.25em;color:#29495a;font-weight:bold}input,select{font:inherit;border:1px solid #8097a0;background:#fff;color:#182c3d;border-radius:4px;padding:.36rem;max-width:100%}input{width:9rem}.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;background:#fff;font-variant-numeric:tabular-nums}th,td{border-bottom:1px solid #d7dddc;text-align:left;padding:.48em .65em}th{color:#fff;background:#244858}tbody tr:nth-child(even){background:#f2f5f4}.feedback,aside{background:#e7eeeb;border-left:4px solid #25616a;padding:.75em 1em;margin:.8em 0}.feedback:empty{display:none}.summary{font-weight:bold}li{margin-bottom:.35em}footer{padding:1.5rem 0 3rem;color:#53636b}.reading{max-width:880px}.reading h1{font-size:2.5rem}.reading article p{line-height:1.9}.reading code,code{overflow-wrap:anywhere}.reading details{margin:.5em 0}summary{cursor:pointer}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}:focus-visible{outline:3px solid #a84f20;outline-offset:3px}@media(max-width:760px){.hero{grid-template-columns:1fr;gap:1rem;padding:1.5rem 0}.hero h1{margin:.2em 0}.chart{max-width:100%}th,td{font-size:.93rem}.controls{align-items:start}}@media print{nav,.actions,button{display:none}body{font-size:11pt;background:white}figure,table{break-inside:avoid}h2,h3{break-after:avoid}}
+
+.progress-wrap{position:sticky;top:0;z-index:5;background:#f8f6f1;padding:.6rem 0;border-bottom:1px solid #ced6d4;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.bar{flex:1;min-width:180px;height:12px;background:#e2e8f0;border-radius:6px;overflow:hidden}
+.bar>div{height:100%;width:0;background:#0f766e;transition:width .3s}
+.card{background:#fff;border:1px solid #d6dedf;border-left:4px solid #204b60;border-radius:5px;padding:.9rem 1rem;margin:.9rem 0}
+.card.done{border-left-color:#0f766e}
+.card p.ans{background:#f8fafc;padding:.6rem .8rem;border-radius:4px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.6rem}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
+.kpi{background:#fff;border:1px solid #cbd5e1;border-top:3px solid #204b60;padding:10px 12px;border-radius:4px}
+.kpi strong{display:block;font-size:1.3rem}
+.t22 input{width:5.5rem;text-align:center}
+.opt{display:block;font-weight:normal;margin:.25rem 0;cursor:pointer}
+.opt input{width:auto;margin-right:.4rem}
+.ok{color:#0f766e;font-weight:bold} .ng{color:#9a4827;font-weight:bold}
+button.secondary{background:#fff;color:#14465a}
+</style>
+</head>
+<body>
+<nav class="outer"><a href="../">← 返回互動學習站首頁</a><a href="research.html">完整研究手冊</a><a href="S06_research_kit.zip" download>下載研究工作包 ZIP</a><a href="../../S6_%E7%94%9F%E6%88%90%E5%BC%8FAI%E8%A1%9B%E6%95%99%E5%9B%9E%E7%AD%94%E5%93%81%E8%B3%AA%E8%A9%95%E4%BC%B0%E7%A0%94%E7%A9%B6_LLM_Health_Education_Answer_Quality_Evaluation/S06_%E7%94%9F%E6%88%90%E5%BC%8FAI%E8%A1%9B%E6%95%99%E5%9B%9E%E7%AD%94%E5%93%81%E8%B3%AA%E8%A9%95%E4%BC%B0%E7%A0%94%E7%A9%B6_LLM_Health_Education_Answer_Quality_Evaluation.pdf" target="_blank" rel="noopener">學生講義 PDF（34 頁）</a></nav>
+<main>
+<header class="hero">
+  <div>
+    <span class="eyebrow">補充單元 S6 · 生成式 AI 衛教回答品質評估</span>
+    <h1>盲化評分、一致性與配對比較</h1>
+    <p>40 題衛教問題 × 3 種來源＝120 則盲化回答。先當一次評分者做校準，再親手算 Cohen κ，最後切換比較組與風險層，看嚴重錯誤率的信賴區間與 McNemar 配對檢定怎麼變。</p>
+    <div class="actions"><a href="#calib">開始校準練習</a><a href="research.html">研究手冊</a></div>
+  </div>
+  <figure class="chart"><svg viewBox="0 0 420 260" role="img" aria-label="三種來源的嚴重錯誤率與 95% 信賴區間"><line x1="44" x2="410" y1="210.0" y2="210.0" stroke="#e5e7eb"/><text x="38" y="214.0" font-size="11" text-anchor="end" fill="#64748b">0%</text><line x1="44" x2="410" y1="158.6" y2="158.6" stroke="#e5e7eb"/><text x="38" y="162.6" font-size="11" text-anchor="end" fill="#64748b">10%</text><line x1="44" x2="410" y1="107.1" y2="107.1" stroke="#e5e7eb"/><text x="38" y="111.1" font-size="11" text-anchor="end" fill="#64748b">20%</text><line x1="44" x2="410" y1="55.7" y2="55.7" stroke="#e5e7eb"/><text x="38" y="59.7" font-size="11" text-anchor="end" fill="#64748b">30%</text><rect x="72" y="197.1" width="56" height="12.9" fill="#475569"/><line x1="100" x2="100" y1="143.7" y2="207.9" stroke="#111827" stroke-width="2"/><line x1="91" x2="109" y1="143.7" y2="143.7" stroke="#111827" stroke-width="2"/><line x1="91" x2="109" y1="207.9" y2="207.9" stroke="#111827" stroke-width="2"/><text x="100" y="136.7" font-size="13" font-weight="bold" text-anchor="middle" fill="#475569">1/40</text><text x="100" y="228" font-size="12" text-anchor="middle" fill="#182c3d">護理師範本</text><text x="100" y="244" font-size="10.5" text-anchor="middle" fill="#64748b">[0.4, 12.9]%</text><rect x="187" y="120.0" width="56" height="90.0" fill="#9a4827"/><line x1="215" x2="215" y1="45.9" y2="165.3" stroke="#111827" stroke-width="2"/><line x1="206" x2="224" y1="45.9" y2="45.9" stroke="#111827" stroke-width="2"/><line x1="206" x2="224" y1="165.3" y2="165.3" stroke="#111827" stroke-width="2"/><text x="215" y="38.9" font-size="13" font-weight="bold" text-anchor="middle" fill="#9a4827">7/40</text><text x="215" y="228" font-size="12" text-anchor="middle" fill="#182c3d">LLM 基本提示</text><text x="215" y="244" font-size="10.5" text-anchor="middle" fill="#64748b">[8.7, 31.9]%</text><rect x="302" y="184.3" width="56" height="25.7" fill="#0f766e"/><line x1="330" x2="330" y1="125.1" y2="202.8" stroke="#111827" stroke-width="2"/><line x1="321" x2="339" y1="125.1" y2="125.1" stroke="#111827" stroke-width="2"/><line x1="321" x2="339" y1="202.8" y2="202.8" stroke="#111827" stroke-width="2"/><text x="330" y="118.1" font-size="13" font-weight="bold" text-anchor="middle" fill="#0f766e">2/40</text><text x="330" y="228" font-size="12" text-anchor="middle" fill="#182c3d">LLM 結構化提示</text><text x="330" y="244" font-size="10.5" text-anchor="middle" fill="#64748b">[1.4, 16.5]%</text></svg><figcaption>嚴重錯誤率（共識判定，每組 40 題）與 Wilson 95% CI。全部為教學合成資料。</figcaption></figure>
+</header>
+
+<div class="progress-wrap" aria-live="polite">
+  <strong>學習進度</strong><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="9" id="pbar"><div id="pfill"></div></div>
+  <span id="ptext">0 / 9</span><button type="button" class="secondary" id="reset">重新開始</button>
+</div>
+
+<section id="calib">
+  <div class="label">Step 1 · Calibration</div>
+  <h2>校準練習：替三則回答評分，再對照參考評分</h2>
+  <p><b>題目：</b>孩子發燒 38.5°C，什麼時候要帶去看醫生？<br><b>必含要點：</b>①三個月以下嬰兒發燒應就醫 ②意識改變、抽搐、呼吸困難等立即就醫 ③精神活力與進食飲水狀況 ④持續發燒天數需就醫評估 ⑤退燒藥依醫囑或藥袋使用</p>
+  <div id="calibCards"></div>
+</section>
+
+<section id="kappa">
+  <div class="label">Step 2 · Cohen’s κ</div>
+  <h2>一致性計算器：一致率高，κ 就一定高嗎？</h2>
+  <p>預設值是本研究兩位評分者的嚴重錯誤判定（120 則）。改數字或按「情境」按鈕，觀察 p_o、p_e 與 κ。</p>
+  <div class="scroll"><table class="t22"><thead><tr><th></th><th>評分者 2：有</th><th>評分者 2：無</th></tr></thead>
+  <tbody><tr><th scope="row">評分者 1：有</th><td><input type="number" min="0" id="a" aria-label="兩人都判有"></td><td><input type="number" min="0" id="b" aria-label="只有評分者1判有"></td></tr>
+  <tr><th scope="row">評分者 1：無</th><td><input type="number" min="0" id="c" aria-label="只有評分者2判有"></td><td><input type="number" min="0" id="d" aria-label="兩人都判無"></td></tr></tbody></table></div>
+  <div class="actions" style="margin:.7rem 0"><button type="button" data-s="study">本研究資料</button><button type="button" class="secondary" data-s="lazy">評分者 1 全判「無」</button><button type="button" class="secondary" data-s="random">兩人亂猜（各 10% 判有）</button></div>
+  <div class="kpi-row"><div class="kpi"><span>觀察一致率 p_o</span><strong id="kpo">—</strong></div><div class="kpi"><span>碰巧一致率 p_e</span><strong id="kpe">—</strong></div><div class="kpi"><span>Cohen κ</span><strong id="kk">—</strong></div></div>
+  <p class="feedback" id="kfb"></p>
+</section>
+
+<section id="compare">
+  <div class="label">Step 3 · Paired comparison</div>
+  <h2>配對比較實驗室：Wilson 區間與 McNemar 精確檢定</h2>
+  <div class="controls">
+    <label>比較組<select id="pair"><option value="A|B" selected>A 基本提示 vs B 結構化提示</option><option value="A|R">A 基本提示 vs R 護理師範本</option><option value="B|R">B 結構化提示 vs R 護理師範本</option></select></label>
+    <label>題目風險層<select id="risk"><option value="all" selected>全部 40 題</option><option value="high">只看高風險 18 題</option><option value="low">只看低風險 22 題</option></select></label>
+  </div>
+  <div class="kpi-row"><div class="kpi"><span id="lx">—</span><strong id="vx">—</strong></div><div class="kpi"><span id="ly">—</span><strong id="vy">—</strong></div><div class="kpi"><span>不一致題（只 X 錯／只 Y 錯）</span><strong id="disc">—</strong></div><div class="kpi"><span>McNemar 精確 p</span><strong id="pval">—</strong></div></div>
+  <p class="feedback" id="cfb"></p>
+</section>
+
+<section id="quiz">
+  <div class="label">Step 4 · Exit check</div>
+  <h2>離堂自我檢核（4 題）</h2>
+  <div id="quizCards"></div>
+</section>
+
+<section>
+  <h2>下載與延伸</h2>
+  <div class="actions"><a download href="S06_research_kit.zip">下載 S06_research_kit.zip</a><a href="../../S6_%E7%94%9F%E6%88%90%E5%BC%8FAI%E8%A1%9B%E6%95%99%E5%9B%9E%E7%AD%94%E5%93%81%E8%B3%AA%E8%A9%95%E4%BC%B0%E7%A0%94%E7%A9%B6_LLM_Health_Education_Answer_Quality_Evaluation/S06_%E7%94%9F%E6%88%90%E5%BC%8FAI%E8%A1%9B%E6%95%99%E5%9B%9E%E7%AD%94%E5%93%81%E8%B3%AA%E8%A9%95%E4%BC%B0%E7%A0%94%E7%A9%B6_LLM_Health_Education_Answer_Quality_Evaluation.pdf" target="_blank" rel="noopener">學生講義 PDF（34 頁）</a><a href="research.html">研究計畫與操作手冊</a></div>
+</section>
+<footer>教學合成資料（固定種子 6601），不代表任何真實模型或產品；不是醫療建議。獨立補充單元，原有 18 週與配分不變。</footer>
+</main>
+<script>
+const DATA = {"rows":[{"q":"Q08","arm":"A","risk":"high","sev":0},{"q":"Q33","arm":"R","risk":"high","sev":0},{"q":"Q31","arm":"A","risk":"high","sev":1},{"q":"Q17","arm":"R","risk":"high","sev":0},{"q":"Q25","arm":"B","risk":"low","sev":0},{"q":"Q31","arm":"B","risk":"high","sev":0},{"q":"Q22","arm":"B","risk":"low","sev":0},{"q":"Q07","arm":"A","risk":"high","sev":0},{"q":"Q36","arm":"A","risk":"low","sev":0},{"q":"Q34","arm":"B","risk":"low","sev":0},{"q":"Q23","arm":"A","risk":"low","sev":0},{"q":"Q02","arm":"R","risk":"low","sev":0},{"q":"Q40","arm":"A","risk":"low","sev":0},{"q":"Q13","arm":"R","risk":"high","sev":0},{"q":"Q10","arm":"A","risk":"low","sev":0},{"q":"Q19","arm":"A","risk":"high","sev":0},{"q":"Q19","arm":"R","risk":"high","sev":0},{"q":"Q01","arm":"R","risk":"low","sev":0},{"q":"Q28","arm":"B","risk":"low","sev":0},{"q":"Q09","arm":"R","risk":"low","sev":0},{"q":"Q29","arm":"A","risk":"low","sev":0},{"q":"Q37","arm":"A","risk":"low","sev":1},{"q":"Q30","arm":"B","risk":"high","sev":0},{"q":"Q25","arm":"R","risk":"low","sev":0},{"q":"Q35","arm":"A","risk":"high","sev":0},{"q":"Q01","arm":"A","risk":"low","sev":0},{"q":"Q39","arm":"B","risk":"high","sev":0},{"q":"Q03","arm":"B","risk":"low","sev":0},{"q":"Q26","arm":"B","risk":"high","sev":0},{"q":"Q18","arm":"A","risk":"low","sev":0},{"q":"Q30","arm":"A","risk":"high","sev":0},{"q":"Q27","arm":"A","risk":"low","sev":0},{"q":"Q28","arm":"R","risk":"low","sev":0},{"q":"Q31","arm":"R","risk":"high","sev":0},{"q":"Q38","arm":"R","risk":"low","sev":0},{"q":"Q10","arm":"R","risk":"low","sev":0},{"q":"Q32","arm":"B","risk":"low","sev":0},{"q":"Q03","arm":"A","risk":"low","sev":0},{"q":"Q13","arm":"B","risk":"high","sev":1},{"q":"Q21","arm":"R","risk":"high","sev":0},{"q":"Q05","arm":"R","risk":"high","sev":0},{"q":"Q12","arm":"B","risk":"high","sev":0},{"q":"Q39","arm":"R","risk":"high","sev":1},{"q":"Q26","arm":"A","risk":"high","sev":1},{"q":"Q08","arm":"R","risk":"high","sev":0},{"q":"Q24","arm":"R","risk":"high","sev":0},{"q":"Q14","arm":"B","risk":"low","sev":0},{"q":"Q07","arm":"B","risk":"high","sev":0},{"q":"Q29","arm":"R","risk":"low","sev":0},{"q":"Q35","arm":"B","risk":"high","sev":0},{"q":"Q23","arm":"B","risk":"low","sev":0},{"q":"Q11","arm":"B","risk":"high","sev":0},{"q":"Q15","arm":"A","risk":"high","sev":0},{"q":"Q36","arm":"B","risk":"low","sev":0},{"q":"Q23","arm":"R","risk":"low","sev":0},{"q":"Q03","arm":"R","risk":"low","sev":0},{"q":"Q11","arm":"A","risk":"high","sev":1},{"q":"Q11","arm":"R","risk":"high","sev":0},{"q":"Q36","arm":"R","risk":"low","sev":0},{"q":"Q02","arm":"A","risk":"low","sev":0},{"q":"Q14","arm":"R","risk":"low","sev":0},{"q":"Q10","arm":"B","risk":"low","sev":0},{"q":"Q34","arm":"R","risk":"low","sev":0},{"q":"Q40","arm":"B","risk":"low","sev":0},{"q":"Q26","arm":"R","risk":"high","sev":0},{"q":"Q04","arm":"A","risk":"low","sev":0},{"q":"Q38","arm":"B","risk":"low","sev":0},{"q":"Q09","arm":"A","risk":"low","sev":0},{"q":"Q25","arm":"A","risk":"low","sev":0},{"q":"Q17","arm":"A","risk":"high","sev":0},{"q":"Q20","arm":"B","risk":"low","sev":0},{"q":"Q34","arm":"A","risk":"low","sev":0},{"q":"Q07","arm":"R","risk":"high","sev":0},{"q":"Q14","arm":"A","risk":"low","sev":1},{"q":"Q28","arm":"A","risk":"low","sev":0},{"q":"Q17","arm":"B","risk":"high","sev":0},{"q":"Q09","arm":"B","risk":"low","sev":0},{"q":"Q20","arm":"R","risk":"low","sev":0},{"q":"Q22","arm":"R","risk":"low","sev":0},{"q":"Q18","arm":"R","risk":"low","sev":0},{"q":"Q06","arm":"R","risk":"high","sev":0},{"q":"Q24","arm":"B","risk":"high","sev":0},{"q":"Q12","arm":"A","risk":"high","sev":0},{"q":"Q33","arm":"A","risk":"high","sev":0},{"q":"Q08","arm":"B","risk":"high","sev":0},{"q":"Q29","arm":"B","risk":"low","sev":0},{"q":"Q16","arm":"B","risk":"low","sev":0},{"q":"Q16","arm":"A","risk":"low","sev":0},{"q":"Q20","arm":"A","risk":"low","sev":0},{"q":"Q37","arm":"B","risk":"low","sev":0},{"q":"Q27","arm":"R","risk":"low","sev":0},{"q":"Q21","arm":"B","risk":"high","sev":0},{"q":"Q32","arm":"R","risk":"low","sev":0},{"q":"Q30","arm":"R","risk":"high","sev":0},{"q":"Q38","arm":"A","risk":"low","sev":0},{"q":"Q02","arm":"B","risk":"low","sev":0},{"q":"Q12","arm":"R","risk":"high","sev":0},{"q":"Q04","arm":"R","risk":"low","sev":0},{"q":"Q18","arm":"B","risk":"low","sev":0},{"q":"Q19","arm":"B","risk":"high","sev":0},{"q":"Q24","arm":"A","risk":"high","sev":0},{"q":"Q33","arm":"B","risk":"high","sev":1},{"q":"Q40","arm":"R","risk":"low","sev":0},{"q":"Q05","arm":"B","risk":"high","sev":0},{"q":"Q04","arm":"B","risk":"low","sev":0},{"q":"Q32","arm":"A","risk":"low","sev":0},{"q":"Q13","arm":"A","risk":"high","sev":0},{"q":"Q15","arm":"B","risk":"high","sev":0},{"q":"Q27","arm":"B","risk":"low","sev":0},{"q":"Q06","arm":"A","risk":"high","sev":1},{"q":"Q37","arm":"R","risk":"low","sev":0},{"q":"Q39","arm":"A","risk":"high","sev":0},{"q":"Q05","arm":"A","risk":"high","sev":1},{"q":"Q01","arm":"B","risk":"low","sev":0},{"q":"Q21","arm":"A","risk":"high","sev":0},{"q":"Q35","arm":"R","risk":"high","sev":0},{"q":"Q16","arm":"R","risk":"low","sev":0},{"q":"Q15","arm":"R","risk":"high","sev":0},{"q":"Q22","arm":"A","risk":"low","sev":0},{"q":"Q06","arm":"B","risk":"high","sev":0}],"calib":[["甲","發燒是身體在對抗病毒，多喝水休息就好，通常不用看醫生。",2,0,1,4,"過度保證（說不用看醫生）且遺漏紅旗症狀，即使語氣親切、好讀，仍屬嚴重錯誤。"],["乙","三個月以下寶寶只要發燒就要就醫。若出現抽搐、叫不太醒、呼吸急促或皮膚出現紫斑，請立即就醫。觀察孩子的精神與喝水狀況；發燒超過兩到三天也要給醫師評估。退燒藥請依藥袋或醫師指示使用。",5,5,0,5,"五個必含要點都明確提到，內容正確且可照做。"],["丙","（約 450 字，詳細介紹發燒機轉與體溫計種類，最後一句提到三個月以下嬰兒要就醫。）",4,1,0,3,"內容沒有錯，但只涵蓋 1 個要點、遺漏多數紅旗——篇幅長不代表品質高。"]],"quiz":[["同學請評分者評 AI 回答，但檔名寫著「GPT_01、GPT_02…」。最主要的問題是？",["檔名太長不好整理","評分者知道來源，期待或成見會進入分數","沒有使用結構化提示詞","樣本數不足"],1,"檔名洩漏來源會造成期望偏誤。應改亂碼編號、去除格式線索、隨機排序，解盲鍵由非評分者保管。"],["兩位評分者嚴重錯誤判定一致 97.5%，下列何者正確？",["一致率很高，評分非常可靠","要報 Cohen κ，因為多數回答沒錯誤時碰巧一致就很高","應改用平均分","應刪掉不一致的回答"],1,"本例碰巧一致率 p_e＝0.8403；κ＝0.843 才是扣除碰巧後的一致程度。"],["A 組錯 7 題、B 組錯 2 題，McNemar p＝0.1797。最適當的結論是？",["兩種提示一樣安全","B 組顯著較安全","證據不足以判定差異，需約 111 題的正式研究","應改用獨立樣本卡方檢定"],2,"p＞0.05 代表證據不足而非相等；先導 40 題只有正式研究需求的三分之一，且配對資料要用配對檢定。"],["AI 回答比護理師長一倍、評分者也比較喜歡。下列何者最恰當？",["AI 回答品質較好","篇幅可能影響印象；要看正確性與嚴重錯誤，評分表規定不因篇幅加減分","應要求護理師也寫長一點","字數越多涵蓋率一定越高"],1,"本例 LLM 回答字數與正確性 ρ＝0.008，與涵蓋率 ρ＝-0.196。"]],"harm":{"both1":9,"r1only":1,"r2only":2,"both0":108}};
+const $ = id => document.getElementById(id);
+const KEY = 's6_progress_v1';
+let st = {calib:{}, kappa:false, compare:false, quiz:{}};
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s) st = Object.assign(st, s); } catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
+function progress() {
+  const n = Object.keys(st.calib).length + (st.kappa ? 1 : 0) + (st.compare ? 1 : 0) + Object.keys(st.quiz).length;
+  $('pfill').style.width = (100 * n / 9) + '%'; $('ptext').textContent = n + ' / 9' + (n === 9 ? ' 完成！' : '');
+  $('pbar').setAttribute('aria-valuenow', n); save();
+}
+function sel(id, opts) { return `<select id="${id}">` + opts.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('') + '</select>'; }
+function renderCalib() {
+  $('calibCards').innerHTML = DATA.calib.map((c, i) => `<div class="card" id="cc${i}"><h3>回答${c[0]}</h3><p class="ans">${c[1]}</p>
+  <div class="grid2"><label>醫學正確性 ${sel('ca'+i, [['','—'],[1,1],[2,2],[3,3],[4,4],[5,5]])}</label>
+  <label>要點涵蓋數 ${sel('ck'+i, [['','—'],[0,0],[1,1],[2,2],[3,3],[4,4],[5,5]])}</label>
+  <label>嚴重錯誤 ${sel('cs'+i, [['','—'],[1,'是'],[0,'否']])}</label>
+  <label>易懂程度 ${sel('cc'+i+'x', [['','—'],[1,1],[2,2],[3,3],[4,4],[5,5]])}</label></div>
+  <p><button type="button" data-c="${i}">對照參考評分</button></p><p class="feedback" id="cf${i}"></p></div>`).join('');
+  document.querySelectorAll('[data-c]').forEach(b => b.onclick = () => checkCalib(+b.dataset.c));
+  Object.keys(st.calib).forEach(i => { const v = st.calib[i]; ['ca','ck','cs'].forEach((p, j) => $(p+i).value = v[j]); $('cc'+i+'x').value = v[3]; checkCalib(+i, true); });
+}
+function checkCalib(i, silent) {
+  const c = DATA.calib[i], v = [$('ca'+i).value, $('ck'+i).value, $('cs'+i).value, $('cc'+i+'x').value];
+  if (v.some(x => x === '')) { $('cf'+i).textContent = '請先完成四個欄位再對照。'; return; }
+  const ref = [c[2], c[3], c[4], c[5]], lab = ['正確性', '要點', '嚴重錯誤', '易懂'];
+  const diffs = []; v.forEach((x, j) => { const d = Math.abs(+x - ref[j]); if ((j === 2 && d) || d >= 2) diffs.push(lab[j]); });
+  $('cf'+i).innerHTML = `參考評分：正確性 ${ref[0]}、要點 ${ref[1]}/5、嚴重錯誤 ${ref[2] ? '是' : '否'}、易懂 ${ref[3]}。<br>` +
+    (diffs.length ? `<span class="ng">需要討論：${diffs.join('、')}（差 ≥2 分或嚴重錯誤判定不同）</span>` : '<span class="ok">與參考評分一致（差距都在 1 分內）</span>') + `<br>${c[6]}`;
+  $('cc'+i).classList.add('done'); st.calib[i] = v; if (!silent) progress();
+}
+const SCEN = {study:[DATA.harm.both1, DATA.harm.r1only, DATA.harm.r2only, DATA.harm.both0], lazy:[0, 0, 11, 109], random:[1, 11, 11, 97]};
+function setK(a) { ['a','b','c','d'].forEach((k, j) => $(k).value = a[j]); kappa(); }
+function kappa(touch) {
+  const [a, b, c, d] = ['a','b','c','d'].map(k => Math.max(0, +$(k).value || 0)), n = a + b + c + d;
+  if (!n) return;
+  const po = (a + d) / n, pe = ((a + b) * (a + c) + (c + d) * (b + d)) / (n * n), k = pe < 1 ? (po - pe) / (1 - pe) : 0;
+  $('kpo').textContent = (100 * po).toFixed(1) + '%'; $('kpe').textContent = (100 * pe).toFixed(1) + '%'; $('kk').textContent = k.toFixed(3);
+  $('kfb').textContent = k >= 0.81 ? '幾乎完全一致（Landis & Koch 分級）。仍要同時報告一致率與 2×2 表。'
+    : k >= 0.61 ? '高度一致；可接受，但檢查不一致的回答是否源自評分表定義模糊。'
+    : k >= 0.41 ? '中度一致：先回到校準，再開始正式評分。'
+    : `一致率 ${(100 * po).toFixed(1)}% 看起來很高，κ 卻只有 ${k.toFixed(2)}：罕見事件的高一致率大多來自碰巧，量尺不可靠。`;
+  if (touch && !st.kappa) { st.kappa = true; progress(); }
+}
+function comb(n, k) { let r = 1; for (let i = 1; i <= k; i++) r = r * (n - k + i) / i; return r; }
+function wilson(x, n) { const z = 1.959964, p = x / n, den = 1 + z * z / n, c = (p + z * z / (2 * n)) / den, h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / den; return [Math.max(0, c - h), Math.min(1, c + h)]; }
+const NAME = {R:'R 護理師範本', A:'A 基本提示', B:'B 結構化提示'};
+function compare(touch) {
+  const [X, Y] = $('pair').value.split('|'), risk = $('risk').value, m = {};
+  DATA.rows.filter(r => risk === 'all' || r.risk === risk).forEach(r => { (m[r.q] = m[r.q] || {})[r.arm] = r.sev; });
+  const qs = Object.keys(m), n = qs.length; let x = 0, y = 0, b = 0, c = 0;
+  qs.forEach(q => { x += m[q][X]; y += m[q][Y]; if (m[q][X] && !m[q][Y]) b++; if (!m[q][X] && m[q][Y]) c++; });
+  const k = b + c, lo = Math.min(b, c); let tail = 0; for (let i = 0; i <= lo; i++) tail += comb(k, i);
+  const p = k ? Math.min(1, 2 * tail / Math.pow(2, k)) : 1, wx = wilson(x, n), wy = wilson(y, n);
+  $('lx').textContent = NAME[X] + ' 嚴重錯誤'; $('ly').textContent = NAME[Y] + ' 嚴重錯誤';
+  $('vx').textContent = `${x}/${n}（${(100 * x / n).toFixed(1)}%）`; $('vy').textContent = `${y}/${n}（${(100 * y / n).toFixed(1)}%）`;
+  $('disc').textContent = `${b} ／ ${c}`; $('pval').textContent = p.toFixed(4);
+  $('cfb').textContent = `95% CI：${NAME[X]} [${(100 * wx[0]).toFixed(1)}%, ${(100 * wx[1]).toFixed(1)}%]；${NAME[Y]} [${(100 * wy[0]).toFixed(1)}%, ${(100 * wy[1]).toFixed(1)}%]。` +
+    (p < 0.05 ? '差異達統計顯著，仍要看區間寬度與臨床意義。' : '未達顯著＝證據不足，不等於一樣安全；兩者都錯或都對的題目不提供比較資訊。');
+  if (touch && !st.compare) { st.compare = true; progress(); }
+}
+function renderQuiz() {
+  $('quizCards').innerHTML = DATA.quiz.map((q, i) => `<div class="card" id="qc${i}"><h3>Q${i + 1}｜${q[0]}</h3>` +
+    q[1].map((o, j) => `<label class="opt"><input type="radio" name="q${i}" value="${j}">${o}</label>`).join('') + `<p class="feedback" id="qf${i}"></p></div>`).join('');
+  DATA.quiz.forEach((q, i) => document.querySelectorAll(`input[name=q${i}]`).forEach(r => r.onchange = () => answer(i, +r.value)));
+  Object.keys(st.quiz).forEach(i => { const r = document.querySelector(`input[name=q${i}][value="${st.quiz[i]}"]`); if (r) r.checked = true; answer(+i, st.quiz[i], true); });
+}
+function answer(i, j, silent) {
+  const q = DATA.quiz[i], ok = j === q[2];
+  $('qf'+i).innerHTML = (ok ? '<span class="ok">答對了。</span>' : `<span class="ng">再想想：正確答案是「${q[1][q[2]]}」。</span>`) + q[3];
+  $('qc'+i).classList.add('done'); st.quiz[i] = j; if (!silent) progress();
+}
+['a','b','c','d'].forEach(k => $(k).oninput = () => kappa(true));
+document.querySelectorAll('[data-s]').forEach(b => b.onclick = () => { setK(SCEN[b.dataset.s]); kappa(true); });
+['pair','risk'].forEach(k => $(k).onchange = () => compare(true));
+$('reset').onclick = () => { st = {calib:{}, kappa:false, compare:false, quiz:{}}; try { localStorage.removeItem(KEY); } catch (e) {}
+  renderCalib(); renderQuiz(); setK(SCEN.study); $('pair').value = 'A|B'; $('risk').value = 'all'; compare(); progress(); };
+renderCalib(); renderQuiz(); setK(SCEN.study); compare(); progress();
+</script>
+</body>
+</html>
